@@ -15,8 +15,6 @@ buildscript {
         minSdk = 24
         targetSdk = 32
 
-        jvmTarget = "1.8"
-
         composeVersion = '1.1.1'
         activityComposeVersion = '1.4.0'
 

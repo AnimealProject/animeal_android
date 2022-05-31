@@ -34,7 +34,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = rootProject.ext.jvmTarget
+        jvmTarget = rootProject.ext.jvmTargetVersion
     }
 
     buildFeatures {
