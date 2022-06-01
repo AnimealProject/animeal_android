@@ -23,6 +23,7 @@ jobs:
         run: ./gradlew test
 
   android_tests:
+    needs: [unit_tests]
     name: Instrumentation Tests
     runs-on: macos-latest
     steps:
