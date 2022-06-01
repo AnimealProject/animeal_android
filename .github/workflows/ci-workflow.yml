@@ -1,5 +1,5 @@
 
-name: CI
+name: Debug CI workflow
 
 on:
   pull_request:
