@@ -42,9 +42,12 @@ jobs:
           script: ./gradlew connectedAndroidTest
           
   build_apk:
+    needs: [unit_tests, android_tests]
     name: Build Debug APK
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+    
       - name: Setup Java 11
         uses: actions/setup-java@v1
         with: {java-version: 11}
