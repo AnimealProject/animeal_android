@@ -6,5 +6,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Animeal"
-include ':app'
-include ':base'
+
+include(":app")
+include(":base")
