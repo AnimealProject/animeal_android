@@ -26,6 +26,11 @@ jobs:
       
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
+        
+      - name: setup-android-tools
+        uses: maxim-lobanov/setup-android-tools@v1
+        with:
+          packages: ndk;19.2.5345600
 
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
