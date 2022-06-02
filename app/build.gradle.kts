@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -33,6 +35,10 @@ android {
         compose = true
     }
 
+    compileOptions {
+        this.isCoreLibraryDesugaringEnabled = true
+    }
+
     composeOptions {
         kotlinCompilerExtensionVersion = rootProject.extra["composeVersion"] as String
     }
@@ -41,11 +47,15 @@ android {
         resources.excludes.add("META-INF/AL2.0")
         resources.excludes.add("META-INF/LGPL2.1")
     }
+
+    project.tasks.preBuild.dependsOn("moveSecretsToProject")
 }
 
 dependencies {
     implementation(project(":base"))
 
+    val amplifyFramework: String by rootProject.extra
+    val desugarJdkLibs: String by rootProject.extra
     val activityComposeVersion: String by rootProject.extra
     val composeVersion: String by rootProject.extra
     val coreKtxVersion: String by rootProject.extra
@@ -54,6 +64,12 @@ dependencies {
     val junitVersion: String by rootProject.extra
     val hiltAndroidVersion: String by rootProject.extra
     val lifecycleKtxVersion: String by rootProject.extra
+
+    // Amplify core dependency
+    implementation("com.amplifyframework:core:$amplifyFramework")
+
+    // Support for Java 8 features
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkLibs")
 
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleKtxVersion")
@@ -73,4 +89,26 @@ dependencies {
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$junitExtVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+}
+
+
+val ANIMEAL_SECRETS_FOLDER: String by project
+
+try {
+    //checking project configuration
+    ANIMEAL_SECRETS_FOLDER
+} catch (e: Exception) {
+    throw Exception("!!!!!!! project-secrets not located; please follow instructions in app/docs/setup.md for proper configuration", e)
+}
+
+tasks.register("moveSecretsToProject") {
+    dependsOn(tasks.named("copyAwsAmplifySecrets"))
+}
+
+tasks.register<Copy>("copyAwsAmplifySecrets") {
+    from(
+        "${ANIMEAL_SECRETS_FOLDER}/awsconfiguration.json",
+        "${ANIMEAL_SECRETS_FOLDER}/amplifyconfiguration.json"
+    )
+    into("${rootDir}/app/src/main/res/raw")
 }
