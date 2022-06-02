@@ -1,3 +1,9 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
+plugins {
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+}
+
 buildscript {
     repositories {
         google()
@@ -22,6 +28,34 @@ buildscript {
         set("junitVersion", "4.13.2")
         set("junitExtVersion", "1.1.3")
         set("espressoVersion", "3.4.0")
+    }
+}
+
+detekt {
+    config = files("config/detekt/detekt.yml")
+    allRules = true
+    autoCorrect = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+    }
+}
+
+subprojects {
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+    }
+
+    detekt {
+        autoCorrect = true
+    }
+}
+
+allprojects {
+    dependencies {
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
     }
 }
 
