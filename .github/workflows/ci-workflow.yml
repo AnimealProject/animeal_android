@@ -19,7 +19,7 @@ jobs:
         with: { java-version: 11 }
 
       - name: Run Detekt
-        run: ./gradlew detektDebug
+        run: ./gradlew detekt
 
   unit_tests:
     needs: [detekt]
