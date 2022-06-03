@@ -36,7 +36,7 @@ android {
     }
 
     compileOptions {
-        this.isCoreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
     }
 
     composeOptions {
