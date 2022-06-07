@@ -17,13 +17,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
       - name: Set up AWS Amplify
         run: sudo npm install -g @aws-amplify/cli --unsafe-perm=true
-      - name: Amplify headless init
-        run: sh ./headless_init_env.sh
+        
+      - name: Configure Amplify
+        uses: ambientlight/amplify-cli-action@0.3.0
+        with:
+          amplify_command: configure
+          amplify_env: prod
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
