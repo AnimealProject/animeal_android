@@ -14,14 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Retrieve the secret and decode it to a file
+      - name: Executing secret-directory preparing script
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
-        run: |
-          echo "env variables updated"
-
-      - name: Executing secret-directory preparing script
         run: |
           # keep track of the present-working-directoring on startup so we can return to it
           initial_dir=`pwd`
