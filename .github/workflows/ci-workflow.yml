@@ -24,7 +24,7 @@ jobs:
       - name: Configure Amplify
         uses: ambientlight/amplify-cli-action@0.3.0
         with:
-          amplify_command: configure
+          amplify_command: init
           amplify_env: prod
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
