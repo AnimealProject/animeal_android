@@ -16,7 +16,7 @@ jobs:
       
       - name: Retrieve aws configuration and decode it to a file
         env:
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
+          AWS_CONFIGURATION: echo "$AWS_CONFIGURATION" | base64 --decode > awsconfiguration.json
         run: |
           echo $AWS_CONFIGURATION
 
