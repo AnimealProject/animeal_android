@@ -25,7 +25,7 @@ jobs:
       - name: Configure Amplify
         uses: ambientlight/amplify-cli-action@0.3.0
         with:
-          amplify_command: configure
+          amplify_command: init
           amplify_env: prod
 
       - name: Run Detekt
