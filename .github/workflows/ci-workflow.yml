@@ -10,15 +10,13 @@ jobs:
   detekt:
     name: Detekt
     runs-on: ubuntu-latest
+    
+    env:
+        AWS_CONFIGURATION: echo "$AWS_CONFIGURATION" | base64 --decode > awsconfiguration.json
+        AMPLIFY_CONFIGURATION: echo "$AMPLIFY_CONFIGURATION" | base64 --decode > amplifyconfiguration.json
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Retrieve aws configuration and decode it to a file
-        env:
-          AWS_CONFIGURATION: echo "$AWS_CONFIGURATION" | base64 --decode > awsconfiguration.json
-        run: |
-          cat $AWS_CONFIGURATION
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
