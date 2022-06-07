@@ -17,6 +17,8 @@ jobs:
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
+        run: |
+          echo "printing value of env-var - AWS_CONFIGURATION -- ${AWS_CONFIGURATION}"
 
       - name: Executing secret-directory preparing script
         run: |
