@@ -98,7 +98,7 @@ try {
     //checking project configuration
     ANIMEAL_SECRETS_FOLDER
 } catch (e: Exception) {
-    throw Exception("!!!!!!! project-secrets not located; please follow instructions in app/docs/setup.md for proper configuration", e)
+    throw Exception("!!!!!!! project-secrets not located; please follow instructions in the knowledge-base to ensure proper environment setup", e)
 }
 
 tasks.register("moveSecretsToProject") {
