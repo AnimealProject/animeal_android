@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-        AWS_CONFIGURATION: echo "$AWS_CONFIGURATION" | base64 --decode > awsconfiguration.json
-        AMPLIFY_CONFIGURATION: echo "$AMPLIFY_CONFIGURATION" | base64 --decode > amplifyconfiguration.json
+        AWS_CONFIGURATION_BASE64: ${{ secrets.AWS_CONFIGURATION }}
+        AMPLIFY_CONFIGURATION_BASE64: ${{ secrets.AMPLIFY_CONFIGURATION }}
 
     steps:
       - uses: actions/checkout@v2
