@@ -92,11 +92,13 @@ dependencies {
 }
 
 
-val ANIMEAL_SECRETS_FOLDER: String by project
+val AWS_CONFIGURATION: String by project
+val AMPLIFY_CONFIGURATION: String by project
 
 try {
     //checking project configuration
-    ANIMEAL_SECRETS_FOLDER
+    AWS_CONFIGURATION
+    AMPLIFY_CONFIGURATION
 } catch (e: Exception) {
     throw Exception("!!!!!!! project-secrets not located; please follow instructions in the knowledge-base to ensure proper environment setup", e)
 }
@@ -107,8 +109,8 @@ tasks.register("moveSecretsToProject") {
 
 tasks.register<Copy>("copyAwsAmplifySecrets") {
     from(
-        "${ANIMEAL_SECRETS_FOLDER}/awsconfiguration.json",
-        "${ANIMEAL_SECRETS_FOLDER}/amplifyconfiguration.json"
+        AWS_CONFIGURATION,
+        AMPLIFY_CONFIGURATION
     )
     into("${rootDir}/app/src/main/res/raw")
 }
