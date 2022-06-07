@@ -18,7 +18,7 @@ jobs:
         env:
           AWS_CONFIGURATION: echo "$AWS_CONFIGURATION" | base64 --decode > awsconfiguration.json
         run: |
-          echo $AWS_CONFIGURATION
+          openssl x509 -in awsconfiguration.json -inform DER -text -noout
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
