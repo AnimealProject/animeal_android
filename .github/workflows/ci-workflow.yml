@@ -19,13 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: "Create aws configuration file"
+      - name: Create aws configuration file
         run: |
-          echo "$AWS_CONFIGURATION_BASE64" | base64 --decode > awsconfiguration.json
+          echo ${AWS_CONFIGURATION_BASE64} | base64 --decode > awsconfiguration.json
         
-      - name: "Create amplify configuration file"   
+      - name: Create amplify configuration file
         run: |
-          echo "$AMPLIFY_CONFIGURATION_BASE64" | base64 --decode > amplifyconfiguration.json
+          echo ${AMPLIFY_CONFIGURATION_BASE64} | base64 --decode > amplifyconfiguration.json
           
       - name: Restore gradle.properties
         shell: bash
