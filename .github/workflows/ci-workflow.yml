@@ -10,9 +10,18 @@ jobs:
   detekt:
     name: Detekt
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [10.x]
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Use node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
       
       - name: Configure Amplify
         uses: ambientlight/amplify-cli-action@0.3.0
