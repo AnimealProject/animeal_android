@@ -17,21 +17,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Use node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      
-      - name: Configure Amplify
-        uses: ambientlight/amplify-cli-action@0.3.0
-        with:
-          amplify_command: init
-          amplify_env: test
+      - name: Set up AWS Amplify
+        run: sudo npm install -g @aws-amplify/cli --unsafe-perm=true
+      - name: Amplify headless init
+        run: sh ./headless_init_env.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
