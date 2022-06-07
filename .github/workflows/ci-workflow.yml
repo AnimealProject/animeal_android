@@ -7,7 +7,41 @@ on:
   workflow_dispatch:
 
 jobs:
+  prep_secrets:
+    name: Prepare environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Executing secret-directory preparing script
+        run: |
+          # keep track of the present-working-directoring on startup so we can return to it
+          initial_dir=`pwd`
+          #echo "started-at-dir: $initial_dir"
+
+          # ensure we have the directory we will be using for our secrets
+          mkdir -p ~/secrets
+
+          cd ~/secrets
+          secrets_dir=`pwd`
+
+          # populate the content of the secrets-dir to be as expected
+          echo ${{ secrets.AMPLIFY_CONFIGURATION }} | base64 --decode > amplifyconfiguration.json
+          echo ${{ secrets.AWS_CONFIGURATION }} | base64 --decode > awsconfiguration.json
+
+
+          # ensure we have the directory where we will be writing our gradle-properties file
+          mkdir -p ~/.gradle
+
+          # set the gradle-properties constant
+          cd ~/.gradle
+          echo "\nANIMEAL_SECRETS_FOLDER=${secrets_dir}" >> gradle.properties
+
+
+          # return to the starting present-working-directoring
+          cd $initial_dir
+
   detekt:
+    needs: [prep_secrets]
     name: Detekt
     runs-on: ubuntu-latest
 
