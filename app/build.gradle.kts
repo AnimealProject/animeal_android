@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":base"))
+    implementation(project(":feature-more"))
 
     val activityComposeVersion: String by rootProject.extra
     val composeVersion: String by rootProject.extra
