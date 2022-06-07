@@ -7,24 +7,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  prep_secrets:
-    name: Prepare environment
+  detekt:
+    name: Detekt
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Retrieve the secret and decode it to a file
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          echo "printing value of env-var - AWS_CONFIGURATION -- ${AWS_CONFIGURATION}"
+          echo "env variables updated"
 
       - name: Executing secret-directory preparing script
         run: |
           # keep track of the present-working-directoring on startup so we can return to it
           initial_dir=`pwd`
-          #echo "started-at-dir: $initial_dir"
 
           # ensure we have the directory we will be using for our secrets
           mkdir -p ~/secrets
@@ -48,13 +48,6 @@ jobs:
           # return to the starting present-working-directoring
           cd $initial_dir
 
-  detekt:
-    needs: [prep_secrets]
-    name: Detekt
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
