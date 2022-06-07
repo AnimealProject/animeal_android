@@ -14,9 +14,25 @@ jobs:
     env:
       AWS_CONFIGURATION_BASE64: ${{ secrets.AWS_CONFIGURATION }}
       AMPLIFY_CONFIGURATION_BASE64: ${{ secrets.AMPLIFY_CONFIGURATION }}
+      GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: "Create aws configuration file"
+        run: |
+          echo $AWS_CONFIGURATION_BASE64 | base64 --decode > awsconfiguration.json
+        
+      - name: "Create amplify configuration file"   
+        run: |
+          echo $AMPLIFY_CONFIGURATION_BASE64 | base64 --decode > amplifyconfiguration.json
+          
+      - name: Restore gradle.properties
+        shell: bash
+        run: |
+          mkdir -p ~/.gradle/
+          echo "::set-env name=GRADLE_USER_HOME::$HOME/.gradle"
+          echo ${GRADLE_PROPERTIES} > ~/.gradle/gradle.properties
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
