@@ -29,8 +29,8 @@ jobs:
           secrets_dir=`pwd`
 
           # populate the content of the secrets-dir to be as expected
-          echo $AMPLIFY_CONFIGURATION | base64 --decode > amplifyconfiguration.json
-          echo $AWS_CONFIGURATION | base64 --decode > awsconfiguration.json
+          echo $AMPLIFY_CONFIGURATION >> amplifyconfiguration.json
+          echo $AWS_CONFIGURATION >> awsconfiguration.json
 
 
           # ensure we have the directory where we will be writing our gradle-properties file
@@ -40,10 +40,8 @@ jobs:
           cd ~/.gradle
           echo "\nANIMEAL_SECRETS_FOLDER=${secrets_dir}" >> gradle.properties
 
-
           # return to the starting present-working-directoring
           cd $initial_dir
-
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
