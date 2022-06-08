@@ -38,7 +38,7 @@ jobs:
 
           # set the gradle-properties constant
           cd ~/.gradle
-          echo "\nANIMEAL_SECRETS_FOLDER=${secrets_dir}" >> gradle.properties
+          echo "\nANIMEAL_SECRETS_FOLDER=~/secrets >> gradle.properties
 
           # return to the starting present-working-directoring
           cd $initial_dir
