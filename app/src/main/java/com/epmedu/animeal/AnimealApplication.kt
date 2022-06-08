@@ -12,16 +12,18 @@ class AnimealApplication : Application() {
         super.onCreate()
 
         configureAmplify()
-
     }
 
-    fun configureAmplify() {
+    private fun configureAmplify() {
         try {
             Amplify.configure(applicationContext)
-            Log.i("MyAmplifyApp", "Initialized Amplify")
+            Log.i(APPLICATION_TAG, "Initialized Amplify")
         } catch (error: AmplifyException) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify", error)
+            Log.e(APPLICATION_TAG, "Could not initialize Amplify", error)
         }
     }
 
+    private companion object {
+        private const val APPLICATION_TAG = "AnimealApplication"
+    }
 }
