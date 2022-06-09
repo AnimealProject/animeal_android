@@ -38,11 +38,13 @@ dependencies {
 
     val composeVersion: String by rootProject.extra
     val activityComposeVersion: String by rootProject.extra
+    val lifecycleKtxVersion: String by rootProject.extra
 
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.activity:activity-compose:$activityComposeVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleKtxVersion")
 
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
 }

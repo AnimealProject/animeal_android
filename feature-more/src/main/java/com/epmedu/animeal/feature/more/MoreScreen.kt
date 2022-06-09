@@ -23,11 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.feature_more.R
 
 @Composable
-fun MoreScreen() {
+fun MoreScreen(viewModel: MoreViewModel = viewModel()) {
     AnimealTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -38,7 +39,24 @@ fun MoreScreen() {
             ) {
                 Column {
                     MoreTitle()
-                    MoreOptions()
+                    Column {
+                        MoreOption(
+                            name = stringResource(R.string.profile_page_option),
+                            onClick = { viewModel.navigateToProfilePage() }
+                        )
+                        MoreOption(
+                            name = stringResource(R.string.donate_option),
+                            onClick = { viewModel.navigateToDonate() }
+                        )
+                        MoreOption(
+                            name = stringResource(R.string.help_option),
+                            onClick = { viewModel.navigateToHelp() }
+                        )
+                        MoreOption(
+                            name = stringResource(R.string.about_option),
+                            onClick = { viewModel.navigateToAbout() }
+                        )
+                    }
                 }
                 MoreLogout()
             }
@@ -56,32 +74,15 @@ fun MoreTitle() {
 }
 
 @Composable
-fun MoreOptions() {
-    Column {
-        MoreSpacer()
-        MoreOption(name = stringResource(R.string.profile_page_option)) {}
-        MoreSpacer()
-        MoreOption(name = stringResource(R.string.donate_option)) {}
-        MoreSpacer()
-        MoreOption(name = stringResource(R.string.help_option)) {}
-        MoreSpacer()
-        MoreOption(name = stringResource(R.string.about_option)) {}
-    }
-}
-
-@Composable
-fun MoreSpacer() {
-    Spacer(modifier = Modifier.height(32.dp))
-}
-
-@Composable
 fun MoreOption(name: String, onClick: () -> Unit) {
+    Spacer(modifier = Modifier.height(32.dp))
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 17.dp)
             .height(48.dp)
             .clickable { onClick() }
-            .padding(horizontal = 33.dp),
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -99,22 +100,18 @@ fun MoreOption(name: String, onClick: () -> Unit) {
 @Composable
 fun MoreLogout() {
     Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .padding(28.dp)
+            .height(48.dp)
             .clip(RoundedCornerShape(4.dp))
             .clickable { }
+            .padding(horizontal = 16.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .height(48.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.logout_option),
-                style = MaterialTheme.typography.body1
-            )
-        }
+        Text(
+            text = stringResource(R.string.logout_option),
+            style = MaterialTheme.typography.body1
+        )
     }
 }
 
