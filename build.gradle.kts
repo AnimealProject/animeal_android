@@ -20,6 +20,8 @@ buildscript {
         set("compileSdk", 32)
         set("minSdk", 24)
         set("targetSdk", 32)
+        set("amplifyFramework", "1.36.0-dev-preview.0")
+        set("desugarJdkLibs", "1.1.5")
         set("composeVersion", "1.1.1")
         set("activityComposeVersion", "1.4.0")
         set("hiltAndroidVersion", "2.38.1")

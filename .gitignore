@@ -14,3 +14,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+
+
+
+awsconfiguration.json
+amplifyconfiguration.json
