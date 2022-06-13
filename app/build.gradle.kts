@@ -1,46 +1,15 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
+    id("AnimalisPlugin")
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
-    defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
-        targetSdk = rootProject.extra["targetSdk"] as Int
-
-        applicationId = "com.epmedu.animeal"
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.extra["composeVersion"] as String
     }
 
     packagingOptions {

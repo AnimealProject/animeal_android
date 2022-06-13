@@ -1,36 +1,6 @@
 plugins {
+    id("AnimalisPlugin")
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-}
-
-android {
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
-    defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
-        targetSdk =  rootProject.extra["targetSdk"] as Int
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.extra["composeVersion"] as String
-    }
 }
 
 dependencies {

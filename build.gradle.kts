@@ -11,15 +11,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:7.2.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+        classpath(libs.gradle.plugin.buildtools)
+        classpath(libs.gradle.plugin.kotlin)
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.41")
     }
 
     extra.apply {
-        set("compileSdk", 32)
-        set("minSdk", 24)
-        set("targetSdk", 32)
         set("amplifyFramework", "1.36.0-dev-preview.0")
         set("desugarJdkLibs", "1.1.5")
         set("composeVersion", "1.1.1")
