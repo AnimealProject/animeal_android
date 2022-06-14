@@ -24,7 +24,7 @@ buildscript {
         set("desugarJdkLibs", "1.1.5")
         set("composeVersion", "1.1.1")
         set("activityComposeVersion", "1.4.0")
-        set("navigationComposeVersion", "2.5.0-alpha02")
+        set("navigationComposeVersion", "2.4.2")
         set("hiltAndroidVersion", "2.38.1")
         set("coreKtxVersion", "1.7.0")
         set("lifecycleKtxVersion", "2.4.1")

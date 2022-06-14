@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -30,14 +30,16 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TabActivity : ComponentActivity() {
+
+    private val navigationViewModel: NavigationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AnimealTheme {
                 val navigationController = rememberNavController()
-                val navigationViewModel: NavigationViewModel by viewModels()
                 Scaffold(
-                    bottomBar = { BottomNavigationBar(navigationController, navigationViewModel) },
+                    bottomBar = { BottomNavigationBar(navigationController) },
                     modifier = Modifier.fillMaxSize()
                 ) {
                     NavigationScreens(navigationController)
@@ -58,7 +60,7 @@ class TabActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun BottomNavigationBar(navigationController: NavController, navigationViewModel: NavigationViewModel) {
+    private fun BottomNavigationBar(navigationController: NavController) {
         val items = listOf(
             NavigationScreen.Search,
             NavigationScreen.Favorites,
@@ -84,7 +86,7 @@ class TabActivity : ComponentActivity() {
                             navigationController.graph.startDestinationRoute?.let { route ->
                                 popUpTo(route) { saveState = true }
                             }
-                            navigationViewModel.onDestinationChanged()
+                            navigationViewModel.onDestinationChanged(item.route)
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -94,7 +96,7 @@ class TabActivity : ComponentActivity() {
         }
     }
 
-    private sealed class NavigationScreen(val route: Route, val icon: Int, @StringRes val title: Int) {
+    sealed class NavigationScreen(val route: Route, val icon: Int, @StringRes val title: Int) {
         object Search : NavigationScreen(route = Route.SEARCH, icon = R.drawable.icon_search, title = R.string.search)
         object Favorites : NavigationScreen(route = Route.FAVORITES, icon = R.drawable.icon_favorites, title = R.string.favorites)
         object Home : NavigationScreen(route = Route.HOME, icon = R.drawable.icon_home, title = R.string.home)
