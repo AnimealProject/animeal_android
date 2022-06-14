@@ -14,34 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Executing secret-directory preparing script && configure amplify config files
+      - name: Copy amplify config files
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          # keep track of the present-working-directoring on startup so we can return to it
-          initial_dir=`pwd`
-
-          # ensure we have the directory we will be using for our secrets
-          mkdir -p ~/secrets
-
-          cd ~/secrets
-          secrets_dir=`pwd`
-
-          # populate the content of the secrets-dir to be as expected
-          echo $AMPLIFY_CONFIGURATION >> amplifyconfiguration.json
-          echo $AWS_CONFIGURATION >> awsconfiguration.json
-
-          # ensure we have the directory where we will be writing our gradle-properties file
-          mkdir -p ~/.gradle
-
-          # set the gradle-properties constant
-          cd ~/.gradle
-          
-          echo "ANIMEAL_SECRETS_FOLDER=~/secrets" >> gradle.properties
-
-          # return to the starting present-working-directoring
-          cd $initial_dir
+          echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
+          echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
 
       - name: Setup Java 11
         uses: actions/setup-java@v1
@@ -58,33 +37,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Executing secret-directory preparing script && configure amplify config files
+      - name: Copy amplify config files
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          # keep track of the present-working-directoring on startup so we can return to it
-          initial_dir=`pwd`
-
-          # ensure we have the directory we will be using for our secrets
-          mkdir -p ~/secrets
-
-          cd ~/secrets
-          secrets_dir=`pwd`
-
-          # populate the content of the secrets-dir to be as expected
-          echo $AMPLIFY_CONFIGURATION >> amplifyconfiguration.json
-          echo $AWS_CONFIGURATION >> awsconfiguration.json
-
-          # ensure we have the directory where we will be writing our gradle-properties file
-          mkdir -p ~/.gradle
-
-          # set the gradle-properties constant
-          cd ~/.gradle
-          echo "ANIMEAL_SECRETS_FOLDER=~/secrets" >> gradle.properties
-
-          # return to the starting present-working-directoring
-          cd $initial_dir
+          echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
+          echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
       
       - name: Setup Java 11
         uses: actions/setup-java@v1
@@ -120,33 +79,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Executing secret-directory preparing script && configure amplify config files
+      - name: Copy amplify config files
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          # keep track of the present-working-directoring on startup so we can return to it
-          initial_dir=`pwd`
-
-          # ensure we have the directory we will be using for our secrets
-          mkdir -p ~/secrets
-
-          cd ~/secrets
-          secrets_dir=`pwd`
-
-          # populate the content of the secrets-dir to be as expected
-          echo $AMPLIFY_CONFIGURATION >> amplifyconfiguration.json
-          echo $AWS_CONFIGURATION >> awsconfiguration.json
-
-          # ensure we have the directory where we will be writing our gradle-properties file
-          mkdir -p ~/.gradle
-
-          # set the gradle-properties constant
-          cd ~/.gradle
-          echo "ANIMEAL_SECRETS_FOLDER=~/secrets" >> gradle.properties
-
-          # return to the starting present-working-directoring
-          cd $initial_dir
+          echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
+          echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
     
       - name: Setup Java 11
         uses: actions/setup-java@v1
@@ -160,4 +99,3 @@ jobs:
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/debug/app-debug.apk
-        
