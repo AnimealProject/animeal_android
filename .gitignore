@@ -14,10 +14,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-/buildSrc/build
-
-
-
-
 awsconfiguration.json
 amplifyconfiguration.json
+/buildSrc/build
