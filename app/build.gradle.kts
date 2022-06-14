@@ -47,8 +47,6 @@ android {
         resources.excludes.add("META-INF/AL2.0")
         resources.excludes.add("META-INF/LGPL2.1")
     }
-
-    project.tasks.preBuild.dependsOn("moveSecretsToProject")
 }
 
 dependencies {
@@ -89,26 +87,4 @@ dependencies {
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$junitExtVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-}
-
-
-val ANIMEAL_SECRETS_FOLDER: String by project
-
-try {
-    //checking project configuration
-    ANIMEAL_SECRETS_FOLDER
-} catch (e: Exception) {
-    throw Exception("!!!!!!! project-secrets not located; please follow instructions in the knowledge-base to ensure proper environment setup", e)
-}
-
-tasks.register("moveSecretsToProject") {
-    dependsOn(tasks.named("copyAwsAmplifySecrets"))
-}
-
-tasks.register<Copy>("copyAwsAmplifySecrets") {
-    from(
-        "${ANIMEAL_SECRETS_FOLDER}/awsconfiguration.json",
-        "${ANIMEAL_SECRETS_FOLDER}/amplifyconfiguration.json"
-    )
-    into("${rootDir}/app/src/main/res/raw")
 }
