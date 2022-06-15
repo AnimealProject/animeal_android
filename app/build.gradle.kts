@@ -1,7 +1,7 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
-    id("AnimalisPlugin")
+    id("AnimealPlugin")
     id("com.android.application")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")

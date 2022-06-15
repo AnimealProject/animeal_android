@@ -1,5 +1,5 @@
 plugins {
-    id("AnimalisPlugin")
+    id("AnimealPlugin")
     id("com.android.library")
 }
 

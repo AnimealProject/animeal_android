@@ -1,6 +1,6 @@
 package com.epmedu.animeal
 
-open class AnimalisPluginExtension {
+open class AnimealPluginExtension {
 
     /**
      * configure BuildConfig generation

@@ -11,7 +11,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
 
-open class AnimalisPlugin : Plugin<Project> {
+open class AnimealPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         with(project) {
@@ -23,7 +23,7 @@ open class AnimalisPlugin : Plugin<Project> {
             }
         }
 
-        val pluginExtension = project.extensions.create<AnimalisPluginExtension>("animalisPlugin")
+        val pluginExtension = project.extensions.create<AnimealPluginExtension>("animealPlugin")
 
         project.afterEvaluate {
             plugins.all {

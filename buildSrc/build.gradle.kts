@@ -9,9 +9,9 @@ repositories {
 
 gradlePlugin {
     plugins {
-        register("AnimalisPlugin") {
-            id = "AnimalisPlugin"
-            implementationClass = "com.epmedu.animeal.AnimalisPlugin"
+        register("AnimealPlugin") {
+            id = "AnimealPlugin"
+            implementationClass = "com.epmedu.animeal.AnimealPlugin"
         }
     }
 }
