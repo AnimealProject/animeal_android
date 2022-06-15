@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -41,16 +43,20 @@ class TabActivity : ComponentActivity() {
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navigationController) },
                     modifier = Modifier.fillMaxSize()
-                ) {
-                    NavigationScreens(navigationController)
+                ) { padding ->
+                    NavigationScreens(navigationController, padding)
                 }
             }
         }
     }
 
     @Composable
-    private fun NavigationScreens(navigationController: NavHostController) {
-        NavHost(navigationController, startDestination = NavigationScreen.Home.route.name) {
+    private fun NavigationScreens(navigationController: NavHostController, padding: PaddingValues) {
+        NavHost(
+            modifier = Modifier.padding(padding),
+            navController = navigationController,
+            startDestination = NavigationScreen.Home.route.name
+        ) {
             composable(NavigationScreen.Search.route.name) { SearchScreen() }
             composable(NavigationScreen.Favorites.route.name) { FavoritesScreen() }
             composable(NavigationScreen.Home.route.name) { HomeScreen() }
