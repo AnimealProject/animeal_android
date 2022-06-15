@@ -56,12 +56,14 @@ dependencies {
     val desugarJdkLibs: String by rootProject.extra
     val activityComposeVersion: String by rootProject.extra
     val composeVersion: String by rootProject.extra
+    val navigationComposeVersion: String by rootProject.extra
     val coreKtxVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val junitExtVersion: String by rootProject.extra
     val junitVersion: String by rootProject.extra
     val hiltAndroidVersion: String by rootProject.extra
     val lifecycleKtxVersion: String by rootProject.extra
+    val viewModelVersion: String by rootProject.extra
 
     // Amplify core dependency
     implementation("com.amplifyframework:core:$amplifyFramework")
@@ -72,6 +74,9 @@ dependencies {
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleKtxVersion")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$viewModelVersion")
+
     implementation("com.google.dagger:hilt-android:$hiltAndroidVersion")
     kapt("com.google.dagger:hilt-compiler:$hiltAndroidVersion")
 
@@ -79,6 +84,7 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.activity:activity-compose:$activityComposeVersion")
+    implementation("androidx.navigation:navigation-compose:$navigationComposeVersion")
 
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")

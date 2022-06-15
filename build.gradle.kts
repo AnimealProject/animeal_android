@@ -24,12 +24,14 @@ buildscript {
         set("desugarJdkLibs", "1.1.5")
         set("composeVersion", "1.1.1")
         set("activityComposeVersion", "1.4.0")
+        set("navigationComposeVersion", "2.4.2")
         set("hiltAndroidVersion", "2.38.1")
         set("coreKtxVersion", "1.7.0")
         set("lifecycleKtxVersion", "2.4.1")
         set("junitVersion", "4.13.2")
         set("junitExtVersion", "1.1.3")
         set("espressoVersion", "3.4.0")
+        set("viewModelVersion", "2.5.0-rc01")
     }
 }
 
