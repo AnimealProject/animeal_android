@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":base"))
+    implementation(projects.base)
 
     val amplifyFramework: String by rootProject.extra
     val desugarJdkLibs: String by rootProject.extra
