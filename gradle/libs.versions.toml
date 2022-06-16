@@ -1,0 +1,16 @@
+[versions]
+compileSdk = "32"
+targetSdk = "32"
+minSdk = "24"
+
+gradleBuildTools = "7.2.1"
+
+compose = "1.1.1"
+javapoet = "1.13.0"
+kotlin = "1.6.10"
+
+[libraries]
+gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "gradleBuildTools" }
+gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
