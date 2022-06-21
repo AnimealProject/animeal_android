@@ -4,13 +4,11 @@ plugins {
 }
 
 dependencies {
-    val composeVersion: String by rootProject.extra
-    val activityComposeVersion: String by rootProject.extra
+    implementation(libs.androidx.activity.compose)
 
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    implementation("androidx.activity:activity-compose:$activityComposeVersion")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.preview)
+    implementation(libs.compose.material)
 
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    debugImplementation(libs.compose.ui.tooling)
 }
