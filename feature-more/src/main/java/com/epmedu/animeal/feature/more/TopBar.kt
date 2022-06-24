@@ -1,9 +1,14 @@
 package com.epmedu.animeal.feature.more
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -22,21 +27,28 @@ import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.feature_more.R
 
 /**
- * Similar to [TopAppBar], but it consists only from the back button and a title.
- * If you pass `null` or nothing in [onBack], the back button will disappear.
+ * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
+ * You can pass `null` in the [navigationIcon] to display only the title.
  * @param title A title of the [TopBar]
- * @param onBack A callback for the back button.
- * If `null` there will be no button. By default `null`.
+ * @param navigationIcon A navigation icon before the title.
+ * If `null` it will be [Spacer] instead. By default `null`.
  */
 @Composable
-fun TopBar(title: String, onBack: (() -> Unit)? = null) {
+fun TopBar(title: String, navigationIcon: (@Composable () -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(32.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(top = 32.dp, end = 32.dp, bottom = 32.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        onBack?.let { BackButton(onClick = { onBack() }) }
+        if (navigationIcon == null) {
+            Spacer(modifier = Modifier.width(24.dp))
+        } else {
+            Spacer(modifier = Modifier.width(8.dp))
+            navigationIcon()
+        }
+
         Text(
             text = title,
             style = MaterialTheme.typography.h4,
@@ -45,10 +57,9 @@ fun TopBar(title: String, onBack: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun BackButton(onClick: () -> Unit) {
+fun BackButton(onClick: () -> Unit) {
     IconButton(
-        onClick = { onClick() },
-        modifier = Modifier.padding(end = 8.dp)
+        onClick = onClick,
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowLeft,
@@ -60,20 +71,16 @@ private fun BackButton(onClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun TopBarJustTitlePreview() {
+private fun TopBarPreview() {
     AnimealTheme {
         Surface {
-            TopBar(title = "Title")
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TopBarFullPreview() {
-    AnimealTheme {
-        Surface {
-            TopBar(title = "Title") {}
+            Column {
+                TopBar(title = "Title")
+                Divider()
+                TopBar(title = "Title") {
+                    BackButton {}
+                }
+            }
         }
     }
 }

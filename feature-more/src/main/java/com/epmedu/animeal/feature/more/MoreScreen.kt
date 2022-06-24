@@ -82,7 +82,7 @@ private fun HomeScreen(navController: NavController, onLogout: () -> Unit) {
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            LogoutButton(onClick = { onLogout() })
+            LogoutButton(onClick = onLogout)
         }
     }
 }
@@ -143,7 +143,7 @@ private sealed class NavigationScreen(val route: Route, @StringRes val title: In
     enum class Route { HOME, PROFILE_PAGE, DONATE, HELP, ABOUT }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun MoreScreenPreview() {
     AnimealTheme {

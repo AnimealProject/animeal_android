@@ -12,7 +12,7 @@ import com.epmedu.animeal.feature_more.R
 internal fun ProfilePageScreen(navController: NavController) {
     ScreenPlaceholder(
         title = stringResource(id = R.string.profile_page),
-        onBack =  { navController.popBackStack() }
+        onBack = { navController.popBackStack() }
     )
 }
 
@@ -20,7 +20,7 @@ internal fun ProfilePageScreen(navController: NavController) {
 internal fun DonateScreen(navController: NavController) {
     ScreenPlaceholder(
         title = stringResource(id = R.string.donate),
-        onBack =  { navController.popBackStack() }
+        onBack = { navController.popBackStack() }
     )
 }
 
@@ -28,7 +28,7 @@ internal fun DonateScreen(navController: NavController) {
 internal fun HelpScreen(navController: NavController) {
     ScreenPlaceholder(
         title = stringResource(id = R.string.help),
-        onBack =  { navController.popBackStack() }
+        onBack = { navController.popBackStack() }
     )
 }
 
@@ -36,7 +36,7 @@ internal fun HelpScreen(navController: NavController) {
 internal fun AboutScreen(navController: NavController) {
     ScreenPlaceholder(
         title = stringResource(id = R.string.about),
-        onBack =  { navController.popBackStack() }
+        onBack = { navController.popBackStack() }
     )
 }
 
@@ -45,10 +45,9 @@ private fun ScreenPlaceholder(title: String, onBack: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopBar(
-                title = title,
-                onBack = { onBack() }
-            )
+            TopBar(title = title) {
+                BackButton(onBack)
+            }
         },
         content = {}
     )
