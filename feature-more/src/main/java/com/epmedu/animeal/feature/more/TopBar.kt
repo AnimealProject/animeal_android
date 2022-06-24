@@ -71,7 +71,7 @@ fun BackButton(onClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun TopBarPreview() {
+fun TopBarPreview() {
     AnimealTheme {
         Surface {
             Column {

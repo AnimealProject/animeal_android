@@ -145,7 +145,7 @@ private sealed class NavigationScreen(val route: Route, @StringRes val title: In
 
 @Preview
 @Composable
-private fun MoreScreenPreview() {
+fun MoreScreenPreview() {
     AnimealTheme {
         HomeScreen(navController = NavController(LocalContext.current)) {}
     }
@@ -153,11 +153,10 @@ private fun MoreScreenPreview() {
 
 @Preview
 @Composable
-private fun MoreOptionPreview() {
+fun MoreOptionPreview() {
     AnimealTheme {
         Surface {
             MoreOption("Profile Page") {}
         }
     }
 }
-
