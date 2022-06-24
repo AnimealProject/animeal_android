@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="more_screen_title">More</string>
-    <string name="logout_option">Logout</string>
-    <string name="profile_page_option">Profile Page</string>
-    <string name="donate_option">Donate</string>
-    <string name="help_option">Help</string>
-    <string name="about_option">About (terms and conditions)</string>
+    <string name="more">More</string>
+    <string name="logout">Logout</string>
+    <string name="profile_page">Profile Page</string>
+    <string name="donate">Donate</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="about_detailed">About (terms and conditions)</string>
+    <string name="back">Back</string>
 </resources>

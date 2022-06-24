@@ -1,14 +1,15 @@
 package com.epmedu.animeal.feature.more
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 
-class MoreViewModel : ViewModel() {
+internal class MoreViewModel : ViewModel() {
 
-    fun navigateToProfilePage() {}
+    internal fun logout() {
+        Log.i(TAG, "Logout clicked")
+    }
 
-    fun navigateToDonate() {}
-
-    fun navigateToHelp() {}
-
-    fun navigateToAbout() {}
+    private companion object {
+        private const val TAG = "MoreViewModel"
+    }
 }
