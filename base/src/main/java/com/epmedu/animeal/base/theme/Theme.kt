@@ -13,9 +13,11 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = AnimealColor.Light.seaSerpent,
+    background = AnimealColor.Light.white,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = AnimealColor.Light.carminePink,
+    secondaryVariant = AnimealColor.Light.platinum,
 
     /* Other default colors to override
     background = Color.White,
