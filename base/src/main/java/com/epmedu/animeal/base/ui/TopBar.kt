@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.more
+package com.epmedu.animeal.base.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,15 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.feature_more.R
 
 /**
  * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
  * You can pass `null` in the [navigationIcon] to display only the title.
- * @param title A title of the [TopBar]
- * @param navigationIcon A navigation icon before the title.
- * If `null` it will be [Spacer] instead. By default `null`.
+ * @param title A title of the [TopBar].
+ * @param navigationIcon A navigation icon before the title. By default `null`.
  */
 @Composable
 fun TopBar(title: String, navigationIcon: (@Composable () -> Unit)? = null) {
@@ -77,7 +76,7 @@ fun TopBarPreview() {
             Column {
                 TopBar(title = "Title")
                 Divider()
-                TopBar(title = "Title") {
+                TopBar(title = "Title with icon") {
                     BackButton {}
                 }
             }

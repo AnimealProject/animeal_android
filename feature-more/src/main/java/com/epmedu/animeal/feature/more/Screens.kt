@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.epmedu.animeal.base.ui.BackButton
+import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.feature_more.R
 
 @Composable

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.feature_more.R
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
