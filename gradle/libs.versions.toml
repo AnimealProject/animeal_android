@@ -19,6 +19,7 @@ hilt = "2.41"
 kotlin = "1.6.10"
 lifecycle = "2.4.1"
 navigation = "2.4.2"
+accompanist = "0.23.1"
 
 [libraries]
 gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }
@@ -44,6 +45,8 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose"}
 compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose"}
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose"}
+
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
 desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs"}
 

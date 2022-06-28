@@ -18,6 +18,7 @@ android {
 
 dependencies {
     implementation(projects.base)
+    implementation(projects.featureMore)
 
     implementation(projects.feature.login)
     implementation(projects.feature.splash)
@@ -44,7 +45,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-    
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)

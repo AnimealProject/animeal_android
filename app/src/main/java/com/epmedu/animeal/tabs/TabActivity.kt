@@ -29,6 +29,7 @@ import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.NavigationItemColor
 import com.epmedu.animeal.base.theme.NavigationItemSelectedColor
 import com.epmedu.animeal.splash.presentation.SplashScreen
+import com.epmedu.animeal.feature.more.MoreScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
