@@ -28,6 +28,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 
+@Suppress("UnusedPrivateMember")
 @Composable
 @Preview(showBackground = true)
 private fun SignInScreenPreview() {
@@ -143,7 +144,7 @@ private fun ButtonsBlock(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimealButton(
-                onClick = {  }
+                onClick = { }
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_phone,
@@ -152,7 +153,7 @@ private fun ButtonsBlock(
             }
             AnimealButton(
                 color = CustomColor.facebook,
-                onClick = {  }
+                onClick = { }
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_facebook,
@@ -161,7 +162,7 @@ private fun ButtonsBlock(
             }
             AnimealButton(
                 color = CustomColor.google,
-                onClick = {  }
+                onClick = { }
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_google,

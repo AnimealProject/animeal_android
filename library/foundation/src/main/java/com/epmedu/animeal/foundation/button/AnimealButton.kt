@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun AnimealButtonPreview() {
