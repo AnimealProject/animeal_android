@@ -15,13 +15,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.foundation.spacer.VSpacer
+import com.epmedu.animeal.foundation.spacer.WSpacer
 import com.epmedu.animeal.resources.R
 
 @Suppress("UnusedPrivateMember")
 @Preview
 @Composable
-fun LoginButtonContentPreview() {
+private fun LoginButtonContentPreview() {
     AnimealTheme {
         Row {
             LoginButtonContent(
@@ -42,7 +42,7 @@ internal fun RowScope.LoginButtonContent(
         painter = painterResource(id = iconId),
         contentDescription = null,
     )
-    VSpacer(16.dp)
+    WSpacer(16.dp)
     Text(
         text = stringResource(id = textId),
         maxLines = 1,

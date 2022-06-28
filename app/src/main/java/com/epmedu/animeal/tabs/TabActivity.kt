@@ -28,6 +28,7 @@ import com.epmedu.animeal.R
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.NavigationItemColor
 import com.epmedu.animeal.base.theme.NavigationItemSelectedColor
+import com.epmedu.animeal.splash.presentation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,13 +40,15 @@ class TabActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AnimealTheme {
-                val navigationController = rememberNavController()
-                Scaffold(
-                    bottomBar = { BottomNavigationBar(navigationController) },
-                    modifier = Modifier.fillMaxSize()
-                ) { padding ->
-                    NavigationScreens(navigationController, padding)
-                }
+//                val navigationController = rememberNavController()
+//                Scaffold(
+//                    bottomBar = { BottomNavigationBar(navigationController) },
+//                    modifier = Modifier.fillMaxSize()
+//                ) { padding ->
+//                    NavigationScreens(navigationController, padding)
+//                }
+
+                SplashScreen()
             }
         }
     }

@@ -13,6 +13,8 @@ include(":app")
 include(":base")
 
 include(":feature:login")
+include(":feature:splash")
+include(":feature:tabs")
 
 include(":library:foundation")
 include(":library:resources")

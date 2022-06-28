@@ -15,7 +15,7 @@ fun HSpacer(
 }
 
 @Composable
-fun VSpacer(
+fun WSpacer(
     width: Dp,
 ) {
     Spacer(modifier = Modifier.width(width))
