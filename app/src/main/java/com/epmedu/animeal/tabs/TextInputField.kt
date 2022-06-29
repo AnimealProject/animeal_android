@@ -1,27 +1,28 @@
 package com.epmedu.animeal.tabs
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.DarkerGrey
 import com.epmedu.animeal.base.theme.LynxWhite
 import com.epmedu.animeal.base.theme.NavigationItemColor
 
 @Composable
-fun InputFieldView(
+fun TextInputField(
     modifier: Modifier,
     title: String,
     placeholder: String,
@@ -54,7 +55,7 @@ fun InputFieldView(
             onValueChange = {
                 onValueChange(it)
             },
-            textStyle = TypographyCustom,
+            textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = NavigationItemColor,
                 backgroundColor = Color.Transparent,
@@ -74,30 +75,32 @@ fun InputFieldView(
         )
     }
 }
-/*
 
 @Preview(
     showBackground = true,
     name = "Preview1",
     showSystemUi = true,
-    backgroundColor = 0xFF03A9F4,
-    heightDp = 200
+    uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
 fun TestPreviewInput() {
-    var number by remember { mutableStateOf("") }
+    AnimealTheme {
+        Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()) {
+            var name by remember { mutableStateOf("") }
 
-    InputFieldView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        title = "Name",
-        placeHolder = "Enter your name",
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        onValueChange = {
-            number = it
-            Log.wtf("Taken Value from input", "$it")
-        },
-        number
-    )
-}*/
+            TextInputField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                title = "Name",
+                placeholder = "Enter your name",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                onValueChange = {
+                    name = it
+                },
+                name
+            )
+
+        }
+    }
+}

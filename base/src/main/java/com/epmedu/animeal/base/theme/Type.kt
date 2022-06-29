@@ -28,13 +28,3 @@ val Typography = Typography(
     )
     */
 )
-
-/**
- * Custom [FontFamily] from resources
- */
-val helveticaFamily = FontFamily(
-    Font(R.font.helvetica_semi_bold, FontWeight.SemiBold),
-    Font(R.font.helvetica_regular, FontWeight.Normal),
-    Font(R.font.helvetica_medium, FontWeight.Medium),
-    Font(R.font.helvetica_bold, FontWeight.Bold),
-)
