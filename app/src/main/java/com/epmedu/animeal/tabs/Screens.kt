@@ -27,7 +27,7 @@ internal fun HomeScreen() {
                 .padding(horizontal = 16.dp),
             title = "Name",
             placeholder = "Enter your name",
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onValueChange = {
                 number = it
                 Log.wtf("Taken Value from input", "$it")
