@@ -5,8 +5,8 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -27,7 +25,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.base.ui.ShortButton
 import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.feature_more.R
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -71,9 +69,16 @@ fun MoreScreen() {
 private fun HomeScreen(navController: NavController, onLogout: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopBar(title = stringResource(id = R.string.more)) }
-    ) {
-        Column {
+        topBar = {
+            TopBar(
+                title = stringResource(id = R.string.more),
+                padding = PaddingValues(top = 8.dp, start = 44.dp, bottom = 48.dp)
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier.padding(padding)
+        ) {
             LazyColumn {
                 items(screens) { screen ->
                     MoreOption(
@@ -83,7 +88,11 @@ private fun HomeScreen(navController: NavController, onLogout: () -> Unit) {
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            LogoutButton(onClick = onLogout)
+            ShortButton(
+                text = stringResource(id = R.string.logout),
+                padding = PaddingValues(start = 44.dp, bottom = 44.dp),
+                onClick = onLogout
+            )
         }
     }
 }
@@ -93,36 +102,17 @@ private fun MoreOption(title: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .height(40.dp)
             .clickable { onClick() }
-            .padding(horizontal = 32.dp),
+            .padding(start = 44.dp, end = 32.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.body1
-        )
+        Text(text = title)
         Icon(
             imageVector = Icons.Default.KeyboardArrowRight,
             contentDescription = title,
             modifier = Modifier.size(32.dp)
-        )
-    }
-}
-
-@Composable
-private fun LogoutButton(onClick: () -> Unit) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .padding(32.dp)
-            .clickable { onClick() }
-    ) {
-        Text(
-            text = stringResource(R.string.logout),
-            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -146,18 +136,18 @@ private sealed class NavigationScreen(val route: Route, @StringRes val title: In
 
 @Preview
 @Composable
-fun MoreScreenPreview() {
-    AnimealTheme {
-        HomeScreen(navController = NavController(LocalContext.current)) {}
-    }
-}
-
-@Preview
-@Composable
 fun MoreOptionPreview() {
     AnimealTheme {
         Surface {
             MoreOption("Profile Page") {}
         }
+    }
+}
+
+@Preview
+@Composable
+fun MoreScreenPreview() {
+    AnimealTheme {
+        HomeScreen(navController = NavController(LocalContext.current)) {}
     }
 }
