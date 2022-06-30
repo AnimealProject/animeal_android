@@ -18,6 +18,7 @@ android {
 
 dependencies {
     implementation(projects.base)
+    implementation(projects.featureMore)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
@@ -39,7 +40,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-    
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)

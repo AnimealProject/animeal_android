@@ -17,13 +17,6 @@ internal fun HomeScreen() {
 }
 
 @Composable
-internal fun MoreScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(R.string.more), modifier = Modifier.align(Alignment.Center))
-    }
-}
-
-@Composable
 internal fun FavoritesScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = stringResource(R.string.favorites), modifier = Modifier.align(Alignment.Center))
