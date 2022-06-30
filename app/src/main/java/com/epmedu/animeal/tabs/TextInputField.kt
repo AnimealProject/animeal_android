@@ -25,7 +25,6 @@ fun TextInputField(
     modifier: Modifier,
     title: String,
     placeholder: String,
-    keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     value: String
 ) {
@@ -70,7 +69,7 @@ fun TextInputField(
                 )
             },
             singleLine = true,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
     }
 }
@@ -93,13 +92,11 @@ fun TestPreviewInput() {
                     .padding(horizontal = 16.dp),
                 title = "Name",
                 placeholder = "Enter your name",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = {
                     name = it
                 },
                 name
             )
-
         }
     }
 }
