@@ -32,7 +32,6 @@ fun TextInputField(
     modifier: Modifier,
     title: String,
     placeholder: String,
-    keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     value: String
 ) {
@@ -77,7 +76,7 @@ fun TextInputField(
                 )
             },
             singleLine = true,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
     }
 }
@@ -87,7 +86,6 @@ fun FormattedInputView(
     modifier: Modifier,
     title: String,
     maskFormat: String,
-    keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     value: String,
     prefixText: (@Composable () -> Unit)? = null,
@@ -126,7 +124,7 @@ fun FormattedInputView(
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
                 visualTransformation = FormattedTransformation(maskFormat),
-                keyboardOptions = keyboardOptions,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = modifier
                     .align(CenterVertically)
             )
@@ -220,7 +218,6 @@ fun TextInputPreview() {
                     .padding(horizontal = 16.dp),
                 title = "Name",
                 placeholder = "Enter your name",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = {
                     name = it
                 },
@@ -258,9 +255,8 @@ fun PhoneInputPreview() {
                         .padding(horizontal = 16.dp),
                     title = "Phone number",
                     maskFormat = "111 11-11-11",
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     onValueChange = { phoneNumber = it },
-                    phoneNumber,
+                    value = phoneNumber,
                     prefixText = {
                         Box(
                             modifier = Modifier
@@ -290,9 +286,8 @@ fun PhoneInputPreview() {
                         .padding(horizontal = 16.dp),
                     title = "Chip number",
                     maskFormat = "111 111 111",
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { chipNumber = it },
-                    chipNumber
+                    value = chipNumber
                 )
             }
         }
