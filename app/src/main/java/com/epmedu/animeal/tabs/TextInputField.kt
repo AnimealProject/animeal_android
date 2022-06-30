@@ -1,7 +1,6 @@
 package com.epmedu.animeal.tabs
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,7 +77,7 @@ fun TextInputField(
 
 @Preview(
     showBackground = true,
-    name = "Preview1",
+    name = "TExtInputField",
     showSystemUi = true,
     uiMode = UI_MODE_NIGHT_NO,
 )
