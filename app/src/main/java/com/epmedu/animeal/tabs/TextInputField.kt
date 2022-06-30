@@ -182,7 +182,20 @@ class FormattedTransformation(format: String) : VisualTransformation {
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    return cleanDigitLength
+                    var lastIndex = 0
+                    while (true) {
+                        when {
+                            lastIndex == map.keys.size -> {
+                                return mask.length
+                            }
+                            offset <= map.keys.toList()[lastIndex] -> {
+                                return offset - lastIndex
+                            }
+                            else -> {
+                                lastIndex += 1
+                            }
+                        }
+                    }
                 }
             }
         )
@@ -233,25 +246,6 @@ fun PhoneInputPreview() {
                 verticalArrangement = Arrangement.Top
             ) {
 
-                Spacer(modifier = Modifier.height(70.dp))
-
-                var name by remember { mutableStateOf("") }
-                /**
-                 *  FIRST NUMBER INPUT
-                 */
-                TextInputField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    title = "Name",
-                    placeholder = "Enter your name",
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    onValueChange = {
-                        name = it
-                    },
-                    name
-                )
-
                 Spacer(modifier = Modifier.height(20.dp))
 
                 var phoneNumber by remember { mutableStateOf("") }
@@ -271,12 +265,12 @@ fun PhoneInputPreview() {
                         Box(
                             modifier = Modifier
                                 .height(56.dp)
-                                .padding(start = 16.dp),
+                                .padding(start = 16.dp, end = 2.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = "+995",
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.Start,
                                 modifier = Modifier.align(Alignment.Center),
                                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
                             )
