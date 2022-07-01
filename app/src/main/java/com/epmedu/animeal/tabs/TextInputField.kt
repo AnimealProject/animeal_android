@@ -252,9 +252,14 @@ fun TextInputPreview() {
 @Composable
 fun PhoneInputPreview() {
     AnimealTheme {
-        Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()) {
+        Surface(
+            color = MaterialTheme.colors.background,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
