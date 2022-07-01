@@ -11,4 +11,8 @@ dependencies {
     implementation(libs.compose.material)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    // Temporary fix for preview bug https://issuetracker.google.com/issues/227767363
+    debugApi(libs.androidx.custom.view)
+    debugApi(libs.androidx.custom.view.container)
 }
