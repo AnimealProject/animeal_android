@@ -84,13 +84,12 @@ fun TextInputField(
 @Composable
 fun FormattedInputView(
     modifier: Modifier,
-    title: String,
-    maskFormat: String,
+    titleAndMaskFormat: Pair<String, String>,
     onValueChange: (String) -> Unit,
     value: String,
     prefixText: (@Composable () -> Unit)? = null,
 ) {
-    val maxDigitCount = maskFormat.replace("\\D".toRegex(), "").length
+    val maxDigitCount = titleAndMaskFormat.second.replace("\\D".toRegex(), "").length
 
     Column(
         modifier = modifier,
@@ -98,7 +97,7 @@ fun FormattedInputView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = title,
+            text = titleAndMaskFormat.first,
             modifier = modifier.padding(bottom = 2.dp),
             style = TextStyle(
                 color = NavigationItemColor,
@@ -123,7 +122,7 @@ fun FormattedInputView(
                     }
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                visualTransformation = FormattedTransformation(maskFormat),
+                visualTransformation = FormattedTransformation(titleAndMaskFormat.second),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = modifier
                     .align(CenterVertically)
@@ -253,8 +252,7 @@ fun PhoneInputPreview() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    title = "Phone number",
-                    maskFormat = "111 11-11-11",
+                    titleAndMaskFormat = "Phone number" to "111 11-11-11",
                     onValueChange = { phoneNumber = it },
                     value = phoneNumber,
                     prefixText = {
@@ -284,8 +282,7 @@ fun PhoneInputPreview() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    title = "Chip number",
-                    maskFormat = "111 111 111",
+                    titleAndMaskFormat = "Chip number" to "111 111 111",
                     onValueChange = { chipNumber = it },
                     value = chipNumber
                 )
