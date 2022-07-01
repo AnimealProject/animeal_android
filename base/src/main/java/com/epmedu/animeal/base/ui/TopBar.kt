@@ -45,6 +45,7 @@ fun TopBar(
         if (navigationIcon == null) {
             Spacer(modifier = Modifier.width(44.dp))
         } else {
+            Spacer(modifier = Modifier.width(8.dp))
             navigationIcon()
         }
 

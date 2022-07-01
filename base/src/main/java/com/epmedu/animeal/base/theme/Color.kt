@@ -10,3 +10,5 @@ val Daintree = Color(0xFF00283D)
 
 val DisabledButtonColor = Color(0xFFD9DEE1)
 val DisabledButtonContentColor = Color.White
+val ResendButtonContentColor = Color(0xFF212530)
+val CursorColor = Color.Black
