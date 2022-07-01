@@ -16,8 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,65 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.CursorColor
-import com.epmedu.animeal.base.theme.DarkerGrey
 import com.epmedu.animeal.base.theme.LynxWhite
 import com.epmedu.animeal.base.theme.NavigationItemColor
-
-@Composable
-fun TextInputField(
-    modifier: Modifier,
-    title: String,
-    placeholder: String,
-    onValueChange: (String) -> Unit,
-    value: String
-) {
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Center,
-    ) {
-
-        Text(
-            text = title,
-            modifier = Modifier
-                .padding(bottom = 2.dp),
-            style = TextStyle(
-                color = NavigationItemColor,
-                fontSize = 14.sp
-            )
-        )
-
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = LynxWhite,
-                    shape = RoundedCornerShape(12.dp),
-                ),
-            value = value,
-            onValueChange = {
-                onValueChange(it)
-            },
-            textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = NavigationItemColor,
-                backgroundColor = Color.Transparent,
-                cursorColor = CursorColor,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    fontSize = 16.sp,
-                    color = DarkerGrey
-                )
-            },
-            singleLine = true,
-        )
-    }
-}
 
 @Composable
 fun FormattedInputView(
@@ -218,34 +159,7 @@ class FormattedTransformation(format: String) : VisualTransformation {
 
 @Preview(
     showBackground = true,
-    name = "TextInputField",
-    showSystemUi = true,
-    uiMode = UI_MODE_NIGHT_NO,
-)
-@Composable
-fun TextInputPreview() {
-    AnimealTheme {
-        Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()) {
-            var name by remember { mutableStateOf("") }
-
-            TextInputField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                title = "Name",
-                placeholder = "Enter your name",
-                onValueChange = {
-                    name = it
-                },
-                name
-            )
-        }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    name = "MaskInputField",
+    name = "PhoneInputPreview",
     showSystemUi = true,
     uiMode = UI_MODE_NIGHT_NO,
 )
@@ -263,12 +177,8 @@ fun PhoneInputPreview() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-                Spacer(modifier = Modifier.height(20.dp))
-
                 var phoneNumber by remember { mutableStateOf("") }
-                /**
-                 *  PHONE NUMBER INPUT
-                 */
+
                 FormattedInputView(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -292,13 +202,34 @@ fun PhoneInputPreview() {
                         }
                     }
                 )
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    name = "ChipNumberInputView",
+    showSystemUi = true,
+    uiMode = UI_MODE_NIGHT_NO,
+)
+@Composable
+fun ChipNumberInputView() {
+    AnimealTheme {
+        Surface(
+            color = MaterialTheme.colors.background,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 var chipNumber by remember { mutableStateOf("") }
-                /**
-                 *  CHIP NUMBER INPUT
-                 */
                 FormattedInputView(
                     modifier = Modifier
                         .fillMaxWidth()
