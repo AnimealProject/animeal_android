@@ -1,7 +1,6 @@
 package com.epmedu.animeal.tabs
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,12 +55,12 @@ fun TextInputField(
     Column(
         modifier = modifier,
         verticalArrangement = Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Text(
             text = title,
-            modifier = modifier.padding(bottom = 2.dp),
+            modifier = Modifier
+                .padding(bottom = 2.dp),
             style = TextStyle(
                 color = NavigationItemColor,
                 fontSize = 14.sp
@@ -69,10 +68,12 @@ fun TextInputField(
         )
 
         TextField(
-            modifier = modifier.background(
-                color = LynxWhite,
-                shape = RoundedCornerShape(12.dp),
-            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = LynxWhite,
+                    shape = RoundedCornerShape(12.dp),
+                ),
             value = value,
             onValueChange = {
                 onValueChange(it)
@@ -93,7 +94,6 @@ fun TextInputField(
                 )
             },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
     }
 }
@@ -110,12 +110,10 @@ fun FormattedInputView(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = titleAndMaskFormat.first,
-            modifier = modifier.padding(bottom = 2.dp),
+            modifier = Modifier.padding(bottom = 2.dp),
             style = TextStyle(
                 color = NavigationItemColor,
                 fontSize = 14.sp
@@ -123,7 +121,7 @@ fun FormattedInputView(
         )
         Row(
             horizontalArrangement = Center,
-            modifier = modifier
+            modifier = Modifier
                 .height(56.dp)
                 .background(
                     color = LynxWhite,
@@ -141,7 +139,9 @@ fun FormattedInputView(
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
                 visualTransformation = FormattedTransformation(titleAndMaskFormat.second),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = modifier
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp)
                     .align(CenterVertically)
             )
         }
@@ -256,7 +256,6 @@ fun PhoneInputPreview() {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
             ) {
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -276,7 +275,7 @@ fun PhoneInputPreview() {
                         Box(
                             modifier = Modifier
                                 .height(56.dp)
-                                .padding(start = 16.dp, end = 2.dp),
+                                .padding(start = 16.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
