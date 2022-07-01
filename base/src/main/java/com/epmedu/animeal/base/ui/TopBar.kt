@@ -1,6 +1,5 @@
 package com.epmedu.animeal.base.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,18 +32,19 @@ import com.epmedu.animeal.base.theme.AnimealTheme
  * @param navigationIcon A navigation icon before the title. By default `null`.
  */
 @Composable
-fun TopBar(title: String, navigationIcon: (@Composable () -> Unit)? = null) {
+fun TopBar(
+    title: String,
+    navigationIcon: (@Composable () -> Unit)? = null
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 32.dp, end = 32.dp, bottom = 32.dp),
+            .padding(top = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (navigationIcon == null) {
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(44.dp))
         } else {
-            Spacer(modifier = Modifier.width(8.dp))
             navigationIcon()
         }
 

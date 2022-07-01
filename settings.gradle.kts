@@ -11,4 +11,4 @@ rootProject.name = "Animeal"
 
 include(":app")
 include(":base")
-include(":feature-more")
+include(":feature:more")
