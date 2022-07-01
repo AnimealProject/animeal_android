@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.ui.BackButton
 import com.epmedu.animeal.base.ui.AnimealShortButton
+import com.epmedu.animeal.base.ui.BackButton
 import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.more.R
 
