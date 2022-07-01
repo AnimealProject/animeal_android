@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.more.profile
+package com.epmedu.animeal.more.profile
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

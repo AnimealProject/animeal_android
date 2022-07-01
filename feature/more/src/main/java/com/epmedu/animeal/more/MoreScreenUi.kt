@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.more.more
+package com.epmedu.animeal.more
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,21 +21,17 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.ui.ShortButton
+import com.epmedu.animeal.base.ui.AnimealShortButton
 import com.epmedu.animeal.base.ui.TopBar
-import com.epmedu.animeal.feature.more.navigation.screens
-import com.epmedu.animeal.feature_more.R
 
 @Composable
-internal fun MainScreen(navController: NavController) {
-    val viewModel: MainViewModel = viewModel()
+internal fun MoreScreenUi(onNavigate: (String) -> Unit) {
+    val viewModel: MoreViewModel = viewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -49,12 +45,12 @@ internal fun MainScreen(navController: NavController) {
                 items(screens) { screen ->
                     MoreOption(
                         title = stringResource(id = screen.title),
-                        onClick = { navController.navigate(screen.route.name) }
+                        onClick = { onNavigate(screen.route.name) }
                     )
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            ShortButton(
+            AnimealShortButton(
                 text = stringResource(id = R.string.logout),
                 onClick = { viewModel.logout() },
                 modifier = Modifier.padding(start = 44.dp, bottom = 44.dp)
@@ -97,6 +93,6 @@ fun MoreOptionPreview() {
 @Composable
 fun MoreScreenPreview() {
     AnimealTheme {
-        MainScreen(navController = NavController(LocalContext.current))
+        MoreScreenUi {}
     }
 }

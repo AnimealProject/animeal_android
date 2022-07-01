@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.more
+package com.epmedu.animeal.more.ui.common
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold

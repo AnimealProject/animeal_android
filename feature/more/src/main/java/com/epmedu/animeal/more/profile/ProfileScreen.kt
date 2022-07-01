@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.more.profile
+package com.epmedu.animeal.more.profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +15,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.ui.BackButton
-import com.epmedu.animeal.base.ui.ShortButton
+import com.epmedu.animeal.base.ui.AnimealShortButton
 import com.epmedu.animeal.base.ui.TopBar
-import com.epmedu.animeal.feature_more.R
+import com.epmedu.animeal.more.R
 
 @Composable
 internal fun ProfileScreen(navController: NavController) {
@@ -39,7 +39,7 @@ internal fun ProfileScreen(navController: NavController) {
                 modifier = Modifier.padding(top = 40.dp, start = 44.dp)
             )
             // TODO: Put profile fields
-            ShortButton(
+            AnimealShortButton(
                 text = "Edit",
                 onClick = { viewModel.edit() },
                 modifier = Modifier.padding(top = 32.dp, start = 24.dp)

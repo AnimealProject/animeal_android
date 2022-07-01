@@ -18,7 +18,7 @@ import com.epmedu.animeal.base.theme.DisabledButtonColor
 import com.epmedu.animeal.base.theme.DisabledButtonContentColor
 
 @Composable
-fun ShortButton(
+fun AnimealShortButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -47,9 +47,9 @@ fun ShortButtonPreview() {
     AnimealTheme {
         Surface {
             Column {
-                ShortButton(text = "Enabled", onClick = {})
+                AnimealShortButton(text = "Enabled", onClick = {})
                 Divider()
-                ShortButton(text = "Disabled", enabled = false, onClick = {})
+                AnimealShortButton(text = "Disabled", enabled = false, onClick = {})
             }
         }
     }
