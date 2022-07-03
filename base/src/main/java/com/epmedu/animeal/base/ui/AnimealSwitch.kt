@@ -75,7 +75,7 @@ private fun DogsCatsTabBar(
             TabIndicator(tabPositions, currentTab)
         }
     ) {
-        HomeTab(
+        AnimalTab(
             tab = Tab.Dogs,
             selected = currentTab == Tab.Dogs,
             onClick = {
@@ -83,7 +83,7 @@ private fun DogsCatsTabBar(
                 currentTab = it
             }
         )
-        HomeTab(
+        AnimalTab(
             tab = Tab.Cats,
             selected = currentTab == Tab.Cats,
             onClick = {
@@ -146,7 +146,7 @@ private fun TabIndicator(
  * @param modifier The [Modifier].
  */
 @Composable
-private fun HomeTab(
+private fun AnimalTab(
     tab: Tab,
     selected: Boolean,
     onClick: (Tab) -> Unit,
