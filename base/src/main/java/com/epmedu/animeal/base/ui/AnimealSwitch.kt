@@ -52,7 +52,7 @@ private enum class Tab(@StringRes val title: Int) {
  * @param modifier The [Modifier].
  */
 @Composable
-private fun DogsCatsTabBar(
+private fun AnimealSwitch(
     onTabSelected: (tab: Tab) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -174,7 +174,7 @@ fun DogCatTabBarPreview() {
     AnimealTheme {
         Surface(color = Color.Black) {
             Row {
-                DogsCatsTabBar(
+                AnimealSwitch(
                     onTabSelected = { }, modifier = Modifier.size(226.dp, 36.dp)
                 )
             }
