@@ -72,7 +72,7 @@ private fun DogsCatsTabBar(
                 shadowElevation = 0f
             },
         indicator = { tabPositions ->
-            HomeTabIndicator(tabPositions, currentTab)
+            TabIndicator(tabPositions, currentTab)
         }
     ) {
         HomeTab(
@@ -101,7 +101,7 @@ private fun DogsCatsTabBar(
  * @param tab The [Tab] that is currently selected.
  */
 @Composable
-private fun HomeTabIndicator(
+private fun TabIndicator(
     tabPositions: List<TabPosition>,
     tab: Tab
 ) {
