@@ -5,40 +5,49 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import com.epmedu.animeal.base.ui.BackButton
-import com.epmedu.animeal.base.ui.TopBar
-import com.epmedu.animeal.feature_more.R
+import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.foundation.topbar.BackButton
+import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun ProfilePageScreen(navController: NavController) {
+internal fun ProfilePageScreen() {
+    val navigator = LocalNavigator.currentOrThrow
+
     ScreenPlaceholder(
-        title = stringResource(id = R.string.profile_page),
-        onBack = { navController.popBackStack() }
+        title = stringResource(id = R.string.page_profile),
+        onBack = { navigator.popBackStack() }
     )
 }
 
 @Composable
-internal fun DonateScreen(navController: NavController) {
+internal fun DonateScreen() {
+    val navigator = LocalNavigator.currentOrThrow
+
     ScreenPlaceholder(
-        title = stringResource(id = R.string.donate),
-        onBack = { navController.popBackStack() }
+        title = stringResource(id = R.string.page_donate),
+        onBack = { navigator.popBackStack() }
     )
 }
 
 @Composable
-internal fun HelpScreen(navController: NavController) {
+internal fun HelpScreen() {
+    val navigator = LocalNavigator.currentOrThrow
+
     ScreenPlaceholder(
-        title = stringResource(id = R.string.help),
-        onBack = { navController.popBackStack() }
+        title = stringResource(id = R.string.page_help),
+        onBack = { navigator.popBackStack() }
     )
 }
 
 @Composable
-internal fun AboutScreen(navController: NavController) {
+internal fun AboutScreen() {
+    val navigator = LocalNavigator.currentOrThrow
+
     ScreenPlaceholder(
-        title = stringResource(id = R.string.about),
-        onBack = { navController.popBackStack() }
+        title = stringResource(id = R.string.page_about),
+        onBack = { navigator.popBackStack() }
     )
 }
 

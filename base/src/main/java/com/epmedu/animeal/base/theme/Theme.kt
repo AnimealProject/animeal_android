@@ -5,6 +5,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -13,11 +14,11 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = AnimealColor.Light.seaSerpent,
-    background = AnimealColor.Light.white,
+    primary = AnimealColor.Light.SeaSerpent,
+    background = Color.White,
     primaryVariant = Purple700,
-    secondary = AnimealColor.Light.carminePink,
-    secondaryVariant = AnimealColor.Light.platinum,
+    secondary = AnimealColor.Light.CarminePink,
+    secondaryVariant = AnimealColor.Light.Gainsboro,
 
     /* Other default colors to override
     background = Color.White,

@@ -19,9 +19,13 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.CustomColor
+import com.epmedu.animeal.common.screenRoute.MainScreenRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.login.domain.model.OnBoardingItemModel
 import com.epmedu.animeal.login.foundation.LoginButtonContent
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -30,34 +34,55 @@ import com.google.accompanist.pager.rememberPagerState
 
 @Suppress("UnusedPrivateMember")
 @Composable
-@Preview(showBackground = true)
+@Preview
 private fun SignInScreenPreview() {
     AnimealTheme {
-        SignInScreen()
+        SignInScreenUI(
+            onSignInMobile = {},
+            onSignInFacebook = {},
+            onSignInGoogle = {},
+        )
     }
 }
 
 @Composable
-fun SignInScreen(
+fun SignInScreen() {
+    val navigator = LocalNavigator.currentOrThrow
+
+    SignInScreenUI(
+        onSignInMobile = {
+            navigator.replaceSignIn(MainScreenRoute.Tabs)
+        },
+        onSignInFacebook = {
+            navigator.replaceSignIn(MainScreenRoute.Tabs)
+        },
+        onSignInGoogle = {
+            navigator.replaceSignIn(MainScreenRoute.Tabs)
+        },
+    )
+}
+
+@Composable
+private fun SignInScreenUI(
     modifier: Modifier = Modifier,
+    onSignInMobile: () -> Unit,
+    onSignInFacebook: () -> Unit,
+    onSignInGoogle: () -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background,
     ) {
-        SignInUi()
-    }
-}
-
-@Composable
-private fun SignInUi(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        OnBoarding()
-        ButtonsBlock()
+        Column(
+            modifier = modifier.fillMaxSize(),
+        ) {
+            OnBoarding()
+            ButtonsBlock(
+                onSignInMobile = onSignInMobile,
+                onSignInFacebook = onSignInFacebook,
+                onSignInGoogle = onSignInGoogle,
+            )
+        }
     }
 }
 
@@ -130,6 +155,9 @@ private fun OnBoardingItem(
 @Composable
 private fun ButtonsBlock(
     modifier: Modifier = Modifier,
+    onSignInMobile: () -> Unit,
+    onSignInFacebook: () -> Unit,
+    onSignInGoogle: () -> Unit,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -144,7 +172,7 @@ private fun ButtonsBlock(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimealButton(
-                onClick = { }
+                onClick = onSignInMobile,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_phone,
@@ -152,8 +180,8 @@ private fun ButtonsBlock(
                 )
             }
             AnimealButton(
-                color = CustomColor.facebook,
-                onClick = { }
+                color = CustomColor.Facebook,
+                onClick = onSignInFacebook,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_facebook,
@@ -161,14 +189,24 @@ private fun ButtonsBlock(
                 )
             }
             AnimealButton(
-                color = CustomColor.google,
-                onClick = { }
+                color = CustomColor.Google,
+                onClick = onSignInGoogle,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_google,
                     textId = R.string.sign_in_google,
                 )
             }
+        }
+    }
+}
+
+private fun Navigator.replaceSignIn(
+    route: MainScreenRoute
+) {
+    navigate(route.name) {
+        popUpTo(MainScreenRoute.SignIn.name) {
+            inclusive = true
         }
     }
 }

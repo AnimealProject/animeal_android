@@ -4,73 +4,72 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.ui.TopBar
-import com.epmedu.animeal.feature_more.R
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.navigation.AnimatedScreenNavHost
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MoreScreen() {
-    val navController = rememberAnimatedNavController()
     val viewModel: MoreViewModel = viewModel()
 
-    AnimatedNavHost(
-        navController = navController,
+    AnimatedScreenNavHost(
         startDestination = NavigationScreen.Home.route.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
         exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
     ) {
-        composable(
+        screen(
             NavigationScreen.Home.route.name,
             enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Right) },
             exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Left) }
         ) {
-            HomeScreen(navController = navController, onLogout = { viewModel.logout() })
+            HomeScreen(onLogout = { viewModel.logout() })
         }
-        composable(NavigationScreen.ProfilePage.route.name) { ProfilePageScreen(navController) }
-        composable(NavigationScreen.Donate.route.name) { DonateScreen(navController) }
-        composable(NavigationScreen.Help.route.name) { HelpScreen(navController) }
-        composable(NavigationScreen.About.route.name) { AboutScreen(navController) }
+        screen(NavigationScreen.ProfilePage.route.name) { ProfilePageScreen() }
+        screen(NavigationScreen.Donate.route.name) { DonateScreen() }
+        screen(NavigationScreen.Help.route.name) { HelpScreen() }
+        screen(NavigationScreen.About.route.name) { AboutScreen() }
     }
 }
 
 @Composable
-private fun HomeScreen(navController: NavController, onLogout: () -> Unit) {
+private fun HomeScreen(onLogout: () -> Unit) {
+    val navigator = LocalNavigator.currentOrThrow
+
+    HomeScreenUI(
+        onItemClicked = {
+            navigator.navigate(it)
+        },
+        onLogout = onLogout,
+    )
+}
+
+@Composable
+private fun HomeScreenUI(
+    modifier: Modifier = Modifier,
+    onItemClicked: (String) -> Unit,
+    onLogout: () -> Unit,
+) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         topBar = { TopBar(title = stringResource(id = R.string.more)) }
     ) {
         Column {
@@ -78,7 +77,7 @@ private fun HomeScreen(navController: NavController, onLogout: () -> Unit) {
                 items(screens) { screen ->
                     MoreOption(
                         title = stringResource(id = screen.title),
-                        onClick = { navController.navigate(screen.route.name) }
+                        onClick = { onItemClicked(screen.route.name) }
                     )
                 }
             }
@@ -136,10 +135,10 @@ private val screens = listOf(
 
 private sealed class NavigationScreen(val route: Route, @StringRes val title: Int) {
     object Home : NavigationScreen(route = Route.HOME, title = R.string.more)
-    object ProfilePage : NavigationScreen(route = Route.PROFILE_PAGE, title = R.string.profile_page)
-    object Donate : NavigationScreen(route = Route.DONATE, title = R.string.donate)
-    object Help : NavigationScreen(route = Route.HELP, title = R.string.help)
-    object About : NavigationScreen(route = Route.ABOUT, title = R.string.about_detailed)
+    object ProfilePage : NavigationScreen(route = Route.PROFILE_PAGE, title = R.string.page_profile)
+    object Donate : NavigationScreen(route = Route.DONATE, title = R.string.page_donate)
+    object Help : NavigationScreen(route = Route.HELP, title = R.string.page_help)
+    object About : NavigationScreen(route = Route.ABOUT, title = R.string.page_about_detailed)
 
     enum class Route { HOME, PROFILE_PAGE, DONATE, HELP, ABOUT }
 }
@@ -148,7 +147,10 @@ private sealed class NavigationScreen(val route: Route, @StringRes val title: In
 @Composable
 fun MoreScreenPreview() {
     AnimealTheme {
-        HomeScreen(navController = NavController(LocalContext.current)) {}
+        HomeScreenUI(
+            onItemClicked = {},
+            onLogout = {},
+        )
     }
 }
 

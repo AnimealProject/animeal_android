@@ -11,14 +11,13 @@ val NavigationItemSelectedColor = Color(0xFF03BFD7)
 internal object AnimealColor {
 
     object Light {
-        val carminePink = Color(0xFFF04E45)
-        val platinum = Color(0xFFE8E7E7)
-        val seaSerpent = Color(0xFF43BFD7)
-        val white = Color(0xFFFFFFFF)
+        val CarminePink = Color(0xFFF04E45)
+        val Gainsboro = Color(0xFFDFDFDF)
+        val SeaSerpent = Color(0xFF03BFD7)
     }
 }
 
 object CustomColor {
-    val facebook = Color(0xFF438BED)
-    val google = Color(0xFF000000)
+    val Facebook = Color(0xFF438BED)
+    val Google = Color(0xFF000000)
 }

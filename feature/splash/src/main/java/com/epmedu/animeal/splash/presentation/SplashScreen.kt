@@ -10,6 +10,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,20 +20,45 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.foundation.spacer.HSpacer
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun SplashScreenPreview() {
     AnimealTheme {
-        SplashScreen()
+        SplashScreenUI()
     }
 }
 
 @Composable
-fun SplashScreen(
+fun SplashScreen() {
+    val navController = LocalNavigator.currentOrThrow
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            // todo delete it after login logic implementation
+            delay(2000)
+            navController.navigate(MainScreenRoute.SignIn.name) {
+                popUpTo(MainScreenRoute.Splash.name) {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    SplashScreenUI()
+}
+
+@Composable
+private fun SplashScreenUI(
     modifier: Modifier = Modifier,
 ) {
     Surface(

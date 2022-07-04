@@ -5,7 +5,11 @@ plugins {
 
 dependencies {
     implementation(projects.base)
+
+    implementation(projects.library.common)
+    implementation(projects.library.extensions)
     implementation(projects.library.foundation)
+    implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
     implementation(libs.accompanist.pager)

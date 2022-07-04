@@ -6,11 +6,8 @@ plugins {
 dependencies {
     implementation(projects.base)
 
-    implementation(projects.library.common)
-    implementation(projects.library.extensions)
-    implementation(projects.library.foundation)
-    implementation(projects.library.navigation)
-    implementation(projects.library.resources)
+    api(libs.androidx.navigation.compose)
+    api(libs.accompanist.navigation.animation)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
