@@ -10,7 +10,12 @@ import kotlinx.coroutines.launch
 
 internal class CodeConfirmationViewModel : ViewModel() {
 
-    private val _state = MutableStateFlow(CodeConfirmationScreenState(code = getEmptyCode()))
+    private val _state = MutableStateFlow(
+        CodeConfirmationScreenState(
+            phoneNumber = getPhoneNumber(),
+            code = getEmptyCode(),
+        )
+    )
     val state: StateFlow<CodeConfirmationScreenState> = _state.asStateFlow()
 
     private val currentState get() = _state.value
@@ -19,6 +24,11 @@ internal class CodeConfirmationViewModel : ViewModel() {
         viewModelScope.launch {
             launchResendTimer()
         }
+    }
+
+    private fun getPhoneNumber(): String {
+        // TODO: Retrieve a phone number from repository
+        return PHONE_NUMBER_PLACEHOLDER
     }
 
     private fun getEmptyCode() = List(CODE_SIZE) { null }
@@ -77,6 +87,7 @@ internal class CodeConfirmationViewModel : ViewModel() {
     internal companion object {
         internal const val CODE_SIZE = 4
         internal const val RESEND_DELAY = 30L
+        internal const val PHONE_NUMBER_PLACEHOLDER = "558 49-99-69"
 
         private const val CORRECT_CODE = "1111"
     }

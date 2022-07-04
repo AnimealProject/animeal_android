@@ -14,7 +14,6 @@ internal const val FOCUS_DELAY = 300L
 
 @Composable
 fun CodeConfirmationScreen(
-    phoneNumber: String,
     onBack: () -> Unit,
     onNext: () -> Unit
 ) {
@@ -24,7 +23,6 @@ fun CodeConfirmationScreen(
 
     CodeConfirmationScreenUi(
         state = state,
-        phoneNumber = phoneNumber,
         focusRequester = focusRequester,
         onBack = onBack,
         onDigitChange = { position, digit ->
@@ -45,5 +43,3 @@ fun CodeConfirmationScreen(
         }
     }
 }
-
-

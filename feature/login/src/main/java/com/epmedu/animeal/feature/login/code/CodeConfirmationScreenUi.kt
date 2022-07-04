@@ -39,12 +39,12 @@ import com.epmedu.animeal.base.theme.ResendButtonContentColor
 import com.epmedu.animeal.base.ui.BackButton
 import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.feature.login.R
+import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
 import java.text.DecimalFormat
 
 @Composable
 internal fun CodeConfirmationScreenUi(
     state: CodeConfirmationScreenState,
-    phoneNumber: String,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
     onDigitChange: (position: Int, digit: Int?) -> Unit,
@@ -74,7 +74,7 @@ internal fun CodeConfirmationScreenUi(
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "${stringResource(id = R.string.code_was_sent_to)} $phoneNumber",
+                text = "${stringResource(id = R.string.code_was_sent_to)} ${state.phoneNumber}",
                 modifier = Modifier.padding(top = 8.dp)
             )
             CodeRow(
@@ -231,12 +231,14 @@ fun ResendButtonPreview() {
                 ResendButton(
                     isEnabled = true,
                     resendDelay = CodeConfirmationViewModel.RESEND_DELAY,
-                    onClick = {})
+                    onClick = {}
+                )
                 Divider()
                 ResendButton(
                     isEnabled = false,
                     resendDelay = CodeConfirmationViewModel.RESEND_DELAY,
-                    onClick = {})
+                    onClick = {}
+                )
             }
         }
     }
@@ -247,8 +249,10 @@ fun ResendButtonPreview() {
 fun CodeConfirmationScreenPreview() {
     AnimealTheme {
         CodeConfirmationScreenUi(
-            state = CodeConfirmationScreenState(listOf(null, null, null, null)),
-            phoneNumber = "558 49-99-69",
+            state = CodeConfirmationScreenState(
+                phoneNumber = PHONE_NUMBER_PLACEHOLDER,
+                code = listOf(null, null, null, null)
+            ),
             focusRequester = FocusRequester(),
             onBack = {},
             onDigitChange = { _, _ -> },
