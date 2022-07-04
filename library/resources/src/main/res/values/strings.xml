@@ -6,6 +6,7 @@
     <string name="more">More</string>
 
     <string name="page_profile">Profile Page</string>
+    <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
     <string name="page_help">Help</string>
     <string name="page_about">About</string>

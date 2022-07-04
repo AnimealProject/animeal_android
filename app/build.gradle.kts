@@ -20,7 +20,6 @@ dependencies {
     implementation(projects.base)
 
     implementation(projects.feature.login)
-    implementation(projects.feature.more)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabs)
 

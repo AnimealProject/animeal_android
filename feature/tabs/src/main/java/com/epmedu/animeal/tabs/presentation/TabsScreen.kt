@@ -19,7 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.epmedu.animeal.base.theme.NavigationItemColor
 import com.epmedu.animeal.base.theme.NavigationItemSelectedColor
-import com.epmedu.animeal.feature.more.MoreScreen
+import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 
 @Composable
@@ -46,7 +46,7 @@ private fun NavigationScreens(navigationController: NavHostController, padding: 
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { MoreScreen() }
+        screen(NavigationTab.More.route.name) { TabMoreScreen() }
     }
 }
 

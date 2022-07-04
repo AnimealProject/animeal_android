@@ -6,7 +6,7 @@ plugins {
 dependencies {
     implementation(projects.base)
 
-    implementation(projects.featureMore)
+    implementation(projects.feature.more)
 
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
