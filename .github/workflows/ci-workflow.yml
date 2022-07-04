@@ -19,7 +19,7 @@ jobs:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
 
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
@@ -44,7 +44,7 @@ jobs:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
 
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
@@ -88,7 +88,7 @@ jobs:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
           AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
     
