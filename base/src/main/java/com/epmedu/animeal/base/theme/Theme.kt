@@ -11,6 +11,8 @@ import com.epmedu.animeal.base.theme.AnimealColor.Light
 private val DarkColorPalette = darkColors(
     primary = Light.SeaSerpent,
     primaryVariant = Light.SeaSerpent,
+    secondary = Light.CarminePink,
+    secondaryVariant = Light.Gainsboro,
     onSurface = Color.White
 )
 
