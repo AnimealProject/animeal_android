@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.spacer.HSpacer
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.resources.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

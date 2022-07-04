@@ -10,13 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.ui.AnimealShortButton
-import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 
 @Composable

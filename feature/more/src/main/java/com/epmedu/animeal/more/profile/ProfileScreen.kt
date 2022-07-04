@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
-
 @Composable
 internal fun ProfileScreen() {
     val viewModel: ProfileViewModel = viewModel()
