@@ -12,18 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
 
-@Suppress("UnusedPrivateMember")
-@Preview
-@Composable
-private fun AnimealButtonPreview() {
-    AnimealTheme {
-        AnimealButton(
-            onClick = { },
-            text = "Hello World!",
-        )
-    }
-}
-
 @Composable
 fun AnimealButton(
     modifier: Modifier = Modifier,
@@ -69,4 +57,16 @@ fun AnimealButton(
         onClick = onClick,
         content = content,
     )
+}
+
+@Suppress("UnusedPrivateMember")
+@Preview
+@Composable
+private fun AnimealButtonPreview() {
+    AnimealTheme {
+        AnimealButton(
+            onClick = { },
+            text = "Hello World!",
+        )
+    }
 }

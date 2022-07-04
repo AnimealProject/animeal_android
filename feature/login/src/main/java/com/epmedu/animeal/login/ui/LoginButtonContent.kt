@@ -18,20 +18,6 @@ import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.foundation.spacer.WSpacer
 import com.epmedu.animeal.resources.R
 
-@Suppress("UnusedPrivateMember")
-@Preview
-@Composable
-private fun LoginButtonContentPreview() {
-    AnimealTheme {
-        Row {
-            LoginButtonContent(
-                iconId = R.drawable.ic_google,
-                textId = R.string.sign_in_google,
-            )
-        }
-    }
-}
-
 @Composable
 internal fun RowScope.LoginButtonContent(
     @DrawableRes iconId: Int,
@@ -48,4 +34,18 @@ internal fun RowScope.LoginButtonContent(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )
+}
+
+@Suppress("UnusedPrivateMember")
+@Preview
+@Composable
+private fun LoginButtonContentPreview() {
+    AnimealTheme {
+        Row {
+            LoginButtonContent(
+                iconId = R.drawable.ic_google,
+                textId = R.string.sign_in_google,
+            )
+        }
+    }
 }
