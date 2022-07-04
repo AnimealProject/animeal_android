@@ -38,7 +38,7 @@ import androidx.compose.ui.zIndex
 import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
 
-private enum class Tab(@StringRes val title: Int) {
+enum class Tab(@StringRes val title: Int) {
     Dogs(R.string.tab_dogs_title),
     Cats(R.string.tab_cats_title)
 }
@@ -50,7 +50,7 @@ private enum class Tab(@StringRes val title: Int) {
  * @param modifier The [Modifier].
  */
 @Composable
-private fun AnimealSwitch(
+fun AnimealSwitch(
     modifier: Modifier = Modifier,
     onTabSelected: (tab: Tab) -> Unit
 ) {
