@@ -1,11 +1,10 @@
 package com.epmedu.animeal.base.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -38,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.PrimaryColor
 
 private enum class Tab(@StringRes val title: Int) {
     Dogs(R.string.tab_dogs_title),
@@ -53,21 +51,17 @@ private enum class Tab(@StringRes val title: Int) {
  */
 @Composable
 private fun AnimealSwitch(
-    onTabSelected: (tab: Tab) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTabSelected: (tab: Tab) -> Unit
 ) {
     var currentTab by remember { mutableStateOf(Tab.Cats) }
 
     TabRow(
         selectedTabIndex = currentTab.ordinal,
-        backgroundColor = Color.White,
+        backgroundColor = MaterialTheme.colors.surface,
         modifier = modifier
-            .padding(vertical = 2.dp)
-            .clip(RoundedCornerShape(9.dp))
-            .border(
-                BorderStroke(2.dp, Color.White),
-                RoundedCornerShape(9.dp)
-            )
+            .size(width = 226.dp, height = 36.dp)
+            .clip(RoundedCornerShape(10.dp))
             .graphicsLayer {
                 shadowElevation = 0f
             },
@@ -105,16 +99,18 @@ private fun TabIndicator(
     tabPositions: List<TabPosition>,
     tab: Tab
 ) {
+
     val transition = updateTransition(
-        tab,
+        targetState = tab,
         label = "Tab indicator"
     )
-    val indicatorLeft by transition.animateDp(
 
+    val indicatorLeft by transition.animateDp(
         label = "Indicator left"
     ) { page ->
         tabPositions[page.ordinal].left
     }
+
     val indicatorRight by transition.animateDp(
         label = "Indicator right"
     ) { page ->
@@ -123,17 +119,16 @@ private fun TabIndicator(
 
     Box(
         Modifier
-            .fillMaxSize()
             .wrapContentSize(align = Alignment.BottomStart)
             .offset(x = indicatorLeft)
-            .width(indicatorRight - indicatorLeft)
-            .padding(2.dp)
+            .width(width = indicatorRight - indicatorLeft)
             .fillMaxSize()
+            .padding(all = 2.dp)
             .background(
-                PrimaryColor,
-                RoundedCornerShape(9.dp)
+                color = MaterialTheme.colors.primary,
+                shape = RoundedCornerShape(9.dp)
             )
-            .zIndex(-1f)
+            .zIndex(zIndex = -1f)
     )
 }
 
@@ -147,14 +142,16 @@ private fun TabIndicator(
  */
 @Composable
 private fun AnimalTab(
+    modifier: Modifier = Modifier,
     tab: Tab,
     selected: Boolean,
-    onClick: (Tab) -> Unit,
-    modifier: Modifier = Modifier
+    onClick: (Tab) -> Unit
 ) {
     Row(
         modifier = modifier
-            .clickable(onClick = { onClick.invoke(tab) }),
+            .padding(all = 2.dp)
+            .clip(shape = RoundedCornerShape(size = 9.dp))
+            .clickable(onClick = { onClick(tab) }),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -162,22 +159,16 @@ private fun AnimalTab(
             text = stringResource(id = tab.title),
             fontSize = 14.sp,
             modifier = Modifier.zIndex(1f),
-            color = if (selected) Color.White else Color.Black
+            color = if (selected) Color.White else MaterialTheme.colors.onSurface
         )
     }
 }
 
-
-@Preview
+@Preview(showBackground = true)
+@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun DogCatTabBarPreview() {
+fun AnimealSwitchPreview() {
     AnimealTheme {
-        Surface(color = Color.Black) {
-            Row {
-                AnimealSwitch(
-                    onTabSelected = { }, modifier = Modifier.size(226.dp, 36.dp)
-                )
-            }
-        }
+        AnimealSwitch(onTabSelected = { })
     }
 }
