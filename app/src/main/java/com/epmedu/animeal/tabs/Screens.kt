@@ -19,7 +19,8 @@ internal fun HomeScreen() {
             modifier = Modifier
                 .align(alignment = Alignment.TopCenter)
                 .padding(top = 24.dp),
-            onTabSelected = {})
+            onTabSelected = {}
+        )
         Text(text = stringResource(R.string.home), modifier = Modifier.align(Alignment.Center))
     }
 }
