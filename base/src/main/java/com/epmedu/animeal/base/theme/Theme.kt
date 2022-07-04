@@ -8,14 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = RobinsEggBlue,
-    primaryVariant = RobinsEggBlue,
+    primary = SeaSerpent,
+    primaryVariant = SeaSerpent,
     onSurface = Color.White
 )
 
 private val LightColorPalette = lightColors(
-    primary = RobinsEggBlue,
-    primaryVariant = RobinsEggBlue,
+    primary = SeaSerpent,
+    primaryVariant = SeaSerpent,
     onSurface = Daintree
 )
 
