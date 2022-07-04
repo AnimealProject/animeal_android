@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,13 +60,11 @@ fun AnimealSwitch(
         backgroundColor = MaterialTheme.colors.surface,
         modifier = modifier
             .size(width = 226.dp, height = 36.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .graphicsLayer {
-                shadowElevation = 0f
-            },
+            .clip(RoundedCornerShape(10.dp)),
         indicator = { tabPositions ->
             TabIndicator(tabPositions, currentTab)
-        }
+        },
+        divider = {}
     ) {
         AnimalTab(
             tab = Tab.Dogs,
