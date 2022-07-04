@@ -34,7 +34,6 @@ internal fun MoreOption(title: String, onClick: () -> Unit) {
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun MoreOptionPreview() {

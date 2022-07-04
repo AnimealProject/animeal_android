@@ -47,7 +47,6 @@ internal fun MoreScreenUi(
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun MoreScreenPreview() {

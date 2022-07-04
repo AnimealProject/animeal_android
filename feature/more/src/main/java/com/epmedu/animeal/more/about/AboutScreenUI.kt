@@ -17,7 +17,6 @@ internal fun AboutScreenUI(
     )
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun AboutScreenUIPreview() {

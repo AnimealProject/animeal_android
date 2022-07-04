@@ -46,7 +46,6 @@ internal fun ProfileScreenUI(
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun ProfileScreenUIPreview() {

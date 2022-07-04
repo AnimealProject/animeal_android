@@ -54,7 +54,6 @@ internal fun SplashScreenUI(
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun SplashScreenUIPreview() {

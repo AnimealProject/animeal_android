@@ -59,7 +59,6 @@ fun AnimealButton(
     )
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun AnimealButtonPreview() {

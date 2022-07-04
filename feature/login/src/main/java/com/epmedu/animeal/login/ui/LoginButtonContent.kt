@@ -36,7 +36,6 @@ internal fun RowScope.LoginButtonContent(
     )
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun LoginButtonContentPreview() {

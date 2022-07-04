@@ -46,7 +46,6 @@ internal fun BottomAppBarFab(
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun BottomAppBarFabPreview() {

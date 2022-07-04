@@ -188,7 +188,6 @@ private fun rememberOnBoardingItems(): List<OnBoardingItemModel> = remember {
     )
 }
 
-@Suppress("UnusedPrivateMember")
 @Composable
 @Preview
 private fun SignInScreenPreview() {

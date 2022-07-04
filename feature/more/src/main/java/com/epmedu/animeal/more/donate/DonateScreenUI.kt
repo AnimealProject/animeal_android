@@ -17,7 +17,6 @@ internal fun DonateScreenUI(
     )
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun DonateScreenPreview() {

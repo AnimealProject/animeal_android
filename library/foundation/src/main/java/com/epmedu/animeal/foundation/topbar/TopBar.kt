@@ -56,7 +56,6 @@ fun BackButton(onClick: () -> Unit) {
     }
 }
 
-@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun TopBarPreview() {
