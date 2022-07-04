@@ -23,7 +23,7 @@ import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.login.domain.model.OnBoardingItemModel
-import com.epmedu.animeal.login.foundation.LoginButtonContent
+import com.epmedu.animeal.login.ui.LoginButtonContent
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.resources.R
