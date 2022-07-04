@@ -170,7 +170,7 @@ private fun ResendButton(
     val seconds = DecimalFormat("00").format(resendDelay)
     val text =
         if (isEnabled) stringResource(id = R.string.resend_code)
-        else "${stringResource(id = R.string.resend_code_in)}$seconds"
+        else stringResource(id = R.string.resend_code_in, formatArgs = arrayOf(seconds))
 
     TextButton(
         onClick = onClick,
