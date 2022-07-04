@@ -37,11 +37,6 @@ import androidx.compose.ui.zIndex
 import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
 
-enum class Tab(@StringRes val title: Int) {
-    Dogs(R.string.tab_dogs_title),
-    Cats(R.string.tab_cats_title)
-}
-
 /**
  * Shows the bar that holds 2 tabs.
  *
@@ -159,6 +154,11 @@ private fun AnimalTab(
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
         )
     }
+}
+
+enum class Tab(@StringRes val title: Int) {
+    Dogs(R.string.tab_dogs_title),
+    Cats(R.string.tab_cats_title)
 }
 
 @Preview(showBackground = true)
