@@ -784,7 +784,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
   PackageName:
     active: false
