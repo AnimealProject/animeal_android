@@ -1,42 +1,60 @@
 package com.epmedu.animeal.tabs.presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.epmedu.animeal.base.theme.NavigationItemColor
-import com.epmedu.animeal.base.theme.NavigationItemSelectedColor
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
+import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
 
 @Composable
 fun TabsScreen(
     modifier: Modifier = Modifier,
 ) {
     val navigationController = rememberNavController()
+    val navBackStackEntry by navigationController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val onNavigate: (NavigationTab.Route) -> Unit = { route ->
+        navigationController.navigate(route.name) {
+            navigationController.graph.startDestinationRoute?.let { route ->
+                popUpTo(route) { saveState = true }
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        bottomBar = { BottomNavigationBar(navigationController) },
+        isFloatingActionButtonDocked = true,
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            BottomAppBarFab(currentRoute = currentRoute, onNavigate = onNavigate)
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                currentRoute = currentRoute,
+                onNavigate = onNavigate
+            )
+        },
     ) { padding ->
-        NavigationScreens(navigationController, padding)
+        NavigationTabs(navigationController, padding)
     }
 }
 
 @Composable
-private fun NavigationScreens(navigationController: NavHostController, padding: PaddingValues) {
+private fun NavigationTabs(navigationController: NavHostController, padding: PaddingValues) {
     ScreenNavHost(
         modifier = Modifier.padding(padding),
         navController = navigationController,
@@ -52,7 +70,8 @@ private fun NavigationScreens(navigationController: NavHostController, padding: 
 
 @Composable
 private fun BottomNavigationBar(
-    navigationController: NavController,
+    currentRoute: String?,
+    onNavigate: (NavigationTab.Route) -> Unit
 ) {
     val items = listOf(
         NavigationTab.Search,
@@ -61,29 +80,30 @@ private fun BottomNavigationBar(
         NavigationTab.Analytics,
         NavigationTab.More
     )
-    BottomNavigation(
-        backgroundColor = Color.White,
-        contentColor = NavigationItemColor
-    ) {
-        val navBackStackEntry by navigationController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+    BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
         items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = stringResource(item.title)) },
-                selectedContentColor = NavigationItemSelectedColor,
-                unselectedContentColor = NavigationItemColor,
-                alwaysShowLabel = true,
-                selected = currentRoute == item.route.name,
-                onClick = {
-                    navigationController.navigate(item.route.name) {
-                        navigationController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) { saveState = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
+            if (item == NavigationTab.Home) {
+                Box(modifier = Modifier.weight(1f))
+            } else {
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = stringResource(item.title)
+                        )
+                    },
+                    label = {
+                        Text(text = stringResource(id = item.title))
+                    },
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    unselectedContentColor = MaterialTheme.colors.onSurface,
+                    alwaysShowLabel = false,
+                    selected = currentRoute == item.route.name,
+                    onClick = {
+                        onNavigate(item.route)
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
