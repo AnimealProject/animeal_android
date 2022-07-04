@@ -18,7 +18,7 @@ android {
 
 dependencies {
     implementation(projects.base)
-    implementation(projects.featureMore)
+    implementation(projects.feature.more)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
