@@ -6,10 +6,10 @@ on:
 
   workflow_dispatch:
 
-  env:
-    AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-    AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
-    GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+env:
+  AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
+  AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
+  GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
 jobs:
   detekt:
