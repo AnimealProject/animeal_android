@@ -15,6 +15,7 @@ import com.epmedu.animeal.base.ui.TopBar
 import com.epmedu.animeal.feature.login.R
 import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
 import com.epmedu.animeal.feature.login.code.ui.CodeRow
+import com.epmedu.animeal.feature.login.code.ui.ResendButton
 
 @Composable
 internal fun CodeConfirmationScreenUi(
