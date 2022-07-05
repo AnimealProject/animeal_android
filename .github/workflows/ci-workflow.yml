@@ -6,6 +6,11 @@ on:
 
   workflow_dispatch:
 
+  env:
+    AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
+    AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
+    GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+
 jobs:
   detekt:
     name: Detekt
@@ -15,12 +20,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Copy google services config
-        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
 
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
           mkdir -p app/src/main/res/raw
 
@@ -43,12 +45,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Copy google services config
-        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
 
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
           mkdir -p app/src/main/res/raw
 
@@ -90,12 +89,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Copy google services config
-        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
 
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
           mkdir -p app/src/main/res/raw
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
