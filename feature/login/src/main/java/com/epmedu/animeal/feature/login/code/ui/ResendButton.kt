@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.login.code
+package com.epmedu.animeal.feature.login.code.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +16,7 @@ import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.DisabledButtonColor
 import com.epmedu.animeal.base.theme.ResendButtonContentColor
 import com.epmedu.animeal.feature.login.R
+import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel
 import java.text.DecimalFormat
 
 @Composable
