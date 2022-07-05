@@ -1,12 +1,11 @@
 package com.epmedu.animeal.tabs
+
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,18 +38,18 @@ import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.LynxWhite
 
 @Composable
-fun FormattedInputView(
+fun PhoneNumberInputView(
     modifier: Modifier,
-    titleAndMaskFormat: Pair<String, String>,
+    title: String,
     onValueChange: (String) -> Unit,
-    value: String,
-    prefixText: (@Composable () -> Unit)? = null
+    value: String
 ) {
-    val maxDigitCount = titleAndMaskFormat.second.replace("\\D".toRegex(), "").length
+    val phoneFormat = "111 11-11-11"
+    val maxDigitCount = phoneFormat.replace("\\D".toRegex(), "").length
 
     Column(modifier = modifier) {
         Text(
-            text = titleAndMaskFormat.first,
+            text = title,
             modifier = Modifier.padding(bottom = 2.dp),
             style = TextStyle(
                 color = MaterialTheme.colors.onSurface,
@@ -66,7 +65,19 @@ fun FormattedInputView(
                     shape = RoundedCornerShape(12.dp),
                 )
         ) {
-            prefixText?.let { prefixText() }
+            Box(
+                modifier = Modifier
+                    .height(56.dp)
+                    .padding(start = 16.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "+995",
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.align(Alignment.Center),
+                    style = TextStyle(color = Color.Black, fontSize = 16.sp)
+                )
+            }
             BasicTextField(
                 value = value,
                 onValueChange = {
@@ -75,7 +86,7 @@ fun FormattedInputView(
                     }
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                visualTransformation = FormattedTransformation(titleAndMaskFormat.second),
+                visualTransformation = FormattedTransformation(phoneFormat),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,66 +171,16 @@ class FormattedTransformation(format: String) : VisualTransformation {
 fun PhoneInputPreview() {
     AnimealTheme {
         Surface {
-            Column(
+            var phoneNumber by remember { mutableStateOf("") }
+
+            PhoneNumberInputView(
                 modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                var phoneNumber by remember { mutableStateOf("") }
-
-                FormattedInputView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    titleAndMaskFormat = "Phone number" to "111 11-11-11",
-                    onValueChange = { phoneNumber = it },
-                    value = phoneNumber,
-                    prefixText = {
-                        Box(
-                            modifier = Modifier
-                                .height(56.dp)
-                                .padding(start = 16.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = "+995",
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.align(Alignment.Center),
-                                style = TextStyle(color = Color.Black, fontSize = 16.sp)
-                            )
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
-@Composable
-fun ChipNumberInputPreview() {
-    AnimealTheme {
-        Surface {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                var chipNumber by remember { mutableStateOf("") }
-                FormattedInputView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    titleAndMaskFormat = "Chip number" to "111 111 111",
-                    onValueChange = { chipNumber = it },
-                    value = chipNumber
-                )
-            }
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                title = "Phone number",
+                onValueChange = { phoneNumber = it },
+                value = phoneNumber
+            )
         }
     }
 }
