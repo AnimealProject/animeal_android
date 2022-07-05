@@ -44,9 +44,6 @@ fun PhoneNumberInputView(
     onValueChange: (String) -> Unit,
     value: String
 ) {
-    val phoneFormat = "111 11-11-11"
-    val maxDigitCount = phoneFormat.replace("\\D".toRegex(), "").length
-
     Column(modifier = modifier) {
         Text(
             text = title,
@@ -81,12 +78,12 @@ fun PhoneNumberInputView(
             BasicTextField(
                 value = value,
                 onValueChange = {
-                    if (it.length <= maxDigitCount) {
+                    if (it.length <= 9) {
                         onValueChange(it)
                     }
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                visualTransformation = FormattedTransformation(phoneFormat),
+                visualTransformation = FormattedTransformation,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -97,68 +94,41 @@ fun PhoneNumberInputView(
     }
 }
 
-class FormattedTransformation(format: String) : VisualTransformation {
-    val mask: String = format
-    private val cleanDigitLength = mask.replace("\\D".toRegex(), "").length
-    private val map: MutableMap<Int, Char> = mutableMapOf()
-
-    init {
-        for (a in mask.indices) {
-            if (mask[a] != '1') {
-                map[a - map.size - 1] = mask[a]
-            }
-        }
-        map[cleanDigitLength] = ' '
-    }
+internal object FormattedTransformation : VisualTransformation {
+    private const val phoneFormat = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
-            if (text.text.length >= cleanDigitLength) text.text.substring(0 until cleanDigitLength) else text.text
+            if (text.text.length >= 9) text.text.substring(0..8) else text.text
         val annotatedString = AnnotatedString.Builder().run {
             for (i in trimmed.indices) {
                 append(trimmed[i])
-                if (map.containsKey(i)) {
-                    append(map[i].toString())
+                if (i == 2) {
+                    append(" ")
+                } else if (i == 4 || i == 6) {
+                    append("-")
                 }
             }
-            mask.takeLast(mask.length - length)
+            phoneFormat.takeLast(phoneFormat.length - length)
             toAnnotatedString()
         }
         return TransformedText(
             text = annotatedString,
             offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
-                    var lastIndex = 0
-                    while (true) {
-                        when {
-                            lastIndex == map.keys.size -> {
-                                return mask.length
-                            }
-                            offset <= map.keys.toList()[lastIndex] -> {
-                                return offset + lastIndex
-                            }
-                            else -> {
-                                lastIndex += 1
-                            }
-                        }
-                    }
+                    if (offset <= 2) return offset
+                    if (offset <= 4) return offset + 1
+                    if (offset <= 6) return offset + 2
+                    if (offset <= 9) return offset + 3
+                    return 12
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    var lastIndex = 0
-                    while (true) {
-                        when {
-                            lastIndex == map.keys.size -> {
-                                return mask.length
-                            }
-                            offset <= map.keys.toList()[lastIndex] -> {
-                                return offset - lastIndex
-                            }
-                            else -> {
-                                lastIndex += 1
-                            }
-                        }
-                    }
+                    if (offset <= 2) return offset
+                    if (offset <= 4) return offset - 1
+                    if (offset <= 8) return offset - 2
+                    if (offset <= 10) return offset - 3
+                    return 9
                 }
             }
         )
