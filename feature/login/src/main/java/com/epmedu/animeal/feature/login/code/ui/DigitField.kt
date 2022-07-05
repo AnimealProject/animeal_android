@@ -1,11 +1,13 @@
 package com.epmedu.animeal.feature.login.code.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.TextFieldDefaults
@@ -43,7 +45,7 @@ internal fun DigitField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            cursorColor = Color.Black,
+            cursorColor = LocalContentColor.current,
             focusedBorderColor = Color.Gray
         )
     )
@@ -52,6 +54,7 @@ internal fun DigitField(
 private fun String.isOneDigit() = isDigitsOnly() && length == 1
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun DigitFieldPreview() {
     AnimealTheme {

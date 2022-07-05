@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feature.login.code
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -82,6 +83,7 @@ internal fun CodeConfirmationScreenUi(
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun CodeConfirmationScreenPreview() {
     AnimealTheme {

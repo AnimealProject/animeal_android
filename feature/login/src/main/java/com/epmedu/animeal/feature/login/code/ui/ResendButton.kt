@@ -1,11 +1,13 @@
 package com.epmedu.animeal.feature.login.code.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -19,8 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.DarkGunMetal
-import com.epmedu.animeal.base.theme.Gainsboro
 import com.epmedu.animeal.feature.login.R
 import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel
 import java.text.DecimalFormat
@@ -42,8 +42,7 @@ internal fun ResendButton(
         modifier = modifier,
         enabled = isEnabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = DarkGunMetal,
-            disabledContentColor = Gainsboro
+            contentColor = LocalContentColor.current
         )
     ) {
         Row(
@@ -63,6 +62,7 @@ internal fun ResendButton(
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun ResendButtonPreview() {
     AnimealTheme {
