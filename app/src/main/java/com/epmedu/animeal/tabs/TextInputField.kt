@@ -85,7 +85,7 @@ fun TextInputField(
 @Composable
 fun TextInputFieldPreview() {
     AnimealTheme {
-        Surface{
+        Surface {
             var name by remember { mutableStateOf("") }
             TextInputField(
                 title = "Name",
