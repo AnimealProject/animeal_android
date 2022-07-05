@@ -199,7 +199,7 @@ fun PhoneInputPreview() {
 @Preview(showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
-fun ChipNumberInputView() {
+fun ChipNumberInputPreview() {
     AnimealTheme {
         Surface {
             Column(
