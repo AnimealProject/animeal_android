@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.topbar
+package com.epmedu.animeal.foundation.button
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -39,7 +39,7 @@ fun AnimealShortButton(
 
 @Preview
 @Composable
-fun ShortButtonPreview() {
+private fun ShortButtonPreview() {
     AnimealTheme {
         Surface {
             Column {

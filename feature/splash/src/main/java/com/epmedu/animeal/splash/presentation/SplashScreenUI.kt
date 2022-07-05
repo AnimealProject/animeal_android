@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.foundation.spacer.HSpacer
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -45,7 +45,7 @@ internal fun SplashScreenUI(
                 ),
                 contentDescription = null
             )
-            HSpacer(16.dp)
+            HeightSpacer(16.dp)
             Text(
                 text = stringResource(id = R.string.app_name).uppercase(),
                 style = MaterialTheme.typography.h6,

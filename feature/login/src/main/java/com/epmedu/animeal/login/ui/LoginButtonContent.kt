@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.foundation.spacer.WSpacer
+import com.epmedu.animeal.foundation.spacer.WidthSpacer
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -28,7 +28,7 @@ internal fun RowScope.LoginButtonContent(
         painter = painterResource(id = iconId),
         contentDescription = null,
     )
-    WSpacer(16.dp)
+    WidthSpacer(16.dp)
     Text(
         text = stringResource(id = textId),
         maxLines = 1,
