@@ -1,6 +1,9 @@
 package com.epmedu.animeal.feature.login.code.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
@@ -17,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.CursorColor
 
 @Composable
 internal fun DigitField(
@@ -41,7 +43,7 @@ internal fun DigitField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            cursorColor = CursorColor,
+            cursorColor = Color.Black,
             focusedBorderColor = Color.Gray
         )
     )

@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.DisabledButtonColor
-import com.epmedu.animeal.base.theme.ResendButtonContentColor
+import com.epmedu.animeal.base.theme.DarkGunMetal
+import com.epmedu.animeal.base.theme.Gainsboro
 import com.epmedu.animeal.feature.login.R
 import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel
 import java.text.DecimalFormat
@@ -36,8 +36,8 @@ internal fun ResendButton(
         modifier = modifier,
         enabled = isEnabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = ResendButtonContentColor,
-            disabledContentColor = DisabledButtonColor
+            contentColor = DarkGunMetal,
+            disabledContentColor = Gainsboro
         )
     ) {
         Row(
