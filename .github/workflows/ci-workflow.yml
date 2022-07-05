@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Copy google services config
+        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
+
       - name: Copy amplify config files
         env:
           AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
@@ -38,6 +41,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Copy google services config
+        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
 
       - name: Copy amplify config files
         env:
@@ -82,6 +88,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Copy google services config
+        run: echo ${{ secrets.GOOGLE_SERVICES }} >> app/google-services.json
 
       - name: Copy amplify config files
         env:
