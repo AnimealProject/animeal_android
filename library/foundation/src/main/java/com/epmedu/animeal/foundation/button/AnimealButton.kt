@@ -44,7 +44,7 @@ fun AnimealButton(
 ) {
     Button(
         modifier = modifier
-            .height(56.dp)
+            .height(60.dp)
             .fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = color,
