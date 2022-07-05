@@ -87,6 +87,7 @@ fun TextInputFieldPreview() {
     AnimealTheme {
         Surface {
             var name by remember { mutableStateOf("") }
+
             TextInputField(
                 title = "Name",
                 placeholder = "Enter your name",
