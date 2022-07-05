@@ -9,7 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -113,14 +113,14 @@ private fun TabIndicator(
         Modifier
             .wrapContentSize(align = Alignment.BottomStart)
             .offset(x = indicatorLeft)
-            .width(width = indicatorRight - indicatorLeft)
-            .fillMaxSize()
+            .width(indicatorRight - indicatorLeft)
+            .fillMaxHeight()
             .padding(all = 2.dp)
             .background(
                 color = MaterialTheme.colors.primary,
                 shape = RoundedCornerShape(9.dp)
             )
-            .zIndex(zIndex = -1f)
+            .zIndex(-1f)
     )
 }
 
