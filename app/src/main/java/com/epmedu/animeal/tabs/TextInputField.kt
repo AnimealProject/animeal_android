@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.LynxWhite
-import com.epmedu.animeal.base.theme.NavigationItemColor
 
 @Composable
 fun FormattedInputView(
@@ -45,18 +44,16 @@ fun FormattedInputView(
     titleAndMaskFormat: Pair<String, String>,
     onValueChange: (String) -> Unit,
     value: String,
-    prefixText: (@Composable () -> Unit)? = null,
+    prefixText: (@Composable () -> Unit)? = null
 ) {
     val maxDigitCount = titleAndMaskFormat.second.replace("\\D".toRegex(), "").length
 
-    Column(
-        modifier = modifier,
-    ) {
+    Column(modifier = modifier) {
         Text(
             text = titleAndMaskFormat.first,
             modifier = Modifier.padding(bottom = 2.dp),
             style = TextStyle(
-                color = NavigationItemColor,
+                color = MaterialTheme.colors.onSurface,
                 fontSize = 14.sp
             )
         )
@@ -157,24 +154,16 @@ class FormattedTransformation(format: String) : VisualTransformation {
     }
 }
 
-@Preview(
-    showBackground = true,
-    name = "PhoneInputPreview",
-    showSystemUi = true,
-    uiMode = UI_MODE_NIGHT_NO,
-)
+@Preview(showBackground = true)
+@Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
 fun PhoneInputPreview() {
     AnimealTheme {
-        Surface(
-            color = MaterialTheme.colors.background,
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        Surface {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 var phoneNumber by remember { mutableStateOf("") }
@@ -207,20 +196,12 @@ fun PhoneInputPreview() {
     }
 }
 
-@Preview(
-    showBackground = true,
-    name = "ChipNumberInputView",
-    showSystemUi = true,
-    uiMode = UI_MODE_NIGHT_NO,
-)
+@Preview(showBackground = true)
+@Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
 fun ChipNumberInputView() {
     AnimealTheme {
-        Surface(
-            color = MaterialTheme.colors.background,
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        Surface {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
