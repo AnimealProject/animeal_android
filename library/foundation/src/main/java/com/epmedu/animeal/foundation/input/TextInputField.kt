@@ -80,7 +80,7 @@ fun TextInputField(
 @Preview(showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun TextInputFieldPreview() {
+private fun TextInputFieldPreview() {
     AnimealTheme {
         Surface {
             var name by remember { mutableStateOf("") }
