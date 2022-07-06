@@ -1,6 +1,8 @@
 package com.epmedu.animeal.login.presentation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -139,6 +141,10 @@ private fun ButtonsBlock(
         ) {
             AnimealButton(
                 onClick = onSignInMobile,
+                contentColor = when {
+                    isSystemInDarkTheme() -> MaterialTheme.colors.onSurface
+                    else -> MaterialTheme.colors.surface
+                },
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_phone,
@@ -146,7 +152,11 @@ private fun ButtonsBlock(
                 )
             }
             AnimealButton(
-                color = CustomColor.Facebook,
+                backgroundColor = CustomColor.Facebook,
+                contentColor = when {
+                    isSystemInDarkTheme() -> MaterialTheme.colors.onSurface
+                    else -> MaterialTheme.colors.surface
+                },
                 onClick = onSignInFacebook,
             ) {
                 LoginButtonContent(
@@ -155,7 +165,11 @@ private fun ButtonsBlock(
                 )
             }
             AnimealButton(
-                color = CustomColor.Google,
+                backgroundColor = CustomColor.Google,
+                contentColor = when {
+                    isSystemInDarkTheme() -> MaterialTheme.colors.surface
+                    else -> MaterialTheme.colors.onSurface
+                },
                 onClick = onSignInGoogle,
             ) {
                 LoginButtonContent(
@@ -188,8 +202,9 @@ private fun rememberOnBoardingItems(): List<OnBoardingItemModel> = remember {
     )
 }
 
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-@Preview
 private fun SignInScreenPreview() {
     AnimealTheme {
         SignInScreenUI(

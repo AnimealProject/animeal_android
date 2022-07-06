@@ -39,7 +39,8 @@ fun AnimealButton(
 @Composable
 fun AnimealButton(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.primary,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor),
     enabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
@@ -49,7 +50,8 @@ fun AnimealButton(
             .height(60.dp)
             .fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = color,
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
             disabledBackgroundColor = DisabledButtonColor,
             disabledContentColor = DisabledButtonContentColor
         ),
