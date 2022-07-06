@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_verification_code">Enter verification code</string>
+    <string name="code_was_sent_to">Code was sent to:</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="resend_code_in">Resend Code in 00:%1$s</string>
+</resources>
