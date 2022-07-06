@@ -30,7 +30,7 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(libs.firebase.crashlytics)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)

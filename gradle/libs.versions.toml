@@ -11,17 +11,17 @@ androidxJunit = "1.1.3"
 buildTools = "7.2.1"
 compose = "1.1.1"
 core = "1.7.0"
+crashlytics = "2.9.1"
 desugarJdkLibs = "1.1.5"
 detekt = "1.20.0"
+firebaseBom = "30.1.0"
+googleServices = "4.3.10"
 javapoet = "1.13.0"
 junit = "4.13.2"
 hilt = "2.41"
 kotlin = "1.6.10"
 lifecycle = "2.4.1"
 navigation = "2.4.2"
-googleServices = "4.3.10"
-crashlytics = "2.9.1"
-firebaseBom = "30.1.0"
 
 [libraries]
 gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }
@@ -30,8 +30,6 @@ gradle-plugin-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", 
 gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-plugin-googleservices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
-
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
@@ -55,6 +53,9 @@ compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", versio
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose"}
 
 desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs"}
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
