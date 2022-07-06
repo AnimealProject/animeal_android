@@ -7,25 +7,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.login.domain.EnterCodeViewModel
-import kotlinx.coroutines.delay
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-internal const val FOCUS_DELAY = 300L
-
 @Composable
-fun EnterCodeScreen(
-    onBack: () -> Unit,
-    onNext: () -> Unit
-) {
+fun EnterCodeScreen() {
+    val navigator = LocalNavigator.currentOrThrow
     val viewModel: EnterCodeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
-    val state by viewModel.state.collectAsState()
+    val model by viewModel.model.collectAsState()
 
     EnterCodeScreenUi(
-        state = state,
+        model = model,
         focusRequester = focusRequester,
-        onBack = onBack,
+        onBack = navigator::popBackStack,
         onDigitChange = { position, digit ->
             viewModel.changeDigit(position, digit)
         },
@@ -36,11 +33,13 @@ fun EnterCodeScreen(
     )
 
     LaunchedEffect(Unit) {
-        delay(FOCUS_DELAY)
         focusRequester.requestFocus()
 
-        viewModel.state.collectLatest {
-            if (it.isCodeCorrect == true) onNext()
+        viewModel.isCodeCorrect.collectLatest { isCorrect ->
+            if (isCorrect) {
+                // TODO: Replace route with FinishProfileScreen
+                navigator.navigateToTabs()
+            }
         }
     }
 }

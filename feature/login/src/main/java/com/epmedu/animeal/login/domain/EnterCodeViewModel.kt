@@ -11,15 +11,17 @@ import kotlinx.coroutines.launch
 
 internal class EnterCodeViewModel : ViewModel() {
 
-    private val _state = MutableStateFlow(
+    private val _model = MutableStateFlow(
         EnterCodeScreenModel(
             phoneNumber = getPhoneNumber(),
             code = getEmptyCode(),
         )
     )
-    val state: StateFlow<EnterCodeScreenModel> = _state.asStateFlow()
+    val model: StateFlow<EnterCodeScreenModel> = _model.asStateFlow()
+    private val _isCodeCorrect = MutableStateFlow(false)
+    val isCodeCorrect: StateFlow<Boolean> get() = _isCodeCorrect.asStateFlow()
 
-    private val currentState get() = _state.value
+    private val currentModel get() = _model.value
 
     init {
         viewModelScope.launch {
@@ -36,10 +38,10 @@ internal class EnterCodeViewModel : ViewModel() {
 
     private suspend fun launchResendTimer() {
         for (tick in RESEND_DELAY downTo 1L) {
-            _state.emit(currentState.copy(resendDelay = tick))
+            _model.emit(currentModel.copy(resendDelay = tick))
             delay(1000)
         }
-        _state.emit(currentState.copy(isResendEnabled = true, resendDelay = 0))
+        _model.emit(currentModel.copy(isResendEnabled = true, resendDelay = 0))
     }
 
     internal fun resendCode() {
@@ -50,13 +52,13 @@ internal class EnterCodeViewModel : ViewModel() {
     }
 
     private suspend fun clearCodeAndDisableResend() {
-        _state.emit(currentState.copy(code = getEmptyCode(), isResendEnabled = false))
+        _model.emit(currentModel.copy(code = getEmptyCode(), isResendEnabled = false))
     }
 
     internal fun changeDigit(position: Int, digit: Int?) {
         viewModelScope.launch {
-            _state.emit(
-                currentState.copy(
+            _model.emit(
+                currentModel.copy(
                     code = getNewCodeWithReplacedDigit(position, digit)
                 )
             )
@@ -65,21 +67,24 @@ internal class EnterCodeViewModel : ViewModel() {
     }
 
     private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
-        return currentState.code.mapIndexed { index, currentDigit ->
+        return currentModel.code.mapIndexed { index, currentDigit ->
             if (index == position) newDigit
             else currentDigit
         }
     }
 
     private suspend fun validateCodeIfFull() {
-        if (currentState.code.all { it != null }) {
-            _state.emit(currentState.copy(isCodeCorrect = isCodeCorrect()))
+        if (currentModel.code.all { it != null }) {
+            _model.emit(currentModel.copy(isError = isCodeWrong()))
+            _isCodeCorrect.emit(isCodeCorrect())
         }
     }
 
+    private fun isCodeWrong() = !isCodeCorrect()
+
     private fun isCodeCorrect(): Boolean {
         var codeString = ""
-        currentState.code.forEach { digit ->
+        currentModel.code.forEach { digit ->
             codeString += digit
         }
         return codeString == CORRECT_CODE

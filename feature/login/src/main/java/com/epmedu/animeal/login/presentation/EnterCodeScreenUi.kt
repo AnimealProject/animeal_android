@@ -30,7 +30,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun EnterCodeScreenUi(
-    state: EnterCodeScreenModel,
+    model: EnterCodeScreenModel,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
     onDigitChange: (position: Int, digit: Int?) -> Unit,
@@ -60,20 +60,20 @@ internal fun EnterCodeScreenUi(
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "${stringResource(id = R.string.enter_code_subtitle)} ${state.phoneNumber}",
+                text = "${stringResource(id = R.string.enter_code_subtitle)} ${model.phoneNumber}",
                 modifier = Modifier.padding(top = 8.dp)
             )
             CodeRow(
-                code = state.code,
-                isError = state.isCodeCorrect == false,
+                code = model.code,
+                isError = model.isError,
                 focusRequester = focusRequester,
                 modifier = Modifier.padding(top = 36.dp),
                 onDigitChange = onDigitChange
             )
             Spacer(modifier = Modifier.weight(1f))
             ResendButton(
-                isEnabled = state.isResendEnabled,
-                resendDelay = state.resendDelay,
+                isEnabled = model.isResendEnabled,
+                resendDelay = model.resendDelay,
                 onClick = onResend,
                 modifier = Modifier
                     .padding(bottom = 20.dp)
@@ -89,7 +89,7 @@ internal fun EnterCodeScreenUi(
 private fun EnterCodeScreenPreview() {
     AnimealTheme {
         EnterCodeScreenUi(
-            state = EnterCodeScreenModel(
+            model = EnterCodeScreenModel(
                 phoneNumber = PHONE_NUMBER_PLACEHOLDER,
                 code = listOf(null, null, null, null)
             ),
