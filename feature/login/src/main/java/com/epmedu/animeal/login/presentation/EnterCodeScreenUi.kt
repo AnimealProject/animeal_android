@@ -56,11 +56,11 @@ internal fun EnterCodeScreenUi(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(R.string.enter_verification_code),
+                text = stringResource(R.string.enter_code_title),
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "${stringResource(id = R.string.code_was_sent_to)} ${state.phoneNumber}",
+                text = "${stringResource(id = R.string.enter_code_subtitle)} ${state.phoneNumber}",
                 modifier = Modifier.padding(top = 8.dp)
             )
             CodeRow(
