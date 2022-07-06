@@ -13,7 +13,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun EnterCodeScreen() {
+internal fun EnterCodeScreen() {
     val navigator = LocalNavigator.currentOrThrow
     val viewModel: EnterCodeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
