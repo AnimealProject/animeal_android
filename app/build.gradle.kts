@@ -19,13 +19,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.base)
-
     implementation(projects.feature.login)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabs)
 
     implementation(projects.library.common)
+    implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 

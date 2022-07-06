@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.DisabledButtonColor
-import com.epmedu.animeal.base.theme.DisabledButtonContentColor
+import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.DisabledButtonColor
+import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealShortButton(

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.more.root.ui.MoreOption

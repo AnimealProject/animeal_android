@@ -4,8 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.base)
-
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)

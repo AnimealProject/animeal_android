@@ -1,4 +1,4 @@
-package com.epmedu.animeal.base.theme
+package com.epmedu.animeal.foundation.theme
 
 import androidx.compose.ui.graphics.Color
 
