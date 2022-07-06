@@ -1,9 +1,10 @@
 package com.epmedu.animeal.foundation.button
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,20 +12,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.base.theme.DisabledButtonColor
+import com.epmedu.animeal.base.theme.DisabledButtonContentColor
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 
 @Composable
 fun AnimealButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    color: Color = MaterialTheme.colors.primary,
-    enabled: Boolean = true,
     text: String,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
 ) {
     AnimealButton(
         modifier = modifier,
-        color = color,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     ) {
         Text(
             text = text,
@@ -37,9 +39,9 @@ fun AnimealButton(
 @Composable
 fun AnimealButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     color: Color = MaterialTheme.colors.primary,
     enabled: Boolean = true,
+    onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
@@ -48,9 +50,8 @@ fun AnimealButton(
             .fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = color,
-            contentColor = contentColorFor(
-                backgroundColor = MaterialTheme.colors.primary
-            ),
+            disabledBackgroundColor = DisabledButtonColor,
+            disabledContentColor = DisabledButtonContentColor
         ),
         shape = MaterialTheme.shapes.large,
         enabled = enabled,
@@ -59,13 +60,37 @@ fun AnimealButton(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun AnimealButtonPreview() {
     AnimealTheme {
-        AnimealButton(
-            onClick = { },
-            text = "Hello World!",
-        )
+        Surface {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                AnimealButton(
+                    onClick = { },
+                    text = "Hello World!",
+                )
+                AnimealButton(
+                    enabled = false,
+                    onClick = { },
+                    text = "Hello World!",
+                )
+
+                HeightSpacer(height = 8.dp)
+
+                AnimealButton(onClick = { }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                    Text(text = "Hello World!")
+                }
+                AnimealButton(
+                    enabled = false,
+                    onClick = { },
+                ) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                    Text(text = "Hello World!")
+                }
+            }
+        }
     }
 }
