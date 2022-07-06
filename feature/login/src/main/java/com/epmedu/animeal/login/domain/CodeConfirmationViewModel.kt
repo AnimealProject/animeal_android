@@ -1,7 +1,8 @@
-package com.epmedu.animeal.feature.login.code
+package com.epmedu.animeal.login.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.login.domain.model.CodeConfirmationScreenState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

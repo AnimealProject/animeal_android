@@ -1,6 +1,6 @@
-package com.epmedu.animeal.feature.login.code
+package com.epmedu.animeal.login.domain.model
 
-import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel.Companion.RESEND_DELAY
+import com.epmedu.animeal.login.domain.CodeConfirmationViewModel.Companion.RESEND_DELAY
 
 internal data class CodeConfirmationScreenState(
     val phoneNumber: String,

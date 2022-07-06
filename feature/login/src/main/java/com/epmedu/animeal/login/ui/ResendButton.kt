@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feature.login.code.ui
+package com.epmedu.animeal.login.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
@@ -21,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.feature.login.R
-import com.epmedu.animeal.feature.login.code.CodeConfirmationViewModel
+import com.epmedu.animeal.login.domain.CodeConfirmationViewModel
+import com.epmedu.animeal.resources.R
 import java.text.DecimalFormat
 
 @Composable
