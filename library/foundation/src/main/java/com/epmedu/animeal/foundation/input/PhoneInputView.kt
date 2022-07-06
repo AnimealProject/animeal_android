@@ -112,8 +112,7 @@ internal object FormattedTransformation : VisualTransformation {
             PHONE_NUMBER_FORMAT.takeLast(PHONE_NUMBER_FORMAT.length - length)
             toAnnotatedString()
         }
-
-        @Suppress(names = ["ReturnCount"])
+        @Suppress("ReturnCount")
         return TransformedText(
             text = annotatedString,
             offsetMapping = object : OffsetMapping {
