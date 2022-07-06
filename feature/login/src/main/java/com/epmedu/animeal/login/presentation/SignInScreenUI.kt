@@ -17,9 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.login.domain.model.OnBoardingItemModel
 import com.epmedu.animeal.login.ui.LoginButtonContent
 import com.epmedu.animeal.resources.R
