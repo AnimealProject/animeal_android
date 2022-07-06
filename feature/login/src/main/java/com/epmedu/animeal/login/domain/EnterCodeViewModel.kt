@@ -2,22 +2,22 @@ package com.epmedu.animeal.login.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.login.domain.model.CodeConfirmationScreenState
+import com.epmedu.animeal.login.domain.model.EnterCodeScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class CodeConfirmationViewModel : ViewModel() {
+internal class EnterCodeViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(
-        CodeConfirmationScreenState(
+        EnterCodeScreenModel(
             phoneNumber = getPhoneNumber(),
             code = getEmptyCode(),
         )
     )
-    val state: StateFlow<CodeConfirmationScreenState> = _state.asStateFlow()
+    val state: StateFlow<EnterCodeScreenModel> = _state.asStateFlow()
 
     private val currentState get() = _state.value
 

@@ -22,15 +22,15 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.login.domain.CodeConfirmationViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
-import com.epmedu.animeal.login.domain.model.CodeConfirmationScreenState
+import com.epmedu.animeal.login.domain.EnterCodeViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
+import com.epmedu.animeal.login.domain.model.EnterCodeScreenModel
 import com.epmedu.animeal.login.ui.CodeRow
 import com.epmedu.animeal.login.ui.ResendButton
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun CodeConfirmationScreenUi(
-    state: CodeConfirmationScreenState,
+    state: EnterCodeScreenModel,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
     onDigitChange: (position: Int, digit: Int?) -> Unit,
@@ -89,7 +89,7 @@ internal fun CodeConfirmationScreenUi(
 private fun CodeConfirmationScreenPreview() {
     AnimealTheme {
         CodeConfirmationScreenUi(
-            state = CodeConfirmationScreenState(
+            state = EnterCodeScreenModel(
                 phoneNumber = PHONE_NUMBER_PLACEHOLDER,
                 code = listOf(null, null, null, null)
             ),

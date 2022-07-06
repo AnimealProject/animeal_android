@@ -1,8 +1,8 @@
 package com.epmedu.animeal.login.domain.model
 
-import com.epmedu.animeal.login.domain.CodeConfirmationViewModel.Companion.RESEND_DELAY
+import com.epmedu.animeal.login.domain.EnterCodeViewModel.Companion.RESEND_DELAY
 
-internal data class CodeConfirmationScreenState(
+internal data class EnterCodeScreenModel(
     val phoneNumber: String,
     val code: List<Int?>,
     val isCodeCorrect: Boolean? = null,

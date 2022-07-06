@@ -7,18 +7,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.epmedu.animeal.login.domain.CodeConfirmationViewModel
+import com.epmedu.animeal.login.domain.EnterCodeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 internal const val FOCUS_DELAY = 300L
 
 @Composable
-fun CodeConfirmationScreen(
+fun EnterCodeScreen(
     onBack: () -> Unit,
     onNext: () -> Unit
 ) {
-    val viewModel: CodeConfirmationViewModel = viewModel()
+    val viewModel: EnterCodeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.state.collectAsState()
 
