@@ -14,6 +14,8 @@ buildscript {
         classpath(libs.gradle.plugin.buildtools)
         classpath(libs.gradle.plugin.hilt)
         classpath(libs.gradle.plugin.kotlin)
+        classpath(libs.gradle.plugin.googleservices)
+        classpath(libs.gradle.plugin.crashlytics)
     }
 }
 
