@@ -22,7 +22,7 @@ fun EnterCodeScreen(
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.state.collectAsState()
 
-    CodeConfirmationScreenUi(
+    EnterCodeScreenUi(
         state = state,
         focusRequester = focusRequester,
         onBack = onBack,

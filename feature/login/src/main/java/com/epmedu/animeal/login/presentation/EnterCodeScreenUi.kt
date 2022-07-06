@@ -29,7 +29,7 @@ import com.epmedu.animeal.login.ui.ResendButton
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun CodeConfirmationScreenUi(
+internal fun EnterCodeScreenUi(
     state: EnterCodeScreenModel,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
@@ -86,9 +86,9 @@ internal fun CodeConfirmationScreenUi(
 @Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-private fun CodeConfirmationScreenPreview() {
+private fun EnterCodeScreenPreview() {
     AnimealTheme {
-        CodeConfirmationScreenUi(
+        EnterCodeScreenUi(
             state = EnterCodeScreenModel(
                 phoneNumber = PHONE_NUMBER_PLACEHOLDER,
                 code = listOf(null, null, null, null)
