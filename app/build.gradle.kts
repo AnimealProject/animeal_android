@@ -18,7 +18,14 @@ android {
 
 dependencies {
     implementation(projects.base)
-    implementation(projects.feature.more)
+
+    implementation(projects.feature.login)
+    implementation(projects.feature.splash)
+    implementation(projects.feature.tabs)
+
+    implementation(projects.library.common)
+    implementation(projects.library.navigation)
+    implementation(projects.library.resources)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
@@ -28,7 +35,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 

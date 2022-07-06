@@ -11,4 +11,14 @@ rootProject.name = "Animeal"
 
 include(":app")
 include(":base")
+
+include(":feature:login")
 include(":feature:more")
+include(":feature:splash")
+include(":feature:tabs")
+
+include(":library:common")
+include(":library:extensions")
+include(":library:foundation")
+include(":library:navigation")
+include(":library:resources")
