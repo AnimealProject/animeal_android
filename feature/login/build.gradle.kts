@@ -14,6 +14,7 @@ dependencies {
 
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 
