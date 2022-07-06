@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.core.view.WindowCompat
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.login.OnboardingScreen
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             AnimealTheme {
                 AnimatedScreenNavHost(
