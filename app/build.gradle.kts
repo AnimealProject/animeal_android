@@ -3,6 +3,8 @@ plugins {
     id("com.android.application")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -26,6 +28,9 @@ dependencies {
     implementation(projects.library.common)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
