@@ -6,6 +6,11 @@ on:
 
   workflow_dispatch:
 
+env:
+  AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
+  AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
+  GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+
 jobs:
   detekt:
     name: Detekt
@@ -14,12 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Copy google services config
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
+
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
 
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
@@ -39,12 +44,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Copy google services config
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
+
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
 
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
@@ -83,12 +88,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Copy google services config
+        run: echo $GOOGLE_SERVICES >> app/google-services.json
+
       - name: Copy amplify config files
-        env:
-          AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-          AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
         run: |
-          mkdir app/src/main/res/raw
+          mkdir -p app/src/main/res/raw
           echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
           echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
     

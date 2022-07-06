@@ -642,6 +642,8 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
+    ignoreAnnotated:
+      - 'Preview'
     allowedNames: '(_|ignored|expected|serialVersionUID)'
   UseAnyOrNoneInsteadOfFind:
     active: false
@@ -784,7 +786,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
   PackageName:
     active: false
