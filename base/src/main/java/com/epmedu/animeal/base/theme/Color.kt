@@ -25,5 +25,3 @@ object CustomColor {
     val DarkerGrey = Color(0xFF99A8B0)
     val CursorColor = Color(0xFF000000)
 }
-
-
