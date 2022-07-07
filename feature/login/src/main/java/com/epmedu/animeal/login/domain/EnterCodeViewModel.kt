@@ -44,7 +44,7 @@ internal class EnterCodeViewModel : ViewModel() {
         _model.emit(currentModel.copy(isResendEnabled = true, resendDelay = 0))
     }
 
-    internal fun resendCode() {
+    fun resendCode() {
         viewModelScope.launch {
             clearCodeAndDisableResend()
             launchResendTimer()
@@ -55,7 +55,7 @@ internal class EnterCodeViewModel : ViewModel() {
         _model.emit(currentModel.copy(code = getEmptyCode(), isResendEnabled = false))
     }
 
-    internal fun changeDigit(position: Int, digit: Int?) {
+    fun changeDigit(position: Int, digit: Int?) {
         viewModelScope.launch {
             _model.emit(
                 currentModel.copy(
@@ -87,10 +87,10 @@ internal class EnterCodeViewModel : ViewModel() {
         return codeString == CORRECT_CODE
     }
 
-    internal companion object {
-        internal const val CODE_SIZE = 4
-        internal const val RESEND_DELAY = 30L
-        internal const val PHONE_NUMBER_PLACEHOLDER = "558 49-99-69"
+    companion object {
+        const val CODE_SIZE = 4
+        const val RESEND_DELAY = 30L
+        const val PHONE_NUMBER_PLACEHOLDER = "558 49-99-69"
 
         private const val CORRECT_CODE = "1111"
     }
