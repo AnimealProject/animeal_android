@@ -1,6 +1,8 @@
 package com.epmedu.animeal.login.presentation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -139,28 +142,36 @@ private fun ButtonsBlock(
         ) {
             AnimealButton(
                 onClick = onSignInMobile,
+                contentColor = MaterialTheme.colors.onPrimary,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_phone,
                     textId = R.string.sign_in_mobile,
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             AnimealButton(
-                color = CustomColor.Facebook,
+                backgroundColor = CustomColor.Facebook,
+                contentColor = MaterialTheme.colors.onPrimary,
                 onClick = onSignInFacebook,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_facebook,
                     textId = R.string.sign_in_facebook,
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             AnimealButton(
-                color = CustomColor.Google,
+                backgroundColor = CustomColor.Google,
+                contentColor = when {
+                    isSystemInDarkTheme() -> MaterialTheme.colors.onPrimary
+                    else -> Color.Black
+                },
                 onClick = onSignInGoogle,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_google,
-                    textId = R.string.sign_in_google,
+                    textId = R.string.sign_in_google
                 )
             }
         }
@@ -188,8 +199,9 @@ private fun rememberOnBoardingItems(): List<OnBoardingItemModel> = remember {
     )
 }
 
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-@Preview
 private fun SignInScreenPreview() {
     AnimealTheme {
         SignInScreenUI(
