@@ -11,10 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.DisabledButtonColor
-import com.epmedu.animeal.base.theme.DisabledButtonContentColor
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
+import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.DisabledButtonColor
+import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealButton(
