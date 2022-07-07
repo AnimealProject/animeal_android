@@ -23,19 +23,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.CustomColor.CursorColor
 import com.epmedu.animeal.base.theme.CustomColor.DarkerGrey
 import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
 
 @Composable
 fun TextInputField(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     hint: String,
     onValueChange: (String) -> Unit,
     value: String
 ) {
-
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title,
@@ -61,7 +59,7 @@ fun TextInputField(
             colors = TextFieldDefaults.textFieldColors(
                 textColor = MaterialTheme.colors.onSurface,
                 backgroundColor = Color.Transparent,
-                cursorColor = CursorColor,
+                cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
@@ -84,7 +82,6 @@ private fun TextInputFieldPreview() {
     AnimealTheme {
         Surface {
             var name by remember { mutableStateOf("") }
-
             TextInputField(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = "Name",
