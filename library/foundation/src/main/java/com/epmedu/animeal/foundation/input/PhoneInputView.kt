@@ -42,7 +42,7 @@ fun PhoneNumberInputView(
     title: String,
     onValueChange: (String) -> Unit,
     value: String,
-    enabled: Boolean
+    enabled: Boolean = false
 ) {
     Column(modifier = modifier) {
         Text(
@@ -69,7 +69,6 @@ fun PhoneNumberInputView(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.Center),
                     text = "+995",
                     style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
@@ -77,7 +76,7 @@ fun PhoneNumberInputView(
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp)
+                    .padding(start = 4.dp)
                     .align(CenterVertically),
                 value = value,
                 onValueChange = {
@@ -136,8 +135,9 @@ internal object PhoneFormatTransformation : VisualTransformation {
     }
 }
 
-@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 private fun PhoneInputPreview() {
     AnimealTheme {
         Surface {
