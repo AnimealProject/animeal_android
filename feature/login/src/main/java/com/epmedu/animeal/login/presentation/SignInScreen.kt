@@ -26,7 +26,7 @@ internal fun SignInScreen() {
 }
 
 internal fun Navigator.navigateToTabs() {
-    parent!!.navigate(MainScreenRoute.Tabs.name) {
+    parent?.navigate(MainScreenRoute.Tabs.name) {
         popUpTo(MainScreenRoute.Onboarding.name) {
             inclusive = true
         }
