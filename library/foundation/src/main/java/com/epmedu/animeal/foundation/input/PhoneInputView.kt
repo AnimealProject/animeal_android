@@ -1,6 +1,6 @@
 package com.epmedu.animeal.foundation.input
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +41,8 @@ fun PhoneNumberInputView(
     modifier: Modifier = Modifier,
     title: String,
     onValueChange: (String) -> Unit,
-    value: String
+    value: String,
+    enabled: Boolean
 ) {
     Column(modifier = modifier) {
         Text(
@@ -54,13 +54,13 @@ fun PhoneNumberInputView(
             )
         )
         Row(
-            horizontalArrangement = Center,
             modifier = Modifier
                 .height(56.dp)
                 .background(
                     color = LynxWhite,
                     shape = RoundedCornerShape(12.dp),
-                )
+                ),
+            horizontalArrangement = Center,
         ) {
             Box(
                 modifier = Modifier
@@ -69,13 +69,16 @@ fun PhoneNumberInputView(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "+995",
-                    textAlign = TextAlign.Start,
                     modifier = Modifier.align(Alignment.Center),
+                    text = "+995",
                     style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
             }
             BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp)
+                    .align(CenterVertically),
                 value = value,
                 onValueChange = {
                     if (it.length <= 9) {
@@ -85,10 +88,7 @@ fun PhoneNumberInputView(
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
                 visualTransformation = PhoneFormatTransformation,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
-                    .align(CenterVertically)
+                enabled = enabled
             )
         }
     }
@@ -136,8 +136,7 @@ internal object PhoneFormatTransformation : VisualTransformation {
     }
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PhoneInputPreview() {
     AnimealTheme {
@@ -145,11 +144,11 @@ private fun PhoneInputPreview() {
             var phoneNumber by remember { mutableStateOf("") }
             PhoneNumberInputView(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 4.dp),
                 title = "Phone number",
                 onValueChange = { phoneNumber = it },
-                value = phoneNumber
+                value = phoneNumber,
+                enabled = true
             )
         }
     }
