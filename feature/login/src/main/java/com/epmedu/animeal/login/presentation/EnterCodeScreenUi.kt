@@ -4,7 +4,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.login.domain.EnterCodeViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
@@ -50,7 +50,7 @@ internal fun EnterCodeScreenUi(
         Column(
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Spacer(modifier = Modifier.height(12.dp))
+            HeightSpacer(12.dp)
             Text(
                 text = stringResource(R.string.enter_code_title),
                 style = MaterialTheme.typography.h5
