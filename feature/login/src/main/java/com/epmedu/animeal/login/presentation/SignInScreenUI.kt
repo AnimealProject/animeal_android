@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -141,40 +142,36 @@ private fun ButtonsBlock(
         ) {
             AnimealButton(
                 onClick = onSignInMobile,
-                contentColor = when {
-                    isSystemInDarkTheme() -> MaterialTheme.colors.onSurface
-                    else -> MaterialTheme.colors.surface
-                },
+                contentColor = MaterialTheme.colors.onPrimary,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_phone,
                     textId = R.string.sign_in_mobile,
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             AnimealButton(
                 backgroundColor = CustomColor.Facebook,
-                contentColor = when {
-                    isSystemInDarkTheme() -> MaterialTheme.colors.onSurface
-                    else -> MaterialTheme.colors.surface
-                },
+                contentColor = MaterialTheme.colors.onPrimary,
                 onClick = onSignInFacebook,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_facebook,
                     textId = R.string.sign_in_facebook,
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             AnimealButton(
                 backgroundColor = CustomColor.Google,
                 contentColor = when {
-                    isSystemInDarkTheme() -> MaterialTheme.colors.surface
-                    else -> MaterialTheme.colors.onSurface
+                    isSystemInDarkTheme() -> MaterialTheme.colors.onPrimary
+                    else -> Color.Black
                 },
                 onClick = onSignInGoogle,
             ) {
                 LoginButtonContent(
                     iconId = R.drawable.ic_google,
-                    textId = R.string.sign_in_google,
+                    textId = R.string.sign_in_google
                 )
             }
         }
