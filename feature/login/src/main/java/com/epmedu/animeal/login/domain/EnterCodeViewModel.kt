@@ -83,10 +83,7 @@ internal class EnterCodeViewModel : ViewModel() {
     private fun isCodeWrong() = !isCodeCorrect()
 
     private fun isCodeCorrect(): Boolean {
-        var codeString = ""
-        currentModel.code.forEach { digit ->
-            codeString += digit
-        }
+        val codeString = currentModel.code.joinToString("")
         return codeString == CORRECT_CODE
     }
 
