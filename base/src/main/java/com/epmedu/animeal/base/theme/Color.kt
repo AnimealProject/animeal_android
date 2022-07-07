@@ -23,5 +23,4 @@ object CustomColor {
     val Google = Color(0xFF000000)
     val LynxWhite = Color(0xFFF7F7F7)
     val DarkerGrey = Color(0xFF99A8B0)
-    val CursorColor = Color(0xFF000000)
 }
