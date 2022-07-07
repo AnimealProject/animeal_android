@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,11 +24,16 @@ import com.epmedu.animeal.resources.R
 internal fun RowScope.LoginButtonContent(
     @DrawableRes iconId: Int,
     @StringRes textId: Int,
+    tint: Color? = null
 ) {
     Image(
         modifier = Modifier.height(20.dp),
         painter = painterResource(id = iconId),
         contentDescription = null,
+        colorFilter = when {
+            tint != null -> ColorFilter.tint(tint)
+            else -> null
+        }
     )
     WidthSpacer(16.dp)
     Text(
