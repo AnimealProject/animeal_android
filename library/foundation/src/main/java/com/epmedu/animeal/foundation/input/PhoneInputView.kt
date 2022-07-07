@@ -36,13 +36,15 @@ import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
 
+private const val PHONE_NUMBER_PREFIX = "+995"
+
 @Composable
 fun PhoneNumberInputView(
     modifier: Modifier = Modifier,
     title: String,
     onValueChange: (String) -> Unit,
     value: String,
-    enabled: Boolean = false
+    enabled: Boolean = true
 ) {
     Column(modifier = modifier) {
         Text(
@@ -69,7 +71,7 @@ fun PhoneNumberInputView(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "+995",
+                    text = PHONE_NUMBER_PREFIX,
                     style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
             }
