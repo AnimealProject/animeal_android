@@ -39,7 +39,7 @@ import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
 
 @Composable
 fun PhoneNumberInputView(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     onValueChange: (String) -> Unit,
     value: String
@@ -83,7 +83,7 @@ fun PhoneNumberInputView(
                     }
                 },
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                visualTransformation = FormattedTransformation,
+                visualTransformation = PhoneFormatTransformation,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -94,7 +94,7 @@ fun PhoneNumberInputView(
     }
 }
 
-internal object FormattedTransformation : VisualTransformation {
+internal object PhoneFormatTransformation : VisualTransformation {
     private const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -143,7 +143,6 @@ private fun PhoneInputPreview() {
     AnimealTheme {
         Surface {
             var phoneNumber by remember { mutableStateOf("") }
-
             PhoneNumberInputView(
                 modifier = Modifier
                     .fillMaxWidth()
