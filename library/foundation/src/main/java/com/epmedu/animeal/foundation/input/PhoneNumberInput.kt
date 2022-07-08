@@ -39,7 +39,7 @@ import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
 private const val PHONE_NUMBER_PREFIX = "+995"
 
 @Composable
-fun PhoneNumberInputView(
+fun PhoneNumberInput(
     modifier: Modifier = Modifier,
     title: String,
     onValueChange: (String) -> Unit,
@@ -140,11 +140,11 @@ internal object PhoneFormatTransformation : VisualTransformation {
 @Composable
 @Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES)
-private fun PhoneInputPreview() {
+private fun PhoneNumberInputPreview() {
     AnimealTheme {
         Surface {
             var phoneNumber by remember { mutableStateOf("") }
-            PhoneNumberInputView(
+            PhoneNumberInput(
                 modifier = Modifier
                     .padding(horizontal = 4.dp),
                 title = "Phone number",

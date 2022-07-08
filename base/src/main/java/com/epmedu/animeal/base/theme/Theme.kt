@@ -14,7 +14,8 @@ private val DarkColorPalette = darkColors(
     onPrimary = Color.Black,
     secondary = Light.CarminePink,
     secondaryVariant = Light.Gainsboro,
-    onSurface = Color.White
+    onSurface = Color.White,
+    error = CustomColor.Error
 )
 
 private val LightColorPalette = lightColors(
@@ -25,6 +26,7 @@ private val LightColorPalette = lightColors(
     secondary = Light.CarminePink,
     secondaryVariant = Light.Gainsboro,
     onSurface = Light.Daintree,
+    error = CustomColor.Error
 )
 
 @Composable
