@@ -70,13 +70,12 @@ internal class EnterCodeViewModel : ViewModel() {
     }
 
     private fun validateCodeIfFull() {
+        val isCodeCorrect = isCodeCorrect()
         if (currentModel.code.all { it != null }) {
-            _model.value = currentModel.copy(isError = isCodeWrong())
-            _isCodeCorrect.value = isCodeCorrect()
+            _model.value = currentModel.copy(isError = !isCodeCorrect)
+            _isCodeCorrect.value = isCodeCorrect
         }
     }
-
-    private fun isCodeWrong() = !isCodeCorrect()
 
     private fun isCodeCorrect(): Boolean {
         val codeString = currentModel.code.joinToString("")
