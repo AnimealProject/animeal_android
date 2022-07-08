@@ -38,10 +38,10 @@ internal class EnterCodeViewModel : ViewModel() {
 
     private suspend fun launchResendTimer() {
         for (tick in RESEND_DELAY downTo 1L) {
-            _model.emit(currentModel.copy(resendDelay = tick))
+            _model.value = currentModel.copy(resendDelay = tick)
             delay(1000)
         }
-        _model.emit(currentModel.copy(isResendEnabled = true, resendDelay = 0))
+        _model.value = currentModel.copy(isResendEnabled = true, resendDelay = 0)
     }
 
     fun resendCode() {
@@ -51,19 +51,15 @@ internal class EnterCodeViewModel : ViewModel() {
         }
     }
 
-    private suspend fun clearCodeAndDisableResend() {
-        _model.emit(currentModel.copy(code = getEmptyCode(), isResendEnabled = false))
+    private fun clearCodeAndDisableResend() {
+        _model.value = currentModel.copy(code = getEmptyCode(), isResendEnabled = false)
     }
 
     fun changeDigit(position: Int, digit: Int?) {
-        viewModelScope.launch {
-            _model.emit(
-                currentModel.copy(
-                    code = getNewCodeWithReplacedDigit(position, digit)
-                )
-            )
-            validateCodeIfFull()
-        }
+        _model.value = currentModel.copy(
+            code = getNewCodeWithReplacedDigit(position, digit)
+        )
+        validateCodeIfFull()
     }
 
     private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
@@ -73,10 +69,10 @@ internal class EnterCodeViewModel : ViewModel() {
         }
     }
 
-    private suspend fun validateCodeIfFull() {
+    private fun validateCodeIfFull() {
         if (currentModel.code.all { it != null }) {
-            _model.emit(currentModel.copy(isError = isCodeWrong()))
-            _isCodeCorrect.emit(isCodeCorrect())
+            _model.value = currentModel.copy(isError = isCodeWrong())
+            _isCodeCorrect.value = isCodeCorrect()
         }
     }
 
