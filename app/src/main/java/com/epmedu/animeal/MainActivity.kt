@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.core.view.WindowCompat
-import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.login.OnboardingScreen

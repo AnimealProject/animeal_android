@@ -16,7 +16,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 internal fun CodeRow(
