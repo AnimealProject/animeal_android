@@ -10,13 +10,6 @@ import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun HomeScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(R.string.tab_home), modifier = Modifier.align(Alignment.Center))
-    }
-}
-
-@Composable
 internal fun FavoritesScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = stringResource(R.string.tab_favorites), modifier = Modifier.align(Alignment.Center))
