@@ -28,4 +28,7 @@
 
     <string name="navigate_to_app_settings">Navigate to app settings</string>
     <string name="request_permission">Request permission</string>
+
+    <string name="switch_cats_title">Cats</string>
+    <string name="switch_dogs_title">Dogs</string>
 </resources>

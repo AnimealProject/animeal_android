@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="back">Back</string>
-    <string name="tab_cats_title">Cats</string>
-    <string name="tab_dogs_title">Dogs</string>
 </resources>

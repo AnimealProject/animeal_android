@@ -1,4 +1,4 @@
-package com.epmedu.animeal.base.ui
+package com.epmedu.animeal.foundation.switch
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.StringRes
@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
+import com.epmedu.animeal.resources.R
 
 /**
  * Shows the bar that holds 2 tabs.
@@ -157,8 +157,8 @@ private fun AnimalTab(
 }
 
 enum class Tab(@StringRes val title: Int) {
-    Dogs(R.string.tab_dogs_title),
-    Cats(R.string.tab_cats_title)
+    Dogs(R.string.switch_dogs_title),
+    Cats(R.string.switch_cats_title)
 }
 
 @Preview(showBackground = true)
