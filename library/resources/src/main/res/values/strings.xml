@@ -3,8 +3,14 @@
     <string name="app_name">Animeal</string>
 
     <string name="logout">Logout</string>
+    <string name="home">Home</string>
     <string name="more">More</string>
 
+    <string name="enter_code_title">Enter verification code</string>
+    <string name="enter_code_subtitle">Code was sent to:</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="resend_code_in">Resend Code in 00:%1$s</string>
+    
     <string name="page_profile">Profile Page</string>
     <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
@@ -21,4 +27,10 @@
     <string name="tab_home">Home</string>
     <string name="tab_analytics">Analytics</string>
     <string name="tab_more">More</string>
+
+    <string name="location_permission_denied">Location permission is permanently denied. Navigate to app settings to enable it.</string>
+    <string name="location_rationale_text">Location permission is needed to access Maps!</string>
+
+    <string name="navigate_to_app_settings">Navigate to app settings</string>
+    <string name="request_permission">Request permission</string>
 </resources>

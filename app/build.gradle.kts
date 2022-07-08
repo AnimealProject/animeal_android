@@ -39,7 +39,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 
