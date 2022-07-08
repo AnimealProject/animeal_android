@@ -70,8 +70,8 @@ internal class EnterCodeViewModel : ViewModel() {
     }
 
     private fun validateCodeIfFull() {
-        val isCodeCorrect = isCodeCorrect()
         if (currentModel.code.all { it != null }) {
+            val isCodeCorrect = isCodeCorrect()
             _model.value = currentModel.copy(isError = !isCodeCorrect)
             _isCodeCorrect.value = isCodeCorrect
         }
