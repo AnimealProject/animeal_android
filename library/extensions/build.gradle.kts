@@ -4,6 +4,5 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.accompanist.permissions)
     implementation(libs.compose.runtime)
 }
