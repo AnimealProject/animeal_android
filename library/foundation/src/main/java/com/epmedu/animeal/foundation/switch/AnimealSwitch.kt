@@ -37,6 +37,10 @@ import androidx.compose.ui.zIndex
 import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
+private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"
+private const val INDICATOR_LEFT_TRANSITION_LABEL = "TAB_INDICATOR_LEFT"
+private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
+
 /**
  * Shows the bar that holds 2 tabs.
  *
@@ -94,17 +98,17 @@ private fun TabIndicator(
 
     val transition = updateTransition(
         targetState = tab,
-        label = "Tab indicator"
+        label = INDICATOR_TRANSITION_LABEL
     )
 
     val indicatorLeft by transition.animateDp(
-        label = "Indicator left"
+        label = INDICATOR_LEFT_TRANSITION_LABEL
     ) { page ->
         tabPositions[page.ordinal].left
     }
 
     val indicatorRight by transition.animateDp(
-        label = "Indicator right"
+        label = INDICATOR_RIGHT_TRANSITION_LABEL
     ) { page ->
         tabPositions[page.ordinal].right
     }
