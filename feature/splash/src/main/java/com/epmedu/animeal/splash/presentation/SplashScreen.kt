@@ -18,7 +18,7 @@ fun SplashScreen() {
         coroutineScope.launch {
             // todo delete it after login logic implementation
             delay(2000)
-            navController.navigate(MainScreenRoute.Onboarding.name) {
+            navController.navigate(MainScreenRoute.SignIn.name) {
                 popUpTo(MainScreenRoute.Splash.name) {
                     inclusive = true
                 }

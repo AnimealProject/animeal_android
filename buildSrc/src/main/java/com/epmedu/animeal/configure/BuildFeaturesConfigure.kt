@@ -16,7 +16,7 @@ fun CommonExtension<*, *, *, *>.configureBuildFeatures(
             compose = pluginExtension.compose
 
             composeOptions {
-                kotlinCompilerExtensionVersion = project.libs.versions.composeCompiler.get()
+                kotlinCompilerExtensionVersion = project.libs.versions.compose.get()
             }
         }
     }

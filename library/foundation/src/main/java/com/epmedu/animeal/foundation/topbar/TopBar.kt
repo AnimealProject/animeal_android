@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.base.R
 import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.foundation.spacer.WidthSpacer
 
 /**
  * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
@@ -32,9 +31,8 @@ fun TopBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (navigationIcon == null) {
-            WidthSpacer(44.dp)
+            Spacer(modifier = Modifier.width(44.dp))
         } else {
-            WidthSpacer(8.dp)
             navigationIcon()
         }
 
