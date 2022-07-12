@@ -16,6 +16,7 @@ include(":feature:login")
 include(":feature:more")
 include(":feature:splash")
 include(":feature:tabs")
+include(":feature:home")
 
 include(":library:common")
 include(":library:extensions")
