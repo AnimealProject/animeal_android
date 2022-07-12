@@ -12,7 +12,7 @@
     <string name="enter_code_subtitle">Code was sent to:</string>
     <string name="resend_code">Resend Code</string>
     <string name="resend_code_in">Resend Code in 00:%1$s</string>
-    
+
     <string name="page_profile">Profile Page</string>
     <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
@@ -35,4 +35,7 @@
 
     <string name="navigate_to_app_settings">Navigate to app settings</string>
     <string name="request_permission">Request permission</string>
+
+    <string name="switch_cats_title">Cats</string>
+    <string name="switch_dogs_title">Dogs</string>
 </resources>

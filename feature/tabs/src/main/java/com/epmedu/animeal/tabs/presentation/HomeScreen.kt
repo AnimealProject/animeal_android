@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -63,6 +64,12 @@ internal fun HomeScreen() {
 @Composable
 private fun Maps() {
     Box(modifier = Modifier.fillMaxSize()) {
+        AnimealSwitch(
+            modifier = Modifier
+                .align(alignment = Alignment.TopCenter)
+                .padding(top = 24.dp),
+            onTabSelected = {}
+        )
         Text(text = stringResource(R.string.home), modifier = Modifier.align(Alignment.Center))
     }
 }
