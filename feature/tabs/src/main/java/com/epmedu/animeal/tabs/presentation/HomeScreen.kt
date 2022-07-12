@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.base.theme.Typography
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
@@ -96,7 +96,7 @@ private fun NavigateToSettingsPrompt() {
         Text(
             text = stringResource(R.string.location_permission_denied),
             textAlign = TextAlign.Center,
-            style = Typography.body1
+            style = MaterialTheme.typography.body1
         )
         AnimealButton(
             modifier = Modifier

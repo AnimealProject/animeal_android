@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.base.R
-import com.epmedu.animeal.base.theme.AnimealTheme
 import com.epmedu.animeal.foundation.spacer.WidthSpacer
+import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.resources.R
 
 /**
  * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
@@ -52,7 +52,7 @@ fun BackButton(onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = stringResource(id = R.string.back),
+            contentDescription = stringResource(id = R.string.content_description_back),
             modifier = Modifier.size(48.dp)
         )
     }

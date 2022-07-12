@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Animeal</string>
 
+    <string name="content_description_back">Back</string>
+
     <string name="logout">Logout</string>
     <string name="home">Home</string>
     <string name="more">More</string>
