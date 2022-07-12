@@ -1,5 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 
+apply(plugin = "com.github.ben-manes.versions")
+
 plugins {
     id("io.gitlab.arturbosch.detekt") version libs.versions.detekt
 }
@@ -12,10 +14,11 @@ buildscript {
 
     dependencies {
         classpath(libs.gradle.plugin.buildtools)
+        classpath(libs.gradle.plugin.crashlytics)
+        classpath(libs.gradle.plugin.googleservices)
         classpath(libs.gradle.plugin.hilt)
         classpath(libs.gradle.plugin.kotlin)
-        classpath(libs.gradle.plugin.googleservices)
-        classpath(libs.gradle.plugin.crashlytics)
+        classpath(libs.gradle.plugin.versions)
     }
 }
 
