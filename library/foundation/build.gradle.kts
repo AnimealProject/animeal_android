@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.base)
+    implementation(projects.library.resources)
 
     implementation(projects.library.resources)
 
