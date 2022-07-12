@@ -22,9 +22,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.CustomColor.DarkerGrey
-import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
+import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.CustomColor.DarkerGrey
+import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
 
 @Composable
 fun TextInputField(
