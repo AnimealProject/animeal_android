@@ -26,7 +26,7 @@ private val LightColorPalette = lightColors(
     secondary = Light.CarminePink,
     secondaryVariant = Light.Gainsboro,
     onSurface = Light.Daintree,
-    error = CustomColor.Error
+    error = Light.Error
 )
 
 @Composable

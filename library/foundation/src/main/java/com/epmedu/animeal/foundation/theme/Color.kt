@@ -15,6 +15,7 @@ internal object AnimealColor {
         val Gainsboro = Color(0xFFDFDFDF)
         val SeaSerpent = Color(0xFF03BFD7)
         val Daintree = Color(0xFF00283D)
+        val Error = Color(0xFFF04E45)
     }
 }
 

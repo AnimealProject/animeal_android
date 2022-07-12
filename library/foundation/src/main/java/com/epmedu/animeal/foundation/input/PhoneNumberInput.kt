@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -33,8 +34,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.epmedu.animeal.base.theme.AnimealTheme
-import com.epmedu.animeal.base.theme.CustomColor.LynxWhite
+import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
 
 private const val PHONE_NUMBER_PREFIX = "+995"
 
@@ -100,8 +101,12 @@ internal object PhoneFormatTransformation : VisualTransformation {
 
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
-            if (text.text.length >= 9) text.text.substring(0..8) else text.text
-        val annotatedString = AnnotatedString.Builder().run {
+            if (text.text.length >= 9) {
+                text.text.substring(0..8)
+            } else {
+                text.text
+            }
+        val annotatedString = buildAnnotatedString {
             for (i in trimmed.indices) {
                 append(trimmed[i])
                 if (i == 2) {
