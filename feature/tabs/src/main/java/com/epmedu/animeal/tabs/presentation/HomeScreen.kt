@@ -1,6 +1,7 @@
 package com.epmedu.animeal.tabs.presentation
 
 import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,6 +64,13 @@ internal fun HomeScreen() {
 
 @Composable
 private fun Maps() {
+    val context = LocalContext.current
+
+    val metadata = context.packageManager.getApplicationInfo(
+        context.packageName,
+        PackageManager.GET_META_DATA
+    ).metaData
+
     Box(modifier = Modifier.fillMaxSize()) {
         AnimealSwitch(
             modifier = Modifier
@@ -70,7 +78,10 @@ private fun Maps() {
                 .padding(top = 24.dp),
             onTabSelected = {}
         )
-        Text(text = stringResource(R.string.home), modifier = Modifier.align(Alignment.Center))
+        Text(
+            text = stringResource(R.string.home) + metadata.get("mapbox.ACCESS_TOKEN").toString(),
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
 
