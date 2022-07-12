@@ -25,6 +25,7 @@ hilt = "2.41"
 kotlin = "1.7.0"
 lifecycle = "2.4.1"
 navigation = "2.4.2"
+secrets = "2.0.1"
 
 [libraries]
 gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }
@@ -33,6 +34,7 @@ gradle-plugin-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", 
 gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-plugin-googleservices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
+gradle-plugin-secrets = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secrets" }
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
