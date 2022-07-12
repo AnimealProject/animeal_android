@@ -6,6 +6,11 @@
     <string name="home">Home</string>
     <string name="more">More</string>
 
+    <string name="enter_code_title">Enter verification code</string>
+    <string name="enter_code_subtitle">Code was sent to:</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="resend_code_in">Resend Code in 00:%1$s</string>
+
     <string name="page_profile">Profile Page</string>
     <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
