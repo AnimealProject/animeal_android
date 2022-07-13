@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation
+package com.epmedu.animeal.home
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -56,7 +56,7 @@ fun CheckLocationPermission(onGranted: @Composable () -> Unit) {
 }
 
 @Composable
-internal fun HomeScreen() {
+fun HomeScreen() {
     CheckLocationPermission {
         Maps()
     }

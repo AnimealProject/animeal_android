@@ -7,6 +7,7 @@ dependencies {
     implementation(projects.base)
 
     implementation(projects.feature.more)
+    implementation(projects.feature.home)
 
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
@@ -15,7 +16,6 @@ dependencies {
 
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
-    implementation(libs.accompanist.permissions)
 
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
