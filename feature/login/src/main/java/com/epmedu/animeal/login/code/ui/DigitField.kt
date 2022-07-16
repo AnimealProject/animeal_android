@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.ui
+package com.epmedu.animeal.login.code.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column

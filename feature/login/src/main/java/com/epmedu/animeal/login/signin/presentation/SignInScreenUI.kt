@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.presentation
+package com.epmedu.animeal.login.signin.presentation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.login.domain.model.OnBoardingItemModel
-import com.epmedu.animeal.login.ui.LoginButtonContent
+import com.epmedu.animeal.login.signin.domain.model.OnBoardingItemModel
+import com.epmedu.animeal.login.signin.ui.LoginButtonContent
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
