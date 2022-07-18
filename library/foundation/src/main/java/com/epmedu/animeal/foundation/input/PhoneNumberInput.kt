@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -43,7 +44,7 @@ private const val PHONE_NUMBER_PREFIX = "+995"
 fun PhoneNumberInput(
     modifier: Modifier = Modifier,
     title: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit = {},
     value: String,
     enabled: Boolean = true
 ) {
@@ -53,7 +54,8 @@ fun PhoneNumberInput(
             modifier = Modifier.padding(bottom = 2.dp),
             style = TextStyle(
                 color = MaterialTheme.colors.onSurface,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
             )
         )
         Row(

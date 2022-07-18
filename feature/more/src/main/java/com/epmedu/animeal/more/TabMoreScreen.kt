@@ -4,10 +4,10 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import com.epmedu.animeal.login.profile.presentation.FinishProfileScreen
 import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
-import com.epmedu.animeal.more.profile.ProfileScreen
 import com.epmedu.animeal.more.root.MoreScreen
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.resources.R
@@ -27,7 +27,7 @@ fun TabMoreScreen() {
         ) {
             MoreScreen()
         }
-        screen(NavigationScreen.ProfilePage.route.name) { ProfileScreen() }
+        screen(NavigationScreen.ProfilePage.route.name) { FinishProfileScreen(false) }
         screen(NavigationScreen.Donate.route.name) { DonateScreen() }
         screen(NavigationScreen.Help.route.name) { HelpScreen() }
         screen(NavigationScreen.About.route.name) { AboutScreen() }

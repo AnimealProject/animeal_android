@@ -8,6 +8,7 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.feature.login)
 
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)

@@ -38,4 +38,28 @@
 
     <string name="switch_cats_title">Cats</string>
     <string name="switch_dogs_title">Dogs</string>
+
+    <string name="profile_birth_date">Birthdate</string>
+    <string name="profile_select_birth_date">Select birthdate</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_subtitle">please fill out the profile information</string>
+    <string name="profile_name_title">Name</string>
+    <string name="profile_name_hint">Enter name</string>
+    <string name="profile_surname_title">Surname</string>
+    <string name="profile_surname_hint">Enter surname</string>
+    <string name="profile_email_title">Email</string>
+    <string name="profile_email_hint">Enter email</string>
+    <string name="profile_phone_number">Phone Number</string>
+    <string name="profile_text_field_error_msg">Amount of characters: min - 2, max - 35</string>
+    <string name="profile_name_blank_error_msg">Name can not be blank</string>
+    <string name="profile_surname_blank_error_msg">Surname can not be blank</string>
+    <string name="profile_email_blank_error_msg">Email can not be blank</string>
+    <string name="profile_email_invalid_error_msg">Email is invalid</string>
+    <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
+    <string name="profile_birthdate_placeholder">DD.MM.YYYY</string>
+
+    <string name="done">Done</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
