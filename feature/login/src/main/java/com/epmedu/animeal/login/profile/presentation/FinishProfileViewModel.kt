@@ -136,7 +136,6 @@ internal class FinishProfileViewModel @Inject constructor(
     }
 
     private fun loadProfile() {
-
         viewModelScope.launch {
             profileRepository.getProfile()
                 .flowOn(Dispatchers.IO)
