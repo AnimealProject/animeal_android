@@ -7,7 +7,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.foundation.input.BirthDateFormatTransformation
-import com.epmedu.animeal.login.profile.data.model.ProfileObj
+import com.epmedu.animeal.login.profile.data.model.Profile
 import com.epmedu.animeal.login.profile.data.repository.ProfileRepository
 import com.epmedu.animeal.login.profile.domain.BirthDateValidator
 import com.epmedu.animeal.login.profile.domain.EmailValidator
@@ -121,7 +121,7 @@ internal class FinishProfileViewModel @Inject constructor(
     }
 
     private fun saveProfile() {
-        val profile = ProfileObj(
+        val profile = Profile(
             firstName = state.name,
             lastName = state.surname,
             email = state.email,
@@ -129,7 +129,6 @@ internal class FinishProfileViewModel @Inject constructor(
         )
         viewModelScope.launch {
             profileRepository.saveProfile(profile)
-                .flowOn(Dispatchers.IO)
                 .collect {
                     validationEventChannel.send(ValidationEvent.Success)
                 }

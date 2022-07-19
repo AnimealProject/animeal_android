@@ -12,7 +12,7 @@ animealPlugin {
 }
 
 dependencies {
-    implementation(libs.androidx.preference)
+    implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 }

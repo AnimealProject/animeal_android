@@ -1,7 +1,6 @@
 package com.epmedu.animeal.login.profile.data.model
 
-internal data class ProfileObj(
-    val phoneNumber: String = "",
+internal data class Profile(
     val firstName: String = "",
     val lastName: String = "",
     val birthDate: String = "",

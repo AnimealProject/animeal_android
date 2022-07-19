@@ -1,11 +1,11 @@
 package com.epmedu.animeal.login.profile.data.repository
 
-import com.epmedu.animeal.login.profile.data.model.ProfileObj
+import com.epmedu.animeal.login.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
 
 internal interface ProfileRepository {
 
-    suspend fun getProfile(): Flow<ProfileObj>
+    suspend fun getProfile(): Flow<Profile>
 
-    suspend fun saveProfile(profileObj: ProfileObj): Flow<Unit>
+    suspend fun saveProfile(profile: Profile): Flow<Unit>
 }
