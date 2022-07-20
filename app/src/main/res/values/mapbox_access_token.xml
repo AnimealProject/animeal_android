@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    TODO Replace public key -->
+    <string name="mapbox_access_token">
+        pk.eyJ1IjoidmV6ZSIsImEiOiJjbDVmMHZzMnAxNmo2M2ZsMXBnN2g1eHViIn0.FUnfOQ7hOpLMx-cuET_4vQ
+    </string>
+</resources>

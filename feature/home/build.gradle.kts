@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation(libs.mapbox.android)
+    implementation("com.google.android.gms:play-services-location:18.0.0")
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
