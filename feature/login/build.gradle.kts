@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
@@ -24,8 +22,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
-
-    implementation(libs.serialization.gson)
 
     debugImplementation(libs.compose.ui.tooling)
 

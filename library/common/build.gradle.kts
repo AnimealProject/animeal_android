@@ -14,5 +14,6 @@ animealPlugin {
 dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.viewmodel)
     kapt(libs.hilt.compiler)
 }

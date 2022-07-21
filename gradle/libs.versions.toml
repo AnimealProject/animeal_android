@@ -22,7 +22,6 @@ detekt = "1.20.0"
 dialogCore = "0.8.1-rc"
 firebaseBom = "30.2.0"
 googleServices = "4.3.13"
-gson = "2.8.6"
 javapoet = "1.13.0"
 junit = "4.13.2"
 hilt = "2.42"
@@ -83,5 +82,3 @@ junit = { module = "junit:junit", version.ref = "junit" }
 
 compose-material-dialog-core = { module = "io.github.vanpra.compose-material-dialogs:core", version.ref = "dialogCore" }
 compose-material-dialog-datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "dialogCore" }
-
-serialization-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

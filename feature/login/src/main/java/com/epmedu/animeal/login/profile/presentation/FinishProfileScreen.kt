@@ -18,7 +18,7 @@ fun FinishProfileScreen(isFirstTime: Boolean = true) {
     )
 
     LaunchedEffect(Unit) {
-        viewModel.validationEvents.collect {
+        viewModel.validationSharedFlow.collect {
             when (it) {
                 FinishProfileViewModel.ValidationEvent.Success -> {
                     if (isFirstTime) {

@@ -1,11 +1,8 @@
 package com.epmedu.animeal.login.profile.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.AnnotatedString
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.foundation.input.BirthDateFormatTransformation
 import com.epmedu.animeal.login.profile.data.model.Profile
 import com.epmedu.animeal.login.profile.data.repository.ProfileRepository
@@ -17,46 +14,48 @@ import com.epmedu.animeal.login.profile.domain.ValidationResult
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileEvent
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : ViewModel() {
+) : StateViewModel<ProfileEvent, ProfileState>(initialState = ProfileState()) {
     private val nameValidator: FirstnameValidator = FirstnameValidator
     private val surnameValidator: SurnameValidator = SurnameValidator
     private val emailValidator: EmailValidator = EmailValidator
     private val birthDateValidator: BirthDateValidator = BirthDateValidator
 
-    var state by mutableStateOf(ProfileState())
-    private val validationEventChannel = Channel<ValidationEvent>()
-    val validationEvents = validationEventChannel.receiveAsFlow()
+    private val _validationSharedFlow = MutableSharedFlow<ValidationEvent>()
+    val validationSharedFlow: SharedFlow<ValidationEvent> get() = _validationSharedFlow.asSharedFlow()
 
     init {
         loadProfile()
     }
 
-    fun onEvent(event: ProfileEvent) {
+    override fun handleEvents(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.FirstnameChanged -> {
-                state = state.copy(name = event.name)
+                updateState { copy(name = event.name) }
             }
             is ProfileEvent.SurnameChanged -> {
-                state = state.copy(surname = event.surname)
+                updateState { copy(surname = event.surname) }
             }
             is ProfileEvent.EmailChanged -> {
-                state = state.copy(email = event.email)
+                updateState { copy(email = event.email) }
             }
             is ProfileEvent.BirthDateChanged -> {
-                state = state.copy(
-                    formattedBirthDate = event.birthDate.format(),
-                    birthDateString = event.birthDate
-                )
+                updateState {
+                    copy(
+                        formattedBirthDate = event.birthDate.format(),
+                        birthDateString = event.birthDate
+                    )
+                }
             }
             ProfileEvent.Submit -> {
                 submitData()
@@ -74,29 +73,38 @@ internal class FinishProfileViewModel @Inject constructor(
                 isValidBirthDate()
             }
         }
+
     }
 
     private fun isValidName(): ValidationResult {
         val nameValidationResult = nameValidator.validate(state.name)
-        state = state.copy(nameError = nameValidationResult.errorMessage)
+        updateState {
+            copy(nameError = nameValidationResult.errorMessage)
+        }
         return nameValidationResult
     }
 
     private fun isValidSurname(): ValidationResult {
         val validationResult = surnameValidator.validate(state.surname)
-        state = state.copy(surnameError = validationResult.errorMessage)
+        updateState {
+            copy(surnameError = validationResult.errorMessage)
+        }
         return validationResult
     }
 
     private fun isValidEmail(): ValidationResult {
         val validationResult = emailValidator.validate(state.email)
-        state = state.copy(emailError = validationResult.errorMessage)
+        updateState {
+            copy(emailError = validationResult.errorMessage)
+        }
         return validationResult
     }
 
     private fun isValidBirthDate(): ValidationResult {
         val validationResult = birthDateValidator.validate(state.formattedBirthDate)
-        state = state.copy(birthDateError = validationResult.errorMessage)
+        updateState {
+            copy(birthDateError = validationResult.errorMessage)
+        }
         return validationResult
     }
 
@@ -108,12 +116,14 @@ internal class FinishProfileViewModel @Inject constructor(
                 isValidEmail(),
                 isValidBirthDate()
             ).any { !it.isSuccess }
-        state = state.copy(
-            nameError = isValidName().errorMessage,
-            surnameError = isValidSurname().errorMessage,
-            emailError = isValidEmail().errorMessage,
-            birthDateError = isValidBirthDate().errorMessage
-        )
+        updateState {
+            copy(
+                nameError = isValidName().errorMessage,
+                surnameError = isValidSurname().errorMessage,
+                emailError = isValidEmail().errorMessage,
+                birthDateError = isValidBirthDate().errorMessage
+            )
+        }
         if (hasError) {
             return
         }
@@ -130,7 +140,7 @@ internal class FinishProfileViewModel @Inject constructor(
         viewModelScope.launch {
             profileRepository.saveProfile(profile)
                 .collect {
-                    validationEventChannel.send(ValidationEvent.Success)
+                    _validationSharedFlow.emit(ValidationEvent.Success)
                 }
         }
     }
@@ -140,13 +150,15 @@ internal class FinishProfileViewModel @Inject constructor(
             profileRepository.getProfile()
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    state = state.copy(
-                        name = it.firstName,
-                        surname = it.lastName,
-                        email = it.email,
-                        birthDateString = it.birthDate,
-                        formattedBirthDate = it.birthDate.format()
-                    )
+                    updateState {
+                        copy(
+                            name = it.firstName,
+                            surname = it.lastName,
+                            email = it.email,
+                            birthDateString = it.birthDate,
+                            formattedBirthDate = it.birthDate.format()
+                        )
+                    }
                 }
         }
     }

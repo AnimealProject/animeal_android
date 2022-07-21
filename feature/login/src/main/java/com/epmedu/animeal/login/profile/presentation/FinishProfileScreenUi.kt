@@ -13,8 +13,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -46,7 +49,7 @@ internal fun FinishProfileScreenUi(
     onBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val state = viewModel.state
+    val state = viewModel.stateFlow.collectAsState().value
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -54,8 +57,6 @@ internal fun FinishProfileScreenUi(
             TopBar(title = stringResource(id = R.string.profile_title)) {
                 BackButton(onClick = onBack)
             }
-        },
-        floatingActionButton = {
         }
     ) { padding ->
         Column(
@@ -144,14 +145,14 @@ internal fun FinishProfileScreenUi(
 
 @Composable
 private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: FocusManager) {
-    val state = viewModel.state
-    val shouldOpenDialog = remember { mutableStateOf(false) }
+    val state = viewModel.stateFlow.collectAsState().value
+    var shouldOpenDialog by remember { mutableStateOf(false) }
     BirthDateInput(
         title = stringResource(id = R.string.profile_birth_date),
         isEnabled = true,
         onIconClick = {
             focusManager.clearFocus()
-            shouldOpenDialog.value = true
+            shouldOpenDialog = true
         },
         onValueChange = {
             viewModel.onEvent(ProfileEvent.BirthDateChanged(it))
@@ -168,7 +169,7 @@ private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: Fo
         })
     )
     DatePickerDialog(
-        initialDate = viewModel.state.initialDate,
+        initialDate = viewModel.stateFlow.collectAsState().value.initialDate,
         shouldShowDialog = shouldOpenDialog
     ) {
         val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
