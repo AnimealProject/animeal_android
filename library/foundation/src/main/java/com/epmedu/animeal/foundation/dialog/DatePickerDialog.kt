@@ -3,10 +3,7 @@ package com.epmedu.animeal.foundation.dialog
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.resources.R
@@ -18,25 +15,30 @@ import java.time.LocalDate
 @Composable
 fun DatePickerDialog(
     initialDate: LocalDate,
-    shouldShowDialog: Boolean,
+    shouldShowDialog: MutableState<Boolean>,
     onDatePicked: (LocalDate) -> Unit
 ) {
     val dialogState = rememberMaterialDialogState()
-    var showDialog  by remember { mutableStateOf(shouldShowDialog) }
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
-            positiveButton(stringResource(id = R.string.ok), onClick = { showDialog = false })
-            negativeButton(stringResource(id = R.string.cancel), onClick = { showDialog = false })
+            positiveButton(
+                stringResource(id = R.string.ok),
+                onClick = { shouldShowDialog.value = false }
+            )
+            negativeButton(
+                stringResource(id = R.string.cancel),
+                onClick = { shouldShowDialog.value = false }
+            )
         },
-        onCloseRequest = { showDialog = false }
+        onCloseRequest = { shouldShowDialog.value = false }
     ) {
         datepicker(initialDate = initialDate) {
             onDatePicked(it)
-            showDialog= false
+            shouldShowDialog.value = false
         }
     }
-    if (showDialog) {
+    if (shouldShowDialog.value) {
         dialogState.show()
     }
 }
@@ -45,5 +47,5 @@ fun DatePickerDialog(
 @Preview
 @Composable
 private fun DatePickerDialogPreview() {
-    DatePickerDialog(shouldShowDialog = true, initialDate = LocalDate.now()) {}
+    DatePickerDialog(shouldShowDialog = mutableStateOf(true), initialDate = LocalDate.now()) {}
 }

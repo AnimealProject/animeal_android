@@ -146,13 +146,13 @@ internal fun FinishProfileScreenUi(
 @Composable
 private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: FocusManager) {
     val state = viewModel.stateFlow.collectAsState().value
-    var shouldOpenDialog by remember { mutableStateOf(false) }
+    val shouldOpenDialog = remember { mutableStateOf(false) }
     BirthDateInput(
         title = stringResource(id = R.string.profile_birth_date),
         isEnabled = true,
         onIconClick = {
             focusManager.clearFocus()
-            shouldOpenDialog = true
+            shouldOpenDialog.value = true
         },
         onValueChange = {
             viewModel.onEvent(ProfileEvent.BirthDateChanged(it))

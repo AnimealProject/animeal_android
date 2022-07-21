@@ -39,4 +39,4 @@ abstract class StateViewModel<Event : Any, State : Any>(initialState: State) : V
             }
         }
     }
-} 
+}
