@@ -1,6 +1,8 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 dependencies {
@@ -13,6 +15,7 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
 
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 
@@ -21,4 +24,7 @@ dependencies {
     implementation(libs.compose.material)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
