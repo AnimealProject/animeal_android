@@ -3,7 +3,6 @@ package com.epmedu.animeal.login.profile.domain
 import android.util.Patterns
 import com.epmedu.animeal.login.profile.presentation.ui.UiText
 import com.epmedu.animeal.resources.R
-import java.util.regex.Pattern
 
 internal object EmailValidator : Validator {
 
