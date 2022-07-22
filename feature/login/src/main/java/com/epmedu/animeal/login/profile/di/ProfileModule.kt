@@ -14,7 +14,8 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 internal object ProfileModule {
 
-    @[ViewModelScoped Provides]
+    @ViewModelScoped
+    @Provides
     fun provideProfileRepository(
         dataStore: DataStore<Preferences>
     ): ProfileRepository =

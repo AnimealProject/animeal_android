@@ -1,11 +1,11 @@
 package com.epmedu.animeal.login.profile.domain
 
+import android.util.Patterns
 import com.epmedu.animeal.login.profile.presentation.ui.UiText
 import com.epmedu.animeal.resources.R
 import java.util.regex.Pattern
 
 internal object EmailValidator : Validator {
-    private const val EMAIL_VALIDATION_REGEX = "^(.+)@(.+)\$"
 
     @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
@@ -25,6 +25,6 @@ internal object EmailValidator : Validator {
     }
 
     private fun isEmailValid(email: String): Boolean {
-        return Pattern.matches(EMAIL_VALIDATION_REGEX, email)
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }

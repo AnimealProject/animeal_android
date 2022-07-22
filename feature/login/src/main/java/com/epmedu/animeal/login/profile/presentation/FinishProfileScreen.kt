@@ -2,6 +2,7 @@ package com.epmedu.animeal.login.profile.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.login.presentation.navigateToTabs
@@ -11,11 +12,14 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 fun FinishProfileScreen(isFirstTime: Boolean = true) {
     val viewModel: FinishProfileViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
+    val state = viewModel.stateFlow.collectAsState().value
 
     FinishProfileScreenUi(
-        viewModel = viewModel,
+        state = state,
         onBack = navigator::popBackStack
-    )
+    ) { event ->
+        viewModel.onEvent(event)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.validationSharedFlow.collect {

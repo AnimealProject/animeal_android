@@ -13,14 +13,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Singleton
 
 private const val DATA_STORE_PREFERENCES_KEY = "preferences"
 
-@[Module InstallIn(SingletonComponent::class)]
+@Module
+@InstallIn(SingletonComponent::class)
 internal object AppModule {
 
     @Singleton

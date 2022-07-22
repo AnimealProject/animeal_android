@@ -1,5 +1,6 @@
 package com.epmedu.animeal.login.profile.presentation
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +14,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -40,16 +38,16 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileEvent
+import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongMethod")
 @Composable
 internal fun FinishProfileScreenUi(
-    viewModel: FinishProfileViewModel,
-    onBack: () -> Unit
+    state: ProfileState,
+    onBack: () -> Unit,
+    onEvent: (ProfileEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val state = viewModel.stateFlow.collectAsState().value
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -67,63 +65,27 @@ internal fun FinishProfileScreenUi(
         ) {
             HeightSpacer(12.dp)
             Text(text = stringResource(id = R.string.profile_subtitle))
-            TextInputField(
-                title = stringResource(id = R.string.profile_name_title),
-                hint = stringResource(id = R.string.profile_name_hint),
-                onValueChange = {
-                    viewModel.onEvent(ProfileEvent.FirstnameChanged(it))
-                },
-                value = state.name,
-                errorText = state.nameError?.asString(),
-                onClearFocus = {
-                    if (state.name.isNotBlank()) {
-                        viewModel.onEvent(ProfileEvent.FirstnameValidation)
-                    }
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+            FirstNameInputUi(
+                state = state,
+                focusManager = focusManager,
+                onEvent = onEvent
             )
-            TextInputField(
-                title = stringResource(id = R.string.profile_surname_title),
-                hint = stringResource(id = R.string.profile_surname_hint),
-                onValueChange = {
-                    viewModel.onEvent(ProfileEvent.SurnameChanged(it))
-                },
-                value = state.surname,
-                errorText = state.surnameError?.asString(),
-                onClearFocus = {
-                    if (state.surname.isNotBlank()) {
-                        viewModel.onEvent(ProfileEvent.SurnameValidation)
-                    }
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+            LastNameInputUi(
+                state = state,
+                focusManager = focusManager,
+                onEvent = onEvent
             )
-            TextInputField(
-                title = stringResource(id = R.string.profile_email_title),
-                hint = stringResource(id = R.string.profile_email_hint),
-                onValueChange = {
-                    viewModel.onEvent(ProfileEvent.EmailChanged(it))
-                },
-                value = state.email,
-                errorText = state.emailError?.asString(),
-                onClearFocus = {
-                    if (state.email.isNotBlank()) {
-                        viewModel.onEvent(ProfileEvent.EmailValidation)
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Email
-                ),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+            EmailInputUi(
+                state = state,
+                focusManager = focusManager,
+                onEvent = onEvent
             )
             PhoneNumberInput(
                 title = stringResource(id = R.string.profile_phone_number),
                 value = "999112233",
                 enabled = false
             )
-            BirthDateInputUi(viewModel, focusManager)
+            BirthDateInputUi(state, focusManager) { onEvent(it) }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,7 +95,7 @@ internal fun FinishProfileScreenUi(
                 AnimealShortButton(
                     text = stringResource(id = R.string.done),
                     onClick = {
-                        viewModel.onEvent(ProfileEvent.Submit)
+                        onEvent(ProfileEvent.Submit)
                         focusManager.clearFocus()
                     },
                     modifier = Modifier.padding(start = 44.dp, bottom = 55.dp)
@@ -144,8 +106,86 @@ internal fun FinishProfileScreenUi(
 }
 
 @Composable
-private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: FocusManager) {
-    val state = viewModel.stateFlow.collectAsState().value
+private fun FirstNameInputUi(
+    state: ProfileState,
+    focusManager: FocusManager,
+    onEvent: (ProfileEvent) -> Unit
+) {
+    TextInputField(
+        title = stringResource(id = R.string.profile_name_title),
+        hint = stringResource(id = R.string.profile_name_hint),
+        onValueChange = {
+            onEvent(ProfileEvent.FirstnameChanged(it))
+        },
+        value = state.name,
+        errorText = state.nameError?.asString(),
+        onClearFocus = {
+            if (state.name.isNotBlank()) {
+                onEvent(ProfileEvent.FirstnameValidation)
+            }
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+    )
+}
+
+@Composable
+private fun LastNameInputUi(
+    state: ProfileState,
+    focusManager: FocusManager,
+    onEvent: (ProfileEvent) -> Unit
+) {
+    TextInputField(
+        title = stringResource(id = R.string.profile_surname_title),
+        hint = stringResource(id = R.string.profile_surname_hint),
+        onValueChange = {
+            onEvent(ProfileEvent.SurnameChanged(it))
+        },
+        value = state.surname,
+        errorText = state.surnameError?.asString(),
+        onClearFocus = {
+            if (state.surname.isNotBlank()) {
+                onEvent(ProfileEvent.SurnameValidation)
+            }
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+    )
+}
+
+@Composable
+private fun EmailInputUi(
+    state: ProfileState,
+    focusManager: FocusManager,
+    onEvent: (ProfileEvent) -> Unit
+) {
+    TextInputField(
+        title = stringResource(id = R.string.profile_email_title),
+        hint = stringResource(id = R.string.profile_email_hint),
+        onValueChange = {
+            onEvent(ProfileEvent.EmailChanged(it))
+        },
+        value = state.email,
+        errorText = state.emailError?.asString(),
+        onClearFocus = {
+            if (state.email.isNotBlank()) {
+                onEvent(ProfileEvent.EmailValidation)
+            }
+        },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Email
+        ),
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+    )
+}
+
+@Composable
+private fun BirthDateInputUi(
+    state: ProfileState,
+    focusManager: FocusManager,
+    onEvent: (ProfileEvent) -> Unit
+) {
     val shouldOpenDialog = remember { mutableStateOf(false) }
     BirthDateInput(
         title = stringResource(id = R.string.profile_birth_date),
@@ -155,7 +195,7 @@ private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: Fo
             shouldOpenDialog.value = true
         },
         onValueChange = {
-            viewModel.onEvent(ProfileEvent.BirthDateChanged(it))
+            onEvent(ProfileEvent.BirthDateChanged(it))
         },
         value = state.birthDateString,
         errorText = state.birthDateError?.asString(),
@@ -169,16 +209,17 @@ private fun BirthDateInputUi(viewModel: FinishProfileViewModel, focusManager: Fo
         })
     )
     DatePickerDialog(
-        initialDate = viewModel.stateFlow.collectAsState().value.initialDate,
+        initialDate = state.initialDate,
         shouldShowDialog = shouldOpenDialog
     ) {
         val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
-        viewModel.onEvent(ProfileEvent.BirthDateChanged(formattedDate.replace(".", "")))
-        viewModel.onEvent(ProfileEvent.BirthDateValidation)
+        onEvent(ProfileEvent.BirthDateChanged(formattedDate.replace(".", "")))
+        onEvent(ProfileEvent.BirthDateValidation)
     }
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun EnterPhoneScreenPreview() {
     AnimealTheme {
