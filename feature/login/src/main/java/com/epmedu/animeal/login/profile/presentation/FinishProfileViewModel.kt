@@ -14,13 +14,13 @@ import com.epmedu.animeal.login.profile.domain.ValidationResult
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileEvent
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(

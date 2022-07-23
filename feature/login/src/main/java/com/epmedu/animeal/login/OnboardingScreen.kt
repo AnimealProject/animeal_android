@@ -1,9 +1,9 @@
 package com.epmedu.animeal.login
 
 import androidx.compose.runtime.Composable
-import com.epmedu.animeal.login.profile.presentation.FinishProfileScreen
 import com.epmedu.animeal.login.code.presentation.EnterCodeScreen
 import com.epmedu.animeal.login.phone.presentation.EnterPhoneScreen
+import com.epmedu.animeal.login.profile.presentation.FinishProfileScreen
 import com.epmedu.animeal.login.signin.presentation.SignInScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 

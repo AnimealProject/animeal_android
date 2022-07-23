@@ -10,10 +10,10 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.lastNameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
 import com.epmedu.animeal.login.profile.data.model.Profile
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
