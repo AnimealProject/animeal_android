@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
-import com.epmedu.animeal.login.presentation.navigateToTabs
+import com.epmedu.animeal.login.signin.presentation.navigateToTabs
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
@@ -18,7 +18,7 @@ fun FinishProfileScreen(isFirstTime: Boolean = true) {
         state = state,
         onBack = navigator::popBackStack
     ) { event ->
-        viewModel.onEvent(event)
+        viewModel.handleEvents(event)
     }
 
     LaunchedEffect(Unit) {

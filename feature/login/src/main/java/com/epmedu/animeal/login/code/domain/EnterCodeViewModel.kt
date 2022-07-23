@@ -5,13 +5,13 @@ import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.login.code.data.EnterCodeRepository
 import com.epmedu.animeal.login.code.domain.model.EnterCodeState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(

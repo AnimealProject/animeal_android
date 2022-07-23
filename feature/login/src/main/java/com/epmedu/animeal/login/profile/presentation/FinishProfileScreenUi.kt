@@ -82,7 +82,7 @@ internal fun FinishProfileScreenUi(
             )
             PhoneNumberInput(
                 title = stringResource(id = R.string.profile_phone_number),
-                value = "999112233",
+                value = state.phoneNumber,
                 enabled = false
             )
             BirthDateInputUi(state, focusManager) { onEvent(it) }

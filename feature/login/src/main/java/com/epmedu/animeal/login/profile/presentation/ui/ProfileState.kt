@@ -12,7 +12,8 @@ internal data class ProfileState(
     val emailError: UiText? = null,
     val birthDateString: String = "",
     val birthDateError: UiText? = null,
-    val formattedBirthDate: String = ""
+    val formattedBirthDate: String = "",
+    val formattedPhoneNumber: String = ""
 ) {
     val initialDate: LocalDate
         get() {
@@ -21,4 +22,6 @@ internal data class ProfileState(
                 tryParseDate(formattedBirthDate) ?: LocalDate.now()
             }
         }
+    val phoneNumber: String
+        get() = formattedPhoneNumber.replace("\\D".toRegex(), "")
 }

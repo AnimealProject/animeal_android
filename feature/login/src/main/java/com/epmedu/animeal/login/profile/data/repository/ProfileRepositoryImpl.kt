@@ -7,12 +7,13 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.firstNameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.lastNameKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
 import com.epmedu.animeal.login.profile.data.model.Profile
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -23,6 +24,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
             Profile(
                 firstName = preferences[firstNameKey] ?: EMPTY_STRING,
                 lastName = preferences[lastNameKey] ?: EMPTY_STRING,
+                phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING,
                 email = preferences[emailKey] ?: EMPTY_STRING,
                 birthDate = preferences[birthDateKey] ?: EMPTY_STRING,
             )

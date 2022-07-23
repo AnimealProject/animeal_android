@@ -14,18 +14,18 @@ import com.epmedu.animeal.login.profile.domain.ValidationResult
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileEvent
 import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<ProfileEvent, ProfileState>(initialState = ProfileState()) {
+) : StateViewModel<ProfileState>(initialState = ProfileState()) {
     private val nameValidator: FirstnameValidator = FirstnameValidator
     private val surnameValidator: SurnameValidator = SurnameValidator
     private val emailValidator: EmailValidator = EmailValidator
@@ -38,7 +38,7 @@ internal class FinishProfileViewModel @Inject constructor(
         loadProfile()
     }
 
-    override fun handleEvents(event: ProfileEvent) {
+    fun handleEvents(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.FirstnameChanged -> {
                 updateState { copy(name = event.name) }
@@ -155,7 +155,8 @@ internal class FinishProfileViewModel @Inject constructor(
                             surname = it.lastName,
                             email = it.email,
                             birthDateString = it.birthDate,
-                            formattedBirthDate = it.birthDate.format()
+                            formattedBirthDate = it.birthDate.format(),
+                            formattedPhoneNumber = it.phoneNumber
                         )
                     }
                 }
