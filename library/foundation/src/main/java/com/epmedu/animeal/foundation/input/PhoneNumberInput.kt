@@ -98,7 +98,7 @@ fun PhoneNumberInput(
     }
 }
 
-internal object PhoneFormatTransformation : VisualTransformation {
+object PhoneFormatTransformation : VisualTransformation {
     private const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {

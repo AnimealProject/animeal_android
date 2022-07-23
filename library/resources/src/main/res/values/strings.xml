@@ -8,6 +8,10 @@
     <string name="home">Home</string>
     <string name="more">More</string>
 
+    <string name="enter_phone_title">Enter phone number</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="next">Next</string>
+
     <string name="enter_code_title">Enter verification code</string>
     <string name="enter_code_subtitle">Code was sent to:</string>
     <string name="resend_code">Resend Code</string>

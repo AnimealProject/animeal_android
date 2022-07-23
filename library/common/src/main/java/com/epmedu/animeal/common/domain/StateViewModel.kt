@@ -1,6 +1,10 @@
 package com.epmedu.animeal.common.domain
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+abstract class StateViewModel<State : Any>(initialState: State) : ViewModel() {
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

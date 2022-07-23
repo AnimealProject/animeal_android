@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.ui
+package com.epmedu.animeal.login.signin.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

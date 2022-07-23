@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.presentation
+package com.epmedu.animeal.login.code.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
@@ -20,15 +20,14 @@ import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.login.domain.EnterCodeViewModel.Companion.PHONE_NUMBER_PLACEHOLDER
-import com.epmedu.animeal.login.domain.model.EnterCodeScreenModel
-import com.epmedu.animeal.login.ui.CodeRow
-import com.epmedu.animeal.login.ui.ResendButton
+import com.epmedu.animeal.login.code.domain.model.EnterCodeState
+import com.epmedu.animeal.login.code.ui.CodeRow
+import com.epmedu.animeal.login.code.ui.ResendButton
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun EnterCodeScreenUi(
-    model: EnterCodeScreenModel,
+    state: EnterCodeState,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
     onDigitChange: (position: Int, digit: Int?) -> Unit,
@@ -56,20 +55,20 @@ internal fun EnterCodeScreenUi(
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "${stringResource(id = R.string.enter_code_subtitle)} ${model.phoneNumber}",
+                text = "${stringResource(id = R.string.enter_code_subtitle)} ${state.phoneNumber}",
                 modifier = Modifier.padding(top = 8.dp)
             )
             CodeRow(
-                code = model.code,
-                isError = model.isError,
+                code = state.code,
+                isError = state.isError,
                 focusRequester = focusRequester,
                 modifier = Modifier.padding(top = 36.dp),
                 onDigitChange = onDigitChange
             )
             Spacer(modifier = Modifier.weight(1f))
             ResendButton(
-                isEnabled = model.isResendEnabled,
-                resendDelay = model.resendDelay,
+                isEnabled = state.isResendEnabled,
+                resendDelay = state.resendDelay,
                 onClick = onResend,
                 modifier = Modifier
                     .padding(bottom = 20.dp)
@@ -85,9 +84,9 @@ internal fun EnterCodeScreenUi(
 private fun EnterCodeScreenPreview() {
     AnimealTheme {
         EnterCodeScreenUi(
-            model = EnterCodeScreenModel(
-                phoneNumber = PHONE_NUMBER_PLACEHOLDER,
-                code = listOf(null, null, null, null)
+            state = EnterCodeState(
+                code = listOf(null, null, null, null),
+                phoneNumber = "558 49-99-69"
             ),
             focusRequester = FocusRequester(),
             onBack = {},

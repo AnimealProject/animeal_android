@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.domain.model
+package com.epmedu.animeal.login.signin.domain.model
 
 import androidx.annotation.DrawableRes
 

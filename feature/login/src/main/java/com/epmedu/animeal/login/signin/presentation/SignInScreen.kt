@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.presentation
+package com.epmedu.animeal.login.signin.presentation
 
 import androidx.compose.runtime.Composable
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
@@ -13,8 +13,7 @@ internal fun SignInScreen() {
 
     SignInScreenUI(
         onSignInMobile = {
-            // TODO: Replace route with EnterPhoneScreen
-            navigator.navigate(OnboardingScreenRoute.EnterCode.name)
+            navigator.navigate(OnboardingScreenRoute.EnterPhone.name)
         },
         onSignInFacebook = {
             navigator.navigateToTabs()
