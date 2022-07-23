@@ -6,8 +6,8 @@ import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.login.phone.data.EnterPhoneRepository
 import com.epmedu.animeal.login.phone.domain.model.EnterPhoneState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
