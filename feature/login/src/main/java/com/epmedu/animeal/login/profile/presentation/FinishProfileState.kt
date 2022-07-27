@@ -1,9 +1,10 @@
-package com.epmedu.animeal.login.profile.presentation.ui
+package com.epmedu.animeal.login.profile.presentation
 
 import com.epmedu.animeal.extensions.tryParseDate
+import com.epmedu.animeal.foundation.common.UiText
 import java.time.LocalDate
 
-internal data class ProfileState(
+data class FinishProfileState(
     val name: String = "",
     val nameError: UiText? = null,
     val surname: String = "",
@@ -18,10 +19,13 @@ internal data class ProfileState(
     val initialDate: LocalDate
         get() {
             return if (birthDateString.isBlank()) LocalDate.now()
-            else {
-                tryParseDate(formattedBirthDate) ?: LocalDate.now()
-            }
+            else tryParseDate(formattedBirthDate) ?: LocalDate.now()
         }
+
     val phoneNumber: String
         get() = formattedPhoneNumber.replace("\\D".toRegex(), "")
+
+    fun hasErrors (): Boolean {
+        return listOfNotNull(nameError, surnameError, emailError, birthDateError).isNotEmpty()
+    }
 }

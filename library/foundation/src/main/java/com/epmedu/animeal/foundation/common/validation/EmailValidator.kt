@@ -1,10 +1,10 @@
-package com.epmedu.animeal.login.profile.domain
+package com.epmedu.animeal.foundation.common.validation
 
 import android.util.Patterns
-import com.epmedu.animeal.login.profile.presentation.ui.UiText
+import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.resources.R
 
-internal object EmailValidator : Validator {
+object EmailValidator : Validator {
 
     @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {

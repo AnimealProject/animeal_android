@@ -1,12 +1,12 @@
-package com.epmedu.animeal.login.profile.domain
+package com.epmedu.animeal.foundation.common.validation
 
 import android.annotation.SuppressLint
-import com.epmedu.animeal.login.profile.presentation.ui.UiText
+import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.resources.R
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 
-internal object BirthDateValidator : Validator {
+object BirthDateValidator : Validator {
 
     private const val BIRTH_DATE_REGEX = "^(0[1-9]|[12][0-9]|[3][01]).(0[1-9]|1[012]).\\d{4}$"
     private const val DATE_FORMAT = "dd.MM.yyyy"

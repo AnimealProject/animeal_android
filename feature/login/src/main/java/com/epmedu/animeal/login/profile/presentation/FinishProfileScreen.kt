@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.login.profile.domain.FinishProfileViewModel
 import com.epmedu.animeal.login.signin.presentation.navigateToTabs
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
@@ -22,7 +23,7 @@ fun FinishProfileScreen(isFirstTime: Boolean = true) {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.validationSharedFlow.collect {
+        viewModel.validationEvent.collect {
             when (it) {
                 FinishProfileViewModel.ValidationEvent.Success -> {
                     if (isFirstTime) {

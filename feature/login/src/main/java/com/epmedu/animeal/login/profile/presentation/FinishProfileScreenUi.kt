@@ -37,15 +37,13 @@ import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.login.profile.presentation.ui.ProfileEvent
-import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FinishProfileScreenUi(
-    state: ProfileState,
+    state: FinishProfileState,
     onBack: () -> Unit,
-    onEvent: (ProfileEvent) -> Unit
+    onEvent: (FinishProfileEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     Scaffold(
@@ -95,7 +93,7 @@ internal fun FinishProfileScreenUi(
                 AnimealShortButton(
                     text = stringResource(id = R.string.done),
                     onClick = {
-                        onEvent(ProfileEvent.Submit)
+                        onEvent(FinishProfileEvent.Submit)
                         focusManager.clearFocus()
                     },
                     modifier = Modifier.padding(start = 44.dp, bottom = 55.dp)
@@ -107,22 +105,20 @@ internal fun FinishProfileScreenUi(
 
 @Composable
 private fun FirstNameInputUi(
-    state: ProfileState,
+    state: FinishProfileState,
     focusManager: FocusManager,
-    onEvent: (ProfileEvent) -> Unit
+    onEvent: (FinishProfileEvent) -> Unit
 ) {
     TextInputField(
         title = stringResource(id = R.string.profile_name_title),
         hint = stringResource(id = R.string.profile_name_hint),
         onValueChange = {
-            onEvent(ProfileEvent.FirstnameChanged(it))
+            onEvent(FinishProfileEvent.NameChanged(it))
         },
         value = state.name,
         errorText = state.nameError?.asString(),
         onClearFocus = {
-            if (state.name.isNotBlank()) {
-                onEvent(ProfileEvent.FirstnameValidation)
-            }
+            onEvent(FinishProfileEvent.ValidateName)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
@@ -131,22 +127,20 @@ private fun FirstNameInputUi(
 
 @Composable
 private fun LastNameInputUi(
-    state: ProfileState,
+    state: FinishProfileState,
     focusManager: FocusManager,
-    onEvent: (ProfileEvent) -> Unit
+    onEvent: (FinishProfileEvent) -> Unit
 ) {
     TextInputField(
         title = stringResource(id = R.string.profile_surname_title),
         hint = stringResource(id = R.string.profile_surname_hint),
         onValueChange = {
-            onEvent(ProfileEvent.SurnameChanged(it))
+            onEvent(FinishProfileEvent.SurnameChanged(it))
         },
         value = state.surname,
         errorText = state.surnameError?.asString(),
         onClearFocus = {
-            if (state.surname.isNotBlank()) {
-                onEvent(ProfileEvent.SurnameValidation)
-            }
+            onEvent(FinishProfileEvent.ValidateSurname)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
@@ -155,22 +149,20 @@ private fun LastNameInputUi(
 
 @Composable
 private fun EmailInputUi(
-    state: ProfileState,
+    state: FinishProfileState,
     focusManager: FocusManager,
-    onEvent: (ProfileEvent) -> Unit
+    onEvent: (FinishProfileEvent) -> Unit
 ) {
     TextInputField(
         title = stringResource(id = R.string.profile_email_title),
         hint = stringResource(id = R.string.profile_email_hint),
         onValueChange = {
-            onEvent(ProfileEvent.EmailChanged(it))
+            onEvent(FinishProfileEvent.EmailChanged(it))
         },
         value = state.email,
         errorText = state.emailError?.asString(),
         onClearFocus = {
-            if (state.email.isNotBlank()) {
-                onEvent(ProfileEvent.EmailValidation)
-            }
+            onEvent(FinishProfileEvent.ValidateEmail)
         },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
@@ -182,9 +174,9 @@ private fun EmailInputUi(
 
 @Composable
 private fun BirthDateInputUi(
-    state: ProfileState,
+    state: FinishProfileState,
     focusManager: FocusManager,
-    onEvent: (ProfileEvent) -> Unit
+    onEvent: (FinishProfileEvent) -> Unit
 ) {
     val shouldOpenDialog = remember { mutableStateOf(false) }
     BirthDateInput(
@@ -195,7 +187,7 @@ private fun BirthDateInputUi(
             shouldOpenDialog.value = true
         },
         onValueChange = {
-            onEvent(ProfileEvent.BirthDateChanged(it))
+            onEvent(FinishProfileEvent.BirthDateChanged(it))
         },
         value = state.birthDateString,
         errorText = state.birthDateError?.asString(),
@@ -204,7 +196,7 @@ private fun BirthDateInputUi(
             keyboardType = KeyboardType.Number
         ),
         keyboardActions = KeyboardActions(onDone = {
-            ProfileEvent.BirthDateValidation
+            FinishProfileEvent.ValidateBirthDate
             focusManager.clearFocus()
         })
     )
@@ -213,8 +205,8 @@ private fun BirthDateInputUi(
         shouldShowDialog = shouldOpenDialog
     ) {
         val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
-        onEvent(ProfileEvent.BirthDateChanged(formattedDate.replace(".", "")))
-        onEvent(ProfileEvent.BirthDateValidation)
+        onEvent(FinishProfileEvent.BirthDateChanged(formattedDate.replace(".", "")))
+        onEvent(FinishProfileEvent.ValidateBirthDate)
     }
 }
 

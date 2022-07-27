@@ -1,9 +1,9 @@
-package com.epmedu.animeal.login.profile.domain
+package com.epmedu.animeal.foundation.common.validation
 
-import com.epmedu.animeal.login.profile.presentation.ui.UiText
+import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.resources.R
 
-internal object SurnameValidator : Validator {
+object SurnameValidator : Validator {
 
     @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
