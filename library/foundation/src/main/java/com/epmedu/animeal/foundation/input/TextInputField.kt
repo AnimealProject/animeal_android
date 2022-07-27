@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -47,7 +48,9 @@ fun TextInputField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
+    var focusedDirty by rememberSaveable { mutableStateOf(false) }
     val borderColor: Color = if (errorText == null) LynxWhite else CustomColor.Error
+
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title,
@@ -62,7 +65,11 @@ fun TextInputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
-                    if (!focusState.hasFocus) {
+                    if (focusState.isFocused && !focusedDirty) {
+                        focusedDirty = true
+                    }
+
+                    if (!focusState.isFocused && focusedDirty) {
                         onClearFocus()
                     }
                 }
