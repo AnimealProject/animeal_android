@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.login.OnboardingScreenRoute
 import com.epmedu.animeal.login.signin.presentation.navigateToTabs
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
@@ -16,7 +17,9 @@ fun FinishProfileScreen(isFirstTime: Boolean = true) {
 
     FinishProfileScreenUi(
         state = state,
-        onCancel = navigator::popBackStack
+        onCancel = {
+            navigator.popBackStack(OnboardingScreenRoute.EnterPhone.name)
+        }
     ) { event ->
         viewModel.handleEvents(event)
     }

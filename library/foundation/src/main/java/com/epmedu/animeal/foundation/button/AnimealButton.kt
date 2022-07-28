@@ -20,11 +20,15 @@ import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 fun AnimealButton(
     modifier: Modifier = Modifier,
     text: String,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor),
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     AnimealButton(
         modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
         enabled = enabled,
         onClick = onClick
     ) {

@@ -137,9 +137,11 @@ private fun BirthDateInputErrorText(errorText: String) {
         style = MaterialTheme.typography.caption
     )
 }
+
 private const val BIRTH_DATE_FORMAT = "xx.xx.xxxx"
 
 object BirthDateFormatTransformation : VisualTransformation {
+
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
             if (text.text.length >= 8) {
@@ -167,7 +169,6 @@ object BirthDateFormatTransformation : VisualTransformation {
                     if (offset <= 8) return offset + 2
                     return 10
                 }
-
                 override fun transformedToOriginal(offset: Int): Int {
                     if (offset <= 1) return offset
                     if (offset <= 3) return offset - 1
