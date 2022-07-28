@@ -10,7 +10,7 @@ import com.epmedu.animeal.login.signin.presentation.navigateToTabs
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
-fun FinishProfileScreen(isFirstTime: Boolean = true) {
+fun FinishProfileScreen() {
     val viewModel: FinishProfileViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val state = viewModel.stateFlow.collectAsState().value
@@ -28,11 +28,7 @@ fun FinishProfileScreen(isFirstTime: Boolean = true) {
         viewModel.validationEvent.collect {
             when (it) {
                 FinishProfileViewModel.ValidationEvent.Success -> {
-                    if (isFirstTime) {
-                        navigator.navigateToTabs()
-                    } else {
-                        navigator.popBackStack()
-                    }
+                    navigator.navigateToTabs()
                 }
             }
         }
