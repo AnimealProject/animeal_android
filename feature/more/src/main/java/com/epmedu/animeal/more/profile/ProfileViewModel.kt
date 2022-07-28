@@ -1,10 +1,10 @@
 package com.epmedu.animeal.more.profile
 
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.common.domain.StateViewModel
-import com.epmedu.animeal.foundation.common.validation.ProfileValidator
 import com.epmedu.animeal.common.data.model.Profile
 import com.epmedu.animeal.common.data.repository.ProfileRepository
+import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.foundation.common.validation.ProfileValidator
 import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
