@@ -18,7 +18,6 @@ import com.epmedu.animeal.login.profile.presentation.FinishProfileEvent
 import com.epmedu.animeal.resources.R
 import java.time.LocalDate
 
-
 @Composable
 fun NameInput(
     value: String,
@@ -88,6 +87,7 @@ fun EmailInput(
     )
 }
 
+@Suppress("LongParameterList")
 @Composable
 fun BirthDateInput(
     value: String,

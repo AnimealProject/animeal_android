@@ -25,7 +25,7 @@ data class FinishProfileState(
     val phoneNumber: String
         get() = formattedPhoneNumber.replace("\\D".toRegex(), "")
 
-    fun hasErrors (): Boolean {
+    fun hasErrors(): Boolean {
         return listOfNotNull(nameError, surnameError, emailError, birthDateError).isNotEmpty()
     }
 }

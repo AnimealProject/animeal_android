@@ -27,6 +27,7 @@ import com.epmedu.animeal.login.profile.ui.SurnameInput
 import com.epmedu.animeal.login.profile.ui.BirthDateInput
 import com.epmedu.animeal.resources.R
 
+@Suppress("LongMethod")
 @Composable
 internal fun ProfileScreenUI(
     state: ProfileState,
