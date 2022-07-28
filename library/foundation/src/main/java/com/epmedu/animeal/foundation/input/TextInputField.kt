@@ -34,7 +34,7 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.foundation.theme.CustomColor.DarkerGrey
 import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 fun TextInputField(
     modifier: Modifier = Modifier,

@@ -40,7 +40,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 fun BirthDateInput(
     modifier: Modifier = Modifier,
