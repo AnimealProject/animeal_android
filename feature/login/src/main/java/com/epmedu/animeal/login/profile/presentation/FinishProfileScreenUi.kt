@@ -1,6 +1,7 @@
 package com.epmedu.animeal.login.profile.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -42,6 +43,10 @@ internal fun FinishProfileScreenUi(
 ) {
     val focusManager = LocalFocusManager.current
     val showCancellationAlert = rememberSaveable { mutableStateOf(false) }
+
+    BackHandler(!showCancellationAlert.value) {
+        showCancellationAlert.value = true
+    }
 
     if (showCancellationAlert.value) {
         AnimealAlertDialog(
