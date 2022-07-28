@@ -1,12 +1,7 @@
 package com.epmedu.animeal.login.profile.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.DAY_MONTH_YEAR_DOT_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
+import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.dialog.DatePickerDialog
 import com.epmedu.animeal.foundation.input.BirthDateInput
@@ -42,17 +38,15 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun FinishProfileScreenUi(
     state: FinishProfileState,
-    onBack: () -> Unit,
+    onCancel: () -> Unit,
     onEvent: (FinishProfileEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopBar(title = stringResource(id = R.string.profile_title)) {
-                BackButton(onClick = onBack)
-            }
+            TopBar(title = stringResource(id = R.string.profile_title))
         }
     ) { padding ->
         Column(
@@ -83,20 +77,34 @@ internal fun FinishProfileScreenUi(
                 value = state.phoneNumber,
                 enabled = false
             )
-            BirthDateInputUi(state, focusManager) { onEvent(it) }
-            Box(
+            BirthDateInputUi(
+                state = state,
+                focusManager = focusManager,
+                onEvent = onEvent
+            )
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
-                contentAlignment = Alignment.BottomEnd,
+                    .padding(bottom = 32.dp),
+                horizontalArrangement = Arrangement.spacedBy(48.dp)
             ) {
-                AnimealShortButton(
+                AnimealButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(id = R.string.cancel),
+                    onClick = {
+                        focusManager.clearFocus()
+                        onCancel()
+                    },
+                )
+
+                AnimealButton(
+                    modifier = Modifier.weight(1f),
                     text = stringResource(id = R.string.done),
                     onClick = {
-                        onEvent(FinishProfileEvent.Submit)
                         focusManager.clearFocus()
+                        onEvent(FinishProfileEvent.Submit)
                     },
-                    modifier = Modifier.padding(start = 44.dp, bottom = 55.dp)
                 )
             }
         }

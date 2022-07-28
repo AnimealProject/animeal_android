@@ -1,4 +1,4 @@
-package com.epmedu.animeal.login.profile.domain
+package com.epmedu.animeal.login.profile.presentation
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.viewModelScope
@@ -7,8 +7,6 @@ import com.epmedu.animeal.foundation.common.validation.*
 import com.epmedu.animeal.foundation.input.BirthDateFormatTransformation
 import com.epmedu.animeal.login.profile.data.model.Profile
 import com.epmedu.animeal.login.profile.data.repository.ProfileRepository
-import com.epmedu.animeal.login.profile.presentation.FinishProfileEvent
-import com.epmedu.animeal.login.profile.presentation.FinishProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,9 +51,6 @@ internal class FinishProfileViewModel @Inject constructor(
             }
             FinishProfileEvent.Submit -> {
                 submitData()
-            }
-            FinishProfileEvent.Cancel -> {
-                // TODO cancellation logic
             }
             FinishProfileEvent.ValidateName -> {
                 updateState {

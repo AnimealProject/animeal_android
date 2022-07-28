@@ -6,7 +6,6 @@ internal sealed interface FinishProfileEvent {
     data class EmailChanged(val email: String) : FinishProfileEvent
     data class BirthDateChanged(val birthDate: String) : FinishProfileEvent
     object Submit : FinishProfileEvent
-    object Cancel : FinishProfileEvent
     object ValidateName : FinishProfileEvent
     object ValidateSurname : FinishProfileEvent
     object ValidateEmail : FinishProfileEvent

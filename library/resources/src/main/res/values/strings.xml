@@ -13,7 +13,7 @@
     <string name="next">Next</string>
 
     <string name="enter_code_title">Enter verification code</string>
-    <string name="enter_code_subtitle">Code was sent to:</string>
+    <string name="enter_code_subtitle">Code was sent to: %s</string>
     <string name="resend_code">Resend Code</string>
     <string name="resend_code_in">Resend Code in 00:%1$s</string>
 
