@@ -20,4 +20,8 @@ internal class AnimealNavigator(
     override fun popBackStack() {
         navController.popBackStack()
     }
+
+    override fun popBackStack(route: String, inclusive: Boolean, saveState: Boolean) {
+        navController.popBackStack(route, inclusive, saveState)
+    }
 }

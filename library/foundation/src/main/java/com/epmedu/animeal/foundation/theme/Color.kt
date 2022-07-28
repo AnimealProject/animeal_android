@@ -25,4 +25,5 @@ object CustomColor {
     val LynxWhite = Color(0xFFF7F7F7)
     val DarkerGrey = Color(0xFF99A8B0)
     val Error = Color(0xFFF04E45)
+    val HitGrey = Color(0xFF99A8B0)
 }

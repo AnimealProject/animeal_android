@@ -24,8 +24,7 @@ internal class EnterPhoneViewModel @Inject constructor(
     }
 
     private fun String.isValidPhoneNumber(): Boolean {
-        return length == PHONE_NUMBER_LENGTH &&
-            PhoneNumberUtils.isGlobalPhoneNumber(this)
+        return length == PHONE_NUMBER_LENGTH && PhoneNumberUtils.isGlobalPhoneNumber(this)
     }
 
     fun savePhoneNumberAndSendCode() {

@@ -32,7 +32,7 @@ fun TopBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (navigationIcon == null) {
-            WidthSpacer(44.dp)
+            WidthSpacer(24.dp)
         } else {
             WidthSpacer(8.dp)
             navigationIcon()

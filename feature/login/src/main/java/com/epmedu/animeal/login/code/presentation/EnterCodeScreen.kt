@@ -8,8 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.login.OnboardingScreenRoute
 import com.epmedu.animeal.login.code.domain.EnterCodeViewModel
-import com.epmedu.animeal.login.signin.presentation.navigateToTabs
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
 
@@ -38,8 +38,7 @@ internal fun EnterCodeScreen() {
 
         viewModel.isCodeCorrect.collectLatest { isCorrect ->
             if (isCorrect) {
-                // TODO: Replace route with FinishProfileScreen
-                navigator.navigateToTabs()
+                navigator.navigate(OnboardingScreenRoute.FinishProfile.name)
             }
         }
     }
