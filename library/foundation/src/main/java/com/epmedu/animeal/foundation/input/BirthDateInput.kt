@@ -80,7 +80,8 @@ fun BirthDateInput(
                     textColor = MaterialTheme.colors.onSurface,
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
                 ),
                 placeholder = {
                     Text(
@@ -178,6 +179,10 @@ object BirthDateFormatTransformation : VisualTransformation {
             }
         )
     }
+}
+
+fun formatBirthDate(birthDate: String): String {
+    return BirthDateFormatTransformation.filter(AnnotatedString(birthDate)).text.text
 }
 
 @Preview(showBackground = true)

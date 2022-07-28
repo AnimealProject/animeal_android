@@ -44,6 +44,7 @@
     <string name="switch_dogs_title">Dogs</string>
 
     <string name="profile_registration_cancel">Do you really want to cancel registration?</string>
+    <string name="profile_edit_discard">Do you really want to discard the changes?</string>
     <string name="profile_birth_date">Birthdate</string>
     <string name="profile_select_birth_date">Select birthdate</string>
     <string name="profile_title">Profile</string>
@@ -66,6 +67,9 @@
     <string name="done">Done</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
 

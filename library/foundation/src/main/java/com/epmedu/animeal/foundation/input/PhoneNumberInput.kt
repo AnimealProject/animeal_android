@@ -46,7 +46,7 @@ fun PhoneNumberInput(
     title: String,
     onValueChange: (String) -> Unit = {},
     value: String,
-    enabled: Boolean = true
+    isEnabbled: Boolean = true
 ) {
     Column(modifier = modifier) {
         Text(
@@ -92,7 +92,7 @@ fun PhoneNumberInput(
                 textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
                 visualTransformation = PhoneFormatTransformation,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                enabled = enabled
+                enabled = isEnabbled
             )
         }
     }
@@ -157,7 +157,7 @@ private fun PhoneNumberInputPreview() {
                 title = "Phone number",
                 onValueChange = { phoneNumber = it },
                 value = phoneNumber,
-                enabled = true
+                isEnabbled = true
             )
         }
     }

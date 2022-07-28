@@ -85,7 +85,8 @@ fun TextInputField(
                 textColor = MaterialTheme.colors.onSurface,
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
             ),
             placeholder = {
                 Text(

@@ -1,9 +1,9 @@
-package com.epmedu.animeal.login.profile.di
+package com.epmedu.animeal.more.profile.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.epmedu.animeal.login.profile.data.repository.ProfileRepository
-import com.epmedu.animeal.login.profile.data.repository.ProfileRepositoryImpl
+import com.epmedu.animeal.common.data.repository.ProfileRepository
+import com.epmedu.animeal.common.data.repository.ProfileRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +18,5 @@ internal object ProfileModule {
     @Provides
     fun provideProfileRepository(
         dataStore: DataStore<Preferences>
-    ): ProfileRepository =
-        ProfileRepositoryImpl(dataStore)
+    ): ProfileRepository = ProfileRepositoryImpl(dataStore)
 }

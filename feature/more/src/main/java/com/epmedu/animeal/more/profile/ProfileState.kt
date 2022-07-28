@@ -1,10 +1,11 @@
-package com.epmedu.animeal.login.profile.presentation
+package com.epmedu.animeal.more.profile
 
 import com.epmedu.animeal.extensions.tryParseDate
 import com.epmedu.animeal.foundation.common.UiText
 import java.time.LocalDate
 
-data class FinishProfileState(
+data class ProfileState(
+    val readonly: Boolean = true,
     val name: String = "",
     val nameError: UiText? = null,
     val surname: String = "",

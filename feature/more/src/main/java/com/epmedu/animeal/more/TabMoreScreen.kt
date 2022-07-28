@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import com.epmedu.animeal.login.profile.presentation.FinishProfileScreen
 import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen

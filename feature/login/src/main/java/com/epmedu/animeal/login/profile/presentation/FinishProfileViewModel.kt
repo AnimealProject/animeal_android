@@ -1,12 +1,11 @@
 package com.epmedu.animeal.login.profile.presentation
 
-import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.data.model.Profile
+import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.foundation.common.validation.*
-import com.epmedu.animeal.foundation.input.BirthDateFormatTransformation
-import com.epmedu.animeal.login.profile.data.model.Profile
-import com.epmedu.animeal.login.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,8 +22,8 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private val validator: ProfileValidator = ProfileValidator()
 
-    private val _validationEvent = MutableSharedFlow<ValidationEvent>()
-    val validationEvent: SharedFlow<ValidationEvent> get() = _validationEvent.asSharedFlow()
+    private val _event = MutableSharedFlow<Event>()
+    val event: SharedFlow<Event> get() = _event.asSharedFlow()
 
     init {
         loadProfile()
@@ -44,8 +43,8 @@ internal class FinishProfileViewModel @Inject constructor(
             is FinishProfileEvent.BirthDateChanged -> {
                 updateState {
                     copy(
-                        formattedBirthDate = event.birthDate.format(),
-                        birthDateString = event.birthDate
+                        birthDate = event.birthDate,
+                        formattedBirthDate = formatBirthDate(event.birthDate)
                     )
                 }
             }
@@ -97,11 +96,11 @@ internal class FinishProfileViewModel @Inject constructor(
             firstName = state.name,
             lastName = state.surname,
             email = state.email,
-            birthDate = state.birthDateString
+            birthDate = state.birthDate
         )
         viewModelScope.launch {
             profileRepository.saveProfile(profile).collect {
-                _validationEvent.emit(ValidationEvent.Success)
+                _event.emit(Event.Saved)
             }
         }
     }
@@ -116,8 +115,8 @@ internal class FinishProfileViewModel @Inject constructor(
                             name = it.firstName,
                             surname = it.lastName,
                             email = it.email,
-                            birthDateString = it.birthDate,
-                            formattedBirthDate = it.birthDate.format(),
+                            birthDate = it.birthDate,
+                            formattedBirthDate = formatBirthDate(it.birthDate),
                             formattedPhoneNumber = it.phoneNumber
                         )
                     }
@@ -125,11 +124,7 @@ internal class FinishProfileViewModel @Inject constructor(
         }
     }
 
-    sealed interface ValidationEvent {
-        object Success : ValidationEvent
-    }
-
-    private fun String.format(): String {
-        return BirthDateFormatTransformation.filter(AnnotatedString(this)).text.text
+    sealed interface Event {
+        object Saved : Event
     }
 }

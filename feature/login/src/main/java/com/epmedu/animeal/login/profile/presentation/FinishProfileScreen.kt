@@ -15,7 +15,7 @@ fun FinishProfileScreen() {
     val navigator = LocalNavigator.currentOrThrow
     val state = viewModel.stateFlow.collectAsState().value
 
-    FinishProfileScreenUi(
+    FinishProfileScreenUI(
         state = state,
         onCancel = {
             navigator.popBackStack(OnboardingScreenRoute.EnterPhone.name)
@@ -25,9 +25,9 @@ fun FinishProfileScreen() {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.validationEvent.collect {
+        viewModel.event.collect {
             when (it) {
-                FinishProfileViewModel.ValidationEvent.Success -> {
+                FinishProfileViewModel.Event.Saved -> {
                     navigator.navigateToTabs()
                 }
             }
