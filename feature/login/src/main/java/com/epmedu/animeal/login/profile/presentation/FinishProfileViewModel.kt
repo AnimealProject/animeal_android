@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class FinishProfileViewModel @Inject constructor(
+class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : StateViewModel<ProfileState>(initialState = ProfileState()) {
     private val nameValidator: FirstnameValidator = FirstnameValidator

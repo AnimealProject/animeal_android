@@ -3,7 +3,7 @@ package com.epmedu.animeal.login.profile.presentation.ui
 import com.epmedu.animeal.extensions.tryParseDate
 import java.time.LocalDate
 
-internal data class ProfileState(
+data class ProfileState(
     val name: String = "",
     val nameError: UiText? = null,
     val surname: String = "",

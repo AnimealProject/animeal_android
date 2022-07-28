@@ -1,6 +1,6 @@
 package com.epmedu.animeal.login.profile.presentation.ui
 
-internal sealed interface ProfileEvent {
+sealed interface ProfileEvent {
     data class FirstnameChanged(val name: String) : ProfileEvent
     data class SurnameChanged(val surname: String) : ProfileEvent
     data class EmailChanged(val email: String) : ProfileEvent

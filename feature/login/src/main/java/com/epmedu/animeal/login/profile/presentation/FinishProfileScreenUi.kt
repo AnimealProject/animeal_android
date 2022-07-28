@@ -42,7 +42,7 @@ import com.epmedu.animeal.login.profile.presentation.ui.ProfileState
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun FinishProfileScreenUi(
+fun FinishProfileScreenUi(
     state: ProfileState,
     onBack: () -> Unit,
     onEvent: (ProfileEvent) -> Unit

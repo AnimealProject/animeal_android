@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class ProfileRepositoryImpl @Inject constructor(
+class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ProfileRepository {
 
