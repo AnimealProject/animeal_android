@@ -4,21 +4,24 @@ import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.resources.R
 
 object NameValidator : Validator {
+    private val requiredLength = 2..35
 
     @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
-        if (value.isBlank()) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_name_blank_error_msg)
-            )
+        return when {
+            value.isBlank() -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_name_blank_error_msg)
+                )
+            }
+            value.length !in requiredLength -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_text_field_error_msg)
+                )
+            }
+            else -> ValidationResult(isSuccess = true)
         }
-        if (value.length !in 2..35) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_text_field_error_msg)
-            )
-        }
-        return ValidationResult(isSuccess = true)
     }
 }

@@ -8,19 +8,21 @@ object EmailValidator : Validator {
 
     @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
-        if (value.isBlank()) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_email_blank_error_msg)
-            )
+        return when {
+            value.isBlank() -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_email_blank_error_msg)
+                )
+            }
+            !isEmailValid(value) -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_email_invalid_error_msg)
+                )
+            }
+            else -> ValidationResult(isSuccess = true)
         }
-        if (!isEmailValid(value)) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_email_invalid_error_msg)
-            )
-        }
-        return ValidationResult(isSuccess = true)
     }
 
     private fun isEmailValid(email: String): Boolean {

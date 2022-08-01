@@ -7,25 +7,25 @@ import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 
 object BirthDateValidator : Validator {
-
     private const val BIRTH_DATE_REGEX = "^(0[1-9]|[12][0-9]|[3][01]).(0[1-9]|1[012]).\\d{4}$"
     private const val DATE_FORMAT = "dd.MM.yyyy"
 
-    @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
-        if (value.isBlank()) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_select_birth_date)
-            )
+        return when {
+            value.isBlank() -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_select_birth_date)
+                )
+            }
+            !isBirthdateValid(value) -> {
+                ValidationResult(
+                    isSuccess = false,
+                    errorMessage = UiText.StringResource(R.string.profile_birthdate_error_msg)
+                )
+            }
+            else -> ValidationResult(isSuccess = true)
         }
-        if (!isBirthdateValid(value)) {
-            return ValidationResult(
-                isSuccess = false,
-                errorMessage = UiText.StringResource(R.string.profile_birthdate_error_msg)
-            )
-        }
-        return ValidationResult(isSuccess = true)
     }
 
     @SuppressLint("SimpleDateFormat")

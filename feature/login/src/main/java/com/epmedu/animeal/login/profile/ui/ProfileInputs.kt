@@ -16,6 +16,7 @@ import com.epmedu.animeal.foundation.dialog.DatePickerDialog
 import com.epmedu.animeal.foundation.input.TextInputField
 import com.epmedu.animeal.login.profile.presentation.FinishProfileEvent
 import com.epmedu.animeal.resources.R
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 
 @Composable
@@ -98,13 +99,19 @@ fun BirthDateInput(
     onValueChange: (String) -> Unit,
     onFocusRelease: () -> Unit,
 ) {
-    val shouldOpenDialog = remember { mutableStateOf(false) }
+    val dialogState = rememberMaterialDialogState()
+    val showDialog = remember { mutableStateOf(false) }
+
+    if (showDialog.value) {
+        dialogState.show()
+    }
+
     com.epmedu.animeal.foundation.input.BirthDateInput(
         title = stringResource(id = R.string.profile_birth_date),
         isEnabled = isEnabled,
         onIconClick = {
             focusManager.clearFocus()
-            shouldOpenDialog.value = true
+            showDialog.value = true
         },
         onValueChange = onValueChange,
         value = value,
@@ -119,11 +126,16 @@ fun BirthDateInput(
         })
     )
     DatePickerDialog(
+        state = dialogState,
         initialDate = initialDate,
-        shouldShowDialog = shouldOpenDialog
-    ) {
-        val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
-        onValueChange(formattedDate.replace(".", ""))
-        onFocusRelease()
-    }
+        onPositiveClick = { showDialog.value = false },
+        onNegativeClick = { showDialog.value = false },
+        onCloseRequest = { showDialog.value = false },
+        onDatePicked = {
+            val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
+            onValueChange(formattedDate.replace(".", ""))
+            onFocusRelease()
+            showDialog.value = false
+        }
+    )
 }

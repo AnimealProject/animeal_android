@@ -40,7 +40,9 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongParameterList", "LongMethod")
+private const val BIRTHDATE_MAX_LENGTH = 8
+
+@Suppress("LongParameterList")
 @Composable
 fun BirthDateInput(
     modifier: Modifier = Modifier,
@@ -67,50 +69,82 @@ fun BirthDateInput(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextField(
+            BirthDateInput(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 value = value,
-                onValueChange = {
-                    if (it.length <= 8) {
-                        onValueChange(it)
-                    }
-                },
-                textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                ),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.profile_birthdate_placeholder),
-                        fontSize = 16.sp,
-                        color = CustomColor.DarkerGrey
-                    )
-                },
-                visualTransformation = BirthDateFormatTransformation,
-                enabled = isEnabled,
-                keyboardActions = keyboardActions,
+                isEnabled = isEnabled,
+                onValueChange = onValueChange,
                 keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
             )
-            IconButton(
+            BirthDateInputIcon(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .size(20.dp),
-                onClick = { if (isEnabled) onIconClick() },
-                enabled = isEnabled
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_birthdate),
-                    contentDescription = null,
-                    tint = CustomColor.HitGrey,
-                )
-            }
+                isEnabled = isEnabled,
+                onClick = onIconClick,
+            )
         }
         errorText?.let { BirthDateInputErrorText(it) }
     }
+}
+
+@Composable
+private fun BirthDateInputIcon(
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean,
+    onClick: () -> Unit,
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = { if (isEnabled) onClick() },
+        enabled = isEnabled
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_birthdate),
+            contentDescription = null,
+            tint = CustomColor.HitGrey,
+        )
+    }
+}
+
+@Composable
+private fun BirthDateInput(
+    modifier: Modifier = Modifier,
+    value: String,
+    isEnabled: Boolean,
+    onValueChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
+) {
+    TextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = {
+            if (it.length <= BIRTHDATE_MAX_LENGTH) {
+                onValueChange(it)
+            }
+        },
+        textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = MaterialTheme.colors.onSurface,
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+        ),
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.profile_birthdate_placeholder),
+                fontSize = 16.sp,
+                color = CustomColor.DarkerGrey
+            )
+        },
+        visualTransformation = BirthDateFormatTransformation,
+        enabled = isEnabled,
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+    )
 }
 
 @Composable
@@ -145,7 +179,7 @@ object BirthDateFormatTransformation : VisualTransformation {
 
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
-            if (text.text.length >= 8) {
+            if (text.text.length >= BIRTHDATE_MAX_LENGTH) {
                 text.text.substring(0..7)
             } else {
                 text.text

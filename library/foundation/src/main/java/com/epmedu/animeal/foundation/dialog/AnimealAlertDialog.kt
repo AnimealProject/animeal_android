@@ -15,21 +15,21 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 
+@Suppress("LongParameterList")
 @Composable
 fun AnimealAlertDialog(
     title: String,
     dismissText: String,
     acceptText: String,
-    onDismiss: () -> Unit = {},
-    onConfirm: () -> Unit = {},
+    onDismissRequest: () -> Unit = {},
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
         modifier = Modifier.padding(24.dp),
         shape = RoundedCornerShape(32.dp),
-        onDismissRequest = {
-            // showAlert.value = false
-        },
+        onDismissRequest = onDismissRequest,
         title = {
             Text(
                 text = title,
@@ -76,6 +76,8 @@ private fun AnimealAlertDialogPreview() {
             title = "Title",
             dismissText = "No",
             acceptText = "Yes",
+            onDismiss = {},
+            onConfirm = {}
         )
     }
 }
