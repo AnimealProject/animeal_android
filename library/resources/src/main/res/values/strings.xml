@@ -18,7 +18,6 @@
     <string name="resend_code_in">Resend Code in 00:%1$s</string>
 
     <string name="page_profile">Profile Page</string>
-    <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
     <string name="page_help">Help</string>
     <string name="page_about">About</string>
@@ -48,7 +47,7 @@
     <string name="profile_birth_date">Birthdate</string>
     <string name="profile_select_birth_date">Select birthdate</string>
     <string name="profile_title">Profile</string>
-    <string name="profile_subtitle">please fill out the profile information</string>
+    <string name="profile_subtitle">Please, fill out the profile information</string>
     <string name="profile_name_title">Name</string>
     <string name="profile_name_hint">Enter name</string>
     <string name="profile_surname_title">Surname</string>
