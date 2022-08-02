@@ -6,7 +6,6 @@ import com.epmedu.animeal.resources.R
 
 object EmailValidator : Validator {
 
-    @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
         return when {
             value.isBlank() -> {

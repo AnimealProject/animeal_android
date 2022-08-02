@@ -6,7 +6,6 @@ import com.epmedu.animeal.resources.R
 object NameValidator : Validator {
     private val requiredLength = 2..35
 
-    @Suppress("ReturnCount")
     override fun validate(value: String): ValidationResult {
         return when {
             value.isBlank() -> {
