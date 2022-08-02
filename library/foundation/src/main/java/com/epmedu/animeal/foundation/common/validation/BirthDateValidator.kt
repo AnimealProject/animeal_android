@@ -1,9 +1,9 @@
 package com.epmedu.animeal.foundation.common.validation
 
-import android.annotation.SuppressLint
 import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.resources.R
-import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.ResolverStyle
 import java.util.regex.Pattern
 
 object BirthDateValidator : Validator {
@@ -28,17 +28,16 @@ object BirthDateValidator : Validator {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun isBirthdateValid(strDate: String): Boolean {
-        var isValid = false
         if (Pattern.matches(BIRTH_DATE_REGEX, strDate)) {
-            val sdf = SimpleDateFormat(DATE_FORMAT)
-            sdf.isLenient = false
-            kotlin.runCatching {
-                sdf.parse(strDate)
-                isValid = true
-            }
+            val formatter = DateTimeFormatter
+                .ofPattern(DATE_FORMAT)
+                .withResolverStyle(ResolverStyle.LENIENT)
+
+            return runCatching {
+                formatter.parse(strDate)
+            }.isSuccess
         }
-        return isValid
+        return false
     }
 }
