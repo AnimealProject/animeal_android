@@ -7,11 +7,9 @@ import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.foundation.common.validation.*
 import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -107,20 +105,18 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun loadProfile() {
         viewModelScope.launch {
-            profileRepository.getProfile()
-                .flowOn(Dispatchers.IO)
-                .collect {
-                    updateState {
-                        copy(
-                            name = it.firstName,
-                            surname = it.lastName,
-                            email = it.email,
-                            birthDate = it.birthDate,
-                            formattedBirthDate = formatBirthDate(it.birthDate),
-                            formattedPhoneNumber = it.phoneNumber
-                        )
-                    }
+            profileRepository.getProfile().collect {
+                updateState {
+                    copy(
+                        name = it.firstName,
+                        surname = it.lastName,
+                        email = it.email,
+                        birthDate = it.birthDate,
+                        formattedBirthDate = formatBirthDate(it.birthDate),
+                        formattedPhoneNumber = it.phoneNumber
+                    )
                 }
+            }
         }
     }
 

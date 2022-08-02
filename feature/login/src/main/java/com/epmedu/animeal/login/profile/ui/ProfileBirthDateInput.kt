@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.extensions.DAY_MONTH_YEAR_DOT_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.dialog.DatePickerDialog
+import com.epmedu.animeal.foundation.input.BirthDateInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.login.profile.presentation.FinishProfileEvent
 import com.epmedu.animeal.resources.R
@@ -39,7 +40,7 @@ fun BirthDateInput(
         dialogState.show()
     }
 
-    com.epmedu.animeal.foundation.input.BirthDateInput(
+    BirthDateInput(
         title = stringResource(id = R.string.profile_birth_date),
         isEnabled = isEnabled,
         onIconClick = {
