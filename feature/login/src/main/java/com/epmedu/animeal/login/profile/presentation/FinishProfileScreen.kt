@@ -3,6 +3,7 @@ package com.epmedu.animeal.login.profile.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.login.OnboardingScreenRoute
@@ -13,7 +14,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 fun FinishProfileScreen() {
     val viewModel: FinishProfileViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
-    val state = viewModel.stateFlow.collectAsState().value
+    val state by viewModel.stateFlow.collectAsState()
 
     FinishProfileScreenUI(
         state = state,

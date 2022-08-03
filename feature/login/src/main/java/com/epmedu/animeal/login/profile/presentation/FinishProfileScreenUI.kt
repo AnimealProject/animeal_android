@@ -9,8 +9,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -36,21 +38,21 @@ internal fun FinishProfileScreenUI(
     onEvent: (FinishProfileEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val showCancellationAlert = rememberSaveable { mutableStateOf(false) }
+    var showCancellationAlert by rememberSaveable { mutableStateOf(false) }
 
-    BackHandler(!showCancellationAlert.value) {
-        showCancellationAlert.value = true
+    BackHandler(!showCancellationAlert) {
+        showCancellationAlert = true
     }
 
-    if (showCancellationAlert.value) {
+    if (showCancellationAlert) {
         AnimealAlertDialog(
             title = stringResource(id = R.string.profile_registration_cancel),
             dismissText = stringResource(id = R.string.no),
             acceptText = stringResource(id = R.string.yes),
-            onDismissRequest = { showCancellationAlert.value = false },
-            onDismiss = { showCancellationAlert.value = false },
+            onDismissRequest = { showCancellationAlert = false },
+            onDismiss = { showCancellationAlert = false },
             onConfirm = {
-                showCancellationAlert.value = false
+                showCancellationAlert = false
                 onCancel()
             }
         )
@@ -82,7 +84,7 @@ internal fun FinishProfileScreenUI(
                     .padding(bottom = 12.dp),
                 onCancelClick = {
                     focusManager.clearFocus()
-                    showCancellationAlert.value = true
+                    showCancellationAlert = true
                 },
                 onDoneClick = {
                     focusManager.clearFocus()
