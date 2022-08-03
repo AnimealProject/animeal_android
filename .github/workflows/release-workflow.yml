@@ -14,6 +14,7 @@ env:
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
   KEY_STORE_FILE: ${{ secrets.KEY_STORE }}
+  FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT }}
 
 jobs:
   build:
@@ -40,14 +41,14 @@ jobs:
         uses: RollyPeres/base64-to-path@v1
         with:
           filePath: ${{ github.workspace }}/app/animeal_key_store.jks
-          encodedString: $KEY_STORE_FILE
+          encodedString: ${{ secrets.KEY_STORE }}
 
       - name: "Check keystore existence"
         uses: andstor/file-existence-action@v1
         with:
           files: "app/animeal_key_store.jks"
 
-      - name: Build APK
+      - name: Build release APK
         run: ./gradlew clean assembleRelease
 
       - name: Upload APK
@@ -55,3 +56,14 @@ jobs:
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/release/app-release.apk
+     
+      - name: Create Google Service Account.json
+        run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
+          
+      - name: Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFile: service_account.json
+          groups: qa_team
+          file: app/build/outputs/apk/release/app-release.apk
