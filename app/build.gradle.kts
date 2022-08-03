@@ -92,7 +92,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso)
 }
 
-fun keyStoreFile(vararg fileNames: String): java.io.File? {
+fun keyStoreFile(vararg fileNames: String): File? {
     for (path in fileNames) {
         val file = project.file(path)
 
