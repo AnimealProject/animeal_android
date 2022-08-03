@@ -26,9 +26,6 @@ jobs:
         with: { java-version: 11 }
 
       - uses: actions/checkout@v3
-      
-      - name: Create Google Service Account.json
-        run: echo $SERVICE_ACCOUNT_JSON >> service_account.json
 
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json
@@ -60,7 +57,7 @@ jobs:
           path: app/build/outputs/apk/release/app-release.apk
      
       - name: Create Google Service Account.json
-        run: echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account.json
+        run: echo $SERVICE_ACCOUNT_JSON >> service_account.json
           
       - name: Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
