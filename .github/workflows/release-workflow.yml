@@ -13,7 +13,6 @@ env:
   KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-  KEY_STORE_FILE: ${{ secrets.KEY_STORE }}
 
 jobs:
   build:
@@ -40,10 +39,10 @@ jobs:
         uses: RollyPeres/base64-to-path@v1
         with:
           filePath: ${{ github.workspace }}/app/animeal_key_store.jks
-          encodedString: $KEY_STORE_FILE
+          encodedString: ${{ secrets.KEY_STORE }}
       
       - name: Console
-        run: echo ${{ github.workspace }}/app/keystore.jks
+        run: echo ${{ github.workspace }}/app/animeal_key_store.jks
 
       - name: "Check keystore existence"
         uses: andstor/file-existence-action@v1
