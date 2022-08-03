@@ -41,18 +41,12 @@ jobs:
           filePath: ${{ github.workspace }}/app/animeal_key_store.jks
           encodedString: ${{ secrets.KEY_STORE }}
       
-      - name: Console
-        run: echo ${{ github.workspace }}/app/animeal_key_store.jks
-
       - name: "Check keystore existence"
         uses: andstor/file-existence-action@v1
         with:
           files: "app/animeal_key_store.jks"
-       
-      - name: sign report
-        run: ./gradlew signingReport
 
-      - name: Build APK
+      - name: Build release APK
         run: ./gradlew clean assembleRelease
 
       - name: Upload APK
@@ -60,3 +54,14 @@ jobs:
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/release/app-release.apk
+     
+      - name: Create Google Service Account.json
+        run: echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account.json
+          
+      - name: Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFile: service_account.json
+          groups: qa_team
+          file: app/build/outputs/apk/release/app-release.apk
