@@ -63,6 +63,8 @@
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
     <string name="profile_birthdate_placeholder">DD.MM.YYYY</string>
 
+    <string name="help_page_app_version">App version: %s</string>
+
     <string name="done">Done</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
