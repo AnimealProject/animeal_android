@@ -39,7 +39,7 @@ jobs:
       - name: Copy key
         uses: RollyPeres/base64-to-path@v1
         with:
-          filePath: ${{ github.workspace }}/app/animeal_key_store.jks
+          filePath: app/animeal_key_store.jks
           encodedString: $KEY_STORE_FILE
 
       - name: "Check keystore existence"
