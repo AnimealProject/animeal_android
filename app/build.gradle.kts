@@ -1,3 +1,6 @@
+import com.epmedu.animeal.extension.debug
+import com.epmedu.animeal.extension.release
+
 plugins {
     id("AnimealPlugin")
     id("com.android.application")
@@ -7,7 +10,40 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
+animealPlugin {
+    buildConfigGeneration = true
+}
+
 android {
+    signingConfigs {
+        debug {
+            storeFile = keyStoreFile("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+
+        release {
+            storeFile = keyStoreFile("animeal_key_store.jks", "debug.keystore")
+            storePassword = System.getenv("KEY_STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+            extra["enableCrashlytics"] = true
+            extra["alwaysUpdateBuildId"] = true
+        }
+
+        debug {
+            extra["enableCrashlytics"] = false
+            extra["alwaysUpdateBuildId"] = false
+        }
+    }
+
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }
@@ -54,4 +90,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
+}
+
+fun keyStoreFile(vararg fileNames: String): java.io.File? {
+    for (path in fileNames) {
+        val file = project.file(path)
+
+        if (file.exists()) {
+            return file
+        }
+    }
+
+    return null
 }
