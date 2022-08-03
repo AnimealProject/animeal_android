@@ -46,6 +46,9 @@ jobs:
         uses: andstor/file-existence-action@v1
         with:
           files: "app/animeal_key_store.jks"
+       
+      - name: sign report
+        run: ./gradlew signingReport
 
       - name: Build APK
         run: ./gradlew clean assembleRelease
