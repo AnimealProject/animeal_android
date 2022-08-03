@@ -13,12 +13,11 @@
     <string name="next">Next</string>
 
     <string name="enter_code_title">Enter verification code</string>
-    <string name="enter_code_subtitle">Code was sent to:</string>
+    <string name="enter_code_subtitle">Code was sent to: %s</string>
     <string name="resend_code">Resend Code</string>
     <string name="resend_code_in">Resend Code in 00:%1$s</string>
 
     <string name="page_profile">Profile Page</string>
-    <string name="page_profile_subtitle">Please fill profile information</string>
     <string name="page_donate">Donate</string>
     <string name="page_help">Help</string>
     <string name="page_about">About</string>
@@ -42,4 +41,35 @@
 
     <string name="switch_cats_title">Cats</string>
     <string name="switch_dogs_title">Dogs</string>
+
+    <string name="profile_registration_cancel">Do you really want to cancel registration?</string>
+    <string name="profile_edit_discard">Do you really want to discard the changes?</string>
+    <string name="profile_birth_date">Birthdate</string>
+    <string name="profile_select_birth_date">Select birthdate</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_subtitle">Please, fill out the profile information</string>
+    <string name="profile_name_title">Name</string>
+    <string name="profile_name_hint">Enter name</string>
+    <string name="profile_surname_title">Surname</string>
+    <string name="profile_surname_hint">Enter surname</string>
+    <string name="profile_email_title">Email</string>
+    <string name="profile_email_hint">Enter email</string>
+    <string name="profile_phone_number">Phone Number</string>
+    <string name="profile_text_field_error_msg">Amount of characters: min - 2, max - 35</string>
+    <string name="profile_name_blank_error_msg">Name can not be blank</string>
+    <string name="profile_surname_blank_error_msg">Surname can not be blank</string>
+    <string name="profile_email_blank_error_msg">Email can not be blank</string>
+    <string name="profile_email_invalid_error_msg">Email is invalid</string>
+    <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
+    <string name="profile_birthdate_placeholder">DD.MM.YYYY</string>
+
+    <string name="done">Done</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
 </resources>

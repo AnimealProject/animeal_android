@@ -23,7 +23,12 @@ internal fun MoreScreenUi(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopBar(title = stringResource(id = R.string.more)) }
+        topBar = {
+            TopBar(
+                startPadding = 44.dp,
+                title = stringResource(id = R.string.more)
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier.padding(padding)

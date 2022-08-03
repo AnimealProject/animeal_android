@@ -55,14 +55,14 @@ internal fun EnterCodeScreenUi(
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "${stringResource(id = R.string.enter_code_subtitle)} ${state.phoneNumber}",
+                text = stringResource(R.string.enter_code_subtitle, state.phoneNumber),
                 modifier = Modifier.padding(top = 8.dp)
             )
             CodeRow(
                 code = state.code,
                 isError = state.isError,
                 focusRequester = focusRequester,
-                modifier = Modifier.padding(top = 36.dp),
+                modifier = Modifier.padding(top = 32.dp),
                 onDigitChange = onDigitChange
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -71,7 +71,7 @@ internal fun EnterCodeScreenUi(
                 resendDelay = state.resendDelay,
                 onClick = onResend,
                 modifier = Modifier
-                    .padding(bottom = 20.dp)
+                    .padding(bottom = 32.dp)
                     .align(Alignment.CenterHorizontally)
             )
         }

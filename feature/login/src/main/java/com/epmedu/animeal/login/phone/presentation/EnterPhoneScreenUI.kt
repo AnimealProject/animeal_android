@@ -46,6 +46,7 @@ internal fun EnterPhoneScreenUI(
         },
         floatingActionButton = {
             AnimealShortButton(
+                modifier = Modifier.padding(bottom = 32.dp),
                 text = stringResource(id = R.string.next),
                 enabled = state.isNextEnabled,
                 onClick = onNext
@@ -62,7 +63,7 @@ internal fun EnterPhoneScreenUI(
             )
             PhoneNumberInput(
                 modifier = Modifier
-                    .padding(top = 44.dp)
+                    .padding(top = 32.dp)
                     .focusRequester(focusRequester),
                 title = stringResource(id = R.string.phone_number),
                 onValueChange = onNumberChange,

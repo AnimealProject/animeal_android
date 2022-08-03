@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
+    implementation(libs.compose.material.dialog.core)
 
     debugImplementation(libs.compose.ui.tooling)
 

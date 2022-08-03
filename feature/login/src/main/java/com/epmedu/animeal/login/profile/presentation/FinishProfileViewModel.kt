@@ -1,39 +1,44 @@
-package com.epmedu.animeal.more.profile
+package com.epmedu.animeal.login.profile.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.model.Profile
 import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
-import com.epmedu.animeal.foundation.common.validation.ProfileValidator
+import com.epmedu.animeal.foundation.common.validation.*
 import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ProfileViewModel @Inject constructor(
+internal class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<ProfileState>(initialState = ProfileState()) {
+) : StateViewModel<FinishProfileState>(initialState = FinishProfileState()) {
 
     private val validator: ProfileValidator = ProfileValidator()
+
+    private val _event = MutableSharedFlow<Event>()
+    val event: SharedFlow<Event> get() = _event.asSharedFlow()
 
     init {
         loadProfile()
     }
 
-    fun handleEvents(event: ProfileEvent) {
+    fun handleEvents(event: FinishProfileEvent) {
         when (event) {
-            is ProfileEvent.NameChanged -> {
+            is FinishProfileEvent.NameChanged -> {
                 updateState { copy(name = event.name) }
             }
-            is ProfileEvent.SurnameChanged -> {
+            is FinishProfileEvent.SurnameChanged -> {
                 updateState { copy(surname = event.surname) }
             }
-            is ProfileEvent.EmailChanged -> {
+            is FinishProfileEvent.EmailChanged -> {
                 updateState { copy(email = event.email) }
             }
-            is ProfileEvent.BirthDateChanged -> {
+            is FinishProfileEvent.BirthDateChanged -> {
                 updateState {
                     copy(
                         birthDate = event.birthDate,
@@ -41,33 +46,25 @@ internal class ProfileViewModel @Inject constructor(
                     )
                 }
             }
-            ProfileEvent.Edit -> {
-                updateState {
-                    copy(readonly = false)
-                }
+            FinishProfileEvent.Submit -> {
+                submitData()
             }
-            ProfileEvent.Discard -> {
-                discardChanges()
-            }
-            ProfileEvent.Save -> {
-                saveChanges()
-            }
-            ProfileEvent.ValidateName -> {
+            FinishProfileEvent.ValidateName -> {
                 updateState {
                     copy(nameError = validator.validateName(state.name).errorMessage)
                 }
             }
-            ProfileEvent.ValidateSurname -> {
+            FinishProfileEvent.ValidateSurname -> {
                 updateState {
                     copy(surnameError = validator.validateSurname(state.surname).errorMessage)
                 }
             }
-            ProfileEvent.ValidateEmail -> {
+            FinishProfileEvent.ValidateEmail -> {
                 updateState {
                     copy(emailError = validator.validateEmail(state.email).errorMessage)
                 }
             }
-            ProfileEvent.ValidateBirthDate -> {
+            FinishProfileEvent.ValidateBirthDate -> {
                 updateState {
                     copy(birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage)
                 }
@@ -75,14 +72,7 @@ internal class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun discardChanges() {
-        updateState {
-            copy(readonly = true)
-        }
-        loadProfile()
-    }
-
-    private fun saveChanges() {
+    private fun submitData() {
         updateState {
             copy(
                 nameError = validator.validateName(state.name).errorMessage,
@@ -94,21 +84,22 @@ internal class ProfileViewModel @Inject constructor(
 
         if (state.hasErrors()) {
             return
-        } else {
-            updateState {
-                copy(readonly = true)
-            }
         }
 
+        saveProfile()
+    }
+
+    private fun saveProfile() {
         val profile = Profile(
             firstName = state.name,
             lastName = state.surname,
             email = state.email,
             birthDate = state.birthDate
         )
-
         viewModelScope.launch {
-            profileRepository.saveProfile(profile).collect()
+            profileRepository.saveProfile(profile).collect {
+                _event.emit(Event.Saved)
+            }
         }
     }
 
@@ -127,5 +118,9 @@ internal class ProfileViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    sealed interface Event {
+        object Saved : Event
     }
 }
