@@ -20,6 +20,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json
