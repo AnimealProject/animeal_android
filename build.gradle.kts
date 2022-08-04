@@ -1,4 +1,8 @@
+import com.epmedu.animeal.extension.propertyInt
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.konan.file.File
+import org.jetbrains.kotlin.konan.properties.loadProperties
+import org.jetbrains.kotlin.konan.properties.saveToFile
 
 apply(plugin = "com.github.ben-manes.versions")
 
@@ -53,5 +57,22 @@ allprojects {
 tasks {
     registering(Delete::class) {
         delete(buildDir)
+    }
+
+    register("incrementVersion") {
+        val properties = loadProperties("$rootDir/app/version.properties")
+
+        val newVersion = properties.propertyInt("BUILD_VERSION").inc()
+
+        if (newVersion == 1000) {
+            val subVersion = properties.propertyInt("SUB_VERSION").inc()
+
+            properties["SUB_VERSION"] = subVersion.toString()
+            properties["BUILD_VERSION"] = 0.toString()
+        } else {
+            properties["BUILD_VERSION"] = newVersion.toString()
+        }
+
+        properties.saveToFile(File("$rootDir/app/version.properties"))
     }
 }
