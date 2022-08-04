@@ -21,7 +21,6 @@ internal object AnimealColor {
 
 object CustomColor {
     val Facebook = Color(0xFF438BED)
-    val Google = Color(0xFFF5F5F5)
     val LynxWhite = Color(0xFFF7F7F7)
     val DarkerGrey = Color(0xFF99A8B0)
     val Error = Color(0xFFF04E45)

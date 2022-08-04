@@ -18,9 +18,6 @@ internal fun SignInScreen() {
         onSignInFacebook = {
             navigator.navigateToTabs()
         },
-        onSignInGoogle = {
-            navigator.navigateToTabs()
-        },
     )
 }
 

@@ -49,8 +49,8 @@ private fun LoginButtonContentPreview() {
     AnimealTheme {
         Row {
             LoginButtonContent(
-                iconId = R.drawable.ic_google,
-                textId = R.string.sign_in_google,
+                iconId = R.drawable.ic_facebook,
+                textId = R.string.sign_in_facebook,
             )
         }
     }

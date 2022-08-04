@@ -2,7 +2,6 @@ package com.epmedu.animeal.login.signin.presentation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -13,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +34,6 @@ internal fun SignInScreenUI(
     modifier: Modifier = Modifier,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
-    onSignInGoogle: () -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -49,7 +46,6 @@ internal fun SignInScreenUI(
             ButtonsBlock(
                 onSignInMobile = onSignInMobile,
                 onSignInFacebook = onSignInFacebook,
-                onSignInGoogle = onSignInGoogle,
             )
         }
     }
@@ -126,7 +122,6 @@ private fun ButtonsBlock(
     modifier: Modifier = Modifier,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
-    onSignInGoogle: () -> Unit,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -159,19 +154,6 @@ private fun ButtonsBlock(
                     iconId = R.drawable.ic_facebook,
                     textId = R.string.sign_in_facebook,
                     tint = MaterialTheme.colors.onPrimary
-                )
-            }
-            AnimealButton(
-                backgroundColor = CustomColor.Google,
-                contentColor = when {
-                    isSystemInDarkTheme() -> MaterialTheme.colors.onPrimary
-                    else -> Color.Black
-                },
-                onClick = onSignInGoogle,
-            ) {
-                LoginButtonContent(
-                    iconId = R.drawable.ic_google,
-                    textId = R.string.sign_in_google
                 )
             }
         }
@@ -207,7 +189,6 @@ private fun SignInScreenPreview() {
         SignInScreenUI(
             onSignInMobile = {},
             onSignInFacebook = {},
-            onSignInGoogle = {},
         )
     }
 }
