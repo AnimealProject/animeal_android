@@ -38,21 +38,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Increment build number
-        run: ./gradlew incrementVersion
-
-      - name: Commit files
-        run: |
-          git config --local user.email "egorikftp@gmail.com"
-          git config --local user.name "egorikftp"
-          git commit -m "Increment build version" -a
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
           
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json
@@ -93,3 +78,18 @@ jobs:
           serviceCredentialsFile: service_account.json
           groups: qa_team
           file: app/build/outputs/apk/release/app-release.apk
+     
+      - name: Increment build number
+        run: ./gradlew incrementVersion
+
+      - name: Commit files
+        run: |
+          git config --local user.email "egorikftp@gmail.com"
+          git config --local user.name "egorikftp"
+          git commit -m "Increment build version" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
