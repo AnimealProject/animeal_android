@@ -60,7 +60,9 @@ internal fun ProfileScreenUI(
         )
     }
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             ProfileAppBar(onBack = {
                 if (state.readonly) onBack()
@@ -70,6 +72,7 @@ internal fun ProfileScreenUI(
     ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .padding(vertical = 12.dp, horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)

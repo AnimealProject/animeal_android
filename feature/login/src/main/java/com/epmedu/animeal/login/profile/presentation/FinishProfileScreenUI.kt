@@ -59,13 +59,16 @@ internal fun FinishProfileScreenUI(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             TopBar(title = stringResource(id = R.string.profile_title))
         }
     ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .padding(vertical = 12.dp, horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
