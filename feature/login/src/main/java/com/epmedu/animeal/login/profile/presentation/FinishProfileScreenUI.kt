@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
-import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -61,14 +59,8 @@ internal fun FinishProfileScreenUI(
     }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        topBar = {
-            TopBar(
-                title = stringResource(R.string.profile_title)
-            )
-        }
+        modifier = Modifier.fillMaxSize().imePadding(),
+        topBar = { TopBar(title = stringResource(R.string.profile_title)) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -89,7 +81,6 @@ internal fun FinishProfileScreenUI(
                     onEvent = onEvent
                 )
             }
-
             FinishProfileButtonsRow(
                 modifier = Modifier
                     .fillMaxWidth()

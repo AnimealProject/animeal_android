@@ -27,14 +27,10 @@ internal fun MoreScreenUi(
             TopBar(title = stringResource(id = R.string.more))
         }
     ) { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
-            .padding(
-                start = 24.dp,
-                end = 24.dp,
-                top = 12.dp,
-                bottom = 32.dp,
-            )
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 32.dp)
         ) {
             LazyColumn {
                 items(screens) { screen ->
