@@ -1,12 +1,10 @@
 package com.epmedu.animeal.tabs.presentation
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +35,14 @@ fun TabsScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        isFloatingActionButtonDocked = true,
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            BottomAppBarFab(
+                currentRoute = currentRoute,
+                onNavigate = onNavigate,
+            )
+        },
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,
@@ -76,24 +82,12 @@ private fun BottomNavigationBar(
         NavigationTab.More
     )
     BottomAppBar(
-        modifier = Modifier
-            .height(74.dp)
-            .fillMaxWidth()
-            .graphicsLayer {
-                clip = true
-                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                shadowElevation = 70f
-            },
-        elevation = 0.dp,
-        contentPadding = PaddingValues(bottom = 10.dp),
+        modifier = Modifier.height(56.dp),
         backgroundColor = MaterialTheme.colors.surface,
     ) {
         items.forEach { item ->
             if (item == NavigationTab.Home) {
-                BottomAppBarFab(
-                    currentRoute = currentRoute,
-                    onNavigate = onNavigate,
-                )
+                Box(modifier = Modifier.weight(1f))
             } else {
                 BottomNavigationItem(
                     icon = {

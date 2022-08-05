@@ -33,6 +33,7 @@ internal fun BottomAppBarFab(
 
     Box(
         modifier = Modifier
+            .padding(top = 32.dp)
             .size(64.dp)
             .background(
                 brush = Brush.radialGradient(
