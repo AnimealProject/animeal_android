@@ -1,15 +1,15 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -37,11 +37,6 @@ fun TabsScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        isFloatingActionButtonDocked = true,
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            BottomAppBarFab(currentRoute = currentRoute, onNavigate = onNavigate)
-        },
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,
@@ -80,10 +75,25 @@ private fun BottomNavigationBar(
         NavigationTab.Analytics,
         NavigationTab.More
     )
-    BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
+    BottomAppBar(
+        modifier = Modifier
+            .height(74.dp)
+            .fillMaxWidth()
+            .graphicsLayer {
+                clip = true
+                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                shadowElevation = 70f
+            },
+        elevation = 0.dp,
+        contentPadding = PaddingValues(bottom = 10.dp),
+        backgroundColor = MaterialTheme.colors.surface,
+    ) {
         items.forEach { item ->
             if (item == NavigationTab.Home) {
-                Box(modifier = Modifier.weight(1f))
+                BottomAppBarFab(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate,
+                )
             } else {
                 BottomNavigationItem(
                     icon = {
