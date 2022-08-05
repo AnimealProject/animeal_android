@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,32 +18,34 @@ import com.epmedu.animeal.resources.R
 
 /**
  * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
- * You can pass `null` in the [navigationIcon] to display only the title.
  * @param title A title of the [TopBar].
- * @param navigationIcon A navigation icon before the title. By default `null`.
+ * @param navigationIcon A navigation icon before the title. By default empty.
  */
 @Composable
 fun TopBar(
-    startPadding: Dp? = null,
     title: String,
-    navigationIcon: (@Composable () -> Unit)? = null
+    navigationIcon: (@Composable () -> Unit) = {}
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 32.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        if (navigationIcon == null) {
-            WidthSpacer(startPadding ?: 24.dp)
-        } else {
-            WidthSpacer(startPadding ?: 8.dp)
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .height(44.dp)
+                .fillMaxWidth(),
+        ) {
             navigationIcon()
         }
 
         Text(
+            modifier = Modifier.padding(start = 24.dp),
             text = title,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
         )
     }
 }
@@ -50,7 +53,8 @@ fun TopBar(
 @Composable
 fun BackButton(onClick: () -> Unit) {
     IconButton(
-        onClick = onClick,
+        modifier = Modifier.then(Modifier.size(48.dp)),
+        onClick = onClick
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowLeft,

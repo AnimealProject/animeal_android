@@ -22,6 +22,7 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.BackButton
@@ -64,7 +65,7 @@ internal fun ProfileScreenUI(
             .fillMaxSize()
             .imePadding(),
         topBar = {
-            ProfileAppBar(onBack = {
+            ProfileTopBar(onBack = {
                 if (state.readonly) onBack()
                 else showDiscardAlert.value = true
             })
@@ -73,20 +74,27 @@ internal fun ProfileScreenUI(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = 12.dp, horizontal = 24.dp)
+                .padding(horizontal = 24.dp)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(text = stringResource(id = R.string.profile_subtitle))
-            ProfileInputForm(
-                state = state,
-                focusManager = focusManager,
-                onEvent = onEvent,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(id = R.string.profile_subtitle)
+                )
+                ProfileInputForm(
+                    state = state,
+                    focusManager = focusManager,
+                    onEvent = onEvent,
+                )
+            }
+
             ProfileButtonsRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(vertical = 24.dp),
                 readonly = state.readonly,
                 onEditClick = {
                     onEvent(ProfileEvent.Edit)
@@ -105,12 +113,15 @@ internal fun ProfileScreenUI(
 }
 
 @Composable
-private fun ProfileAppBar(
+private fun ProfileTopBar(
     onBack: () -> Unit,
 ) {
-    TopBar(title = stringResource(id = R.string.profile_title)) {
-        BackButton(onClick = onBack)
-    }
+    TopBar(
+        title = stringResource(id = R.string.profile_title),
+        navigationIcon = {
+            BackButton(onClick = onBack)
+        }
+    )
 }
 
 @Composable
@@ -196,7 +207,7 @@ private fun ProfileButtonsRow(
     } else {
         Row(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(48.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             AnimealButton(
                 modifier = Modifier.weight(1f),

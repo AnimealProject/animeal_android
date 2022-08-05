@@ -38,7 +38,7 @@ internal fun EnterPhoneScreenUI(
             .imePadding(),
         topBar = {
             TopBar(
-                title = "",
+                title = stringResource(R.string.enter_phone_title),
                 navigationIcon = {
                     BackButton(onClick = onBack)
                 }
@@ -46,7 +46,6 @@ internal fun EnterPhoneScreenUI(
         },
         floatingActionButton = {
             AnimealShortButton(
-                modifier = Modifier.padding(bottom = 32.dp),
                 text = stringResource(id = R.string.next),
                 enabled = state.isNextEnabled,
                 onClick = onNext
@@ -54,16 +53,13 @@ internal fun EnterPhoneScreenUI(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 24.dp)
         ) {
-            HeightSpacer(12.dp)
-            Text(
-                text = stringResource(R.string.enter_phone_title),
-                style = MaterialTheme.typography.h5
-            )
             PhoneNumberInput(
                 modifier = Modifier
-                    .padding(top = 32.dp)
+                    .padding(top = 56.dp)
                     .focusRequester(focusRequester),
                 title = stringResource(id = R.string.phone_number),
                 onValueChange = onNumberChange,

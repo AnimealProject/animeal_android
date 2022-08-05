@@ -15,13 +15,16 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
-internal fun MoreOption(title: String, onClick: () -> Unit) {
+internal fun MoreOption(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(40.dp)
-            .clickable { onClick() }
-            .padding(start = 44.dp, end = 32.dp),
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -39,7 +42,7 @@ internal fun MoreOption(title: String, onClick: () -> Unit) {
 private fun MoreOptionPreview() {
     AnimealTheme {
         Surface {
-            MoreOption("Profile Page") {}
+            MoreOption(title = "Profile Page") {}
         }
     }
 }

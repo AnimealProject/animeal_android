@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -63,28 +65,35 @@ internal fun FinishProfileScreenUI(
             .fillMaxSize()
             .imePadding(),
         topBar = {
-            TopBar(title = stringResource(id = R.string.profile_title))
+            TopBar(
+                title = stringResource(R.string.profile_title)
+            )
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = 12.dp, horizontal = 24.dp)
+                .padding(horizontal = 24.dp)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = stringResource(id = R.string.profile_subtitle))
-
-            FinishProfileInputForm(
-                state = state,
-                focusManager = focusManager,
-                onEvent = onEvent
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(R.string.profile_subtitle),
+                )
+                FinishProfileInputForm(
+                    state = state,
+                    focusManager = focusManager,
+                    onEvent = onEvent
+                )
+            }
 
             FinishProfileButtonsRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(vertical = 24.dp),
                 onCancelClick = {
                     focusManager.clearFocus()
                     showCancellationAlert = true
@@ -164,7 +173,7 @@ private fun FinishProfileButtonsRow(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(48.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AnimealButton(
             modifier = Modifier.weight(1f),
