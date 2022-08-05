@@ -143,16 +143,14 @@ private fun FinishProfileInputForm(
         isEnabled = false
     )
     BirthDateInput(
-        value = state.birthDate,
+        value = state.formattedBirthDate,
         error = state.birthDateError?.asString(),
-        initialDate = state.initialDate,
+        datePickerValue = state.birthDate,
         focusManager = focusManager,
         onValueChange = {
             onEvent(FinishProfileEvent.BirthDateChanged(it))
-        },
-        onFocusRelease = {
             onEvent(FinishProfileEvent.ValidateBirthDate)
-        }
+        },
     )
 }
 

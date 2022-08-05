@@ -171,17 +171,15 @@ private fun ProfileInputForm(
         isEnabled = false
     )
     BirthDateInput(
-        isEnabled = !state.readonly,
-        value = state.birthDate,
+        clickable = !state.readonly,
+        value = state.formattedBirthDate,
         error = state.birthDateError?.asString(),
-        initialDate = state.initialDate,
+        datePickerValue = state.birthDate,
         focusManager = focusManager,
         onValueChange = {
             onEvent(ProfileEvent.BirthDateChanged(it))
-        },
-        onFocusRelease = {
             onEvent(ProfileEvent.ValidateBirthDate)
-        }
+        },
     )
 }
 
