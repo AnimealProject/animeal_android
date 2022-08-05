@@ -62,6 +62,9 @@
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
     <string name="profile_birthdate_placeholder">Select birthdate</string>
 
+    <string name="onboarding_image_title">Take care of pets</string>
+    <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>
+
     <string name="help_page_app_version">App version: %s</string>
 
     <string name="done">Done</string>
