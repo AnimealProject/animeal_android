@@ -4,8 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.base)
-
     implementation(projects.feature.more)
     implementation(projects.feature.home)
 

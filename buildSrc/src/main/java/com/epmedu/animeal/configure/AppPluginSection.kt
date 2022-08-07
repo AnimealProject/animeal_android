@@ -3,6 +3,8 @@ package com.epmedu.animeal.configure
 import com.epmedu.animeal.internal.applicationExtension
 import com.epmedu.animeal.internal.libs
 import org.gradle.api.Project
+import com.epmedu.animeal.extension.provideVersionCode
+import com.epmedu.animeal.extension.provideVersionName
 
 internal fun Project.configureAndroidApplication() = applicationExtension.run {
     plugins.apply("kotlin-android")
@@ -13,8 +15,8 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
         applicationId = "com.epmedu.animeal"
         targetSdk = libs.versions.targetSdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = provideVersionCode()
+        versionName = provideVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -39,7 +39,6 @@ fun getSecretToken(): String {
 rootProject.name = "Animeal"
 
 include(":app")
-include(":base")
 
 include(":feature:login")
 include(":feature:more")

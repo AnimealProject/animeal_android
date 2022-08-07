@@ -12,4 +12,10 @@ interface Navigator {
     )
 
     fun popBackStack()
+
+    fun popBackStack(
+        route: String,
+        inclusive: Boolean = false,
+        saveState: Boolean = false
+    )
 }
