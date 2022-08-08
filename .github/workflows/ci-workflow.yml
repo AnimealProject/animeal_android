@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: actions/cache@v2
         with:
           path: |
@@ -29,6 +29,19 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      - name: Configure MapBox secrets
+        run: |
+          
+          echo -e "\nMAPBOX_SECRET_TOKEN=${{ secrets.MAPBOX_SECRET_TOKEN }}" >> ./gradle.properties
+
+          echo "MAPBOX_PUBLIC_TOKEN=${{ secrets.MAPBOX_PUBLIC_TOKEN }}" >> ./gradle.properties
+
+          echo "MAPBOX_USERNAME=${{ secrets.MAPBOX_USERNAME }}" >> ./gradle.properties
+
+          echo "MAPBOX_STYLE_ID=${{ secrets.MAPBOX_STYLE_ID }}" >> ./gradle.properties
+
+          cat ./gradle.properties
 
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json
