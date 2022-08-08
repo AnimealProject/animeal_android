@@ -1,5 +1,3 @@
-import java.util.Properties
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -14,27 +12,20 @@ dependencyResolutionManagement {
                 create<BasicAuthentication>("basic")
             }
             credentials {
+                val MAPBOX_SECRET_TOKEN: String? by settings
+                gradle.settingsEvaluated {
+                    if(MAPBOX_SECRET_TOKEN == null)
+                    throw GradleException("MAPBOX_SECRET_TOKEN is not defined in gradle.properties")
+                }
                 // Do not change the username below.
                 // This should always be `mapbox` (not your username).
                 username = "mapbox"
                 // Use the secret token you stored in secrets.properties as the password
-                password = getSecretToken()
+                password = MAPBOX_SECRET_TOKEN
             }
         }
     }
 }
-
-fun getSecretToken(): String {
-    val propertiesFile = file("secrets.properties")
-    if (propertiesFile.exists()) {
-        val properties = Properties()
-        properties.load(propertiesFile.inputStream())
-        return properties.getProperty("MAPBOX_ACCESS_TOKEN")
-            ?: throw BuildCancelledException("MAPBOX_ACCESS_TOKEN is not defined")
-    }
-    throw BuildCancelledException("secrets.properties is not exist")
-}
-
 
 rootProject.name = "Animeal"
 

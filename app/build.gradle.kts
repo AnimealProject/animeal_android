@@ -8,7 +8,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 animealPlugin {
@@ -55,10 +54,6 @@ android {
     }
 }
 
-secrets {
-    propertiesFileName = "secrets.properties"
-}
-
 dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.splash)
@@ -86,6 +81,10 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
+
+    implementation(libs.play.services.location)
+
+    implementation (libs.androidx.work.runtime)
 
     debugImplementation(libs.compose.ui.tooling)
 
