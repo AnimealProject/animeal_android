@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.login.profile.ui.BirthDateInput
@@ -79,7 +79,8 @@ internal fun ProfileScreenUI(
             Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.profile_subtitle)
+                    text = stringResource(id = R.string.profile_subtitle),
+                    style = MaterialTheme.typography.subtitle1,
                 )
                 ProfileInputForm(
                     state = state,
@@ -200,10 +201,8 @@ private fun ProfileButtonsRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AnimealButton(
+        AnimealSecondaryButton(
             modifier = Modifier.weight(1f),
-            backgroundColor = DisabledButtonColor,
-            contentColor = MaterialTheme.colors.onPrimary,
             text = stringResource(negativeButtonText),
             onClick = if (readonly) onCancelClick else onDiscardClick,
         )

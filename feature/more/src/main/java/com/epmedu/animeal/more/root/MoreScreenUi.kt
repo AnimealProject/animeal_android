@@ -30,7 +30,7 @@ internal fun MoreScreenUi(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 32.dp)
+                .padding(top = 12.dp, bottom = 32.dp)
         ) {
             LazyColumn {
                 items(screens) { screen ->
@@ -42,6 +42,7 @@ internal fun MoreScreenUi(
             }
             Spacer(modifier = Modifier.weight(1f))
             AnimealShortButton(
+                modifier = Modifier.padding(start = 24.dp),
                 text = stringResource(id = R.string.logout),
                 onClick = onLogout,
             )

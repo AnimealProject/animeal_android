@@ -1,6 +1,9 @@
 package com.epmedu.animeal.foundation.input
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
@@ -11,7 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,6 +29,7 @@ import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBE
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.resources.R
 
 @Composable
 fun PhoneNumberInput(
@@ -46,14 +53,24 @@ fun PhoneNumberInput(
         visualTransformation = PhoneFormatTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         leadingIcon = {
-            Text(
+            Row(
                 modifier = Modifier.padding(start = 12.dp),
-                text = PHONE_NUMBER_PREFIX,
-                style = TextStyle(
-                    color = MaterialTheme.colors.onSurface,
-                    fontSize = 16.sp,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Image(
+                    contentScale = ContentScale.Crop,
+                    painter = painterResource(R.drawable.ic_georgia),
+                    contentDescription = null
                 )
-            )
+                Text(
+                    text = PHONE_NUMBER_PREFIX,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = 16.sp,
+                    ),
+                )
+            }
         }
     )
 }

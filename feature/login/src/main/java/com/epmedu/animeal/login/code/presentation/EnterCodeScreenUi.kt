@@ -2,6 +2,7 @@ package com.epmedu.animeal.login.code.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +46,8 @@ internal fun EnterCodeScreenUi(
         ) {
             Text(
                 modifier = Modifier.padding(top = 12.dp),
-                text = stringResource(R.string.enter_code_subtitle, state.phoneNumber)
+                text = stringResource(R.string.enter_code_subtitle, state.phoneNumber),
+                style = MaterialTheme.typography.subtitle1,
             )
             CodeRow(
                 modifier = Modifier.padding(top = 32.dp),
