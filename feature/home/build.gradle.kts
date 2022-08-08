@@ -1,11 +1,11 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 dependencies {
-    implementation(projects.base)
-
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
@@ -15,11 +15,15 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation(libs.mapbox.android)
-    implementation("com.google.android.gms:play-services-location:18.0.0")
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
+    implementation(libs.androidx.viewmodel)
+    implementation(libs.androidx.viewmodel.compose)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
