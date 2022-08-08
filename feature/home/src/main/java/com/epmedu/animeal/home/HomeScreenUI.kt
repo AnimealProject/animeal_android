@@ -31,11 +31,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 
@@ -58,6 +58,10 @@ internal fun HomeScreenUI(state: HomeState) {
 private fun MapboxMap(state: HomeState) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
+    val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
+        mapBoxView.getMapboxMap().setCamera(CameraOptions.Builder().center(it).build())
+    }
+    
     AndroidView(
         factory = { mapBoxView },
         modifier = Modifier.fillMaxSize()
@@ -67,20 +71,7 @@ private fun MapboxMap(state: HomeState) {
             enabled = true
             pulsingEnabled = true
         }
-
-        mapView.getMapboxMap().apply {
-            setCamera(
-                CameraOptions.Builder()
-                    .center(
-                        Point.fromLngLat(
-                            state.currentLocation.longitude,
-                            state.currentLocation.latitude
-                        )
-                    )
-                    .zoom(9.0)
-                    .build()
-            )
-        }
+        mapView.location.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
     }
 }
 
