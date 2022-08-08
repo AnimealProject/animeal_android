@@ -6,5 +6,5 @@ interface BuildConfigProvider {
 
     val mapBoxPublicKey: String
 
-    val mapBoxStyleURI:String
+    val mapBoxStyleURI: String
 }
