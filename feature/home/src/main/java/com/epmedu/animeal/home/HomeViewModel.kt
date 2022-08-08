@@ -5,8 +5,8 @@ import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.domain.StateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
