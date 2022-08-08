@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Looper
 import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.data.model.MapLocation
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
