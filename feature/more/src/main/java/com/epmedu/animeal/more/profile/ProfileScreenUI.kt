@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -19,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -95,6 +93,9 @@ internal fun ProfileScreenUI(
                     .fillMaxWidth()
                     .padding(vertical = 24.dp),
                 readonly = state.readonly,
+                onCancelClick = {
+                    onBack()
+                },
                 onEditClick = {
                     onEvent(ProfileEvent.Edit)
                 },
@@ -187,39 +188,31 @@ private fun ProfileInputForm(
 private fun ProfileButtonsRow(
     modifier: Modifier = Modifier,
     readonly: Boolean,
+    onCancelClick: () -> Unit,
     onEditClick: () -> Unit,
     onDiscardClick: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    if (readonly) {
-        Box(
-            modifier = modifier,
-            contentAlignment = Alignment.BottomStart,
-        ) {
-            AnimealShortButton(
-                text = stringResource(id = R.string.edit),
-                onClick = onEditClick,
-            )
-        }
-    } else {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            AnimealButton(
-                modifier = Modifier.weight(1f),
-                backgroundColor = DisabledButtonColor,
-                contentColor = MaterialTheme.colors.onPrimary,
-                text = stringResource(id = R.string.discard),
-                onClick = onDiscardClick,
-            )
+    val negativeButtonText = if (readonly) R.string.cancel else R.string.discard
+    val positiveButtonText = if (readonly) R.string.edit else R.string.save
 
-            AnimealButton(
-                modifier = Modifier.weight(1f),
-                text = stringResource(id = R.string.save),
-                onClick = onSaveClick,
-            )
-        }
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        AnimealButton(
+            modifier = Modifier.weight(1f),
+            backgroundColor = DisabledButtonColor,
+            contentColor = MaterialTheme.colors.onPrimary,
+            text = stringResource(negativeButtonText),
+            onClick = if (readonly) onCancelClick else onDiscardClick,
+        )
+
+        AnimealButton(
+            modifier = Modifier.weight(1f),
+            text = stringResource(positiveButtonText),
+            onClick = if (readonly) onEditClick else onSaveClick,
+        )
     }
 }
 
