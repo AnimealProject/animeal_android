@@ -28,7 +28,7 @@ fun AnimealAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.padding(24.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
             Text(

@@ -45,10 +45,7 @@ internal fun FinishProfileScreenUI(
     }
 
     if (showCancellationAlert) {
-        AnimealAlertDialog(
-            title = stringResource(id = R.string.profile_registration_cancel),
-            dismissText = stringResource(id = R.string.no),
-            acceptText = stringResource(id = R.string.yes),
+        CancellationDialog(
             onDismissRequest = { showCancellationAlert = false },
             onDismiss = { showCancellationAlert = false },
             onConfirm = {
@@ -59,7 +56,9 @@ internal fun FinishProfileScreenUI(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().imePadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = { TopBar(title = stringResource(R.string.profile_title)) }
     ) { padding ->
         Column(
@@ -152,6 +151,22 @@ private fun FinishProfileInputForm(
             onEvent(FinishProfileEvent.BirthDateChanged(it))
             onEvent(FinishProfileEvent.ValidateBirthDate)
         },
+    )
+}
+
+@Composable
+private fun CancellationDialog(
+    onDismissRequest: () -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AnimealAlertDialog(
+        title = stringResource(id = R.string.profile_registration_cancel),
+        dismissText = stringResource(id = R.string.no),
+        acceptText = stringResource(id = R.string.yes),
+        onDismissRequest = onDismissRequest,
+        onDismiss = onDismiss,
+        onConfirm = onConfirm,
     )
 }
 
