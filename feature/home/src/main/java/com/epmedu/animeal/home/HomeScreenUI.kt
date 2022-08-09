@@ -61,7 +61,7 @@ private fun MapboxMap(state: HomeState) {
     val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
         mapBoxView.getMapboxMap().setCamera(CameraOptions.Builder().center(it).build())
     }
-    
+
     AndroidView(
         factory = { mapBoxView },
         modifier = Modifier.fillMaxSize()
