@@ -34,12 +34,10 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
-            extra["enableCrashlytics"] = true
             extra["alwaysUpdateBuildId"] = true
         }
 
         debug {
-            extra["enableCrashlytics"] = false
             extra["alwaysUpdateBuildId"] = false
         }
     }
@@ -65,7 +63,7 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
+    releaseImplementation(libs.firebase.crashlytics)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
