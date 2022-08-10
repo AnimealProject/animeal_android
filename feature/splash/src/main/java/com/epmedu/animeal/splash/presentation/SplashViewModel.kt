@@ -1,31 +1,35 @@
-package com.epmedu.animeal.more
+package com.epmedu.animeal.splash.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MoreViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _event = MutableSharedFlow<Event>()
     val event: SharedFlow<Event> get() = _event.asSharedFlow()
 
-    internal fun logout() {
+    init {
         viewModelScope.launch {
-            profileRepository.clearProfile()
-            _event.emit(Event.NavigateToOnboarding)
+            delay(2000)
+            if (profileRepository.isProfileSaved()) {
+                _event.emit(Event.NavigateToHome)
+            } else {
+                _event.emit(Event.NavigateToOnboarding)
+            }
         }
     }
 
     sealed interface Event {
+        object NavigateToHome : Event
         object NavigateToOnboarding : Event
     }
 }
