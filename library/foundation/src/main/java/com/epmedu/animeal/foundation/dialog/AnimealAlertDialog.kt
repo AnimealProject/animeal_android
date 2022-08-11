@@ -12,8 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 
 @Suppress("LongParameterList")
 @Composable
@@ -28,7 +28,7 @@ fun AnimealAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.padding(24.dp),
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
             Text(
@@ -46,16 +46,13 @@ fun AnimealAlertDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AnimealButton(
+                AnimealSecondaryButton(
                     modifier = Modifier.weight(1f),
-                    backgroundColor = DisabledButtonColor,
-                    contentColor = MaterialTheme.colors.onPrimary,
                     text = dismissText,
                     onClick = {
                         onDismiss()
                     },
                 )
-
                 AnimealButton(
                     modifier = Modifier.weight(1f),
                     text = acceptText,

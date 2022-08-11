@@ -4,8 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.model.Profile
 import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
+import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.common.validation.*
-import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -41,8 +42,9 @@ internal class FinishProfileViewModel @Inject constructor(
             is FinishProfileEvent.BirthDateChanged -> {
                 updateState {
                     copy(
-                        birthDate = event.birthDate,
-                        formattedBirthDate = formatBirthDate(event.birthDate)
+                        formattedBirthDate = formatDateToString(
+                            event.birthDate, DAY_MONTH_COMMA_YEAR_FORMATTER
+                        )
                     )
                 }
             }
@@ -94,7 +96,7 @@ internal class FinishProfileViewModel @Inject constructor(
             firstName = state.name,
             lastName = state.surname,
             email = state.email,
-            birthDate = state.birthDate
+            birthDate = state.formattedBirthDate
         )
         viewModelScope.launch {
             profileRepository.saveProfile(profile).collect {
@@ -111,8 +113,7 @@ internal class FinishProfileViewModel @Inject constructor(
                         name = it.firstName,
                         surname = it.lastName,
                         email = it.email,
-                        birthDate = it.birthDate,
-                        formattedBirthDate = formatBirthDate(it.birthDate),
+                        formattedBirthDate = it.birthDate,
                         formattedPhoneNumber = it.phoneNumber
                     )
                 }

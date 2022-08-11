@@ -8,7 +8,7 @@
     <string name="home">Home</string>
     <string name="more">More</string>
 
-    <string name="enter_phone_title">Enter phone number</string>
+    <string name="enter_phone_title">Please, enter your phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="next">Next</string>
 
@@ -60,7 +60,10 @@
     <string name="profile_email_blank_error_msg">Email can not be blank</string>
     <string name="profile_email_invalid_error_msg">Email is invalid</string>
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
-    <string name="profile_birthdate_placeholder">DD.MM.YYYY</string>
+    <string name="profile_birthdate_placeholder">Select birthdate</string>
+
+    <string name="onboarding_image_title">Take care of pets</string>
+    <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>
 
     <string name="help_page_app_version">App version: %s</string>
 

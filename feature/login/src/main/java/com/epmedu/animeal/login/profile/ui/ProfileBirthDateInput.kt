@@ -1,23 +1,14 @@
 package com.epmedu.animeal.login.profile.ui
 
 import android.content.res.Configuration
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import com.epmedu.animeal.extensions.DAY_MONTH_YEAR_DOT_FORMATTER
-import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.dialog.DatePickerDialog
 import com.epmedu.animeal.foundation.input.BirthDateInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.login.profile.presentation.FinishProfileEvent
 import com.epmedu.animeal.resources.R
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
@@ -27,49 +18,40 @@ import java.time.LocalDate
 fun BirthDateInput(
     value: String,
     error: String?,
-    initialDate: LocalDate,
+    clickable: Boolean = true,
+    datePickerValue: LocalDate,
     focusManager: FocusManager,
-    isEnabled: Boolean = true,
-    onValueChange: (String) -> Unit,
-    onFocusRelease: () -> Unit,
+    onValueChange: (LocalDate) -> Unit,
 ) {
     val dialogState = rememberMaterialDialogState()
-    val showDialog = remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
-    if (showDialog.value) {
+    if (showDialog) {
         dialogState.show()
     }
 
     BirthDateInput(
-        title = stringResource(id = R.string.profile_birth_date),
-        isEnabled = isEnabled,
-        onIconClick = {
-            focusManager.clearFocus()
-            showDialog.value = true
-        },
-        onValueChange = onValueChange,
+        title = stringResource(R.string.profile_birth_date),
         value = value,
         errorText = error,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Number
-        ),
-        keyboardActions = KeyboardActions(onDone = {
-            FinishProfileEvent.ValidateBirthDate
+        clickable = clickable,
+        onClick = {
             focusManager.clearFocus()
-        })
+            showDialog = true
+        },
+        onValueChange = {
+            focusManager.clearFocus()
+        },
     )
     DatePickerDialog(
         state = dialogState,
-        initialDate = initialDate,
-        onPositiveClick = { showDialog.value = false },
-        onNegativeClick = { showDialog.value = false },
-        onCloseRequest = { showDialog.value = false },
+        date = datePickerValue,
+        onPositiveClick = { showDialog = false },
+        onNegativeClick = { showDialog = false },
+        onCloseRequest = { showDialog = false },
         onDatePicked = {
-            val formattedDate = formatDateToString(it, DAY_MONTH_YEAR_DOT_FORMATTER)
-            onValueChange(formattedDate.replace(".", ""))
-            onFocusRelease()
-            showDialog.value = false
+            onValueChange(it)
+            showDialog = false
         }
     )
 }
@@ -80,12 +62,11 @@ fun BirthDateInput(
 private fun BirthDateInputPreview() {
     AnimealTheme {
         BirthDateInput(
-            value = "11.11.1900",
+            value = "1, Sep 1939",
             error = null,
-            initialDate = LocalDate.now(),
+            datePickerValue = LocalDate.now(),
             focusManager = LocalFocusManager.current,
             onValueChange = {},
-            onFocusRelease = {}
         )
     }
 }

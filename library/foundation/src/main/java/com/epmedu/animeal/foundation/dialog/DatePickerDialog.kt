@@ -13,7 +13,7 @@ import java.time.LocalDate
 @Composable
 fun DatePickerDialog(
     state: MaterialDialogState,
-    initialDate: LocalDate,
+    date: LocalDate,
     onPositiveClick: () -> Unit,
     onNegativeClick: () -> Unit,
     onCloseRequest: () -> Unit,
@@ -35,7 +35,12 @@ fun DatePickerDialog(
             onCloseRequest()
         }
     ) {
-        datepicker(initialDate = initialDate) {
+        datepicker(
+            initialDate = date,
+            allowedDateValidator = {
+                it.isBefore(LocalDate.now().plusDays(1))
+            }
+        ) {
             onDatePicked(it)
         }
     }
@@ -46,7 +51,7 @@ fun DatePickerDialog(
 private fun DatePickerDialogPreview() {
     DatePickerDialog(
         state = rememberMaterialDialogState(),
-        initialDate = LocalDate.now(),
+        date = LocalDate.now(),
         onPositiveClick = {},
         onNegativeClick = {},
         onCloseRequest = {},

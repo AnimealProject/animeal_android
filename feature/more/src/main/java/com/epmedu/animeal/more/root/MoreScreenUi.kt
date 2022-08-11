@@ -24,16 +24,14 @@ internal fun MoreScreenUi(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopBar(
-                startPadding = 44.dp,
-                title = stringResource(id = R.string.more)
-            )
+            TopBar(title = stringResource(id = R.string.more))
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding)
+            modifier = Modifier
+                .padding(padding)
+                .padding(top = 12.dp, bottom = 32.dp)
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
             LazyColumn {
                 items(screens) { screen ->
                     MoreOption(
@@ -44,9 +42,9 @@ internal fun MoreScreenUi(
             }
             Spacer(modifier = Modifier.weight(1f))
             AnimealShortButton(
+                modifier = Modifier.padding(start = 24.dp),
                 text = stringResource(id = R.string.logout),
                 onClick = onLogout,
-                modifier = Modifier.padding(start = 44.dp, bottom = 44.dp)
             )
         }
     }
