@@ -8,7 +8,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HelpViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider
-) : StateViewModel<HelpState>(initialState = HelpState()) {
+) : StateViewModel<HelpState, Unit>(initialState = HelpState()) {
 
     init {
         updateState {

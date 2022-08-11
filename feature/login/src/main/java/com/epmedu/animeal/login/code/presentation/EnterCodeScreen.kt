@@ -11,7 +11,6 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.login.OnboardingScreenRoute
 import com.epmedu.animeal.login.code.domain.EnterCodeViewModel
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun EnterCodeScreen() {
@@ -36,8 +35,8 @@ internal fun EnterCodeScreen() {
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
 
-        viewModel.isCodeCorrect.collectLatest { isCorrect ->
-            if (isCorrect) {
+        viewModel.event.collect {
+            if (it is EnterCodeViewModel.Event.NavigateToFinishProfile) {
                 navigator.navigate(OnboardingScreenRoute.FinishProfile.name)
             }
         }

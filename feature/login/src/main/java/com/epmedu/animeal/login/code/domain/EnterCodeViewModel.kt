@@ -6,9 +6,6 @@ import com.epmedu.animeal.login.code.data.EnterCodeRepository
 import com.epmedu.animeal.login.code.domain.model.EnterCodeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,10 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
     private val repository: EnterCodeRepository
-) : StateViewModel<EnterCodeState>(EnterCodeState()) {
-
-    private val _isCodeCorrect = MutableStateFlow(false)
-    val isCodeCorrect: StateFlow<Boolean> = _isCodeCorrect.asStateFlow()
+) : StateViewModel<EnterCodeState, EnterCodeViewModel.Event>(EnterCodeState()) {
 
     init {
         viewModelScope.launch { getPhoneNumber() }
@@ -71,7 +65,10 @@ internal class EnterCodeViewModel @Inject constructor(
         if (state.code.all { it != null }) {
             val isCodeCorrect = isCodeCorrect()
             updateState { copy(isError = !isCodeCorrect) }
-            _isCodeCorrect.value = isCodeCorrect
+
+            viewModelScope.launch {
+                sendEvent(Event.NavigateToFinishProfile)
+            }
         }
     }
 
@@ -87,5 +84,9 @@ internal class EnterCodeViewModel @Inject constructor(
         private const val CORRECT_CODE = "1111"
 
         internal fun emptyCode() = List(CODE_SIZE) { null }
+    }
+
+    sealed interface Event {
+        object NavigateToFinishProfile : Event
     }
 }

@@ -6,23 +6,18 @@ import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
-import com.epmedu.animeal.foundation.common.validation.*
+import com.epmedu.animeal.foundation.common.validation.ProfileValidator
+import com.epmedu.animeal.login.profile.presentation.FinishProfileViewModel.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<FinishProfileState>(initialState = FinishProfileState()) {
+) : StateViewModel<FinishProfileState, Event>(initialState = FinishProfileState()) {
 
     private val validator: ProfileValidator = ProfileValidator()
-
-    private val _event = MutableSharedFlow<Event>()
-    val event: SharedFlow<Event> get() = _event.asSharedFlow()
 
     init {
         loadProfile()
@@ -100,7 +95,7 @@ internal class FinishProfileViewModel @Inject constructor(
         )
         viewModelScope.launch {
             profileRepository.saveProfile(profile).collect {
-                _event.emit(Event.Saved)
+                sendEvent(Event.Saved)
             }
         }
     }
