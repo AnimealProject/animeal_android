@@ -1,29 +1,25 @@
 package com.epmedu.animeal.splash.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
+import com.epmedu.animeal.common.domain.StateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : ViewModel() {
+) : StateViewModel<Unit, SplashViewModel.Event>(Unit) {
 
-    private val _event = MutableSharedFlow<Event>()
-    val event: SharedFlow<Event> get() = _event.asSharedFlow()
-
-    init {
+    fun verifyProfileSaved() {
         viewModelScope.launch {
-            delay(2000)
+            delay(1000)
             if (profileRepository.isProfileSaved()) {
-                _event.emit(Event.NavigateToHome)
+                sendEvent(Event.NavigateToHome)
             } else {
-                _event.emit(Event.NavigateToOnboarding)
+                sendEvent(Event.NavigateToOnboarding)
             }
         }
     }
