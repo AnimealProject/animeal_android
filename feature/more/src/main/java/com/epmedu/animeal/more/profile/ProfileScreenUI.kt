@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -19,11 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealShortButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.login.profile.ui.BirthDateInput
@@ -60,9 +58,11 @@ internal fun ProfileScreenUI(
         )
     }
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
-            ProfileAppBar(onBack = {
+            ProfileTopBar(onBack = {
                 if (state.readonly) onBack()
                 else showDiscardAlert.value = true
             })
@@ -70,21 +70,33 @@ internal fun ProfileScreenUI(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 24.dp)
+                .padding(padding)
+                .padding(horizontal = 24.dp)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(text = stringResource(id = R.string.profile_subtitle))
-            ProfileInputForm(
-                state = state,
-                focusManager = focusManager,
-                onEvent = onEvent,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(id = R.string.profile_subtitle),
+                    style = MaterialTheme.typography.subtitle1,
+                )
+                ProfileInputForm(
+                    state = state,
+                    focusManager = focusManager,
+                    onEvent = onEvent,
+                )
+            }
+
             ProfileButtonsRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(vertical = 24.dp),
                 readonly = state.readonly,
+                onCancelClick = {
+                    onBack()
+                },
                 onEditClick = {
                     onEvent(ProfileEvent.Edit)
                 },
@@ -102,12 +114,15 @@ internal fun ProfileScreenUI(
 }
 
 @Composable
-private fun ProfileAppBar(
+private fun ProfileTopBar(
     onBack: () -> Unit,
 ) {
-    TopBar(title = stringResource(id = R.string.profile_title)) {
-        BackButton(onClick = onBack)
-    }
+    TopBar(
+        title = stringResource(id = R.string.profile_title),
+        navigationIcon = {
+            BackButton(onClick = onBack)
+        }
+    )
 }
 
 @Composable
@@ -158,17 +173,15 @@ private fun ProfileInputForm(
         isEnabled = false
     )
     BirthDateInput(
-        isEnabled = !state.readonly,
-        value = state.birthDate,
+        clickable = !state.readonly,
+        value = state.formattedBirthDate,
         error = state.birthDateError?.asString(),
-        initialDate = state.initialDate,
+        datePickerValue = state.birthDate,
         focusManager = focusManager,
         onValueChange = {
             onEvent(ProfileEvent.BirthDateChanged(it))
-        },
-        onFocusRelease = {
             onEvent(ProfileEvent.ValidateBirthDate)
-        }
+        },
     )
 }
 
@@ -176,39 +189,29 @@ private fun ProfileInputForm(
 private fun ProfileButtonsRow(
     modifier: Modifier = Modifier,
     readonly: Boolean,
+    onCancelClick: () -> Unit,
     onEditClick: () -> Unit,
     onDiscardClick: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    if (readonly) {
-        Box(
-            modifier = modifier,
-            contentAlignment = Alignment.BottomStart,
-        ) {
-            AnimealShortButton(
-                text = stringResource(id = R.string.edit),
-                onClick = onEditClick,
-            )
-        }
-    } else {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(48.dp)
-        ) {
-            AnimealButton(
-                modifier = Modifier.weight(1f),
-                backgroundColor = DisabledButtonColor,
-                contentColor = MaterialTheme.colors.onPrimary,
-                text = stringResource(id = R.string.discard),
-                onClick = onDiscardClick,
-            )
+    val negativeButtonText = if (readonly) R.string.cancel else R.string.discard
+    val positiveButtonText = if (readonly) R.string.edit else R.string.save
 
-            AnimealButton(
-                modifier = Modifier.weight(1f),
-                text = stringResource(id = R.string.save),
-                onClick = onSaveClick,
-            )
-        }
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        AnimealSecondaryButton(
+            modifier = Modifier.weight(1f),
+            text = stringResource(negativeButtonText),
+            onClick = if (readonly) onCancelClick else onDiscardClick,
+        )
+
+        AnimealButton(
+            modifier = Modifier.weight(1f),
+            text = stringResource(positiveButtonText),
+            onClick = if (readonly) onEditClick else onSaveClick,
+        )
     }
 }
 

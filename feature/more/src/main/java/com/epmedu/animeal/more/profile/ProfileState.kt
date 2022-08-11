@@ -12,14 +12,13 @@ data class ProfileState(
     val surnameError: UiText? = null,
     val email: String = "",
     val emailError: UiText? = null,
-    val birthDate: String = "",
     val birthDateError: UiText? = null,
     val formattedBirthDate: String = "",
     val formattedPhoneNumber: String = ""
 ) {
-    val initialDate: LocalDate
+    val birthDate: LocalDate
         get() {
-            return if (birthDate.isBlank()) LocalDate.now()
+            return if (formattedBirthDate.isEmpty()) LocalDate.now()
             else tryParseDate(formattedBirthDate) ?: LocalDate.now()
         }
 

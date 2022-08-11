@@ -20,10 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.login.profile.ui.BirthDateInput
 import com.epmedu.animeal.login.profile.ui.EmailInput
@@ -45,10 +45,7 @@ internal fun FinishProfileScreenUI(
     }
 
     if (showCancellationAlert) {
-        AnimealAlertDialog(
-            title = stringResource(id = R.string.profile_registration_cancel),
-            dismissText = stringResource(id = R.string.no),
-            acceptText = stringResource(id = R.string.yes),
+        CancellationDialog(
             onDismissRequest = { showCancellationAlert = false },
             onDismiss = { showCancellationAlert = false },
             onConfirm = {
@@ -59,29 +56,35 @@ internal fun FinishProfileScreenUI(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopBar(title = stringResource(id = R.string.profile_title))
-        }
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
+        topBar = { TopBar(title = stringResource(R.string.profile_title)) }
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 24.dp)
+                .padding(padding)
+                .padding(horizontal = 24.dp)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = stringResource(id = R.string.profile_subtitle))
-
-            FinishProfileInputForm(
-                state = state,
-                focusManager = focusManager,
-                onEvent = onEvent
-            )
-
+            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(R.string.profile_subtitle),
+                    style = MaterialTheme.typography.subtitle1,
+                )
+                FinishProfileInputForm(
+                    state = state,
+                    focusManager = focusManager,
+                    onEvent = onEvent
+                )
+            }
             FinishProfileButtonsRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(vertical = 24.dp),
                 onCancelClick = {
                     focusManager.clearFocus()
                     showCancellationAlert = true
@@ -140,16 +143,30 @@ private fun FinishProfileInputForm(
         isEnabled = false
     )
     BirthDateInput(
-        value = state.birthDate,
+        value = state.formattedBirthDate,
         error = state.birthDateError?.asString(),
-        initialDate = state.initialDate,
+        datePickerValue = state.birthDate,
         focusManager = focusManager,
         onValueChange = {
             onEvent(FinishProfileEvent.BirthDateChanged(it))
-        },
-        onFocusRelease = {
             onEvent(FinishProfileEvent.ValidateBirthDate)
-        }
+        },
+    )
+}
+
+@Composable
+private fun CancellationDialog(
+    onDismissRequest: () -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AnimealAlertDialog(
+        title = stringResource(id = R.string.profile_registration_cancel),
+        dismissText = stringResource(id = R.string.no),
+        acceptText = stringResource(id = R.string.yes),
+        onDismissRequest = onDismissRequest,
+        onDismiss = onDismiss,
+        onConfirm = onConfirm,
     )
 }
 
@@ -161,12 +178,10 @@ private fun FinishProfileButtonsRow(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(48.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AnimealButton(
+        AnimealSecondaryButton(
             modifier = Modifier.weight(1f),
-            backgroundColor = DisabledButtonColor,
-            contentColor = MaterialTheme.colors.onPrimary,
             text = stringResource(id = R.string.cancel),
             onClick = onCancelClick,
         )

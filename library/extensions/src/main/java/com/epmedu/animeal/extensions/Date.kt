@@ -4,17 +4,19 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-private const val DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN = "d MMMM, yyyy"
+private const val DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN = "d MMM, yyyy"
 private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
 
 val DEFAULT_LOCALE: Locale
     get() = Locale.getDefault()
 
 val DAY_MONTH_COMMA_YEAR_FORMATTER: DateTimeFormatter =
-    DateTimeFormatter.ofPattern(DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN)
+    DateTimeFormatter
+        .ofPattern(DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN)
         .withLocale(DEFAULT_LOCALE)
 
-val DAY_MONTH_YEAR_DOT_FORMATTER = DateTimeFormatter.ofPattern(DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN)
+val DAY_MONTH_YEAR_DOT_FORMATTER = DateTimeFormatter
+    .ofPattern(DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN)
     .withLocale(DEFAULT_LOCALE)
 
 val DEFAULT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
@@ -30,6 +32,6 @@ fun tryParseDate(rawDate: String?): LocalDate? {
         return null
     }
     return runCatching {
-        LocalDate.parse(rawDate, DAY_MONTH_YEAR_DOT_FORMATTER)
+        LocalDate.parse(rawDate, DAY_MONTH_COMMA_YEAR_FORMATTER)
     }.getOrNull()
 }

@@ -1,6 +1,7 @@
 package com.epmedu.animeal.login.code.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -46,16 +47,19 @@ internal fun ResendButton(
         )
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
+                modifier = Modifier.size(12.dp),
                 imageVector = Icons.Default.Refresh,
                 contentDescription = text,
-                modifier = Modifier.size(12.dp)
+                tint = MaterialTheme.colors.onSurface,
             )
             Text(
                 text = text,
-                style = MaterialTheme.typography.caption
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.onSurface,
             )
         }
     }

@@ -1,11 +1,7 @@
 package com.epmedu.animeal.login.code.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -16,7 +12,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -39,7 +34,7 @@ internal fun EnterCodeScreenUi(
             .imePadding(),
         topBar = {
             TopBar(
-                title = "",
+                title = stringResource(R.string.enter_code_title),
                 navigationIcon = {
                     BackButton(onClick = onBack)
                 }
@@ -47,22 +42,18 @@ internal fun EnterCodeScreenUi(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            HeightSpacer(12.dp)
             Text(
-                text = stringResource(R.string.enter_code_title),
-                style = MaterialTheme.typography.h5
-            )
-            Text(
+                modifier = Modifier.padding(top = 12.dp),
                 text = stringResource(R.string.enter_code_subtitle, state.phoneNumber),
-                modifier = Modifier.padding(top = 8.dp)
+                style = MaterialTheme.typography.subtitle1,
             )
             CodeRow(
+                modifier = Modifier.padding(top = 32.dp),
                 code = state.code,
                 isError = state.isError,
                 focusRequester = focusRequester,
-                modifier = Modifier.padding(top = 32.dp),
                 onDigitChange = onDigitChange
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -71,7 +62,7 @@ internal fun EnterCodeScreenUi(
                 resendDelay = state.resendDelay,
                 onClick = onResend,
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .align(Alignment.CenterHorizontally)
             )
         }

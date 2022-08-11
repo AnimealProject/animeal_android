@@ -42,7 +42,7 @@ internal fun DigitField(
         modifier = modifier.size(width = 66.dp, height = 72.dp),
         textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center),
         isError = isError,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = LocalContentColor.current,

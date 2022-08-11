@@ -1,16 +1,10 @@
 package com.epmedu.animeal.foundation.input
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement.Center
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -21,24 +15,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_FORMAT
+import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_LENGTH
+import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
-
-private const val PHONE_NUMBER_PREFIX = "+995"
+import com.epmedu.animeal.resources.R
 
 @Composable
 fun PhoneNumberInput(
@@ -48,62 +39,50 @@ fun PhoneNumberInput(
     value: String,
     isEnabled: Boolean = true
 ) {
-    Column(modifier = modifier) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(bottom = 2.dp),
-            style = TextStyle(
-                color = MaterialTheme.colors.onSurface,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .background(
-                    color = LynxWhite,
-                    shape = RoundedCornerShape(12.dp),
-                ),
-            horizontalArrangement = Center,
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(56.dp)
-                    .padding(start = 16.dp),
-                contentAlignment = Alignment.Center,
+    TextInputField(
+        modifier = modifier,
+        isEnabled = isEnabled,
+        title = title,
+        hint = PHONE_NUMBER_FORMAT,
+        onValueChange = {
+            if (it.length <= PHONE_NUMBER_LENGTH) {
+                onValueChange(it)
+            }
+        },
+        value = value,
+        visualTransformation = PhoneFormatTransformation,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        leadingIcon = {
+            Row(
+                modifier = Modifier.padding(start = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                Image(
+                    contentScale = ContentScale.Crop,
+                    painter = painterResource(R.drawable.ic_georgia),
+                    contentDescription = null
+                )
                 Text(
                     text = PHONE_NUMBER_PREFIX,
-                    style = TextStyle(color = Color.Black, fontSize = 16.sp)
+                    style = TextStyle(
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = 16.sp,
+                    ),
                 )
             }
-            BasicTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp)
-                    .align(CenterVertically),
-                value = value,
-                onValueChange = {
-                    if (it.length <= 9) {
-                        onValueChange(it)
-                    }
-                },
-                textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
-                visualTransformation = PhoneFormatTransformation,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                enabled = isEnabled
-            )
         }
-    }
+    )
 }
 
 object PhoneFormatTransformation : VisualTransformation {
-    private const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
+    internal const val PHONE_NUMBER_LENGTH = 9
+    internal const val PHONE_NUMBER_PREFIX = "+995"
+    internal const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
-            if (text.text.length >= 9) {
+            if (text.text.length >= PHONE_NUMBER_LENGTH) {
                 text.text.substring(0..8)
             } else {
                 text.text

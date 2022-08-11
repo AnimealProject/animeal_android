@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,9 @@ fun TextInputField(
     isEnabled: Boolean = true,
     errorText: String? = null,
     onClearFocus: () -> Unit = {},
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -76,6 +80,9 @@ fun TextInputField(
                     onClearFocus()
             },
             borderColor = borderColor,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
         )
@@ -103,6 +110,9 @@ private fun TextInputFieldBox(
     onValueChange: (String) -> Unit,
     onFocusChange: (FocusState) -> Unit,
     borderColor: Color,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation,
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
 ) {
@@ -118,6 +128,7 @@ private fun TextInputFieldBox(
         value = value,
         onValueChange = { onValueChange(it) },
         textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
+        visualTransformation = visualTransformation,
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSurface,
             backgroundColor = Color.Transparent,
@@ -125,6 +136,8 @@ private fun TextInputFieldBox(
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
         ),
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         placeholder = {
             Text(
                 text = hint,
