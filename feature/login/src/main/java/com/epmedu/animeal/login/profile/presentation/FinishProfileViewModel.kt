@@ -43,7 +43,8 @@ internal class FinishProfileViewModel @Inject constructor(
                 updateState {
                     copy(
                         formattedBirthDate = formatDateToString(
-                            event.birthDate, DAY_MONTH_COMMA_YEAR_FORMATTER
+                            date = event.birthDate,
+                            formatter = DAY_MONTH_COMMA_YEAR_FORMATTER
                         )
                     )
                 }
