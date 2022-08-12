@@ -13,8 +13,6 @@ fun SplashScreen() {
     val viewModel: SplashViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.verifyProfileSaved()
-
         viewModel.event.collectLatest {
             when (it) {
                 SplashViewModel.Event.NavigateToHome -> {
@@ -33,6 +31,10 @@ fun SplashScreen() {
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.verifyProfileSaved()
     }
 
     SplashScreenUI()

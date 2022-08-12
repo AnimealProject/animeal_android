@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,7 +14,6 @@ class SplashViewModel @Inject constructor(
 
     fun verifyProfileSaved() {
         viewModelScope.launch {
-            delay(1000)
             if (profileRepository.isProfileSaved()) {
                 sendEvent(Event.NavigateToHome)
             } else {
