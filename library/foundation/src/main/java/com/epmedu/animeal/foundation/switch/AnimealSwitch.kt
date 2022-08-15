@@ -95,7 +95,6 @@ private fun TabIndicator(
     tabPositions: List<TabPosition>,
     tab: Tab
 ) {
-
     val transition = updateTransition(
         targetState = tab,
         label = INDICATOR_TRANSITION_LABEL

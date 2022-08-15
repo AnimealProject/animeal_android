@@ -73,11 +73,13 @@ fun TextInputField(
             isEnabled = isEnabled,
             onValueChange = onValueChange,
             onFocusChange = { focusState ->
-                if (focusState.isFocused && !focusedDirty)
+                if (focusState.isFocused && !focusedDirty) {
                     focusedDirty = true
+                }
 
-                if (!focusState.isFocused && focusedDirty)
+                if (!focusState.isFocused && focusedDirty) {
                     onClearFocus()
+                }
             },
             borderColor = borderColor,
             leadingIcon = leadingIcon,

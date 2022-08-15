@@ -1,4 +1,5 @@
 import com.epmedu.animeal.extension.propertyInt
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.konan.file.File
 import org.jetbrains.kotlin.konan.properties.loadProperties
@@ -55,6 +56,12 @@ allprojects {
 }
 
 tasks {
+    withType<DependencyUpdatesTask> {
+        rejectVersionIf {
+            isNonStable(candidate.version)
+        }
+    }
+
     registering(Delete::class) {
         delete(buildDir)
     }
@@ -75,4 +82,11 @@ tasks {
 
         properties.saveToFile(File("$rootDir/app/version.properties"))
     }
+}
+
+fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA", "RC").any { version.toUpperCase().contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return isStable.not()
 }
