@@ -33,7 +33,7 @@ internal fun SignInScreenUI(
         color = MaterialTheme.colors.background,
     ) {
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             OnBoarding()
             ButtonsBlock(
@@ -55,7 +55,7 @@ private fun ColumnScope.OnBoarding(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
-            modifier = modifier.padding(24.dp),
+            modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {

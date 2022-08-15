@@ -8,7 +8,7 @@ sealed interface UiText {
     data class RawString(val value: String) : UiText
     class StringResource(@StringRes val resId: Int, vararg val args: Any) : UiText
 
-    @Suppress("SpreadOperator")
+    @Suppress("SpreadOperator", "TopLevelComposableFunctions")
     @Composable
     fun asString(): String {
         return when (this) {

@@ -17,7 +17,7 @@ fun DatePickerDialog(
     onPositiveClick: () -> Unit,
     onNegativeClick: () -> Unit,
     onCloseRequest: () -> Unit,
-    onDatePicked: (LocalDate) -> Unit,
+    onPickDate: (LocalDate) -> Unit,
 ) {
     MaterialDialog(
         dialogState = state,
@@ -41,7 +41,7 @@ fun DatePickerDialog(
                 it.isBefore(LocalDate.now().plusDays(1))
             }
         ) {
-            onDatePicked(it)
+            onPickDate(it)
         }
     }
 }
@@ -55,6 +55,6 @@ private fun DatePickerDialogPreview() {
         onPositiveClick = {},
         onNegativeClick = {},
         onCloseRequest = {},
-        onDatePicked = {},
+        onPickDate = {},
     )
 }

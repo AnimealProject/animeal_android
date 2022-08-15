@@ -49,7 +49,7 @@ fun BirthDateInput(
         onPositiveClick = { showDialog = false },
         onNegativeClick = { showDialog = false },
         onCloseRequest = { showDialog = false },
-        onDatePicked = {
+        onPickDate = {
             onValueChange(it)
             showDialog = false
         }
