@@ -5,7 +5,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SplashScreen() {
@@ -13,7 +12,7 @@ fun SplashScreen() {
     val viewModel: SplashViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.event.collectLatest {
+        viewModel.event.collect {
             when (it) {
                 SplashViewModel.Event.NavigateToHome -> {
                     navigator.navigate(MainScreenRoute.Tabs.name) {
