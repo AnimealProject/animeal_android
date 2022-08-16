@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.login.OnboardingScreenRoute
 import com.epmedu.animeal.login.code.domain.EnterCodeViewModel
+import com.epmedu.animeal.login.code.domain.EnterCodeViewModel.Event
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
@@ -36,7 +37,7 @@ internal fun EnterCodeScreen() {
         focusRequester.requestFocus()
 
         viewModel.event.collect {
-            if (it is EnterCodeViewModel.Event.NavigateToFinishProfile) {
+            if (it is Event.NavigateToFinishProfile) {
                 navigator.navigate(OnboardingScreenRoute.FinishProfile.name)
             }
         }

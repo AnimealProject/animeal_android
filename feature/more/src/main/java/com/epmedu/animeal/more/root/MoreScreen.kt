@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.more.MoreViewModel
+import com.epmedu.animeal.more.MoreViewModel.Event
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
@@ -15,7 +16,7 @@ internal fun MoreScreen() {
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
-            if (it is MoreViewModel.Event.NavigateToOnboarding) {
+            if (it is Event.NavigateToOnboarding) {
                 navigator.parent?.parent?.navigate(MainScreenRoute.Onboarding.name) {
                     popUpTo(MainScreenRoute.Tabs.name) {
                         inclusive = true
