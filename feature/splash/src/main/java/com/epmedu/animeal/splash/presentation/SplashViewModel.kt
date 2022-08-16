@@ -1,26 +1,29 @@
-package com.epmedu.animeal.more
+package com.epmedu.animeal.splash.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
 import com.epmedu.animeal.common.domain.StateViewModel
-import com.epmedu.animeal.more.MoreViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MoreViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<Unit, Event>(Unit) {
+) : StateViewModel<Unit, SplashViewModel.Event>(Unit) {
 
-    internal fun logout() {
+    fun verifyProfileSaved() {
         viewModelScope.launch {
-            profileRepository.clearProfile()
-            sendEvent(Event.NavigateToOnboarding)
+            if (profileRepository.isProfileSaved()) {
+                sendEvent(Event.NavigateToHome)
+            } else {
+                sendEvent(Event.NavigateToOnboarding)
+            }
         }
     }
 
     sealed interface Event {
+        object NavigateToHome : Event
         object NavigateToOnboarding : Event
     }
 }

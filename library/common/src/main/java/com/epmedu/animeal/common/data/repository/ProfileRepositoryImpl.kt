@@ -10,9 +10,7 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.lastNameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
 import com.epmedu.animeal.common.data.model.Profile
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -39,6 +37,22 @@ class ProfileRepositoryImpl @Inject constructor(
                 preference[emailKey] = profile.email
                 preference[birthDateKey] = profile.birthDate
             }
+        }
+    }
+
+    override suspend fun clearProfile() {
+        dataStore.edit {
+            it.remove(firstNameKey)
+            it.remove(lastNameKey)
+            it.remove(phoneNumberKey)
+            it.remove(emailKey)
+            it.remove(birthDateKey)
+        }
+    }
+
+    override suspend fun isProfileSaved(): Boolean {
+        return with(getProfile().first()) {
+            listOf(firstName, lastName, phoneNumber, email, birthDate).all { it.isNotEmpty() }
         }
     }
 }

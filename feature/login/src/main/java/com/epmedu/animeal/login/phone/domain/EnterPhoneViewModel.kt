@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
     private val repository: EnterPhoneRepository
-) : StateViewModel<EnterPhoneState>(initialState = EnterPhoneState()) {
+) : StateViewModel<EnterPhoneState, Unit>(initialState = EnterPhoneState()) {
 
     fun updatePhoneNumber(newNumber: String) {
         updateState {

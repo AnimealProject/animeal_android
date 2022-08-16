@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<ProfileState>(initialState = ProfileState()) {
+) : StateViewModel<ProfileState, Unit>(initialState = ProfileState()) {
 
     private val validator: ProfileValidator = ProfileValidator()
 

@@ -1,29 +1,39 @@
 package com.epmedu.animeal.splash.presentation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen() {
-    val navController = LocalNavigator.currentOrThrow
-    val coroutineScope = rememberCoroutineScope()
+    val navigator = LocalNavigator.currentOrThrow
+    val viewModel: SplashViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            // todo delete it after login logic implementation
-            delay(2000)
-            navController.navigate(MainScreenRoute.Onboarding.name) {
-                popUpTo(MainScreenRoute.Splash.name) {
-                    inclusive = true
+        viewModel.event.collect {
+            when (it) {
+                SplashViewModel.Event.NavigateToHome -> {
+                    navigator.navigate(MainScreenRoute.Tabs.name) {
+                        popUpTo(MainScreenRoute.Splash.name) {
+                            inclusive = true
+                        }
+                    }
+                }
+                SplashViewModel.Event.NavigateToOnboarding -> {
+                    navigator.navigate(MainScreenRoute.Onboarding.name) {
+                        popUpTo(MainScreenRoute.Splash.name) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.verifyProfileSaved()
     }
 
     SplashScreenUI()
