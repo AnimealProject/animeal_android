@@ -36,7 +36,7 @@ internal fun EnterCodeScreen() {
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
 
-        viewModel.event.collect {
+        viewModel.events.collect {
             if (it is Event.NavigateToFinishProfile) {
                 navigator.navigate(OnboardingScreenRoute.FinishProfile.name)
             }

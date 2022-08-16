@@ -1,9 +1,13 @@
 package com.epmedu.animeal.login.profile.presentation
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.model.Profile
 import com.epmedu.animeal.common.data.repository.ProfileRepository
-import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.common.presentation.event.EventSource
+import com.epmedu.animeal.common.presentation.event.EventSourceImpl
+import com.epmedu.animeal.common.presentation.state.StateHolder
+import com.epmedu.animeal.common.presentation.state.StateHolderImpl
 import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.common.validation.ProfileValidator
@@ -15,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<FinishProfileState, Event>(initialState = FinishProfileState()) {
+) : ViewModel(),
+    StateHolder<FinishProfileState> by StateHolderImpl(initialState = FinishProfileState()),
+    EventSource<Event> by EventSourceImpl() {
 
     private val validator: ProfileValidator = ProfileValidator()
 

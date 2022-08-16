@@ -26,7 +26,7 @@ fun FinishProfileScreen() {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.event.collect {
+        viewModel.events.collect {
             when (it) {
                 FinishProfileViewModel.Event.Saved -> {
                     navigator.navigateToTabs()

@@ -1,8 +1,10 @@
 package com.epmedu.animeal.splash.presentation
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
-import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.common.presentation.event.EventSource
+import com.epmedu.animeal.common.presentation.event.EventSourceImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -10,7 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<Unit, SplashViewModel.Event>(Unit) {
+) : ViewModel(),
+    EventSource<SplashViewModel.Event> by EventSourceImpl() {
 
     fun verifyProfileSaved() {
         viewModelScope.launch {

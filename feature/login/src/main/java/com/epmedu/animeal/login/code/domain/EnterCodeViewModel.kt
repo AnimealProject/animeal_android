@@ -1,7 +1,11 @@
 package com.epmedu.animeal.login.code.domain
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.common.presentation.event.EventSource
+import com.epmedu.animeal.common.presentation.event.EventSourceImpl
+import com.epmedu.animeal.common.presentation.state.StateHolder
+import com.epmedu.animeal.common.presentation.state.StateHolderImpl
 import com.epmedu.animeal.login.code.data.EnterCodeRepository
 import com.epmedu.animeal.login.code.domain.model.EnterCodeState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
     private val repository: EnterCodeRepository
-) : StateViewModel<EnterCodeState, EnterCodeViewModel.Event>(EnterCodeState()) {
+) : ViewModel(),
+    StateHolder<EnterCodeState> by StateHolderImpl(initialState = EnterCodeState()),
+    EventSource<EnterCodeViewModel.Event> by EventSourceImpl() {
 
     init {
         viewModelScope.launch { getPhoneNumber() }
