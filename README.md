@@ -7,5 +7,3 @@
 
 #### - gradle-versions-plugin - checks the latest version of libraries
 `gradle dependencyUpdate`
-
-test
