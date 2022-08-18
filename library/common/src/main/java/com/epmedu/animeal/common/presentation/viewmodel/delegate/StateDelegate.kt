@@ -1,8 +1,8 @@
-package com.epmedu.animeal.common.presentation.state
+package com.epmedu.animeal.common.presentation.viewmodel.delegate
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface StateHolder<State> {
+interface StateDelegate<State> {
 
     val stateFlow: StateFlow<State>
 

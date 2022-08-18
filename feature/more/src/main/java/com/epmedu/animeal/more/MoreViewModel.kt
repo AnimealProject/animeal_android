@@ -3,8 +3,8 @@ package com.epmedu.animeal.more
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.repository.ProfileRepository
-import com.epmedu.animeal.common.presentation.event.EventSource
-import com.epmedu.animeal.common.presentation.event.EventSourceImpl
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.more.MoreViewModel.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import javax.inject.Inject
 internal class MoreViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : ViewModel(),
-    EventSource<Event> by EventSourceImpl() {
+    EventDelegate<Event> by DefaultEventDelegate() {
 
     internal fun logout() {
         viewModelScope.launch {

@@ -1,8 +1,8 @@
-package com.epmedu.animeal.common.presentation.event
+package com.epmedu.animeal.common.presentation.viewmodel.delegate
 
 import kotlinx.coroutines.flow.SharedFlow
 
-interface EventSource<Event> {
+interface EventDelegate<Event> {
 
     val events: SharedFlow<Event>
 

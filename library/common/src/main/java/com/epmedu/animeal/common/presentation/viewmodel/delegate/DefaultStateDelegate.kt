@@ -1,9 +1,9 @@
-package com.epmedu.animeal.common.presentation.state
+package com.epmedu.animeal.common.presentation.viewmodel.delegate
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class StateHolderImpl<State>(initialState: State) : StateHolder<State> {
+class DefaultStateDelegate<State>(initialState: State) : StateDelegate<State> {
 
     private val _stateFlow = MutableStateFlow(initialState)
     override val stateFlow = _stateFlow.asStateFlow()

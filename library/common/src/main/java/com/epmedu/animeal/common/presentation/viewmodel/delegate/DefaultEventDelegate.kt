@@ -1,9 +1,9 @@
-package com.epmedu.animeal.common.presentation.event
+package com.epmedu.animeal.common.presentation.viewmodel.delegate
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class EventSourceImpl<Event> : EventSource<Event> {
+class DefaultEventDelegate<Event> : EventDelegate<Event> {
 
     private val _events = MutableSharedFlow<Event>()
     override val events = _events.asSharedFlow()
