@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.epmedu.animeal.common.screenRoute.MainScreenRoute
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -25,7 +27,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             AnimealTheme {
                 AnimatedScreenNavHost(
-                    startDestination = MainScreenRoute.Splash.name
+                    startDestination = MainScreenRoute.Splash.name,
+                    modifier = Modifier.navigationBarsPadding()
                 ) {
                     screen(MainScreenRoute.Splash.name) { SplashScreen() }
                     screen(MainScreenRoute.Onboarding.name) { OnboardingScreen() }

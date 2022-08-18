@@ -2,8 +2,6 @@ package com.epmedu.animeal.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -67,9 +65,7 @@ fun AnimatedScreenNavHost(
     ) {
         AnimatedNavHost(
             startDestination = startDestination,
-            modifier = modifier
-                .statusBarsPadding()
-                .navigationBarsPadding(),
+            modifier = modifier,
             navController = navController,
             contentAlignment = contentAlignment,
             route = route,

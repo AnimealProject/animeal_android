@@ -1,6 +1,8 @@
 package com.epmedu.animeal.login
 
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.epmedu.animeal.login.code.presentation.EnterCodeScreen
 import com.epmedu.animeal.login.phone.presentation.EnterPhoneScreen
 import com.epmedu.animeal.login.profile.presentation.FinishProfileScreen
@@ -10,6 +12,7 @@ import com.epmedu.animeal.navigation.ScreenNavHost
 @Composable
 fun OnboardingScreen() {
     ScreenNavHost(
+        modifier = Modifier.systemBarsPadding(),
         startDestination = OnboardingScreenRoute.SignIn.name
     ) {
         screen(OnboardingScreenRoute.SignIn.name) { SignInScreen() }

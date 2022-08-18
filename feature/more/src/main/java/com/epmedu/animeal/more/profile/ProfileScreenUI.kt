@@ -60,7 +60,8 @@ internal fun ProfileScreenUI(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding(),
+            .imePadding()
+            .systemBarsPadding(),
         topBar = {
             ProfileTopBar(onBack = {
                 if (state.readonly) onBack()

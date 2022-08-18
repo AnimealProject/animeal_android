@@ -2,11 +2,14 @@ package com.epmedu.animeal.foundation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import com.epmedu.animeal.foundation.theme.AnimealColor.Light
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Light.SeaSerpent,
@@ -34,6 +37,7 @@ fun AnimealTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
@@ -43,7 +47,20 @@ fun AnimealTheme(
     MaterialTheme(
         colors = colors,
         typography = Typography,
-        shapes = Shapes,
-        content = content,
-    )
+        shapes = Shapes
+    ) {
+        LaunchedEffect(Unit) {
+            systemUiController.run {
+                setNavigationBarColor(
+                    color = Color.Transparent
+                )
+                setSystemBarsColor(
+                    color = Color.Transparent,
+                    darkIcons = darkTheme.not()
+                )
+            }
+        }
+
+        Surface(content = content)
+    }
 }
