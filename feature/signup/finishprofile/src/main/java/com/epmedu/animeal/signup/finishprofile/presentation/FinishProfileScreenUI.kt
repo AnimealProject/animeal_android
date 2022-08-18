@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
 import com.epmedu.animeal.signup.finishprofile.presentation.ui.CancellationDialog
 import com.epmedu.animeal.signup.finishprofile.presentation.ui.FinishProfileButtonsRow
 import com.epmedu.animeal.signup.finishprofile.presentation.ui.FinishProfileInputForm
@@ -86,7 +87,7 @@ internal fun FinishProfileScreenUI(
                 },
                 onDoneClick = {
                     focusManager.clearFocus()
-                    onEvent(FinishProfileScreenEvent.Submit)
+                    onEvent(Submit)
                 }
             )
         }

@@ -3,6 +3,7 @@ package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.domain.StateViewModel
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -66,7 +67,7 @@ internal class EnterCodeViewModel @Inject constructor(
             updateState { copy(isError = !isCodeCorrect) }
 
             viewModelScope.launch {
-                sendEvent(EnterCodeEvent.NavigateToFinishProfile)
+                sendEvent(NavigateToFinishProfile)
             }
         }
     }

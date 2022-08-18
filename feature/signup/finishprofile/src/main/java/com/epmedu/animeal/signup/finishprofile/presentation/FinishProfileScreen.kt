@@ -10,7 +10,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.navigation.route.MainRoute
 import com.epmedu.animeal.navigation.route.SignUpRoute
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel
 
 @Composable
@@ -31,7 +31,7 @@ fun FinishProfileScreen() {
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                FinishProfileEvent.Saved -> {
+                Saved -> {
                     navigator.navigateToTabs()
                 }
             }

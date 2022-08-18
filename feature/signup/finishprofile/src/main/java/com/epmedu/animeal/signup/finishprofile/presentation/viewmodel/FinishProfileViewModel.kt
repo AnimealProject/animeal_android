@@ -8,6 +8,16 @@ import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.common.validation.ProfileValidator
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.BirthDateChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.EmailChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.NameChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.SurnameChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateBirthDate
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateEmail
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateName
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateSurname
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,16 +35,16 @@ internal class FinishProfileViewModel @Inject constructor(
 
     fun handleEvents(event: FinishProfileScreenEvent) {
         when (event) {
-            is FinishProfileScreenEvent.NameChanged -> {
+            is NameChanged -> {
                 updateState { copy(name = event.name) }
             }
-            is FinishProfileScreenEvent.SurnameChanged -> {
+            is SurnameChanged -> {
                 updateState { copy(surname = event.surname) }
             }
-            is FinishProfileScreenEvent.EmailChanged -> {
+            is EmailChanged -> {
                 updateState { copy(email = event.email) }
             }
-            is FinishProfileScreenEvent.BirthDateChanged -> {
+            is BirthDateChanged -> {
                 updateState {
                     copy(
                         formattedBirthDate = formatDateToString(
@@ -44,25 +54,25 @@ internal class FinishProfileViewModel @Inject constructor(
                     )
                 }
             }
-            FinishProfileScreenEvent.Submit -> {
+            Submit -> {
                 submitData()
             }
-            FinishProfileScreenEvent.ValidateName -> {
+            ValidateName -> {
                 updateState {
                     copy(nameError = validator.validateName(state.name).errorMessage)
                 }
             }
-            FinishProfileScreenEvent.ValidateSurname -> {
+            ValidateSurname -> {
                 updateState {
                     copy(surnameError = validator.validateSurname(state.surname).errorMessage)
                 }
             }
-            FinishProfileScreenEvent.ValidateEmail -> {
+            ValidateEmail -> {
                 updateState {
                     copy(emailError = validator.validateEmail(state.email).errorMessage)
                 }
             }
-            FinishProfileScreenEvent.ValidateBirthDate -> {
+            ValidateBirthDate -> {
                 updateState {
                     copy(birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage)
                 }
@@ -96,7 +106,7 @@ internal class FinishProfileViewModel @Inject constructor(
         )
         viewModelScope.launch {
             profileRepository.saveProfile(profile).collect {
-                sendEvent(FinishProfileEvent.Saved)
+                sendEvent(Saved)
             }
         }
     }

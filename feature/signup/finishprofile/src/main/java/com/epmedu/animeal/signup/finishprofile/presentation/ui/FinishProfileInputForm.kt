@@ -14,6 +14,14 @@ import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.BirthDateChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.EmailChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.NameChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.SurnameChanged
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateBirthDate
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateEmail
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateName
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ValidateSurname
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileState
 
 @Composable
@@ -27,10 +35,10 @@ internal fun FinishProfileInputForm(
         error = state.nameError?.asString(),
         focusManager = focusManager,
         onValueChange = {
-            onEvent(FinishProfileScreenEvent.NameChanged(it))
+            onEvent(NameChanged(it))
         },
         onFocusRelease = {
-            onEvent(FinishProfileScreenEvent.ValidateName)
+            onEvent(ValidateName)
         }
     )
     SurnameInput(
@@ -38,10 +46,10 @@ internal fun FinishProfileInputForm(
         error = state.surnameError?.asString(),
         focusManager = focusManager,
         onValueChange = {
-            onEvent(FinishProfileScreenEvent.SurnameChanged(it))
+            onEvent(SurnameChanged(it))
         },
         onFocusRelease = {
-            onEvent(FinishProfileScreenEvent.ValidateSurname)
+            onEvent(ValidateSurname)
         }
     )
     EmailInput(
@@ -49,10 +57,10 @@ internal fun FinishProfileInputForm(
         error = state.emailError?.asString(),
         focusManager = focusManager,
         onValueChange = {
-            onEvent(FinishProfileScreenEvent.EmailChanged(it))
+            onEvent(EmailChanged(it))
         },
         onFocusRelease = {
-            onEvent(FinishProfileScreenEvent.ValidateEmail)
+            onEvent(ValidateEmail)
         }
     )
     PhoneNumberInput(
@@ -66,8 +74,8 @@ internal fun FinishProfileInputForm(
         datePickerValue = state.birthDate,
         focusManager = focusManager,
         onValueChange = {
-            onEvent(FinishProfileScreenEvent.BirthDateChanged(it))
-            onEvent(FinishProfileScreenEvent.ValidateBirthDate)
+            onEvent(BirthDateChanged(it))
+            onEvent(ValidateBirthDate)
         },
     )
 }
