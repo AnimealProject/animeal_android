@@ -51,7 +51,7 @@ internal class EnterCodeViewModel @Inject constructor(
                 code = getNewCodeWithReplacedDigit(position, digit)
             )
         }
-        validateCodeIfFull()
+        validateCodeIfFilled()
     }
 
     private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
@@ -61,20 +61,29 @@ internal class EnterCodeViewModel @Inject constructor(
         }
     }
 
-    private fun validateCodeIfFull() {
-        if (state.code.all { it != null }) {
-            val isCodeCorrect = isCodeCorrect()
-            updateState { copy(isError = !isCodeCorrect) }
-
-            viewModelScope.launch {
-                sendEvent(Event.NavigateToFinishProfile)
-            }
+    private fun validateCodeIfFilled() {
+        if (state.isCodeFilled()) {
+            validateCode()
         }
     }
 
-    private fun isCodeCorrect(): Boolean {
-        val codeString = state.code.joinToString("")
-        return codeString == CORRECT_CODE
+    private fun validateCode() {
+        updateState {
+            copy(
+                isError = if (isCodeEquals(CORRECT_CODE)) {
+                    navigateToFinishProfile()
+                    false
+                } else {
+                    true
+                }
+            )
+        }
+    }
+
+    private fun navigateToFinishProfile() {
+        viewModelScope.launch {
+            sendEvent(Event.NavigateToFinishProfile)
+        }
     }
 
     companion object {
