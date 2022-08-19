@@ -1,14 +1,17 @@
 package com.epmedu.animeal.more.help
 
+import androidx.lifecycle.ViewModel
 import com.epmedu.animeal.common.component.BuildConfigProvider
-import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 internal class HelpViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider
-) : StateViewModel<HelpState>(initialState = HelpState()) {
+) : ViewModel(),
+    StateDelegate<HelpState> by DefaultStateDelegate(initialState = HelpState()) {
 
     init {
         updateState {
