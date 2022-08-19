@@ -8,7 +8,7 @@ import androidx.core.view.WindowCompat
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.navigation.route.MainRoute
-import com.epmedu.animeal.signup.signup.SignUpScreen
+import com.epmedu.animeal.signup.SignUpScreen
 import com.epmedu.animeal.splash.presentation.SplashScreen
 import com.epmedu.animeal.tabs.presentation.TabsScreen
 import dagger.hilt.android.AndroidEntryPoint

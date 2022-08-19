@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.signup
+package com.epmedu.animeal.signup
 
 import androidx.compose.runtime.Composable
 import com.epmedu.animeal.navigation.ScreenNavHost
