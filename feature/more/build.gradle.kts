@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.feature.signup.finishprofile)
+    implementation(projects.feature.signupflow.finishprofile)
 
     implementation(projects.library.common)
     implementation(projects.library.extensions)
