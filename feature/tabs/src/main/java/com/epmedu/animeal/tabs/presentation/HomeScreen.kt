@@ -68,7 +68,7 @@ private fun Maps() {
             modifier = Modifier
                 .align(alignment = Alignment.TopCenter)
                 .padding(top = 24.dp),
-            onTabSelected = {}
+            onSelectTab = {}
         )
         Text(text = stringResource(R.string.home), modifier = Modifier.align(Alignment.Center))
     }

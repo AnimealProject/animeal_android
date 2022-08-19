@@ -2,7 +2,7 @@ package com.epmedu.animeal.foundation.button
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +22,7 @@ fun AnimealSecondaryButton(
 ) {
     Button(
         modifier = modifier
-            .height(60.dp)
+            .heightIn(min = 60.dp)
             .fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = DisabledButtonColor,

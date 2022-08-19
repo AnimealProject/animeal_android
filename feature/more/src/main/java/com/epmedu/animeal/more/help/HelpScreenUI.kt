@@ -46,7 +46,7 @@ internal fun HelpScreenUI(
 
 @Preview
 @Composable
-fun HelpScreenUIPreview() {
+private fun HelpScreenUIPreview() {
     AnimealTheme {
         HelpScreenUI(
             helpState = HelpState(),
