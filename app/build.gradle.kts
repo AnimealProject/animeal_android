@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.signup)
+    implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabs)
 
