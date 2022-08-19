@@ -13,6 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
@@ -24,6 +26,17 @@ internal class EnterCodeViewModel @Inject constructor(
     init {
         viewModelScope.launch { getPhoneNumber() }
         viewModelScope.launch { launchResendTimer() }
+        stateFlow
+            .filterNotNull()
+            .onEach {
+                updateState {
+                    copy(
+                        isError = !isCodeEquals(CORRECT_CODE).also { isCorrect ->
+                            if (isCorrect) navigateToFinishProfile()
+                        }
+                    )
+                }
+            }
     }
 
     private suspend fun launchResendTimer() {
