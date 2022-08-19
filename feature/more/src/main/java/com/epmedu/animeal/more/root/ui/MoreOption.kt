@@ -21,7 +21,7 @@ internal fun MoreOption(
     ListItem(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .heightIn(min = 48.dp)
             .clickable { onClick() }
             .padding(start = 8.dp, end = 8.dp),
         text = {

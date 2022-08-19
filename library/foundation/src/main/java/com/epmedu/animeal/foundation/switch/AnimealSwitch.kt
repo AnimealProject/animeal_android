@@ -6,25 +6,13 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,13 +32,13 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 /**
  * Shows the bar that holds 2 tabs.
  *
- * @param onTabSelected Called when the tab is switched.
+ * @param onSelectTab Called when the tab is switched.
  * @param modifier The [Modifier].
  */
 @Composable
 fun AnimealSwitch(
     modifier: Modifier = Modifier,
-    onTabSelected: (tab: Tab) -> Unit
+    onSelectTab: (tab: Tab) -> Unit
 ) {
     var currentTab by remember { mutableStateOf(Tab.Cats) }
 
@@ -66,19 +54,19 @@ fun AnimealSwitch(
         divider = {}
     ) {
         AnimalTab(
-            tab = Tab.Dogs,
+            titleId = Tab.Dogs.title,
             selected = currentTab == Tab.Dogs,
             onClick = {
-                onTabSelected(it)
-                currentTab = it
+                onSelectTab(Tab.Dogs)
+                currentTab = Tab.Dogs
             }
         )
         AnimalTab(
-            tab = Tab.Cats,
+            titleId = Tab.Cats.title,
             selected = currentTab == Tab.Cats,
             onClick = {
-                onTabSelected(it)
-                currentTab = it
+                onSelectTab(Tab.Cats)
+                currentTab = Tab.Cats
             }
         )
     }
@@ -138,20 +126,20 @@ private fun TabIndicator(
 @Composable
 private fun AnimalTab(
     modifier: Modifier = Modifier,
-    tab: Tab,
+    titleId: Int,
     selected: Boolean,
-    onClick: (Tab) -> Unit
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .padding(all = 2.dp)
             .clip(shape = RoundedCornerShape(size = 9.dp))
-            .clickable(onClick = { onClick(tab) }),
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = tab.title),
+            text = stringResource(id = titleId),
             fontSize = 14.sp,
             modifier = Modifier.zIndex(1f),
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
@@ -167,8 +155,8 @@ enum class Tab(@StringRes val title: Int) {
 @Preview(showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun AnimealSwitchPreview() {
+private fun AnimealSwitchPreview() {
     AnimealTheme {
-        AnimealSwitch(onTabSelected = { })
+        AnimealSwitch(onSelectTab = { })
     }
 }
