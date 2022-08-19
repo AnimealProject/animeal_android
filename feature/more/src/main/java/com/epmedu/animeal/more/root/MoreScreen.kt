@@ -15,7 +15,7 @@ internal fun MoreScreen() {
     val navigator = LocalNavigator.currentOrThrow
 
     LaunchedEffect(Unit) {
-        viewModel.event.collect {
+        viewModel.events.collect {
             if (it is Event.NavigateToOnboarding) {
                 navigator.parent?.parent?.navigate(MainRoute.SignUp.name) {
                     popUpTo(MainRoute.Tabs.name) {

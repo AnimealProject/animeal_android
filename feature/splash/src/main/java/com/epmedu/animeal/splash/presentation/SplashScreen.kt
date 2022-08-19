@@ -12,7 +12,7 @@ fun SplashScreen() {
     val viewModel: SplashViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.event.collect {
+        viewModel.events.collect {
             when (it) {
                 SplashViewModel.Event.NavigateToHome -> {
                     navigator.navigate(MainRoute.Tabs.name) {

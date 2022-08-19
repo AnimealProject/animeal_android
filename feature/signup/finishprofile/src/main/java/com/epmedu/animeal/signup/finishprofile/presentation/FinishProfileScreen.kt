@@ -29,7 +29,7 @@ fun FinishProfileScreen() {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.event.collect {
+        viewModel.events.collect {
             when (it) {
                 Saved -> {
                     navigator.navigateToTabs()
