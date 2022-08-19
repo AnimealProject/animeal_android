@@ -45,7 +45,6 @@ fun BirthDateInput(
         value = value,
         trailingIcon = {
             IconButton(
-                modifier = modifier,
                 onClick = {
                     if (clickable) onClick()
                 },

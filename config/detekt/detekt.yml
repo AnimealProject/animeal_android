@@ -855,3 +855,24 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+compose:
+  ReusedModifierInstance:
+    active: true
+  UnnecessaryEventHandlerParameter:
+    active: true
+  ComposableEventParameterNaming:
+    active: true
+  ComposableParametersOrdering:
+    active: false
+  ModifierHeightWithText:
+    active: true
+  ModifierParameterPosition:
+    active: false
+  ModifierDefaultValue:
+    active: true
+  MissingModifierDefaultValue:
+    active: true
+  PublicComposablePreview:
+    active: true
+  TopLevelComposableFunctions:
+    active: true
