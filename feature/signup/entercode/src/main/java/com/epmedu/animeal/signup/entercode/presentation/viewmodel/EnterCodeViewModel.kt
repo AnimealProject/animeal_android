@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @HiltViewModel
@@ -37,6 +38,13 @@ internal class EnterCodeViewModel @Inject constructor(
                     )
                 }
             }
+            .launchIn(viewModelScope)
+    }
+
+    private fun navigateToFinishProfile() {
+        viewModelScope.launch {
+            sendEvent(NavigateToFinishProfile)
+        }
     }
 
     private suspend fun launchResendTimer() {
@@ -70,38 +78,12 @@ internal class EnterCodeViewModel @Inject constructor(
                 code = getNewCodeWithReplacedDigit(position, digit)
             )
         }
-        validateCodeIfFilled()
     }
 
     private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
         return state.code.mapIndexed { index, currentDigit ->
             if (index == position) newDigit
             else currentDigit
-        }
-    }
-
-    private fun validateCodeIfFilled() {
-        if (state.isCodeFilled()) {
-            validateCode()
-        }
-    }
-
-    private fun validateCode() {
-        updateState {
-            copy(
-                isError = if (isCodeEquals(CORRECT_CODE)) {
-                    navigateToFinishProfile()
-                    false
-                } else {
-                    true
-                }
-            )
-        }
-    }
-
-    private fun navigateToFinishProfile() {
-        viewModelScope.launch {
-            sendEvent(NavigateToFinishProfile)
         }
     }
 
