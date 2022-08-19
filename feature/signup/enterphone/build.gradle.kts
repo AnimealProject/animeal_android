@@ -1,13 +1,11 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 dependencies {
-    implementation(projects.feature.signup.finishprofile)
-
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
@@ -15,13 +13,12 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(libs.androidx.datastore)
-
     implementation(libs.androidx.viewmodel)
-    implementation(libs.androidx.viewmodel.compose)
 
+    implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
-    implementation(libs.compose.material)
+    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
