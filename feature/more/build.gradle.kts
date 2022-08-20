@@ -6,12 +6,13 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.feature.signupflow.finishprofile)
+
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
-    implementation(projects.feature.login)
 
     implementation(libs.androidx.datastore)
 

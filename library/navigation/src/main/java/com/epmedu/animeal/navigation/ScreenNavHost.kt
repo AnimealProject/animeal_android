@@ -21,6 +21,7 @@ import com.epmedu.animeal.navigation.navigator.Navigator
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
+@Suppress("ReusedModifierInstance")
 @Composable
 fun ScreenNavHost(
     modifier: Modifier = Modifier,
@@ -43,7 +44,7 @@ fun ScreenNavHost(
     }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "ReusedModifierInstance")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedScreenNavHost(

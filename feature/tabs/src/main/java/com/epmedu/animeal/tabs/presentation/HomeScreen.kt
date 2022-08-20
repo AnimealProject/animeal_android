@@ -70,7 +70,7 @@ private fun Maps() {
                 .align(alignment = Alignment.TopCenter)
                 .systemBarsPadding()
                 .padding(top = 24.dp),
-            onTabSelected = {}
+            onSelectTab = {}
         )
         Text(text = stringResource(R.string.home), modifier = Modifier.align(Alignment.Center))
     }

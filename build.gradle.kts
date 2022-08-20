@@ -51,6 +51,7 @@ subprojects {
 
 allprojects {
     dependencies {
+        detektPlugins(rootProject.project.libs.gradle.plugin.detekt.compose)
         detektPlugins(rootProject.project.libs.gradle.plugin.detekt.formatting)
     }
 }
