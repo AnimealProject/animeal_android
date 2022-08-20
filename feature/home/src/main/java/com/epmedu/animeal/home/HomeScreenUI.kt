@@ -13,29 +13,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
-import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 
@@ -58,9 +57,8 @@ internal fun HomeScreenUI(state: HomeState) {
 private fun MapboxMap(state: HomeState) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
-    val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
-        mapBoxView.getMapboxMap().setCamera(CameraOptions.Builder().center(it).build())
-    }
+    var initialLocationReceived by rememberSaveable() { mutableStateOf(false) }
+    LaunchedEffect(Unit) { initialLocationReceived = false }
 
     AndroidView(
         factory = { mapBoxView },
@@ -71,7 +69,20 @@ private fun MapboxMap(state: HomeState) {
             enabled = true
             pulsingEnabled = true
         }
-        mapView.location.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+
+        if (!initialLocationReceived && !state.currentLocation.isInitial) {
+            initialLocationReceived = true
+            mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(17.0)
+                    .center(
+                        Point.fromLngLat(
+                            state.currentLocation.longitude,
+                            state.currentLocation.latitude
+                        )
+                    ).build()
+            )
+        }
     }
 }
 
@@ -79,7 +90,7 @@ private fun MapboxMap(state: HomeState) {
 private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
     val context = LocalContext.current
     val mapInitOptions = MapInitOptions(
-        context,
+        context = context,
         resourceOptions = ResourceOptions.Builder().accessToken(mapboxPublicKey).build(),
         styleUri = mapBoxStyleUri
     )
@@ -147,13 +158,5 @@ private fun NavigateToSettingsPrompt() {
             text = stringResource(R.string.navigate_to_app_settings),
             onClick = { context.launchAppSettings() }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenUIPreview() {
-    AnimealTheme {
-        HomeScreenUI(state = HomeState())
     }
 }
