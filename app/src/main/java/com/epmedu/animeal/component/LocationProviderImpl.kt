@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit
 class LocationProviderImpl(private val client: FusedLocationProviderClient) : LocationProvider {
 
     override fun fetchUpdates(): Flow<MapLocation> = callbackFlow {
-
         val locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.SECONDS.toMillis(UPDATE_INTERVAL_SECS)
             fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_UPDATE_INTERVAL_SECS)
@@ -30,7 +29,6 @@ class LocationProviderImpl(private val client: FusedLocationProviderClient) : Lo
                 super.onLocationResult(locationResult)
 
                 locationResult.lastLocation?.let {
-
                     val userLocation = MapLocation(
                         latitude = it.latitude,
                         longitude = it.longitude,
