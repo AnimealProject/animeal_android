@@ -152,8 +152,8 @@ enum class Tab(@StringRes val title: Int) {
     Cats(R.string.switch_cats_title)
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun AnimealSwitchPreview() {
     AnimealTheme {

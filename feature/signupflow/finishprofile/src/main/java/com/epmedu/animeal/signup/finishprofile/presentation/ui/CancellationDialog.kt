@@ -1,7 +1,6 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,12 +29,10 @@ internal fun CancellationDialog(
 @Composable
 private fun CancellationDialogPreview() {
     AnimealTheme {
-        Surface {
-            CancellationDialog(
-                onDismissRequest = {},
-                onDismiss = {},
-                onConfirm = {}
-            )
-        }
+        CancellationDialog(
+            onDismissRequest = {},
+            onDismiss = {},
+            onConfirm = {}
+        )
     }
 }

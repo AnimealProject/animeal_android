@@ -1,8 +1,11 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
 import android.content.res.Configuration
-import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -63,14 +66,12 @@ fun BirthDateInput(
 @Composable
 private fun BirthDateInputPreview() {
     AnimealTheme {
-        Surface {
-            BirthDateInput(
-                value = "1, Sep 1939",
-                error = null,
-                datePickerValue = LocalDate.now(),
-                focusManager = LocalFocusManager.current,
-                onValueChange = {},
-            )
-        }
+        BirthDateInput(
+            value = "1, Sep 1939",
+            error = null,
+            datePickerValue = LocalDate.now(),
+            focusManager = LocalFocusManager.current,
+            onValueChange = {},
+        )
     }
 }

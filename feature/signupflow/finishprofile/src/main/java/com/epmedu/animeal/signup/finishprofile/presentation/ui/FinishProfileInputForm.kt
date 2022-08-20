@@ -3,7 +3,6 @@ package com.epmedu.animeal.signup.finishprofile.presentation.ui
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -85,14 +84,12 @@ internal fun FinishProfileInputForm(
 @Composable
 private fun FinishProfileInputFormPreview() {
     AnimealTheme {
-        Surface {
-            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                FinishProfileInputForm(
-                    state = FinishProfileState(),
-                    focusManager = LocalFocusManager.current,
-                    onEvent = {}
-                )
-            }
+        Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            FinishProfileInputForm(
+                state = FinishProfileState(),
+                focusManager = LocalFocusManager.current,
+                onEvent = {}
+            )
         }
     }
 }

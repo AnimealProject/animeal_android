@@ -8,16 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -135,30 +131,26 @@ internal object ChipNumberFormatTransformation : VisualTransformation {
     }
 }
 
-@Composable
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 private fun ChipNumberInputPreview() {
     AnimealTheme {
-        Surface {
-            Column {
-                var chipNumber by remember { mutableStateOf("") }
-                ChipNumberInput(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                    title = "Chip number",
-                    onValueChange = { chipNumber = it },
-                    value = chipNumber,
-                    errorText = "Pet with this chip number already exists"
-                )
-                ChipNumberInput(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                    title = "Chip number",
-                    onValueChange = { chipNumber = it },
-                    value = chipNumber
-                )
-            }
+        Column {
+            ChipNumberInput(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                title = "Chip number",
+                onValueChange = {},
+                value = "123456789",
+                errorText = "Pet with this chip number already exists"
+            )
+            Divider()
+            ChipNumberInput(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                title = "Chip number",
+                onValueChange = {},
+                value = "123456789"
+            )
         }
     }
 }
