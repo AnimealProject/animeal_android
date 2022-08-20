@@ -10,12 +10,8 @@ import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
@@ -27,24 +23,11 @@ internal class EnterCodeViewModel @Inject constructor(
     init {
         viewModelScope.launch { getPhoneNumber() }
         viewModelScope.launch { launchResendTimer() }
-        stateFlow
-            .filterNotNull()
-            .onEach {
-                updateState {
-                    copy(
-                        isError = !isCodeEquals(CORRECT_CODE).also { isCorrect ->
-                            if (isCorrect) navigateToFinishProfile()
-                        }
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch { launchCodeValidation() }
     }
 
-    private fun navigateToFinishProfile() {
-        viewModelScope.launch {
-            sendEvent(NavigateToFinishProfile)
-        }
+    private suspend fun getPhoneNumber() {
+        repository.phoneNumber.collect { updateState { copy(phoneNumber = it) } }
     }
 
     private suspend fun launchResendTimer() {
@@ -55,9 +38,31 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(isResendEnabled = true, resendDelay = 0) }
     }
 
-    private suspend fun getPhoneNumber() {
-        repository.phoneNumber.collectLatest {
-            updateState { copy(phoneNumber = it) }
+    private suspend fun launchCodeValidation() {
+        stateFlow.collect {
+            updateIsError()
+            navigateToFinishProfileIfCodeIsCorrect()
+        }
+    }
+
+    private fun updateIsError() {
+        updateState { copy(isError = isCodeFilled() && isCodeEquals(CORRECT_CODE).not()) }
+    }
+
+    private fun navigateToFinishProfileIfCodeIsCorrect() {
+        if (state.isCodeEquals(CORRECT_CODE)) {
+            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+        }
+    }
+
+    fun changeDigit(position: Int, digit: Int?) {
+        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit)) }
+    }
+
+    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
+        return state.code.mapIndexed { index, currentDigit ->
+            if (index == position) newDigit
+            else currentDigit
         }
     }
 
@@ -70,21 +75,6 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun clearCodeAndDisableResend() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
-    }
-
-    fun changeDigit(position: Int, digit: Int?) {
-        updateState {
-            copy(
-                code = getNewCodeWithReplacedDigit(position, digit)
-            )
-        }
-    }
-
-    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
-        return state.code.mapIndexed { index, currentDigit ->
-            if (index == position) newDigit
-            else currentDigit
-        }
     }
 
     companion object {
