@@ -48,7 +48,7 @@ internal fun HomeScreenUI(state: HomeState) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
                     .padding(top = 24.dp),
-                onTabSelected = {}
+                onSelectTab = {}
             )
         }
     }

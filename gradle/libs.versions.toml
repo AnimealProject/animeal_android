@@ -28,8 +28,8 @@ lifecycle = "2.5.1"
 navigationCompose = "2.5.1"
 navigationComposeHilt = "1.0.0"
 playServicesLocation = "20.0.0"
+mapbox = "10.7.0"
 versions = "0.42.0"
-work = "2.7.1"
 
 [libraries]
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
@@ -62,7 +62,6 @@ androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", vers
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 androidx-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "work" }
 
 compose-material-dialog-core = { module = "io.github.vanpra.compose-material-dialogs:core", version.ref = "dialogCore" }
 compose-material-dialog-datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "dialogCore" }

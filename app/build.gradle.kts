@@ -82,8 +82,6 @@ dependencies {
 
     implementation(libs.play.services.location)
 
-    implementation (libs.androidx.work.runtime)
-
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
