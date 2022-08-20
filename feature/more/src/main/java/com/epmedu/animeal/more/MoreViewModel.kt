@@ -1,15 +1,29 @@
 package com.epmedu.animeal.more
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.data.repository.ProfileRepository
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
+import com.epmedu.animeal.more.MoreViewModel.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class MoreViewModel : ViewModel() {
+@HiltViewModel
+internal class MoreViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository
+) : ViewModel(),
+    EventDelegate<Event> by DefaultEventDelegate() {
 
     internal fun logout() {
-        Log.i(TAG, "Logout clicked")
+        viewModelScope.launch {
+            profileRepository.clearProfile()
+            sendEvent(Event.NavigateToOnboarding)
+        }
     }
 
-    private companion object {
-        private const val TAG = "MoreViewModel"
+    sealed interface Event {
+        object NavigateToOnboarding : Event
     }
 }

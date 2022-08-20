@@ -1,15 +1,13 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -41,7 +39,10 @@ fun TabsScreen(
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            BottomAppBarFab(currentRoute = currentRoute, onNavigate = onNavigate)
+            BottomAppBarFab(
+                currentRoute = currentRoute,
+                onNavigate = onNavigate,
+            )
         },
         bottomBar = {
             BottomNavigationBar(
@@ -81,7 +82,10 @@ private fun BottomNavigationBar(
         NavigationTab.Analytics,
         NavigationTab.More
     )
-    BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
+    BottomAppBar(
+        modifier = Modifier.height(56.dp),
+        backgroundColor = MaterialTheme.colors.surface,
+    ) {
         items.forEach { item ->
             if (item == NavigationTab.Home) {
                 Box(modifier = Modifier.weight(1f))

@@ -31,8 +31,12 @@ rootProject.name = "Animeal"
 
 include(":app")
 
-include(":feature:login")
 include(":feature:more")
+include(":feature:signupflow:entercode")
+include(":feature:signupflow:enterphone")
+include(":feature:signupflow:finishprofile")
+include(":feature:signupflow:onboarding")
+include(":feature:signupflow:signup")
 include(":feature:splash")
 include(":feature:tabs")
 include(":feature:home")

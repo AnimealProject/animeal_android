@@ -12,8 +12,7 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pager.indicators)
+    implementation(libs.accompanist.permissions)
 
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)

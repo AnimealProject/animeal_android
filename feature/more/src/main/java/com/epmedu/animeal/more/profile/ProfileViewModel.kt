@@ -1,11 +1,14 @@
 package com.epmedu.animeal.more.profile
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.data.model.Profile
 import com.epmedu.animeal.common.data.repository.ProfileRepository
-import com.epmedu.animeal.common.domain.StateViewModel
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
+import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.common.validation.ProfileValidator
-import com.epmedu.animeal.foundation.input.formatBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -14,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-) : StateViewModel<ProfileState>(initialState = ProfileState()) {
+) : ViewModel(),
+    StateDelegate<ProfileState> by DefaultStateDelegate(initialState = ProfileState()) {
 
     private val validator: ProfileValidator = ProfileValidator()
 
@@ -36,8 +40,10 @@ internal class ProfileViewModel @Inject constructor(
             is ProfileEvent.BirthDateChanged -> {
                 updateState {
                     copy(
-                        birthDate = event.birthDate,
-                        formattedBirthDate = formatBirthDate(event.birthDate)
+                        formattedBirthDate = formatDateToString(
+                            date = event.birthDate,
+                            formatter = DAY_MONTH_COMMA_YEAR_FORMATTER
+                        )
                     )
                 }
             }
@@ -104,7 +110,7 @@ internal class ProfileViewModel @Inject constructor(
             firstName = state.name,
             lastName = state.surname,
             email = state.email,
-            birthDate = state.birthDate
+            birthDate = state.formattedBirthDate
         )
 
         viewModelScope.launch {
@@ -120,8 +126,7 @@ internal class ProfileViewModel @Inject constructor(
                         name = it.firstName,
                         surname = it.lastName,
                         email = it.email,
-                        birthDate = it.birthDate,
-                        formattedBirthDate = formatBirthDate(it.birthDate),
+                        formattedBirthDate = it.birthDate,
                         formattedPhoneNumber = it.phoneNumber
                     )
                 }
