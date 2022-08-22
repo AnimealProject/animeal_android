@@ -9,4 +9,8 @@ internal data class EnterCodeState(
     val isError: Boolean = false,
     val isResendEnabled: Boolean = false,
     val resendDelay: Long = RESEND_DELAY
-)
+) {
+    fun isCodeFilled() = code.all { it != null }
+
+    fun isCodeEquals(stringToCompare: String) = code.joinToString("") == stringToCompare
+}
