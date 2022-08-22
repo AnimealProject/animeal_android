@@ -20,12 +20,3 @@ fun OnboardingScreen() {
         },
     )
 }
-
-// TODO: Remove when facebook login will be implemented
-private fun Navigator.navigateToTabs() {
-    parent?.navigate(MainRoute.Tabs.name) {
-        popUpTo(MainRoute.SignUp.name) {
-            inclusive = true
-        }
-    }
-}
