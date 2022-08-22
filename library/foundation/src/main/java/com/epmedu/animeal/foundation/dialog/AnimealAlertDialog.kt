@@ -27,6 +27,7 @@ fun AnimealAlertDialog(
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
+        modifier = Modifier.padding(24.dp),
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {

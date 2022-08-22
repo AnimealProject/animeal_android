@@ -1,16 +1,20 @@
 package com.epmedu.animeal.foundation.button
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.DisabledButtonColor
+import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealSecondaryButton(
@@ -19,17 +23,15 @@ fun AnimealSecondaryButton(
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-    OutlinedButton(
+    Button(
         modifier = modifier
             .heightIn(min = 60.dp)
             .fillMaxWidth(),
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.primary,
-        ),
-        border = BorderStroke(
-            width = ButtonDefaults.OutlinedBorderSize,
-            color = MaterialTheme.colors.primary
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = DisabledButtonColor,
+            contentColor = MaterialTheme.colors.onPrimary,
+            disabledBackgroundColor = DisabledButtonColor,
+            disabledContentColor = DisabledButtonContentColor
         ),
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
