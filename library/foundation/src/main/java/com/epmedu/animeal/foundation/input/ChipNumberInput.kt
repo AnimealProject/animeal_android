@@ -1,6 +1,6 @@
 package com.epmedu.animeal.foundation.input
 
-import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -132,7 +132,7 @@ internal object ChipNumberFormatTransformation : VisualTransformation {
 }
 
 @Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun ChipNumberInputPreview() {
     AnimealTheme {
