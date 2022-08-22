@@ -1,6 +1,9 @@
 package com.epmedu.animeal.more.root
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -23,8 +26,7 @@ internal fun MoreScreenUi(
 ) {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
+            .fillMaxSize(),
         topBar = {
             TopBar(title = stringResource(id = R.string.more))
         }

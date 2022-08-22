@@ -2,7 +2,13 @@ package com.epmedu.animeal.more.profile
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -60,8 +66,7 @@ internal fun ProfileScreenUI(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding(),
+            .imePadding(),
         topBar = {
             ProfileTopBar(onBack = {
                 if (state.readonly) onBack()
