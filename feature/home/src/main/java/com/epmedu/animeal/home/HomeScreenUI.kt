@@ -57,7 +57,7 @@ internal fun HomeScreenUI(state: HomeState) {
 private fun MapboxMap(state: HomeState) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
-    var initialLocationReceived by rememberSaveable() { mutableStateOf(false) }
+    var initialLocationReceived by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) { initialLocationReceived = false }
 
     AndroidView(
