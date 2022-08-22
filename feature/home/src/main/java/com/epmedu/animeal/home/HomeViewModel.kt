@@ -26,7 +26,7 @@ internal class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            locationProvider.fetchUpdates().collect() {
+            locationProvider.fetchUpdates().collect {
                 updateState { copy(currentLocation = it) }
             }
         }
