@@ -43,6 +43,7 @@
 
     <string name="profile_registration_cancel">Do you really want to cancel registration?</string>
     <string name="profile_edit_discard">Do you really want to discard the changes?</string>
+    <string name="profile_logout">Are you sure you want to log out of your account?</string>
     <string name="profile_birth_date">Birthdate</string>
     <string name="profile_select_birth_date">Select birthdate</string>
     <string name="profile_title">Profile</string>

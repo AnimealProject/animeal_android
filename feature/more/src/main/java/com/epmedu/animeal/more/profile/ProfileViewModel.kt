@@ -10,7 +10,8 @@ import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.foundation.common.validation.ProfileValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +25,14 @@ internal class ProfileViewModel @Inject constructor(
 
     init {
         loadProfile()
+
+        stateFlow
+            .onEach {
+                updateState {
+                    copy(enableButton = storedProfile != getCurrentProfile() || readonly)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun handleEvents(event: ProfileEvent) {
@@ -106,23 +115,31 @@ internal class ProfileViewModel @Inject constructor(
             }
         }
 
-        val profile = Profile(
-            firstName = state.name,
-            lastName = state.surname,
-            email = state.email,
-            birthDate = state.formattedBirthDate
-        )
+        val profile = getCurrentProfile()
 
         viewModelScope.launch {
-            profileRepository.saveProfile(profile).collect()
+            profileRepository.saveProfile(profile).collect {
+                updateState {
+                    copy(storedProfile = profile)
+                }
+            }
         }
     }
+
+    private fun getCurrentProfile() = Profile(
+        firstName = state.name,
+        lastName = state.surname,
+        phoneNumber = state.formattedPhoneNumber,
+        email = state.email,
+        birthDate = state.formattedBirthDate
+    )
 
     private fun loadProfile() {
         viewModelScope.launch {
             profileRepository.getProfile().collect {
                 updateState {
                     copy(
+                        storedProfile = it,
                         name = it.firstName,
                         surname = it.lastName,
                         email = it.email,

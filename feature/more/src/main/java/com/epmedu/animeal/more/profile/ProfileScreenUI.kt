@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -90,20 +89,14 @@ internal fun ProfileScreenUI(
                 )
             }
 
-            ProfileButtonsRow(
+            ProfileButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 24.dp),
+                    .padding(bottom = 24.dp),
                 readonly = state.readonly,
-                onCancelClick = {
-                    onBack()
-                },
+                enabled = state.enableButton,
                 onEditClick = {
                     onEvent(ProfileEvent.Edit)
-                },
-                onDiscardClick = {
-                    focusManager.clearFocus()
-                    showDiscardAlert.value = true
                 },
                 onSaveClick = {
                     focusManager.clearFocus()
@@ -187,33 +180,19 @@ private fun ProfileInputForm(
 }
 
 @Composable
-private fun ProfileButtonsRow(
+private fun ProfileButton(
     modifier: Modifier = Modifier,
     readonly: Boolean,
-    onCancelClick: () -> Unit,
+    enabled: Boolean,
     onEditClick: () -> Unit,
-    onDiscardClick: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    val negativeButtonText = if (readonly) R.string.cancel else R.string.discard
-    val positiveButtonText = if (readonly) R.string.edit else R.string.save
-
-    Row(
+    AnimealButton(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        AnimealSecondaryButton(
-            modifier = Modifier.weight(1f),
-            text = stringResource(negativeButtonText),
-            onClick = if (readonly) onCancelClick else onDiscardClick,
-        )
-
-        AnimealButton(
-            modifier = Modifier.weight(1f),
-            text = stringResource(positiveButtonText),
-            onClick = if (readonly) onEditClick else onSaveClick,
-        )
-    }
+        enabled = enabled,
+        text = stringResource(if (readonly) R.string.edit else R.string.save),
+        onClick = if (readonly) onEditClick else onSaveClick,
+    )
 }
 
 @Preview
