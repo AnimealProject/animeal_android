@@ -22,7 +22,9 @@ internal fun MoreScreenUi(
     onNavigate: (String) -> Unit
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         topBar = {
             TopBar(title = stringResource(id = R.string.more))
         }

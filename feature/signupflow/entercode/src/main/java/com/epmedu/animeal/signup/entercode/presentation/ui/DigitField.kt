@@ -9,7 +9,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -58,23 +57,21 @@ private fun String.isOneDigit() = isDigitsOnly() && length == 1
 @Composable
 private fun DigitFieldPreview() {
     AnimealTheme {
-        Surface {
-            Column {
-                DigitField(
-                    digit = null,
-                    onDigitInput = {},
-                    onDigitRemove = {},
-                    modifier = Modifier.padding(8.dp)
-                )
-                Divider(modifier = Modifier.width(82.dp))
-                DigitField(
-                    digit = 4,
-                    onDigitInput = {},
-                    onDigitRemove = {},
-                    modifier = Modifier.padding(8.dp),
-                    isError = true
-                )
-            }
+        Column {
+            DigitField(
+                digit = null,
+                onDigitInput = {},
+                onDigitRemove = {},
+                modifier = Modifier.padding(8.dp)
+            )
+            Divider(modifier = Modifier.width(82.dp))
+            DigitField(
+                digit = 4,
+                onDigitInput = {},
+                onDigitRemove = {},
+                modifier = Modifier.padding(8.dp),
+                isError = true
+            )
         }
     }
 }

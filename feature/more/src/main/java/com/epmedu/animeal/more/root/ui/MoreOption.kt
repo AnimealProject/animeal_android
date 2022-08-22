@@ -41,8 +41,6 @@ internal fun MoreOption(
 @Composable
 private fun MoreOptionPreview() {
     AnimealTheme {
-        Surface {
-            MoreOption(title = "Profile Page") {}
-        }
+        MoreOption(title = "Profile Page") {}
     }
 }

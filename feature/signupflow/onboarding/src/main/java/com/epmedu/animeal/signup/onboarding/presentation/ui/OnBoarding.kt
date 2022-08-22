@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,10 +62,8 @@ internal fun ColumnScope.OnBoarding(
 @Composable
 private fun OnBoardingPreview() {
     AnimealTheme {
-        Surface {
-            Column {
-                OnBoarding()
-            }
+        Column {
+            OnBoarding()
         }
     }
 }

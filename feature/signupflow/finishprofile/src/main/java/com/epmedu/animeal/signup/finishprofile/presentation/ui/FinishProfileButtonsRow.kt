@@ -3,7 +3,6 @@ package com.epmedu.animeal.signup.finishprofile.presentation.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,11 +41,9 @@ internal fun FinishProfileButtonsRow(
 @Composable
 private fun FinishProfileButtonsRowPreview() {
     AnimealTheme {
-        Surface {
-            FinishProfileButtonsRow(
-                onCancelClick = {},
-                onDoneClick = {}
-            )
-        }
+        FinishProfileButtonsRow(
+            onCancelClick = {},
+            onDoneClick = {}
+        )
     }
 }

@@ -3,7 +3,6 @@ package com.epmedu.animeal.signup.finishprofile.presentation.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
@@ -43,14 +42,12 @@ fun NameInput(
 @Composable
 private fun NameInputPreview() {
     AnimealTheme {
-        Surface {
-            NameInput(
-                value = "Name",
-                error = null,
-                focusManager = LocalFocusManager.current,
-                onValueChange = {},
-                onFocusRelease = {}
-            )
-        }
+        NameInput(
+            value = "Name",
+            error = null,
+            focusManager = LocalFocusManager.current,
+            onValueChange = {},
+            onFocusRelease = {}
+        )
     }
 }

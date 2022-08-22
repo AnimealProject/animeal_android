@@ -1,8 +1,8 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,18 +16,14 @@ internal fun OnboardingScreenUI(
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
 ) {
-    Surface(
-        modifier = modifier.fillMaxSize()
+    Column(
+        modifier = modifier.fillMaxSize(),
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            OnBoarding()
-            ButtonsBlock(
-                onSignInMobile = onSignInMobile,
-                onSignInFacebook = onSignInFacebook,
-            )
-        }
+        OnBoarding()
+        ButtonsBlock(
+            onSignInMobile = onSignInMobile,
+            onSignInFacebook = onSignInFacebook,
+        )
     }
 }
 
