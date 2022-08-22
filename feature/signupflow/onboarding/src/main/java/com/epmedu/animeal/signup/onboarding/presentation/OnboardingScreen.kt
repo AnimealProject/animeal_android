@@ -16,7 +16,7 @@ fun OnboardingScreen() {
             navigator.navigate(SignUpRoute.EnterPhone.name)
         },
         onSignInFacebook = {
-            navigator.navigateToTabs()
+            navigator.navigate(SignUpRoute.EnterPhone.name)
         },
     )
 }
