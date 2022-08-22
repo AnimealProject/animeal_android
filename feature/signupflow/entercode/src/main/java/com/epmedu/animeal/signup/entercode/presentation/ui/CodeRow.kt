@@ -37,8 +37,7 @@ internal fun CodeRow(
                 digit = code[index],
                 onDigitInput = { digit ->
                     onDigitChange(index, digit)
-                    if (index == code.lastIndex) focusManager.clearFocus()
-                    else focusManager.moveFocus(FocusDirection.Next)
+                    if (index < code.lastIndex) focusManager.moveFocus(FocusDirection.Next)
                 },
                 onDigitRemove = {
                     onDigitChange(index, null)

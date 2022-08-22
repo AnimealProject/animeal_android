@@ -10,7 +10,6 @@ import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +23,11 @@ internal class EnterCodeViewModel @Inject constructor(
     init {
         viewModelScope.launch { getPhoneNumber() }
         viewModelScope.launch { launchResendTimer() }
+        viewModelScope.launch { launchCodeValidation() }
+    }
+
+    private suspend fun getPhoneNumber() {
+        repository.phoneNumber.collect { updateState { copy(phoneNumber = it) } }
     }
 
     private suspend fun launchResendTimer() {
@@ -34,9 +38,31 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(isResendEnabled = true, resendDelay = 0) }
     }
 
-    private suspend fun getPhoneNumber() {
-        repository.phoneNumber.collectLatest {
-            updateState { copy(phoneNumber = it) }
+    private suspend fun launchCodeValidation() {
+        stateFlow.collect {
+            updateIsError()
+            navigateToFinishProfileIfCodeIsCorrect()
+        }
+    }
+
+    private fun updateIsError() {
+        updateState { copy(isError = isCodeFilled() && isCodeEquals(CORRECT_CODE).not()) }
+    }
+
+    private fun navigateToFinishProfileIfCodeIsCorrect() {
+        if (state.isCodeEquals(CORRECT_CODE)) {
+            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+        }
+    }
+
+    fun changeDigit(position: Int, digit: Int?) {
+        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit)) }
+    }
+
+    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
+        return state.code.mapIndexed { index, currentDigit ->
+            if (index == position) newDigit
+            else currentDigit
         }
     }
 
@@ -49,38 +75,6 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun clearCodeAndDisableResend() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
-    }
-
-    fun changeDigit(position: Int, digit: Int?) {
-        updateState {
-            copy(
-                code = getNewCodeWithReplacedDigit(position, digit)
-            )
-        }
-        validateCodeIfFull()
-    }
-
-    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
-        return state.code.mapIndexed { index, currentDigit ->
-            if (index == position) newDigit
-            else currentDigit
-        }
-    }
-
-    private fun validateCodeIfFull() {
-        if (state.code.all { it != null }) {
-            val isCodeCorrect = isCodeCorrect()
-            updateState { copy(isError = !isCodeCorrect) }
-
-            viewModelScope.launch {
-                sendEvent(NavigateToFinishProfile)
-            }
-        }
-    }
-
-    private fun isCodeCorrect(): Boolean {
-        val codeString = state.code.joinToString("")
-        return codeString == CORRECT_CODE
     }
 
     companion object {
