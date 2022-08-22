@@ -55,12 +55,11 @@ internal fun EnterPhoneScreenUi(
                 .padding(horizontal = 24.dp)
         ) {
             PhoneNumberInput(
+                value = state.phoneNumber,
                 modifier = Modifier
                     .padding(top = 56.dp)
                     .focusRequester(focusRequester),
-                title = stringResource(id = R.string.phone_number),
-                onValueChange = onNumberChange,
-                value = state.phoneNumber
+                onValueChange = onNumberChange
             )
         }
     }

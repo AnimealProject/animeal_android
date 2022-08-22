@@ -6,10 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.epmedu.animeal.extensions.tryParseDate
 import com.epmedu.animeal.foundation.dialog.DatePickerDialog
 import com.epmedu.animeal.foundation.input.BirthDateInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -22,12 +22,11 @@ import java.time.LocalDate
 @Composable
 fun BirthDateInput(
     value: String,
-    error: String?,
-    clickable: Boolean = true,
-    datePickerValue: LocalDate,
-    focusManager: FocusManager,
     onValueChange: (LocalDate) -> Unit,
+    error: String,
+    clickable: Boolean = true,
 ) {
+    val focusManager = LocalFocusManager.current
     val dialogState = rememberMaterialDialogState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -44,13 +43,11 @@ fun BirthDateInput(
             focusManager.clearFocus()
             showDialog = true
         },
-        onValueChange = {
-            focusManager.clearFocus()
-        },
+        onValueChange = { focusManager.clearFocus() },
     )
     DatePickerDialog(
         state = dialogState,
-        date = datePickerValue,
+        date = tryParseDate(value) ?: LocalDate.now(),
         onPositiveClick = { showDialog = false },
         onNegativeClick = { showDialog = false },
         onCloseRequest = { showDialog = false },
@@ -68,10 +65,8 @@ private fun BirthDateInputPreview() {
     AnimealTheme {
         BirthDateInput(
             value = "1, Sep 1939",
-            error = null,
-            datePickerValue = LocalDate.now(),
-            focusManager = LocalFocusManager.current,
             onValueChange = {},
+            error = ""
         )
     }
 }

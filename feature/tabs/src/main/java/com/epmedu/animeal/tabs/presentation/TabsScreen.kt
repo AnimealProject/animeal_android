@@ -1,29 +1,31 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.foundation.animation.VerticalAnimatedVisibility
 import com.epmedu.animeal.home.HomeScreen
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
+import com.epmedu.animeal.tabs.presentation.ui.BottomNavigationBar
 
 @Composable
-fun TabsScreen(
-    modifier: Modifier = Modifier,
-) {
+fun TabsScreen() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
+    var isBottomBarVisible by rememberSaveable { mutableStateOf(true) }
+    val onChangeBottomBarVisibility = { visible: Boolean ->
+        isBottomBarVisible = visible
+    }
     val onNavigate: (NavigationTab.Route) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
@@ -35,30 +37,39 @@ fun TabsScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            BottomAppBarFab(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate,
-            )
+            VerticalAnimatedVisibility(
+                visible = isBottomBarVisible
+            ) {
+                BottomAppBarFab(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate,
+                )
+            }
         },
         bottomBar = {
-            BottomNavigationBar(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate
-            )
+            VerticalAnimatedVisibility(
+                visible = isBottomBarVisible
+            ) {
+                BottomNavigationBar(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate
+                )
+            }
         },
     ) { padding ->
-        NavigationTabs(navigationController, padding)
+        NavigationTabs(navigationController, onChangeBottomBarVisibility)
     }
 }
 
 @Composable
-private fun NavigationTabs(navigationController: NavHostController, padding: PaddingValues) {
+private fun NavigationTabs(
+    navigationController: NavHostController,
+    onChangeBottomBarVisibility: (Boolean) -> Unit
+) {
     ScreenNavHost(
-        modifier = Modifier.padding(padding),
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
@@ -66,49 +77,6 @@ private fun NavigationTabs(navigationController: NavHostController, padding: Pad
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { TabMoreScreen() }
-    }
-}
-
-@Composable
-private fun BottomNavigationBar(
-    currentRoute: String?,
-    onNavigate: (NavigationTab.Route) -> Unit
-) {
-    val items = listOf(
-        NavigationTab.Search,
-        NavigationTab.Favorites,
-        NavigationTab.Home,
-        NavigationTab.Analytics,
-        NavigationTab.More
-    )
-    BottomAppBar(
-        modifier = Modifier.height(56.dp),
-        backgroundColor = MaterialTheme.colors.surface,
-    ) {
-        items.forEach { item ->
-            if (item == NavigationTab.Home) {
-                Box(modifier = Modifier.weight(1f))
-            } else {
-                BottomNavigationItem(
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = item.icon),
-                            contentDescription = stringResource(item.title)
-                        )
-                    },
-                    label = {
-                        Text(text = stringResource(id = item.title))
-                    },
-                    selectedContentColor = MaterialTheme.colors.primary,
-                    unselectedContentColor = MaterialTheme.colors.onSurface,
-                    alwaysShowLabel = false,
-                    selected = currentRoute == item.route.name,
-                    onClick = {
-                        onNavigate(item.route)
-                    }
-                )
-            }
-        }
+        screen(NavigationTab.More.route.name) { TabMoreScreen(onChangeBottomBarVisibility) }
     }
 }

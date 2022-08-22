@@ -1,8 +1,6 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
-import com.epmedu.animeal.extensions.tryParseDate
 import com.epmedu.animeal.foundation.common.UiText
-import java.time.LocalDate
 
 internal data class FinishProfileState(
     val name: String = "",
@@ -15,12 +13,6 @@ internal data class FinishProfileState(
     val formattedBirthDate: String = "",
     val formattedPhoneNumber: String = ""
 ) {
-    val birthDate: LocalDate
-        get() {
-            return if (formattedBirthDate.isEmpty()) LocalDate.now()
-            else tryParseDate(formattedBirthDate) ?: LocalDate.now()
-        }
-
     val phoneNumber: String
         get() = formattedPhoneNumber.replace("\\D".toRegex(), "")
 

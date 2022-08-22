@@ -10,7 +10,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
-import com.epmedu.animeal.foundation.common.validation.ProfileValidator
+import com.epmedu.animeal.foundation.common.validation.DefaultProfileValidator
+import com.epmedu.animeal.foundation.common.validation.ValidationResult
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.BirthDateChanged
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.EmailChanged
@@ -33,7 +34,7 @@ internal class FinishProfileViewModel @Inject constructor(
     StateDelegate<FinishProfileState> by DefaultStateDelegate(initialState = FinishProfileState()),
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
-    private val validator: ProfileValidator = ProfileValidator()
+    private val validator: DefaultProfileValidator = DefaultProfileValidator()
 
     init {
         loadProfile()
@@ -65,22 +66,22 @@ internal class FinishProfileViewModel @Inject constructor(
             }
             ValidateName -> {
                 updateState {
-                    copy(nameError = validator.validateName(state.name).errorMessage)
+                    copy(nameError = reduceValidationResult(validator.validateName(state.name)))
                 }
             }
             ValidateSurname -> {
                 updateState {
-                    copy(surnameError = validator.validateSurname(state.surname).errorMessage)
+                    copy(surnameError = reduceValidationResult(validator.validateSurname(state.surname)))
                 }
             }
             ValidateEmail -> {
                 updateState {
-                    copy(emailError = validator.validateEmail(state.email).errorMessage)
+                    copy(emailError = reduceValidationResult(validator.validateEmail(state.email)))
                 }
             }
             ValidateBirthDate -> {
                 updateState {
-                    copy(birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage)
+                    copy(birthDateError = reduceValidationResult(validator.validateBirthDate(state.formattedBirthDate)))
                 }
             }
         }
@@ -89,10 +90,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun submitData() {
         updateState {
             copy(
-                nameError = validator.validateName(state.name).errorMessage,
-                surnameError = validator.validateSurname(state.surname).errorMessage,
-                emailError = validator.validateEmail(state.email).errorMessage,
-                birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage
+                nameError = reduceValidationResult(validator.validateName(state.name)),
+                surnameError = reduceValidationResult(validator.validateSurname(state.surname)),
+                emailError = reduceValidationResult(validator.validateEmail(state.email)),
+                birthDateError = reduceValidationResult(validator.validateBirthDate(state.formattedBirthDate))
             )
         }
 
@@ -105,8 +106,8 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun saveProfile() {
         val profile = Profile(
-            firstName = state.name,
-            lastName = state.surname,
+            name = state.name,
+            surname = state.surname,
             email = state.email,
             birthDate = state.formattedBirthDate
         )
@@ -122,8 +123,8 @@ internal class FinishProfileViewModel @Inject constructor(
             profileRepository.getProfile().collect {
                 updateState {
                     copy(
-                        name = it.firstName,
-                        surname = it.lastName,
+                        name = it.name,
+                        surname = it.surname,
                         email = it.email,
                         formattedBirthDate = it.birthDate,
                         formattedPhoneNumber = it.phoneNumber
@@ -131,5 +132,10 @@ internal class FinishProfileViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun reduceValidationResult(result: ValidationResult) = when (result) {
+        is ValidationResult.Success -> null
+        is ValidationResult.Failure -> result.errorMessage
     }
 }

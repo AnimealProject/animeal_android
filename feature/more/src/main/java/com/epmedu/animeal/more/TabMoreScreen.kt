@@ -8,14 +8,14 @@ import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.account.AccountScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
-import com.epmedu.animeal.more.profile.ProfileScreen
+import com.epmedu.animeal.more.profile.presentation.ProfileScreen
 import com.epmedu.animeal.more.root.MoreScreen
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TabMoreScreen() {
+fun TabMoreScreen(onChangeBottomBarVisibility: (Boolean) -> Unit) {
     AnimatedScreenNavHost(
         startDestination = NavigationScreen.More.route.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
@@ -26,9 +26,9 @@ fun TabMoreScreen() {
             enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Right) },
             exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Left) }
         ) {
-            MoreScreen()
+            MoreScreen(onChangeBottomBarVisibility)
         }
-        screen(NavigationScreen.ProfilePage.route.name) { ProfileScreen() }
+        screen(NavigationScreen.ProfilePage.route.name) { ProfileScreen(onChangeBottomBarVisibility) }
         screen(NavigationScreen.Donate.route.name) { DonateScreen() }
         screen(NavigationScreen.Help.route.name) { HelpScreen() }
         screen(NavigationScreen.About.route.name) { AboutScreen() }

@@ -10,11 +10,12 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.route.MainRoute
 
 @Composable
-internal fun MoreScreen() {
+internal fun MoreScreen(onChangeBottomBarVisibility: (Boolean) -> Unit) {
     val viewModel: MoreViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
 
     LaunchedEffect(Unit) {
+        onChangeBottomBarVisibility(true)
         viewModel.events.collect {
             if (it is Event.NavigateToOnboarding) {
                 navigator.parent?.parent?.navigate(MainRoute.SignUp.name) {
