@@ -46,6 +46,7 @@ internal fun HomeScreenUI(state: HomeState) {
             MapboxMap(state)
             AnimealSwitch(
                 modifier = Modifier
+                    .statusBarsPadding()
                     .align(alignment = Alignment.TopCenter)
                     .padding(top = 24.dp),
                 onSelectTab = {}
