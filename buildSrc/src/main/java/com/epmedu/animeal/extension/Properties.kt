@@ -1,5 +1,6 @@
 package com.epmedu.animeal.extension
 
+import java.io.FileInputStream
 import java.util.*
 
 fun Properties.propertyInt(key: String): Int {
@@ -15,3 +16,15 @@ fun Properties.propertyInt(key: String): Int {
         throw IllegalArgumentException("Cast exception for $key")
     }
 }
+
+fun Properties.getStringPropertyOrThrow(key: String) = when {
+    containsKey(key) -> this[key].toString()
+    else -> throw Exception("$key is not defined in properties")
+}
+
+fun loadProperties(path: String): Properties =
+    FileInputStream(path).use { inputStream ->
+        Properties().apply {
+            load(inputStream)
+        }
+    }

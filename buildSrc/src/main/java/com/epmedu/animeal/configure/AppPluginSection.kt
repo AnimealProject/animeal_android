@@ -1,7 +1,5 @@
 package com.epmedu.animeal.configure
 
-import com.epmedu.animeal.extension.addMapBoxPublicKeyField
-import com.epmedu.animeal.extension.addMapBoxStyleURIField
 import com.epmedu.animeal.extension.provideVersionCode
 import com.epmedu.animeal.extension.provideVersionName
 import com.epmedu.animeal.internal.applicationExtension

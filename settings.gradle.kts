@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.*
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -12,20 +15,30 @@ dependencyResolutionManagement {
                 create<BasicAuthentication>("basic")
             }
             credentials {
-                val MAPBOX_SECRET_TOKEN: String? by settings
+                val prop = loadProperties("local.properties")
+                val mapBoxSecretToken: String? = prop.getProperty("MAPBOX_SECRET_TOKEN")
+
                 gradle.settingsEvaluated {
-                    if(MAPBOX_SECRET_TOKEN == null)
-                    throw GradleException("MAPBOX_SECRET_TOKEN is not defined in gradle.properties")
+                    if (mapBoxSecretToken == null) {
+                        throw GradleException("MAPBOX_SECRET_TOKEN is not defined in local.properties")
+                    }
                 }
                 // Do not change the username below.
                 // This should always be `mapbox` (not your username).
                 username = "mapbox"
-                // Use the secret token you stored in secrets.properties as the password
-                password = MAPBOX_SECRET_TOKEN
+                // Use the secret token you stored in local.properties as the password
+                password = mapBoxSecretToken
             }
         }
     }
 }
+
+fun loadProperties(path: String): Properties =
+    FileInputStream(path).use { inputStream ->
+        Properties().apply {
+            load(inputStream)
+        }
+    }
 
 rootProject.name = "Animeal"
 
