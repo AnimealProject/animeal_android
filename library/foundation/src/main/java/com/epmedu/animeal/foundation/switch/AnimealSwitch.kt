@@ -66,7 +66,7 @@ fun AnimealSwitch(
         divider = {}
     ) {
         AnimalTab(
-            titleId = Tab.Dogs.title,
+            titleResId = Tab.Dogs.title,
             selected = currentTab == Tab.Dogs,
             onClick = {
                 onSelectTab(Tab.Dogs)
@@ -74,7 +74,7 @@ fun AnimealSwitch(
             }
         )
         AnimalTab(
-            titleId = Tab.Cats.title,
+            titleResId = Tab.Cats.title,
             selected = currentTab == Tab.Cats,
             onClick = {
                 onSelectTab(Tab.Cats)
@@ -130,7 +130,7 @@ private fun TabIndicator(
 /**
  * Shows a tab.
  *
- * @param tab current Tab type [Tab]
+ * @param titleResId current Tab string resource id
  * @param selected current tab selected state
  * @param onClick Called when this tab is clicked.
  * @param modifier The [Modifier].
@@ -138,7 +138,7 @@ private fun TabIndicator(
 @Composable
 private fun AnimalTab(
     modifier: Modifier = Modifier,
-    titleId: Int,
+    @StringRes titleResId: Int,
     selected: Boolean,
     onClick: () -> Unit
 ) {
@@ -151,7 +151,7 @@ private fun AnimalTab(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = titleId),
+            text = stringResource(id = titleResId),
             fontSize = 14.sp,
             modifier = Modifier.zIndex(1f),
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
@@ -164,8 +164,8 @@ enum class Tab(@StringRes val title: Int) {
     Cats(R.string.switch_cats_title)
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun AnimealSwitchPreview() {
     AnimealTheme {

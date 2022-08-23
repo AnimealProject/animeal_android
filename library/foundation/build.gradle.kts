@@ -6,6 +6,8 @@ plugins {
 dependencies {
     implementation(projects.library.resources)
 
+    implementation(libs.accompanist.systemuicontroller)
+
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)

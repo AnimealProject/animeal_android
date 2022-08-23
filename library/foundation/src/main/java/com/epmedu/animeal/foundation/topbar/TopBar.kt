@@ -1,7 +1,18 @@
 package com.epmedu.animeal.foundation.topbar
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
@@ -65,13 +76,11 @@ fun BackButton(onClick: () -> Unit) {
 @Composable
 private fun TopBarPreview() {
     AnimealTheme {
-        Surface {
-            Column {
-                TopBar(title = "Title")
-                Divider()
-                TopBar(title = "Title with icon") {
-                    BackButton {}
-                }
+        Column {
+            TopBar(title = "Title")
+            Divider()
+            TopBar(title = "Title with icon") {
+                BackButton {}
             }
         }
     }

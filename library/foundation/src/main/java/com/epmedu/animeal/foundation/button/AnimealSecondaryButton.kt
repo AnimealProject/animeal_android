@@ -3,7 +3,10 @@ package com.epmedu.animeal.foundation.button
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,16 +52,14 @@ fun AnimealSecondaryButton(
     }
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun AnimealSecondaryButtonPreview() {
     AnimealTheme {
-        Surface {
-            AnimealSecondaryButton(
-                text = "Button",
-                onClick = {},
-            )
-        }
+        AnimealSecondaryButton(
+            text = "Button",
+            onClick = {},
+        )
     }
 }

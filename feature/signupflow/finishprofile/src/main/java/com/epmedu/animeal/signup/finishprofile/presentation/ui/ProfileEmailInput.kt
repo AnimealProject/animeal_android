@@ -3,7 +3,6 @@ package com.epmedu.animeal.signup.finishprofile.presentation.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -46,14 +45,12 @@ fun EmailInput(
 @Composable
 private fun EmailInputPreview() {
     AnimealTheme {
-        Surface {
-            EmailInput(
-                value = "Email",
-                error = null,
-                focusManager = LocalFocusManager.current,
-                onValueChange = {},
-                onFocusRelease = {}
-            )
-        }
+        EmailInput(
+            value = "Email",
+            error = null,
+            focusManager = LocalFocusManager.current,
+            onValueChange = {},
+            onFocusRelease = {}
+        )
     }
 }

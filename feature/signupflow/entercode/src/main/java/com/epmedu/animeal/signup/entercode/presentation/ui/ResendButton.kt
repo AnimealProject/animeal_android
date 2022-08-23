@@ -10,7 +10,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -70,20 +69,18 @@ internal fun ResendButton(
 @Composable
 private fun ResendButtonPreview() {
     AnimealTheme {
-        Surface {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                ResendButton(
-                    isEnabled = true,
-                    resendDelay = EnterCodeViewModel.RESEND_DELAY,
-                    onClick = {}
-                )
-                Divider()
-                ResendButton(
-                    isEnabled = false,
-                    resendDelay = EnterCodeViewModel.RESEND_DELAY,
-                    onClick = {}
-                )
-            }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            ResendButton(
+                isEnabled = true,
+                resendDelay = EnterCodeViewModel.RESEND_DELAY,
+                onClick = {}
+            )
+            Divider()
+            ResendButton(
+                isEnabled = false,
+                resendDelay = EnterCodeViewModel.RESEND_DELAY,
+                onClick = {}
+            )
         }
     }
 }

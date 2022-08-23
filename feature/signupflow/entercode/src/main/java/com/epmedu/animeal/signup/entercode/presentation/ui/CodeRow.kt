@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -37,8 +36,7 @@ internal fun CodeRow(
                 digit = code[index],
                 onDigitInput = { digit ->
                     onDigitChange(index, digit)
-                    if (index == code.lastIndex) focusManager.clearFocus()
-                    else focusManager.moveFocus(FocusDirection.Next)
+                    if (index < code.lastIndex) focusManager.moveFocus(FocusDirection.Next)
                 },
                 onDigitRemove = {
                     onDigitChange(index, null)
@@ -56,23 +54,21 @@ internal fun CodeRow(
 @Composable
 private fun CodeRowPreview() {
     AnimealTheme {
-        Surface {
-            Column {
-                CodeRow(
-                    code = listOf(1, 2, null, null),
-                    focusRequester = FocusRequester(),
-                    onDigitChange = { _, _ -> },
-                    modifier = Modifier.padding(8.dp)
-                )
-                Divider()
-                CodeRow(
-                    code = listOf(1, 2, 3, 9),
-                    focusRequester = FocusRequester(),
-                    onDigitChange = { _, _ -> },
-                    modifier = Modifier.padding(8.dp),
-                    isError = true
-                )
-            }
+        Column {
+            CodeRow(
+                code = listOf(1, 2, null, null),
+                focusRequester = FocusRequester(),
+                onDigitChange = { _, _ -> },
+                modifier = Modifier.padding(8.dp)
+            )
+            Divider()
+            CodeRow(
+                code = listOf(1, 2, 3, 9),
+                focusRequester = FocusRequester(),
+                onDigitChange = { _, _ -> },
+                modifier = Modifier.padding(8.dp),
+                isError = true
+            )
         }
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -59,19 +58,17 @@ fun BirthDateInput(
     )
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BirthDateInputPreview() {
     AnimealTheme {
-        Surface {
-            BirthDateInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                value = "1, Sep 1939",
-                title = "BirthDate",
-                onClick = {},
-                onValueChange = {},
-            )
-        }
+        BirthDateInput(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            value = "1, Sep 1939",
+            title = "BirthDate",
+            onClick = {},
+            onValueChange = {},
+        )
     }
 }

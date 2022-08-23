@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,11 +58,9 @@ internal fun ButtonsBlock(
 @Composable
 private fun ButtonsBlockPreview() {
     AnimealTheme {
-        Surface {
-            ButtonsBlock(
-                onSignInMobile = {},
-                onSignInFacebook = {}
-            )
-        }
+        ButtonsBlock(
+            onSignInMobile = {},
+            onSignInFacebook = {}
+        )
     }
 }
