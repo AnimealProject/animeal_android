@@ -44,13 +44,13 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 /**
  * Shows the bar that holds 2 tabs.
  *
- * @param onTabSelected Called when the tab is switched.
+ * @param onSelectTab Called when the tab is switched.
  * @param modifier The [Modifier].
  */
 @Composable
 fun AnimealSwitch(
     modifier: Modifier = Modifier,
-    onTabSelected: (tab: Tab) -> Unit
+    onSelectTab: (tab: Tab) -> Unit
 ) {
     var currentTab by remember { mutableStateOf(Tab.Cats) }
 
@@ -66,19 +66,19 @@ fun AnimealSwitch(
         divider = {}
     ) {
         AnimalTab(
-            tab = Tab.Dogs,
+            titleResId = Tab.Dogs.title,
             selected = currentTab == Tab.Dogs,
             onClick = {
-                onTabSelected(it)
-                currentTab = it
+                onSelectTab(Tab.Dogs)
+                currentTab = Tab.Dogs
             }
         )
         AnimalTab(
-            tab = Tab.Cats,
+            titleResId = Tab.Cats.title,
             selected = currentTab == Tab.Cats,
             onClick = {
-                onTabSelected(it)
-                currentTab = it
+                onSelectTab(Tab.Cats)
+                currentTab = Tab.Cats
             }
         )
     }
@@ -130,7 +130,7 @@ private fun TabIndicator(
 /**
  * Shows a tab.
  *
- * @param tab current Tab type [Tab]
+ * @param titleResId current Tab string resource id
  * @param selected current tab selected state
  * @param onClick Called when this tab is clicked.
  * @param modifier The [Modifier].
@@ -138,20 +138,20 @@ private fun TabIndicator(
 @Composable
 private fun AnimalTab(
     modifier: Modifier = Modifier,
-    tab: Tab,
+    @StringRes titleResId: Int,
     selected: Boolean,
-    onClick: (Tab) -> Unit
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .padding(all = 2.dp)
             .clip(shape = RoundedCornerShape(size = 9.dp))
-            .clickable(onClick = { onClick(tab) }),
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = tab.title),
+            text = stringResource(id = titleResId),
             fontSize = 14.sp,
             modifier = Modifier.zIndex(1f),
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
@@ -164,11 +164,11 @@ enum class Tab(@StringRes val title: Int) {
     Cats(R.string.switch_cats_title)
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun AnimealSwitchPreview() {
+private fun AnimealSwitchPreview() {
     AnimealTheme {
-        AnimealSwitch(onTabSelected = { })
+        AnimealSwitch(onSelectTab = { })
     }
 }

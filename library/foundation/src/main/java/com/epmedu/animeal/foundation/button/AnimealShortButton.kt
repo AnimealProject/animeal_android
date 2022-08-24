@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,23 +25,21 @@ fun AnimealShortButton(
     )
 }
 
-@Preview(showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ShortButtonPreview() {
     AnimealTheme {
-        Surface {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                AnimealShortButton(
-                    text = "Enabled",
-                    onClick = {}
-                )
-                AnimealShortButton(
-                    text = "Disabled",
-                    enabled = false,
-                    onClick = {}
-                )
-            }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            AnimealShortButton(
+                text = "Enabled",
+                onClick = {}
+            )
+            AnimealShortButton(
+                text = "Disabled",
+                enabled = false,
+                onClick = {}
+            )
         }
     }
 }

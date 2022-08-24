@@ -3,8 +3,14 @@ name: Debug CI workflow
 on:
   pull_request:
     branches: [ develop ]
+    paths-ignore:
+      - '**/README.md'
+      - '.github/**'
   push:
     branches: [ develop ]
+    paths-ignore:
+      - '**/README.md'
+      - '.github/**'
 
   workflow_dispatch:
 
@@ -20,7 +26,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: actions/cache@v2
         with:
           path: |
@@ -29,6 +35,14 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      - name: Configure MapBox secrets
+        run: |
+          echo -e "\nMAPBOX_SECRET_TOKEN=${{ secrets.MAPBOX_SECRET_TOKEN }}" >> ./local.properties
+          echo "MAPBOX_PUBLIC_TOKEN=${{ secrets.MAPBOX_PUBLIC_TOKEN }}" >> ./local.properties
+          echo "MAPBOX_USERNAME=${{ secrets.MAPBOX_USERNAME }}" >> ./local.properties
+          echo "MAPBOX_STYLE_ID=${{ secrets.MAPBOX_STYLE_ID }}" >> ./local.properties
+          cat ./local.properties
 
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json

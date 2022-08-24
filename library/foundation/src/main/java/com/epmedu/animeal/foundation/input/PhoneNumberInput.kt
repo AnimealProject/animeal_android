@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +20,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -128,16 +130,14 @@ object PhoneFormatTransformation : VisualTransformation {
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 private fun PhoneNumberInputPreview() {
     AnimealTheme {
-        Surface {
-            var phoneNumber by remember { mutableStateOf("") }
-            PhoneNumberInput(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp),
-                title = "Phone number",
-                onValueChange = { phoneNumber = it },
-                value = phoneNumber,
-                isEnabled = true
-            )
-        }
+        var phoneNumber by remember { mutableStateOf("") }
+        PhoneNumberInput(
+            modifier = Modifier
+                .padding(horizontal = 4.dp),
+            title = "Phone number",
+            onValueChange = { phoneNumber = it },
+            value = phoneNumber,
+            isEnabled = true
+        )
     }
 }

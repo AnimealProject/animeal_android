@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(projects.feature.more)
+    implementation(projects.feature.home)
 
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)

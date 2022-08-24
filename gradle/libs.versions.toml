@@ -16,6 +16,7 @@ crashlytics = "2.9.1"
 datastore = "1.0.0"
 desugarJdkLibs = "1.1.5"
 detekt = "1.21.0"
+detektCompose = "1.2.1"
 dialogCore = "0.8.1-rc"
 firebaseBom = "30.3.2"
 googleServices = "4.3.13"
@@ -26,11 +27,14 @@ kotlin = "1.7.10"
 lifecycle = "2.5.1"
 navigationCompose = "2.5.1"
 navigationComposeHilt = "1.0.0"
+playServicesLocation = "20.0.0"
+mapbox = "10.7.0"
 versions = "0.42.0"
 
 [libraries]
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }
+gradle-plugin-detekt-compose = { module = "ru.kode:detekt-rules-compose", version.ref = "detektCompose" }
 gradle-plugin-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 gradle-plugin-googleservices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle-plugin-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
@@ -39,6 +43,11 @@ gradle-plugin-versions = { module = "com.github.ben-manes:gradle-versions-plugin
 
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+
+mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 
 amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
 

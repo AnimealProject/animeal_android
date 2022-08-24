@@ -2,7 +2,13 @@ package com.epmedu.animeal.more.profile
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -24,11 +30,11 @@ import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.login.profile.ui.BirthDateInput
-import com.epmedu.animeal.login.profile.ui.EmailInput
-import com.epmedu.animeal.login.profile.ui.NameInput
-import com.epmedu.animeal.login.profile.ui.SurnameInput
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.signup.finishprofile.presentation.ui.BirthDateInput
+import com.epmedu.animeal.signup.finishprofile.presentation.ui.EmailInput
+import com.epmedu.animeal.signup.finishprofile.presentation.ui.NameInput
+import com.epmedu.animeal.signup.finishprofile.presentation.ui.SurnameInput
 
 @Suppress("LongMethod")
 @Composable

@@ -2,8 +2,6 @@ package com.epmedu.animeal.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -23,6 +21,7 @@ import com.epmedu.animeal.navigation.navigator.Navigator
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
+@Suppress("ReusedModifierInstance")
 @Composable
 fun ScreenNavHost(
     modifier: Modifier = Modifier,
@@ -45,7 +44,7 @@ fun ScreenNavHost(
     }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "ReusedModifierInstance")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedScreenNavHost(
@@ -67,9 +66,7 @@ fun AnimatedScreenNavHost(
     ) {
         AnimatedNavHost(
             startDestination = startDestination,
-            modifier = modifier
-                .statusBarsPadding()
-                .navigationBarsPadding(),
+            modifier = modifier,
             navController = navController,
             contentAlignment = contentAlignment,
             route = route,

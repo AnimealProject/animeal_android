@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.login)
+    implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabs)
 
@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
+
+    implementation(libs.play.services.location)
 
     debugImplementation(libs.compose.ui.tooling)
 

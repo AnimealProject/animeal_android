@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.home.HomeScreen
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
