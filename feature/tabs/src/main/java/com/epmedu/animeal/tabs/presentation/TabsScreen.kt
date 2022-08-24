@@ -1,9 +1,11 @@
 package com.epmedu.animeal.tabs.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -15,6 +17,7 @@ import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TabsScreen(
     modifier: Modifier = Modifier,
@@ -22,6 +25,12 @@ fun TabsScreen(
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    var showBottomBar by remember { mutableStateOf(true) }
+
+    val changeBottomBarVisibility: (Boolean) -> Unit = { visible ->
+        showBottomBar = visible
+    }
 
     val onNavigate: (NavigationTab.Route) -> Unit = { route ->
         navigationController.navigate(route.name) {
@@ -38,32 +47,50 @@ fun TabsScreen(
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            BottomAppBarFab(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate,
-            )
+            AnimatedVisibility(
+                visible = showBottomBar,
+                enter = slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }),
+            ) {
+                BottomAppBarFab(currentRoute = currentRoute, onNavigate = onNavigate)
+            }
         },
         bottomBar = {
-            BottomNavigationBar(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate
-            )
+            AnimatedVisibility(
+                visible = showBottomBar,
+                enter = slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }),
+            ) {
+                BottomNavigationBar(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate
+                )
+            }
         },
     ) { padding ->
-        NavigationTabs(navigationController, padding)
+        NavigationTabs(
+            padding = padding,
+            navigationController = navigationController,
+            changeBottomBarVisibility = changeBottomBarVisibility,
+        )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun NavigationTabs(navigationController: NavHostController, padding: PaddingValues) {
+private fun NavigationTabs(
+    padding: PaddingValues,
+    navigationController: NavHostController,
+    changeBottomBarVisibility: (Boolean) -> Unit,
+) {
     ScreenNavHost(
-        modifier = Modifier.padding(padding),
+        // modifier = Modifier.padding(padding),
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
         screen(NavigationTab.Search.route.name) { SearchScreen() }
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
-        screen(NavigationTab.Home.route.name) { HomeScreen() }
+        screen(NavigationTab.Home.route.name) { HomeScreen(changeBottomBarVisibility) }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { TabMoreScreen() }
     }
