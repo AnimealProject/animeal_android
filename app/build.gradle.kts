@@ -80,6 +80,8 @@ dependencies {
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
 
+    implementation(libs.play.services.location)
+
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
