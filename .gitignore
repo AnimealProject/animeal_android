@@ -2,7 +2,6 @@
 .gradle
 .idea
 /local.properties
-/gradle.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -17,4 +16,3 @@
 local.properties
 gradle.properties
 /buildSrc/build
-secrets.properties
