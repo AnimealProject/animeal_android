@@ -16,9 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
@@ -89,7 +92,14 @@ internal fun AnimealTextButtonWithIcon(
         modifier = Modifier.fillMaxWidth().padding(start = 8.dp),
         text = text,
         color = color,
-        textAlign = textAlign
+        textAlign = textAlign,
+        style = TextStyle(
+            fontSize = 16.sp,
+            letterSpacing = 0.sp,
+            lineHeight = 0.sp,
+            textAlign = TextAlign.Start,
+            fontFamily = FontFamily.Default
+        )
     )
 }
 

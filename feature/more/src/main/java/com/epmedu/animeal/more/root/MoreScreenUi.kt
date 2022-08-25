@@ -21,7 +21,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun MoreScreenUi(
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier
