@@ -4,7 +4,7 @@
 
     <string name="content_description_back">Back</string>
 
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
     <string name="home">Home</string>
     <string name="more">More</string>
 
@@ -62,6 +62,8 @@
     <string name="profile_email_invalid_error_msg">Email is invalid</string>
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
     <string name="profile_birthdate_placeholder">Select birthdate</string>
+    <string name="profile_logout_cancel">Are you sure you want to log out of your account?</string>
+    <string name="profile_logout_success">You have successfully logged out</string>
 
     <string name="account_delete">Delete Account</string>
 
