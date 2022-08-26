@@ -23,9 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
+import com.epmedu.animeal.model.AnimalType
+import com.epmedu.animeal.model.FeedingPoint
+import com.epmedu.animeal.model.State
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -36,6 +41,9 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 
@@ -101,6 +109,18 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
         MapView(context, mapInitOptions)
     }
 
+    // For testing purposes
+    AddMarker(
+        mapView,
+        FeedingPoint(
+            0,
+            3,
+            State.GREEN,
+            AnimalType.DOG,
+            coordinates = Point.fromLngLat(-122.42, 37.80)
+        )
+    )
+
     return mapView
 }
 
@@ -161,4 +181,26 @@ private fun NavigateToSettingsPrompt() {
             onClick = { context.launchAppSettings() }
         )
     }
+}
+
+@Composable
+private fun AddMarker(mapView: MapView, feedingPoint: FeedingPoint) {
+
+    ContextCompat.getDrawable(
+        LocalContext.current,
+        feedingPoint.getDrawableRes()
+    )?.let { resourceImg ->
+        val annotationApi = mapView.annotations
+        val pointAnnotationManager = annotationApi.createPointAnnotationManager()
+        // Set options for the resulting symbol layer.
+        val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+            // Define a geographic coordinate.
+            .withPoint(feedingPoint.coordinates)
+            // Specify the bitmap you assigned to the point annotation
+            // The bitmap will be added to map style automatically.
+            .withIconImage(resourceImg.toBitmap())
+        // Add the resulting pointAnnotation to the map.
+        pointAnnotationManager.create(pointAnnotationOptions)
+    }
+
 }
