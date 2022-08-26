@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.epmedu.animeal.more.about.AboutScreen
+import com.epmedu.animeal.more.account.AccountScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
 import com.epmedu.animeal.more.profile.ProfileScreen
@@ -34,6 +35,7 @@ fun TabMoreScreen() {
         screen(NavigationScreen.Donate.route.name) { DonateScreen() }
         screen(NavigationScreen.Help.route.name) { HelpScreen() }
         screen(NavigationScreen.About.route.name) { AboutScreen() }
+        screen(NavigationScreen.Account.route.name) { AccountScreen() }
     }
 }
 
@@ -41,7 +43,8 @@ internal val screens = listOf(
     NavigationScreen.ProfilePage,
     NavigationScreen.Donate,
     NavigationScreen.Help,
-    NavigationScreen.About
+    NavigationScreen.About,
+    NavigationScreen.Account,
 )
 
 internal sealed class NavigationScreen(val route: Route, @StringRes val title: Int) {
@@ -51,5 +54,7 @@ internal sealed class NavigationScreen(val route: Route, @StringRes val title: I
     object Help : NavigationScreen(route = Route.HELP, title = R.string.page_help)
     object About : NavigationScreen(route = Route.ABOUT, title = R.string.page_about_detailed)
 
-    enum class Route { MORE, PROFILE, DONATE, HELP, ABOUT }
+    object Account : NavigationScreen(route = Route.ACCOUNT, title = R.string.page_account)
+
+    enum class Route { MORE, PROFILE, DONATE, HELP, ABOUT, ACCOUNT }
 }

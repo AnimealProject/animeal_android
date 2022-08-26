@@ -27,7 +27,6 @@ internal fun MoreScreen() {
     }
 
     MoreScreenUi(
-        onLogout = viewModel::logout,
         onNavigate = navigator::navigate,
     )
 }
