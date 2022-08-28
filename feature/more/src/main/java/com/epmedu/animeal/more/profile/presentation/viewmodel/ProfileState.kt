@@ -6,16 +6,16 @@ import com.epmedu.animeal.foundation.common.UiText
 internal data class ProfileState(
     val profile: Profile = Profile(),
     val formState: FormState = FormState.READ_ONLY,
-    val nameError: UiText? = null,
-    val surnameError: UiText? = null,
-    val emailError: UiText? = null,
-    val birthDateError: UiText? = null,
+    val nameError: UiText = UiText.Empty,
+    val surnameError: UiText = UiText.Empty,
+    val emailError: UiText = UiText.Empty,
+    val birthDateError: UiText = UiText.Empty,
 ) {
     val phoneNumber: String
         get() = profile.phoneNumber.replace("\\D".toRegex(), "")
 
     fun hasErrors() =
-        listOfNotNull(nameError, surnameError, emailError, birthDateError).isNotEmpty()
+        listOf(nameError, surnameError, emailError, birthDateError).any { it !is UiText.Empty }
 
     fun isEditedOrHasErrors() = formState == FormState.EDITED || hasErrors()
 

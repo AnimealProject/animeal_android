@@ -31,21 +31,21 @@ internal fun FinishProfileInputForm(
     NameInput(
         value = state.name,
         onValueChange = { onEvent(NameChanged(it)) },
-        error = state.nameError?.asString().orEmpty(),
+        error = state.nameError.asString(),
         onClearFocus = { onEvent(ValidateName) },
         onNext = { focusManager.moveFocus(FocusDirection.Down) }
     )
     SurnameInput(
         value = state.surname,
         onValueChange = { onEvent(SurnameChanged(it)) },
-        error = state.surnameError?.asString().orEmpty(),
+        error = state.surnameError.asString(),
         onClearFocus = { onEvent(ValidateSurname) },
         onNext = { focusManager.moveFocus(FocusDirection.Down) }
     )
     EmailInput(
         value = state.email,
         onValueChange = { onEvent(EmailChanged(it)) },
-        error = state.emailError?.asString().orEmpty(),
+        error = state.emailError.asString(),
         onClearFocus = { onEvent(ValidateEmail) },
         onDone = { focusManager.clearFocus() }
     )
@@ -59,7 +59,7 @@ internal fun FinishProfileInputForm(
             onEvent(BirthDateChanged(it))
             onEvent(ValidateBirthDate)
         },
-        error = state.birthDateError?.asString().orEmpty()
+        error = state.birthDateError.asString()
     )
 }
 

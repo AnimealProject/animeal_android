@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.common.validation
+package com.epmedu.animeal.foundation.common.validation.validator
 
 class DefaultProfileValidator : ProfileValidator {
     override fun validateName(name: String) = NameValidator.validate(name)

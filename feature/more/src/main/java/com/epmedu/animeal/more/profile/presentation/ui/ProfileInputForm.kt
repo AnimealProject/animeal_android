@@ -39,21 +39,21 @@ internal fun ProfileInputForm(
         NameInput(
             value = state.profile.name,
             onValueChange = { onEvent(NameChanged(it)) },
-            error = state.nameError?.asString().orEmpty(),
+            error = state.nameError.asString(),
             isEnabled = isFormEnabled,
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
         SurnameInput(
             value = state.profile.surname,
             onValueChange = { onEvent(SurnameChanged(it)) },
-            error = state.surnameError?.asString().orEmpty(),
+            error = state.surnameError.asString(),
             isEnabled = isFormEnabled,
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
         EmailInput(
             value = state.profile.email,
             onValueChange = { onEvent(EmailChanged(it)) },
-            error = state.emailError?.asString().orEmpty(),
+            error = state.emailError.asString(),
             isEnabled = isFormEnabled,
             onDone = { focusManager.clearFocus() }
         )
@@ -64,7 +64,7 @@ internal fun ProfileInputForm(
         BirthDateInput(
             value = state.profile.birthDate,
             onValueChange = { onEvent(BirthDateChanged(it)) },
-            error = state.birthDateError?.asString().orEmpty(),
+            error = state.birthDateError.asString(),
             clickable = isFormEnabled,
         )
     }
