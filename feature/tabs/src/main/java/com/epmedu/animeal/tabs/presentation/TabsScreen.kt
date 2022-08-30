@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.epmedu.animeal.foundation.animation.VerticalAnimatedVisibility
+import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.home.HomeScreen
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
@@ -40,7 +40,7 @@ fun TabsScreen() {
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            VerticalAnimatedVisibility(
+            VerticalSlideAnimatedVisibility(
                 visible = isBottomBarVisible
             ) {
                 BottomAppBarFab(
@@ -50,7 +50,7 @@ fun TabsScreen() {
             }
         },
         bottomBar = {
-            VerticalAnimatedVisibility(
+            VerticalSlideAnimatedVisibility(
                 visible = isBottomBarVisible
             ) {
                 BottomNavigationBar(

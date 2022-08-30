@@ -7,7 +7,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 
 @Composable
-fun VerticalAnimatedVisibility(
+fun VerticalSlideAnimatedVisibility(
     visible: Boolean,
     content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
