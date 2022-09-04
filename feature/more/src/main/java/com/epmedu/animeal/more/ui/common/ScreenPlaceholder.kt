@@ -2,6 +2,7 @@ package com.epmedu.animeal.more.ui.common
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,7 +18,10 @@ internal fun ScreenPlaceholder(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopBar(title = title) {
+            TopBar(
+                title = title,
+                modifier = Modifier.statusBarsPadding()
+            ) {
                 BackButton(onBack)
             }
         },
