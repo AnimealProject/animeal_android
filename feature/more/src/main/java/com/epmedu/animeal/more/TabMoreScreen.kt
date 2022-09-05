@@ -3,9 +3,7 @@ package com.epmedu.animeal.more
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
@@ -18,7 +16,6 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun TabMoreScreen() {
     AnimatedScreenNavHost(
-        modifier = Modifier.statusBarsPadding(),
         startDestination = NavigationScreen.More.route.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
         exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
