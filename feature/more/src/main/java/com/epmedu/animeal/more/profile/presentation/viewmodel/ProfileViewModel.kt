@@ -78,9 +78,10 @@ internal class ProfileViewModel @Inject constructor(
             if (it.formState != READ_ONLY) {
                 updateState {
                     copy(
-                        formState =
-                        if (it.hasErrors() || it.profile == lastSavedProfile) EDITABLE
-                        else EDITED
+                        formState = when {
+                            it.hasErrors() || it.profile == lastSavedProfile -> EDITABLE
+                            else -> EDITED
+                        }
                     )
                 }
             }
