@@ -97,9 +97,6 @@ private fun BottomNavigationBar(
                             contentDescription = stringResource(item.title)
                         )
                     },
-                    label = {
-                        Text(text = stringResource(id = item.title))
-                    },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.onSurface,
                     alwaysShowLabel = false,
