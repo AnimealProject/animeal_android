@@ -185,7 +185,6 @@ private fun NavigateToSettingsPrompt() {
 
 @Composable
 private fun AddMarker(mapView: MapView, feedingPoint: FeedingPoint) {
-
     ContextCompat.getDrawable(
         LocalContext.current,
         feedingPoint.getDrawableRes()
@@ -202,5 +201,4 @@ private fun AddMarker(mapView: MapView, feedingPoint: FeedingPoint) {
         // Add the resulting pointAnnotation to the map.
         pointAnnotationManager.create(pointAnnotationOptions)
     }
-
 }

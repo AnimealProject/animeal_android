@@ -37,7 +37,6 @@ data class FeedingPoint(
                 }
             }
         }
-
 }
 
 enum class State {
