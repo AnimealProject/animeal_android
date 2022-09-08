@@ -96,13 +96,13 @@ jobs:
           groups: qa_team
           file: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
      
-      - name: Create Release Tag
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release Tag
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          release_name: Release v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          artifacts: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
 
       - name: Commit files
