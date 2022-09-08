@@ -29,9 +29,5 @@ val Typography = Typography(
     h5 = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
-    ),
-    subtitle2 = TextStyle(
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp
     )
 )

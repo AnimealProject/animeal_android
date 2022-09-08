@@ -60,6 +60,7 @@ fun TextInputField(
         Text(
             text = title,
             modifier = Modifier.padding(bottom = 2.dp),
+            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.subtitle2
         )
 

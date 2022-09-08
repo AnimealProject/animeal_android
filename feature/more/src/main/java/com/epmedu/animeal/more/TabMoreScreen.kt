@@ -15,7 +15,7 @@ import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TabMoreScreen(onChangeBottomBarVisibility: (Boolean) -> Unit) {
+fun TabMoreScreen() {
     AnimatedScreenNavHost(
         startDestination = NavigationScreen.More.route.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
@@ -26,9 +26,9 @@ fun TabMoreScreen(onChangeBottomBarVisibility: (Boolean) -> Unit) {
             enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Right) },
             exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Left) }
         ) {
-            MoreScreen(onChangeBottomBarVisibility)
+            MoreScreen()
         }
-        screen(NavigationScreen.ProfilePage.route.name) { ProfileScreen(onChangeBottomBarVisibility) }
+        screen(NavigationScreen.ProfilePage.route.name) { ProfileScreen() }
         screen(NavigationScreen.Donate.route.name) { DonateScreen() }
         screen(NavigationScreen.Help.route.name) { HelpScreen() }
         screen(NavigationScreen.About.route.name) { AboutScreen() }

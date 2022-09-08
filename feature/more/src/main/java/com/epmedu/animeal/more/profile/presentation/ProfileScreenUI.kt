@@ -47,8 +47,10 @@ internal fun ProfileScreenUI(
         state = state,
         onEvent = onEvent,
         onBack = {
-            if (state.isEditedOrHasErrors()) showDiscardAlert = true
-            else onBack()
+            when {
+                state.isEditedOrHasErrors() -> showDiscardAlert = true
+                else -> onBack()
+            }
         }
     )
 }

@@ -3,6 +3,7 @@ package com.epmedu.animeal.tabs.presentation
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -11,6 +12,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.HomeScreen
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
@@ -22,9 +26,9 @@ fun TabsScreen() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    var isBottomBarVisible by rememberSaveable { mutableStateOf(true) }
-    val onChangeBottomBarVisibility = { visible: Boolean ->
-        isBottomBarVisible = visible
+    var bottomBarVisibility by rememberSaveable { mutableStateOf(SHOWN) }
+    val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
+        bottomBarVisibility = visibility
     }
     val onNavigate: (NavigationTab.Route) -> Unit = { route ->
         navigationController.navigate(route.name) {
@@ -41,7 +45,7 @@ fun TabsScreen() {
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             VerticalSlideAnimatedVisibility(
-                visible = isBottomBarVisible
+                visible = bottomBarVisibility.isShown()
             ) {
                 BottomAppBarFab(
                     currentRoute = currentRoute,
@@ -51,7 +55,7 @@ fun TabsScreen() {
         },
         bottomBar = {
             VerticalSlideAnimatedVisibility(
-                visible = isBottomBarVisible
+                visible = bottomBarVisibility.isShown()
             ) {
                 BottomNavigationBar(
                     currentRoute = currentRoute,
@@ -60,15 +64,16 @@ fun TabsScreen() {
             }
         },
     ) { padding ->
-        NavigationTabs(navigationController, onChangeBottomBarVisibility)
+        CompositionLocalProvider(
+            LocalBottomBarVisibilityController provides onChangeBottomBarVisibility
+        ) {
+            NavigationTabs(navigationController)
+        }
     }
 }
 
 @Composable
-private fun NavigationTabs(
-    navigationController: NavHostController,
-    onChangeBottomBarVisibility: (Boolean) -> Unit
-) {
+private fun NavigationTabs(navigationController: NavHostController) {
     ScreenNavHost(
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
@@ -77,6 +82,6 @@ private fun NavigationTabs(
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { TabMoreScreen(onChangeBottomBarVisibility) }
+        screen(NavigationTab.More.route.name) { TabMoreScreen() }
     }
 }
