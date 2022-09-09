@@ -66,23 +66,6 @@ tasks {
     registering(Delete::class) {
         delete(buildDir)
     }
-
-    register("incrementVersion") {
-        val properties = loadProperties("$rootDir/app/version.properties")
-
-        val newVersion = properties.propertyInt("BUILD_VERSION").inc()
-
-        if (newVersion == 1000) {
-            val subVersion = properties.propertyInt("SUB_VERSION").inc()
-
-            properties["SUB_VERSION"] = subVersion.toString()
-            properties["BUILD_VERSION"] = 0.toString()
-        } else {
-            properties["BUILD_VERSION"] = newVersion.toString()
-        }
-
-        properties.saveToFile(File("$rootDir/app/version.properties"))
-    }
 }
 
 fun isNonStable(version: String): Boolean {

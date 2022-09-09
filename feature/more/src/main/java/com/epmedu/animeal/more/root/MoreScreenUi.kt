@@ -1,9 +1,9 @@
 package com.epmedu.animeal.more.root
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.more.root.ui.MoreOption
@@ -21,14 +20,16 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun MoreScreenUi(
-    onLogout: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            TopBar(title = stringResource(id = R.string.more))
+            TopBar(
+                title = stringResource(id = R.string.more),
+                modifier = Modifier.statusBarsPadding()
+            )
         }
     ) { padding ->
         Column(
@@ -44,12 +45,6 @@ internal fun MoreScreenUi(
                     )
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
-            AnimealShortButton(
-                modifier = Modifier.padding(start = 24.dp),
-                text = stringResource(id = R.string.logout),
-                onClick = onLogout,
-            )
         }
     }
 }
@@ -59,7 +54,6 @@ internal fun MoreScreenUi(
 private fun MoreScreenPreview() {
     AnimealTheme {
         MoreScreenUi(
-            onLogout = {},
             onNavigate = {},
         )
     }

@@ -68,14 +68,22 @@ jobs:
         with:
           files: "app/animeal_key_store.jks"
 
+      - name: Increment build number 
+        run: ./increment.sh
+        shell: bash                 
+
       - name: Build release APK
         run: ./gradlew clean assembleRelease
+
+      - name: Rename artifacts
+        run: |
+           mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: app-debug.apk
-          path: app/build/outputs/apk/release/app-release.apk
+          name: app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Create Google Service Account.json
         run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
@@ -86,10 +94,16 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
           groups: qa_team
-          file: app/build/outputs/apk/release/app-release.apk
+          file: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
      
-      - name: Increment build number
-        run: ./gradlew incrementVersion
+      - name: Create release Tag
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
 
       - name: Commit files
         run: |
