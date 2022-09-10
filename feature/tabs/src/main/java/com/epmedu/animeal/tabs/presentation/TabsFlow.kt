@@ -12,12 +12,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.epmedu.animeal.home.HomeScreen
-import com.epmedu.animeal.more.TabMoreScreen
+import com.epmedu.animeal.more.MoreFlow
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
 
 @Composable
-fun TabsScreen(
+fun TabsFlow(
     modifier: Modifier = Modifier,
 ) {
     val navigationController = rememberNavController()
@@ -66,7 +66,7 @@ private fun NavigationTabs(navigationController: NavHostController, padding: Pad
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { TabMoreScreen() }
+        screen(NavigationTab.More.route.name) { MoreFlow() }
     }
 }
 
