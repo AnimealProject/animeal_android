@@ -38,5 +38,4 @@ internal object AppModule {
     @Singleton
     @Provides
     fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
-
 }

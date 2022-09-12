@@ -176,7 +176,6 @@ private fun addMarkers(
     mapView: MapView,
     feedingPoints: List<FeedingPointUi>
 ): PointAnnotationManager {
-
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
@@ -187,7 +186,6 @@ private fun addMarkers(
         )?.let { resourceImg ->
             // Set options for the resulting symbol layer.
             val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-                // Define a geographic coordinate.
                 .withPoint(feedingPoint.coordinates)
                 // Specify the bitmap you assigned to the point annotation
                 // The bitmap will be added to map style automatically.
