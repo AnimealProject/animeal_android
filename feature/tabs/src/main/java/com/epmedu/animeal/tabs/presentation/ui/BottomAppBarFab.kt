@@ -67,7 +67,7 @@ internal fun BottomAppBarFab(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_home),
-                    contentDescription = stringResource(associatedScreen.title),
+                    contentDescription = stringResource(associatedScreen.contentDescription),
                     tint = when (currentRoute) {
                         route.name -> MaterialTheme.colors.surface
                         else -> MaterialTheme.colors.onSurface

@@ -94,7 +94,7 @@ private fun BottomNavigationBar(
                     icon = {
                         Icon(
                             painter = painterResource(id = item.icon),
-                            contentDescription = stringResource(item.title)
+                            contentDescription = stringResource(item.contentDescription)
                         )
                     },
                     selectedContentColor = MaterialTheme.colors.primary,
