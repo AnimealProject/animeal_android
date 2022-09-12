@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation
+package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.gestures.Orientation
@@ -20,9 +20,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.tabs.presentation.HomeBottomSheetValue.Expanded
-import com.epmedu.animeal.tabs.presentation.HomeBottomSheetValue.Hidden
-import com.epmedu.animeal.tabs.presentation.HomeBottomSheetValue.Shown
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue.Expanded
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue.Hidden
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue.Shown
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -108,6 +108,7 @@ fun rememberHomeBottomSheetState(
     }
 }
 
+@Suppress("LongParameterList")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeBottomSheetLayout(

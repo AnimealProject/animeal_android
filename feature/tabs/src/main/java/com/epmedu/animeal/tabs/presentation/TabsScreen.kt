@@ -1,8 +1,5 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -13,7 +10,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.epmedu.animeal.home.HomeScreen
+import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
+import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.more.TabMoreScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
@@ -29,7 +27,7 @@ fun TabsScreen(
 
     var showBottomBar by remember { mutableStateOf(true) }
 
-    val changeBottomBarVisibility: (Boolean) -> Unit = { visible ->
+    val changeBottomNavBarVisibility: (Boolean) -> Unit = { visible ->
         showBottomBar = visible
     }
 
@@ -48,20 +46,12 @@ fun TabsScreen(
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            AnimatedVisibility(
-                visible = showBottomBar,
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
-            ) {
+            VerticalSlideAnimatedVisibility(visible = showBottomBar) {
                 BottomAppBarFab(currentRoute = currentRoute, onNavigate = onNavigate)
             }
         },
         bottomBar = {
-            AnimatedVisibility(
-                visible = showBottomBar,
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
-            ) {
+            VerticalSlideAnimatedVisibility(visible = showBottomBar) {
                 BottomNavigationBar(
                     currentRoute = currentRoute,
                     onNavigate = onNavigate
@@ -70,9 +60,8 @@ fun TabsScreen(
         },
     ) { padding ->
         NavigationTabs(
-            padding = padding,
             navigationController = navigationController,
-            changeBottomBarVisibility = changeBottomBarVisibility,
+            onChangeBottomNavBarVisibility = changeBottomNavBarVisibility,
         )
     }
 }
@@ -80,18 +69,16 @@ fun TabsScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun NavigationTabs(
-    padding: PaddingValues,
     navigationController: NavHostController,
-    changeBottomBarVisibility: (Boolean) -> Unit,
+    onChangeBottomNavBarVisibility: (Boolean) -> Unit,
 ) {
     ScreenNavHost(
-        // modifier = Modifier.padding(padding),
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
         screen(NavigationTab.Search.route.name) { SearchScreen() }
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
-        screen(NavigationTab.Home.route.name) { HomeScreen(changeBottomBarVisibility) }
+        screen(NavigationTab.Home.route.name) { HomeScreen(onChangeBottomNavBarVisibility) }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { TabMoreScreen() }
     }
