@@ -63,6 +63,10 @@
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
     <string name="profile_birthdate_placeholder">Select birthdate</string>
 
+    <string name="feed_status_green">Newly fed</string>
+    <string name="feed_status_orange">12 hours since not fed</string>
+    <string name="feed_status_red">There is no food</string>
+
     <string name="account_delete">Delete Account</string>
 
     <string name="onboarding_image_title">Take care of pets</string>
@@ -79,5 +83,6 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="i_will_feed">I will feed</string>
+    <string name="last_feeder">Last feeder</string>
 
 </resources>
