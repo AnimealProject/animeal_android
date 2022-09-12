@@ -1,21 +1,11 @@
 package com.epmedu.animeal.home
 
 import android.Manifest
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,9 +18,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
-import com.epmedu.animeal.model.AnimalType
-import com.epmedu.animeal.model.FeedingPoint
-import com.epmedu.animeal.model.State
+import com.epmedu.animeal.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -42,6 +30,7 @@ import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -71,7 +60,10 @@ private fun MapboxMap(state: HomeState) {
     LaunchedEffect(Unit) { initialLocationReceived = false }
 
     AndroidView(
-        factory = { mapBoxView },
+        factory = {
+            addMarkers(mapBoxView, state.feedingPoints)
+            mapBoxView
+        },
         modifier = Modifier.fillMaxSize()
     ) { mapView ->
         mapView.scalebar.enabled = false
@@ -109,18 +101,6 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
         MapView(context, mapInitOptions)
     }
 
-    // For testing purposes
-    AddMarker(
-        mapView,
-        FeedingPoint(
-            0,
-            3,
-            State.GREEN,
-            AnimalType.DOG,
-            coordinates = Point.fromLngLat(-122.42, 37.80)
-        )
-    )
-
     return mapView
 }
 
@@ -140,6 +120,7 @@ fun CheckLocationPermission(onGranted: @Composable () -> Unit) {
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()
     }
+
     with(permissionState.status) {
         when {
             isGranted -> onGranted()
@@ -183,22 +164,37 @@ private fun NavigateToSettingsPrompt() {
     }
 }
 
-@Composable
-private fun AddMarker(mapView: MapView, feedingPoint: FeedingPoint) {
-    ContextCompat.getDrawable(
-        LocalContext.current,
-        feedingPoint.getDrawableRes()
-    )?.let { resourceImg ->
-        val annotationApi = mapView.annotations
-        val pointAnnotationManager = annotationApi.createPointAnnotationManager()
-        // Set options for the resulting symbol layer.
-        val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-            // Define a geographic coordinate.
-            .withPoint(feedingPoint.coordinates)
-            // Specify the bitmap you assigned to the point annotation
-            // The bitmap will be added to map style automatically.
-            .withIconImage(resourceImg.toBitmap())
-        // Add the resulting pointAnnotation to the map.
-        pointAnnotationManager.create(pointAnnotationOptions)
-    }
+/**
+ * Creates a list of markers in the map
+ *
+ * @param mapView the view where the markers are being created
+ * @param feedingPoints the list of feeding points
+ *
+ * @return returns the manager that will allow us to update or delete the markers created
+ */
+private fun addMarkers(
+    mapView: MapView,
+    feedingPoints: List<FeedingPointUi>
+): PointAnnotationManager {
+
+    val annotationApi = mapView.annotations
+    val pointAnnotationManager = annotationApi.createPointAnnotationManager()
+
+    for (feedingPoint: FeedingPointUi in feedingPoints)
+        ContextCompat.getDrawable(
+            mapView.context,
+            feedingPoint.getDrawableRes()
+        )?.let { resourceImg ->
+            // Set options for the resulting symbol layer.
+            val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                // Define a geographic coordinate.
+                .withPoint(feedingPoint.coordinates)
+                // Specify the bitmap you assigned to the point annotation
+                // The bitmap will be added to map style automatically.
+                .withIconImage(resourceImg.toBitmap())
+            // Add the resulting pointAnnotation to the map.
+            pointAnnotationManager.create(pointAnnotationOptions)
+        }
+
+    return pointAnnotationManager
 }
