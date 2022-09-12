@@ -15,7 +15,7 @@ import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TabMoreScreen() {
+fun MoreFlow() {
     AnimatedScreenNavHost(
         startDestination = NavigationScreen.More.route.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
