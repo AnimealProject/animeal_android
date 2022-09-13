@@ -179,7 +179,7 @@ private fun addMarkers(
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
-    for (feedingPoint: FeedingPointUi in feedingPoints)
+    feedingPoints.forEach { feedingPoint ->
         ContextCompat.getDrawable(
             mapView.context,
             feedingPoint.getDrawableRes()
@@ -192,6 +192,7 @@ private fun addMarkers(
                 .withIconImage(resourceImg.toBitmap())
             pointAnnotationManager.create(pointAnnotationOptions)
         }
+    }
 
     return pointAnnotationManager
 }

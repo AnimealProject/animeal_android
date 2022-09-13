@@ -14,5 +14,6 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
     implementation(libs.androidx.viewmodel)
+    implementation(project(mapOf("path" to ":library:foundation")))
     kapt(libs.hilt.compiler)
 }

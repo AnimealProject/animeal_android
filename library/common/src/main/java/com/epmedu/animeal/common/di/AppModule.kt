@@ -7,8 +7,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.epmedu.animeal.common.data.repository.FeedingPointRepository
-import com.epmedu.animeal.common.data.repository.FeedingPointRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +33,8 @@ internal object AppModule {
         )
     }
 
-    @Singleton
+   /* @Singleton
     @Provides
     fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
+*/
 }

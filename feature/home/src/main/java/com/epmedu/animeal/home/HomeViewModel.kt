@@ -21,6 +21,12 @@ internal class HomeViewModel @Inject constructor(
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()) {
 
     init {
+        initialize()
+        fetchLocationUpdates()
+        fetchFeedingPoints()
+    }
+
+    private fun initialize() {
         updateState {
             copy(
                 mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
@@ -28,13 +34,17 @@ internal class HomeViewModel @Inject constructor(
                 areFeedingPointsLoading = false
             )
         }
+    }
 
+    private fun fetchLocationUpdates() {
         viewModelScope.launch {
             locationProvider.fetchUpdates().collect {
                 updateState { copy(currentLocation = it) }
             }
         }
+    }
 
+    private fun fetchFeedingPoints() {
         viewModelScope.launch {
             feedingPointRepository.getAllFeedingPoints().collect {
                 updateState {
