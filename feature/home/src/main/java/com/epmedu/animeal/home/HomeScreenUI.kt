@@ -190,7 +190,6 @@ private fun addMarkers(
                 // Specify the bitmap you assigned to the point annotation
                 // The bitmap will be added to map style automatically.
                 .withIconImage(resourceImg.toBitmap())
-            // Add the resulting pointAnnotation to the map.
             pointAnnotationManager.create(pointAnnotationOptions)
         }
 
