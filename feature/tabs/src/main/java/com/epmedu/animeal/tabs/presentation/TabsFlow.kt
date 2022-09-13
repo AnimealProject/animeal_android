@@ -94,11 +94,8 @@ private fun BottomNavigationBar(
                     icon = {
                         Icon(
                             painter = painterResource(id = item.icon),
-                            contentDescription = stringResource(item.title)
+                            contentDescription = stringResource(item.contentDescription)
                         )
-                    },
-                    label = {
-                        Text(text = stringResource(id = item.title))
                     },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.onSurface,
