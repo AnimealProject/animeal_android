@@ -176,7 +176,6 @@ private fun addMarkers(
     mapView: MapView,
     feedingPoints: List<FeedingPointUi>
 ): PointAnnotationManager {
-
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
