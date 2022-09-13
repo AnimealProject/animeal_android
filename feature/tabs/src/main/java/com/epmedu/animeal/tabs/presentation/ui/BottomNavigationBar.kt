@@ -9,14 +9,13 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.tabs.presentation.NavigationTab
 
 @Composable
@@ -32,7 +31,7 @@ internal fun BottomNavigationBar(
         NavigationTab.More
     )
     BottomAppBar(
-        modifier = Modifier.height(bottomBarHeight),
+        modifier = Modifier.height(56.dp),
         backgroundColor = MaterialTheme.colors.surface,
     ) {
         items.forEach { item ->
@@ -43,11 +42,8 @@ internal fun BottomNavigationBar(
                     icon = {
                         Icon(
                             painter = painterResource(id = item.icon),
-                            contentDescription = stringResource(item.title)
+                            contentDescription = stringResource(item.contentDescription)
                         )
-                    },
-                    label = {
-                        Text(text = stringResource(id = item.title))
                     },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.onSurface,

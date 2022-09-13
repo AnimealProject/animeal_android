@@ -1,7 +1,6 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -16,13 +15,13 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.HomeScreen
-import com.epmedu.animeal.more.TabMoreScreen
+import com.epmedu.animeal.more.MoreFlow
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.presentation.ui.BottomNavigationBar
 
 @Composable
-fun TabsScreen() {
+fun TabsFlow() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -82,6 +81,6 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { TabMoreScreen() }
+        screen(NavigationTab.More.route.name) { MoreFlow() }
     }
 }
