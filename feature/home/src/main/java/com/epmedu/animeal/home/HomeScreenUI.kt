@@ -13,13 +13,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.utils.MarkerCache
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -55,13 +54,14 @@ internal fun HomeScreenUI(state: HomeState) {
 @Composable
 private fun MapboxMap(state: HomeState) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
+    val markerCache = MarkerCache(LocalContext.current)
 
     var initialLocationReceived by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) { initialLocationReceived = false }
 
     AndroidView(
         factory = {
-            addMarkers(mapBoxView, state.feedingPoints)
+            addMarkers(mapBoxView, state.feedingPoints, markerCache)
             mapBoxView
         },
         modifier = Modifier.fillMaxSize()
@@ -174,24 +174,23 @@ private fun NavigateToSettingsPrompt() {
  */
 private fun addMarkers(
     mapView: MapView,
-    feedingPoints: List<FeedingPointUi>
+    feedingPoints: List<FeedingPointUi>,
+    markerCache: MarkerCache
 ): PointAnnotationManager {
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
     feedingPoints.forEach { feedingPoint ->
-        ContextCompat.getDrawable(
-            mapView.context,
-            feedingPoint.getDrawableRes()
-        )?.let { resourceImg ->
-            // Set options for the resulting symbol layer.
-            val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-                .withPoint(feedingPoint.coordinates)
-                // Specify the bitmap you assigned to the point annotation
-                // The bitmap will be added to map style automatically.
-                .withIconImage(resourceImg.toBitmap())
-            pointAnnotationManager.create(pointAnnotationOptions)
-        }
+        markerCache.getVector(feedingPoint.getDrawableRes())
+            .let { resourceImg ->
+                // Set options for the resulting symbol layer.
+                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                    .withPoint(feedingPoint.coordinates)
+                    // Specify the bitmap you assigned to the point annotation
+                    // The bitmap will be added to map style automatically.
+                    .withIconImage(resourceImg)
+                pointAnnotationManager.create(pointAnnotationOptions)
+            }
     }
 
     return pointAnnotationManager
