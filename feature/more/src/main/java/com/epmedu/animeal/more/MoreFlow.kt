@@ -8,7 +8,7 @@ import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.account.AccountScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
-import com.epmedu.animeal.more.profile.ProfileScreen
+import com.epmedu.animeal.more.profile.presentation.ProfileScreen
 import com.epmedu.animeal.more.root.MoreScreen
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.resources.R

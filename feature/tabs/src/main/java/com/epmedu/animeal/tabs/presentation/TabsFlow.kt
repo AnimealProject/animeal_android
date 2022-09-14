@@ -1,29 +1,34 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.HomeScreen
 import com.epmedu.animeal.more.MoreFlow
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
+import com.epmedu.animeal.tabs.presentation.ui.BottomNavigationBar
 
 @Composable
-fun TabsFlow(
-    modifier: Modifier = Modifier,
-) {
+fun TabsFlow() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
+    var bottomBarVisibility by rememberSaveable { mutableStateOf(SHOWN) }
+    val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
+        bottomBarVisibility = visibility
+    }
     val onNavigate: (NavigationTab.Route) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
@@ -35,30 +40,40 @@ fun TabsFlow(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            BottomAppBarFab(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate,
-            )
+            VerticalSlideAnimatedVisibility(
+                visible = bottomBarVisibility.isShown()
+            ) {
+                BottomAppBarFab(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate,
+                )
+            }
         },
         bottomBar = {
-            BottomNavigationBar(
-                currentRoute = currentRoute,
-                onNavigate = onNavigate
-            )
+            VerticalSlideAnimatedVisibility(
+                visible = bottomBarVisibility.isShown()
+            ) {
+                BottomNavigationBar(
+                    currentRoute = currentRoute,
+                    onNavigate = onNavigate
+                )
+            }
         },
     ) { padding ->
-        NavigationTabs(navigationController, padding)
+        CompositionLocalProvider(
+            LocalBottomBarVisibilityController provides onChangeBottomBarVisibility
+        ) {
+            NavigationTabs(navigationController)
+        }
     }
 }
 
 @Composable
-private fun NavigationTabs(navigationController: NavHostController, padding: PaddingValues) {
+private fun NavigationTabs(navigationController: NavHostController) {
     ScreenNavHost(
-        modifier = Modifier.padding(padding),
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
@@ -67,45 +82,5 @@ private fun NavigationTabs(navigationController: NavHostController, padding: Pad
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { MoreFlow() }
-    }
-}
-
-@Composable
-private fun BottomNavigationBar(
-    currentRoute: String?,
-    onNavigate: (NavigationTab.Route) -> Unit
-) {
-    val items = listOf(
-        NavigationTab.Search,
-        NavigationTab.Favorites,
-        NavigationTab.Home,
-        NavigationTab.Analytics,
-        NavigationTab.More
-    )
-    BottomAppBar(
-        modifier = Modifier.height(56.dp),
-        backgroundColor = MaterialTheme.colors.surface,
-    ) {
-        items.forEach { item ->
-            if (item == NavigationTab.Home) {
-                Box(modifier = Modifier.weight(1f))
-            } else {
-                BottomNavigationItem(
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = item.icon),
-                            contentDescription = stringResource(item.contentDescription)
-                        )
-                    },
-                    selectedContentColor = MaterialTheme.colors.primary,
-                    unselectedContentColor = MaterialTheme.colors.onSurface,
-                    alwaysShowLabel = false,
-                    selected = currentRoute == item.route.name,
-                    onClick = {
-                        onNavigate(item.route)
-                    }
-                )
-            }
-        }
     }
 }

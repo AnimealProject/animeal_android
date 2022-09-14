@@ -2,6 +2,7 @@ package com.epmedu.animeal.common.presentation.viewmodel.delegate
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class DefaultStateDelegate<State>(initialState: State) : StateDelegate<State> {
 
@@ -12,7 +13,6 @@ class DefaultStateDelegate<State>(initialState: State) : StateDelegate<State> {
         get() = stateFlow.value
 
     override fun updateState(reduce: State.() -> State) {
-        val newState = state.reduce()
-        _stateFlow.value = newState
+        _stateFlow.update(reduce)
     }
 }

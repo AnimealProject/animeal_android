@@ -34,6 +34,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.foundation.theme.CustomColor.DarkerGrey
 import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
+import com.epmedu.animeal.foundation.theme.interFontFamily
 
 @Suppress("LongParameterList")
 @Composable
@@ -44,7 +45,7 @@ fun TextInputField(
     onValueChange: (String) -> Unit,
     value: String,
     isEnabled: Boolean = true,
-    errorText: String? = null,
+    errorText: String = "",
     onClearFocus: () -> Unit = {},
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -53,17 +54,14 @@ fun TextInputField(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     var focusedDirty by rememberSaveable { mutableStateOf(false) }
-    val borderColor: Color = if (errorText == null) LynxWhite else CustomColor.Error
+    val borderColor: Color = if (errorText.isEmpty()) LynxWhite else CustomColor.Error
 
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title,
             modifier = Modifier.padding(bottom = 2.dp),
-            style = TextStyle(
-                color = MaterialTheme.colors.onSurface,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            )
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.subtitle2
         )
 
         TextInputFieldBox(
@@ -88,17 +86,16 @@ fun TextInputField(
             keyboardActions = keyboardActions,
         )
 
-        errorText?.let {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                text = it,
-                textAlign = TextAlign.End,
-                color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption
-            )
-        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            text = errorText,
+            textAlign = TextAlign.End,
+            color = MaterialTheme.colors.error,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.ExtraLight
+        )
     }
 }
 
@@ -128,10 +125,15 @@ private fun TextInputFieldBox(
             ),
         value = value,
         onValueChange = { onValueChange(it) },
-        textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.ExtraLight,
+            fontFamily = interFontFamily
+        ),
         visualTransformation = visualTransformation,
         colors = TextFieldDefaults.textFieldColors(
-            textColor = MaterialTheme.colors.onSurface,
+            textColor = Color.Black,
+            disabledTextColor = Color.Black,
             backgroundColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -142,8 +144,8 @@ private fun TextInputFieldBox(
         placeholder = {
             Text(
                 text = hint,
-                fontSize = 16.sp,
-                color = DarkerGrey
+                color = DarkerGrey,
+                fontWeight = FontWeight.ExtraLight
             )
         },
         singleLine = true,
@@ -161,7 +163,7 @@ private fun TextInputFieldPreview() {
         Column {
             TextInputField(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Title",
+                title = "Empty",
                 hint = "Hint",
                 onValueChange = {},
                 value = ""
@@ -169,10 +171,28 @@ private fun TextInputFieldPreview() {
             Divider()
             TextInputField(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Title",
+                title = "With value",
                 hint = "Enter your name",
                 onValueChange = {},
                 value = "Value"
+            )
+            Divider()
+            TextInputField(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = "With error",
+                hint = "Hint",
+                onValueChange = {},
+                value = "Wrong value",
+                errorText = "Value is wrong"
+            )
+            Divider()
+            TextInputField(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = "Disabled",
+                hint = "Hint",
+                onValueChange = {},
+                value = "Wrong value",
+                isEnabled = false
             )
         }
     }
