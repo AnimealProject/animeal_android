@@ -59,6 +59,7 @@ dependencies {
     implementation(projects.feature.tabsflow.tabs)
 
     implementation(projects.library.common)
+    implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)

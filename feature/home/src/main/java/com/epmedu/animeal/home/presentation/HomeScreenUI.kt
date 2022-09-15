@@ -29,7 +29,7 @@ import com.epmedu.animeal.resources.R
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
-    onEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
@@ -65,7 +65,7 @@ internal fun HomeScreenUI(
                         feedingPoint = feedingPoint,
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
-                            onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
+                            onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                         }
                     )
                 }
@@ -79,7 +79,8 @@ internal fun HomeScreenUI(
         ) {
             MapContent(
                 state = state,
-                onFeedingPointSelect = { onEvent(HomeScreenEvent.FeedingPointSelected()) }
+//                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected()) },
+                onGeolocationClick = { onScreenEvent(HomeScreenEvent.UserCurrentGeolocationRequest) }
             )
         }
     }
@@ -88,7 +89,8 @@ internal fun HomeScreenUI(
 @Composable
 private fun MapContent(
     state: HomeState,
-    onFeedingPointSelect: () -> Unit
+//    onFeedingPointSelect: () -> Unit,
+    onGeolocationClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(state = state)
@@ -106,7 +108,7 @@ private fun MapContent(
                     end = 24.dp
                 )
                 .align(alignment = Alignment.BottomEnd),
-            onClick = onFeedingPointSelect
+            onClick = onGeolocationClick
         )
     }
 }
@@ -114,7 +116,7 @@ private fun MapContent(
 @Composable
 private fun FeedingPointActionButton(
     alpha: Float,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     AnimealButton(
         modifier = Modifier
