@@ -58,6 +58,7 @@ dependencies {
     implementation(projects.feature.tabs)
 
     implementation(projects.library.common)
+    implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)

@@ -3,6 +3,7 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
+import com.epmedu.animeal.common.component.GpsSettingsProvider
 import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
@@ -18,10 +19,11 @@ import javax.inject.Inject
 internal class HomeViewModel @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
     private val buildConfigProvider: BuildConfigProvider,
-    private val locationProvider: LocationProvider
+    private val locationProvider: LocationProvider,
+    private val gpsSettingsProvider: GpsSettingsProvider,
 ) : ViewModel(),
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
-    EventDelegate<HomeEvent> by DefaultEventDelegate() {
+    EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
 
     init {
         updateState {
@@ -36,27 +38,46 @@ internal class HomeViewModel @Inject constructor(
                 updateState { copy(currentLocation = it) }
             }
         }
-    }
 
-    fun handleEvents(event: HomeScreenEvent) {
-        when (event) {
-            is HomeScreenEvent.FeedingPointSelected -> {
-                viewModelScope.launch {
-                    feedingPointRepository.getFeedingPoint(event.id).collect { feedingPoint ->
-                        updateState {
-                            copy(currentFeedingPoint = feedingPoint)
-                        }
-                        sendEvent(HomeEvent.ShowCurrentFeedingPoint)
-                    }
-                }
-            }
-            is HomeScreenEvent.FeedingPointFavouriteChange -> {
-                updateState {
-                    copy(
-                        currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
-                    )
-                }
+        viewModelScope.launch {
+            gpsSettingsProvider.fetchUpdates().collect {
+                updateState { copy(gpsSettingState = it) }
             }
         }
     }
+
+    fun handleEvents(event: HomeScreenEvent) = when (event) {
+        is HomeScreenEvent.FeedingPointSelected -> {
+            selectFeedingPoint(event)
+        }
+
+        is HomeScreenEvent.FeedingPointFavouriteChange -> {
+            changeFavouriteFeedingPoint(event)
+        }
+
+        is HomeScreenEvent.UserCurrentGeolocationRequest -> {
+            changeGpsSetting()
+        }
+    }
+
+    private fun selectFeedingPoint(event: HomeScreenEvent.FeedingPointSelected) {
+        viewModelScope.launch {
+            feedingPointRepository.getFeedingPoint(event.id).collect { feedingPoint ->
+                updateState {
+                    copy(currentFeedingPoint = feedingPoint)
+                }
+                sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
+            }
+        }
+    }
+
+    private fun changeFavouriteFeedingPoint(event: HomeScreenEvent.FeedingPointFavouriteChange) {
+        updateState {
+            copy(
+                currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
+            )
+        }
+    }
+
+    private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
 }

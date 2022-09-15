@@ -2,8 +2,10 @@ package com.epmedu.animeal.di
 
 import android.content.Context
 import com.epmedu.animeal.common.component.BuildConfigProvider
+import com.epmedu.animeal.common.component.GpsSettingsProvider
 import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.component.BuildConfigProviderImpl
+import com.epmedu.animeal.component.IntentGpsSettingsProvider
 import com.epmedu.animeal.component.LocationProviderImpl
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -31,4 +33,9 @@ class AppScopeModule {
     @Provides
     fun providesFusedLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
+
+    @Singleton
+    @Provides
+    fun providesGpsSettingsStrategyProvider(@ApplicationContext context: Context): GpsSettingsProvider =
+        IntentGpsSettingsProvider(context)
 }
