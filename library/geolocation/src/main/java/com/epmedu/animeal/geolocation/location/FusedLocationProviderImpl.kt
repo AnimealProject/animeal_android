@@ -1,9 +1,8 @@
-package com.epmedu.animeal.component
+package com.epmedu.animeal.geolocation.location
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import com.epmedu.animeal.common.component.LocationProvider
-import com.epmedu.animeal.common.data.model.MapLocation
+import com.epmedu.animeal.geolocation.location.model.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -15,9 +14,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("MissingPermission")
-class LocationProviderImpl(private val client: FusedLocationProviderClient) : LocationProvider {
+internal class FusedLocationProviderImpl(private val client: FusedLocationProviderClient) : LocationProvider {
 
-    override fun fetchUpdates(): Flow<MapLocation> = callbackFlow {
+    override fun fetchUpdates(): Flow<Location> = callbackFlow {
         val locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.SECONDS.toMillis(UPDATE_INTERVAL_SECS)
             fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_UPDATE_INTERVAL_SECS)
@@ -29,7 +28,7 @@ class LocationProviderImpl(private val client: FusedLocationProviderClient) : Lo
                 super.onLocationResult(locationResult)
 
                 locationResult.lastLocation?.let {
-                    val userLocation = MapLocation(
+                    val userLocation = Location(
                         latitude = it.latitude,
                         longitude = it.longitude,
                     )
