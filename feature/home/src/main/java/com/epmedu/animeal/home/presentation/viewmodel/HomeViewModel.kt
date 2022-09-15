@@ -3,14 +3,15 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
-import com.epmedu.animeal.common.component.GpsSettingsProvider
-import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
+import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +36,7 @@ internal class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             locationProvider.fetchUpdates().collect {
-                updateState { copy(currentLocation = it) }
+                updateState { copy(currentLocation = MapLocation(it)) }
             }
         }
 

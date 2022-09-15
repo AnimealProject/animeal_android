@@ -68,6 +68,7 @@ include(":feature:tabsflow:tabs")
 include(":library:common")
 include(":library:extensions")
 include(":library:foundation")
+include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
 
