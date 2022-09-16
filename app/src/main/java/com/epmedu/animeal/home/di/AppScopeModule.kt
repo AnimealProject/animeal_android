@@ -1,4 +1,4 @@
-package com.epmedu.animeal.di
+package com.epmedu.animeal.home.di
 
 import android.content.Context
 import com.epmedu.animeal.common.component.BuildConfigProvider

@@ -1,10 +1,9 @@
-package com.epmedu.animeal.model
+package com.epmedu.animeal.home.data.model
 
-import com.epmedu.animeal.common.data.enum.AnimalPriority
-import com.epmedu.animeal.common.data.enum.AnimalState
-import com.epmedu.animeal.common.data.enum.Remoteness
-import com.epmedu.animeal.common.data.model.FeedingPoint
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.home.data.model.enum.AnimalPriority
+import com.epmedu.animeal.home.data.model.enum.AnimalState
+import com.epmedu.animeal.home.data.model.enum.Remoteness
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 

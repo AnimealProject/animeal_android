@@ -1,13 +1,13 @@
-package com.epmedu.animeal.home
+package com.epmedu.animeal.home.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.component.LocationProvider
-import com.epmedu.animeal.common.data.repository.FeedingPointRepository
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.model.FeedingPointUi
+import com.epmedu.animeal.home.data.FeedingPointRepository
+import com.epmedu.animeal.home.data.model.FeedingPointUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.ui
+package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon

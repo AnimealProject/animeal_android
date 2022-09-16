@@ -14,7 +14,7 @@ import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
-import com.epmedu.animeal.home.HomeScreen
+import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.more.MoreFlow
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab

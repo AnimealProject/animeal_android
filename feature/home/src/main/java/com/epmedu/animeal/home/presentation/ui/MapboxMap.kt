@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.ui
+package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -11,9 +11,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.epmedu.animeal.home.HomeState
-import com.epmedu.animeal.model.FeedingPointUi
-import com.epmedu.animeal.utils.MarkerCache
+import com.epmedu.animeal.home.data.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.utils.MarkerCache
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions

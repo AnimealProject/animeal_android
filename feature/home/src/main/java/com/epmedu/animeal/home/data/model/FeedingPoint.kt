@@ -1,9 +1,10 @@
-package com.epmedu.animeal.common.data.model
+package com.epmedu.animeal.home.data.model
 
-import com.epmedu.animeal.common.data.enum.AnimalPriority
-import com.epmedu.animeal.common.data.enum.AnimalState
-import com.epmedu.animeal.common.data.enum.Remoteness
+import com.epmedu.animeal.common.data.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.home.data.model.enum.AnimalPriority
+import com.epmedu.animeal.home.data.model.enum.AnimalState
+import com.epmedu.animeal.home.data.model.enum.Remoteness
 
 data class FeedingPoint(
     val id: Int, // For future implementations

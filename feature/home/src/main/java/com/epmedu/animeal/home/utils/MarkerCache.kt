@@ -1,4 +1,4 @@
-package com.epmedu.animeal.utils
+package com.epmedu.animeal.home.utils
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home
+package com.epmedu.animeal.home.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.home.ui.CheckLocationPermission
-import com.epmedu.animeal.home.ui.GeoLocationFloatingActionButton
-import com.epmedu.animeal.home.ui.MapboxMap
+import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
+import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
+import com.epmedu.animeal.home.presentation.ui.MapboxMap
+import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 
 @Composable
 internal fun HomeScreenUI(state: HomeState) {

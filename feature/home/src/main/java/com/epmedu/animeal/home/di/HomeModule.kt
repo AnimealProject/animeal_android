@@ -1,7 +1,7 @@
-package com.epmedu.animeal.di
+package com.epmedu.animeal.home.di
 
-import com.epmedu.animeal.common.data.repository.FeedingPointRepository
-import com.epmedu.animeal.common.data.repository.FeedingPointRepositoryImpl
+import com.epmedu.animeal.home.data.FeedingPointRepository
+import com.epmedu.animeal.home.data.FeedingPointRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

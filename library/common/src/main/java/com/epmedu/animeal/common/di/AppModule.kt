@@ -32,9 +32,4 @@ internal object AppModule {
             produceFile = { context.preferencesDataStoreFile(DATA_STORE_PREFERENCES_KEY) }
         )
     }
-
-   /* @Singleton
-    @Provides
-    fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
-*/
 }
