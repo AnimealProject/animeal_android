@@ -5,13 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
@@ -33,9 +27,10 @@ internal fun ResendButton(
     modifier: Modifier = Modifier
 ) {
     val seconds = DecimalFormat("00").format(resendDelay)
-    val text =
-        if (isEnabled) stringResource(id = R.string.resend_code)
-        else stringResource(id = R.string.resend_code_in, formatArgs = arrayOf(seconds))
+    val text = when {
+        isEnabled -> stringResource(id = R.string.resend_code)
+        else -> stringResource(id = R.string.resend_code_in, formatArgs = arrayOf(seconds))
+    }
 
     TextButton(
         onClick = onClick,
