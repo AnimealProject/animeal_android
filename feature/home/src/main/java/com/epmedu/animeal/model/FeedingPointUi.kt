@@ -18,6 +18,16 @@ data class FeedingPointUi(
     var coordinates: Point
 ) {
 
+    constructor(feedingPoint: FeedingPoint) : this(
+        feedingPoint.id,
+        feedingPoint.animalPriority,
+        feedingPoint.animalStatus,
+        feedingPoint.animalType,
+        feedingPoint.isFavourite,
+        feedingPoint.remoteness,
+        Point.fromLngLat(feedingPoint.location.latitude, feedingPoint.location.longitude)
+    )
+
     fun getDrawableRes(): Int =
         when {
             isFavourite -> {
@@ -34,26 +44,12 @@ data class FeedingPointUi(
                     AnimalState.GREEN -> R.drawable.ic_dogsstate_doghungry_low
                 }
             }
-            else -> {
+            //animalType == AnimalType.Cats
+            else ->
                 when (status) {
                     AnimalState.RED -> R.drawable.ic_catsstate_cathungry_high
                     AnimalState.YELLOW -> R.drawable.ic_catsstate_cathungry_medium
                     AnimalState.GREEN -> R.drawable.ic_catsstate_cathungry_low
                 }
-            }
         }
-
-    companion object {
-        fun FeedingPoint.toUi(): FeedingPointUi {
-            return FeedingPointUi(
-                id,
-                animalPriority,
-                animalStatus,
-                animalType,
-                isFavourite,
-                remoteness,
-                Point.fromLngLat(xCoordinate, yCoordinate)
-            )
-        }
-    }
 }

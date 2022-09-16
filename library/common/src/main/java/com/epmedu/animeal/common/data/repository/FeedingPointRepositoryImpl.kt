@@ -3,6 +3,7 @@ package com.epmedu.animeal.common.data.repository
 import com.epmedu.animeal.common.data.enum.AnimalPriority
 import com.epmedu.animeal.common.data.enum.AnimalState
 import com.epmedu.animeal.common.data.model.FeedingPoint
+import com.epmedu.animeal.common.data.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,8 +18,10 @@ class FeedingPointRepositoryImpl : FeedingPointRepository {
             AnimalState.values()[Random.nextInt(0, AnimalState.values().size)],
             AnimalType.values()[Random.nextInt(0, AnimalType.values().size)],
             Random.nextBoolean(),
-            yCoordinate = Random.nextDouble(37.362023, 37.466366),
-            xCoordinate = Random.nextDouble(-122.178187, -121.978700)
+            location = MapLocation(
+                Random.nextDouble(37.362023, 37.466366),
+                Random.nextDouble(-122.178187, -121.978700)
+            )
         )
     }
 

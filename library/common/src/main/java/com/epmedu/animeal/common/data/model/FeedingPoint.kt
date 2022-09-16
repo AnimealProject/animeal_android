@@ -12,6 +12,5 @@ data class FeedingPoint(
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
     val remoteness: Remoteness = Remoteness.ANY,
-    var xCoordinate: Double,
-    var yCoordinate: Double
+    var location: MapLocation
 )

@@ -7,7 +7,7 @@ import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.data.repository.FeedingPointRepository
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.model.FeedingPointUi.Companion.toUi
+import com.epmedu.animeal.model.FeedingPointUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,7 +50,7 @@ internal class HomeViewModel @Inject constructor(
                 updateState {
                     copy(
                         areFeedingPointsLoading = false,
-                        feedingPoints = it.map { feedingPoint -> feedingPoint.toUi() }
+                        feedingPoints = it.map { feedingPoint -> FeedingPointUi(feedingPoint) }
                     )
                 }
             }
