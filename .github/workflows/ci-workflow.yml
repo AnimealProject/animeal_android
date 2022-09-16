@@ -15,9 +15,9 @@ on:
   workflow_dispatch:
 
 env:
-  AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-  AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+  GH_PAT: ${{ secrets.GH_PAT }}
+
 
 jobs:
   build:
@@ -26,6 +26,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Add private "android-keystore" repo
+        uses: actions/checkout@v3
+        with:
+          repository: AnimealProject/android-keystore
+          token: ${{ secrets.GH_PAT }} # GH_PAT=Personal_Access_Token (scope repo)
+          path: android-keystore
 
       - uses: actions/cache@v2
         with:
@@ -51,8 +58,8 @@ jobs:
         run: |
           mkdir -p app/src/main/res/raw
 
-          echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
-          echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
 
       - name: Setup Java 11
         uses: actions/setup-java@v2
