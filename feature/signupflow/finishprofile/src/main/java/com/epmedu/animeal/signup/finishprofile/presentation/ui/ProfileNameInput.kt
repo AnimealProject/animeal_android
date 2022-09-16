@@ -1,12 +1,10 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
 import android.content.res.Configuration
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,11 +16,11 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun NameInput(
     value: String,
-    error: String?,
-    focusManager: FocusManager,
-    isEnabled: Boolean = true,
     onValueChange: (String) -> Unit,
-    onFocusRelease: () -> Unit,
+    error: String,
+    isEnabled: Boolean = true,
+    onClearFocus: () -> Unit = {},
+    onNext: KeyboardActionScope.() -> Unit = {},
 ) {
     TextInputField(
         isEnabled = isEnabled,
@@ -31,9 +29,9 @@ fun NameInput(
         onValueChange = onValueChange,
         value = value,
         errorText = error,
-        onClearFocus = onFocusRelease,
+        onClearFocus = onClearFocus,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+        keyboardActions = KeyboardActions(onNext = onNext)
     )
 }
 
@@ -44,10 +42,8 @@ private fun NameInputPreview() {
     AnimealTheme {
         NameInput(
             value = "Name",
-            error = null,
-            focusManager = LocalFocusManager.current,
             onValueChange = {},
-            onFocusRelease = {}
+            error = ""
         )
     }
 }

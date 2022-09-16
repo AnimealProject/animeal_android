@@ -24,7 +24,7 @@ fun BirthDateInput(
     title: String,
     value: String,
     clickable: Boolean = false,
-    errorText: String? = null,
+    errorText: String = "",
     onValueChange: (String) -> Unit,
     onClick: () -> Unit,
 ) {
@@ -44,9 +44,8 @@ fun BirthDateInput(
         value = value,
         trailingIcon = {
             IconButton(
-                onClick = {
-                    if (clickable) onClick()
-                },
+                onClick = onClick,
+                enabled = clickable
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_birthdate),

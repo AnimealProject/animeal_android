@@ -65,7 +65,7 @@ internal fun FinishProfileScreenUI(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
                     text = stringResource(R.string.profile_subtitle),

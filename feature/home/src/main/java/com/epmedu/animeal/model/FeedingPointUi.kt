@@ -15,7 +15,7 @@ data class FeedingPointUi(
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
     val remoteness: Remoteness = Remoteness.ANY,
-    var coordinates: Point
+    val coordinates: Point
 ) {
 
     constructor(feedingPoint: FeedingPoint) : this(
@@ -25,7 +25,7 @@ data class FeedingPointUi(
         feedingPoint.animalType,
         feedingPoint.isFavourite,
         feedingPoint.remoteness,
-        Point.fromLngLat(feedingPoint.location.latitude, feedingPoint.location.longitude)
+        Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude)
     )
 
     fun getDrawableRes(): Int =
@@ -44,7 +44,7 @@ data class FeedingPointUi(
                     AnimalState.GREEN -> R.drawable.ic_dogsstate_doghungry_low
                 }
             }
-            //animalType == AnimalType.Cats
+            // animalType == AnimalType.Cats
             else ->
                 when (status) {
                     AnimalState.RED -> R.drawable.ic_catsstate_cathungry_high

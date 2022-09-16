@@ -1,11 +1,10 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
 import android.content.res.Configuration
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -18,11 +17,11 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun EmailInput(
     value: String,
-    error: String?,
-    focusManager: FocusManager,
-    isEnabled: Boolean = true,
     onValueChange: (String) -> Unit,
-    onFocusRelease: () -> Unit,
+    error: String,
+    isEnabled: Boolean = true,
+    onClearFocus: () -> Unit = {},
+    onDone: KeyboardActionScope.() -> Unit = {},
 ) {
     TextInputField(
         isEnabled = isEnabled,
@@ -31,12 +30,12 @@ fun EmailInput(
         onValueChange = onValueChange,
         value = value,
         errorText = error,
-        onClearFocus = onFocusRelease,
+        onClearFocus = onClearFocus,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Email
         ),
-        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+        keyboardActions = KeyboardActions(onDone = onDone)
     )
 }
 
@@ -47,10 +46,8 @@ private fun EmailInputPreview() {
     AnimealTheme {
         EmailInput(
             value = "Email",
-            error = null,
-            focusManager = LocalFocusManager.current,
             onValueChange = {},
-            onFocusRelease = {}
+            error = ""
         )
     }
 }

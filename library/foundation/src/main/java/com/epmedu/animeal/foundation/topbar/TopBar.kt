@@ -27,15 +27,17 @@ import com.epmedu.animeal.resources.R
 /**
  * Similar to [TopAppBar], but it consists only from a navigation icon and a title.
  * @param title A title of the [TopBar].
+ * @param modifier A modifier to be applied to the [TopBar].
  * @param navigationIcon A navigation icon before the title. By default empty.
  */
 @Composable
 fun TopBar(
     title: String,
+    modifier: Modifier = Modifier,
     navigationIcon: (@Composable () -> Unit) = {}
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 16.dp),
         horizontalAlignment = Alignment.Start,

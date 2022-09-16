@@ -5,9 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.firstNameKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.lastNameKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
 import com.epmedu.animeal.common.data.model.Profile
 import kotlinx.coroutines.flow.*
@@ -20,8 +20,8 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getProfile(): Flow<Profile> {
         return dataStore.data.map { preferences ->
             Profile(
-                firstName = preferences[firstNameKey] ?: EMPTY_STRING,
-                lastName = preferences[lastNameKey] ?: EMPTY_STRING,
+                name = preferences[nameKey] ?: EMPTY_STRING,
+                surname = preferences[surnameKey] ?: EMPTY_STRING,
                 phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING,
                 email = preferences[emailKey] ?: EMPTY_STRING,
                 birthDate = preferences[birthDateKey] ?: EMPTY_STRING,
@@ -32,8 +32,8 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun saveProfile(profile: Profile): Flow<Unit> {
         return flowOf(Unit).map {
             dataStore.edit { preference ->
-                preference[firstNameKey] = profile.firstName
-                preference[lastNameKey] = profile.lastName
+                preference[nameKey] = profile.name
+                preference[surnameKey] = profile.surname
                 preference[emailKey] = profile.email
                 preference[birthDateKey] = profile.birthDate
             }
@@ -42,8 +42,8 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearProfile() {
         dataStore.edit {
-            it.remove(firstNameKey)
-            it.remove(lastNameKey)
+            it.remove(nameKey)
+            it.remove(surnameKey)
             it.remove(phoneNumberKey)
             it.remove(emailKey)
             it.remove(birthDateKey)
@@ -52,7 +52,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun isProfileSaved(): Boolean {
         return with(getProfile().first()) {
-            listOf(firstName, lastName, phoneNumber, email, birthDate).all { it.isNotEmpty() }
+            listOf(name, surname, phoneNumber, email, birthDate).all { it.isNotEmpty() }
         }
     }
 }

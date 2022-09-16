@@ -21,17 +21,13 @@ val interFontFamily =
     )
 
 val Typography = Typography(
+    defaultFontFamily = interFontFamily,
     h4 = TextStyle(
-        fontFamily = interFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp
     ),
     h5 = TextStyle(
-        fontFamily = interFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
-    ),
-    body1 = TextStyle(
-        fontFamily = interFontFamily
     )
 )
