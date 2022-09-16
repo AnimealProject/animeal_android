@@ -1,6 +1,5 @@
 package com.epmedu.animeal.home.presentation.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -16,15 +14,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -35,12 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.home.data.model.FeedSpot
 import com.epmedu.animeal.home.data.model.FeedStatus
 import com.epmedu.animeal.resources.R
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FeedSpotSheetContent(
     feedSpot: FeedSpot,
@@ -82,36 +76,6 @@ internal fun FeedSpotSheetContent(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-internal fun HeartButton(
-    modifier: Modifier = Modifier,
-    selected: Boolean,
-    onChange: (Boolean) -> Unit,
-) {
-    val iconColor = if (selected) {
-        MaterialTheme.colors.error
-    } else {
-        MaterialTheme.colors.secondaryVariant
-    }
-
-    Surface(
-        modifier = modifier.size(32.dp),
-        shape = CircleShape,
-        elevation = 1.dp,
-        onClick = {
-            onChange(!selected)
-        },
-    ) {
-        Icon(
-            modifier = Modifier.requiredSize(16.dp),
-            imageVector = Icons.Filled.Favorite,
-            tint = iconColor,
-            contentDescription = null
-        )
-    }
-}
-
 @Composable
 internal fun FeedSpotSheetHeader(
     title: String,
@@ -146,7 +110,7 @@ internal fun FeedSpotSheetHeader(
                 status = status,
             )
         }
-        HeartButton(
+        AnimealHeartButton(
             modifier = Modifier.align(Alignment.Top),
             selected = isFavourite,
             onChange = onFavouriteChange,
@@ -180,7 +144,6 @@ internal fun FeedStatus(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun FeedSpotDetails(
     scrimAlpha: Float,
