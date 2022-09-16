@@ -11,9 +11,9 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.TransparentSystemUi
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.navigation.route.MainRoute
-import com.epmedu.animeal.signup.SignUpScreen
+import com.epmedu.animeal.signup.SignUpFlow
 import com.epmedu.animeal.splash.presentation.SplashScreen
-import com.epmedu.animeal.tabs.presentation.TabsScreen
+import com.epmedu.animeal.tabs.presentation.TabsFlow
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.navigationBarsPadding()
                     ) {
                         screen(MainRoute.Splash.name) { SplashScreen() }
-                        screen(MainRoute.SignUp.name) { SignUpScreen() }
-                        screen(MainRoute.Tabs.name) { TabsScreen() }
+                        screen(MainRoute.SignUp.name) { SignUpFlow() }
+                        screen(MainRoute.Tabs.name) { TabsFlow() }
                     }
                 }
             }

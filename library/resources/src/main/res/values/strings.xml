@@ -4,7 +4,7 @@
 
     <string name="content_description_back">Back</string>
 
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
     <string name="home">Home</string>
     <string name="more">More</string>
 
@@ -55,13 +55,15 @@
     <string name="profile_email_title">Email</string>
     <string name="profile_email_hint">Enter email</string>
     <string name="profile_phone_number">Phone Number</string>
-    <string name="profile_text_field_error_msg">Amount of characters: min - 2, max - 35</string>
+    <string name="profile_wrong_amount_of_characters_error_msg">Amount of characters: min - %1$d, max - %2$d</string>
     <string name="profile_name_blank_error_msg">Name can not be blank</string>
     <string name="profile_surname_blank_error_msg">Surname can not be blank</string>
     <string name="profile_email_blank_error_msg">Email can not be blank</string>
     <string name="profile_email_invalid_error_msg">Email is invalid</string>
     <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
     <string name="profile_birthdate_placeholder">Select birthdate</string>
+    <string name="profile_logout_cancel">Are you sure you want to log out of your account?</string>
+    <string name="profile_logout_success">You have successfully logged out</string>
 
     <string name="feed_status_green">Newly fed</string>
     <string name="feed_status_orange">12 hours since not fed</string>

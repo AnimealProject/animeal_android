@@ -10,8 +10,6 @@ on:
   workflow_dispatch:
 
 env:
-  AMPLIFY_CONFIGURATION: ${{ secrets.AMPLIFY_CONFIGURATION }}
-  AWS_CONFIGURATION: ${{ secrets.AWS_CONFIGURATION }}
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
   KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -25,6 +23,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Add nested repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.KEY_STORE_REPOSITORY }}
+          token: ${{ secrets.GH_PAT }} 
+          path: android-keystore
       
       - name: Setup Java 11
         uses: actions/setup-java@v2
@@ -54,8 +59,8 @@ jobs:
       - name: Copy amplify config files
         run: |
           mkdir -p app/src/main/res/raw
-          echo $AMPLIFY_CONFIGURATION >> app/src/main/res/raw/amplifyconfiguration.json
-          echo $AWS_CONFIGURATION >> app/src/main/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
 
       - name: Copy keystore
         uses: RollyPeres/base64-to-path@v1

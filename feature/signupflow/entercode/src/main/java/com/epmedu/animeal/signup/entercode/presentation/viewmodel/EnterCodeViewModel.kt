@@ -61,8 +61,10 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
         return state.code.mapIndexed { index, currentDigit ->
-            if (index == position) newDigit
-            else currentDigit
+            when (index) {
+                position -> newDigit
+                else -> currentDigit
+            }
         }
     }
 

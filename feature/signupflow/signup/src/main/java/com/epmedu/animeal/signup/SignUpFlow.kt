@@ -11,7 +11,7 @@ import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreen
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreen
 
 @Composable
-fun SignUpScreen() {
+fun SignUpFlow() {
     ScreenNavHost(
         modifier = Modifier.statusBarsPadding(),
         startDestination = SignUpRoute.Onboarding.name

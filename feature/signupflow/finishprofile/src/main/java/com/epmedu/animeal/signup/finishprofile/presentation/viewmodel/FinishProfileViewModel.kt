@@ -10,7 +10,13 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
-import com.epmedu.animeal.foundation.common.validation.ProfileValidator
+import com.epmedu.animeal.foundation.common.UiText
+import com.epmedu.animeal.foundation.common.validation.result.BirthDateValidationResult
+import com.epmedu.animeal.foundation.common.validation.result.EmailValidationResult
+import com.epmedu.animeal.foundation.common.validation.result.NameValidationResult
+import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult
+import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.BirthDateChanged
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.EmailChanged
@@ -33,10 +39,26 @@ internal class FinishProfileViewModel @Inject constructor(
     StateDelegate<FinishProfileState> by DefaultStateDelegate(initialState = FinishProfileState()),
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
-    private val validator: ProfileValidator = ProfileValidator()
+    private val validator: DefaultProfileValidator = DefaultProfileValidator()
 
     init {
         loadProfile()
+    }
+
+    private fun loadProfile() {
+        viewModelScope.launch {
+            profileRepository.getProfile().collect {
+                updateState {
+                    copy(
+                        name = it.name,
+                        surname = it.surname,
+                        email = it.email,
+                        formattedBirthDate = it.birthDate,
+                        formattedPhoneNumber = it.phoneNumber
+                    )
+                }
+            }
+        }
     }
 
     fun handleEvents(event: FinishProfileScreenEvent) {
@@ -64,23 +86,17 @@ internal class FinishProfileViewModel @Inject constructor(
                 submitData()
             }
             ValidateName -> {
-                updateState {
-                    copy(nameError = validator.validateName(state.name).errorMessage)
-                }
+                updateState { copy(nameError = validateName(name)) }
             }
             ValidateSurname -> {
-                updateState {
-                    copy(surnameError = validator.validateSurname(state.surname).errorMessage)
-                }
+                updateState { copy(surnameError = validateSurname(surname)) }
             }
             ValidateEmail -> {
-                updateState {
-                    copy(emailError = validator.validateEmail(state.email).errorMessage)
-                }
+                updateState { copy(emailError = validateEmail(email)) }
             }
             ValidateBirthDate -> {
                 updateState {
-                    copy(birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage)
+                    copy(birthDateError = validateBirthdate(formattedBirthDate))
                 }
             }
         }
@@ -89,10 +105,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun submitData() {
         updateState {
             copy(
-                nameError = validator.validateName(state.name).errorMessage,
-                surnameError = validator.validateSurname(state.surname).errorMessage,
-                emailError = validator.validateEmail(state.email).errorMessage,
-                birthDateError = validator.validateBirthDate(state.formattedBirthDate).errorMessage
+                nameError = validateName(name),
+                surnameError = validateSurname(surname),
+                emailError = validateEmail(email),
+                birthDateError = validateBirthdate(formattedBirthDate),
             )
         }
 
@@ -105,8 +121,8 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun saveProfile() {
         val profile = Profile(
-            firstName = state.name,
-            lastName = state.surname,
+            name = state.name,
+            surname = state.surname,
             email = state.email,
             birthDate = state.formattedBirthDate
         )
@@ -117,18 +133,70 @@ internal class FinishProfileViewModel @Inject constructor(
         }
     }
 
-    private fun loadProfile() {
-        viewModelScope.launch {
-            profileRepository.getProfile().collect {
-                updateState {
-                    copy(
-                        name = it.firstName,
-                        surname = it.lastName,
-                        email = it.email,
-                        formattedBirthDate = it.birthDate,
-                        formattedPhoneNumber = it.phoneNumber
-                    )
-                }
+    private fun validateName(name: String): UiText {
+        return when (val result = validator.validateName(name)) {
+            is NameValidationResult.ValidName -> {
+                UiText.Empty
+            }
+            is NameValidationResult.BlankNameError -> {
+                UiText.StringResource(R.string.profile_name_blank_error_msg)
+            }
+            is NameValidationResult.WrongNameLengthError -> {
+                UiText.StringResource(
+                    R.string.profile_wrong_amount_of_characters_error_msg,
+                    result.requiredLength.first,
+                    result.requiredLength.last
+                )
+            }
+        }
+    }
+
+    private fun validateSurname(surname: String): UiText {
+        return when (val result = validator.validateSurname(surname)) {
+            is SurnameValidationResult.ValidSurname -> {
+                UiText.Empty
+            }
+            is SurnameValidationResult.BlankSurnameError -> {
+                UiText.StringResource(R.string.profile_surname_blank_error_msg)
+            }
+            is SurnameValidationResult.WrongSurnameLengthError -> {
+                UiText.StringResource(
+                    R.string.profile_wrong_amount_of_characters_error_msg,
+                    result.requiredLength.first,
+                    result.requiredLength.last
+                )
+            }
+        }
+    }
+
+    private fun validateEmail(email: String): UiText {
+        return when (val result = validator.validateEmail(email)) {
+            is EmailValidationResult.ValidEmail -> {
+                UiText.Empty
+            }
+            is EmailValidationResult.BlankEmailError -> {
+                UiText.StringResource(R.string.profile_email_blank_error_msg)
+            }
+            is EmailValidationResult.WrongEmailLengthError -> {
+                UiText.StringResource(
+                    R.string.profile_wrong_amount_of_characters_error_msg,
+                    result.requiredLength.first,
+                    result.requiredLength.last
+                )
+            }
+            is EmailValidationResult.InvalidEmailError -> {
+                UiText.StringResource(R.string.profile_email_invalid_error_msg)
+            }
+        }
+    }
+
+    private fun validateBirthdate(birthDate: String): UiText {
+        return when (validator.validateBirthDate(birthDate)) {
+            is BirthDateValidationResult.ValidBirthDate -> {
+                UiText.Empty
+            }
+            is BirthDateValidationResult.BlankBirthDateError -> {
+                UiText.StringResource(R.string.profile_select_birth_date)
             }
         }
     }
