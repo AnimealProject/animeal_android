@@ -1,16 +1,19 @@
-package com.epmedu.animeal.home.ui
+package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.epmedu.animeal.resources.R
 
 @Composable
 fun GeoLocationFloatingActionButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) = FloatingActionButton(
+    modifier = modifier,
     onClick = onClick,
     backgroundColor = MaterialTheme.colors.background,
 ) {

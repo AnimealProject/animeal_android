@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen(onChangeBottomNavBarVisibility: (Boolean) -> Unit) {
+fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
@@ -25,7 +25,6 @@ fun HomeScreen(onChangeBottomNavBarVisibility: (Boolean) -> Unit) {
     HomeScreenUI(
         state = state,
         bottomSheetState = bottomSheetState,
-        onChangeBottomNavBarVisibility = onChangeBottomNavBarVisibility,
         onEvent = { event ->
             viewModel.handleEvents(event)
         }

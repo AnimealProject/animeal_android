@@ -89,9 +89,11 @@ internal fun HeartButton(
     selected: Boolean,
     onChange: (Boolean) -> Unit,
 ) {
-    val iconColor =
-        if (selected) MaterialTheme.colors.error
-        else MaterialTheme.colors.secondaryVariant
+    val iconColor = if (selected) {
+        MaterialTheme.colors.error
+    } else {
+        MaterialTheme.colors.secondaryVariant
+    }
 
     Surface(
         modifier = modifier.size(32.dp),

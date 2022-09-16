@@ -1,42 +1,28 @@
 package com.epmedu.animeal.home.presentation
 
-import android.Manifest
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.epmedu.animeal.common.data.model.MapLocation
-import com.epmedu.animeal.extensions.launchAppSettings
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
+import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
 import com.epmedu.animeal.home.presentation.ui.FeedSpotSheetContent
+import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetLayout
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetState
-import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
+import com.epmedu.animeal.home.presentation.ui.MapboxMap
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
-import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
-import com.mapbox.maps.MapInitOptions
-import com.mapbox.maps.MapView
-import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.scalebar.scalebar
 
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
@@ -44,14 +30,14 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
-    onChangeBottomNavBarVisibility: (Boolean) -> Unit,
     onEvent: (HomeScreenEvent) -> Unit
 ) {
+    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
+
     LaunchedEffect(bottomSheetState.progress) {
-        onChangeBottomNavBarVisibility(
-            if (bottomSheetState.progress.to != HomeBottomSheetValue.Hidden) false
-            else bottomSheetState.isHidden
-        )
+        val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
+
+        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
     }
 
     val contentAlpha: Float by animateFloatAsState(
@@ -91,11 +77,7 @@ internal fun HomeScreenUI(
             }
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                MapboxMap(
-                    mapBoxPublicKey = state.mapBoxPublicKey,
-                    mapBoxStyleUri = state.mapBoxStyleUri,
-                    location = state.currentLocation
-                )
+                MapboxMap(state = state)
                 AnimealSwitch(
                     modifier = Modifier
                         .statusBarsPadding()
@@ -103,93 +85,18 @@ internal fun HomeScreenUI(
                         .padding(top = 24.dp),
                     onSelectTab = {}
                 )
-                Text(
+                GeoLocationFloatingActionButton(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .clickable {
-                            onEvent(HomeScreenEvent.FeedSpotSelected())
-                        },
-                    text = "Feed spot"
+                        .padding(
+                            bottom = bottomBarHeight + 24.dp,
+                            end = 24.dp
+                        )
+                        .align(alignment = Alignment.BottomEnd),
+                    onClick = {
+                        onEvent(HomeScreenEvent.FeedSpotSelected())
+                    }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun MapboxMap(
-    mapBoxPublicKey: String,
-    mapBoxStyleUri: String,
-    location: MapLocation,
-) {
-    val mapBoxView = MapView(mapBoxPublicKey, mapBoxStyleUri)
-
-    var initialLocationReceived by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(Unit) { initialLocationReceived = false }
-
-    AndroidView(
-        factory = { mapBoxView },
-        modifier = Modifier.fillMaxSize()
-    ) { mapView ->
-        mapView.scalebar.enabled = false
-        mapView.location.updateSettings {
-            enabled = true
-            pulsingEnabled = true
-        }
-
-        if (!initialLocationReceived && !location.isInitial) {
-            initialLocationReceived = true
-            mapView.getMapboxMap().setCamera(
-                CameraOptions.Builder()
-                    .zoom(17.0)
-                    .center(
-                        Point.fromLngLat(
-                            location.longitude,
-                            location.latitude
-                        )
-                    ).build()
-            )
-        }
-    }
-}
-
-@Composable
-private fun MapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
-    val context = LocalContext.current
-    val mapInitOptions = MapInitOptions(
-        context = context,
-        resourceOptions = ResourceOptions.Builder().accessToken(mapboxPublicKey).build(),
-        styleUri = mapBoxStyleUri
-    )
-
-    val mapView = remember(mapInitOptions) {
-        MapView(context, mapInitOptions)
-    }
-
-    return mapView
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun CheckLocationPermission(onGranted: @Composable () -> Unit) {
-    var isPermissionRequested by remember {
-        mutableStateOf(false)
-    }
-    val permissionState = rememberPermissionState(
-        permission = Manifest.permission.ACCESS_FINE_LOCATION,
-        onPermissionResult = {
-            isPermissionRequested = true
-        }
-    )
-
-    LaunchedEffect(Unit) {
-        permissionState.launchPermissionRequest()
-    }
-    with(permissionState.status) {
-        when {
-            isGranted -> onGranted()
-            shouldShowRationale -> RationaleText()
-            isPermissionRequested && !isGranted && !shouldShowRationale -> NavigateToSettingsPrompt()
         }
     }
 }
@@ -207,38 +114,4 @@ private fun FeedSpotActionButton(
         text = stringResource(R.string.i_will_feed),
         onClick = onClick,
     )
-}
-
-@Composable
-private fun RationaleText() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = stringResource(R.string.location_rationale_text),
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
-
-@Composable
-private fun NavigateToSettingsPrompt() {
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.location_permission_denied),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.body1
-        )
-        AnimealButton(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 24.dp),
-            text = stringResource(R.string.navigate_to_app_settings),
-            onClick = { context.launchAppSettings() }
-        )
-    }
 }
