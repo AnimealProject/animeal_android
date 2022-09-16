@@ -16,7 +16,6 @@ on:
 
 env:
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-  GH_PAT: ${{ secrets.GH_PAT }}
 
 
 jobs:
@@ -27,11 +26,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Add private "android-keystore" repo
+      - name: Add nested repo
         uses: actions/checkout@v3
         with:
-          repository: AnimealProject/android-keystore
-          token: ${{ secrets.GH_PAT }} # GH_PAT=Personal_Access_Token (scope repo)
+          repository: ${{ secrets.KEY_STORE_REPOSITORY }}
+          token: ${{ secrets.GH_PAT }} 
           path: android-keystore
 
       - uses: actions/cache@v2
