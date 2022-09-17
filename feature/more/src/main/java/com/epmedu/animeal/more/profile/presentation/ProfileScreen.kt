@@ -20,6 +20,7 @@ internal fun ProfileScreen() {
     ProfileScreenUI(
         state = state,
         onBack = navigator::popBackStack,
-        onEvent = viewModel::handleEvent
+        onProfileScreenEvent = viewModel::handleScreenEvent,
+        onProfileFormEvent = viewModel::handleInputFormEvent
     )
 }

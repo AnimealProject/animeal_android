@@ -10,7 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.more.profile.presentation.viewmodel.ProfileState.FormState
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITED
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -21,7 +24,7 @@ internal fun ProfileButton(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
-        if (state == FormState.READ_ONLY) {
+        if (state == READ_ONLY) {
             AnimealButton(
                 text = stringResource(R.string.edit),
                 onClick = onEdit
@@ -29,7 +32,7 @@ internal fun ProfileButton(
         } else {
             AnimealButton(
                 text = stringResource(R.string.save),
-                enabled = state == FormState.EDITED,
+                enabled = state == EDITED,
                 onClick = onSave
             )
         }
@@ -43,19 +46,19 @@ private fun ProfileButtonPreview() {
     AnimealTheme {
         Column {
             ProfileButton(
-                state = FormState.READ_ONLY,
+                state = READ_ONLY,
                 onEdit = {},
                 onSave = {}
             )
             Divider()
             ProfileButton(
-                state = FormState.EDITABLE,
+                state = EDITABLE,
                 onEdit = {},
                 onSave = {}
             )
             Divider()
             ProfileButton(
-                state = FormState.EDITED,
+                state = EDITED,
                 onEdit = {},
                 onSave = {}
             )
