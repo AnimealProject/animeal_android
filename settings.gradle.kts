@@ -52,6 +52,7 @@ include(":feature:signupflow:onboarding")
 include(":feature:signupflow:signup")
 include(":feature:splash")
 include(":feature:tabs")
+include(":feature:favourites")
 include(":feature:home")
 
 include(":library:common")

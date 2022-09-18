@@ -10,13 +10,6 @@ import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun FavoritesScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(R.string.tab_favorites), modifier = Modifier.align(Alignment.Center))
-    }
-}
-
-@Composable
 internal fun AnalyticsScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = stringResource(R.string.tab_analytics), modifier = Modifier.align(Alignment.Center))

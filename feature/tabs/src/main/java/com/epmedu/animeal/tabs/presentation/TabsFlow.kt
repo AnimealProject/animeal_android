@@ -1,6 +1,7 @@
 package com.epmedu.animeal.tabs.presentation
 
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -10,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.favourites.FavouritesScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
@@ -78,7 +80,7 @@ private fun NavigationTabs(navigationController: NavHostController) {
         startDestination = NavigationTab.Home.route.name
     ) {
         screen(NavigationTab.Search.route.name) { SearchScreen() }
-        screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
+        screen(NavigationTab.Favorites.route.name) { FavouritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { MoreFlow() }
