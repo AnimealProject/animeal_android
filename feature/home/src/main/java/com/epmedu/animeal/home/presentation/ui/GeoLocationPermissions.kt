@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.ui
+package com.epmedu.animeal.home.presentation.ui
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
