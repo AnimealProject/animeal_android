@@ -20,6 +20,7 @@ dependencies {
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
+    implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.compose.material)
     implementation(libs.compose.material.dialog.core)

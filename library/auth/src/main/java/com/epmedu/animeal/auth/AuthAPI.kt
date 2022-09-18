@@ -61,11 +61,29 @@ class AuthAPI {
         )
     }
 
+    fun deleteUser(
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.deleteUser(
+            handler::onSuccess,
+            handler::onError,
+        )
+    }
+
     fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
         signIn(phoneNumber, handler)
+    }
+
+    fun fetchUserAttributes(
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.fetchUserAttributes(
+            handler::onSuccess,
+            handler::onError,
+        )
     }
 
     fun fetchSession(
@@ -81,6 +99,17 @@ class AuthAPI {
         handler: AuthRequestHandler
     ) {
         Amplify.Auth.signOut(
+            handler::onSuccess,
+            handler::onError,
+        )
+    }
+
+    fun updateUserAttributes(
+        userAttributes: List<AuthUserAttribute>,
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.updateUserAttributes(
+            userAttributes,
             handler::onSuccess,
             handler::onError,
         )

@@ -9,7 +9,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToNextPage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -69,7 +69,7 @@ internal class EnterCodeViewModel @Inject constructor(
                 code = state.code,
                 onSuccess = {
                     updateState { copy(isError = false) }
-                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+                    viewModelScope.launch { sendEvent(NavigateToNextPage) }
                 },
                 onError = {
                     updateState { copy(isError = true) }

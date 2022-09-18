@@ -43,6 +43,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
             dataStore.edit { preference ->
                 preference[nameKey] = profile.name
                 preference[surnameKey] = profile.surname
+                preference[phoneNumberKey] = profile.phoneNumber
                 preference[emailKey] = profile.email
                 preference[birthDateKey] = profile.birthDate
             }
