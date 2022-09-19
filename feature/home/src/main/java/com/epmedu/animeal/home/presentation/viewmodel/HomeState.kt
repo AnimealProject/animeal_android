@@ -6,7 +6,7 @@ import com.mapbox.maps.Style
 
 data class HomeState(
     val currentLocation: MapLocation = MapLocation(),
-    val currentFeedingPoint: FeedingPoint? = null,
+    val currentFeedingPoint: FeedingPoint = FeedingPoint(),
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS
 )

@@ -24,7 +24,6 @@ import com.epmedu.animeal.home.presentation.ui.MapboxMap
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreenUI(
@@ -61,15 +60,13 @@ internal fun HomeScreenUI(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             sheetContent = {
-                state.currentFeedingPoint?.let {
-                    FeedingPointSheetContent(
-                        feedingPoint = it,
-                        contentAlpha = contentAlpha,
-                        onFavouriteChange = {
-                            onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
-                        }
-                    )
-                }
+                FeedingPointSheetContent(
+                    feedingPoint = state.currentFeedingPoint,
+                    contentAlpha = contentAlpha,
+                    onFavouriteChange = {
+                        onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
+                    }
+                )
             },
             sheetControls = {
                 FeedingPointActionButton(
@@ -78,28 +75,37 @@ internal fun HomeScreenUI(
                 )
             }
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                MapboxMap(state = state)
-                AnimealSwitch(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .align(alignment = Alignment.TopCenter)
-                        .padding(top = 24.dp),
-                    onSelectTab = {}
-                )
-                GeoLocationFloatingActionButton(
-                    modifier = Modifier
-                        .padding(
-                            bottom = bottomBarHeight + 24.dp,
-                            end = 24.dp
-                        )
-                        .align(alignment = Alignment.BottomEnd),
-                    onClick = {
-                        onEvent(HomeScreenEvent.FeedingPointSelected())
-                    }
-                )
-            }
+            MapContent(
+                state = state,
+                onFeedingPointSelect = { onEvent(HomeScreenEvent.FeedingPointSelected()) }
+            )
         }
+    }
+}
+
+@Composable
+private fun MapContent(
+    state: HomeState,
+    onFeedingPointSelect: () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        MapboxMap(state = state)
+        AnimealSwitch(
+            modifier = Modifier
+                .statusBarsPadding()
+                .align(alignment = Alignment.TopCenter)
+                .padding(top = 24.dp),
+            onSelectTab = {}
+        )
+        GeoLocationFloatingActionButton(
+            modifier = Modifier
+                .padding(
+                    bottom = bottomBarHeight + 24.dp,
+                    end = 24.dp
+                )
+                .align(alignment = Alignment.BottomEnd),
+            onClick = onFeedingPointSelect
+        )
     }
 }
 
