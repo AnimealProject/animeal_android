@@ -1,11 +1,14 @@
 package com.epmedu.animeal.home.presentation.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,11 +31,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
+import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.FeedStatus
+import com.epmedu.animeal.home.data.model.Feeder
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -84,19 +93,24 @@ internal fun FeedingPointSheetHeader(
     onFavouriteChange: (Boolean) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .height(80.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
+                .width(80.dp)
+                .fillMaxHeight()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colors.secondaryVariant)
         )
         Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = title,
@@ -226,5 +240,31 @@ internal fun FeedingPointLastFeeder(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun FeedingPointSheetPreview(
+    @PreviewParameter(LoremIpsum::class) text: String
+) {
+    AnimealTheme {
+        FeedingPointSheetContent(
+            feedingPoint = FeedingPoint(
+                id = -1,
+                title = text.take(30),
+                status = FeedStatus.ORANGE,
+                description = text.take(200),
+                isFavourite = true,
+                lastFeeder = Feeder(
+                    id = -1,
+                    name = text.take(20),
+                    time = "14 hours ago"
+                )
+            ),
+            contentAlpha = 1f,
+            onFavouriteChange = {}
+        )
     }
 }
