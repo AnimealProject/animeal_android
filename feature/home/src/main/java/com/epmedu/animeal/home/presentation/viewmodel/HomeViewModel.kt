@@ -53,7 +53,7 @@ internal class HomeViewModel @Inject constructor(
             is HomeScreenEvent.FeedSpotFavouriteChange -> {
                 updateState {
                     copy(
-                        currentFeedSpot = currentFeedSpot.copy(isFavourite = event.isFavourite)
+                        currentFeedSpot = currentFeedSpot?.copy(isFavourite = event.isFavourite)
                     )
                 }
             }

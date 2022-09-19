@@ -61,13 +61,15 @@ internal fun HomeScreenUI(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             sheetContent = {
-                FeedSpotSheetContent(
-                    feedSpot = state.currentFeedSpot,
-                    contentAlpha = contentAlpha,
-                    onFavouriteChange = {
-                        onEvent(HomeScreenEvent.FeedSpotFavouriteChange(isFavourite = it))
-                    }
-                )
+                state.currentFeedSpot?.let {
+                    FeedSpotSheetContent(
+                        feedSpot = it,
+                        contentAlpha = contentAlpha,
+                        onFavouriteChange = {
+                            onEvent(HomeScreenEvent.FeedSpotFavouriteChange(isFavourite = it))
+                        }
+                    )
+                }
             },
             sheetControls = {
                 FeedSpotActionButton(
