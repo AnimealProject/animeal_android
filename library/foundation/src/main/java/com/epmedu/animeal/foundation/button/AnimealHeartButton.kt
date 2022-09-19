@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -21,6 +22,7 @@ fun AnimealHeartButton(
     modifier: Modifier = Modifier,
     selected: Boolean,
     onChange: (Boolean) -> Unit,
+    elevation: Dp = 0.dp
 ) {
     val iconColor = if (selected) {
         MaterialTheme.colors.error
@@ -31,7 +33,7 @@ fun AnimealHeartButton(
     Surface(
         modifier = modifier.size(32.dp),
         shape = CircleShape,
-        elevation = 1.dp,
+        elevation = elevation,
         onClick = {
             onChange(!selected)
         },
@@ -61,6 +63,6 @@ private fun SelectedAnimealHeartButtonPreview() {
 private fun UnselectedAnimealHeartButtonPreview() {
     AnimealHeartButton(
         selected = false,
-        onChange = {}
+        onChange = {},
     )
 }

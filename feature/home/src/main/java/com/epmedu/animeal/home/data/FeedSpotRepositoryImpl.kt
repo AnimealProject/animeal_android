@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.data
 
+import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.home.data.model.FeedSpot
-import com.epmedu.animeal.home.data.model.FeedStatus
 import com.epmedu.animeal.home.data.model.Feeder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

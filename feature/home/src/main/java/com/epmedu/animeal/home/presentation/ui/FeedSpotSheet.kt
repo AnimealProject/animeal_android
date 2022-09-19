@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -30,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
+import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.home.data.model.FeedSpot
-import com.epmedu.animeal.home.data.model.FeedStatus
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -114,33 +113,8 @@ internal fun FeedSpotSheetHeader(
             modifier = Modifier.align(Alignment.Top),
             selected = isFavourite,
             onChange = onFavouriteChange,
+            elevation = 1.dp
         )
-    }
-}
-
-@Composable
-internal fun FeedStatus(
-    status: FeedStatus
-) {
-    Row(
-        modifier = Modifier.wrapContentSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        CompositionLocalProvider(
-            LocalContentColor provides status.color,
-        ) {
-            Icon(
-                painter = painterResource(status.iconId),
-                contentDescription = null
-            )
-            Text(
-                text = stringResource(status.titleId),
-                style = MaterialTheme.typography.caption,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-            )
-        }
     }
 }
 
