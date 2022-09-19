@@ -1,6 +1,7 @@
-package com.epmedu.animeal.home.data.model
+package com.epmedu.animeal.home.presentation.model
 
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.enum.AnimalPriority
 import com.epmedu.animeal.home.data.model.enum.AnimalState
 import com.epmedu.animeal.home.data.model.enum.Remoteness

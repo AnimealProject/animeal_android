@@ -7,7 +7,7 @@ import com.epmedu.animeal.common.component.LocationProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.home.data.FeedingPointRepository
-import com.epmedu.animeal.home.data.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

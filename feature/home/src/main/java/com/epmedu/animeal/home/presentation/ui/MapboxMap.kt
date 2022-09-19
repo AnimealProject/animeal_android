@@ -1,17 +1,12 @@
 package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.epmedu.animeal.home.data.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.utils.MarkerCache
 import com.mapbox.geojson.Point
@@ -20,6 +15,7 @@ import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
@@ -27,7 +23,10 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 
 @Composable
-fun MapboxMap(state: HomeState) {
+fun MapboxMap(
+    state: HomeState,
+    onFeedingPointClickListener: OnPointAnnotationClickListener? = null
+) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
     var initialLocationReceived by rememberSaveable { mutableStateOf(false) }
@@ -35,7 +34,7 @@ fun MapboxMap(state: HomeState) {
 
     AndroidView(
         factory = {
-            addMarkers(mapBoxView, state.feedingPoints)
+            addMarkers(mapBoxView, state.feedingPoints, onFeedingPointClickListener)
             mapBoxView
         },
         modifier = Modifier.fillMaxSize()
@@ -83,12 +82,14 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
  *
  * @param mapView the view where the markers are being created
  * @param feedingPoints the list of feeding points
+ * @param onFeedingPointClickListener marker click listener
  *
  * @return returns the manager that will allow us to update or delete the markers created
  */
 private fun addMarkers(
     mapView: MapView,
-    feedingPoints: List<FeedingPointUi>
+    feedingPoints: List<FeedingPointUi>,
+    onFeedingPointClickListener: OnPointAnnotationClickListener? = null
 ): PointAnnotationManager {
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
@@ -106,6 +107,8 @@ private fun addMarkers(
                 pointAnnotationManager.create(pointAnnotationOptions)
             }
     }
+
+    onFeedingPointClickListener?.let { pointAnnotationManager.addClickListener(it) }
 
     return pointAnnotationManager
 }
