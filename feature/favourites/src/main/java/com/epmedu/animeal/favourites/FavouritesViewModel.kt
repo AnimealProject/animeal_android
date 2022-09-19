@@ -11,10 +11,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+internal class FavouritesViewModel @Inject constructor(
     private val feedSpotRepository: FavouritesRepository
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()) {
+
     init {
         viewModelScope.launch {
             feedSpotRepository.getFavouriteFeedSpots().collect {
@@ -22,6 +23,20 @@ internal class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun handleEvents(event: FavouritesScreenEvent) {
+        when (event) {
+            is FavouritesScreenEvent.FeedSpotRemove -> updateState { copy(favourites = favourites.filterNot { it.id == event.id }) }
+            is FavouritesScreenEvent.FeedSpotSelected -> {
+                // TODO Implement Event Handler
+            }
+        }
+    }
+}
+
+internal sealed class FavouritesScreenEvent(open val id: Int = -1) {
+    data class FeedSpotSelected(override val id: Int) : FavouritesScreenEvent(id)
+    data class FeedSpotRemove(override val id: Int) : FavouritesScreenEvent(id)
 }
 
 data class FavouritesState(val favourites: List<FavouriteFeedSpot> = emptyList())

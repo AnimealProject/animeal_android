@@ -24,7 +24,9 @@ import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun FavouritesScreenUI(state: FavouritesState) {
+internal fun FavouritesScreenUI(
+    state: FavouritesState, onEvent: (FavouritesScreenEvent) -> Unit
+) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -52,8 +54,8 @@ internal fun FavouritesScreenUI(state: FavouritesState) {
                         title = item.title,
                         status = item.status,
                         isFavourite = item.isFavourite,
-                        onFavouriteChange = {},
-                        onClick = {}
+                        onFavouriteChange = { onEvent(FavouritesScreenEvent.FeedSpotRemove(item.id)) },
+                        onClick = { onEvent(FavouritesScreenEvent.FeedSpotSelected(item.id)) }
                     )
                 }
             }
@@ -74,6 +76,6 @@ private fun MoreScreenPreview() {
                     FavouriteFeedSpot(title = title, isFavourite = true)
                 )
             )
-        )
+        ) {}
     }
 }

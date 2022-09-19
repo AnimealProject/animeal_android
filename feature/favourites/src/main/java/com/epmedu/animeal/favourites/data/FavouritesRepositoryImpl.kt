@@ -10,19 +10,19 @@ class FavouritesRepositoryImpl : FavouritesRepository {
     override suspend fun getFavouriteFeedSpots(): Flow<List<FavouriteFeedSpot>> = flowOf(
         listOf(
             FavouriteFeedSpot(
-                id = -1,
+                id = 1,
                 title = "Europe Square park",
                 status = FeedStatus.ORANGE,
                 isFavourite = true,
             ),
             FavouriteFeedSpot(
-                id = -1,
+                id = 2,
                 title = "University garden",
                 status = FeedStatus.RED,
                 isFavourite = true,
             ),
             FavouriteFeedSpot(
-                id = -1,
+                id = 3,
                 title = "Gorky park",
                 status = FeedStatus.GREEN,
                 isFavourite = true,
