@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,7 +69,7 @@ internal fun FeedingPointSheetContent(
                 .clip(RoundedCornerShape(2.dp)),
             thickness = 4.dp,
         )
-        FeedingPointSheetHeader(
+        FeedingPointHeader(
             title = feedingPoint.title,
             status = feedingPoint.status,
             isFavourite = feedingPoint.isFavourite,
@@ -83,14 +85,16 @@ internal fun FeedingPointSheetContent(
 }
 
 @Composable
-internal fun FeedingPointSheetHeader(
+internal fun FeedingPointHeader(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .height(80.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -101,7 +105,9 @@ internal fun FeedingPointSheetHeader(
                 .background(MaterialTheme.colors.secondaryVariant)
         )
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -160,7 +166,7 @@ internal fun FeedingPointDetails(
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(52.dp)
+        verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colors.onSurface,
