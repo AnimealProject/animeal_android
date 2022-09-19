@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.favourites.data.model.FavouriteFeedSpot
 import com.epmedu.animeal.favourites.ui.FavouriteFeedSpotItem
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
@@ -63,7 +64,16 @@ internal fun FavouritesScreenUI(state: FavouritesState) {
 @Preview
 @Composable
 private fun MoreScreenPreview() {
+    val title = "FeedSpot"
     AnimealTheme {
-        FavouritesScreenUI(FavouritesState())
+        FavouritesScreenUI(
+            FavouritesState(
+                listOf(
+                    FavouriteFeedSpot(title = title, isFavourite = true),
+                    FavouriteFeedSpot(title = title, isFavourite = true),
+                    FavouriteFeedSpot(title = title, isFavourite = true)
+                )
+            )
+        )
     }
 }
