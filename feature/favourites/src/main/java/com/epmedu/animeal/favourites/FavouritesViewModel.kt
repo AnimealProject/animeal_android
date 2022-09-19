@@ -26,7 +26,8 @@ internal class FavouritesViewModel @Inject constructor(
 
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
-            is FavouritesScreenEvent.FeedSpotRemove -> updateState { copy(favourites = favourites.filterNot { it.id == event.id }) }
+            is FavouritesScreenEvent.FeedSpotRemove ->
+                updateState { copy(favourites = favourites.filterNot { it.id == event.id }) }
             is FavouritesScreenEvent.FeedSpotSelected -> {
                 // TODO Implement Event Handler
             }

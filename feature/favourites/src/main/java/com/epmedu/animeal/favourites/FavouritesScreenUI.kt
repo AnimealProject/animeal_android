@@ -25,7 +25,8 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FavouritesScreenUI(
-    state: FavouritesState, onEvent: (FavouritesScreenEvent) -> Unit
+    state: FavouritesState,
+    onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
