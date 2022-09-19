@@ -16,7 +16,7 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
-import com.epmedu.animeal.home.presentation.ui.FeedSpotSheetContent
+import com.epmedu.animeal.home.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetLayout
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetState
@@ -61,18 +61,18 @@ internal fun HomeScreenUI(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             sheetContent = {
-                state.currentFeedSpot?.let {
-                    FeedSpotSheetContent(
-                        feedSpot = it,
+                state.currentFeedingPoint?.let {
+                    FeedingPointSheetContent(
+                        feedingPoint = it,
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
-                            onEvent(HomeScreenEvent.FeedSpotFavouriteChange(isFavourite = it))
+                            onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                         }
                     )
                 }
             },
             sheetControls = {
-                FeedSpotActionButton(
+                FeedingPointActionButton(
                     alpha = buttonAlpha,
                     onClick = {}
                 )
@@ -95,7 +95,7 @@ internal fun HomeScreenUI(
                         )
                         .align(alignment = Alignment.BottomEnd),
                     onClick = {
-                        onEvent(HomeScreenEvent.FeedSpotSelected())
+                        onEvent(HomeScreenEvent.FeedingPointSelected())
                     }
                 )
             }
@@ -104,7 +104,7 @@ internal fun HomeScreenUI(
 }
 
 @Composable
-private fun FeedSpotActionButton(
+private fun FeedingPointActionButton(
     alpha: Float,
     onClick: () -> Unit
 ) {

@@ -1,15 +1,15 @@
 package com.epmedu.animeal.home.data
 
-import com.epmedu.animeal.home.data.model.FeedSpot
+import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.FeedStatus
 import com.epmedu.animeal.home.data.model.Feeder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class FeedSpotRepositoryImpl : FeedSpotRepository {
+class FeedingPointRepositoryImpl : FeedingPointRepository {
 
-    override suspend fun getFeedSpot(id: Int): Flow<FeedSpot> = flowOf(
-        FeedSpot(
+    override suspend fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
+        FeedingPoint(
             id = -1,
             title = "Near to Bukia Garden M.S Technical University",
             status = FeedStatus.ORANGE,

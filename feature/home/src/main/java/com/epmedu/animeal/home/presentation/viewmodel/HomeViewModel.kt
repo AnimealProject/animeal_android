@@ -8,7 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.home.data.FeedSpotRepository
+import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
-    private val feedSpotRepository: FeedSpotRepository,
+    private val feedingPointRepository: FeedingPointRepository,
     private val buildConfigProvider: BuildConfigProvider,
     private val locationProvider: LocationProvider
 ) : ViewModel(),
@@ -40,20 +40,20 @@ internal class HomeViewModel @Inject constructor(
 
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
-            is HomeScreenEvent.FeedSpotSelected -> {
+            is HomeScreenEvent.FeedingPointSelected -> {
                 viewModelScope.launch {
-                    feedSpotRepository.getFeedSpot(event.id).collect { feedSpot ->
+                    feedingPointRepository.getFeedingPoint(event.id).collect { feedingPoint ->
                         updateState {
-                            copy(currentFeedSpot = feedSpot)
+                            copy(currentFeedingPoint = feedingPoint)
                         }
-                        sendEvent(HomeEvent.ShowCurrentFeedSpotInformation)
+                        sendEvent(HomeEvent.ShowCurrentFeedingPoint)
                     }
                 }
             }
-            is HomeScreenEvent.FeedSpotFavouriteChange -> {
+            is HomeScreenEvent.FeedingPointFavouriteChange -> {
                 updateState {
                     copy(
-                        currentFeedSpot = currentFeedSpot?.copy(isFavourite = event.isFavourite)
+                        currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
                     )
                 }
             }

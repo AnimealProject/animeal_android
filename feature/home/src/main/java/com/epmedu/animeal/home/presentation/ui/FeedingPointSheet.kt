@@ -31,13 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.home.data.model.FeedSpot
+import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.FeedStatus
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun FeedSpotSheetContent(
-    feedSpot: FeedSpot,
+internal fun FeedingPointSheetContent(
+    feedingPoint: FeedingPoint,
     contentAlpha: Float,
     onFavouriteChange: (Boolean) -> Unit
 ) {
@@ -61,23 +61,23 @@ internal fun FeedSpotSheetContent(
                 .clip(RoundedCornerShape(2.dp)),
             thickness = 4.dp,
         )
-        FeedSpotSheetHeader(
-            title = feedSpot.title,
-            status = feedSpot.status,
-            isFavourite = feedSpot.isFavourite,
+        FeedingPointSheetHeader(
+            title = feedingPoint.title,
+            status = feedingPoint.status,
+            isFavourite = feedingPoint.isFavourite,
             onFavouriteChange = onFavouriteChange
         )
-        FeedSpotDetails(
-            description = feedSpot.description,
-            lastFeederName = feedSpot.lastFeeder.name,
-            lastFeedTime = feedSpot.lastFeeder.time,
+        FeedingPointDetails(
+            description = feedingPoint.description,
+            lastFeederName = feedingPoint.lastFeeder.name,
+            lastFeedTime = feedingPoint.lastFeeder.time,
             scrimAlpha = contentAlpha
         )
     }
 }
 
 @Composable
-internal fun FeedSpotSheetHeader(
+internal fun FeedingPointSheetHeader(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
@@ -145,7 +145,7 @@ internal fun FeedStatus(
 }
 
 @Composable
-internal fun FeedSpotDetails(
+internal fun FeedingPointDetails(
     scrimAlpha: Float,
     description: String,
     lastFeederName: String,
@@ -165,7 +165,7 @@ internal fun FeedSpotDetails(
                 style = MaterialTheme.typography.body2,
                 overflow = TextOverflow.Ellipsis,
             )
-            FeedSpotLastFeeder(
+            FeedingPointLastFeeder(
                 name = lastFeederName,
                 time = lastFeedTime,
             )
@@ -174,7 +174,7 @@ internal fun FeedSpotDetails(
 }
 
 @Composable
-internal fun FeedSpotLastFeeder(
+internal fun FeedingPointLastFeeder(
     name: String,
     time: String,
 ) {

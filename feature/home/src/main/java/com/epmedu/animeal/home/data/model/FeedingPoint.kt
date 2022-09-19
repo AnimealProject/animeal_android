@@ -1,6 +1,6 @@
 package com.epmedu.animeal.home.data.model
 
-data class FeedSpot(
+data class FeedingPoint(
     val id: Int,
     val title: String,
     val status: FeedStatus,
