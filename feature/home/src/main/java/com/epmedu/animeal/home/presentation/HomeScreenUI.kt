@@ -60,13 +60,15 @@ internal fun HomeScreenUI(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             sheetContent = {
-                FeedingPointSheetContent(
-                    feedingPoint = state.currentFeedingPoint,
-                    contentAlpha = contentAlpha,
-                    onFavouriteChange = {
-                        onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
-                    }
-                )
+                state.currentFeedingPoint?.let { feedingPoint ->
+                    FeedingPointSheetContent(
+                        feedingPoint = feedingPoint,
+                        contentAlpha = contentAlpha,
+                        onFavouriteChange = {
+                            onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
+                        }
+                    )
+                }
             },
             sheetControls = {
                 FeedingPointActionButton(
