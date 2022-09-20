@@ -13,18 +13,12 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
-import com.epmedu.animeal.profile.presentation.mapper.BirthDateValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.EmailValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.NameValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.PhoneNumberValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.SurnameValidationResultToUiTextMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 
-@Suppress("TooManyFunctions")
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object ProfileModule {
@@ -81,25 +75,4 @@ internal object ProfileModule {
     fun provideValidateBirthDateUseCase(
         validator: ProfileValidator
     ) = ValidateBirthDateUseCase(validator)
-
-    @ViewModelScoped
-    @Provides
-    fun provideNameValidationResultToUiTextMapper() = NameValidationResultToUiTextMapper()
-
-    @ViewModelScoped
-    @Provides
-    fun provideSurnameValidationResultToUiTextMapper() = SurnameValidationResultToUiTextMapper()
-
-    @ViewModelScoped
-    @Provides
-    fun provideEmailValidationResultToUiTextMapper() = EmailValidationResultToUiTextMapper()
-
-    @ViewModelScoped
-    @Provides
-    fun providePhoneNumberValidationResultToUiTextMapper() =
-        PhoneNumberValidationResultToUiTextMapper()
-
-    @ViewModelScoped
-    @Provides
-    fun provideBirthDateValidationResultToUiTextMapper() = BirthDateValidationResultToUiTextMapper()
 }
