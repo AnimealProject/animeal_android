@@ -12,4 +12,6 @@ interface FeedingPointRepository {
     suspend fun getDogs(): Flow<List<FeedingPoint>>
 
     suspend fun getFavourites(): Flow<List<FeedingPoint>>
+
+    suspend fun getFeedingPoint(id: Int): Flow<FeedingPoint>
 }

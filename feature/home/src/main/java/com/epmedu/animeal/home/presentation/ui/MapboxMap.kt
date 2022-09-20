@@ -6,6 +6,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.epmedu.animeal.home.presentation.OnFeedingPointClickListener
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.utils.MarkerCache
@@ -15,17 +16,14 @@ import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.*
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 
 @Composable
 fun MapboxMap(
     state: HomeState,
-    onFeedingPointClickListener: OnPointAnnotationClickListener? = null
+    onFeedingPointClickListener: OnFeedingPointClickListener
 ) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
@@ -89,7 +87,7 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
 private fun addMarkers(
     mapView: MapView,
     feedingPoints: List<FeedingPointUi>,
-    onFeedingPointClickListener: OnPointAnnotationClickListener? = null
+    onFeedingPointClickListener: OnFeedingPointClickListener
 ): PointAnnotationManager {
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
@@ -108,7 +106,16 @@ private fun addMarkers(
             }
     }
 
-    onFeedingPointClickListener?.let { pointAnnotationManager.addClickListener(it) }
+    pointAnnotationManager.addClickListener(
+        OnPointAnnotationClickListener {
+            onFeedingPointClickListener.onFeedingPointClick(
+                feedingPoints.first { feedingPointUi ->
+                    feedingPointUi.coordinates == it.point
+                }
+            )
+            true
+        }
+    )
 
     return pointAnnotationManager
 }

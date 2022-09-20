@@ -1,29 +1,36 @@
 package com.epmedu.animeal.home.presentation.model
 
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.home.data.model.Feeder
 import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.enum.AnimalPriority
-import com.epmedu.animeal.home.data.model.enum.AnimalState
 import com.epmedu.animeal.home.data.model.enum.Remoteness
+import com.epmedu.animeal.home.presentation.model.FeedStatus.Companion.toFeedStatus
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
 data class FeedingPointUi(
     val id: Int, // For future implementations
-    val priority: AnimalPriority,
-    val status: AnimalState,
+    val title: String,
+    val description: String,
+    val animalPriority: AnimalPriority,
+    val feedStatus: FeedStatus,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
+    val lastFeeder: Feeder,
     val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point
 ) {
 
     constructor(feedingPoint: FeedingPoint) : this(
         feedingPoint.id,
+        feedingPoint.title,
+        feedingPoint.description,
         feedingPoint.animalPriority,
-        feedingPoint.animalStatus,
+        feedingPoint.animalStatus.toFeedStatus(),
         feedingPoint.animalType,
         feedingPoint.isFavourite,
+        feedingPoint.lastFeeder,
         feedingPoint.remoteness,
         Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude)
     )
@@ -31,25 +38,25 @@ data class FeedingPointUi(
     fun getDrawableRes(): Int =
         when {
             isFavourite -> {
-                when (status) {
-                    AnimalState.RED -> R.drawable.ic_favstate_favouritehungry_high
-                    AnimalState.YELLOW -> R.drawable.ic_favstate_favouritehungry_medium
-                    AnimalState.GREEN -> R.drawable.ic_favstate_favouritehungry_low
+                when (feedStatus) {
+                    FeedStatus.RED -> R.drawable.ic_favstate_favouritehungry_high
+                    FeedStatus.ORANGE -> R.drawable.ic_favstate_favouritehungry_medium
+                    FeedStatus.GREEN -> R.drawable.ic_favstate_favouritehungry_low
                 }
             }
             animalType == AnimalType.Dogs -> {
-                when (status) {
-                    AnimalState.RED -> R.drawable.ic_dogsstate_doghungry_high
-                    AnimalState.YELLOW -> R.drawable.ic_dogsstate_doghungry_medium
-                    AnimalState.GREEN -> R.drawable.ic_dogsstate_doghungry_low
+                when (feedStatus) {
+                    FeedStatus.RED -> R.drawable.ic_dogsstate_doghungry_high
+                    FeedStatus.ORANGE -> R.drawable.ic_dogsstate_doghungry_medium
+                    FeedStatus.GREEN -> R.drawable.ic_dogsstate_doghungry_low
                 }
             }
             // animalType == AnimalType.Cats
             else ->
-                when (status) {
-                    AnimalState.RED -> R.drawable.ic_catsstate_cathungry_high
-                    AnimalState.YELLOW -> R.drawable.ic_catsstate_cathungry_medium
-                    AnimalState.GREEN -> R.drawable.ic_catsstate_cathungry_low
+                when (feedStatus) {
+                    FeedStatus.RED -> R.drawable.ic_catsstate_cathungry_high
+                    FeedStatus.ORANGE -> R.drawable.ic_catsstate_cathungry_medium
+                    FeedStatus.GREEN -> R.drawable.ic_catsstate_cathungry_low
                 }
         }
 }
