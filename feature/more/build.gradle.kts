@@ -5,6 +5,10 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+android {
+    namespace = "com.epmedu.animeal.more"
+}
+
 dependencies {
     implementation(projects.feature.signupflow.finishprofile)
 

@@ -3,6 +3,10 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.signup"
+}
+
 dependencies {
     implementation(projects.feature.signupflow.entercode)
     implementation(projects.feature.signupflow.enterphone)
