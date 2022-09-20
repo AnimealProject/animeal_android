@@ -3,7 +3,6 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
@@ -12,11 +11,6 @@ import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
-import com.epmedu.animeal.profile.presentation.mapper.BirthDateValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.EmailValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.NameValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.PhoneNumberValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.SurnameValidationResultToUiTextMapper
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
@@ -31,25 +25,16 @@ import javax.inject.Inject
 internal class FinishProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
-    validateNameUseCase: ValidateNameUseCase,
-    validateSurnameUseCase: ValidateSurnameUseCase,
-    validateEmailUseCase: ValidateEmailUseCase,
+    private val validateNameUseCase: ValidateNameUseCase,
+    private val validateSurnameUseCase: ValidateSurnameUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
-    validateBirthDateUseCase: ValidateBirthDateUseCase,
-    nameValidationResultToUiTextMapper: NameValidationResultToUiTextMapper,
-    surnameValidationResultToUiTextMapper: SurnameValidationResultToUiTextMapper,
-    emailValidationResultToUiTextMapper: EmailValidationResultToUiTextMapper,
-    private val phoneNumberValidationResultToUiTextMapper: PhoneNumberValidationResultToUiTextMapper,
-    birthDateValidationResultToUiTextMapper: BirthDateValidationResultToUiTextMapper
+    private val validateBirthDateUseCase: ValidateBirthDateUseCase,
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
     validateEmailUseCase,
-    validateBirthDateUseCase,
-    nameValidationResultToUiTextMapper,
-    surnameValidationResultToUiTextMapper,
-    emailValidationResultToUiTextMapper,
-    birthDateValidationResultToUiTextMapper
+    validateBirthDateUseCase
 ),
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
@@ -59,7 +44,7 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun loadProfile() {
         viewModelScope.launch {
-            getProfileUseCase.execute().collect {
+            getProfileUseCase().collect {
                 updateState {
                     copy(profile = it, formState = EDITABLE)
                 }
@@ -71,14 +56,9 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             copy(
                 profile = profile.copy(phoneNumber = event.phoneNumber),
-                phoneNumberError = validateAndMapPhoneNumberToError(event.phoneNumber)
+                phoneNumberError = validatePhoneNumberUseCase(event.phoneNumber)
             )
         }
-    }
-
-    private fun validateAndMapPhoneNumberToError(phoneNumber: String): UiText {
-        val validationResult = validatePhoneNumberUseCase.execute(phoneNumber)
-        return phoneNumberValidationResultToUiTextMapper.map(validationResult)
     }
 
     fun handleScreenEvents(event: FinishProfileScreenEvent) {
@@ -99,11 +79,11 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             with(profile) {
                 copy(
-                    nameError = validateAndMapNameToError(name),
-                    surnameError = validateAndMapSurnameToError(surname),
-                    emailError = validateAndMapEmailToError(email),
-                    phoneNumberError = validateAndMapPhoneNumberToError(phoneNumber),
-                    birthDateError = validateAndMapBirthDateToError(birthDate)
+                    nameError = validateNameUseCase(name),
+                    surnameError = validateSurnameUseCase(surname),
+                    emailError = validateEmailUseCase(email),
+                    phoneNumberError = validatePhoneNumberUseCase(phoneNumber),
+                    birthDateError = validateBirthDateUseCase(birthDate)
                 )
             }
         }
@@ -111,7 +91,7 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun saveProfile() {
         viewModelScope.launch {
-            saveProfileUseCase.execute(state.profile).collect {
+            saveProfileUseCase(state.profile).collect {
                 sendEvent(Saved)
             }
         }

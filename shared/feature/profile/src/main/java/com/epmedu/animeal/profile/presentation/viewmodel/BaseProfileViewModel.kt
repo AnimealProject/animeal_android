@@ -5,7 +5,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
-import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
@@ -16,22 +15,13 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChange
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
-import com.epmedu.animeal.profile.presentation.mapper.BirthDateValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.EmailValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.NameValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.SurnameValidationResultToUiTextMapper
 import java.time.LocalDate
 
-@Suppress("LongParameterList")
 abstract class BaseProfileViewModel(
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validateBirthDateUseCase: ValidateBirthDateUseCase,
-    private val nameValidationResultToUiTextMapper: NameValidationResultToUiTextMapper,
-    private val surnameValidationResultToUiTextMapper: SurnameValidationResultToUiTextMapper,
-    private val emailValidationResultToUiTextMapper: EmailValidationResultToUiTextMapper,
-    private val birthDateValidationResultToUiTextMapper: BirthDateValidationResultToUiTextMapper
+    private val validateBirthDateUseCase: ValidateBirthDateUseCase
 ) : ViewModel(),
     StateDelegate<ProfileState> by DefaultStateDelegate(initialState = ProfileState()) {
 
@@ -41,7 +31,7 @@ abstract class BaseProfileViewModel(
                 updateState {
                     copy(
                         profile = profile.copy(name = event.name),
-                        nameError = validateAndMapNameToError(event.name)
+                        nameError = validateNameUseCase(event.name)
                     )
                 }
             }
@@ -49,7 +39,7 @@ abstract class BaseProfileViewModel(
                 updateState {
                     copy(
                         profile = profile.copy(surname = event.surname),
-                        surnameError = validateAndMapSurnameToError(event.surname)
+                        surnameError = validateSurnameUseCase(event.surname)
                     )
                 }
             }
@@ -57,7 +47,7 @@ abstract class BaseProfileViewModel(
                 updateState {
                     copy(
                         profile = profile.copy(email = event.email),
-                        emailError = validateAndMapEmailToError(event.email)
+                        emailError = validateEmailUseCase(event.email)
                     )
                 }
             }
@@ -69,7 +59,7 @@ abstract class BaseProfileViewModel(
                 updateState {
                     copy(
                         profile = profile.copy(birthDate = formattedBirthDate),
-                        birthDateError = validateAndMapBirthDateToError(formattedBirthDate)
+                        birthDateError = validateBirthDateUseCase(formattedBirthDate)
                     )
                 }
             }
@@ -77,26 +67,6 @@ abstract class BaseProfileViewModel(
     }
 
     protected abstract fun handlePhoneNumberChangedEvent(event: PhoneNumberChanged)
-
-    protected fun validateAndMapNameToError(name: String): UiText {
-        val validationResult = validateNameUseCase.execute(name)
-        return nameValidationResultToUiTextMapper.map(validationResult)
-    }
-
-    protected fun validateAndMapSurnameToError(surname: String): UiText {
-        val validationResult = validateSurnameUseCase.execute(surname)
-        return surnameValidationResultToUiTextMapper.map(validationResult)
-    }
-
-    protected fun validateAndMapEmailToError(email: String): UiText {
-        val validationResult = validateEmailUseCase.execute(email)
-        return emailValidationResultToUiTextMapper.map(validationResult)
-    }
-
-    protected fun validateAndMapBirthDateToError(birthDate: String): UiText {
-        val validationResult = validateBirthDateUseCase.execute(birthDate)
-        return birthDateValidationResultToUiTextMapper.map(validationResult)
-    }
 
     private fun formatBirthDate(birthDate: LocalDate) = formatDateToString(
         date = birthDate,

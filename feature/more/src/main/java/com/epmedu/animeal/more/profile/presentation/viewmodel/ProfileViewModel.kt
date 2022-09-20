@@ -13,10 +13,6 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
-import com.epmedu.animeal.profile.presentation.mapper.BirthDateValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.EmailValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.NameValidationResultToUiTextMapper
-import com.epmedu.animeal.profile.presentation.mapper.SurnameValidationResultToUiTextMapper
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
@@ -29,7 +25,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
 @HiltViewModel
 internal class ProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
@@ -37,20 +32,12 @@ internal class ProfileViewModel @Inject constructor(
     validateNameUseCase: ValidateNameUseCase,
     validateSurnameUseCase: ValidateSurnameUseCase,
     validateEmailUseCase: ValidateEmailUseCase,
-    validateBirthDateUseCase: ValidateBirthDateUseCase,
-    nameValidationResultToUiTextMapper: NameValidationResultToUiTextMapper,
-    surnameValidationResultToUiTextMapper: SurnameValidationResultToUiTextMapper,
-    emailValidationResultToUiTextMapper: EmailValidationResultToUiTextMapper,
-    birthDateValidationResultToUiTextMapper: BirthDateValidationResultToUiTextMapper
+    validateBirthDateUseCase: ValidateBirthDateUseCase
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
     validateEmailUseCase,
-    validateBirthDateUseCase,
-    nameValidationResultToUiTextMapper,
-    surnameValidationResultToUiTextMapper,
-    emailValidationResultToUiTextMapper,
-    birthDateValidationResultToUiTextMapper
+    validateBirthDateUseCase
 ) {
 
     private var lastSavedProfile = Profile()
@@ -62,7 +49,7 @@ internal class ProfileViewModel @Inject constructor(
 
     private fun loadProfile() {
         viewModelScope.launch {
-            getProfileUseCase.execute().collect {
+            getProfileUseCase().collect {
                 lastSavedProfile = it
                 updateState { copy(profile = it) }
             }
@@ -104,7 +91,7 @@ internal class ProfileViewModel @Inject constructor(
 
     private fun saveChanges() {
         viewModelScope.launch {
-            saveProfileUseCase.execute(state.profile).collectLatest {
+            saveProfileUseCase(state.profile).collectLatest {
                 lastSavedProfile = state.profile
                 updateState { copy(formState = READ_ONLY) }
             }
