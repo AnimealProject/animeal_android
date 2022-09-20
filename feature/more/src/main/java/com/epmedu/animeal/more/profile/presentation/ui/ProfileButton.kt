@@ -1,14 +1,12 @@
 package com.epmedu.animeal.more.profile.presentation.ui
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.more.profile.presentation.viewmodel.ProfileState.FormState
 import com.epmedu.animeal.resources.R
@@ -36,8 +34,7 @@ internal fun ProfileButton(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun ProfileButtonPreview() {
     AnimealTheme {

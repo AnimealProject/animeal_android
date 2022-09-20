@@ -1,15 +1,13 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.BirthDateChanged
@@ -63,8 +61,7 @@ internal fun FinishProfileInputForm(
     )
 }
 
-@Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun FinishProfileInputFormPreview() {
     AnimealTheme {

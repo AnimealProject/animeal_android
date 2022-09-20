@@ -1,11 +1,9 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.signup.onboarding.presentation.ui.ButtonsBlock
 import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
@@ -27,8 +25,7 @@ internal fun OnboardingScreenUI(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun OnboardingScreenPreview() {
     AnimealTheme {

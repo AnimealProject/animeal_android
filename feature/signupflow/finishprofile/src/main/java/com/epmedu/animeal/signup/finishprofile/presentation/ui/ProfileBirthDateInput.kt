@@ -1,6 +1,5 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
-import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,10 +7,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.extensions.tryParseDate
 import com.epmedu.animeal.foundation.dialog.DatePickerDialog
 import com.epmedu.animeal.foundation.input.BirthDateInput
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -58,8 +57,7 @@ fun BirthDateInput(
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun BirthDateInputPreview() {
     AnimealTheme {

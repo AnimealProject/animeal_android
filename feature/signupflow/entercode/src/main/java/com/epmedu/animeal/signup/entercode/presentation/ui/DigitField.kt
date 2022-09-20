@@ -1,10 +1,6 @@
 package com.epmedu.animeal.signup.entercode.presentation.ui
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
@@ -16,10 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
@@ -52,8 +48,7 @@ internal fun DigitField(
 
 private fun String.isOneDigit() = isDigitsOnly() && length == 1
 
-@Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun DigitFieldPreview() {
     AnimealTheme {
