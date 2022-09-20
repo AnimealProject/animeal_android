@@ -1,10 +1,12 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+}
+
+android {
+    namespace = "com.epmedu.animeal.splash"
 }
 
 dependencies {

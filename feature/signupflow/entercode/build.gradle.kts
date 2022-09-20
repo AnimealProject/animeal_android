@@ -5,6 +5,10 @@ plugins {
     id("kotlin-kapt")
 }
 
+android {
+    namespace = "com.epmedu.animeal.signup.entercode"
+}
+
 dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)

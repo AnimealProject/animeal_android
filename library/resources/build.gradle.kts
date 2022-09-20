@@ -6,3 +6,7 @@ plugins {
 animealPlugin {
     compose = false
 }
+
+android {
+    namespace = "com.epmedu.animeal.resources"
+}

@@ -3,6 +3,10 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.foundation"
+}
+
 dependencies {
     implementation(projects.library.resources)
 
