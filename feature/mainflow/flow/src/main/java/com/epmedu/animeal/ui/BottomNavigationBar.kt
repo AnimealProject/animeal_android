@@ -1,19 +1,15 @@
-package com.epmedu.animeal.tabs.presentation.ui
+package com.epmedu.animeal.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.NavigationTab
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.tabs.presentation.NavigationTab
+import com.epmedu.animeal.foundation.theme.bottomBarHeight
 
 @Composable
 internal fun BottomNavigationBar(
@@ -28,7 +24,7 @@ internal fun BottomNavigationBar(
         NavigationTab.More
     )
     BottomAppBar(
-        modifier = Modifier.height(56.dp),
+        modifier = Modifier.height(bottomBarHeight),
         backgroundColor = MaterialTheme.colors.surface,
     ) {
         items.forEach { item ->

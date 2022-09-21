@@ -13,7 +13,6 @@ import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.navigation.route.MainRoute
 import com.epmedu.animeal.signup.SignUpFlow
 import com.epmedu.animeal.splash.presentation.SplashScreen
-import com.epmedu.animeal.tabs.presentation.TabsFlow
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         screen(MainRoute.Splash.name) { SplashScreen() }
                         screen(MainRoute.SignUp.name) { SignUpFlow() }
-                        screen(MainRoute.Tabs.name) { TabsFlow() }
+                        screen(MainRoute.Tabs.name) { MainFlow() }
                     }
                 }
             }

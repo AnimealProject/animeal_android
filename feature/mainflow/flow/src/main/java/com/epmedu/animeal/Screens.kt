@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation
+package com.epmedu.animeal
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,19 +13,5 @@ import com.epmedu.animeal.resources.R
 internal fun FavoritesScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = stringResource(R.string.tab_favorites), modifier = Modifier.align(Alignment.Center))
-    }
-}
-
-@Composable
-internal fun AnalyticsScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(R.string.tab_analytics), modifier = Modifier.align(Alignment.Center))
-    }
-}
-
-@Composable
-internal fun SearchScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(R.string.tab_search), modifier = Modifier.align(Alignment.Center))
     }
 }

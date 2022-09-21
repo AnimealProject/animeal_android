@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation
+package com.epmedu.animeal
 
 import androidx.annotation.StringRes
 import com.epmedu.animeal.resources.R

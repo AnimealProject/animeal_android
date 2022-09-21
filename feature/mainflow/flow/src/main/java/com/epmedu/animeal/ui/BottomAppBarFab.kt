@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation.ui
+package com.epmedu.animeal.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.NavigationTab
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.presentation.NavigationTab
 
 @Composable
 internal fun BottomAppBarFab(

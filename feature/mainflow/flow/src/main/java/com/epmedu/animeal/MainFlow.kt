@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.presentation
+package com.epmedu.animeal
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.analytics.AnalyticsScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
@@ -17,11 +18,12 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.more.MoreFlow
 import com.epmedu.animeal.navigation.ScreenNavHost
-import com.epmedu.animeal.tabs.presentation.ui.BottomAppBarFab
-import com.epmedu.animeal.tabs.presentation.ui.BottomNavigationBar
+import com.epmedu.animeal.search.SearchScreen
+import com.epmedu.animeal.ui.BottomAppBarFab
+import com.epmedu.animeal.ui.BottomNavigationBar
 
 @Composable
-fun TabsFlow() {
+fun MainFlow() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
