@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.favourites.data.model.FavouriteFeedSpot
-import com.epmedu.animeal.favourites.ui.FavouriteFeedSpotItem
+import com.epmedu.animeal.favourites.data.model.FavouriteFeedingPoint
+import com.epmedu.animeal.favourites.ui.FavouriteFeedingPointItem
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -51,7 +51,7 @@ internal fun FavouritesScreenUI(
 
             ) {
                 items(state.favourites) { item ->
-                    FavouriteFeedSpotItem(
+                    FavouriteFeedingPointItem(
                         title = item.title,
                         status = item.status,
                         isFavourite = item.isFavourite,
@@ -72,9 +72,9 @@ private fun MoreScreenPreview() {
         FavouritesScreenUI(
             FavouritesState(
                 listOf(
-                    FavouriteFeedSpot(title = title, isFavourite = true),
-                    FavouriteFeedSpot(title = title, isFavourite = true),
-                    FavouriteFeedSpot(title = title, isFavourite = true)
+                    FavouriteFeedingPoint(title = title, isFavourite = true),
+                    FavouriteFeedingPoint(title = title, isFavourite = true),
+                    FavouriteFeedingPoint(title = title, isFavourite = true)
                 )
             )
         ) {}

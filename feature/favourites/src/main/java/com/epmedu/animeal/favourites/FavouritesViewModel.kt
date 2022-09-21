@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.favourites.data.FavouritesRepository
-import com.epmedu.animeal.favourites.data.model.FavouriteFeedSpot
+import com.epmedu.animeal.favourites.data.model.FavouriteFeedingPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,4 +40,4 @@ internal sealed class FavouritesScreenEvent(open val id: Int = -1) {
     data class FeedSpotRemove(override val id: Int) : FavouritesScreenEvent(id)
 }
 
-data class FavouritesState(val favourites: List<FavouriteFeedSpot> = emptyList())
+data class FavouritesState(val favourites: List<FavouriteFeedingPoint> = emptyList())

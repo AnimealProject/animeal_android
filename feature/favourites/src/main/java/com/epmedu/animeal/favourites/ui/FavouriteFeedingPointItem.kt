@@ -34,7 +34,7 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FavouriteFeedSpotItem(
+fun FavouriteFeedingPointItem(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
@@ -103,13 +103,13 @@ private fun MoreScreenPreview() {
 
     AnimealTheme {
         Column {
-            FavouriteFeedSpotItem(
+            FavouriteFeedingPointItem(
                 longText,
                 FeedStatus.RED,
                 isFavourite = true,
                 {}
             ) {}
-            FavouriteFeedSpotItem(
+            FavouriteFeedingPointItem(
                 shortText,
                 FeedStatus.GREEN,
                 isFavourite = false,
