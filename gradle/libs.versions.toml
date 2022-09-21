@@ -30,6 +30,7 @@ navigationComposeHilt = "1.0.0"
 playServicesLocation = "20.0.0"
 mapbox = "10.7.0"
 versions = "0.42.0"
+leakcanaryAndroid = "2.9.1"
 
 [libraries]
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
@@ -82,3 +83,5 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
+
+leakcanaryAndroid = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
