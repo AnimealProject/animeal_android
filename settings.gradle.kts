@@ -45,6 +45,12 @@ rootProject.name = "Animeal"
 include(":app")
 
 include(":feature:home")
+include(":feature:mainflow:moreflow:about")
+include(":feature:mainflow:moreflow:account")
+include(":feature:mainflow:moreflow:flow")
+include(":feature:mainflow:moreflow:more")
+include(":feature:mainflow:moreflow:help")
+include(":feature:mainflow:moreflow:donate")
 include(":feature:more")
 include(":feature:signupflow:entercode")
 include(":feature:signupflow:enterphone")
