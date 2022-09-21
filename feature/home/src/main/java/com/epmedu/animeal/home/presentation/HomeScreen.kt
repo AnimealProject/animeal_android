@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
-import com.epmedu.animeal.home.presentation.viewmodel.HomeEvent.ShowCurrentFeedSpotInformation
+import com.epmedu.animeal.home.presentation.viewmodel.HomeEvent.ShowCurrentFeedingPoint
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
@@ -33,7 +33,7 @@ fun HomeScreen() {
     LaunchedEffect(Unit) {
         viewModel.events.collect {
             when (it) {
-                is ShowCurrentFeedSpotInformation -> {
+                is ShowCurrentFeedingPoint -> {
                     scope.launch {
                         if (bottomSheetState.isHidden) {
                             bottomSheetState.show()

@@ -10,7 +10,7 @@ import com.epmedu.animeal.more.profile.presentation.viewmodel.ProfileViewModel
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
-internal fun ProfileScreen() {
+fun ProfileScreen() {
     val viewModel: ProfileViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val state = viewModel.stateFlow.collectAsState().value
@@ -20,6 +20,7 @@ internal fun ProfileScreen() {
     ProfileScreenUI(
         state = state,
         onBack = navigator::popBackStack,
-        onEvent = viewModel::handleEvent
+        onProfileScreenEvent = viewModel::handleScreenEvent,
+        onProfileFormEvent = viewModel::handleInputFormEvent
     )
 }

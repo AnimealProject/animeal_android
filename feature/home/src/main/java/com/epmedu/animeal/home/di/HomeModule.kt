@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.di
 
-import com.epmedu.animeal.home.data.FeedSpotRepository
-import com.epmedu.animeal.home.data.FeedSpotRepositoryImpl
+import com.epmedu.animeal.home.data.FeedingPointRepository
+import com.epmedu.animeal.home.data.FeedingPointRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ internal object HomeModule {
 
     @ViewModelScoped
     @Provides
-    fun provideFeedSpotRepository(): FeedSpotRepository = FeedSpotRepositoryImpl()
+    fun provideFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
 }

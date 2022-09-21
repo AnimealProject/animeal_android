@@ -1,10 +1,12 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+}
+
+android {
+    namespace = "com.epmedu.animeal.splash"
 }
 
 dependencies {
@@ -13,6 +15,8 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+
+    implementation(projects.shared.feature.profile)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

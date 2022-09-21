@@ -108,7 +108,7 @@ fun rememberHomeBottomSheetState(
     }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeBottomSheetLayout(
@@ -171,7 +171,10 @@ fun HomeBottomSheetLayout(
             color = sheetBackgroundColor,
             contentColor = sheetContentColor
         ) {
-            Column(content = sheetContent)
+            Column(
+                modifier = Modifier.defaultMinSize(minHeight = 1.dp),
+                content = sheetContent
+            )
         }
 
         Box(

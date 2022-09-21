@@ -3,6 +3,7 @@ package com.epmedu.animeal.foundation.button
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -15,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,8 +50,7 @@ fun AnimealHeartButton(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun SelectedAnimealHeartButtonPreview() {
     AnimealHeartButton(
@@ -57,12 +59,11 @@ private fun SelectedAnimealHeartButtonPreview() {
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun UnselectedAnimealHeartButtonPreview() {
     AnimealHeartButton(
         selected = false,
-        onChange = {},
+        onChange = {}
     )
 }

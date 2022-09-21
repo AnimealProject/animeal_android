@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Suppress("LongParameterList")
@@ -65,7 +65,7 @@ fun AnimealAlertDialog(
     )
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun AnimealAlertDialogPreview() {
     AnimealTheme {

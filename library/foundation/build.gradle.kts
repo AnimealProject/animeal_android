@@ -3,6 +3,10 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.foundation"
+}
+
 dependencies {
     implementation(projects.library.resources)
 
@@ -14,8 +18,5 @@ dependencies {
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.material.dialog.datetime)
 
-    // https://developer.android.com/studio/known-issues#error_when_rendering_compose_preview
-    debugImplementation(libs.androidx.lifecycle.runtime)
-    debugImplementation(libs.androidx.lifecycle.savedstate)
     debugImplementation(libs.compose.ui.tooling)
 }

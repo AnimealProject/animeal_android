@@ -3,8 +3,12 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.tabs"
+}
+
 dependencies {
-    implementation(projects.feature.more)
+    implementation(projects.feature.mainflow.moreflow.flow)
     implementation(projects.feature.home)
     implementation(projects.feature.favourites)
 
