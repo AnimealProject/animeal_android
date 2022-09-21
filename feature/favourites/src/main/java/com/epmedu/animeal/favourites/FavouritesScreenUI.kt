@@ -14,10 +14,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.favourites.data.model.FavouriteFeedingPoint
 import com.epmedu.animeal.favourites.ui.FavouriteFeedingPointItem
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -64,7 +64,7 @@ internal fun FavouritesScreenUI(
     }
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun MoreScreenPreview() {
     val title = "FeedSpot"

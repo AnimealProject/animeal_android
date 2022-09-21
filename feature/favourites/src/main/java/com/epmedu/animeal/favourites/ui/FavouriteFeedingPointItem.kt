@@ -1,6 +1,5 @@
 package com.epmedu.animeal.favourites.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -25,10 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.common.FeedStatus
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 
@@ -94,10 +93,9 @@ fun FavouriteFeedingPointItem(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
-private fun MoreScreenPreview() {
+fun MoreScreenPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
 
