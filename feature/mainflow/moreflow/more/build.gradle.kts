@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)

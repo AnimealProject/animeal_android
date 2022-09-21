@@ -11,5 +11,6 @@ dependencies {
     implementation(projects.feature.mainflow.moreflow.more)
     implementation(projects.feature.more)
 
+    implementation(projects.library.common)
     implementation(projects.library.navigation)
 }

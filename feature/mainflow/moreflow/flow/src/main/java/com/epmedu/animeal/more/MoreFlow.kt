@@ -3,13 +3,13 @@ package com.epmedu.animeal.more
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import com.epmedu.animeal.common.route.MoreRoute
 import com.epmedu.animeal.more.about.AboutScreen
 import com.epmedu.animeal.more.account.AccountScreen
 import com.epmedu.animeal.more.donate.DonateScreen
 import com.epmedu.animeal.more.help.HelpScreen
 import com.epmedu.animeal.more.profile.presentation.ProfileScreen
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
-import com.epmedu.animeal.navigation.route.MoreRoute
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
