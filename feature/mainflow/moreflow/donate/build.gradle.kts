@@ -3,6 +3,10 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.more.donate"
+}
+
 dependencies {
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)

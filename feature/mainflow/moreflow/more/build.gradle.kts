@@ -3,6 +3,10 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    namespace = "com.epmedu.animeal.more"
+}
+
 dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)
