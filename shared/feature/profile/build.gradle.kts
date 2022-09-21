@@ -5,6 +5,10 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+android {
+    namespace = "com.epmedu.animeal.profile"
+}
+
 dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)
