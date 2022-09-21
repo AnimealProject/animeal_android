@@ -91,8 +91,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
-    // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+
+    debugImplementation(libs.leakcanaryAndroid)
 }
 
 fun keyStoreFile(vararg fileNames: String): File? {
