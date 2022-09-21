@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.finishprofile.presentation.ui
+package com.epmedu.animeal.profile.presentation.ui
 
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,15 +12,16 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
-// TODO: Move to a separate module
+@Suppress("LongParameterList")
 @Composable
-fun EmailInput(
+internal fun EmailInput(
     value: String,
     onValueChange: (String) -> Unit,
     error: String,
+    imeAction: ImeAction,
     isEnabled: Boolean = true,
-    onClearFocus: () -> Unit = {},
-    onDone: KeyboardActionScope.() -> Unit = {},
+    onNext: KeyboardActionScope.() -> Unit = {},
+    onDone: KeyboardActionScope.() -> Unit = {}
 ) {
     TextInputField(
         isEnabled = isEnabled,
@@ -29,12 +30,14 @@ fun EmailInput(
         onValueChange = onValueChange,
         value = value,
         errorText = error,
-        onClearFocus = onClearFocus,
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
+            imeAction = imeAction,
             keyboardType = KeyboardType.Email
         ),
-        keyboardActions = KeyboardActions(onDone = onDone)
+        keyboardActions = KeyboardActions(
+            onDone = onDone,
+            onNext = onNext
+        )
     )
 }
 
@@ -45,7 +48,8 @@ private fun EmailInputPreview() {
         EmailInput(
             value = "Email",
             onValueChange = {},
-            error = ""
+            error = "",
+            imeAction = ImeAction.Default
         )
     }
 }

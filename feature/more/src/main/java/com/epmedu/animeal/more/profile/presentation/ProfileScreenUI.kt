@@ -12,14 +12,16 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Discard
 import com.epmedu.animeal.more.profile.presentation.ui.ProfileContent
-import com.epmedu.animeal.more.profile.presentation.viewmodel.ProfileState
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ProfileScreenUI(
     state: ProfileState,
     onBack: () -> Unit,
-    onEvent: (ProfileScreenEvent) -> Unit
+    onProfileScreenEvent: (ProfileScreenEvent) -> Unit,
+    onProfileFormEvent: (ProfileInputFormEvent) -> Unit
 ) {
     var showDiscardAlert by rememberSaveable {
         mutableStateOf(false)
@@ -38,19 +40,20 @@ internal fun ProfileScreenUI(
             onDismiss = { showDiscardAlert = false },
             onConfirm = {
                 showDiscardAlert = false
-                onEvent(Discard)
+                onProfileScreenEvent(Discard)
             }
         )
     }
     ProfileContent(
         state = state,
-        onEvent = onEvent,
         onBack = {
             when {
                 state.isEditedOrHasErrors() -> showDiscardAlert = true
                 else -> onBack()
             }
-        }
+        },
+        onScreenEvent = onProfileScreenEvent,
+        onInputFormEvent = onProfileFormEvent
     )
 }
 
@@ -61,7 +64,8 @@ private fun ProfileScreenPreview() {
         ProfileScreenUI(
             state = ProfileState(),
             onBack = {},
-            onEvent = {},
+            onProfileScreenEvent = {},
+            onProfileFormEvent = {}
         )
     }
 }

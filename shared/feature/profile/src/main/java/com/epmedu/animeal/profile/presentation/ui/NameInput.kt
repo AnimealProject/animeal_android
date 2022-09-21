@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.finishprofile.presentation.ui
+package com.epmedu.animeal.profile.presentation.ui
 
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -11,9 +11,8 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
-// TODO: Move to a separate module
 @Composable
-fun NameInput(
+internal fun NameInput(
     value: String,
     onValueChange: (String) -> Unit,
     error: String,

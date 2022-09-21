@@ -1,17 +1,18 @@
-package com.epmedu.animeal.more.profile.di
+package com.epmedu.animeal.profile.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.epmedu.animeal.common.data.repository.ProfileRepository
-import com.epmedu.animeal.common.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
-import com.epmedu.animeal.more.profile.domain.GetProfileUseCase
-import com.epmedu.animeal.more.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.more.profile.domain.ValidateBirthDateUseCase
-import com.epmedu.animeal.more.profile.domain.ValidateEmailUseCase
-import com.epmedu.animeal.more.profile.domain.ValidateNameUseCase
-import com.epmedu.animeal.more.profile.domain.ValidateSurnameUseCase
+import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
+import com.epmedu.animeal.profile.domain.GetProfileUseCase
+import com.epmedu.animeal.profile.domain.SaveProfileUseCase
+import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
+import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
+import com.epmedu.animeal.profile.domain.ValidateNameUseCase
+import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
+import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +31,8 @@ internal object ProfileModule {
     @Provides
     fun provideProfileRepository(
         dataStore: DataStore<Preferences>
-    ): ProfileRepository = ProfileRepositoryImpl(dataStore)
+    ): ProfileRepository =
+        ProfileRepositoryImpl(dataStore)
 
     @ViewModelScoped
     @Provides
@@ -61,6 +63,12 @@ internal object ProfileModule {
     fun provideValidateEmailUseCase(
         validator: ProfileValidator
     ) = ValidateEmailUseCase(validator)
+
+    @ViewModelScoped
+    @Provides
+    fun provideValidatePhoneNumberUseCase(
+        validator: ProfileValidator
+    ) = ValidatePhoneNumberUseCase(validator)
 
     @ViewModelScoped
     @Provides

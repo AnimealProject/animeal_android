@@ -1,4 +1,4 @@
-package com.epmedu.animeal.common.data.repository
+package com.epmedu.animeal.profile.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -9,11 +9,11 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
-import com.epmedu.animeal.common.data.model.Profile
+import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class ProfileRepositoryImpl @Inject constructor(
+internal class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ProfileRepository {
 

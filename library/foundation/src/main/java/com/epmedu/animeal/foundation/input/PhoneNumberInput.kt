@@ -2,9 +2,10 @@ package com.epmedu.animeal.foundation.input
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,8 +21,8 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_FORMAT
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -32,11 +33,12 @@ fun PhoneNumberInput(
     value: String,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
-    isEnabled: Boolean = true
+    error: String = "",
+    isEnabled: Boolean = true,
+    onDone: KeyboardActionScope.() -> Unit = {},
 ) {
     TextInputField(
         modifier = modifier,
-        isEnabled = isEnabled,
         title = stringResource(id = R.string.phone_number),
         hint = PHONE_NUMBER_FORMAT,
         onValueChange = {
@@ -45,8 +47,8 @@ fun PhoneNumberInput(
             }
         },
         value = value,
-        visualTransformation = PhoneFormatTransformation,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        isEnabled = isEnabled,
+        errorText = error,
         leadingIcon = {
             Row(
                 modifier = Modifier.padding(start = 12.dp),
@@ -64,12 +66,14 @@ fun PhoneNumberInput(
                     fontWeight = FontWeight.ExtraLight
                 )
             }
-        }
+        },
+        visualTransformation = PhoneFormatTransformation,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        keyboardActions = KeyboardActions(onDone = onDone)
     )
 }
 
 object PhoneFormatTransformation : VisualTransformation {
-    internal const val PHONE_NUMBER_LENGTH = 9
     internal const val PHONE_NUMBER_PREFIX = "+995"
     internal const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
@@ -128,6 +132,12 @@ private fun PhoneNumberInputPreview() {
             PhoneNumberInput(
                 value = "123456789",
                 isEnabled = false
+            )
+            Divider()
+            PhoneNumberInput(
+                value = "1234567",
+                isEnabled = false,
+                error = "Phone Number is too short"
             )
         }
     }

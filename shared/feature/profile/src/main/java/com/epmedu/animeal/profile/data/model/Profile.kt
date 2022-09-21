@@ -1,4 +1,4 @@
-package com.epmedu.animeal.common.data.model
+package com.epmedu.animeal.profile.data.model
 
 data class Profile(
     val name: String = "",

@@ -1,6 +1,6 @@
-package com.epmedu.animeal.common.data.repository
+package com.epmedu.animeal.profile.data.repository
 
-import com.epmedu.animeal.common.data.model.Profile
+import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
