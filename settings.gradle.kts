@@ -65,3 +65,5 @@ include(":library:extensions")
 include(":library:foundation")
 include(":library:navigation")
 include(":library:resources")
+
+include(":shared:feature:profile")

@@ -24,14 +24,17 @@ import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent
 import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Edit
 import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Save
-import com.epmedu.animeal.more.profile.presentation.viewmodel.ProfileState
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
+import com.epmedu.animeal.profile.presentation.ui.ProfileInputForm
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ProfileContent(
     state: ProfileState,
     onBack: () -> Unit,
-    onEvent: (ProfileScreenEvent) -> Unit
+    onInputFormEvent: (ProfileInputFormEvent) -> Unit,
+    onScreenEvent: (ProfileScreenEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -58,17 +61,17 @@ internal fun ProfileContent(
             )
             ProfileInputForm(
                 state = state,
-                onEvent = onEvent,
+                onEvent = onInputFormEvent,
                 modifier = Modifier.padding(top = 24.dp)
             )
         }
         Spacer(modifier = Modifier.weight(1f))
         ProfileButton(
             state = state.formState,
-            onEdit = { onEvent(Edit) },
+            onEdit = { onScreenEvent(Edit) },
             onSave = {
                 focusManager.clearFocus()
-                onEvent(Save)
+                onScreenEvent(Save)
             },
             modifier = Modifier
                 .padding(horizontal = 30.dp)
@@ -86,7 +89,8 @@ private fun ProfileContentPreview() {
             ProfileContent(
                 state = ProfileState(),
                 onBack = {},
-                onEvent = {}
+                onScreenEvent = {},
+                onInputFormEvent = {}
             )
         }
     }

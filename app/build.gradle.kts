@@ -15,6 +15,7 @@ animealPlugin {
 }
 
 android {
+    namespace = "com.epmedu.animeal"
     signingConfigs {
         debug {
             storeFile = keyStoreFile("debug.keystore")
