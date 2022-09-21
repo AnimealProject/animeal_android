@@ -7,9 +7,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.route.MoreRoute
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -56,7 +56,7 @@ internal fun MoreScreenUi(
     }
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun MoreScreenPreview() {
     AnimealTheme {

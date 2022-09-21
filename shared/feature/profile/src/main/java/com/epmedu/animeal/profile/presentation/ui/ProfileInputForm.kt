@@ -1,16 +1,14 @@
 package com.epmedu.animeal.profile.presentation.ui
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
@@ -74,8 +72,7 @@ fun ProfileInputForm(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun ProfileInputFormPreview() {
     com.epmedu.animeal.foundation.theme.AnimealTheme {

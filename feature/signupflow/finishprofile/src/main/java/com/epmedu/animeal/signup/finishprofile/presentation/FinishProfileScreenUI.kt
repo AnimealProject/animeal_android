@@ -1,6 +1,5 @@
 package com.epmedu.animeal.signup.finishprofile.presentation
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.tooling.preview.Preview
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
@@ -49,8 +48,7 @@ internal fun FinishProfileScreenUI(
     )
 }
 
-@Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
 private fun FinishProfileScreenPreview() {
     AnimealTheme {

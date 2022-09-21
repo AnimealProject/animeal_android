@@ -2,8 +2,8 @@ package com.epmedu.animeal.more.about
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.foundation.placeholder.ScreenPlaceholder
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
@@ -17,7 +17,7 @@ internal fun AboutScreenUI(
     )
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun AboutScreenUIPreview() {
     AnimealTheme {
