@@ -1,4 +1,4 @@
-package com.epmedu.animeal.more.profile.presentation.ui
+package com.epmedu.animeal.more.profile.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,9 +15,9 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Edit
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Save
+import com.epmedu.animeal.more.profile.ProfileScreenEvent
+import com.epmedu.animeal.more.profile.ProfileScreenEvent.Edit
+import com.epmedu.animeal.more.profile.ProfileScreenEvent.Save
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ui.ProfileInputForm
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState

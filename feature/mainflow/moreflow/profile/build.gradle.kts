@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.epmedu.animeal.more"
+    namespace = "com.epmedu.animeal.more.profile"
 }
 
 dependencies {

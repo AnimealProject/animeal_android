@@ -1,4 +1,4 @@
-package com.epmedu.animeal.more.profile.presentation
+package com.epmedu.animeal.more.profile
 
 internal sealed interface ProfileScreenEvent {
     object Edit : ProfileScreenEvent

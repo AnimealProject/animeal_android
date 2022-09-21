@@ -9,7 +9,7 @@ dependencies {
     implementation(projects.feature.mainflow.moreflow.donate)
     implementation(projects.feature.mainflow.moreflow.help)
     implementation(projects.feature.mainflow.moreflow.more)
-    implementation(projects.feature.more)
+    implementation(projects.feature.mainflow.moreflow.profile)
 
     implementation(projects.library.common)
     implementation(projects.library.navigation)
