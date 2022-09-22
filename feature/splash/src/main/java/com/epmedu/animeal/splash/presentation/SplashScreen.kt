@@ -2,9 +2,9 @@ package com.epmedu.animeal.splash.presentation
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.navigation.route.MainRoute
 
 @Composable
 fun SplashScreen() {

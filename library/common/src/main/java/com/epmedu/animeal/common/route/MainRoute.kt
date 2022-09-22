@@ -1,4 +1,4 @@
-package com.epmedu.animeal.navigation.route
+package com.epmedu.animeal.common.route
 
 enum class MainRoute {
     Splash,
