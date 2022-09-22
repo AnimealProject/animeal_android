@@ -1,10 +1,10 @@
-package com.epmedu.animeal.more.profile.presentation.viewmodel
+package com.epmedu.animeal.more.profile.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Discard
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Edit
-import com.epmedu.animeal.more.profile.presentation.ProfileScreenEvent.Save
+import com.epmedu.animeal.more.profile.ProfileScreenEvent
+import com.epmedu.animeal.more.profile.ProfileScreenEvent.Discard
+import com.epmedu.animeal.more.profile.ProfileScreenEvent.Edit
+import com.epmedu.animeal.more.profile.ProfileScreenEvent.Save
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
