@@ -11,7 +11,7 @@ class MarkerCache(private val context: Context) {
     private val maxSize = (Runtime.getRuntime().maxMemory() / 1024 / 8).toInt()
     private val lruCache = LruCache<Int, Bitmap>(maxSize)
 
-    fun getVector(id: Int): Bitmap {
+    fun getMarker(id: Int): Bitmap {
         return when (val cachedBitmap = lruCache.get(id)) {
             null -> {
                 val bitmap = ContextCompat.getDrawable(context, id)?.toBitmap()

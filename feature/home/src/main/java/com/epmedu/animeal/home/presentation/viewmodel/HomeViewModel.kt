@@ -12,6 +12,7 @@ import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,8 +57,7 @@ internal class HomeViewModel @Inject constructor(
         updateState {
             copy(
                 mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
-                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI,
-                areFeedingPointsLoading = false
+                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI
             )
         }
     }
@@ -75,7 +75,6 @@ internal class HomeViewModel @Inject constructor(
             feedingPointRepository.getAllFeedingPoints().collect {
                 updateState {
                     copy(
-                        areFeedingPointsLoading = false,
                         feedingPoints = it.map { feedingPoint -> FeedingPointUi(feedingPoint) }
                     )
                 }

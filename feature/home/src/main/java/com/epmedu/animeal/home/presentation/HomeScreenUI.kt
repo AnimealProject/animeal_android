@@ -17,6 +17,7 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.ui.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
@@ -86,11 +87,11 @@ internal fun HomeScreenUI(
 @Composable
 private fun MapContent(
     state: HomeState,
-    onFeedingPointClickListener: OnFeedingPointClickListener
+    onFeedingPointClick: (point: FeedingPointUi) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(state = state) {
-            onFeedingPointClickListener.onFeedingPointClick(it)
+            onFeedingPointClick.invoke(it)
         }
         AnimealSwitch(
             modifier = Modifier

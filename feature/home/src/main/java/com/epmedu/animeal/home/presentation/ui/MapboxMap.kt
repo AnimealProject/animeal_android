@@ -6,7 +6,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.epmedu.animeal.home.presentation.OnFeedingPointClickListener
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.utils.MarkerCache
@@ -23,7 +22,7 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 @Composable
 fun MapboxMap(
     state: HomeState,
-    onFeedingPointClickListener: OnFeedingPointClickListener
+    onFeedingPointClick: (point: FeedingPointUi) -> Unit
 ) {
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
 
@@ -32,10 +31,10 @@ fun MapboxMap(
 
     AndroidView(
         factory = {
-            addMarkers(mapBoxView, state.feedingPoints, onFeedingPointClickListener)
+            addMarkers(mapBoxView, state.feedingPoints, onFeedingPointClick)
             mapBoxView
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { mapView ->
         mapView.scalebar.enabled = false
         mapView.location.updateSettings {
@@ -87,28 +86,26 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
 private fun addMarkers(
     mapView: MapView,
     feedingPoints: List<FeedingPointUi>,
-    onFeedingPointClickListener: OnFeedingPointClickListener
+    onFeedingPointClick: (point: FeedingPointUi) -> Unit
 ): PointAnnotationManager {
     val annotationApi = mapView.annotations
     val pointAnnotationManager = annotationApi.createPointAnnotationManager()
     val markerCache = MarkerCache(mapView.context)
 
     feedingPoints.forEach { feedingPoint ->
-        markerCache.getVector(feedingPoint.getDrawableRes())
-            .let { resourceImg ->
-                // Set options for the resulting symbol layer.
-                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-                    .withPoint(feedingPoint.coordinates)
-                    // Specify the bitmap you assigned to the point annotation
-                    // The bitmap will be added to map style automatically.
-                    .withIconImage(resourceImg)
-                pointAnnotationManager.create(pointAnnotationOptions)
-            }
+        val icon = markerCache.getMarker(feedingPoint.getDrawableRes())
+        // Set options for the resulting symbol layer.
+        val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+            .withPoint(feedingPoint.coordinates)
+            // Specify the bitmap you assigned to the point annotation
+            // The bitmap will be added to map style automatically.
+            .withIconImage(icon)
+        pointAnnotationManager.create(pointAnnotationOptions)
     }
 
     pointAnnotationManager.addClickListener(
         OnPointAnnotationClickListener {
-            onFeedingPointClickListener.onFeedingPointClick(
+            onFeedingPointClick(
                 feedingPoints.first { feedingPointUi ->
                     feedingPointUi.coordinates == it.point
                 }

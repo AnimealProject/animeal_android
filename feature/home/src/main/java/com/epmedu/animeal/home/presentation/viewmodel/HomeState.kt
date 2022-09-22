@@ -9,6 +9,5 @@ data class HomeState(
     val currentFeedingPoint: FeedingPointUi? = null,
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
-    val areFeedingPointsLoading: Boolean = false,
     val feedingPoints: List<FeedingPointUi> = emptyList()
 )

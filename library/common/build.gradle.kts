@@ -10,7 +10,6 @@ animealPlugin {
 }
 
 dependencies {
-    implementation(projects.library.foundation)
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
     implementation(libs.androidx.viewmodel)
