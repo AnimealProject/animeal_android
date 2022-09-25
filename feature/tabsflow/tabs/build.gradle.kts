@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.tabsflow.analytics)
-    implementation(projects.feature.tabsflow.moreflow.flow)
+    implementation(projects.feature.tabsflow.moreflow.host)
     implementation(projects.feature.tabsflow.search)
 
     implementation(projects.library.foundation)

@@ -13,7 +13,7 @@ import com.epmedu.animeal.tabs.more.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MoreFlow() {
+fun MoreHost() {
     AnimatedScreenNavHost(
         startDestination = MoreRoute.More.name,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },

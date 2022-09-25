@@ -17,13 +17,13 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
-import com.epmedu.animeal.tabs.more.MoreFlow
+import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
 
 @Composable
-fun TabsFlow() {
+fun TabsHost() {
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -83,6 +83,6 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(NavigationTab.Favorites.route.name) { FavoritesScreen() }
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { MoreFlow() }
+        screen(NavigationTab.More.route.name) { MoreHost() }
     }
 }
