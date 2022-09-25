@@ -21,7 +21,7 @@ fun AccountScreen() {
         viewModel.events.collect {
             if (it is AccountViewModel.Event.NavigateToOnboarding) {
                 navigator.parent?.parent?.navigate(MainRoute.SignUp.name) {
-                    popUpTo(MainRoute.Main.name) {
+                    popUpTo(MainRoute.Tabs.name) {
                         inclusive = true
                     }
                 }

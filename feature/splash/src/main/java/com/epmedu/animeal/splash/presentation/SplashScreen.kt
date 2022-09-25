@@ -15,7 +15,7 @@ fun SplashScreen() {
         viewModel.events.collect {
             when (it) {
                 SplashViewModel.Event.NavigateToHome -> {
-                    navigator.navigate(MainRoute.Main.name) {
+                    navigator.navigate(MainRoute.Tabs.name) {
                         popUpTo(MainRoute.Splash.name) {
                             inclusive = true
                         }

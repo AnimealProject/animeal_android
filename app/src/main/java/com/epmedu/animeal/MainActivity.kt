@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         screen(MainRoute.Splash.name) { SplashScreen() }
                         screen(MainRoute.SignUp.name) { SignUpFlow() }
-                        screen(MainRoute.Main.name) { TabsFlow() }
+                        screen(MainRoute.Tabs.name) { TabsFlow() }
                     }
                 }
             }

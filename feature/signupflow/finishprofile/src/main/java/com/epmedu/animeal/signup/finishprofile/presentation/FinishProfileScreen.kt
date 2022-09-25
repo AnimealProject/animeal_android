@@ -48,7 +48,7 @@ fun FinishProfileScreen() {
 }
 
 private fun Navigator.navigateToTabs() {
-    parent?.navigate(MainRoute.Main.name) {
+    parent?.navigate(MainRoute.Tabs.name) {
         popUpTo(MainRoute.SignUp.name) {
             inclusive = true
         }
