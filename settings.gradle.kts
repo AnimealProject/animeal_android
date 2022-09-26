@@ -45,20 +45,25 @@ rootProject.name = "Animeal"
 include(":app")
 
 include(":feature:home")
-include(":feature:mainflow:moreflow:about")
-include(":feature:mainflow:moreflow:account")
-include(":feature:mainflow:moreflow:donate")
-include(":feature:mainflow:moreflow:flow")
-include(":feature:mainflow:moreflow:help")
-include(":feature:mainflow:moreflow:more")
-include(":feature:mainflow:moreflow:profile")
+
 include(":feature:signupflow:entercode")
 include(":feature:signupflow:enterphone")
 include(":feature:signupflow:finishprofile")
 include(":feature:signupflow:onboarding")
 include(":feature:signupflow:signup")
+
 include(":feature:splash")
-include(":feature:tabs")
+
+include(":feature:tabsflow:analytics")
+include(":feature:tabsflow:moreflow:about")
+include(":feature:tabsflow:moreflow:account")
+include(":feature:tabsflow:moreflow:donate")
+include(":feature:tabsflow:moreflow:help")
+include(":feature:tabsflow:moreflow:host")
+include(":feature:tabsflow:moreflow:more")
+include(":feature:tabsflow:moreflow:profile")
+include(":feature:tabsflow:search")
+include(":feature:tabsflow:tabs")
 
 include(":library:common")
 include(":library:extensions")

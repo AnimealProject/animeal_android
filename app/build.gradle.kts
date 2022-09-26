@@ -56,7 +56,7 @@ android {
 dependencies {
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
-    implementation(projects.feature.tabs)
+    implementation(projects.feature.tabsflow.tabs)
 
     implementation(projects.library.common)
     implementation(projects.library.foundation)
