@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +20,18 @@ import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.ui.*
-import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreenUI(
-    state: HomeState,
+    homeViewModel: HomeViewModel,
     bottomSheetState: HomeBottomSheetState,
     onEvent: (HomeScreenEvent) -> Unit
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
+    val state by homeViewModel.stateFlow.collectAsState()
 
     LaunchedEffect(bottomSheetState.progress) {
         val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
@@ -76,7 +78,7 @@ internal fun HomeScreenUI(
             }
         ) {
             MapContent(
-                state = state
+                homeViewModel = homeViewModel
             ) {
                 onEvent(HomeScreenEvent.FeedingPointSelected(id = it.id))
             }
@@ -86,11 +88,11 @@ internal fun HomeScreenUI(
 
 @Composable
 private fun MapContent(
-    state: HomeState,
+    homeViewModel: HomeViewModel,
     onFeedingPointClick: (point: FeedingPointUi) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        MapboxMap(state = state) {
+        MapboxMap(homeViewModel = homeViewModel) {
             onFeedingPointClick.invoke(it)
         }
         AnimealSwitch(

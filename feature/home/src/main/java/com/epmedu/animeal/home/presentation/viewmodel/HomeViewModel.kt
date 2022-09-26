@@ -12,18 +12,21 @@ import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider,
     private val locationProvider: LocationProvider,
     private val feedingPointRepository: FeedingPointRepository
 ) : ViewModel(),
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
     EventDelegate<HomeEvent> by DefaultEventDelegate() {
+
+    private val feedingPointsState: DefaultStateDelegate<FeedingPointsState> =
+        DefaultStateDelegate(FeedingPointsState(emptyList()))
 
     init {
         initialize()
@@ -53,6 +56,8 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getFeedingPointsFlow(): StateFlow<FeedingPointsState> = feedingPointsState.stateFlow
+
     private fun initialize() {
         updateState {
             copy(
@@ -73,9 +78,10 @@ internal class HomeViewModel @Inject constructor(
     private fun fetchFeedingPoints() {
         viewModelScope.launch {
             feedingPointRepository.getAllFeedingPoints().collect {
-                updateState {
-                    copy(
-                        feedingPoints = it.map { feedingPoint -> FeedingPointUi(feedingPoint) }
+                feedingPointsState.updateState {
+                    FeedingPointsState(
+                        it.take(15)
+                            .map { feedingPoint -> FeedingPointUi(feedingPoint) }
                     )
                 }
             }

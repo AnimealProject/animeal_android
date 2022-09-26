@@ -14,12 +14,11 @@ import kotlinx.coroutines.launch
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
-    val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
     HomeScreenUI(
-        state = state,
+        homeViewModel = viewModel,
         bottomSheetState = bottomSheetState,
         onEvent = { event ->
             viewModel.handleEvents(event)
