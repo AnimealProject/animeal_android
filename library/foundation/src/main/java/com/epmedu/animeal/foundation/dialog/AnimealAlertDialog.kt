@@ -1,6 +1,9 @@
 package com.epmedu.animeal.foundation.dialog
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
@@ -9,10 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Suppress("LongParameterList")
@@ -46,7 +49,7 @@ fun AnimealAlertDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AnimealSecondaryButton(
+                AnimealSecondaryButtonOutlined(
                     modifier = Modifier.weight(1f),
                     text = dismissText,
                     onClick = {
@@ -65,7 +68,7 @@ fun AnimealAlertDialog(
     )
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun AnimealAlertDialogPreview() {
     AnimealTheme {

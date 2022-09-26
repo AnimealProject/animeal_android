@@ -2,7 +2,7 @@ package com.epmedu.animeal.foundation.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.resources.R
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
@@ -46,7 +46,7 @@ fun DatePickerDialog(
     }
 }
 
-@Preview
+@AnimealPreview
 @Composable
 private fun DatePickerDialogPreview() {
     DatePickerDialog(

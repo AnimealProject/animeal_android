@@ -9,9 +9,12 @@ animealPlugin {
     compose = false
 }
 
+android {
+    namespace = "com.epmedu.animeal.common"
+}
+
 dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
-    implementation(libs.androidx.viewmodel)
     kapt(libs.hilt.compiler)
 }

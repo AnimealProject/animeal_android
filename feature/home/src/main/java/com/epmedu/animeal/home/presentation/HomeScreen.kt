@@ -5,8 +5,8 @@ import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
-import com.epmedu.animeal.home.presentation.viewmodel.HomeEvent.ShowCurrentFeedingPoint
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -20,9 +20,7 @@ fun HomeScreen() {
     HomeScreenUI(
         homeViewModel = viewModel,
         bottomSheetState = bottomSheetState,
-        onEvent = { event ->
-            viewModel.handleEvents(event)
-        }
+        onScreenEvent = viewModel::handleEvents
     )
 
     LaunchedEffect(Unit) {

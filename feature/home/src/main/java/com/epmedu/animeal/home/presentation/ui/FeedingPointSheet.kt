@@ -1,6 +1,5 @@
 package com.epmedu.animeal.home.presentation.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,21 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
-import com.epmedu.animeal.foundation.switch.AnimalType
-import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.home.data.model.Feeder
-import com.epmedu.animeal.home.data.model.enum.AnimalPriority
-import com.epmedu.animeal.home.data.model.enum.Remoteness
 import com.epmedu.animeal.home.presentation.model.FeedStatus
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
-import com.mapbox.geojson.Point
 
 @Composable
 internal fun FeedingPointSheetContent(
@@ -229,7 +219,8 @@ internal fun FeedingPointLastFeeder(
     }
 }
 
-@Preview
+// Commented cause unused 'detekt conflicts'
+/*@Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun FeedingPointSheetPreview(
@@ -257,4 +248,4 @@ private fun FeedingPointSheetPreview(
             onFavouriteChange = {}
         )
     }
-}
+}*/

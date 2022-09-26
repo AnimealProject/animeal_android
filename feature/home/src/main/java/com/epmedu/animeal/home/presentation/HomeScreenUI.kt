@@ -3,11 +3,8 @@ package com.epmedu.animeal.home.presentation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -19,7 +16,12 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
-import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
+import com.epmedu.animeal.home.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetLayout
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetState
+import com.epmedu.animeal.home.presentation.ui.MapboxMap
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.resources.R
 
@@ -28,7 +30,7 @@ import com.epmedu.animeal.resources.R
 internal fun HomeScreenUI(
     homeViewModel: HomeViewModel,
     bottomSheetState: HomeBottomSheetState,
-    onEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
     val state by homeViewModel.stateFlow.collectAsState()
@@ -65,7 +67,7 @@ internal fun HomeScreenUI(
                         feedingPoint = feedingPoint,
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
-                            onEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
+                            onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                         }
                     )
                 }
@@ -78,10 +80,10 @@ internal fun HomeScreenUI(
             }
         ) {
             MapContent(
-                homeViewModel = homeViewModel
-            ) {
-                onEvent(HomeScreenEvent.FeedingPointSelected(id = it.id))
-            }
+                homeViewModel = homeViewModel,
+                onGeolocationClick = { onScreenEvent(HomeScreenEvent.UserCurrentGeolocationRequest) },
+                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) }
+            )
         }
     }
 }
@@ -89,11 +91,12 @@ internal fun HomeScreenUI(
 @Composable
 private fun MapContent(
     homeViewModel: HomeViewModel,
-    onFeedingPointClick: (point: FeedingPointUi) -> Unit
+    onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
+    onGeolocationClick: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(homeViewModel = homeViewModel) {
-            onFeedingPointClick.invoke(it)
+            onFeedingPointSelect.invoke(it)
         }
         AnimealSwitch(
             modifier = Modifier
@@ -108,10 +111,9 @@ private fun MapContent(
                     bottom = bottomBarHeight + 24.dp,
                     end = 24.dp
                 )
-                .align(alignment = Alignment.BottomEnd)
-        ) {
-            // TODO get location
-        }
+                .align(alignment = Alignment.BottomEnd),
+            onClick = onGeolocationClick
+        )
     }
 }
 

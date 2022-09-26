@@ -2,6 +2,7 @@ package com.epmedu.animeal.extensions
 
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
 
@@ -13,3 +14,6 @@ fun Context.launchAppSettings() {
     }
     startActivity(intent)
 }
+
+inline val Context.locationManager: LocationManager
+    get() = getSystemService(Context.LOCATION_SERVICE) as LocationManager
