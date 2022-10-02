@@ -10,5 +10,5 @@ fun FavouritesScreen() {
     val viewModel = hiltViewModel<FavouritesViewModel>()
     val state by viewModel.stateFlow.collectAsState()
 
-    FavouritesScreenUI(state) { viewModel.handleEvents(it) }
+    FavouritesScreenUI(state, onEvent = { viewModel.handleEvents(it) })
 }
