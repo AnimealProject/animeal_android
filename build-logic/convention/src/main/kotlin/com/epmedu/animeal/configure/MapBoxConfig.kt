@@ -1,9 +1,9 @@
 package com.epmedu.animeal.configure
 
 import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.epmedu.animeal.extension.getStringPropertyOrThrow
 import com.epmedu.animeal.extension.loadProperties
 import com.epmedu.animeal.extension.stringField
-import com.epmedu.animeal.extension.getStringPropertyOrThrow
 import java.util.*
 
 private val Properties.mapBoxUsername: String

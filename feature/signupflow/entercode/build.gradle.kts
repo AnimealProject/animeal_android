@@ -1,8 +1,12 @@
 plugins {
-    id("AnimealPlugin")
-    id("com.android.library")
+    id("animeal.library")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+}
+
+animealPlugin {
+    compose = true
+    buildConfigGeneration = false
 }
 
 android {

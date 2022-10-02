@@ -1,10 +1,6 @@
-import com.epmedu.animeal.extension.propertyInt
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.file.File
-import org.jetbrains.kotlin.konan.properties.loadProperties
-import org.jetbrains.kotlin.konan.properties.saveToFile
 
 apply(plugin = "com.github.ben-manes.versions")
 
@@ -13,11 +9,6 @@ plugins {
 }
 
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
         classpath(libs.gradle.plugin.buildtools)
         classpath(libs.gradle.plugin.crashlytics)

@@ -2,8 +2,7 @@ import com.epmedu.animeal.extension.debug
 import com.epmedu.animeal.extension.release
 
 plugins {
-    id("AnimealPlugin")
-    id("com.android.application")
+    id("animeal.application")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
@@ -12,6 +11,7 @@ plugins {
 
 animealPlugin {
     buildConfigGeneration = true
+    compose = true
 }
 
 android {

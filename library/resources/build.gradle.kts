@@ -1,10 +1,10 @@
 plugins {
-    id("AnimealPlugin")
-    id("com.android.library")
+    id("animeal.library")
 }
 
 animealPlugin {
     compose = false
+    buildConfigGeneration = false
 }
 
 android {

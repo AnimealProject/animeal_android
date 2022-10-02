@@ -1,5 +1,6 @@
-package com.epmedu.animeal.extension
+package com.epmedu.animeal.configure
 
+import com.epmedu.animeal.extension.propertyInt
 import java.io.FileInputStream
 import java.util.*
 
