@@ -14,7 +14,7 @@ open class AnimealApplicationExtension @Inject constructor(private val project: 
     var buildConfigGeneration = false
         set(value) {
             field = value
-            project.applicationExtension.run {
+            project.applicationExtension {
                 buildFeatures {
                     buildConfig = value
                 }
@@ -29,7 +29,7 @@ open class AnimealApplicationExtension @Inject constructor(private val project: 
             field = value
 
             project.run {
-                applicationExtension.run {
+                applicationExtension {
                     if (value) {
                         buildFeatures {
                             compose = true

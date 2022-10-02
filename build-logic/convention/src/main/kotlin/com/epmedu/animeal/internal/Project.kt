@@ -14,3 +14,8 @@ internal val Project.libraryExtension
 
 internal val Project.applicationExtension
     get() = the<ApplicationExtension>()
+
+fun Project.libraryExtension(action: LibraryExtension.() -> Unit) = libraryExtension.run(action)
+
+fun Project.applicationExtension(action: ApplicationExtension.() -> Unit) =
+    applicationExtension.run(action)
