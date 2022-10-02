@@ -56,9 +56,10 @@ android {
 dependencies {
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
-    implementation(projects.feature.tabs)
+    implementation(projects.feature.tabsflow.tabs)
 
     implementation(projects.library.common)
+    implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
@@ -91,6 +92,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
+
+    debugImplementation(libs.leakcanaryAndroid)
 }
 
 fun keyStoreFile(vararg fileNames: String): File? {

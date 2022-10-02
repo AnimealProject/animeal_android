@@ -7,13 +7,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.TransparentSystemUi
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
-import com.epmedu.animeal.navigation.route.MainRoute
 import com.epmedu.animeal.signup.SignUpFlow
 import com.epmedu.animeal.splash.presentation.SplashScreen
-import com.epmedu.animeal.tabs.presentation.TabsFlow
+import com.epmedu.animeal.tabs.TabsHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         screen(MainRoute.Splash.name) { SplashScreen() }
                         screen(MainRoute.SignUp.name) { SignUpFlow() }
-                        screen(MainRoute.Tabs.name) { TabsFlow() }
+                        screen(MainRoute.Tabs.name) { TabsHost() }
                     }
                 }
             }
