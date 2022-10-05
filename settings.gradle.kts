@@ -64,6 +64,7 @@ include(":feature:tabsflow:moreflow:more")
 include(":feature:tabsflow:moreflow:profile")
 include(":feature:tabsflow:search")
 include(":feature:tabsflow:tabs")
+include(":feature:tabsflow:favourites")
 
 include(":library:common")
 include(":library:extensions")

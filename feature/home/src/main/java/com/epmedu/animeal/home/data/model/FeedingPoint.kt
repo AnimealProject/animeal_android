@@ -1,5 +1,7 @@
 package com.epmedu.animeal.home.data.model
 
+import com.epmedu.animeal.foundation.common.FeedStatus
+
 data class FeedingPoint(
     val id: Int,
     val title: String,

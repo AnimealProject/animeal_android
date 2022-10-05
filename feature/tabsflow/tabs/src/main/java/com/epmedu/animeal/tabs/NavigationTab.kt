@@ -12,7 +12,7 @@ sealed class NavigationTab(val route: Route, val icon: Int, @StringRes val conte
     object Favorites : NavigationTab(
         route = Route.FAVORITES,
         icon = R.drawable.ic_favorites,
-        contentDescription = R.string.tab_favorites
+        contentDescription = R.string.tab_favourites
     )
     object Home : NavigationTab(
         route = Route.HOME,
