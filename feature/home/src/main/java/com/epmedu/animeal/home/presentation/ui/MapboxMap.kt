@@ -9,10 +9,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -69,6 +73,13 @@ private fun mapView(mapboxPublicKey: String, mapBoxStyleUri: String): MapView {
 
     return mapView
 }
+
+private fun MapView.showInitialLocation(location: MapLocation) = getMapboxMap().setCamera(
+    CameraOptions.Builder()
+        .zoom(13.0)
+        .center(Point.fromLngLat(location.longitude, location.latitude))
+        .build()
+)
 
 /**
  * Creates a list of markers in the map

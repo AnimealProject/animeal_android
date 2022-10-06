@@ -13,12 +13,14 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.geolocation.location.LocationProvider
+import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
     private val buildConfigProvider: BuildConfigProvider,
     private val locationProvider: LocationProvider,
@@ -51,6 +53,8 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getFeedingPointsFlow(): StateFlow<FeedingPointsState> = feedingPointsState.stateFlow
+
     private fun initialize() {
         updateState {
             copy(
@@ -63,16 +67,14 @@ internal class HomeViewModel @Inject constructor(
     private fun fetchLocationUpdates() {
         viewModelScope.launch {
             locationProvider.fetchUpdates().collect {
-                updateState { copy(currentLocation = it) }
+                updateState { copy(currentLocation = MapLocation(it)) }
             }
         }
     }
 
     private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
-            gpsSettingsProvider.fetchUpdates().collect {
-                updateState(::collectGpsSettings)
-            }
+            gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
     }
 
