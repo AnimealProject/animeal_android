@@ -54,6 +54,7 @@ fun MapboxMap(
             pulsingEnabled = true
         }
 
+        // Every time you press a marker it resets the location, strange behaviour...
         mapView.showInitialLocation(state.currentLocation)
     }
 }
