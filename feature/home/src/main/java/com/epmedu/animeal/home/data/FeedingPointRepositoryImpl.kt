@@ -1,11 +1,11 @@
 package com.epmedu.animeal.home.data
 
-import com.epmedu.animeal.common.data.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.home.data.model.Feeder
 import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.enum.AnimalPriority
 import com.epmedu.animeal.home.data.model.enum.AnimalState
+import com.epmedu.animeal.home.presentation.model.MapLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlin.random.Random

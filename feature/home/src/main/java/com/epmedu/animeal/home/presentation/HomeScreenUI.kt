@@ -64,7 +64,7 @@ internal fun HomeScreenUI(
             sheetContent = {
                 state.currentFeedingPoint?.let { feedingPoint ->
                     FeedingPointSheetContent(
-                        feedingPoint = feedingPoint,
+                        feedingPoint = FeedingPointUi(feedingPoint),
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
                             onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))

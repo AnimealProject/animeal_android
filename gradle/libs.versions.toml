@@ -29,7 +29,7 @@ lifecycle = "2.5.1"
 navigationCompose = "2.5.2"
 navigationComposeHilt = "1.0.0"
 playServicesLocation = "20.0.0"
-mapbox = "10.7.0"
+mapbox = "10.8.0"
 versions = "0.42.0"
 
 [libraries]

@@ -2,7 +2,6 @@ package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -11,12 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
-import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -32,10 +28,7 @@ fun MapboxMap(
     val mapBoxView = mapView(state.mapBoxPublicKey, state.mapBoxStyleUri)
     val markerController by remember { mutableStateOf(MarkerController(mapBoxView)) }
 
-    var initialLocationReceived by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-        initialLocationReceived = false
-
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             homeViewModel.getFeedingPointsFlow().collect { pointsState ->
                 addMarkers(
@@ -48,10 +41,8 @@ fun MapboxMap(
     }
 
     AndroidView(
-        factory = {
-            mapBoxView
-        },
-        modifier = Modifier.fillMaxSize(),
+        factory = { mapBoxView },
+        modifier = Modifier.fillMaxSize()
     ) { mapView ->
         mapView.scalebar.enabled = false
         mapView.location.updateSettings {
@@ -59,19 +50,7 @@ fun MapboxMap(
             pulsingEnabled = true
         }
 
-        if (!initialLocationReceived && !state.currentLocation.isInitial) {
-            initialLocationReceived = true
-            mapView.getMapboxMap().setCamera(
-                CameraOptions.Builder()
-                    .zoom(17.0)
-                    .center(
-                        Point.fromLngLat(
-                            state.currentLocation.longitude,
-                            state.currentLocation.latitude
-                        )
-                    ).build()
-            )
-        }
+        mapView.showInitialLocation(state.currentLocation)
     }
 }
 

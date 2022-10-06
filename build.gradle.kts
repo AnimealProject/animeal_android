@@ -1,6 +1,7 @@
 import com.epmedu.animeal.extension.propertyInt
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.file.File
 import org.jetbrains.kotlin.konan.properties.loadProperties
 import org.jetbrains.kotlin.konan.properties.saveToFile
@@ -73,4 +74,16 @@ fun isNonStable(version: String): Boolean {
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     val isStable = stableKeyword || regex.matches(version)
     return isStable.not()
+}
+
+subprojects {
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            if (project.findProperty("animeal.enableComposeCompilerReports") == "true") {
+                freeCompilerArgs = freeCompilerArgs +
+                        "-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics" +
+                        "-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics"
+            }
+        }
+    }
 }
