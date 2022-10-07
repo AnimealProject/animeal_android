@@ -58,7 +58,9 @@
     <string name="profile_phone_number">Phone Number</string>
     <string name="profile_wrong_amount_of_characters_error_msg">Amount of characters: min - %1$d, max - %2$d</string>
     <string name="profile_name_blank_error_msg">Name can not be blank</string>
+    <string name="profile_name_invalid_error_msg">Name can contain only letters</string>
     <string name="profile_surname_blank_error_msg">Surname can not be blank</string>
+    <string name="profile_surname_invalid_error_msg">Surname can contain only letters</string>
     <string name="profile_email_blank_error_msg">E-mail can not be blank</string>
     <string name="profile_email_invalid_error_msg">E-mail is invalid</string>
     <string name="profile_phone_number_too_short_error_msg">Phone Number is too short</string>
