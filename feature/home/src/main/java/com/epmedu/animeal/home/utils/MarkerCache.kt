@@ -3,8 +3,8 @@ package com.epmedu.animeal.home.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.epmedu.animeal.extensions.drawableCompat
 
 class MarkerCache(private val context: Context) {
 
@@ -14,7 +14,7 @@ class MarkerCache(private val context: Context) {
     fun getMarker(id: Int): Bitmap {
         return when (val cachedBitmap = lruCache.get(id)) {
             null -> {
-                val bitmap = ContextCompat.getDrawable(context, id)?.toBitmap()
+                val bitmap = context.drawableCompat(id).toBitmap()
                 lruCache.put(id, bitmap)
                 lruCache.get(id)
             }

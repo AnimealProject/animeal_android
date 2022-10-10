@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
@@ -15,7 +16,6 @@ import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,9 +29,6 @@ class HomeViewModel @Inject constructor(
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
     EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
 
-    private val feedingPointsState: DefaultStateDelegate<FeedingPointsState> =
-        DefaultStateDelegate(FeedingPointsState(emptyList()))
-
     init {
         initialize()
         fetchLocationUpdates()
@@ -40,20 +37,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun handleEvents(event: HomeScreenEvent) = when (event) {
-        is HomeScreenEvent.FeedingPointSelected -> {
-            selectFeedingPoint(event)
-        }
-
-        is HomeScreenEvent.FeedingPointFavouriteChange -> {
-            changeFavouriteFeedingPoint(event)
-        }
-
-        is HomeScreenEvent.UserCurrentGeolocationRequest -> {
-            changeGpsSetting()
-        }
+        is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
+        is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
+        is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
     }
-
-    fun getFeedingPointsFlow(): StateFlow<FeedingPointsState> = feedingPointsState.stateFlow
 
     private fun initialize() {
         updateState {
@@ -74,10 +61,12 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
-            gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
+            // TODO: Fix crash
+            // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
     }
 
+    @Suppress("UnusedPrivateMember")
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
         val uiGpsState = when (state) {
             GpsSettingsProvider.GpsSettingState.Enabled -> GpsSettingState.Enabled
@@ -91,10 +80,11 @@ class HomeViewModel @Inject constructor(
     private fun fetchFeedingPoints() {
         viewModelScope.launch {
             feedingPointRepository.getAllFeedingPoints().collect {
-                feedingPointsState.updateState {
-                    FeedingPointsState(
-                        it.take(15)
-                            .map { feedingPoint -> FeedingPointUi(feedingPoint) }
+                updateState {
+                    copy(
+                        feedingPoints = StableList(
+                            it.take(15).map { feedingPoint -> FeedingPointUi(feedingPoint) }
+                        )
                     )
                 }
             }

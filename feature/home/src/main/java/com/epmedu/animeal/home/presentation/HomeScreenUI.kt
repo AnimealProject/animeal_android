@@ -3,8 +3,10 @@ package com.epmedu.animeal.home.presentation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -15,25 +17,20 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
-import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
-import com.epmedu.animeal.home.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
-import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetLayout
-import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetState
-import com.epmedu.animeal.home.presentation.ui.MapboxMap
-import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
+import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreenUI(
-    homeViewModel: HomeViewModel,
+    state: HomeState,
     bottomSheetState: HomeBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
-    val state by homeViewModel.stateFlow.collectAsState()
 
     LaunchedEffect(bottomSheetState.progress) {
         val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
@@ -67,7 +64,7 @@ internal fun HomeScreenUI(
                         feedingPoint = FeedingPointUi(feedingPoint),
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
-                            onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
+                            onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
                         }
                     )
                 }
@@ -80,9 +77,9 @@ internal fun HomeScreenUI(
             }
         ) {
             MapContent(
-                homeViewModel = homeViewModel,
-                onGeolocationClick = { onScreenEvent(HomeScreenEvent.UserCurrentGeolocationRequest) },
-                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) }
+                state = state,
+                onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
+                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) }
             )
         }
     }
@@ -90,14 +87,15 @@ internal fun HomeScreenUI(
 
 @Composable
 private fun MapContent(
-    homeViewModel: HomeViewModel,
+    state: HomeState,
     onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
     onGeolocationClick: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        MapboxMap(homeViewModel = homeViewModel) {
-            onFeedingPointSelect.invoke(it)
-        }
+        MapboxMap(
+            state = state,
+            onFeedingPointClick = onFeedingPointSelect
+        )
         AnimealSwitch(
             modifier = Modifier
                 .statusBarsPadding()

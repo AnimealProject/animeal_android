@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.model
 
+import androidx.compose.runtime.Stable
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.home.data.model.Feeder
 import com.epmedu.animeal.home.data.model.FeedingPoint
@@ -9,6 +10,7 @@ import com.epmedu.animeal.home.presentation.model.FeedStatus.Companion.toFeedSta
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
+@Stable
 data class FeedingPointUi(
     val id: Int, // For future implementations
     val title: String,

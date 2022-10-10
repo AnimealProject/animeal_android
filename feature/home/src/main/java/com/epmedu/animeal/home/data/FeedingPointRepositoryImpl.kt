@@ -36,21 +36,21 @@ class FeedingPointRepositoryImpl : FeedingPointRepository {
         )
     }
 
-    override suspend fun getAllFeedingPoints(): Flow<List<FeedingPoint>> = flowOf(stubData)
+    override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> = flowOf(stubData)
 
-    override suspend fun getCats(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getCats(): Flow<List<FeedingPoint>> = flowOf(
         stubData.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Cats }
     )
 
-    override suspend fun getDogs(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getDogs(): Flow<List<FeedingPoint>> = flowOf(
         stubData.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Dogs }
     )
 
-    override suspend fun getFavourites(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getFavourites(): Flow<List<FeedingPoint>> = flowOf(
         stubData.filter { feedingPoint -> feedingPoint.isFavourite }
     )
 
-    override suspend fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
+    override fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
         stubData.first { feedingPoint -> feedingPoint.id == id }
     )
 }
