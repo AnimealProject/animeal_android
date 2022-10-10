@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home
+package com.epmedu.animeal.di
 
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.component.BuildConfigProviderImpl
