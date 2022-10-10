@@ -42,7 +42,8 @@ internal class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
+            // Temporary disable to avoid crash
+            // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
     }
 
