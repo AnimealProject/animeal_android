@@ -4,12 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -19,12 +14,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
+import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.home.data.model.Feeder
+import com.epmedu.animeal.home.data.model.enum.AnimalPriority
+import com.epmedu.animeal.home.data.model.enum.Remoteness
 import com.epmedu.animeal.home.presentation.model.FeedStatus
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
+import com.mapbox.geojson.Point
 
 @Composable
 internal fun FeedingPointSheetContent(
@@ -224,13 +228,9 @@ internal fun FeedingPointLastFeeder(
     }
 }
 
-// Commented cause unused 'detekt conflicts'
-/*@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AnimealPreview
 @Composable
-private fun FeedingPointSheetPreview(
-    @PreviewParameter(LoremIpsum::class) text: String
-) {
+private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: String) {
     AnimealTheme {
         FeedingPointSheetContent(
             feedingPoint = FeedingPointUi(
@@ -253,4 +253,4 @@ private fun FeedingPointSheetPreview(
             onFavouriteChange = {}
         )
     }
-}*/
+}
