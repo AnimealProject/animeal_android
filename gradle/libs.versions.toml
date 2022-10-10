@@ -76,6 +76,7 @@ desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = 
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 

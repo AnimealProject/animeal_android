@@ -67,6 +67,7 @@ include(":feature:tabsflow:tabs")
 include(":feature:tabsflow:favourites")
 
 include(":library:common")
+include(":library:analytics")
 include(":library:extensions")
 include(":library:foundation")
 include(":library:geolocation")
