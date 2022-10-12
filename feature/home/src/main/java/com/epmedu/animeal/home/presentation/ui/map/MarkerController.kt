@@ -14,11 +14,13 @@ class MarkerController(
 ) {
     private val markerCache = MarkerCache(mapView.context)
     private val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
+    private var feedingPoints: List<FeedingPointUi> = emptyList()
 
     fun drawMarkers(feedingPoints: List<FeedingPointUi>) {
         pointAnnotationManager.deleteAll()
+        this.feedingPoints = feedingPoints
 
-        feedingPoints.onEach { feedingPoint ->
+        this.feedingPoints.onEach { feedingPoint ->
             val icon = markerCache.getMarker(feedingPoint.getDrawableRes())
 
             val pointAnnotationOptions = PointAnnotationOptions()
@@ -31,7 +33,7 @@ class MarkerController(
         pointAnnotationManager.addClickListener { pointAnnotation ->
             consume {
                 onFeedingPointClick(
-                    feedingPoints.single {
+                    this.feedingPoints.single {
                         pointAnnotation.point == it.coordinates
                     }
                 )
