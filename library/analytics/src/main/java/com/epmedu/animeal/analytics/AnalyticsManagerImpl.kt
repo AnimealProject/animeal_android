@@ -5,7 +5,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import javax.inject.Inject
 
-class AnalyticsManagerImpl @Inject constructor(
+internal class AnalyticsManagerImpl @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) : AnalyticsManager {
 
