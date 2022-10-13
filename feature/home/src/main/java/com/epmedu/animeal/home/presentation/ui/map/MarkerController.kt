@@ -5,6 +5,7 @@ import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.utils.MarkerCache
 import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 
@@ -14,13 +15,26 @@ class MarkerController(
 ) {
     private val markerCache = MarkerCache(mapView.context)
     private val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
-    private var feedingPoints: List<FeedingPointUi> = emptyList()
+    private val currentFeedingPoints = mutableListOf<FeedingPointUi>()
+
+    private val onPointClickListener: (PointAnnotation) -> Boolean = { pointAnnotation ->
+        consume {
+            onFeedingPointClick(
+                currentFeedingPoints.single {
+                    pointAnnotation.point == it.coordinates
+                }
+            )
+        }
+    }
 
     fun drawMarkers(feedingPoints: List<FeedingPointUi>) {
         pointAnnotationManager.deleteAll()
-        this.feedingPoints = feedingPoints
+        pointAnnotationManager.removeClickListener(onPointClickListener)
 
-        this.feedingPoints.onEach { feedingPoint ->
+        currentFeedingPoints.clear()
+        currentFeedingPoints.addAll(feedingPoints)
+
+        currentFeedingPoints.onEach { feedingPoint ->
             val icon = markerCache.getMarker(feedingPoint.getDrawableRes())
 
             val pointAnnotationOptions = PointAnnotationOptions()
@@ -29,15 +43,6 @@ class MarkerController(
 
             pointAnnotationManager.create(pointAnnotationOptions)
         }
-
-        pointAnnotationManager.addClickListener { pointAnnotation ->
-            consume {
-                onFeedingPointClick(
-                    this.feedingPoints.single {
-                        pointAnnotation.point == it.coordinates
-                    }
-                )
-            }
-        }
+        pointAnnotationManager.addClickListener(onPointClickListener)
     }
 }
