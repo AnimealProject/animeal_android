@@ -1,26 +1,10 @@
 package com.epmedu.animeal.home.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -34,17 +18,21 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
-import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.home.data.model.Feeder
-import com.epmedu.animeal.home.data.model.FeedingPoint
+import com.epmedu.animeal.home.data.model.enum.AnimalPriority
+import com.epmedu.animeal.home.data.model.enum.Remoteness
+import com.epmedu.animeal.home.presentation.model.FeedStatus
+import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
+import com.mapbox.geojson.Point
 
 @Composable
 internal fun FeedingPointSheetContent(
-    feedingPoint: FeedingPoint,
+    feedingPoint: FeedingPointUi,
     contentAlpha: Float,
     onFavouriteChange: (Boolean) -> Unit
 ) {
@@ -70,7 +58,7 @@ internal fun FeedingPointSheetContent(
         )
         FeedingPointHeader(
             title = feedingPoint.title,
-            status = feedingPoint.status,
+            status = feedingPoint.feedStatus,
             isFavourite = feedingPoint.isFavourite,
             onFavouriteChange = onFavouriteChange
         )
@@ -242,22 +230,24 @@ internal fun FeedingPointLastFeeder(
 
 @AnimealPreview
 @Composable
-private fun FeedingPointSheetPreview(
-    @PreviewParameter(LoremIpsum::class) text: String
-) {
+private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: String) {
     AnimealTheme {
         FeedingPointSheetContent(
-            feedingPoint = FeedingPoint(
-                id = -1,
-                title = text.take(30),
-                status = FeedStatus.ORANGE,
+            feedingPoint = FeedingPointUi(
+                -1,
+                text.take(30),
+                feedStatus = FeedStatus.ORANGE,
                 description = text.take(200),
                 isFavourite = true,
                 lastFeeder = Feeder(
                     id = -1,
                     name = text.take(20),
                     time = "14 hours ago"
-                )
+                ),
+                animalPriority = AnimalPriority.MEDIUM,
+                animalType = AnimalType.Dogs,
+                remoteness = Remoteness.ANY,
+                coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
             onFavouriteChange = {}

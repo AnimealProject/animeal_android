@@ -41,35 +41,35 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 @Composable
 fun AnimealSwitch(
     modifier: Modifier = Modifier,
-    onSelectTab: (tab: Tab) -> Unit
+    onSelectTab: (animalType: AnimalType) -> Unit
 ) {
-    var currentTab by remember { mutableStateOf(Tab.Cats) }
+    var currentAnimalType by remember { mutableStateOf(AnimalType.Cats) }
 
     TabRow(
-        selectedTabIndex = currentTab.ordinal,
+        selectedTabIndex = currentAnimalType.ordinal,
         backgroundColor = MaterialTheme.colors.surface,
         modifier = modifier
             .size(width = 226.dp, height = 36.dp)
             .clip(RoundedCornerShape(10.dp)),
         indicator = { tabPositions ->
-            TabIndicator(tabPositions, currentTab)
+            TabIndicator(tabPositions, currentAnimalType)
         },
         divider = {}
     ) {
         AnimalTab(
-            titleResId = Tab.Dogs.title,
-            selected = currentTab == Tab.Dogs,
+            titleResId = AnimalType.Dogs.title,
+            selected = currentAnimalType == AnimalType.Dogs,
             onClick = {
-                onSelectTab(Tab.Dogs)
-                currentTab = Tab.Dogs
+                onSelectTab(AnimalType.Dogs)
+                currentAnimalType = AnimalType.Dogs
             }
         )
         AnimalTab(
-            titleResId = Tab.Cats.title,
-            selected = currentTab == Tab.Cats,
+            titleResId = AnimalType.Cats.title,
+            selected = currentAnimalType == AnimalType.Cats,
             onClick = {
-                onSelectTab(Tab.Cats)
-                currentTab = Tab.Cats
+                onSelectTab(AnimalType.Cats)
+                currentAnimalType = AnimalType.Cats
             }
         )
     }
@@ -79,15 +79,15 @@ fun AnimealSwitch(
  * Shows an indicator for the tab.
  *
  * @param tabPositions The list of [TabPosition]s from a [TabRow].
- * @param tab The [Tab] that is currently selected.
+ * @param animalType The [AnimalType] that is currently selected.
  */
 @Composable
 private fun TabIndicator(
     tabPositions: List<TabPosition>,
-    tab: Tab
+    animalType: AnimalType
 ) {
     val transition = updateTransition(
-        targetState = tab,
+        targetState = animalType,
         label = INDICATOR_TRANSITION_LABEL
     )
 
@@ -150,7 +150,7 @@ private fun AnimalTab(
     }
 }
 
-enum class Tab(@StringRes val title: Int) {
+enum class AnimalType(@StringRes val title: Int) {
     Dogs(R.string.switch_dogs_title),
     Cats(R.string.switch_cats_title)
 }

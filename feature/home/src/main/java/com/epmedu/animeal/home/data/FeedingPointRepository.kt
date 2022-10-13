@@ -5,5 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointRepository {
 
-    suspend fun getFeedingPoint(id: Int): Flow<FeedingPoint>
+    fun getAllFeedingPoints(): Flow<List<FeedingPoint>>
+
+    fun getCats(): Flow<List<FeedingPoint>>
+
+    fun getDogs(): Flow<List<FeedingPoint>>
+
+    fun getFavourites(): Flow<List<FeedingPoint>>
+
+    fun getFeedingPoint(id: Int): Flow<FeedingPoint>
 }

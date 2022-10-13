@@ -7,10 +7,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
     private val buildConfigProvider: BuildConfigProvider,
     private val locationProvider: LocationProvider,
@@ -28,24 +30,43 @@ internal class HomeViewModel @Inject constructor(
     EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
 
     init {
+        initialize()
+        fetchLocationUpdates()
+        fetchFeedingPoints()
+        fetchGpsSettingsUpdates()
+    }
+
+    fun handleEvents(event: HomeScreenEvent) = when (event) {
+        is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
+        is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
+        is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
+    }
+
+    private fun initialize() {
         updateState {
             copy(
                 mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
-                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI,
+                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI
             )
         }
+    }
 
+    private fun fetchLocationUpdates() {
         viewModelScope.launch {
             locationProvider.fetchUpdates().collect {
                 updateState { copy(currentLocation = MapLocation(it)) }
             }
         }
+    }
 
+    private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
-            gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
+            // TODO: Fix crash
+            // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
     }
 
+    @Suppress("UnusedPrivateMember")
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
         val uiGpsState = when (state) {
             GpsSettingsProvider.GpsSettingState.Enabled -> GpsSettingState.Enabled
@@ -54,17 +75,19 @@ internal class HomeViewModel @Inject constructor(
         updateState { copy(gpsSettingState = uiGpsState) }
     }
 
-    fun handleEvents(event: HomeScreenEvent) = when (event) {
-        is HomeScreenEvent.FeedingPointSelected -> {
-            selectFeedingPoint(event)
-        }
+    private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
 
-        is HomeScreenEvent.FeedingPointFavouriteChange -> {
-            changeFavouriteFeedingPoint(event)
-        }
-
-        is HomeScreenEvent.UserCurrentGeolocationRequest -> {
-            changeGpsSetting()
+    private fun fetchFeedingPoints() {
+        viewModelScope.launch {
+            feedingPointRepository.getAllFeedingPoints().collect {
+                updateState {
+                    copy(
+                        feedingPoints = StableList(
+                            it.take(15).map { feedingPoint -> FeedingPointUi(feedingPoint) }
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -86,6 +109,4 @@ internal class HomeViewModel @Inject constructor(
             )
         }
     }
-
-    private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
 }
