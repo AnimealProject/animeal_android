@@ -22,6 +22,9 @@ class ValidateSurnameUseCase(private val validator: ProfileValidator) {
                     result.requiredLength.last
                 )
             }
+            is InvalidSurnameError -> {
+                UiText.StringResource(R.string.profile_surname_invalid_error_msg)
+            }
         }
     }
 }

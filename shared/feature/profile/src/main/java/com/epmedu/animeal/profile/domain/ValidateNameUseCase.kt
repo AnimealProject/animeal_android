@@ -2,6 +2,7 @@ package com.epmedu.animeal.profile.domain
 
 import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.foundation.common.validation.result.NameValidationResult.BlankNameError
+import com.epmedu.animeal.foundation.common.validation.result.NameValidationResult.InvalidNameError
 import com.epmedu.animeal.foundation.common.validation.result.NameValidationResult.ValidName
 import com.epmedu.animeal.foundation.common.validation.result.NameValidationResult.WrongNameLengthError
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
@@ -23,6 +24,9 @@ class ValidateNameUseCase(private val validator: ProfileValidator) {
                     result.requiredLength.first,
                     result.requiredLength.last
                 )
+            }
+            is InvalidNameError -> {
+                UiText.StringResource(R.string.profile_name_invalid_error_msg)
             }
         }
     }

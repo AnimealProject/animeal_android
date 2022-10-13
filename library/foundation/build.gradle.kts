@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.library.extensions)
     implementation(projects.library.resources)
 
     implementation(libs.accompanist.systemuicontroller)
