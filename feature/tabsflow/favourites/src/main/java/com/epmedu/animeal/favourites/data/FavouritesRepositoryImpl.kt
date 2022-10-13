@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FavouritesRepositoryImpl : FavouritesRepository {
 
-    override suspend fun getFavouriteFeedSpots(): Flow<List<FavouriteFeedingPoint>> = flowOf(
+    override fun getFavouriteFeedSpots(): Flow<List<FavouriteFeedingPoint>> = flowOf(
         listOf(
             FavouriteFeedingPoint(
                 id = 1,

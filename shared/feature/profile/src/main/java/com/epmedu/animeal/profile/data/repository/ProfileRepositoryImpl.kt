@@ -10,14 +10,17 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKe
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
 import com.epmedu.animeal.common.constants.Text.EMPTY_STRING
 import com.epmedu.animeal.profile.data.model.Profile
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ProfileRepository {
 
-    override suspend fun getProfile(): Flow<Profile> {
+    override fun getProfile(): Flow<Profile> {
         return dataStore.data.map { preferences ->
             Profile(
                 name = preferences[nameKey] ?: EMPTY_STRING,
@@ -29,7 +32,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveProfile(profile: Profile): Flow<Unit> {
+    override fun saveProfile(profile: Profile): Flow<Unit> {
         return flowOf(Unit).map {
             dataStore.edit { preference ->
                 preference[nameKey] = profile.name
