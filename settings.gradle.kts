@@ -66,6 +66,7 @@ include(":feature:tabsflow:search")
 include(":feature:tabsflow:tabs")
 include(":feature:tabsflow:favourites")
 
+include(":library:analytics")
 include(":library:common")
 include(":library:extensions")
 include(":library:foundation")
