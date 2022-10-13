@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
@@ -20,7 +19,6 @@ fun HomeScreen() {
 
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
-    val scope = rememberCoroutineScope()
 
     HomeScreenUI(
         state = state,
@@ -32,7 +30,7 @@ fun HomeScreen() {
         viewModel.events.collect {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
-                    scope.launch {
+                    launch {
                         if (bottomSheetState.isHidden) {
                             bottomSheetState.show()
                         } else {

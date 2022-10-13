@@ -1,27 +1,56 @@
 package com.epmedu.animeal.home.data
 
-import com.epmedu.animeal.foundation.common.FeedStatus
+import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.home.data.model.Feeder
 import com.epmedu.animeal.home.data.model.FeedingPoint
+import com.epmedu.animeal.home.data.model.enum.AnimalPriority
+import com.epmedu.animeal.home.data.model.enum.AnimalState
+import com.epmedu.animeal.home.presentation.model.MapLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class FeedingPointRepositoryImpl : FeedingPointRepository {
 
-    override suspend fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
+    private val stubData: List<FeedingPoint> = List(25) { index ->
         FeedingPoint(
-            id = -1,
-            title = "Near to Bukia Garden M.S Technical University",
-            status = FeedStatus.ORANGE,
-            isFavourite = false,
-            description = "This area covers about 100 sq.m. -S, it starts with Bukia Garden " +
+            index,
+            title = "$index - Near to Bukia Garden M.S Technical University",
+            "$index - This area covers about 100 sq.m. -S, it starts with Bukia Garden " +
                 "and Sports At the palace. There are about 1000 homeless people here " +
                 "The dog lives with the habit of helping You need.",
+            AnimalPriority.values().random(),
+            AnimalState.values().random(),
+            AnimalType.values().random(),
+            Random.nextBoolean(),
+            location = MapLocation(
+                Random.nextDouble(41.6752, 41.7183),
+                Random.nextDouble(44.7724, 44.8658)
+            ),
             lastFeeder = Feeder(
-                id = -1,
-                name = "Giorgi Abutidze",
-                time = "14 hours ago"
+                id = index,
+                name = "$index - Giorgi Abutidze",
+                time = "${Random.nextInt(0..24)} hours ago"
             )
         )
+    }
+
+    override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> = flowOf(stubData)
+
+    override fun getCats(): Flow<List<FeedingPoint>> = flowOf(
+        stubData.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Cats }
+    )
+
+    override fun getDogs(): Flow<List<FeedingPoint>> = flowOf(
+        stubData.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Dogs }
+    )
+
+    override fun getFavourites(): Flow<List<FeedingPoint>> = flowOf(
+        stubData.filter { feedingPoint -> feedingPoint.isFavourite }
+    )
+
+    override fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
+        stubData.first { feedingPoint -> feedingPoint.id == id }
     )
 }

@@ -14,5 +14,5 @@ internal object HomeModule {
 
     @ViewModelScoped
     @Provides
-    fun provideFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
+    fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
 }
