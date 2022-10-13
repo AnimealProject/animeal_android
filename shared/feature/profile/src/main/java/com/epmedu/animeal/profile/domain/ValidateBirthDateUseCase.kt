@@ -2,6 +2,7 @@ package com.epmedu.animeal.profile.domain
 
 import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.foundation.common.validation.result.BirthDateValidationResult.BlankBirthDateError
+import com.epmedu.animeal.foundation.common.validation.result.BirthDateValidationResult.TooYoungBirthDateError
 import com.epmedu.animeal.foundation.common.validation.result.BirthDateValidationResult.ValidBirthDate
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.resources.R
@@ -15,6 +16,9 @@ class ValidateBirthDateUseCase(private val validator: ProfileValidator) {
             }
             is BlankBirthDateError -> {
                 UiText.StringResource(R.string.profile_select_birth_date)
+            }
+            is TooYoungBirthDateError -> {
+                UiText.StringResource(R.string.profile_birthdate_too_young_error_msg)
             }
         }
     }

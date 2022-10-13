@@ -64,7 +64,7 @@
     <string name="profile_email_blank_error_msg">E-mail can not be blank</string>
     <string name="profile_email_invalid_error_msg">E-mail is invalid</string>
     <string name="profile_phone_number_too_short_error_msg">Phone Number is too short</string>
-    <string name="profile_birthdate_error_msg">Birthdate is invalid</string>
+    <string name="profile_birthdate_too_young_error_msg">The age limit is 15 years</string>
     <string name="profile_birthdate_placeholder">Select birthdate</string>
     <string name="profile_logout_cancel">Are you sure you want to log out of your account?</string>
     <string name="profile_logout_success">You have successfully logged out</string>
