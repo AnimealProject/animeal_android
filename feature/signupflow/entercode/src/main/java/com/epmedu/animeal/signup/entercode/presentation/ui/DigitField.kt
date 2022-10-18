@@ -34,8 +34,8 @@ internal fun DigitField(
                 value.isEmpty() -> onDigitRemove()
             }
         },
-        modifier = modifier.size(width = 66.dp, height = 72.dp),
-        textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center),
+        modifier = modifier.size(width = 50.dp, height = 54.dp),
+        textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
         isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         singleLine = true,

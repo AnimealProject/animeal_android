@@ -2,5 +2,6 @@ package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 
 internal data class EnterPhoneState(
     val phoneNumber: String = "",
-    val isNextEnabled: Boolean = false
+    val isNextEnabled: Boolean = false,
+    val isError: Boolean = false
 )

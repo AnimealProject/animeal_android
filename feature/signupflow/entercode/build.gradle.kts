@@ -24,6 +24,9 @@ dependencies {
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)
 
+    implementation(libs.amplify.core)
+    implementation(libs.amplify.aws.auth.cognito)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 }
