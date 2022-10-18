@@ -20,6 +20,10 @@ class AnimealApplication : Application() {
             Log.i(APPLICATION_TAG, "Initialized Amplify")
         } catch (error: AmplifyException) {
             Log.e(APPLICATION_TAG, "Could not initialize Amplify", error)
+            throw IllegalStateException(
+                "Could not initialize Amplify, please add config to " +
+                    "app/src/main/res/raw/amplifyconfiguration.json"
+            )
         }
     }
 
