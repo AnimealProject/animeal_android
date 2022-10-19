@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
 
-    suspend fun getProfile(): Flow<Profile>
+    fun getProfile(): Flow<Profile>
 
-    suspend fun saveProfile(profile: Profile): Flow<Unit>
+    fun saveProfile(profile: Profile): Flow<Unit>
 
     suspend fun clearProfile()
 
