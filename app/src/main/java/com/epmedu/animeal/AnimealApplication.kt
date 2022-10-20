@@ -1,7 +1,6 @@
 package com.epmedu.animeal
 
 import android.app.Application
-import android.util.Log
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
@@ -19,13 +18,11 @@ class AnimealApplication : Application() {
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.configure(applicationContext)
-            Log.i(APPLICATION_TAG, "Initialized Amplify")
         } catch (error: AmplifyException) {
-            Log.e(APPLICATION_TAG, "Could not initialize Amplify", error)
+            error(
+                "Could not initialize Amplify, please add config to " +
+                    "app/src/main/res/raw/amplifyconfiguration.json"
+            )
         }
-    }
-
-    private companion object {
-        private const val APPLICATION_TAG = "AnimealApplication"
     }
 }
