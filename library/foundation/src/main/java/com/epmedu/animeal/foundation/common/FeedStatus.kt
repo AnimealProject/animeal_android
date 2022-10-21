@@ -54,6 +54,5 @@ enum class FeedStatus(
     val color: Color
 ) {
     GREEN(R.string.feed_status_green, R.drawable.ic_face_happy, CustomColor.StatusGreen),
-    ORANGE(R.string.feed_status_orange, R.drawable.ic_face_neutral, CustomColor.StatusOrange),
     RED(R.string.feed_status_red, R.drawable.ic_face_upset, CustomColor.StatusRed);
 }
