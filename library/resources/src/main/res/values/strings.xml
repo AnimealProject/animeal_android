@@ -70,7 +70,6 @@
     <string name="profile_logout_success">You have successfully logged out</string>
 
     <string name="feed_status_green">Newly fed</string>
-    <string name="feed_status_orange">12 hours since not fed</string>
     <string name="feed_status_red">There is no food</string>
 
     <string name="account_delete">Delete Account</string>
