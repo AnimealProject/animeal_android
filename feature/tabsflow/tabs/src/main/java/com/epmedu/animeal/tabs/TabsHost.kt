@@ -97,10 +97,11 @@ private fun NavigationTabs(navigationController: NavHostController) {
             backStackEntry.arguments?.getBoolean("comesFromHome")?.let { comesFromHomeScreen ->
                 FeedConfirmationScreen(
                     {
-                        if (comesFromHomeScreen)
+                        if (comesFromHomeScreen) {
                             navigationController.popBackStack()
-                        else
+                        } else {
                             navigationController.navigate(NavigationTab.Home.route.name)
+                        }
                     },
                     {
                         navigationController.popBackStack()

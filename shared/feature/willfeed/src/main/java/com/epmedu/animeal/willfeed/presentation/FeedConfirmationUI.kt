@@ -19,7 +19,6 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.willfeed.R
 
-
 @Composable
 fun FeedConfirmationUI(
     onAgreeClick: () -> Unit,
@@ -77,10 +76,9 @@ fun FeedConfirmationUI(
 
 @AnimealPreview
 @Composable
-fun Preview(){
+fun Preview() {
     AnimealTheme {
         FeedConfirmationUI(onAgreeClick = { /*TODO*/ }) {
-
         }
     }
 }

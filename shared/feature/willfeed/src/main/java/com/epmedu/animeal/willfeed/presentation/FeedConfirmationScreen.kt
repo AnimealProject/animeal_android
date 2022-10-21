@@ -6,6 +6,6 @@ import androidx.compose.runtime.Composable
 fun FeedConfirmationScreen(
     onAgreeClick: () -> Unit,
     onCancelClick: () -> Unit
-){
+) {
     FeedConfirmationUI(onAgreeClick, onCancelClick)
 }
