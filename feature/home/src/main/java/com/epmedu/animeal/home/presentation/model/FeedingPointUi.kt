@@ -42,14 +42,12 @@ data class FeedingPointUi(
             isFavourite -> {
                 when (feedStatus) {
                     FeedStatus.RED -> R.drawable.ic_favstate_favouritehungry_high
-                    FeedStatus.ORANGE -> R.drawable.ic_favstate_favouritehungry_medium
                     FeedStatus.GREEN -> R.drawable.ic_favstate_favouritehungry_low
                 }
             }
             animalType == AnimalType.Dogs -> {
                 when (feedStatus) {
                     FeedStatus.RED -> R.drawable.ic_dogsstate_doghungry_high
-                    FeedStatus.ORANGE -> R.drawable.ic_dogsstate_doghungry_medium
                     FeedStatus.GREEN -> R.drawable.ic_dogsstate_doghungry_low
                 }
             }
@@ -57,7 +55,6 @@ data class FeedingPointUi(
             else ->
                 when (feedStatus) {
                     FeedStatus.RED -> R.drawable.ic_catsstate_cathungry_high
-                    FeedStatus.ORANGE -> R.drawable.ic_catsstate_cathungry_medium
                     FeedStatus.GREEN -> R.drawable.ic_catsstate_cathungry_low
                 }
         }

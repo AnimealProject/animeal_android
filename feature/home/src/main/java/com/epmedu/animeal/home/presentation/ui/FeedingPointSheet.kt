@@ -236,7 +236,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
             feedingPoint = FeedingPointUi(
                 -1,
                 text.take(30),
-                feedStatus = FeedStatus.ORANGE,
+                feedStatus = FeedStatus.RED,
                 description = text.take(200),
                 isFavourite = true,
                 lastFeeder = Feeder(
@@ -244,7 +244,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                     name = text.take(20),
                     time = "14 hours ago"
                 ),
-                animalPriority = AnimalPriority.MEDIUM,
+                animalPriority = AnimalPriority.HIGH,
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)

@@ -12,7 +12,7 @@ class FavouritesRepositoryImpl : FavouritesRepository {
             FavouriteFeedingPoint(
                 id = 1,
                 title = "Europe Square park",
-                status = FeedStatus.ORANGE,
+                status = FeedStatus.RED,
                 isFavourite = true,
             ),
             FavouriteFeedingPoint(
