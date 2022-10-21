@@ -18,11 +18,13 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
+import com.epmedu.animeal.navigation.route.WillFeedRoute
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
+import com.epmedu.animeal.willfeed.presentation.FeedConfirmationScreen
 
 @Composable
 fun TabsHost() {
@@ -86,5 +88,6 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { MoreHost() }
+        screen(WillFeedRoute.Confirmation.name) { FeedConfirmationScreen({}, {}) }
     }
 }

@@ -29,6 +29,7 @@ internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
+    onWillFeedClick: () -> Unit
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
@@ -72,7 +73,7 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = {}
+                    onClick = onWillFeedClick
                 )
             }
         ) {
