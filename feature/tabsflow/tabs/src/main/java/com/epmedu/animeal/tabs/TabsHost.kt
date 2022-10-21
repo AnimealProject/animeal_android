@@ -9,8 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.epmedu.animeal.favourites.FavouritesScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
@@ -88,6 +90,23 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { MoreHost() }
-        screen(WillFeedRoute.Confirmation.name) { FeedConfirmationScreen({}, {}) }
+        screen(
+            "${WillFeedRoute.Confirmation.name}/{comesFromHome}",
+            arguments = listOf(navArgument("comesFromHome") { type = NavType.BoolType })
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getBoolean("comesFromHome")?.let { comesFromHomeScreen ->
+                FeedConfirmationScreen(
+                    {
+                        if (comesFromHomeScreen)
+                            navigationController.popBackStack()
+                        else
+                            navigationController.navigate(NavigationTab.Home.route.name)
+                    },
+                    {
+                        navigationController.popBackStack()
+                    }
+                )
+            }
+        }
     }
 }
