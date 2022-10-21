@@ -91,4 +91,8 @@
     <string name="i_will_feed">I will feed</string>
     <string name="last_feeder">Last feeder</string>
 
+    <string name="thank_you">"Thank You!"</string>
+    <string name="animals_fed">"Animals are fed"</string>
+    <string name="back_to_home">Back to home</string>
+
 </resources>
