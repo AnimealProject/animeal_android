@@ -2,11 +2,10 @@ plugins {
     id("AnimealPlugin")
     id("com.android.library")
     id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.epmedu.animeal.willfeed"
+    namespace = "com.epmedu.animeal.feedconfirmation"
 }
 
 dependencies {
@@ -22,8 +21,4 @@ dependencies {
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
-    debugImplementation(libs.compose.ui.tooling)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.navigation.route.TabsRoute
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.NavigationTab
 
@@ -24,7 +25,7 @@ import com.epmedu.animeal.tabs.NavigationTab
 internal fun BottomAppBarFab(
     currentRoute: String?,
     associatedScreen: NavigationTab = NavigationTab.Home,
-    onNavigate: (NavigationTab.Route) -> Unit
+    onNavigate: (TabsRoute) -> Unit
 ) {
     val route = associatedScreen.route
 

@@ -1,6 +1,7 @@
-package com.epmedu.animeal.willfeed.presentation
+package com.epmedu.animeal.feedconfirmation.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -13,23 +14,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedconfirmation.R
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.willfeed.R
 
 @Composable
-fun FeedConfirmationUI(
+internal fun FeedConfirmationUI(
     onAgreeClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) {
+        modifier = Modifier
+            .statusBarsPadding()
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.secondaryVariant)
+    ) { padding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .padding(padding)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -49,7 +53,7 @@ fun FeedConfirmationUI(
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 36.dp),
+                    .padding(top = 44.dp),
                 painter = painterResource(id = R.mipmap.img_confirm_feeding),
                 contentScale = ContentScale.FillWidth,
                 contentDescription = null
@@ -62,12 +66,12 @@ fun FeedConfirmationUI(
                 AnimealSecondaryButton(
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = com.epmedu.animeal.resources.R.string.cancel),
-                    onClick = { onCancelClick.invoke() }
+                    onClick = onCancelClick
                 )
                 AnimealButton(
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = com.epmedu.animeal.resources.R.string.agree),
-                    onClick = { onAgreeClick.invoke() }
+                    onClick = onAgreeClick
                 )
             }
         }
@@ -76,9 +80,8 @@ fun FeedConfirmationUI(
 
 @AnimealPreview
 @Composable
-fun Preview() {
+private fun FeedConfirmationPreview() {
     AnimealTheme {
-        FeedConfirmationUI(onAgreeClick = { /*TODO*/ }) {
-        }
+        FeedConfirmationUI({}, {})
     }
 }

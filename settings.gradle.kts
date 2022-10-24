@@ -75,4 +75,4 @@ include(":library:navigation")
 include(":library:resources")
 
 include(":shared:feature:profile")
-include(":shared:feature:willfeed")
+include(":shared:feature:feedconfirmation")

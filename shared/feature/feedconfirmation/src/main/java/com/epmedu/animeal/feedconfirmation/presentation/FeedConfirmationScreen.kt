@@ -1,4 +1,4 @@
-package com.epmedu.animeal.willfeed.presentation
+package com.epmedu.animeal.feedconfirmation.presentation
 
 import androidx.compose.runtime.Composable
 

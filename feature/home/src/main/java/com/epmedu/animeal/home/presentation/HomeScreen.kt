@@ -12,7 +12,7 @@ import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.navigation.route.WillFeedRoute
+import com.epmedu.animeal.navigation.route.TabsRoute
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -29,7 +29,7 @@ fun HomeScreen() {
         bottomSheetState = bottomSheetState,
         onScreenEvent = viewModel::handleEvents
     ) {
-        navigator.navigate("${WillFeedRoute.Confirmation.name}/true")
+        navigator.navigate(TabsRoute.FEED_CONFIRMATION.name)
     }
 
     LaunchedEffect(Unit) {

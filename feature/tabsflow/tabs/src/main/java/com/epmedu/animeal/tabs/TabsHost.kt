@@ -9,24 +9,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.epmedu.animeal.favourites.FavouritesScreen
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
-import com.epmedu.animeal.navigation.route.WillFeedRoute
+import com.epmedu.animeal.navigation.route.TabsRoute
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
-import com.epmedu.animeal.willfeed.presentation.FeedConfirmationScreen
 
 @Composable
 fun TabsHost() {
@@ -37,7 +35,7 @@ fun TabsHost() {
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility
     }
-    val onNavigate: (NavigationTab.Route) -> Unit = { route ->
+    val onNavigate: (TabsRoute) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
                 popUpTo(route) { saveState = true }
@@ -90,24 +88,11 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(NavigationTab.Home.route.name) { HomeScreen() }
         screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
         screen(NavigationTab.More.route.name) { MoreHost() }
-        screen(
-            "${WillFeedRoute.Confirmation.name}/{comesFromHome}",
-            arguments = listOf(navArgument("comesFromHome") { type = NavType.BoolType })
-        ) { backStackEntry ->
-            backStackEntry.arguments?.getBoolean("comesFromHome")?.let { comesFromHomeScreen ->
-                FeedConfirmationScreen(
-                    {
-                        if (comesFromHomeScreen) {
-                            navigationController.popBackStack()
-                        } else {
-                            navigationController.navigate(NavigationTab.Home.route.name)
-                        }
-                    },
-                    {
-                        navigationController.popBackStack()
-                    }
-                )
-            }
+        screen(TabsRoute.FeedConfirmation.name) {
+            FeedConfirmationScreen(
+                { navigationController.navigate(NavigationTab.Home.route.name) },
+                { navigationController.popBackStack() }
+            )
         }
     }
 }
