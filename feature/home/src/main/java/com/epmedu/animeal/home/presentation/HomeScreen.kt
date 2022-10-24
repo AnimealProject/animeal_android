@@ -29,7 +29,7 @@ fun HomeScreen() {
         bottomSheetState = bottomSheetState,
         onScreenEvent = viewModel::handleEvents
     ) {
-        navigator.navigate(TabsRoute.FEED_CONFIRMATION.name)
+        navigator.navigate(TabsRoute.FeedConfirmation.name)
     }
 
     LaunchedEffect(Unit) {
