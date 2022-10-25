@@ -14,11 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feedconfirmation.R
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FeedConfirmationUI(
@@ -27,12 +27,12 @@ internal fun FeedConfirmationUI(
 ) {
     Scaffold(
         modifier = Modifier
-            .statusBarsPadding()
             .fillMaxSize()
             .background(color = MaterialTheme.colors.secondaryVariant)
     ) { padding ->
         Column(
             modifier = Modifier
+                .statusBarsPadding()
                 .padding(padding)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -46,7 +46,7 @@ internal fun FeedConfirmationUI(
             )
             Text(
                 modifier = Modifier.padding(top = 36.dp),
-                text = stringResource(id = com.epmedu.animeal.resources.R.string.willfeed_timeleft_msg),
+                text = stringResource(id = R.string.willfeed_timeleft_msg),
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Bold
             )
@@ -63,14 +63,14 @@ internal fun FeedConfirmationUI(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                AnimealSecondaryButton(
+                AnimealSecondaryButtonOutlined(
                     modifier = Modifier.weight(1F),
-                    text = stringResource(id = com.epmedu.animeal.resources.R.string.cancel),
+                    text = stringResource(id = R.string.cancel),
                     onClick = onCancelClick
                 )
                 AnimealButton(
                     modifier = Modifier.weight(1F),
-                    text = stringResource(id = com.epmedu.animeal.resources.R.string.agree),
+                    text = stringResource(id = R.string.agree),
                     onClick = onAgreeClick
                 )
             }

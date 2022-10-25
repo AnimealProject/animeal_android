@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.favourites.FavouritesScreen
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
@@ -19,7 +20,6 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
-import com.epmedu.animeal.navigation.route.TabsRoute
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
@@ -83,16 +83,11 @@ private fun NavigationTabs(navigationController: NavHostController) {
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
-        screen(NavigationTab.Search.route.name) { SearchScreen() }
-        screen(NavigationTab.Favorites.route.name) { FavouritesScreen() }
-        screen(NavigationTab.Home.route.name) { HomeScreen() }
-        screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { MoreHost() }
-        screen(TabsRoute.FeedConfirmation.name) {
-            FeedConfirmationScreen(
-                { navigationController.navigate(NavigationTab.Home.route.name) },
-                { navigationController.popBackStack() }
-            )
-        }
+        screen(TabsRoute.Search.name) { SearchScreen() }
+        screen(TabsRoute.Favourites.name) { FavouritesScreen() }
+        screen(TabsRoute.Home.name) { HomeScreen() }
+        screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
+        screen(TabsRoute.More.name) { MoreHost() }
+        screen(TabsRoute.FeedConfirmation.name) { FeedConfirmationScreen() }
     }
 }

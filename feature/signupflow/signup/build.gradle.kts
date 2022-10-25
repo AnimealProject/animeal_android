@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.feature.signupflow.onboarding)
 
     implementation(projects.library.navigation)
+    implementation(projects.library.common)
 
     implementation(libs.compose.ui)
 }

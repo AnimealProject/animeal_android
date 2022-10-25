@@ -1,7 +1,7 @@
 package com.epmedu.animeal.tabs
 
 import androidx.annotation.StringRes
-import com.epmedu.animeal.navigation.route.TabsRoute
+import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.resources.R
 
 sealed class NavigationTab(val route: TabsRoute, val icon: Int, @StringRes val contentDescription: Int) {

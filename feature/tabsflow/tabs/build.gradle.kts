@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.library.common)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
