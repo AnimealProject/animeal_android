@@ -1,11 +1,16 @@
 package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
+import com.amplifyframework.auth.cognito.options.AuthFlowType
+import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +30,8 @@ internal class EnterCodeViewModel @Inject constructor(
         viewModelScope.launch { launchResendTimer() }
         viewModelScope.launch { launchCodeValidation() }
     }
+
+    private var lastCode: List<Int?> = emptyCode()
 
     private suspend fun getPhoneNumber() {
         repository.phoneNumber.collect { updateState { copy(phoneNumber = it) } }
@@ -46,12 +53,15 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private fun updateIsError() {
-        updateState { copy(isError = isCodeFilled() && isCodeEquals(CORRECT_CODE).not()) }
+        updateState { copy(isError = isCodeFilled() && state.isError) }
     }
 
     private fun navigateToFinishProfileIfCodeIsCorrect() {
-        if (state.isCodeEquals(CORRECT_CODE)) {
-            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+        if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
+            lastCode = state.code
+            viewModelScope.launch {
+                confirmSignIn()
+            }
         }
     }
 
@@ -76,14 +86,49 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private fun clearCodeAndDisableResend() {
+        signIn()
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
+    }
+
+    private fun confirmSignIn(){
+        Log.d("AuthQuickstart", "state.phoneNumber -> ${state.phoneNumber}")
+
+        Log.d("AuthQuickstart", "code -> ${state.code.joinToString("")}")
+        Amplify.Auth.confirmSignIn(state.code.joinToString ( ""),
+            { result ->
+                updateState { copy(isError = false) }
+                Log.d("AuthQuickstart confirm result", "$result")
+                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+            },
+            {
+                updateState { copy(isError = true) }
+                Log.e("AuthQuickstart", "confirm error", it)
+            }
+        )
+    }
+
+    private fun signIn() {
+        val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
+
+        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
+            .authFlowType(AuthFlowType.CUSTOM_AUTH)
+            .build()
+
+        Amplify.Auth.signIn(
+            phoneNumber, "", authSignInOptions,
+            {
+                Log.d("AuthQuickstart", "entercode signIn result -> $it")
+            },
+            {
+                Log.d("AuthQuickstart", "entercode signIn error -> $it")
+            }
+        )
     }
 
     companion object {
         const val RESEND_DELAY = 30L
 
-        private const val CODE_SIZE = 4
-        private const val CORRECT_CODE = "1111"
+        private const val CODE_SIZE = 6
 
         internal fun emptyCode() = List(CODE_SIZE) { null }
     }

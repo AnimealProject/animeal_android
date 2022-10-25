@@ -2,26 +2,41 @@ package com.epmedu.animeal.splash.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository
-) : ViewModel(),
+class SplashViewModel @Inject constructor() : ViewModel(),
     EventDelegate<SplashViewModel.Event> by DefaultEventDelegate() {
 
     fun verifyProfileSaved() {
-        viewModelScope.launch {
-            if (profileRepository.isProfileSaved()) {
-                sendEvent(Event.NavigateToHome)
-            } else {
-                sendEvent(Event.NavigateToOnboarding)
+        Amplify.Auth.fetchAuthSession(
+            { session ->
+                if (session.isSignedIn) {
+                    navigateToHome()
+                } else {
+                    navigateToOnboarding()
+                }
+            },
+            {
+                navigateToOnboarding()
             }
+        )
+    }
+
+    private fun navigateToHome() {
+        viewModelScope.launch {
+            sendEvent(Event.NavigateToHome)
+        }
+    }
+
+    private fun navigateToOnboarding() {
+        viewModelScope.launch {
+            sendEvent(Event.NavigateToOnboarding)
         }
     }
 

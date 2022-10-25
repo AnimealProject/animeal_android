@@ -12,5 +12,5 @@ internal data class EnterCodeState(
 ) {
     fun isCodeFilled() = code.all { it != null }
 
-    fun isCodeEquals(stringToCompare: String) = code.joinToString("") == stringToCompare
+    fun isCodeChanged(codeToCompare: List<Int?>) = code != codeToCompare
 }
