@@ -33,8 +33,7 @@ internal fun FeedConfirmationUI(
         Column(
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(padding)
-                .padding(24.dp),
+                .padding(horizontal = 24.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
