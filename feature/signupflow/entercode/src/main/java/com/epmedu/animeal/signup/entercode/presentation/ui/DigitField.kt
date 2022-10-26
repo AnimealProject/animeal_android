@@ -1,11 +1,9 @@
 package com.epmedu.animeal.signup.entercode.presentation.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +24,7 @@ internal fun DigitField(
     modifier: Modifier = Modifier,
     isError: Boolean = false
 ) {
-    OutlinedTextField(
+    ZeroContentPaddingOutlinedTextField(
         value = digit?.toString() ?: "",
         onValueChange = { value ->
             when {
@@ -35,14 +33,15 @@ internal fun DigitField(
             }
         },
         modifier = modifier.size(width = 49.dp, height = 53.dp),
-        textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
+        textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
         isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = LocalContentColor.current,
             focusedBorderColor = Color.Gray
-        )
+        ),
+        shape = RoundedCornerShape(8.dp)
     )
 }
 
