@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.library.geolocation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.feedconfirmation)
 
     implementation(libs.accompanist.permissions)
 

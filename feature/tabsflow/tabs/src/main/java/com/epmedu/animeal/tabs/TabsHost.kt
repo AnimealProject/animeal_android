@@ -13,7 +13,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.favourites.FavouritesScreen
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
@@ -88,6 +87,5 @@ private fun NavigationTabs(navigationController: NavHostController) {
         screen(TabsRoute.Home.name) { HomeScreen() }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
-        screen(TabsRoute.FeedConfirmation.name) { FeedConfirmationScreen() }
     }
 }

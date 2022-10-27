@@ -1,27 +1,22 @@
 package com.epmedu.animeal.home.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.epmedu.animeal.common.route.TabsRoute
-import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
-import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
-    val navigator = LocalNavigator.currentOrThrow
 
     val state by viewModel.stateFlow.collectAsState()
+    val feedDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
     val bottomSheetState = rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
 
     HomeScreenUI(
@@ -29,7 +24,7 @@ fun HomeScreen() {
         bottomSheetState = bottomSheetState,
         onScreenEvent = viewModel::handleEvents,
         onWillFeedClick = {
-            navigator.navigate(TabsRoute.FeedConfirmation.name)
+            feedDialogState.value = true
         }
     )
 
@@ -47,5 +42,13 @@ fun HomeScreen() {
                 }
             }
         }
+    }
+
+    if (feedDialogState.value) {
+        FeedConfirmationDialog(
+            onAgreeClick = { feedDialogState.value = false },
+            onCancelClick = { feedDialogState.value = false },
+            onDismiss = { }
+        )
     }
 }
