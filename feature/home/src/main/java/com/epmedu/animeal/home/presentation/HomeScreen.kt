@@ -16,7 +16,7 @@ fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
-    val feedDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    var feedDialogState by remember { mutableStateOf(false) }
     val bottomSheetState = rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
 
     HomeScreenUI(
@@ -24,7 +24,7 @@ fun HomeScreen() {
         bottomSheetState = bottomSheetState,
         onScreenEvent = viewModel::handleEvents,
         onWillFeedClick = {
-            feedDialogState.value = true
+            feedDialogState = true
         }
     )
 
@@ -44,11 +44,10 @@ fun HomeScreen() {
         }
     }
 
-    if (feedDialogState.value) {
+    if (feedDialogState) {
         FeedConfirmationDialog(
-            onAgreeClick = { feedDialogState.value = false },
-            onCancelClick = { feedDialogState.value = false },
-            onDismiss = { }
+            onAgreeClick = { feedDialogState = false },
+            onCancelClick = { feedDialogState = false }
         )
     }
 }

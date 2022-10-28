@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
-import com.epmedu.animeal.foundation.dialog.FullScreenDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -81,12 +80,9 @@ internal fun FeedConfirmationUI(
 @Composable
 fun FeedConfirmationDialog(
     onAgreeClick: () -> Unit,
-    onCancelClick: () -> Unit,
-    onDismiss: () -> Unit
+    onCancelClick: () -> Unit
 ) {
-    FullScreenDialog(
-        onDismiss = onDismiss
-    ) { FeedConfirmationUI(onAgreeClick, onCancelClick) }
+    FeedConfirmationUI(onAgreeClick, onCancelClick)
 }
 
 @AnimealPreview

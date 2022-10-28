@@ -5,6 +5,5 @@ enum class TabsRoute {
     Favourites,
     Home,
     Analytics,
-    More,
-    FeedConfirmation
+    More
 }
