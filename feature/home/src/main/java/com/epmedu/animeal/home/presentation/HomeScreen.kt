@@ -31,11 +31,7 @@ fun HomeScreen() {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
                     launch {
-                        if (bottomSheetState.isHidden) {
-                            bottomSheetState.show()
-                        } else {
-                            bottomSheetState.hide()
-                        }
+                        if (bottomSheetState.isHidden) bottomSheetState.show()
                     }
                 }
             }
