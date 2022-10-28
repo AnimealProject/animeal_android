@@ -21,7 +21,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun FeedConfirmationUI(
+fun FeedConfirmationDialog(
     onAgreeClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
@@ -77,18 +77,10 @@ internal fun FeedConfirmationUI(
     }
 }
 
-@Composable
-fun FeedConfirmationDialog(
-    onAgreeClick: () -> Unit,
-    onCancelClick: () -> Unit
-) {
-    FeedConfirmationUI(onAgreeClick, onCancelClick)
-}
-
 @AnimealPreview
 @Composable
 private fun FeedConfirmationPreview() {
     AnimealTheme {
-        FeedConfirmationUI({}, {})
+        FeedConfirmationDialog({}, {})
     }
 }
