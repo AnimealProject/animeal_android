@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.epmedu.animeal.foundation.input.CustomPaddingOutlinedTextField
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
@@ -24,7 +25,7 @@ internal fun DigitField(
     modifier: Modifier = Modifier,
     isError: Boolean = false
 ) {
-    ZeroContentPaddingOutlinedTextField(
+    CustomPaddingOutlinedTextField(
         value = digit?.toString() ?: "",
         onValueChange = { value ->
             when {
@@ -41,7 +42,8 @@ internal fun DigitField(
             cursorColor = LocalContentColor.current,
             focusedBorderColor = Color.Gray
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        customPadding = 8.dp
     )
 }
 
