@@ -26,4 +26,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    implementation(libs.amplify.core)
+    implementation(libs.amplify.aws.auth.cognito)
 }

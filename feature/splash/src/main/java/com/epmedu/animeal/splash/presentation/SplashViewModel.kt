@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor() : ViewModel(),
+class SplashViewModel @Inject constructor() :
+    ViewModel(),
     EventDelegate<SplashViewModel.Event> by DefaultEventDelegate() {
 
     fun verifyProfileSaved() {

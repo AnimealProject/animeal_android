@@ -31,8 +31,8 @@ fun EnterPhoneScreen() {
 
     LaunchedEffect(Unit) {
         viewModel.events.collect {
-            if (it is EnterPhoneViewModel.Event.NavigateToEnterCode ) {
-                    navigator.navigate(SignUpRoute.EnterCode.name)
+            if (it is EnterPhoneViewModel.Event.NavigateToEnterCode) {
+                navigator.navigate(SignUpRoute.EnterCode.name)
             }
         }
     }

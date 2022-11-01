@@ -3,26 +3,21 @@ package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amplifyframework.auth.AuthException.UsernameExistsException
-import com.amplifyframework.auth.AuthUserAttribute
-import com.amplifyframework.auth.AuthUserAttributeKey
-import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
-import com.amplifyframework.auth.cognito.options.AuthFlowType
-import com.amplifyframework.auth.options.AuthSignUpOptions
-import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
+import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
-    private val repository: EnterPhoneRepository
+    private val repository: EnterPhoneRepository,
+    private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
 ) : ViewModel(),
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState()),
     EventDelegate<EnterPhoneViewModel.Event> by DefaultEventDelegate() {
@@ -43,46 +38,19 @@ internal class EnterPhoneViewModel @Inject constructor(
     fun savePhoneNumberAndSendCode() {
         val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
 
-        val attrs = mapOf(
-            AuthUserAttributeKey.phoneNumber() to phoneNumber
-        )
-        val options = AuthSignUpOptions.builder()
-            .userAttributes(attrs.map { AuthUserAttribute(it.key, it.value) })
-            .build()
-
-        savePhoneNumberAndNavigateNext(phoneNumber)
-
-        Amplify.Auth.signUp(phoneNumber, AMPLIFY_PASSWORD, options,
-            {
-                signIn()
-            },
-            { error ->
-                if (error is UsernameExistsException) {
-                    signIn()
-                } else {
+        viewModelScope.launch {
+            signUpAndSignInUseCase(
+                phoneNumber,
+                AMPLIFY_PASSWORD,
+                {
+                    savePhoneNumberAndNavigateNext(phoneNumber)
+                },
+                {
                     updateNextEnabled()
                     updateError(true)
                 }
-            }
-        )
-    }
-
-    private fun signIn() {
-        val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
-        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
-            .authFlowType(AuthFlowType.CUSTOM_AUTH)
-            .build()
-
-        Amplify.Auth.signIn(
-            phoneNumber, "", authSignInOptions,
-            {
-                savePhoneNumberAndNavigateNext(phoneNumber)
-            },
-            {
-                updateNextEnabled()
-                updateError(true)
-            }
-        )
+            )
+        }
     }
 
     private fun savePhoneNumberAndNavigateNext(phoneNumber: String) {
@@ -98,11 +66,11 @@ internal class EnterPhoneViewModel @Inject constructor(
     }
 
     private fun updateNextEnabled(isNextEnabled: Boolean? = null) {
-            updateState {
-                copy(
-                    isNextEnabled = isNextEnabled ?: state.phoneNumber.isValidPhoneNumber()
-                )
-            }
+        updateState {
+            copy(
+                isNextEnabled = isNextEnabled ?: state.phoneNumber.isValidPhoneNumber()
+            )
+        }
     }
 
     private fun updateError(isError: Boolean) {

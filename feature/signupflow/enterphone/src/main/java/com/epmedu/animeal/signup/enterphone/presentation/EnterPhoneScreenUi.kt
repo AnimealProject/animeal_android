@@ -56,7 +56,7 @@ internal fun EnterPhoneScreenUi(
                     .padding(top = 56.dp)
                     .focusRequester(focusRequester),
                 onValueChange = onNumberChange,
-                error = if(state.isError) stringResource(id = R.string.enter_phone_error) else ""
+                error = if (state.isError) stringResource(id = R.string.enter_phone_error) else ""
             )
         }
     }

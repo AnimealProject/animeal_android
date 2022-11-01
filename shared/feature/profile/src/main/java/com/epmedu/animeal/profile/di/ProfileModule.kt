@@ -7,6 +7,7 @@ import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidato
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
+import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
@@ -75,4 +76,10 @@ internal object ProfileModule {
     fun provideValidateBirthDateUseCase(
         validator: ProfileValidator
     ) = ValidateBirthDateUseCase(validator)
+
+    @ViewModelScoped
+    @Provides
+    fun provideLogOutUseCase(
+        repository: ProfileRepository
+    ) = LogOutUseCase(repository)
 }

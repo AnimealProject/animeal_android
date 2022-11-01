@@ -1,17 +1,15 @@
 package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
-import com.amplifyframework.auth.cognito.options.AuthFlowType
-import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
+import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -20,7 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
-    private val repository: EnterCodeRepository
+    private val repository: EnterCodeRepository,
+    private val sendCodeUseCase: SendCodeUseCase,
+    private val confirmCodeUseCase: ConfirmCodeUseCase,
 ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
@@ -60,16 +60,22 @@ internal class EnterCodeViewModel @Inject constructor(
         if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
             lastCode = state.code
             viewModelScope.launch {
-                confirmSignIn()
+                confirmCode()
             }
         }
     }
 
-    fun changeDigit(position: Int, digit: Int?) {
+    fun changeDigit(
+        position: Int,
+        digit: Int?
+    ) {
         updateState { copy(code = getNewCodeWithReplacedDigit(position, digit)) }
     }
 
-    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
+    private fun getNewCodeWithReplacedDigit(
+        position: Int,
+        newDigit: Int?
+    ): List<Int?> {
         return state.code.mapIndexed { index, currentDigit ->
             when (index) {
                 position -> newDigit
@@ -80,49 +86,30 @@ internal class EnterCodeViewModel @Inject constructor(
 
     fun resendCode() {
         viewModelScope.launch {
-            clearCodeAndDisableResend()
+            sendCode()
+            updateState { copy(code = emptyCode(), isResendEnabled = false) }
             launchResendTimer()
         }
     }
 
-    private fun clearCodeAndDisableResend() {
-        signIn()
-        updateState { copy(code = emptyCode(), isResendEnabled = false) }
-    }
-
-    private fun confirmSignIn(){
-        Log.d("AuthQuickstart", "state.phoneNumber -> ${state.phoneNumber}")
-
-        Log.d("AuthQuickstart", "code -> ${state.code.joinToString("")}")
-        Amplify.Auth.confirmSignIn(state.code.joinToString ( ""),
-            { result ->
-                updateState { copy(isError = false) }
-                Log.d("AuthQuickstart confirm result", "$result")
+    private fun confirmCode() {
+        viewModelScope.launch {
+            confirmCodeUseCase(
+                state.code,
+                {
+                    updateState { copy(isError = false) }
                     viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
-            },
-            {
-                updateState { copy(isError = true) }
-                Log.e("AuthQuickstart", "confirm error", it)
-            }
-        )
+                },
+                {
+                    updateState { copy(isError = true) }
+                }
+            )
+        }
     }
 
-    private fun signIn() {
+    private fun sendCode() {
         val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
-
-        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
-            .authFlowType(AuthFlowType.CUSTOM_AUTH)
-            .build()
-
-        Amplify.Auth.signIn(
-            phoneNumber, "", authSignInOptions,
-            {
-                Log.d("AuthQuickstart", "entercode signIn result -> $it")
-            },
-            {
-                Log.d("AuthQuickstart", "entercode signIn error -> $it")
-            }
-        )
+        sendCodeUseCase(phoneNumber, {}, {})
     }
 
     companion object {

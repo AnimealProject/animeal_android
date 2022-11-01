@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepositoryImpl
+import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,4 +20,10 @@ internal object EnterPhoneModule {
     fun providesEnterPhoneRepository(
         dataStore: DataStore<Preferences>
     ): EnterPhoneRepository = EnterPhoneRepositoryImpl(dataStore)
+
+    @ViewModelScoped
+    @Provides
+    fun provideSignUpAndSignInUseCase(
+        repository: EnterPhoneRepository
+    ) = SignUpAndSignInUseCase(repository)
 }

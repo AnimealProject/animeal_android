@@ -3,6 +3,7 @@ package com.epmedu.animeal.profile.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
@@ -41,6 +42,20 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 preference[birthDateKey] = profile.birthDate
             }
         }
+    }
+
+    override fun logOut(
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
+        Amplify.Auth.signOut(
+            {
+                onSuccess()
+            },
+            {
+                onError()
+            }
+        )
     }
 
     override suspend fun clearProfile() {
