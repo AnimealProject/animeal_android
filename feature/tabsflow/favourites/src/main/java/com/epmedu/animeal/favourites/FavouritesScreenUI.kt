@@ -38,10 +38,13 @@ internal fun FavouritesScreenUI(
             )
         }
     ) { padding ->
-        if (state.favourites.isEmpty()) {
-            EmptyState(padding)
-        } else {
-            FavouritesList(padding, state, onEvent)
+        when {
+            state.favourites.isEmpty() -> {
+                EmptyState(padding)
+            }
+            else -> {
+                FavouritesList(padding, state.favourites, onEvent)
+            }
         }
     }
 }
@@ -65,7 +68,7 @@ private fun EmptyState(padding: PaddingValues) {
 @Composable
 private fun FavouritesList(
     padding: PaddingValues,
-    state: FavouritesState,
+    favourites: List<FavouriteFeedingPoint>,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Column(
@@ -78,7 +81,7 @@ private fun FavouritesList(
             contentPadding = PaddingValues(30.dp)
 
         ) {
-            items(state.favourites) { item ->
+            items(favourites) { item ->
                 FavouriteFeedingPointItem(
                     title = item.title,
                     status = item.status,
@@ -93,7 +96,7 @@ private fun FavouritesList(
 
 @AnimealPreview
 @Composable
-private fun MoreScreenPreview() {
+private fun FavouritesScreenPreview() {
     val title = "FeedSpot"
     AnimealTheme {
         FavouritesScreenUI(
@@ -110,7 +113,7 @@ private fun MoreScreenPreview() {
 
 @AnimealPreview
 @Composable
-private fun MoreScreenEmptyPreview() {
+private fun FavouritesScreenEmptyPreview() {
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
