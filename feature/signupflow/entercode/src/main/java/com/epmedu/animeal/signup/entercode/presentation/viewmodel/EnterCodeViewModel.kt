@@ -82,8 +82,8 @@ internal class EnterCodeViewModel @Inject constructor(
     companion object {
         const val RESEND_DELAY = 30L
 
-        private const val CODE_SIZE = 4
-        private const val CORRECT_CODE = "1111"
+        private const val CODE_SIZE = 6
+        private const val CORRECT_CODE = "111111"
 
         internal fun emptyCode() = List(CODE_SIZE) { null }
     }
