@@ -94,4 +94,6 @@
     <string name="animals_fed">"Animals are fed"</string>
     <string name="back_to_home">Back to home</string>
 
+    <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
+
 </resources>
