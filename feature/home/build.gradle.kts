@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation(libs.mapbox.android)
+    implementation(libs.mapbox.navigation)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

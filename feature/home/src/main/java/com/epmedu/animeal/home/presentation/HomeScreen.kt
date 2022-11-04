@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
-import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -34,6 +34,13 @@ fun HomeScreen() {
                         if (bottomSheetState.isHidden) {
                             bottomSheetState.show()
                         } else {
+                            bottomSheetState.hide()
+                        }
+                    }
+                }
+                is StartRouteFlow -> {
+                    launch {
+                        if (bottomSheetState.isVisible) {
                             bottomSheetState.hide()
                         }
                     }

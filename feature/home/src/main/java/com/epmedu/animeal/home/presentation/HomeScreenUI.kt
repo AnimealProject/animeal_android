@@ -21,7 +21,9 @@ import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.ui.map.RouteTopBar
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
 import kotlinx.coroutines.launch
@@ -81,14 +83,17 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = {}
+                    // TODO replace with Dialog and call it from there
+                    onClick = { onScreenEvent(FeedingRouteStartRequest) }
                 )
             }
         ) {
             MapContent(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
-                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) }
+                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) },
+                onCancelRouteClick = { onScreenEvent(FeedingRouteCancellationRequest) },
+                onRouteResult = { result -> onScreenEvent(FeedingRouteUpdateRequest(result)) }
             )
         }
     }
@@ -98,20 +103,35 @@ internal fun HomeScreenUI(
 private fun MapContent(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
-    onGeolocationClick: () -> Unit
+    onGeolocationClick: () -> Unit,
+    onCancelRouteClick: () -> Unit,
+    onRouteResult: (result: RouteResult) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(
             state = state,
-            onFeedingPointClick = onFeedingPointSelect
+            onFeedingPointClick = onFeedingPointSelect,
+            onRouteResult = onRouteResult
         )
-        AnimealSwitch(
-            modifier = Modifier
-                .statusBarsPadding()
-                .align(alignment = Alignment.TopCenter)
-                .padding(top = 24.dp),
-            onSelectTab = {}
-        )
+        if (!state.feedingRouteState.isRouteActive) {
+            AnimealSwitch(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(alignment = Alignment.TopCenter)
+                    .padding(top = 24.dp),
+                onSelectTab = {}
+            )
+        } else {
+            RouteTopBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = 16.dp)
+                    .padding(horizontal = 20.dp),
+                timeLeft = state.feedingRouteState.timeLeft ?: stringResource(R.string.calculating_route),
+                distanceLeft = state.feedingRouteState.distanceLeft?.run { " • $this" } ?: "",
+                onCancelClick = onCancelRouteClick
+            )
+        }
         GeoLocationFloatingActionButton(
             modifier = Modifier
                 .padding(

@@ -13,7 +13,7 @@ import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,13 +33,16 @@ class HomeViewModel @Inject constructor(
         initialize()
         fetchLocationUpdates()
         fetchFeedingPoints()
-        fetchGpsSettingsUpdates()
+        // fetchGpsSettingsUpdates()
     }
 
     fun handleEvents(event: HomeScreenEvent) = when (event) {
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
         is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
+        is HomeScreenEvent.FeedingRouteStartRequest -> startRoute()
+        is HomeScreenEvent.FeedingRouteCancellationRequest -> stopRoute()
+        is HomeScreenEvent.FeedingRouteUpdateRequest -> updateRoute(event)
     }
 
     private fun initialize() {
@@ -59,9 +62,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchGpsSettingsUpdates() {
+    // TODO detekt triggers too many functions(11)
+    /*private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
-            // TODO: Fix crash
             // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
     }
@@ -73,7 +76,7 @@ class HomeViewModel @Inject constructor(
             GpsSettingsProvider.GpsSettingState.Disabled -> GpsSettingState.Disabled
         }
         updateState { copy(gpsSettingState = uiGpsState) }
-    }
+    }*/
 
     private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
 
@@ -106,6 +109,33 @@ class HomeViewModel @Inject constructor(
         updateState {
             copy(
                 currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
+            )
+        }
+    }
+
+    // Route
+
+    private fun startRoute() {
+        viewModelScope.launch {
+            updateState {
+                copy(feedingRouteState = FeedingRouteState(isRouteActive = true))
+            }
+            sendEvent(HomeViewModelEvent.StartRouteFlow)
+        }
+    }
+
+    private fun stopRoute() {
+        updateState { copy(feedingRouteState = FeedingRouteState()) }
+    }
+
+    private fun updateRoute(event: HomeScreenEvent.FeedingRouteUpdateRequest) {
+        updateState {
+            copy(
+                feedingRouteState = feedingRouteState.copy(
+                    isRouteActive = event.result.isSuccessful,
+                    timeLeft = event.result.timeLeft,
+                    distanceLeft = event.result.distanceLeft
+                )
             )
         }
     }

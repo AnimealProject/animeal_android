@@ -2,7 +2,7 @@ package com.epmedu.animeal.extensions
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 
 private const val DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN = "d MMM, yyyy"
 private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
@@ -34,4 +34,11 @@ fun tryParseDate(rawDate: String?): LocalDate? {
     return runCatching {
         LocalDate.parse(rawDate, DAY_MONTH_COMMA_YEAR_FORMATTER)
     }.getOrNull()
+}
+
+fun formatNumberToHourMin(total: Long): String {
+    val hours = total / 3600
+    val minutes = total % 3600 / 60
+
+    return "${if (hours > 0) "$hours h " else ""}$minutes min"
 }

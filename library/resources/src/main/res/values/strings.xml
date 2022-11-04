@@ -93,5 +93,9 @@
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
     <string name="back_to_home">Back to home</string>
+    <string name="calculating_route">Calculating route…</string>
+    <string name="routes_not_found">No routes available</string>
+    <string name="routes_failed">Route request failed</string>
+    <string name="routes_cancelled">Route request cancelled</string>
 
 </resources>
