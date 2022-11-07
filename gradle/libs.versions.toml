@@ -35,7 +35,6 @@ versions = "0.42.0"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
 
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }

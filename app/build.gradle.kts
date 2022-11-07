@@ -55,7 +55,6 @@ android {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom))
 
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
