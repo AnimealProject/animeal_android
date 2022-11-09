@@ -1,8 +1,8 @@
 package com.epmedu.animeal.favourites.data
 
-import com.epmedu.animeal.favourites.data.model.FavouriteFeedingPoint
+import com.epmedu.animeal.feeding.data.model.FeedingPoint
 import kotlinx.coroutines.flow.Flow
 
 interface FavouritesRepository {
-    fun getFavouriteFeedSpots(): Flow<List<FavouriteFeedingPoint>>
+    fun getFavouriteFeedSpots(): Flow<List<FeedingPoint>>
 }

@@ -1,11 +1,11 @@
-package com.epmedu.animeal.home.data
+package com.epmedu.animeal.feeding.data
 
+import com.epmedu.animeal.feeding.data.model.Feeder
+import com.epmedu.animeal.feeding.data.model.FeedingPoint
+import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.data.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
-import com.epmedu.animeal.home.data.model.Feeder
-import com.epmedu.animeal.home.data.model.FeedingPoint
-import com.epmedu.animeal.home.data.model.enum.AnimalPriority
-import com.epmedu.animeal.home.data.model.enum.AnimalState
-import com.epmedu.animeal.home.presentation.model.MapLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlin.random.Random
@@ -18,8 +18,8 @@ class FeedingPointRepositoryImpl : FeedingPointRepository {
             index,
             title = "$index - Near to Bukia Garden M.S Technical University",
             "$index - This area covers about 100 sq.m. -S, it starts with Bukia Garden " +
-                "and Sports At the palace. There are about 1000 homeless people here " +
-                "The dog lives with the habit of helping You need.",
+                    "and Sports At the palace. There are about 1000 homeless people here " +
+                    "The dog lives with the habit of helping You need.",
             AnimalPriority.values().random(),
             AnimalState.values().random(),
             AnimalType.values().random(),

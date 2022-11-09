@@ -1,30 +1,99 @@
 package com.epmedu.animeal.favourites
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.favourites.data.model.FavouriteFeedingPoint
 import com.epmedu.animeal.favourites.ui.FavouriteFeedingPointItem
+import com.epmedu.animeal.feeding.data.model.Feeder
+import com.epmedu.animeal.feeding.data.model.FeedingPoint
+import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.data.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
+import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
+import com.epmedu.animeal.foundation.dialog.bottomsheet.*
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FavouritesScreenUI(
     state: FavouritesState,
+    bottomSheetState: HomeBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
+) {
+
+    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
+
+    LaunchedEffect(bottomSheetState.progress) {
+        val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
+
+        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
+    }
+
+    val contentAlpha: Float by animateFloatAsState(
+        targetValue = when {
+            bottomSheetState.isExpanding -> bottomSheetState.progress.fraction
+            bottomSheetState.isCollapsing -> 1f - bottomSheetState.progress.fraction
+            else -> 0f
+        }
+    )
+
+    val buttonAlpha: Float by animateFloatAsState(
+        targetValue = when {
+            bottomSheetState.isShowing -> bottomSheetState.progress.fraction
+            bottomSheetState.isHiding -> 1f - bottomSheetState.progress.fraction
+            else -> 1f
+        }
+    )
+
+    val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = bottomSheetState.isVisible) {
+        scope.launch { bottomSheetState.hide() }
+    }
+
+    ScreenScaffold(
+        bottomSheetState,
+        state,
+        contentAlpha,
+        onEvent,
+        buttonAlpha
+    )
+}
+
+@Composable
+private fun ScreenScaffold(
+    bottomSheetState: HomeBottomSheetState,
+    state: FavouritesState,
+    contentAlpha: Float,
+    onEvent: (FavouritesScreenEvent) -> Unit,
+    buttonAlpha: Float
 ) {
     Scaffold(
         modifier = Modifier
@@ -38,13 +107,52 @@ internal fun FavouritesScreenUI(
             )
         }
     ) { padding ->
-        when {
-            state.favourites.isEmpty() -> {
-                EmptyState(padding)
+        HomeBottomSheetLayout(
+            sheetState = bottomSheetState,
+            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            sheetContent = {
+                state.showingFeedSpot?.let { feedingPoint ->
+                    FeedingPointSheetContent(
+                        feedingPoint = FeedingPointModel(
+                            feedingPoint
+                        ),
+                        contentAlpha = contentAlpha,
+                        onFavouriteChange = { selected ->
+                            onEvent(
+                                FavouritesScreenEvent.FeedSpotChanged(
+                                    feedingPoint.id,
+                                    isFavorite = selected,
+                                )
+                            )
+                        }
+                    )
+                }
+            },
+            sheetControls = {
+                FeedingPointActionButton(
+                    alpha = buttonAlpha,
+                    onClick = {}
+                )
             }
-            else -> {
-                FavouritesList(padding, state.favourites, onEvent)
-            }
+        ) {
+            ScreenContent(state, padding, onEvent)
+        }
+
+    }
+}
+
+@Composable
+private fun ScreenContent(
+    state: FavouritesState,
+    padding: PaddingValues,
+    onEvent: (FavouritesScreenEvent) -> Unit,
+) {
+    when {
+        state.favourites.isEmpty() -> {
+            EmptyState(padding)
+        }
+        else -> {
+            FavouritesList(padding, state.favourites, onEvent)
         }
     }
 }
@@ -68,7 +176,7 @@ private fun EmptyState(padding: PaddingValues) {
 @Composable
 private fun FavouritesList(
     padding: PaddingValues,
-    favourites: List<FavouriteFeedingPoint>,
+    favourites: List<FeedingPoint>,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Column(
@@ -84,16 +192,19 @@ private fun FavouritesList(
             items(favourites) { item ->
                 FavouriteFeedingPointItem(
                     title = item.title,
-                    status = item.status,
+                    status = item.animalStatus.toFeedStatus(),
                     isFavourite = item.isFavourite,
-                    onFavouriteChange = { onEvent(FavouritesScreenEvent.FeedSpotRemove(item.id)) },
-                    onClick = { onEvent(FavouritesScreenEvent.FeedSpotSelected(item.id)) }
+                    onFavouriteChange = { onEvent(FavouritesScreenEvent.FeedSpotChanged(item.id, isFavorite = false)) },
+                    onClick = {
+                        onEvent(FavouritesScreenEvent.FeedSpotSelected(item.id))
+                    }
                 )
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @AnimealPreview
 @Composable
 private fun FavouritesScreenPreview() {
@@ -102,15 +213,24 @@ private fun FavouritesScreenPreview() {
         FavouritesScreenUI(
             FavouritesState(
                 listOf(
-                    FavouriteFeedingPoint(title = title, isFavourite = true),
-                    FavouriteFeedingPoint(title = title, isFavourite = true),
-                    FavouriteFeedingPoint(title = title, isFavourite = true)
+                    FeedingPoint(
+                        id = 0,
+                        title = title,
+                        isFavourite = true,
+                        animalPriority = AnimalPriority.HIGH,
+                        animalStatus = AnimalState.RED,
+                        animalType = AnimalType.Dogs,
+                        description = "Hungry dog",
+                        lastFeeder = Feeder(id = 0, "Fred", "12:00"),
+                        location = MapLocation.Tbilisi,
+                    ),
                 )
-            )
+            ), rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
         ) {}
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @AnimealPreview
 @Composable
 private fun FavouritesScreenEmptyPreview() {
@@ -118,7 +238,8 @@ private fun FavouritesScreenEmptyPreview() {
         FavouritesScreenUI(
             FavouritesState(
                 emptyList()
-            )
+            ),
+            rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
         ) {}
     }
 }

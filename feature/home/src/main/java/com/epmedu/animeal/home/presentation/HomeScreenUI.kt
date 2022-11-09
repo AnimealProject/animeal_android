@@ -11,19 +11,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
-import com.epmedu.animeal.foundation.button.AnimealButton
+import com.epmedu.animeal.foundation.dialog.bottomsheet.FeedingPointActionButton
+import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetLayout
+import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetState
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.ui.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.resources.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -70,7 +70,7 @@ internal fun HomeScreenUI(
             sheetContent = {
                 state.currentFeedingPoint?.let { feedingPoint ->
                     FeedingPointSheetContent(
-                        feedingPoint = FeedingPointUi(feedingPoint),
+                        feedingPoint = FeedingPointModel(feedingPoint),
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
                             onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
@@ -97,7 +97,7 @@ internal fun HomeScreenUI(
 @Composable
 private fun MapContent(
     state: HomeState,
-    onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
+    onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
     onGeolocationClick: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -122,19 +122,4 @@ private fun MapContent(
             onClick = onGeolocationClick
         )
     }
-}
-
-@Composable
-private fun FeedingPointActionButton(
-    alpha: Float,
-    onClick: () -> Unit
-) {
-    AnimealButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
-            .alpha(alpha),
-        text = stringResource(R.string.i_will_feed),
-        onClick = onClick,
-    )
 }

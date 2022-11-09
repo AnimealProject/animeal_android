@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.ui
+package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,22 +17,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feeding.data.model.Feeder
+import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.data.model.enum.Remoteness
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
+import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.home.data.model.Feeder
-import com.epmedu.animeal.home.data.model.enum.AnimalPriority
-import com.epmedu.animeal.home.data.model.enum.Remoteness
-import com.epmedu.animeal.home.presentation.model.FeedStatus
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
 @Composable
-internal fun FeedingPointSheetContent(
-    feedingPoint: FeedingPointUi,
+fun FeedingPointSheetContent(
+    feedingPoint: FeedingPointModel,
     contentAlpha: Float,
     onFavouriteChange: (Boolean) -> Unit
 ) {
@@ -233,7 +233,7 @@ internal fun FeedingPointLastFeeder(
 private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: String) {
     AnimealTheme {
         FeedingPointSheetContent(
-            feedingPoint = FeedingPointUi(
+            feedingPoint = FeedingPointModel(
                 -1,
                 text.take(30),
                 feedStatus = FeedStatus.RED,

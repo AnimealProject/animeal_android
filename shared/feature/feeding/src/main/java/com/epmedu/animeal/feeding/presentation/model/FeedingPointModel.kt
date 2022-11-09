@@ -1,17 +1,17 @@
-package com.epmedu.animeal.home.presentation.model
+package com.epmedu.animeal.feeding.presentation.model
 
 import androidx.compose.runtime.Stable
+import com.epmedu.animeal.feeding.data.model.Feeder
+import com.epmedu.animeal.feeding.data.model.FeedingPoint
+import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.data.model.enum.Remoteness
+import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.switch.AnimalType
-import com.epmedu.animeal.home.data.model.Feeder
-import com.epmedu.animeal.home.data.model.FeedingPoint
-import com.epmedu.animeal.home.data.model.enum.AnimalPriority
-import com.epmedu.animeal.home.data.model.enum.Remoteness
-import com.epmedu.animeal.home.presentation.model.FeedStatus.Companion.toFeedStatus
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
 @Stable
-data class FeedingPointUi(
+data class FeedingPointModel(
     val id: Int, // For future implementations
     val title: String,
     val description: String,

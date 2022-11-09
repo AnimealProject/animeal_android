@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.data.model
+package com.epmedu.animeal.feeding.data.model
 
 data class Feeder(
     val id: Int,

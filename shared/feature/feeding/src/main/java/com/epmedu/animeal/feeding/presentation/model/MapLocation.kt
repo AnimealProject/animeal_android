@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.model
+package com.epmedu.animeal.feeding.presentation.model
 
 import com.epmedu.animeal.geolocation.location.model.Location
 

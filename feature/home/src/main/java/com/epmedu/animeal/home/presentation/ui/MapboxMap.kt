@@ -6,14 +6,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.presentation.ui.map.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 
 @Composable
 fun MapboxMap(
     state: HomeState,
-    onFeedingPointClick: (point: FeedingPointUi) -> Unit
+    onFeedingPointClick: (point: FeedingPointModel) -> Unit
 ) {
     val mapView = rememberMapViewWithLifecycle(
         mapBoxInitOptions = rememberMapInitOptions(

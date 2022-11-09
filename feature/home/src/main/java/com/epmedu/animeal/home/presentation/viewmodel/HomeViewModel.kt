@@ -8,13 +8,13 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.StableList
+import com.epmedu.animeal.feeding.data.FeedingPointRepository
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
-import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.MapLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -83,7 +83,11 @@ class HomeViewModel @Inject constructor(
                 updateState {
                     copy(
                         feedingPoints = StableList(
-                            it.take(15).map { feedingPoint -> FeedingPointUi(feedingPoint) }
+                            it.take(15).map { feedingPoint ->
+                                FeedingPointModel(
+                                    feedingPoint
+                                )
+                            }
                         )
                     )
                 }
