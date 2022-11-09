@@ -25,7 +25,8 @@ fun MapboxMap(
         uiSettings = rememberMapUiSettings(
             MapUiSettings(
                 scalebar = false,
-                userLocationOnMap = true
+                userLocationOnMap = true,
+                compassEnabled = false
             )
         )
     )
