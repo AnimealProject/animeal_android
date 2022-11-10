@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -23,6 +25,7 @@ import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.ui.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -55,6 +58,16 @@ internal fun HomeScreenUI(
         }
     )
 
+    val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = bottomSheetState.isVisible) {
+        scope.launch { bottomSheetState.hide() }
+    }
+
+    BackHandler(enabled = state.isWillFeedDialogShowing) {
+        scope.launch { onScreenEvent(DismissWillFeedDialog) }
+    }
+
     CheckLocationPermission {
         HomeBottomSheetLayout(
             sheetState = bottomSheetState,
@@ -85,12 +98,7 @@ internal fun HomeScreenUI(
         }
     }
 
-    if (state.isWillFeedDialogShowing) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
-            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
-        )
-    }
+    FeedConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -136,4 +144,14 @@ private fun FeedingPointActionButton(
         text = stringResource(R.string.i_will_feed),
         onClick = onClick,
     )
+}
+
+@Composable
+private fun FeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
+    if (state.isWillFeedDialogShowing) {
+        FeedConfirmationDialog(
+            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
+            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
+        )
+    }
 }

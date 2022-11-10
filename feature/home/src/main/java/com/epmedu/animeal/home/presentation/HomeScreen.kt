@@ -3,7 +3,6 @@ package com.epmedu.animeal.home.presentation
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetValue
 import com.epmedu.animeal.home.presentation.ui.rememberHomeBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
@@ -29,11 +28,7 @@ fun HomeScreen() {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
                     launch {
-                        if (bottomSheetState.isHidden) {
-                            bottomSheetState.show()
-                        } else {
-                            bottomSheetState.hide()
-                        }
+                        if (bottomSheetState.isHidden) bottomSheetState.show()
                     }
                 }
             }

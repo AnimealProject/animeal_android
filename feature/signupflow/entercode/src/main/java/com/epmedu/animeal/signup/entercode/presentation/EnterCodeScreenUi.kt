@@ -18,6 +18,7 @@ import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.entercode.presentation.ui.CodeRow
 import com.epmedu.animeal.signup.entercode.presentation.ui.ResendButton
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeState
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel.Companion.emptyCode
 
 @Composable
 internal fun EnterCodeScreenUi(
@@ -74,7 +75,7 @@ private fun EnterCodeScreenPreview() {
     AnimealTheme {
         EnterCodeScreenUi(
             state = EnterCodeState(
-                code = listOf(null, null, null, null),
+                code = emptyCode(),
                 phoneNumber = "558 49-99-69"
             ),
             focusRequester = FocusRequester(),
