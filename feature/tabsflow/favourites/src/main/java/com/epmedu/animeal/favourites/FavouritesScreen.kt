@@ -30,8 +30,8 @@ fun FavouritesScreen() {
                         if (bottomSheetState.isHidden) bottomSheetState.show()
                     }
                 }
-                else -> {
-                    // do nothing
+                is FavouritesScreenEvent.FeedSpotChanged -> {
+                    bottomSheetState.hide()
                 }
             }
         }

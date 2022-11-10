@@ -1,6 +1,7 @@
 package com.epmedu.animeal.foundation.dialog.bottomsheet
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -20,6 +21,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetValue.*
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -210,4 +213,33 @@ private fun Modifier.bottomSheetSwipeable(
     }
 
     return this.then(modifier)
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun HomeBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
+    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
+
+    LaunchedEffect(progress) {
+        val showBottomBar = if (isShowing) false else isHidden
+
+        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
+    }
+
+    val contentAlpha: Float by animateFloatAsState(
+        targetValue = when {
+            isExpanding -> progress.fraction
+            isCollapsing -> 1f - progress.fraction
+            else -> 0f
+        }
+    )
+
+    val buttonAlpha: Float by animateFloatAsState(
+        targetValue = when {
+            isShowing -> progress.fraction
+            isHiding -> 1f - progress.fraction
+            else -> 1f
+        }
+    )
+    return Pair(contentAlpha, buttonAlpha)
 }

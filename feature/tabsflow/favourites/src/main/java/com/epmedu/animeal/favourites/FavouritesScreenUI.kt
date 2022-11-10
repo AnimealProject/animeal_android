@@ -1,7 +1,6 @@
 package com.epmedu.animeal.favourites
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,8 +11,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +26,6 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
-import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.dialog.bottomsheet.*
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.switch.AnimalType
@@ -40,7 +35,6 @@ import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FavouritesScreenUI(
     state: FavouritesState,
@@ -48,29 +42,7 @@ internal fun FavouritesScreenUI(
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
 
-    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
-
-    LaunchedEffect(bottomSheetState.progress) {
-        val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
-
-        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
-    }
-
-    val contentAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isExpanding -> bottomSheetState.progress.fraction
-            bottomSheetState.isCollapsing -> 1f - bottomSheetState.progress.fraction
-            else -> 0f
-        }
-    )
-
-    val buttonAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isShowing -> bottomSheetState.progress.fraction
-            bottomSheetState.isHiding -> 1f - bottomSheetState.progress.fraction
-            else -> 1f
-        }
-    )
+    val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
     val scope = rememberCoroutineScope()
 
@@ -117,6 +89,7 @@ private fun ScreenScaffold(
                             feedingPoint
                         ),
                         contentAlpha = contentAlpha,
+                        showOnMap = true,
                         onFavouriteChange = { selected ->
                             onEvent(
                                 FavouritesScreenEvent.FeedSpotChanged(
@@ -131,7 +104,8 @@ private fun ScreenScaffold(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = {}
+                    enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
+                    onClick = {},
                 )
             }
         ) {
@@ -194,7 +168,9 @@ private fun FavouritesList(
                     title = item.title,
                     status = item.animalStatus.toFeedStatus(),
                     isFavourite = item.isFavourite,
-                    onFavouriteChange = { onEvent(FavouritesScreenEvent.FeedSpotChanged(item.id, isFavorite = false)) },
+                    onFavouriteChange = {
+                        onEvent(FavouritesScreenEvent.FeedSpotChanged(item.id, isFavorite = false))
+                    },
                     onClick = {
                         onEvent(FavouritesScreenEvent.FeedSpotSelected(item.id))
                     }

@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
@@ -34,6 +35,7 @@ import com.mapbox.geojson.Point
 fun FeedingPointSheetContent(
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
+    showOnMap: Boolean = false,
     onFavouriteChange: (Boolean) -> Unit
 ) {
     Column(
@@ -68,6 +70,9 @@ fun FeedingPointSheetContent(
             lastFeedTime = feedingPoint.lastFeeder.time,
             scrimAlpha = contentAlpha
         )
+        if (showOnMap) {
+            ShowOnMapLink()
+        }
     }
 }
 
@@ -228,6 +233,18 @@ internal fun FeedingPointLastFeeder(
     }
 }
 
+@Composable
+private fun ShowOnMapLink() {
+    Text(
+        text = stringResource(id = R.string.show_on_map),
+        style = MaterialTheme.typography.subtitle1.copy(
+            color = CustomColor.SeaSerpent,
+            textDecoration = TextDecoration.Underline
+        ),
+        color = CustomColor.SeaSerpent,
+    )
+}
+
 @AnimealPreview
 @Composable
 private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: String) {
@@ -250,6 +267,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
+            showOnMap = true,
             onFavouriteChange = {}
         )
     }

@@ -1,61 +1,39 @@
 package com.epmedu.animeal.home.presentation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feeding.data.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
-import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.dialog.bottomsheet.FeedingPointActionButton
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetLayout
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetState
+import com.epmedu.animeal.foundation.dialog.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
-import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
+import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
+import com.epmedu.animeal.home.presentation.ui.MapboxMap
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
-    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
-
-    LaunchedEffect(bottomSheetState.progress) {
-        val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
-
-        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
-    }
-
-    val contentAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isExpanding -> bottomSheetState.progress.fraction
-            bottomSheetState.isCollapsing -> 1f - bottomSheetState.progress.fraction
-            else -> 0f
-        }
-    )
-
-    val buttonAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isShowing -> bottomSheetState.progress.fraction
-            bottomSheetState.isHiding -> 1f - bottomSheetState.progress.fraction
-            else -> 1f
-        }
-    )
+    val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
     val scope = rememberCoroutineScope()
 
@@ -81,6 +59,7 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
+                    enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
                     onClick = {}
                 )
             }
