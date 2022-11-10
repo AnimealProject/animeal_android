@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.button.AnimealButton
@@ -28,8 +29,7 @@ import com.epmedu.animeal.resources.R
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
-    onWillFeedClick: () -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
@@ -73,7 +73,7 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = onWillFeedClick
+                    onClick = { onScreenEvent(ShowWillFeedDialog) }
                 )
             }
         ) {
@@ -83,6 +83,13 @@ internal fun HomeScreenUI(
                 onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) }
             )
         }
+    }
+
+    if (state.isWillFeedDialogShowing) {
+        FeedConfirmationDialog(
+            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
+            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
+        )
     }
 }
 

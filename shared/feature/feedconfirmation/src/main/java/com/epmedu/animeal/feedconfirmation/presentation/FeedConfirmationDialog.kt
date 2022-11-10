@@ -53,7 +53,7 @@ fun FeedConfirmationDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 44.dp),
-                painter = painterResource(id = R.mipmap.img_confirm_feeding),
+                painter = painterResource(id = R.drawable.ic_will_feed_dialog),
                 contentScale = ContentScale.FillWidth,
                 contentDescription = null
             )

@@ -40,6 +40,8 @@ class HomeViewModel @Inject constructor(
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
         is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
+        is HomeScreenEvent.ShowWillFeedDialog -> updateWillFeedDialog(true)
+        is HomeScreenEvent.DismissWillFeedDialog -> updateWillFeedDialog(false)
     }
 
     private fun initialize() {
@@ -107,6 +109,12 @@ class HomeViewModel @Inject constructor(
             copy(
                 currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
             )
+        }
+    }
+
+    private fun updateWillFeedDialog(show: Boolean) {
+        updateState {
+            copy(isWillFeedDialogShowing = show)
         }
     }
 }
