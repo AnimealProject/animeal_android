@@ -29,7 +29,6 @@ fun FeedingPointActionButton(
     )
 }
 
-
 @Composable
 @AnimealPreview
 fun FeedingPointActionButtonPreview() {

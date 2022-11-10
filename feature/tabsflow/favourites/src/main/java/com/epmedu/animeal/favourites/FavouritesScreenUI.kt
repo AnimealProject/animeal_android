@@ -41,7 +41,6 @@ internal fun FavouritesScreenUI(
     bottomSheetState: HomeBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
     val scope = rememberCoroutineScope()
@@ -111,7 +110,6 @@ private fun ScreenScaffold(
         ) {
             ScreenContent(state, padding, onEvent)
         }
-
     }
 }
 
@@ -201,7 +199,8 @@ private fun FavouritesScreenPreview() {
                         location = MapLocation.Tbilisi,
                     ),
                 )
-            ), rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
+            ),
+            rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
         ) {}
     }
 }

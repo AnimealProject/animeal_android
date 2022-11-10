@@ -18,8 +18,8 @@ class FeedingPointRepositoryImpl : FeedingPointRepository {
             index,
             title = "$index - Near to Bukia Garden M.S Technical University",
             "$index - This area covers about 100 sq.m. -S, it starts with Bukia Garden " +
-                    "and Sports At the palace. There are about 1000 homeless people here " +
-                    "The dog lives with the habit of helping You need.",
+                "and Sports At the palace. There are about 1000 homeless people here " +
+                "The dog lives with the habit of helping You need.",
             AnimalPriority.values().random(),
             AnimalState.values().random(),
             AnimalType.values().random(),
