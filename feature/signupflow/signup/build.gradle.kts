@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.feature.signupflow.entercode)
     implementation(projects.feature.signupflow.enterphone)
     implementation(projects.feature.signupflow.finishprofile)

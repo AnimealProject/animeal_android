@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.feature.home)
     implementation(projects.feature.tabsflow.analytics)
     implementation(projects.feature.tabsflow.moreflow.host)
