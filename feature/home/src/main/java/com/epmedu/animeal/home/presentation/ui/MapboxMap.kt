@@ -63,7 +63,7 @@ fun MapboxMap(
     // If we return from other tab and there was a route active in map the camera zoom will not work
     // so we have to make sure the map is loaded before setting location
     val onStyleLoadedListener = OnStyleLoadedListener { event ->
-        if (event.end != null) {
+        event.end?.run {
             if (state.feedingRouteState.isRouteActive) {
                 setLocationOnRoute(mapView, state)
             } else {
