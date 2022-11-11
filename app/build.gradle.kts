@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabsflow.tabs)
