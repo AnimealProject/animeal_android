@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.button.AnimealButton
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
@@ -63,6 +64,10 @@ internal fun HomeScreenUI(
         scope.launch { bottomSheetState.hide() }
     }
 
+    BackHandler(enabled = state.willFeedState.isDialogShowing) {
+        scope.launch { onScreenEvent(DismissWillFeedDialog) }
+    }
+
     CheckLocationPermission {
         HomeBottomSheetLayout(
             sheetState = bottomSheetState,
@@ -81,7 +86,7 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = {}
+                    onClick = { onScreenEvent(ShowWillFeedDialog) }
                 )
             }
         ) {
@@ -92,6 +97,8 @@ internal fun HomeScreenUI(
             )
         }
     }
+
+    WillFeedConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -137,4 +144,14 @@ private fun FeedingPointActionButton(
         text = stringResource(R.string.i_will_feed),
         onClick = onClick,
     )
+}
+
+@Composable
+private fun WillFeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
+    if (state.willFeedState.isDialogShowing) {
+        FeedConfirmationDialog(
+            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
+            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
+        )
+    }
 }
