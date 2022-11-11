@@ -64,7 +64,7 @@ internal fun HomeScreenUI(
         scope.launch { bottomSheetState.hide() }
     }
 
-    BackHandler(enabled = state.isWillFeedDialogShowing) {
+    BackHandler(enabled = state.willFeedState.isDialogShowing) {
         scope.launch { onScreenEvent(DismissWillFeedDialog) }
     }
 
@@ -98,7 +98,7 @@ internal fun HomeScreenUI(
         }
     }
 
-    FeedConfirmationDialog(state, onScreenEvent)
+    WillFeedConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -147,8 +147,8 @@ private fun FeedingPointActionButton(
 }
 
 @Composable
-private fun FeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
-    if (state.isWillFeedDialogShowing) {
+private fun WillFeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
+    if (state.willFeedState.isDialogShowing) {
         FeedConfirmationDialog(
             onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
             onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
