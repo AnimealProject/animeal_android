@@ -1,7 +1,6 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
-    id("kotlin-kapt")
 }
 
 android {
@@ -15,10 +14,7 @@ dependencies {
     implementation(projects.library.resources)
     implementation(projects.library.geolocation)
 
-    implementation(libs.androidx.datastore)
-
     implementation(libs.compose.material)
-    implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)

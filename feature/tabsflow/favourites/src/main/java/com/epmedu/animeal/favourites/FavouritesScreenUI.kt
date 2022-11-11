@@ -30,7 +30,6 @@ import com.epmedu.animeal.foundation.dialog.bottomsheet.*
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
 import kotlinx.coroutines.launch
@@ -53,8 +52,8 @@ internal fun FavouritesScreenUI(
         bottomSheetState,
         state,
         contentAlpha,
-        onEvent,
-        buttonAlpha
+        buttonAlpha,
+        onEvent
     )
 }
 
@@ -63,13 +62,12 @@ private fun ScreenScaffold(
     bottomSheetState: HomeBottomSheetState,
     state: FavouritesState,
     contentAlpha: Float,
-    onEvent: (FavouritesScreenEvent) -> Unit,
-    buttonAlpha: Float
+    buttonAlpha: Float,
+    onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .bottomBarPadding()
             .background(color = MaterialTheme.colors.secondaryVariant),
         topBar = {
             TopBar(
