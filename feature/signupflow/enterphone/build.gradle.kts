@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.library.auth)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
@@ -25,7 +26,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.amplify.core)
-    implementation(libs.amplify.aws.auth.cognito)
+    // implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

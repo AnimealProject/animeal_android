@@ -8,7 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
-import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
+import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
-    private val repository: EnterPhoneRepository,
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
+    private val savePhoneNumberUseCase: SavePhoneNumberUseCase,
 ) : ViewModel(),
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState()),
     EventDelegate<EnterPhoneViewModel.Event> by DefaultEventDelegate() {
@@ -55,13 +55,22 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun savePhoneNumberAndNavigateNext(phoneNumber: String) {
         viewModelScope.launch {
-            repository.savePhoneNumber(phoneNumber)
-            if (repository.isPhoneNumberSaved()) {
-                updateError(false)
-                sendEvent(Event.NavigateToEnterCode)
-            } else {
-                updateError(true)
-            }
+            savePhoneNumberUseCase(
+                phoneNumber = phoneNumber,
+                onSuccess = {
+                    updateError(false)
+                    navigateToEnterCode()
+                },
+                onError = {
+                    updateError(true)
+                }
+            )
+        }
+    }
+
+    private fun navigateToEnterCode() {
+        viewModelScope.launch {
+            sendEvent(Event.NavigateToEnterCode)
         }
     }
 

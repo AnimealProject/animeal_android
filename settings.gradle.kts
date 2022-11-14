@@ -73,5 +73,6 @@ include(":library:foundation")
 include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
+include(":library:auth")
 
 include(":shared:feature:profile")

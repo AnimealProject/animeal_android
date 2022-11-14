@@ -3,20 +3,16 @@ package com.epmedu.animeal.signup.enterphone.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.amplifyframework.auth.AuthException.UsernameExistsException
-import com.amplifyframework.auth.AuthUserAttribute
-import com.amplifyframework.auth.AuthUserAttributeKey
-import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
-import com.amplifyframework.auth.cognito.options.AuthFlowType
-import com.amplifyframework.auth.options.AuthSignUpOptions
-import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class EnterPhoneRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val authAPI: AuthAPI,
 ) : EnterPhoneRepository {
 
     override suspend fun savePhoneNumber(phoneNumber: String) {
@@ -32,56 +28,18 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
             }.first().isNullOrEmpty()
     }
 
-    override fun signUpAndSignIn(
+    override fun signUp(
         phone: String,
         password: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit,
+        requestHandler: AuthRequestHandler
     ) {
-        val attrs = mapOf(
-            AuthUserAttributeKey.phoneNumber() to phone,
-        )
-
-        val options = AuthSignUpOptions.builder()
-            .userAttributes(attrs.map { AuthUserAttribute(it.key, it.value) })
-            .build()
-
-        Amplify.Auth.signUp(
-            phone,
-            password,
-            options,
-            {
-                signIn(phone, onSuccess, onError)
-            },
-            { error ->
-                if (error is UsernameExistsException) {
-                    signIn(phone, onSuccess, onError)
-                } else {
-                    onError()
-                }
-            }
-        )
+        authAPI.signUp(phone, password, requestHandler)
     }
 
     override fun signIn(
         phoneNumber: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit,
+        requestHandler: AuthRequestHandler,
     ) {
-        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
-            .authFlowType(AuthFlowType.CUSTOM_AUTH)
-            .build()
-
-        Amplify.Auth.signIn(
-            phoneNumber,
-            "",
-            authSignInOptions,
-            {
-                onSuccess()
-            },
-            {
-                onError()
-            }
-        )
+        authAPI.signIn(phoneNumber, requestHandler)
     }
 }

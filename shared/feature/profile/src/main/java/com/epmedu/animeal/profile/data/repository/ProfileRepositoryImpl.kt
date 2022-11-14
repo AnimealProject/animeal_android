@@ -44,7 +44,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun logOut(
+    override suspend fun logOut(
         onSuccess: () -> Unit,
         onError: () -> Unit
     ) {

@@ -2,13 +2,14 @@ package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
-import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,9 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
-    private val repository: EnterCodeRepository,
     private val sendCodeUseCase: SendCodeUseCase,
     private val confirmCodeUseCase: ConfirmCodeUseCase,
+    private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
 ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
@@ -33,8 +34,19 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private var lastCode: List<Int?> = emptyCode()
 
+    private val confirmCodeRequestHandler = object : AuthRequestHandler {
+        override fun onSuccess(result: Any?) {
+            updateState { copy(isError = false) }
+            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+        }
+
+        override fun onError(exception: Exception) {
+            updateState { copy(isError = true) }
+        }
+    }
+
     private suspend fun getPhoneNumber() {
-        repository.phoneNumber.collect { updateState { copy(phoneNumber = it) } }
+        getPhoneNumberUseCase().collect { updateState { copy(phoneNumber = it) } }
     }
 
     private suspend fun launchResendTimer() {
@@ -94,16 +106,7 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmCode() {
         viewModelScope.launch {
-            confirmCodeUseCase(
-                state.code,
-                {
-                    updateState { copy(isError = false) }
-                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
-                },
-                {
-                    updateState { copy(isError = true) }
-                }
-            )
+            confirmCodeUseCase(state.code, confirmCodeRequestHandler)
         }
     }
 
