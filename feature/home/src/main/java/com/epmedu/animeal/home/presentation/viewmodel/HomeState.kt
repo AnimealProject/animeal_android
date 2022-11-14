@@ -1,6 +1,5 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
-import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -8,6 +7,8 @@ import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.mapbox.maps.Style
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
     val currentLocation: MapLocation = MapLocation.Tbilisi,
@@ -16,7 +17,7 @@ data class HomeState(
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
-    val feedingPoints: StableList<FeedingPointModel> = StableList(emptyList()),
+    val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val willFeedState: WillFeedState = WillFeedState(),
     val isInitialGeolocationPermissionAsked: Boolean = false,
 )
