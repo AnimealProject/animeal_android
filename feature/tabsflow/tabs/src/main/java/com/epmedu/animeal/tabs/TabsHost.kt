@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.favourites.FavouritesScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
@@ -33,7 +34,7 @@ fun TabsHost() {
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility
     }
-    val onNavigate: (NavigationTab.Route) -> Unit = { route ->
+    val onNavigate: (TabsRoute) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
                 popUpTo(route) { saveState = true }
@@ -81,10 +82,10 @@ private fun NavigationTabs(navigationController: NavHostController) {
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
-        screen(NavigationTab.Search.route.name) { SearchScreen() }
-        screen(NavigationTab.Favorites.route.name) { FavouritesScreen() }
-        screen(NavigationTab.Home.route.name) { HomeScreen() }
-        screen(NavigationTab.Analytics.route.name) { AnalyticsScreen() }
-        screen(NavigationTab.More.route.name) { MoreHost() }
+        screen(TabsRoute.Search.name) { SearchScreen() }
+        screen(TabsRoute.Favourites.name) { FavouritesScreen() }
+        screen(TabsRoute.Home.name) { HomeScreen() }
+        screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
+        screen(TabsRoute.More.name) { MoreHost() }
     }
 }

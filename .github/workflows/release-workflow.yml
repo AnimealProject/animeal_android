@@ -9,6 +9,10 @@ on:
 
   workflow_dispatch:
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
   KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -100,16 +104,7 @@ jobs:
           serviceCredentialsFile: service_account.json
           groups: qa_team
           file: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-     
-      - name: Create release Tag
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          tag: v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          name: Release v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          token: ${{ secrets.GITHUB_TOKEN }}
       
-
       - name: Commit files
         run: |
           git config --local user.email "egorikftp@gmail.com"
@@ -121,3 +116,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
+      - name: Create release Tag
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app/build/outputs/apk/release/app-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}

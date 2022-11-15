@@ -1,10 +1,10 @@
 package com.epmedu.animeal.signup.entercode.presentation.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.epmedu.animeal.foundation.input.CustomPaddingOutlinedTextField
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
@@ -26,7 +27,7 @@ internal fun DigitField(
     modifier: Modifier = Modifier,
     isError: Boolean = false
 ) {
-    OutlinedTextField(
+    CustomPaddingOutlinedTextField(
         value = digit?.toString() ?: "",
         onValueChange = { value ->
             when {
@@ -34,15 +35,17 @@ internal fun DigitField(
                 value.isEmpty() -> onDigitRemove()
             }
         },
-        modifier = modifier.size(width = 50.dp, height = 54.dp),
-        textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
+        modifier = modifier.size(width = 49.dp, height = 53.dp),
+        textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
         isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = LocalContentColor.current,
             focusedBorderColor = Color.Gray
-        )
+        ),
+        shape = RoundedCornerShape(8.dp),
+        customPadding = 8.dp
     )
 }
 

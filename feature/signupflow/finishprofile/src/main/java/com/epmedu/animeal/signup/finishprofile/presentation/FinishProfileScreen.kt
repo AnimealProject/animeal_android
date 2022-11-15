@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
+import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.epmedu.animeal.navigation.route.SignUpRoute
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel

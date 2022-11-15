@@ -15,6 +15,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapLocation
+import com.epmedu.animeal.home.presentation.model.WillFeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,13 +34,15 @@ class HomeViewModel @Inject constructor(
         initialize()
         fetchLocationUpdates()
         fetchFeedingPoints()
-        fetchGpsSettingsUpdates()
+        // fetchGpsSettingsUpdates()
     }
 
     fun handleEvents(event: HomeScreenEvent) = when (event) {
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
         is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
+        is HomeScreenEvent.ShowWillFeedDialog -> showWillFeedDialog()
+        is HomeScreenEvent.DismissWillFeedDialog -> dismissWillFeedDialog()
     }
 
     private fun initialize() {
@@ -59,12 +62,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchGpsSettingsUpdates() {
+    /*private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
             // TODO: Fix crash
             // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
-    }
+    }*/
 
     @Suppress("UnusedPrivateMember")
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
@@ -108,5 +111,13 @@ class HomeViewModel @Inject constructor(
                 currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
             )
         }
+    }
+
+    private fun showWillFeedDialog() {
+        updateState { copy(willFeedState = WillFeedState(true)) }
+    }
+
+    private fun dismissWillFeedDialog() {
+        updateState { copy(willFeedState = WillFeedState(false)) }
     }
 }

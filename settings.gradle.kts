@@ -76,3 +76,4 @@ include(":library:resources")
 include(":library:auth")
 
 include(":shared:feature:profile")
+include(":shared:feature:feedconfirmation")

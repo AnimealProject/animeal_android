@@ -8,15 +8,19 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.feature.home)
     implementation(projects.feature.tabsflow.analytics)
     implementation(projects.feature.tabsflow.moreflow.host)
     implementation(projects.feature.tabsflow.search)
     implementation(projects.feature.tabsflow.favourites)
+    implementation(projects.shared.feature.feedconfirmation)
 
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.library.common)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

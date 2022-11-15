@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)

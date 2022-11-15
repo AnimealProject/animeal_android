@@ -7,6 +7,7 @@ data class MapUiSettings(
     val scalebar: Boolean = true,
     val userLocationOnMap: Boolean = true,
     val locationPulsing: Boolean = true,
+    val compassEnabled: Boolean = false
 )
 
 @Composable

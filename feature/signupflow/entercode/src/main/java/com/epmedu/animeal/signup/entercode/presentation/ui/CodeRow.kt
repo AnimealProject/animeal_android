@@ -50,14 +50,14 @@ private fun CodeRowPreview() {
     AnimealTheme {
         Column {
             CodeRow(
-                code = listOf(1, 2, null, null),
+                code = listOf(1, 2, null, null, null, null),
                 focusRequester = FocusRequester(),
                 onDigitChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp)
             )
             Divider()
             CodeRow(
-                code = listOf(1, 2, 3, 9),
+                code = listOf(1, 2, 3, 9, 5, 7),
                 focusRequester = FocusRequester(),
                 onDigitChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp),
