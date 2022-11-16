@@ -5,5 +5,5 @@ internal sealed class FavouritesScreenEvent(open val id: Int = -1) {
     data class FeedSpotChanged(override val id: Int, val isFavorite: Boolean) :
         FavouritesScreenEvent(id)
     data class ShowWillFeedDialog(override val id: Int) : FavouritesScreenEvent(id)
-    object DismissWillFeedDialog: FavouritesScreenEvent(0)
+    object DismissWillFeedDialog : FavouritesScreenEvent(0)
 }
