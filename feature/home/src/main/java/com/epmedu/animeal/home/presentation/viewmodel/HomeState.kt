@@ -5,7 +5,6 @@ import com.epmedu.animeal.feeding.data.model.FeedingPoint
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.mapbox.maps.Style
 
