@@ -18,6 +18,10 @@ import com.epmedu.animeal.foundation.dialog.bottomsheet.FeedingPointActionButton
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetLayout
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetState
 import com.epmedu.animeal.foundation.dialog.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
+import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
+import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
@@ -31,7 +35,7 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
@@ -39,6 +43,10 @@ internal fun HomeScreenUI(
 
     BackHandler(enabled = bottomSheetState.isVisible) {
         scope.launch { bottomSheetState.hide() }
+    }
+
+    BackHandler(enabled = state.willFeedState.isDialogShowing) {
+        scope.launch { onScreenEvent(DismissWillFeedDialog) }
     }
 
     CheckLocationPermission {
@@ -60,7 +68,7 @@ internal fun HomeScreenUI(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
-                    onClick = {}
+                    onClick = { onScreenEvent(ShowWillFeedDialog) }
                 )
             }
         ) {
@@ -71,6 +79,8 @@ internal fun HomeScreenUI(
             )
         }
     }
+
+    WillFeedConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -99,6 +109,16 @@ private fun MapContent(
                 )
                 .align(alignment = Alignment.BottomEnd),
             onClick = onGeolocationClick
+        )
+    }
+}
+
+@Composable
+private fun WillFeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
+    if (state.willFeedState.isDialogShowing) {
+        FeedConfirmationDialog(
+            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
+            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
         )
     }
 }

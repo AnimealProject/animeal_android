@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
@@ -14,7 +15,7 @@ import com.epmedu.animeal.tabs.NavigationTab
 @Composable
 internal fun BottomNavigationBar(
     currentRoute: String?,
-    onNavigate: (NavigationTab.Route) -> Unit
+    onNavigate: (TabsRoute) -> Unit
 ) {
     val items = listOf(
         NavigationTab.Search,
