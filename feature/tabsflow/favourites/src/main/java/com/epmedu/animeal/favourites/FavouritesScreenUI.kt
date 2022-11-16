@@ -86,7 +86,7 @@ private fun ScreenScaffold(
                             feedingPoint
                         ),
                         contentAlpha = contentAlpha,
-                        showOnMap = true,
+                        isShowOnMapVisible = true,
                         onFavouriteChange = { selected ->
                             onEvent(
                                 FavouritesScreenEvent.FeedSpotChanged(

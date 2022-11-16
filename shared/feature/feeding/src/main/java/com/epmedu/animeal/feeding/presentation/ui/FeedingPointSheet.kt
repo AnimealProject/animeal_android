@@ -35,7 +35,7 @@ import com.mapbox.geojson.Point
 fun FeedingPointSheetContent(
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
-    showOnMap: Boolean = false,
+    isShowOnMapVisible: Boolean = false,
     onFavouriteChange: (Boolean) -> Unit
 ) {
     Column(
@@ -70,7 +70,7 @@ fun FeedingPointSheetContent(
             lastFeedTime = feedingPoint.lastFeeder.time,
             scrimAlpha = contentAlpha
         )
-        if (showOnMap) {
+        if (isShowOnMapVisible) {
             ShowOnMapLink()
         }
     }
@@ -267,7 +267,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
-            showOnMap = true,
+            isShowOnMapVisible = true,
             onFavouriteChange = {}
         )
     }
