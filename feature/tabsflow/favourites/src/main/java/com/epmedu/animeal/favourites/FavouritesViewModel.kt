@@ -33,6 +33,12 @@ internal class FavouritesViewModel @Inject constructor(
             is FavouritesScreenEvent.FeedSpotSelected -> {
                 updateState { copy(showingFeedSpot = favourites.first { it.id == event.id }) }
             }
+            FavouritesScreenEvent.DismissWillFeedDialog -> {
+                updateState { copy(showingWillFeedDialog = false) }
+            }
+            is FavouritesScreenEvent.ShowWillFeedDialog -> {
+                updateState { copy(showingWillFeedDialog = true) }
+            }
         }
         viewModelScope.launch { sendEvent(event) }
     }

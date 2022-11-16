@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.favourites.ui.FavouriteFeedingPointItem
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.data.model.Feeder
 import com.epmedu.animeal.feeding.data.model.FeedingPoint
 import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
@@ -102,13 +103,14 @@ private fun ScreenScaffold(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
-                    onClick = {},
+                    onClick = { onEvent(FavouritesScreenEvent.ShowWillFeedDialog(state.showingFeedSpot!!.id)) },
                 )
             }
         ) {
             ScreenContent(state, padding, onEvent)
         }
     }
+    WillFeedConfirmationDialog(state, onEvent)
 }
 
 @Composable
@@ -173,6 +175,16 @@ private fun FavouritesList(
                 )
             }
         }
+    }
+}
+
+@Composable
+internal fun WillFeedConfirmationDialog(state: FavouritesState, onEvent: (FavouritesScreenEvent) -> Unit) {
+    if (state.showingWillFeedDialog) {
+        FeedConfirmationDialog(
+            onAgreeClick = { onEvent(FavouritesScreenEvent.DismissWillFeedDialog) },
+            onCancelClick = { onEvent(FavouritesScreenEvent.DismissWillFeedDialog) }
+        )
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.data.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
@@ -18,10 +19,6 @@ import com.epmedu.animeal.foundation.dialog.bottomsheet.FeedingPointActionButton
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetLayout
 import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetState
 import com.epmedu.animeal.foundation.dialog.bottomsheet.contentAlphaButtonAlpha
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
-import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
-import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
-import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*

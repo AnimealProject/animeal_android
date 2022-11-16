@@ -33,6 +33,9 @@ fun FavouritesScreen() {
                 is FavouritesScreenEvent.FeedSpotChanged -> {
                     bottomSheetState.hide()
                 }
+                else -> {
+                    // do nothing
+                }
             }
         }
     }
