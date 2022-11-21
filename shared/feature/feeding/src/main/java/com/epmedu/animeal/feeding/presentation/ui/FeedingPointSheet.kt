@@ -71,11 +71,11 @@ fun FeedingPointSheetContent(
             lastFeedTime = feedingPoint.lastFeeder.time,
             scrimAlpha = contentAlpha
         )
-        if (expandToFullScreen) {
-            Spacer(modifier = Modifier.weight(1.0f))
-        }
         if (isShowOnMapVisible) {
             ShowOnMapLink()
+        }
+        if (expandToFullScreen) {
+            Spacer(modifier = Modifier.weight(1.0f))
         }
     }
 }
