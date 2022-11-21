@@ -66,50 +66,55 @@ private fun ScreenScaffold(
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.secondaryVariant),
-        topBar = {
-            TopBar(
-                title = stringResource(id = R.string.favourites),
-                modifier = Modifier.statusBarsPadding()
-            )
-        }
-    ) { padding ->
-        HomeBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-            sheetContent = {
-                state.showingFeedSpot?.let { feedingPoint ->
-                    FeedingPointSheetContent(
-                        feedingPoint = FeedingPointModel(
-                            feedingPoint
-                        ),
-                        contentAlpha = contentAlpha,
-                        isShowOnMapVisible = true,
-                        onFavouriteChange = { selected ->
-                            onEvent(
-                                FavouritesScreenEvent.FeedSpotChanged(
-                                    feedingPoint.id,
-                                    isFavorite = selected,
-                                )
+
+    HomeBottomSheetLayout(
+        modifier = Modifier.statusBarsPadding(),
+        sheetState = bottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        isShownStateEnabled = false,
+        sheetContent = {
+            state.showingFeedSpot?.let { feedingPoint ->
+                FeedingPointSheetContent(
+                    feedingPoint = FeedingPointModel(
+                        feedingPoint
+                    ),
+                    contentAlpha = contentAlpha,
+                    expandToFullScreen = true,
+                    isShowOnMapVisible = true,
+                    onFavouriteChange = { selected ->
+                        onEvent(
+                            FavouritesScreenEvent.FeedSpotChanged(
+                                feedingPoint.id,
+                                isFavorite = selected,
                             )
-                        }
-                    )
-                }
-            },
-            sheetControls = {
-                FeedingPointActionButton(
-                    alpha = buttonAlpha,
-                    enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
-                    onClick = { onEvent(FavouritesScreenEvent.ShowWillFeedDialog(state.showingFeedSpot!!.id)) },
+                        )
+                    }
                 )
             }
-        ) {
+        },
+        sheetControls = {
+            FeedingPointActionButton(
+                alpha = buttonAlpha,
+                enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
+                onClick = { onEvent(FavouritesScreenEvent.ShowWillFeedDialog(state.showingFeedSpot!!.id)) },
+            )
+        }
+    ) {
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colors.secondaryVariant),
+            topBar = {
+                TopBar(
+                    title = stringResource(id = R.string.favourites),
+                    modifier = Modifier.statusBarsPadding()
+                )
+            }
+        ) { padding ->
             ScreenContent(state, padding, onEvent)
         }
     }
+
     WillFeedConfirmationDialog(state, onEvent)
 }
 

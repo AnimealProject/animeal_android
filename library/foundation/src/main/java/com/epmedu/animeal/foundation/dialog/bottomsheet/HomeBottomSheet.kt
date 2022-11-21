@@ -119,6 +119,7 @@ fun HomeBottomSheetLayout(
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
+    isShownStateEnabled: Boolean = true,
     sheetContent: @Composable ColumnScope.() -> Unit,
     sheetControls: @Composable () -> Unit,
     content: @Composable () -> Unit
@@ -138,7 +139,13 @@ fun HomeBottomSheetLayout(
                 .offset {
                     IntOffset(0, sheetState.offset.value.roundToInt())
                 }
-                .bottomSheetSwipeable(sheetState, fullHeight, shownHeight, sheetHeightState)
+                .bottomSheetSwipeable(
+                    sheetState,
+                    fullHeight,
+                    shownHeight,
+                    sheetHeightState,
+                    isShownStateEnabled
+                )
                 .onGloballyPositioned {
                     sheetHeightState.value = it.size.height.toFloat()
                 }
@@ -191,15 +198,24 @@ private fun Modifier.bottomSheetSwipeable(
     sheetState: HomeBottomSheetState,
     fullHeight: Float,
     shownHeight: Float,
-    sheetHeightState: State<Float?>
+    sheetHeightState: State<Float?>,
+    isShownStateEnabled: Boolean
 ): Modifier {
     val sheetHeight = sheetHeightState.value
     val modifier = if (sheetHeight != null) {
-        val anchors = mapOf(
-            fullHeight to Hidden,
-            shownHeight to Shown,
-            max(0f, fullHeight - sheetHeight) to Expanded
-        )
+
+        val anchors = if (isShownStateEnabled) {
+            mapOf(
+                fullHeight to Hidden,
+                shownHeight to Shown,
+                max(0f, fullHeight - sheetHeight) to Expanded
+            )
+        } else {
+            mapOf(
+                fullHeight to Hidden,
+                max(0f, fullHeight - sheetHeight) to Expanded
+            )
+        }
 
         Modifier.swipeable(
             state = sheetState,

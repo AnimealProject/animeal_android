@@ -27,7 +27,7 @@ fun FavouritesScreen() {
             when (it) {
                 is FavouritesScreenEvent.FeedSpotSelected -> {
                     launch {
-                        if (bottomSheetState.isHidden) bottomSheetState.show()
+                        if (bottomSheetState.isHidden) bottomSheetState.expand()
                     }
                 }
                 is FavouritesScreenEvent.FeedSpotChanged -> {
