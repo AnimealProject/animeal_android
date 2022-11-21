@@ -5,8 +5,19 @@ import com.epmedu.animeal.splash.data.SplashRepository
 
 class FetchUserSessionUseCase(private val repository: SplashRepository) {
     operator fun invoke(
-        authRequestHandler: AuthRequestHandler
+        onSuccess: (result: Any?) -> Unit,
+        onError: (exception: Exception) -> Unit,
     ) {
-        repository.fetchSession(authRequestHandler)
+        val handler = object : AuthRequestHandler {
+            override fun onSuccess(result: Any?) {
+                onSuccess(result)
+            }
+
+            override fun onError(exception: Exception) {
+                onError(exception)
+            }
+        }
+
+        repository.fetchSession(handler)
     }
 }

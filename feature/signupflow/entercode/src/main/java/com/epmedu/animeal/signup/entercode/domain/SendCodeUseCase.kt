@@ -10,7 +10,7 @@ class SendCodeUseCase(private val repository: EnterCodeRepository) {
         onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
-        val result = object : AuthRequestHandler {
+        val handler = object : AuthRequestHandler {
             override fun onSuccess(result: Any?) {
                 onSuccess()
             }
@@ -19,6 +19,6 @@ class SendCodeUseCase(private val repository: EnterCodeRepository) {
                 onError()
             }
         }
-        repository.sendCode(phoneNumber, result)
+        repository.sendCode(phoneNumber, handler)
     }
 }

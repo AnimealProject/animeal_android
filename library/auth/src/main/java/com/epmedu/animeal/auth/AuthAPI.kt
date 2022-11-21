@@ -11,7 +11,7 @@ class AuthAPI {
     fun signUp(
         phone: String,
         password: String,
-        handler: AuthRequestHandler
+        handler: AuthRequestHandler,
     ) {
         val attrs = mapOf(
             AuthUserAttributeKey.phoneNumber() to phone,
@@ -25,12 +25,8 @@ class AuthAPI {
             phone,
             password,
             options,
-            {
-                handler.onSuccess()
-            },
-            { error ->
-                handler.onError(error)
-            }
+            handler::onSuccess,
+            handler::onError,
         )
     }
 
@@ -46,12 +42,8 @@ class AuthAPI {
             phoneNumber,
             "",
             authSignInOptions,
-            {
-                handler.onSuccess()
-            },
-            {
-                handler.onError(it)
-            }
+            handler::onSuccess,
+            handler::onError,
         )
     }
 
@@ -61,18 +53,14 @@ class AuthAPI {
     ) {
         Amplify.Auth.confirmSignIn(
             code,
-            {
-                handler.onSuccess()
-            },
-            { error ->
-                handler.onError(error)
-            }
+            handler::onSuccess,
+            handler::onError,
         )
     }
 
     fun sendCode(
         phoneNumber: String,
-        handler: AuthRequestHandler
+        handler: AuthRequestHandler,
     ) {
         signIn(phoneNumber, handler)
     }
@@ -81,12 +69,17 @@ class AuthAPI {
         handler: AuthRequestHandler
     ) {
         Amplify.Auth.fetchAuthSession(
-            { session ->
-                handler.onSuccess(session)
-            },
-            { error ->
-                handler.onError(error)
-            }
+            handler::onSuccess,
+            handler::onError,
+        )
+    }
+
+    fun signOut(
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.signOut(
+            handler::onSuccess,
+            handler::onError,
         )
     }
 }

@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
+    implementation(projects.library.auth)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)

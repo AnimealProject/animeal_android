@@ -1,5 +1,6 @@
 package com.epmedu.animeal.profile.domain
 
+import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,12 +11,19 @@ class LogOutUseCase(private val repository: ProfileRepository) {
 
     suspend operator fun invoke(
         onSuccess: () -> Unit,
-        onError: () -> Unit
+        onError: (exception: Exception) -> Unit
     ) {
-        repository.logOut(
-            onSuccess = { clearProfileAfterLogOut(onSuccess) },
-            onError = onError,
-        )
+        val requestHandler = object : AuthRequestHandler {
+            override fun onSuccess(result: Any?) {
+                clearProfileAfterLogOut(onSuccess)
+            }
+
+            override fun onError(exception: Exception) {
+                onError(exception)
+            }
+        }
+
+        repository.logOut(requestHandler)
     }
 
     private fun clearProfileAfterLogOut(onSuccess: () -> Unit) {

@@ -6,8 +6,19 @@ import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 class ConfirmCodeUseCase(private val repository: EnterCodeRepository) {
     operator fun invoke(
         code: List<Int?>,
-        requestHandler: AuthRequestHandler
+        onSuccess: () -> Unit,
+        onError: (exception: Exception) -> Unit,
     ) {
+        val requestHandler = object : AuthRequestHandler {
+            override fun onSuccess(result: Any?) {
+                onSuccess()
+            }
+
+            override fun onError(exception: Exception) {
+                onError(exception)
+            }
+        }
+
         repository.confirmCode(code, requestHandler)
     }
 }

@@ -2,6 +2,7 @@ package com.epmedu.animeal.profile.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
@@ -31,9 +32,10 @@ internal object ProfileModule {
     @ViewModelScoped
     @Provides
     fun provideProfileRepository(
-        dataStore: DataStore<Preferences>
+        dataStore: DataStore<Preferences>,
+        authAPI: AuthAPI,
     ): ProfileRepository =
-        ProfileRepositoryImpl(dataStore)
+        ProfileRepositoryImpl(dataStore, authAPI)
 
     @ViewModelScoped
     @Provides

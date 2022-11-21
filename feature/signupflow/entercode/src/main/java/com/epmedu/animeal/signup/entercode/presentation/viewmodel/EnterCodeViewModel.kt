@@ -2,7 +2,6 @@ package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -33,17 +32,6 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private var lastCode: List<Int?> = emptyCode()
-
-    private val confirmCodeRequestHandler = object : AuthRequestHandler {
-        override fun onSuccess(result: Any?) {
-            updateState { copy(isError = false) }
-            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
-        }
-
-        override fun onError(exception: Exception) {
-            updateState { copy(isError = true) }
-        }
-    }
 
     private suspend fun getPhoneNumber() {
         getPhoneNumberUseCase().collect { updateState { copy(phoneNumber = it) } }
@@ -106,7 +94,16 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmCode() {
         viewModelScope.launch {
-            confirmCodeUseCase(state.code, confirmCodeRequestHandler)
+            confirmCodeUseCase(
+                code = state.code,
+                onSuccess = {
+                    updateState { copy(isError = false) }
+                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+                },
+                onError = {
+                    updateState { copy(isError = true) }
+                },
+            )
         }
     }
 
