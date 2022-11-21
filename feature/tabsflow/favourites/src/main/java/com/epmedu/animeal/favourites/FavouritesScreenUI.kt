@@ -66,7 +66,6 @@ private fun ScreenScaffold(
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-
     HomeBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
         sheetState = bottomSheetState,

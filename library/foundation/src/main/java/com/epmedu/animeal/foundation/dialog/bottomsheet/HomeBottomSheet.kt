@@ -203,7 +203,6 @@ private fun Modifier.bottomSheetSwipeable(
 ): Modifier {
     val sheetHeight = sheetHeightState.value
     val modifier = if (sheetHeight != null) {
-
         val anchors = if (isShownStateEnabled) {
             mapOf(
                 fullHeight to Hidden,
