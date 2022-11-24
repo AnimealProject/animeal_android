@@ -236,7 +236,7 @@ fun HomeBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
     LaunchedEffect(progress) {
-        val showBottomBar = if (isShowing) false else isHidden
+        val showBottomBar = if (isShowing || isExpanding) false else isHidden
 
         changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
     }
