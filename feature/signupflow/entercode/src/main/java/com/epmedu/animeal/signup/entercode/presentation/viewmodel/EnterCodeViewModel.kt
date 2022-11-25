@@ -6,7 +6,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
@@ -107,9 +106,8 @@ internal class EnterCodeViewModel @Inject constructor(
         }
     }
 
-    private fun sendCode() {
-        val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
-        sendCodeUseCase(phoneNumber, {}, {})
+    private suspend fun sendCode() {
+        sendCodeUseCase({}, {})
     }
 
     companion object {
