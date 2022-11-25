@@ -11,6 +11,7 @@ import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
+import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
@@ -26,6 +27,7 @@ class HomeViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider,
     private val locationProvider: LocationProvider,
     private val gpsSettingsProvider: GpsSettingsProvider,
+    private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
 ) : ViewModel(),
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
     EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
@@ -49,7 +51,8 @@ class HomeViewModel @Inject constructor(
         updateState {
             copy(
                 mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
-                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI
+                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI,
+                isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase()
             )
         }
     }
