@@ -36,7 +36,7 @@ internal fun HomeScreenUI(
 ) {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
-    LaunchedEffect(bottomSheetState.progress) {
+    LaunchedEffect(bottomSheetState.progress, bottomSheetState.currentValue) {
         val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
 
         changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
