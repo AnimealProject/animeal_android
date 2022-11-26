@@ -6,8 +6,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.splash.SplashScreenEvent.NavigateToHome
-import com.epmedu.animeal.splash.SplashScreenEvent.NavigateToOnboarding
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToHome
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToOnboarding
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashViewModel
 
 @Composable
 fun SplashScreen() {
