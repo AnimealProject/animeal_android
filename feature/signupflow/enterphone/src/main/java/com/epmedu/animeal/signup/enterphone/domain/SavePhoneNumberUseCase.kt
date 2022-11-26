@@ -1,6 +1,8 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.withContext
 
 class SavePhoneNumberUseCase(private val repository: EnterPhoneRepository) {
     suspend operator fun invoke(
@@ -8,11 +10,13 @@ class SavePhoneNumberUseCase(private val repository: EnterPhoneRepository) {
         onSuccess: () -> Unit,
         onError: () -> Unit,
     ) {
-        repository.savePhoneNumber(phoneNumber)
-        if (repository.isPhoneNumberSaved()) {
+        withContext(
+            CoroutineExceptionHandler { _, _ ->
+                onError()
+            }
+        ) {
+            repository.savePhoneNumber(phoneNumber)
             onSuccess()
-        } else {
-            onError()
         }
     }
 }

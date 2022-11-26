@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class EnterPhoneRepositoryImpl @Inject constructor(
@@ -19,13 +17,6 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
         dataStore.edit { preferences ->
             preferences[phoneNumberKey] = phoneNumber
         }
-    }
-
-    override suspend fun isPhoneNumberSaved(): Boolean {
-        return !dataStore.data
-            .map { preferences ->
-                preferences[phoneNumberKey]
-            }.first().isNullOrEmpty()
     }
 
     override fun signUp(
