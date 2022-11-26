@@ -12,11 +12,11 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(projects.library.auth)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
-    implementation(projects.library.auth)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
@@ -29,7 +29,4 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-    implementation(libs.amplify.core)
-    implementation(libs.amplify.aws.auth.cognito)
 }
