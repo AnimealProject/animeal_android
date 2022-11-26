@@ -58,9 +58,22 @@ internal class EnterCodeViewModel @Inject constructor(
     private fun navigateToFinishProfileIfCodeIsCorrect() {
         if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
             lastCode = state.code
-            viewModelScope.launch {
-                confirmCode()
-            }
+            confirmCode()
+        }
+    }
+
+    private fun confirmCode() {
+        viewModelScope.launch {
+            confirmCodeUseCase(
+                code = state.code,
+                onSuccess = {
+                    updateState { copy(isError = false) }
+                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+                },
+                onError = {
+                    updateState { copy(isError = true) }
+                },
+            )
         }
     }
 
@@ -85,29 +98,10 @@ internal class EnterCodeViewModel @Inject constructor(
 
     fun resendCode() {
         viewModelScope.launch {
-            sendCode()
             updateState { copy(code = emptyCode(), isResendEnabled = false) }
             launchResendTimer()
+            sendCodeUseCase({}, {})
         }
-    }
-
-    private fun confirmCode() {
-        viewModelScope.launch {
-            confirmCodeUseCase(
-                code = state.code,
-                onSuccess = {
-                    updateState { copy(isError = false) }
-                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
-                },
-                onError = {
-                    updateState { copy(isError = true) }
-                },
-            )
-        }
-    }
-
-    private suspend fun sendCode() {
-        sendCodeUseCase({}, {})
     }
 
     companion object {

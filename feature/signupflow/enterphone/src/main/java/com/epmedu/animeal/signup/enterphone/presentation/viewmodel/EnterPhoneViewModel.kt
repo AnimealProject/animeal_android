@@ -83,13 +83,7 @@ internal class EnterPhoneViewModel @Inject constructor(
     }
 
     private fun updateError(isError: Boolean) {
-        viewModelScope.launch {
-            updateState {
-                copy(
-                    isError = isError
-                )
-            }
-        }
+        updateState { copy(isError = isError) }
     }
 
     sealed interface Event {
