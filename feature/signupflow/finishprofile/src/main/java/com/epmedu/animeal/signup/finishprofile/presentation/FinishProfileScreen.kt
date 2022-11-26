@@ -12,7 +12,9 @@ import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBack
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel
 
@@ -27,9 +29,8 @@ fun FinishProfileScreen() {
         focusRequester.requestFocus()
         viewModel.events.collect {
             when (it) {
-                Saved -> {
-                    navigator.navigateToTabs()
-                }
+                NavigateBack -> navigator.popBackStack(SignUpRoute.EnterPhone.name)
+                Saved -> navigator.navigateToTabs()
             }
         }
     }
@@ -37,12 +38,8 @@ fun FinishProfileScreen() {
     FinishProfileScreenUI(
         state = state,
         focusRequester = focusRequester,
-        onBack = {
-            navigator.popBackStack(SignUpRoute.EnterPhone.name)
-        },
-        onDone = {
-            viewModel.handleScreenEvents(Submit)
-        },
+        onCancel = { viewModel.handleScreenEvents(Cancel) },
+        onDone = { viewModel.handleScreenEvents(Submit) },
         onInputFormEvent = viewModel::handleInputFormEvent
     )
 }

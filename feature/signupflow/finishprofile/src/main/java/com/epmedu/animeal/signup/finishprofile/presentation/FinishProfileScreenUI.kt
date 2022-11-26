@@ -18,7 +18,7 @@ import com.epmedu.animeal.signup.finishprofile.presentation.ui.FinishProfileCont
 internal fun FinishProfileScreenUI(
     state: ProfileState,
     focusRequester: FocusRequester,
-    onBack: () -> Unit,
+    onCancel: () -> Unit,
     onDone: () -> Unit,
     onInputFormEvent: (ProfileInputFormEvent) -> Unit
 ) {
@@ -34,7 +34,7 @@ internal fun FinishProfileScreenUI(
             onDismiss = { showCancellationAlert = false },
             onConfirm = {
                 showCancellationAlert = false
-                onBack()
+                onCancel()
             }
         )
     }
@@ -55,7 +55,7 @@ private fun FinishProfileScreenPreview() {
         FinishProfileScreenUI(
             state = ProfileState(),
             focusRequester = FocusRequester(),
-            onBack = {},
+            onCancel = {},
             onDone = {},
             onInputFormEvent = {}
         )
