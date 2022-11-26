@@ -6,7 +6,7 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
         }
 
     override suspend fun sendCode(requestHandler: AuthRequestHandler) {
-        authAPI.sendCode(phoneNumber.last(), requestHandler)
+        authAPI.sendCode(phoneNumber.first(), requestHandler)
     }
 
     override fun confirmCode(

@@ -97,11 +97,9 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     fun resendCode() {
-        viewModelScope.launch {
-            updateState { copy(code = emptyCode(), isResendEnabled = false) }
-            launchResendTimer()
-            sendCodeUseCase({}, {})
-        }
+        updateState { copy(code = emptyCode(), isResendEnabled = false) }
+        viewModelScope.launch { launchResendTimer() }
+        viewModelScope.launch { sendCodeUseCase({}, {}) }
     }
 
     companion object {
