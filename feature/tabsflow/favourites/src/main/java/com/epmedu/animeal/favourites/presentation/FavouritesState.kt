@@ -1,4 +1,4 @@
-package com.epmedu.animeal.favourites
+package com.epmedu.animeal.favourites.presentation
 
 import com.epmedu.animeal.feeding.data.model.FeedingPoint
 

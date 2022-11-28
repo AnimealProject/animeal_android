@@ -1,4 +1,4 @@
-package com.epmedu.animeal.favourites
+package com.epmedu.animeal.favourites.presentation
 
 internal sealed class FavouritesScreenEvent(open val id: Int = -1) {
     data class FeedSpotSelected(override val id: Int) : FavouritesScreenEvent(id)

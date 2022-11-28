@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.data.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.foundation.dialog.bottomsheet.FeedingPointActionButton
-import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetLayout
-import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetState
+import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetLayout
+import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.dialog.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun HomeScreenUI(
     state: HomeState,
-    bottomSheetState: HomeBottomSheetState,
+    bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -47,7 +47,7 @@ internal fun HomeScreenUI(
     }
 
     CheckLocationPermission {
-        HomeBottomSheetLayout(
+        AnimealBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             sheetContent = {

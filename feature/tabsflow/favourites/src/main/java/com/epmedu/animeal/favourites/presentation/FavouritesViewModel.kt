@@ -1,4 +1,4 @@
-package com.epmedu.animeal.favourites
+package com.epmedu.animeal.favourites.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

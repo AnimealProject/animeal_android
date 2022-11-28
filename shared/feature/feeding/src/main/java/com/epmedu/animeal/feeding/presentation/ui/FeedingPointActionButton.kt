@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.dialog.bottomsheet
+package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

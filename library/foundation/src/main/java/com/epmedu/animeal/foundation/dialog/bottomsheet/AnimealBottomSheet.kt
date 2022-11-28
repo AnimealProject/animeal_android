@@ -23,17 +23,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
-import com.epmedu.animeal.foundation.dialog.bottomsheet.HomeBottomSheetValue.*
+import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetValue.*
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
-class HomeBottomSheetState(
-    initialValue: HomeBottomSheetValue,
+class AnimealBottomSheetState(
+    initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    val confirmStateChange: (HomeBottomSheetValue) -> Boolean = { true }
-) : SwipeableState<HomeBottomSheetValue>(
+    val confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true }
+) : SwipeableState<AnimealBottomSheetValue>(
     initialValue = initialValue,
     animationSpec = animationSpec,
     confirmStateChange = confirmStateChange
@@ -65,11 +65,11 @@ class HomeBottomSheetState(
     companion object {
         fun Saver(
             animationSpec: AnimationSpec<Float>,
-            confirmStateChange: (HomeBottomSheetValue) -> Boolean
-        ): Saver<HomeBottomSheetState, *> = Saver(
+            confirmStateChange: (AnimealBottomSheetValue) -> Boolean
+        ): Saver<AnimealBottomSheetState, *> = Saver(
             save = { it.currentValue },
             restore = {
-                HomeBottomSheetState(
+                AnimealBottomSheetState(
                     initialValue = it,
                     animationSpec = animationSpec,
                     confirmStateChange = confirmStateChange
@@ -79,7 +79,7 @@ class HomeBottomSheetState(
     }
 }
 
-enum class HomeBottomSheetValue {
+enum class AnimealBottomSheetValue {
     Expanded,
     Hidden,
     Shown,
@@ -87,21 +87,21 @@ enum class HomeBottomSheetValue {
 
 @Composable
 @ExperimentalMaterialApi
-fun rememberHomeBottomSheetState(
-    initialValue: HomeBottomSheetValue,
+fun rememberAnimealBottomSheetState(
+    initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    confirmStateChange: (HomeBottomSheetValue) -> Boolean = { true }
-): HomeBottomSheetState {
+    confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true }
+): AnimealBottomSheetState {
     return rememberSaveable(
         initialValue,
         animationSpec,
         confirmStateChange,
-        saver = HomeBottomSheetState.Saver(
+        saver = AnimealBottomSheetState.Saver(
             animationSpec = animationSpec,
             confirmStateChange = confirmStateChange
         )
     ) {
-        HomeBottomSheetState(
+        AnimealBottomSheetState(
             initialValue = initialValue,
             animationSpec = animationSpec,
             confirmStateChange = confirmStateChange
@@ -112,14 +112,14 @@ fun rememberHomeBottomSheetState(
 @Suppress("LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeBottomSheetLayout(
+fun AnimealBottomSheetLayout(
     modifier: Modifier = Modifier,
-    sheetState: HomeBottomSheetState = rememberHomeBottomSheetState(Hidden),
+    sheetState: AnimealBottomSheetState = rememberAnimealBottomSheetState(Hidden),
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
-    isShownStateEnabled: Boolean = true,
+    isHalfExpandedStateEnabled: Boolean = true,
     sheetContent: @Composable ColumnScope.() -> Unit,
     sheetControls: @Composable () -> Unit,
     content: @Composable () -> Unit
@@ -144,7 +144,7 @@ fun HomeBottomSheetLayout(
                     fullHeight,
                     shownHeight,
                     sheetHeightState,
-                    isShownStateEnabled
+                    isHalfExpandedStateEnabled
                 )
                 .onGloballyPositioned {
                     sheetHeightState.value = it.size.height.toFloat()
@@ -195,15 +195,15 @@ fun HomeBottomSheetLayout(
 
 @OptIn(ExperimentalMaterialApi::class)
 private fun Modifier.bottomSheetSwipeable(
-    sheetState: HomeBottomSheetState,
+    sheetState: AnimealBottomSheetState,
     fullHeight: Float,
     shownHeight: Float,
     sheetHeightState: State<Float?>,
-    isShownStateEnabled: Boolean
+    isHalfExpandedStateEnabled: Boolean
 ): Modifier {
     val sheetHeight = sheetHeightState.value
     val modifier = if (sheetHeight != null) {
-        val anchors = if (isShownStateEnabled) {
+        val anchors = if (isHalfExpandedStateEnabled) {
             mapOf(
                 fullHeight to Hidden,
                 shownHeight to Shown,
@@ -232,7 +232,7 @@ private fun Modifier.bottomSheetSwipeable(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
+fun AnimealBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
     LaunchedEffect(progress) {

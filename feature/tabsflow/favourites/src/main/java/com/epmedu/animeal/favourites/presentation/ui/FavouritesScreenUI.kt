@@ -1,4 +1,4 @@
-package com.epmedu.animeal.favourites
+package com.epmedu.animeal.favourites.presentation.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.favourites.ui.FavouriteFeedingPointItem
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
+import com.epmedu.animeal.favourites.presentation.FavouritesState
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.data.model.Feeder
 import com.epmedu.animeal.feeding.data.model.FeedingPoint
@@ -26,6 +27,7 @@ import com.epmedu.animeal.feeding.data.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.foundation.dialog.bottomsheet.*
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -38,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun FavouritesScreenUI(
     state: FavouritesState,
-    bottomSheetState: HomeBottomSheetState,
+    bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -60,17 +62,17 @@ internal fun FavouritesScreenUI(
 
 @Composable
 private fun ScreenScaffold(
-    bottomSheetState: HomeBottomSheetState,
+    bottomSheetState: AnimealBottomSheetState,
     state: FavouritesState,
     contentAlpha: Float,
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-    HomeBottomSheetLayout(
+    AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        isShownStateEnabled = false,
+        isHalfExpandedStateEnabled = false,
         sheetContent = {
             state.showingFeedSpot?.let { feedingPoint ->
                 FeedingPointSheetContent(
@@ -214,7 +216,7 @@ private fun FavouritesScreenPreview() {
                     ),
                 )
             ),
-            rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
+            rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}
     }
 }
@@ -228,7 +230,7 @@ private fun FavouritesScreenEmptyPreview() {
             FavouritesState(
                 emptyList()
             ),
-            rememberHomeBottomSheetState(HomeBottomSheetValue.Hidden)
+            rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}
     }
 }
