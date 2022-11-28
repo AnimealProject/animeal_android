@@ -16,6 +16,14 @@ fun Context.launchAppSettings() {
     startActivity(intent)
 }
 
+// FLAG_ACTIVITY_NEW_TASK is required when we're starting activity from app context
+fun Context.launchGpsSettings() {
+    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    startActivity(intent)
+}
+
 fun Context.drawableCompat(id: Int) = requireNotNull(AppCompatResources.getDrawable(this, id)) {
     "Drawable with $id is null"
 }
