@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 
 @Composable
 fun FeedStatusItem(
@@ -45,16 +45,16 @@ fun FeedStatusItem(
 }
 
 @Composable
-@Preview
-fun FeedStatusItemGreenPreview() {
+@AnimealPreview
+private fun FeedStatusItemGreenPreview() {
     FeedStatusItem(
         status = FeedStatus.GREEN
     )
 }
 
 @Composable
-@Preview
-fun FeedStatusItemRedPreview() {
+@AnimealPreview
+private fun FeedStatusItemRedPreview() {
     FeedStatusItem(
         status = FeedStatus.RED
     )

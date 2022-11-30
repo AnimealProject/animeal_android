@@ -39,7 +39,7 @@ import com.mapbox.geojson.Point
 fun FeedingPointSheetContent(
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     isShowOnMapVisible: Boolean = false,
     onFavouriteChange: (Boolean) -> Unit
 ) {

@@ -44,7 +44,6 @@ internal fun FavouritesScreenUI(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-
     handleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()

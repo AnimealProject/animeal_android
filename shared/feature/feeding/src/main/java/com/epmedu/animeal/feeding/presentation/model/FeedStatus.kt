@@ -16,7 +16,6 @@ enum class FeedStatus(
     RED(R.string.feed_status_red, R.drawable.ic_face_upset, CustomColor.StatusRed);
 }
 
-
 fun AnimalState.toFeedStatus(): FeedStatus =
     when (this) {
         AnimalState.GREEN -> FeedStatus.GREEN

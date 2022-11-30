@@ -28,7 +28,6 @@ internal class FavouritesViewModel @Inject constructor(
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
             is FavouritesScreenEvent.FeedSpotChanged -> {
-
                 val showingFeedSpot = updateShowingFeedSpot(event)
                 val snapshot = updateSnapshot(event)
 
@@ -75,5 +74,4 @@ internal class FavouritesViewModel @Inject constructor(
 
         return snapshot
     }
-
 }
