@@ -235,7 +235,7 @@ private fun Modifier.bottomSheetSwipeable(
 fun AnimealBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
     val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
 
-    LaunchedEffect(progress) {
+    LaunchedEffect(progress, currentValue) {
         val showBottomBar = if (isShowing || isExpanding) false else isHidden
 
         changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))

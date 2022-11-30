@@ -15,5 +15,6 @@ data class HomeState(
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val feedingPoints: StableList<FeedingPointModel> = StableList(emptyList()),
-    val willFeedState: WillFeedState = WillFeedState()
+    val willFeedState: WillFeedState = WillFeedState(),
+    val isInitialGeolocationPermissionAsked: Boolean = false,
 )

@@ -1,6 +1,9 @@
 import java.io.FileInputStream
 import java.util.*
 
+include(":shared:feature:settings")
+
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
