@@ -18,12 +18,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feeding.data.model.Feeder
-import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
-import com.epmedu.animeal.feeding.data.model.enum.Remoteness
+import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
-import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -31,25 +31,29 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
+/**
+ * @param modifier Modifier.fillMaxHeight() to make the dialog full screen,
+ * Modifier.wrapContentHeight() to make the dialog cover a part of the screen
+ */
 @Composable
 fun FeedingPointSheetContent(
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
-    expandToFullScreen: Boolean = false,
+    modifier: Modifier,
     isShowOnMapVisible: Boolean = false,
     onFavouriteChange: (Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
             .background(MaterialTheme.colors.surface)
             .padding(
                 top = 8.dp,
                 bottom = 110.dp,
                 start = 24.dp,
                 end = 24.dp,
-            ),
+            )
+            .then(modifier),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -73,9 +77,6 @@ fun FeedingPointSheetContent(
         )
         if (isShowOnMapVisible) {
             ShowOnMapLink()
-        }
-        if (expandToFullScreen) {
-            Spacer(modifier = Modifier.weight(1.0f))
         }
     }
 }
@@ -114,7 +115,7 @@ internal fun FeedingPointHeader(
                 color = MaterialTheme.colors.onSurface,
                 maxLines = 2,
             )
-            FeedStatus(
+            FeedStatusItem(
                 status = status,
             )
         }
@@ -123,32 +124,6 @@ internal fun FeedingPointHeader(
             selected = isFavourite,
             onChange = onFavouriteChange,
         )
-    }
-}
-
-@Composable
-internal fun FeedStatus(
-    status: FeedStatus
-) {
-    Row(
-        modifier = Modifier.wrapContentSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        CompositionLocalProvider(
-            LocalContentColor provides status.color,
-        ) {
-            Icon(
-                painter = painterResource(status.iconId),
-                contentDescription = null
-            )
-            Text(
-                text = stringResource(status.titleId),
-                style = MaterialTheme.typography.caption,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-            )
-        }
     }
 }
 
@@ -271,6 +246,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
+            modifier = Modifier.fillMaxHeight(),
             isShowOnMapVisible = true,
             onFavouriteChange = {}
         )

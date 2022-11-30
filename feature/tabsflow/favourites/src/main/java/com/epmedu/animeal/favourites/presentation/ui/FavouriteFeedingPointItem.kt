@@ -16,8 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedStatusItem
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
-import com.epmedu.animeal.foundation.common.FeedStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -71,7 +72,7 @@ fun FavouriteFeedingPointItem(
                     color = MaterialTheme.colors.onSurface,
                     maxLines = 2,
                 )
-                FeedStatus(
+                FeedStatusItem(
                     status = status,
                 )
             }

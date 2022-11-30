@@ -1,6 +1,6 @@
-package com.epmedu.animeal.feeding.data
+package com.epmedu.animeal.feeding.domain.repository
 
-import com.epmedu.animeal.feeding.data.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointRepository {

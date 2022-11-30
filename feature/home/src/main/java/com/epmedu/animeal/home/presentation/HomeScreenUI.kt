@@ -1,10 +1,7 @@
 package com.epmedu.animeal.home.presentation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -12,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
-import com.epmedu.animeal.feeding.data.model.enum.AnimalState
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
@@ -55,6 +52,7 @@ internal fun HomeScreenUI(
                     FeedingPointSheetContent(
                         feedingPoint = FeedingPointModel(feedingPoint),
                         contentAlpha = contentAlpha,
+                        modifier = Modifier.wrapContentHeight(),
                         onFavouriteChange = {
                             onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
                         }

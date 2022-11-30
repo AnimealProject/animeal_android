@@ -40,7 +40,7 @@ internal fun EnterCodeScreenUi(
                 }
             )
         }
-    ) { padding ->
+    ) {
         Column(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {

@@ -1,9 +1,9 @@
 package com.epmedu.animeal.favourites.data
 
-import com.epmedu.animeal.feeding.data.model.Feeder
-import com.epmedu.animeal.feeding.data.model.FeedingPoint
-import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
-import com.epmedu.animeal.feeding.data.model.enum.AnimalState
+import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
 import kotlinx.coroutines.flow.Flow

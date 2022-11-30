@@ -1,11 +1,10 @@
 package com.epmedu.animeal.feeding.presentation.model
 
 import androidx.compose.runtime.Stable
-import com.epmedu.animeal.feeding.data.model.Feeder
-import com.epmedu.animeal.feeding.data.model.FeedingPoint
-import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
-import com.epmedu.animeal.feeding.data.model.enum.Remoteness
-import com.epmedu.animeal.foundation.common.FeedStatus
+import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point

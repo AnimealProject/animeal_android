@@ -10,20 +10,19 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
-import com.epmedu.animeal.favourites.presentation.FavouritesState
+import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
-import com.epmedu.animeal.feeding.data.model.Feeder
-import com.epmedu.animeal.feeding.data.model.FeedingPoint
-import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
-import com.epmedu.animeal.feeding.data.model.enum.AnimalState
+import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
@@ -35,6 +34,8 @@ import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,6 +44,9 @@ internal fun FavouritesScreenUI(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
+
+    handleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
+
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
     val scope = rememberCoroutineScope()
@@ -58,6 +62,21 @@ internal fun FavouritesScreenUI(
         buttonAlpha,
         onEvent
     )
+}
+
+@Composable
+private fun handleFeedingPointSheetHiddenState(
+    bottomSheetState: AnimealBottomSheetState,
+    onEvent: (FavouritesScreenEvent) -> Unit
+) {
+    LaunchedEffect(bottomSheetState) {
+        snapshotFlow { bottomSheetState.isHidden }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect {
+                onEvent(FavouritesScreenEvent.FeedingPointSheetHidden)
+            }
+    }
 }
 
 @Composable
@@ -80,7 +99,7 @@ private fun ScreenScaffold(
                         feedingPoint
                     ),
                     contentAlpha = contentAlpha,
-                    expandToFullScreen = true,
+                    modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
                     onFavouriteChange = { selected ->
                         onEvent(
@@ -185,7 +204,10 @@ private fun FavouritesList(
 }
 
 @Composable
-internal fun WillFeedConfirmationDialog(state: FavouritesState, onEvent: (FavouritesScreenEvent) -> Unit) {
+internal fun WillFeedConfirmationDialog(
+    state: FavouritesState,
+    onEvent: (FavouritesScreenEvent) -> Unit
+) {
     if (state.showingWillFeedDialog) {
         FeedConfirmationDialog(
             onAgreeClick = { onEvent(FavouritesScreenEvent.DismissWillFeedDialog) },
@@ -199,22 +221,24 @@ internal fun WillFeedConfirmationDialog(state: FavouritesState, onEvent: (Favour
 @Composable
 private fun FavouritesScreenPreview() {
     val title = "FeedSpot"
+    val favourites = listOf(
+        FeedingPoint(
+            id = 0,
+            title = title,
+            isFavourite = true,
+            animalPriority = AnimalPriority.HIGH,
+            animalStatus = AnimalState.RED,
+            animalType = AnimalType.Dogs,
+            description = "Hungry dog",
+            lastFeeder = Feeder(id = 0, "Fred", "12:00"),
+            location = MapLocation.Tbilisi,
+        ),
+    )
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
-                listOf(
-                    FeedingPoint(
-                        id = 0,
-                        title = title,
-                        isFavourite = true,
-                        animalPriority = AnimalPriority.HIGH,
-                        animalStatus = AnimalState.RED,
-                        animalType = AnimalType.Dogs,
-                        description = "Hungry dog",
-                        lastFeeder = Feeder(id = 0, "Fred", "12:00"),
-                        location = MapLocation.Tbilisi,
-                    ),
-                )
+                favourites = favourites,
+                favouritesSnapshot = favourites,
             ),
             rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}

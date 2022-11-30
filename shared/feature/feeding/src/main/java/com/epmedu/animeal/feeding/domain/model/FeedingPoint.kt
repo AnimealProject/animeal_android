@@ -1,8 +1,8 @@
-package com.epmedu.animeal.feeding.data.model
+package com.epmedu.animeal.feeding.domain.model
 
-import com.epmedu.animeal.feeding.data.model.enum.AnimalPriority
-import com.epmedu.animeal.feeding.data.model.enum.AnimalState
-import com.epmedu.animeal.feeding.data.model.enum.Remoteness
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
 

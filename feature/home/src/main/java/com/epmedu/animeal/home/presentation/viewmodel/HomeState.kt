@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
 import com.epmedu.animeal.extensions.StableList
-import com.epmedu.animeal.feeding.data.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
