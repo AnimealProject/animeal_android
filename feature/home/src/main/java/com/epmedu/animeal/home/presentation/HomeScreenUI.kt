@@ -93,7 +93,8 @@ internal fun HomeScreenUI(
             MapContent(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
-                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) }
+                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) },
+                onMapInteraction = { if (!bottomSheetState.isHiding) scope.launch { bottomSheetState.show() } }
             )
         }
     }
@@ -105,12 +106,14 @@ internal fun HomeScreenUI(
 private fun MapContent(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
-    onGeolocationClick: () -> Unit
+    onGeolocationClick: () -> Unit,
+    onMapInteraction: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(
             state = state,
-            onFeedingPointClick = onFeedingPointSelect
+            onFeedingPointClick = onFeedingPointSelect,
+            onMapInteraction = onMapInteraction
         )
         AnimealSwitch(
             modifier = Modifier
