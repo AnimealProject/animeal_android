@@ -26,9 +26,16 @@ fun EnterPhoneScreen() {
         onBack = navigator::popBackStack,
         onNext = {
             viewModel.savePhoneNumberAndSendCode()
-            navigator.navigate(SignUpRoute.EnterCode.name)
         }
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect {
+            if (it is EnterPhoneViewModel.Event.NavigateToEnterCode) {
+                navigator.navigate(SignUpRoute.EnterCode.name)
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()

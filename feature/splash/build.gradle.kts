@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(projects.library.auth)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
@@ -19,6 +20,8 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(projects.shared.feature.profile)
+
+    implementation(libs.amplify.core)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

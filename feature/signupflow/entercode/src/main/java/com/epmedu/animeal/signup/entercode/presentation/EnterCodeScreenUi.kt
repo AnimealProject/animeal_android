@@ -1,6 +1,10 @@
 package com.epmedu.animeal.signup.entercode.presentation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -40,7 +44,7 @@ internal fun EnterCodeScreenUi(
                 }
             )
         }
-    ) { padding ->
+    ) {
         Column(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {

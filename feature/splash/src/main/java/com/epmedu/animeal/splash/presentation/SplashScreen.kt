@@ -1,10 +1,14 @@
 package com.epmedu.animeal.splash.presentation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToHome
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToOnboarding
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashViewModel
 
 @Composable
 fun SplashScreen() {
@@ -14,14 +18,14 @@ fun SplashScreen() {
     LaunchedEffect(Unit) {
         viewModel.events.collect {
             when (it) {
-                SplashViewModel.Event.NavigateToHome -> {
+                NavigateToHome -> {
                     navigator.navigate(MainRoute.Tabs.name) {
                         popUpTo(MainRoute.Splash.name) {
                             inclusive = true
                         }
                     }
                 }
-                SplashViewModel.Event.NavigateToOnboarding -> {
+                NavigateToOnboarding -> {
                     navigator.navigate(MainRoute.SignUp.name) {
                         popUpTo(MainRoute.Splash.name) {
                             inclusive = true

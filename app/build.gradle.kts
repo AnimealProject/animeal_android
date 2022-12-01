@@ -73,6 +73,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugarJdkLibs)
 
     implementation(libs.amplify.core)
+    implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
