@@ -44,7 +44,7 @@ fun FeedingPointSheetContent(
     onFavouriteChange: (Boolean) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
             .padding(
@@ -52,8 +52,7 @@ fun FeedingPointSheetContent(
                 bottom = 110.dp,
                 start = 24.dp,
                 end = 24.dp,
-            )
-            .then(modifier),
+            ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

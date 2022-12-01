@@ -1,11 +1,10 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 fun FeedStatusItem(
@@ -46,16 +46,17 @@ fun FeedStatusItem(
 
 @Composable
 @AnimealPreview
-private fun FeedStatusItemGreenPreview() {
-    FeedStatusItem(
-        status = FeedStatus.GREEN
-    )
-}
-
-@Composable
-@AnimealPreview
-private fun FeedStatusItemRedPreview() {
-    FeedStatusItem(
-        status = FeedStatus.RED
-    )
+private fun FeedStatusItemPreview() {
+    AnimealTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
+            FeedStatusItem(
+                status = FeedStatus.GREEN
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.RED
+            )
+        }
+    }
 }
