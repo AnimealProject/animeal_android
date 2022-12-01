@@ -17,7 +17,7 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
 
     override val phoneNumber: Flow<String> = dataStore.data
         .map { preferences ->
-            preferences[phoneNumberKey] ?: PHONE_NUMBER_PLACEHOLDER
+            preferences[phoneNumberKey] ?: ""
         }
 
     override suspend fun sendCode(requestHandler: AuthRequestHandler) {
@@ -29,9 +29,5 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
         requestHandler: AuthRequestHandler
     ) {
         authAPI.confirmSignIn(code.joinToString(""), requestHandler)
-    }
-
-    private companion object {
-        const val PHONE_NUMBER_PLACEHOLDER = "+995 558 49-99-69"
     }
 }
