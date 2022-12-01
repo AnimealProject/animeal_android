@@ -48,8 +48,10 @@ fun FeedStatusItem(
 @AnimealPreview
 private fun FeedStatusItemPreview() {
     AnimealTheme {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+        ) {
             FeedStatusItem(
                 status = FeedStatus.GREEN
             )
