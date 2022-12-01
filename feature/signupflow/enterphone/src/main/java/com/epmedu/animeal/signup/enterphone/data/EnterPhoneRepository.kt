@@ -1,6 +1,19 @@
 package com.epmedu.animeal.signup.enterphone.data
 
-internal interface EnterPhoneRepository {
+import com.epmedu.animeal.auth.AuthRequestHandler
 
-    suspend fun savePhoneNumberAndSendCode(phoneNumber: String)
+interface EnterPhoneRepository {
+
+    suspend fun savePhoneNumber(phoneNumber: String)
+
+    fun signUp(
+        phone: String,
+        password: String,
+        requestHandler: AuthRequestHandler,
+    )
+
+    fun signIn(
+        phoneNumber: String,
+        requestHandler: AuthRequestHandler,
+    )
 }

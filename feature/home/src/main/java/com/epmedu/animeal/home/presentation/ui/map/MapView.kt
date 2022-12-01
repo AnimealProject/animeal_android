@@ -6,7 +6,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
@@ -54,3 +57,8 @@ fun MapView.setLocation(location: MapLocation) = getMapboxMap().setCamera(
         .center(Point.fromLngLat(location.longitude, location.latitude))
         .build()
 )
+
+fun MapView.setGesturesListener(onMapInteraction: () -> Unit) =
+    getMapboxMap().addOnCameraChangeListener {
+        onMapInteraction()
+    }

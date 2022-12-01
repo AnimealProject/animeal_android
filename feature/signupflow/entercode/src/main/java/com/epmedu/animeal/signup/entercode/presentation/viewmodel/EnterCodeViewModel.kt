@@ -6,7 +6,9 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
+import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
+import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -15,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
-    private val repository: EnterCodeRepository
+    private val sendCodeUseCase: SendCodeUseCase,
+    private val confirmCodeUseCase: ConfirmCodeUseCase,
+    private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
 ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
@@ -26,8 +30,10 @@ internal class EnterCodeViewModel @Inject constructor(
         viewModelScope.launch { launchCodeValidation() }
     }
 
+    private var lastCode: List<Int?> = emptyCode()
+
     private suspend fun getPhoneNumber() {
-        repository.phoneNumber.collect { updateState { copy(phoneNumber = it) } }
+        getPhoneNumberUseCase().collect { updateState { copy(phoneNumber = it) } }
     }
 
     private suspend fun launchResendTimer() {
@@ -46,20 +52,42 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private fun updateIsError() {
-        updateState { copy(isError = isCodeFilled() && isCodeEquals(CORRECT_CODE).not()) }
+        updateState { copy(isError = isCodeFilled() && state.isError) }
     }
 
     private fun navigateToFinishProfileIfCodeIsCorrect() {
-        if (state.isCodeEquals(CORRECT_CODE)) {
-            viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+        if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
+            lastCode = state.code
+            confirmCode()
         }
     }
 
-    fun changeDigit(position: Int, digit: Int?) {
+    private fun confirmCode() {
+        viewModelScope.launch {
+            confirmCodeUseCase(
+                code = state.code,
+                onSuccess = {
+                    updateState { copy(isError = false) }
+                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+                },
+                onError = {
+                    updateState { copy(isError = true) }
+                },
+            )
+        }
+    }
+
+    fun changeDigit(
+        position: Int,
+        digit: Int?
+    ) {
         updateState { copy(code = getNewCodeWithReplacedDigit(position, digit)) }
     }
 
-    private fun getNewCodeWithReplacedDigit(position: Int, newDigit: Int?): List<Int?> {
+    private fun getNewCodeWithReplacedDigit(
+        position: Int,
+        newDigit: Int?
+    ): List<Int?> {
         return state.code.mapIndexed { index, currentDigit ->
             when (index) {
                 position -> newDigit
@@ -69,21 +97,15 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     fun resendCode() {
-        viewModelScope.launch {
-            clearCodeAndDisableResend()
-            launchResendTimer()
-        }
-    }
-
-    private fun clearCodeAndDisableResend() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
+        viewModelScope.launch { launchResendTimer() }
+        viewModelScope.launch { sendCodeUseCase({}, {}) }
     }
 
     companion object {
         const val RESEND_DELAY = 30L
 
         private const val CODE_SIZE = 6
-        private const val CORRECT_CODE = "111111"
 
         internal fun emptyCode() = List(CODE_SIZE) { null }
     }

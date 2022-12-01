@@ -7,13 +7,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.home.presentation.ui.map.*
+import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
+import com.epmedu.animeal.home.presentation.ui.map.MarkerController
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapUiSettings
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
+import com.epmedu.animeal.home.presentation.ui.map.setGesturesListener
+import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 
 @Composable
 fun MapboxMap(
     state: HomeState,
-    onFeedingPointClick: (point: FeedingPointModel) -> Unit
+    onFeedingPointClick: (point: FeedingPointModel) -> Unit,
+    onMapInteraction: () -> Unit
 ) {
     val mapView = rememberMapViewWithLifecycle(
         mapBoxInitOptions = rememberMapInitOptions(
@@ -37,6 +45,8 @@ fun MapboxMap(
             onFeedingPointClick = onFeedingPointClick
         )
     }
+
+    mapView.setGesturesListener(onMapInteraction = onMapInteraction)
 
     LaunchedEffect(key1 = state.feedingPoints) {
         markerController.drawMarkers(

@@ -1,29 +1,36 @@
 package com.epmedu.animeal.signup.enterphone.data
 
-import androidx.compose.ui.text.AnnotatedString
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation
 import javax.inject.Inject
 
 internal class EnterPhoneRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val authAPI: AuthAPI,
 ) : EnterPhoneRepository {
 
-    override suspend fun savePhoneNumberAndSendCode(phoneNumber: String) {
-        savePhoneNumber(phoneNumber)
-        // TODO: Implement SMS sending
-    }
-
-    private suspend fun savePhoneNumber(phoneNumber: String) {
+    override suspend fun savePhoneNumber(phoneNumber: String) {
         dataStore.edit { preferences ->
-            preferences[phoneNumberKey] = phoneNumber.formatNumber()
+            preferences[phoneNumberKey] = phoneNumber
         }
     }
 
-    private fun String.formatNumber(): String {
-        return PhoneFormatTransformation.filter(AnnotatedString(this)).text.text
+    override fun signUp(
+        phone: String,
+        password: String,
+        requestHandler: AuthRequestHandler
+    ) {
+        authAPI.signUp(phone, password, requestHandler)
+    }
+
+    override fun signIn(
+        phoneNumber: String,
+        requestHandler: AuthRequestHandler,
+    ) {
+        authAPI.signIn(phoneNumber, requestHandler)
     }
 }

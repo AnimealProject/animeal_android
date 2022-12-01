@@ -70,6 +70,7 @@ include(":feature:tabsflow:tabs")
 include(":feature:tabsflow:favourites")
 
 include(":library:analytics")
+include(":library:auth")
 include(":library:common")
 include(":library:extensions")
 include(":library:foundation")
