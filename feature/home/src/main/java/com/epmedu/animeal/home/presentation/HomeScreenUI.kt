@@ -20,6 +20,7 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.home.data.model.enum.AnimalState
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.ui.*
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
+@Suppress("LongMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: HomeBottomSheetState,
@@ -86,7 +88,8 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = { onScreenEvent(ShowWillFeedDialog) }
+                    onClick = { onScreenEvent(ShowWillFeedDialog) },
+                    enabled = state.currentFeedingPoint?.animalStatus != AnimalState.GREEN
                 )
             }
         ) {
@@ -137,13 +140,15 @@ private fun MapContent(
 @Composable
 private fun FeedingPointActionButton(
     alpha: Float,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    enabled: Boolean
 ) {
     AnimealButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp)
             .alpha(alpha),
+        enabled = enabled,
         text = stringResource(R.string.i_will_feed),
         onClick = onClick,
     )
