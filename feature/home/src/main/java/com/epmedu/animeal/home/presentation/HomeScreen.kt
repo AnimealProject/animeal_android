@@ -6,8 +6,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetValue
-import com.epmedu.animeal.foundation.dialog.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
+import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import kotlinx.coroutines.launch

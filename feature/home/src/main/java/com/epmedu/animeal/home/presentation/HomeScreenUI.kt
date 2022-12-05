@@ -13,9 +13,9 @@ import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetLayout
-import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetState
-import com.epmedu.animeal.foundation.dialog.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
+import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*

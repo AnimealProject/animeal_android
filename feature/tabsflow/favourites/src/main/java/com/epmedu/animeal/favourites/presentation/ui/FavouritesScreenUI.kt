@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,10 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.foundation.dialog.bottomsheet.*
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
+import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -215,7 +220,6 @@ internal fun WillFeedConfirmationDialog(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @AnimealPreview
 @Composable
 private fun FavouritesScreenPreview() {
@@ -237,14 +241,12 @@ private fun FavouritesScreenPreview() {
         FavouritesScreenUI(
             FavouritesState(
                 favourites = favourites,
-                favouritesSnapshot = favourites,
             ),
-            rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
         ) {}
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @AnimealPreview
 @Composable
 private fun FavouritesScreenEmptyPreview() {
@@ -253,7 +255,7 @@ private fun FavouritesScreenEmptyPreview() {
             FavouritesState(
                 emptyList()
             ),
-            rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
         ) {}
     }
 }

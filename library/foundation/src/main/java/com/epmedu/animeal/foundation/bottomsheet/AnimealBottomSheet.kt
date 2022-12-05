@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.dialog.bottomsheet
+package com.epmedu.animeal.foundation.bottomsheet
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
-import com.epmedu.animeal.foundation.dialog.bottomsheet.AnimealBottomSheetValue.*
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.*
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.roundToInt

@@ -17,10 +17,13 @@ internal class FavouritesViewModel @Inject constructor(
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()) {
 
+    private var favouritesSnapshot: List<FeedingPoint> = emptyList()
+
     init {
         viewModelScope.launch {
             feedSpotRepository.getFavouriteFeedSpots().collect {
-                updateState { copy(favourites = it, favouritesSnapshot = it) }
+                favouritesSnapshot = it
+                updateState { copy(favourites = it) }
             }
         }
     }
@@ -29,12 +32,11 @@ internal class FavouritesViewModel @Inject constructor(
         when (event) {
             is FavouritesScreenEvent.FeedSpotChanged -> {
                 val showingFeedSpot = updateShowingFeedSpot(event)
-                val snapshot = updateSnapshot(event)
+                updateSnapshot(event)
 
                 updateState {
                     copy(
-                        favouritesSnapshot = snapshot,
-                        favourites = snapshot.filter { it.isFavourite },
+                        favourites = favouritesSnapshot.filter { it.isFavourite },
                         showingFeedSpot = showingFeedSpot
                     )
                 }
@@ -62,16 +64,13 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun updateSnapshot(event: FavouritesScreenEvent.FeedSpotChanged): MutableList<FeedingPoint> {
-        val snapshot = mutableListOf<FeedingPoint>()
-        state.favouritesSnapshot.forEach { feedingPoint ->
-            snapshot += if (event.id == feedingPoint.id) {
+    private fun updateSnapshot(event: FavouritesScreenEvent.FeedSpotChanged) {
+        favouritesSnapshot = favouritesSnapshot.map { feedingPoint ->
+            if (event.id == feedingPoint.id) {
                 feedingPoint.copy(isFavourite = event.isFavorite)
             } else {
-                feedingPoint.copy()
+                feedingPoint
             }
         }
-
-        return snapshot
     }
 }
