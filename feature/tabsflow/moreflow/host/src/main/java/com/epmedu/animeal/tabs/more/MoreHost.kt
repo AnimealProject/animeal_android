@@ -8,7 +8,7 @@ import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.tabs.more.about.AboutScreen
 import com.epmedu.animeal.tabs.more.account.AccountScreen
 import com.epmedu.animeal.tabs.more.donate.DonateScreen
-import com.epmedu.animeal.tabs.more.help.HelpScreen
+import com.epmedu.animeal.tabs.more.faq.FAQScreen
 import com.epmedu.animeal.tabs.more.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -28,7 +28,7 @@ fun MoreHost() {
         }
         screen(MoreRoute.Profile.name) { ProfileScreen() }
         screen(MoreRoute.Donate.name) { DonateScreen() }
-        screen(MoreRoute.Help.name) { HelpScreen() }
+        screen(MoreRoute.FAQ.name) { FAQScreen() }
         screen(MoreRoute.About.name) { AboutScreen() }
         screen(MoreRoute.Account.name) { AccountScreen() }
     }

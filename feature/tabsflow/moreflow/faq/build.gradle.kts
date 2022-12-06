@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.epmedu.animeal.tabs.more.help"
+    namespace = "com.epmedu.animeal.tabs.more.faq"
 }
 
 dependencies {

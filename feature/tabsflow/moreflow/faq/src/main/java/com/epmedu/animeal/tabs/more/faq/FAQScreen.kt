@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.help
+package com.epmedu.animeal.tabs.more.faq
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,19 +8,19 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.tabs.more.help.viewmodel.HelpViewModel
+import com.epmedu.animeal.tabs.more.faq.viewmodel.FAQViewModel
 
 @Composable
-fun HelpScreen() {
+fun FAQScreen() {
     val navigator = LocalNavigator.currentOrThrow
-    val helpViewModel = hiltViewModel<HelpViewModel>()
+    val viewModel = hiltViewModel<FAQViewModel>()
 
-    val state by helpViewModel.stateFlow.collectAsState()
+    val state by viewModel.stateFlow.collectAsState()
 
     BottomBarVisibility(HIDDEN)
 
-    HelpScreenUI(
-        helpState = state,
+    FAQScreenUI(
+        state = state,
         onBack = navigator::popBackStack,
     )
 }

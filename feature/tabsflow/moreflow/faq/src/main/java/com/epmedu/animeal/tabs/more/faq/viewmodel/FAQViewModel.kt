@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.help.viewmodel
+package com.epmedu.animeal.tabs.more.faq.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.epmedu.animeal.common.component.BuildConfigProvider
@@ -8,10 +8,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HelpViewModel @Inject constructor(
+internal class FAQViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider
 ) : ViewModel(),
-    StateDelegate<HelpState> by DefaultStateDelegate(initialState = HelpState()) {
+    StateDelegate<FAQState> by DefaultStateDelegate(initialState = FAQState()) {
 
     init {
         updateState {
