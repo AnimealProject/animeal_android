@@ -89,7 +89,7 @@ internal fun HomeScreenUI(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     onClick = { onScreenEvent(ShowWillFeedDialog) },
-                    enabled = state.currentFeedingPoint?.animalStatus != AnimalState.GREEN
+                    enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED
                 )
             }
         ) {
