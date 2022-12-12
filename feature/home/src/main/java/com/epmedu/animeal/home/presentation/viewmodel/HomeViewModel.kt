@@ -14,6 +14,8 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
@@ -28,6 +30,7 @@ class HomeViewModel @Inject constructor(
     private val locationProvider: LocationProvider,
     private val gpsSettingsProvider: GpsSettingsProvider,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
+    private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
 ) : ViewModel(),
     StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
     EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
@@ -36,15 +39,14 @@ class HomeViewModel @Inject constructor(
         initialize()
         fetchLocationUpdates()
         fetchFeedingPoints()
-        // fetchGpsSettingsUpdates()
     }
 
     fun handleEvents(event: HomeScreenEvent) = when (event) {
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
-        is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
         is HomeScreenEvent.ShowWillFeedDialog -> showWillFeedDialog()
         is HomeScreenEvent.DismissWillFeedDialog -> dismissWillFeedDialog()
+        is HomeScreenEvent.GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
     }
 
     private fun initialize() {
@@ -65,13 +67,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /*private fun fetchGpsSettingsUpdates() {
-        viewModelScope.launch {
-            // TODO: Fix crash
-            // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
-        }
-    }*/
-
     @Suppress("UnusedPrivateMember")
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
         val uiGpsState = when (state) {
@@ -80,8 +75,6 @@ class HomeViewModel @Inject constructor(
         }
         updateState { copy(gpsSettingState = uiGpsState) }
     }
-
-    private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
 
     private fun fetchFeedingPoints() {
         viewModelScope.launch {
@@ -126,5 +119,22 @@ class HomeViewModel @Inject constructor(
 
     private fun dismissWillFeedDialog() {
         updateState { copy(willFeedState = WillFeedState(false)) }
+    }
+
+    private fun changeGeolocationPermissionStatus(event: HomeScreenEvent.GeolocationPermissionStatusChanged) {
+        if (!state.isInitialGeolocationPermissionAsked) {
+            viewModelScope.launch {
+                updateGeolocationPermissionRequestedSettingUseCase(true)
+            }
+            updateState { copy(isInitialGeolocationPermissionAsked = true) }
+        }
+
+        updateState { copy(geolocationPermissionStatus = event.status) }
+
+        if (event.status is PermissionStatus.Granted) {
+            viewModelScope.launch {
+                gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
+            }
+        }
     }
 }
