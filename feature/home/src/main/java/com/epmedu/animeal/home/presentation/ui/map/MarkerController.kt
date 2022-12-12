@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.presentation.ui.map
 
 import com.epmedu.animeal.extensions.consume
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.utils.MarkerCache
 import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.annotation.annotations
@@ -10,12 +10,12 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 
 class MarkerController(
-    private val onFeedingPointClick: (point: FeedingPointUi) -> Unit,
+    private val onFeedingPointClick: (point: FeedingPointModel) -> Unit,
     mapView: MapView
 ) {
     private val markerCache = MarkerCache(mapView.context)
     private val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
-    private val currentFeedingPoints = mutableListOf<FeedingPointUi>()
+    private val currentFeedingPoints = mutableListOf<FeedingPointModel>()
 
     private val onPointClickListener: (PointAnnotation) -> Boolean = { pointAnnotation ->
         consume {
@@ -27,7 +27,7 @@ class MarkerController(
         }
     }
 
-    fun drawMarkers(feedingPoints: List<FeedingPointUi>) {
+    fun drawMarkers(feedingPoints: List<FeedingPointModel>) {
         pointAnnotationManager.deleteAll()
         pointAnnotationManager.removeClickListener(onPointClickListener)
 
