@@ -11,10 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
-import com.epmedu.animeal.home.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.MarkerController
@@ -31,7 +31,7 @@ import com.mapbox.maps.MapView
 @Composable
 internal fun HomeMapbox(
     state: HomeState,
-    onFeedingPointSelect: (point: FeedingPointUi) -> Unit,
+    onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
     onGeolocationClick: (MapView) -> Unit,
     onMapInteraction: () -> Unit,
 ) {
@@ -70,7 +70,7 @@ internal fun HomeMapbox(
 private fun MapboxMap(
     mapboxMapView: MapView,
     state: HomeState,
-    onFeedingPointClick: (point: FeedingPointUi) -> Unit,
+    onFeedingPointClick: (point: FeedingPointModel) -> Unit,
     onMapInteraction: () -> Unit,
 ) {
     val markerController = remember(mapboxMapView) {

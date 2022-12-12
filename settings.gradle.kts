@@ -79,4 +79,5 @@ include(":library:navigation")
 include(":library:resources")
 
 include(":shared:feature:profile")
+include(":shared:feature:feeding")
 include(":shared:feature:feedconfirmation")
