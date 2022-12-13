@@ -23,7 +23,7 @@ internal fun MoreScreenUi(
     val options = listOf(
         R.string.page_profile to MoreRoute.Profile,
         R.string.page_donate to MoreRoute.Donate,
-        R.string.page_help to MoreRoute.Help,
+        R.string.page_faq to MoreRoute.FAQ,
         R.string.page_about_detailed to MoreRoute.About,
         R.string.page_account to MoreRoute.Account,
     )
