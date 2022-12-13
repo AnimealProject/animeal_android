@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.help
+package com.epmedu.animeal.tabs.more.faq
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,15 +11,15 @@ import com.epmedu.animeal.foundation.placeholder.ScreenPlaceholder
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.more.help.viewmodel.HelpState
+import com.epmedu.animeal.tabs.more.faq.viewmodel.FAQState
 
 @Composable
-internal fun HelpScreenUI(
-    helpState: HelpState,
+internal fun FAQScreenUI(
+    state: FAQState,
     onBack: () -> Unit,
 ) {
     ScreenPlaceholder(
-        title = stringResource(id = R.string.page_help),
+        title = stringResource(id = R.string.page_faq),
         content = { paddingValues ->
             Box(
                 modifier = Modifier
@@ -31,8 +31,8 @@ internal fun HelpScreenUI(
                         .align(Alignment.BottomCenter)
                         .padding(32.dp),
                     text = stringResource(
-                        id = R.string.help_page_app_version,
-                        helpState.appVersionName
+                        id = R.string.faq_page_app_version,
+                        state.appVersionName
                     ),
                     style = MaterialTheme.typography.caption
                 )
@@ -44,10 +44,10 @@ internal fun HelpScreenUI(
 
 @AnimealPreview
 @Composable
-private fun HelpScreenUIPreview() {
+private fun FAQScreenUIPreview() {
     AnimealTheme {
-        HelpScreenUI(
-            helpState = HelpState(),
+        FAQScreenUI(
+            state = FAQState(),
             onBack = {},
         )
     }
