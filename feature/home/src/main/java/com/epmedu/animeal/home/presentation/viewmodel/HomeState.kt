@@ -2,10 +2,7 @@ package com.epmedu.animeal.home.presentation.viewmodel
 
 import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.home.data.model.FeedingPoint
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.MapLocation
+import com.epmedu.animeal.home.presentation.model.*
 import com.mapbox.maps.Style
 
 data class HomeState(
@@ -15,5 +12,7 @@ data class HomeState(
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val feedingPoints: StableList<FeedingPointUi> = StableList(emptyList()),
-    val feedingRouteState: FeedingRouteState = FeedingRouteState()
+    val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
+    val willFeedState: WillFeedState = WillFeedState.Dismissed,
+    val isInitialGeolocationPermissionAsked: Boolean = false,
 )

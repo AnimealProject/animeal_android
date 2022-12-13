@@ -74,7 +74,7 @@ fun PhoneNumberInput(
 }
 
 object PhoneFormatTransformation : VisualTransformation {
-    internal const val PHONE_NUMBER_PREFIX = "+995"
+    const val PHONE_NUMBER_PREFIX = "+995"
     internal const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {

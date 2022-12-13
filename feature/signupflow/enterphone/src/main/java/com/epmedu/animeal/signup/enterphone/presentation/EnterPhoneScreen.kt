@@ -7,9 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.navigation.route.SignUpRoute
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneViewModel
 
 @Composable
@@ -26,9 +26,16 @@ fun EnterPhoneScreen() {
         onBack = navigator::popBackStack,
         onNext = {
             viewModel.savePhoneNumberAndSendCode()
-            navigator.navigate(SignUpRoute.EnterCode.name)
         }
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect {
+            if (it is EnterPhoneViewModel.Event.NavigateToEnterCode) {
+                navigator.navigate(SignUpRoute.EnterCode.name)
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()

@@ -8,6 +8,7 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.tabs.more.account.viewmodel.AccountEvent.NavigateToOnboarding
 import com.epmedu.animeal.tabs.more.account.viewmodel.AccountViewModel
 
 @Composable
@@ -19,7 +20,7 @@ fun AccountScreen() {
 
     LaunchedEffect(Unit) {
         viewModel.events.collect {
-            if (it is AccountViewModel.Event.NavigateToOnboarding) {
+            if (it is NavigateToOnboarding) {
                 navigator.parent?.parent?.navigate(MainRoute.SignUp.name) {
                     popUpTo(MainRoute.Tabs.name) {
                         inclusive = true

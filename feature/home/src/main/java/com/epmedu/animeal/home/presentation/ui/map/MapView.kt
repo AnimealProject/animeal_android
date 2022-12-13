@@ -5,20 +5,22 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
-import com.epmedu.animeal.common.constants.MapView.DEFAULT_MAP_BOTTOM_PADDING
-import com.epmedu.animeal.common.constants.MapView.DEFAULT_MAP_END_PADDING
-import com.epmedu.animeal.common.constants.MapView.DEFAULT_MAP_START_PADDING
-import com.epmedu.animeal.common.constants.MapView.DEFAULT_MAP_TOP_PADDING
-import com.epmedu.animeal.common.constants.MapView.DEFAULT_ZOOM
+import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_BOTTOM_PADDING
+import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_END_PADDING
+import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_START_PADDING
+import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_TOP_PADDING
+import com.epmedu.animeal.common.constants.Map.DEFAULT_ZOOM
 import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.home.presentation.model.MapLocation
+import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.resources.R
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
+import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
@@ -28,8 +30,6 @@ import com.mapbox.navigation.base.route.NavigationRouterCallback
 import com.mapbox.navigation.base.route.RouterFailure
 import com.mapbox.navigation.base.route.RouterOrigin
 import com.mapbox.navigation.core.MapboxNavigation
-import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
-import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 
 @Composable
 fun rememberMapViewWithLifecycle(
@@ -49,6 +49,7 @@ fun rememberMapViewWithLifecycle(
     val mapView = remember(mapBoxInitOptions, uiSettings) {
         MapView(context, mapInitOptions).apply {
             scalebar.enabled = uiSettings.scalebar
+            compass.enabled = uiSettings.compassEnabled
 
             location.updateSettings {
                 enabled = uiSettings.userLocationOnMap
@@ -89,26 +90,29 @@ fun MapView.setLocation(
 }
 
 fun MapView.drawRoute(
-    mapboxNavigation: MapboxNavigation,
-    routeLineApi: MapboxRouteLineApi,
-    routeLineView: MapboxRouteLineView,
-    origin: Point,
-    destination: Point,
+    mapBoxRouteInitOptions: MapBoxRouteInitOptions,
+    navigation: MapboxNavigation,
+    path: MapPath,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
     val routeOptions = RouteOptions.builder()
         .applyDefaultNavigationOptions()
         .profile(DirectionsCriteria.PROFILE_WALKING) // Assuming people will walk to their destinations...
-        .coordinates(origin = origin, destination = destination)
+        .coordinates(origin = path.origin, destination = path.destination)
         .build()
 
-    mapboxNavigation.requestRoutes(
+    navigation.requestRoutes(
         routeOptions,
         object : NavigationRouterCallback {
             override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
-                routeLineApi.setNavigationRoutes(routes) { value ->
+                mapBoxRouteInitOptions.routeLineApi.setNavigationRoutes(routes) { value ->
                     getMapboxMap().getStyle()
-                        ?.let { style -> routeLineView.renderRouteDrawData(style, value) }
+                        ?.let { style ->
+                            mapBoxRouteInitOptions.routeLineView.renderRouteDrawData(
+                                style,
+                                value
+                            )
+                        }
                 }
 
                 // Mapbox always considers the first route the better one
@@ -116,8 +120,8 @@ fun MapView.drawRoute(
                     onRouteResult(
                         RouteResult(
                             true,
-                            distanceLeft = formatMetersToKilometers(distance().toLong()),
-                            timeLeft = formatNumberToHourMin(duration().toLong())
+                            distanceLeft = distance().toLong().formatMetersToKilometers(),
+                            timeLeft = duration().toLong().formatNumberToHourMin()
                         )
                     )
                     return
@@ -152,15 +156,24 @@ fun MapView.drawRoute(
     )
 
     doOnDetach {
-        routeLineApi.cancel()
-        routeLineView.cancel()
-    }
-}
-
-fun MapView.removeRoute(routeLineApi: MapboxRouteLineApi, routeLineView: MapboxRouteLineView) {
-    routeLineApi.clearRouteLine { value ->
-        getMapboxMap().getStyle()?.let { style ->
-            routeLineView.renderClearRouteLineValue(style, value)
+        mapBoxRouteInitOptions.run {
+            routeLineApi.cancel()
+            routeLineView.cancel()
         }
     }
 }
+
+fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
+    mapBoxRouteInitOptions.run {
+        routeLineApi.clearRouteLine { value ->
+            getMapboxMap().getStyle()?.let { style ->
+                routeLineView.renderClearRouteLineValue(style, value)
+            }
+        }
+    }
+}
+
+fun MapView.setGesturesListener(onMapInteraction: () -> Unit) =
+    getMapboxMap().addOnCameraChangeListener {
+        onMapInteraction()
+    }

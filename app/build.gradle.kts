@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
     implementation(projects.feature.tabsflow.tabs)
@@ -71,9 +73,11 @@ dependencies {
     coreLibraryDesugaring(libs.desugarJdkLibs)
 
     implementation(libs.amplify.core)
+    implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)

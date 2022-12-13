@@ -1,6 +1,7 @@
 package com.epmedu.animeal.home.data
 
 import com.epmedu.animeal.home.data.model.FeedingPoint
+import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointRepository {
@@ -14,4 +15,6 @@ interface FeedingPointRepository {
     fun getFavourites(): Flow<List<FeedingPoint>>
 
     fun getFeedingPoint(id: Int): Flow<FeedingPoint>
+
+    fun saveUserAsCurrentFeeder(user: Profile, feedingPointId: Int): Flow<Boolean>
 }

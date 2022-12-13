@@ -6,14 +6,16 @@ import com.epmedu.animeal.home.data.model.FeedingPoint
 import com.epmedu.animeal.home.data.model.enum.AnimalPriority
 import com.epmedu.animeal.home.data.model.enum.AnimalState
 import com.epmedu.animeal.home.presentation.model.MapLocation
+import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlin.random.Random
 import kotlin.random.nextInt
 
 class FeedingPointRepositoryImpl : FeedingPointRepository {
 
-    private val stubData: List<FeedingPoint> = List(25) { index ->
+    private val stubData: MutableList<FeedingPoint> = MutableList(25) { index ->
         FeedingPoint(
             index,
             title = "$index - Near to Bukia Garden M.S Technical University",
@@ -53,4 +55,23 @@ class FeedingPointRepositoryImpl : FeedingPointRepository {
     override fun getFeedingPoint(id: Int): Flow<FeedingPoint> = flowOf(
         stubData.first { feedingPoint -> feedingPoint.id == id }
     )
+
+    override fun saveUserAsCurrentFeeder(
+        user: Profile,
+        feedingPointId: Int
+    ): Flow<Boolean> = flow {
+        val currentFeedingPoint = stubData.find { feedingPoint -> feedingPoint.id == feedingPointId }
+        val modifiedFeedingPoint = currentFeedingPoint?.copy(
+            lastFeeder = Feeder(
+                Random.nextInt(1..Int.MAX_VALUE),
+                user.name,
+                "${Random.nextInt(0..24)} hours ago"
+            )
+        )
+        val index = stubData.indexOf(currentFeedingPoint)
+        stubData.remove(currentFeedingPoint)
+        modifiedFeedingPoint?.let { stubData.add(index, it) }
+
+        emit(true)
+    }
 }

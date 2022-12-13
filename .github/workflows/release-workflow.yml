@@ -9,6 +9,10 @@ on:
 
   workflow_dispatch:
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
   KEY_ALIAS: ${{ secrets.KEY_ALIAS }}

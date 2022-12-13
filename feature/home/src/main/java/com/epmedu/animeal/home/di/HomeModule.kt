@@ -1,7 +1,11 @@
 package com.epmedu.animeal.home.di
 
+import com.epmedu.animeal.common.component.AppSettingsProvider
+import com.epmedu.animeal.home.data.ApplicationSettingsRepository
+import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.data.FeedingPointRepositoryImpl
+import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,4 +19,17 @@ internal object HomeModule {
     @ViewModelScoped
     @Provides
     fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
+
+    @ViewModelScoped
+    @Provides
+    fun providesApplicationSettingsRepository(
+        appSettingsProvider: AppSettingsProvider,
+    ): ApplicationSettingsRepository = ApplicationSettingsRepositoryImpl(appSettingsProvider)
+
+    @ViewModelScoped
+    @Provides
+    fun providesGetGeolocationPermissionRequestedSettingUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository,
+    ): GetGeolocationPermissionRequestedSettingUseCase =
+        GetGeolocationPermissionRequestedSettingUseCase(applicationSettingsRepository)
 }

@@ -8,7 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.MapLocation.Companion.toPoint
+import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -16,15 +18,14 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.core.MapboxNavigation
-import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
-import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 
 @Composable
 fun MapboxMap(
     state: HomeState,
     onFeedingPointClick: (point: FeedingPointUi) -> Unit,
-    onRouteResult: (result: RouteResult) -> Unit
+    onRouteResult: (result: RouteResult) -> Unit,
+    onMapInteraction: () -> Unit
 ) {
     val mapView = rememberMapViewWithLifecycle(
         mapBoxInitOptions = rememberMapInitOptions(
@@ -36,28 +37,17 @@ fun MapboxMap(
         uiSettings = rememberMapUiSettings(
             MapUiSettings(
                 scalebar = false,
-                userLocationOnMap = true
+                userLocationOnMap = true,
+                compassEnabled = false
             )
         )
     )
-
-    SetUpRoute(mapView = mapView, state = state, onRouteResult = onRouteResult)
 
     val markerController = remember(mapView) {
         MarkerController(
             mapView = mapView,
             onFeedingPointClick = onFeedingPointClick
         )
-    }
-
-    LaunchedEffect(key1 = state.feedingPoints) {
-        markerController.drawMarkers(
-            feedingPoints = state.feedingPoints
-        )
-    }
-
-    LaunchedEffect(key1 = state.currentLocation) {
-        mapView.setLocation(state.currentLocation)
     }
 
     // If we return from other tab and there was a route active in map the camera zoom will not work
@@ -71,13 +61,27 @@ fun MapboxMap(
             }
         }
     }
+
+    LaunchedEffect(key1 = state.feedingPoints) {
+        markerController.drawMarkers(
+            feedingPoints = state.feedingPoints
+        )
+    }
+
+    LaunchedEffect(key1 = state.currentLocation) {
+        // mapView.setLocation(state.currentLocation)
+    }
+
     // TODO check if it is needed to remove, probably yes
     mapView.getMapboxMap().addOnStyleLoadedListener(onStyleLoadedListener)
+    mapView.setGesturesListener(onMapInteraction = onMapInteraction)
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { mapView }
     )
+
+    SetUpRoute(mapView = mapView, state = state, onRouteResult = onRouteResult)
 }
 
 @Composable
@@ -86,6 +90,13 @@ private fun SetUpRoute(
     state: HomeState,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
+    val mapBoxRouteInitOptions = rememberMapRouteInitOptions(
+        mapView = mapView,
+        mapBoxNavigationInitOptions = MapBoxRouteInitOptions(
+            MapboxRouteLineOptions.Builder(mapView.context).build()
+        )
+    )
+
     val mapboxNavigation = remember(mapView) {
         MapboxNavigation(
             NavigationOptions.Builder(mapView.context)
@@ -93,21 +104,18 @@ private fun SetUpRoute(
                 .build()
         )
     }
-    val routeLineOptions =
-        remember(mapView) { MapboxRouteLineOptions.Builder(mapView.context).build() }
-    val routeLineApi = remember(mapView) { MapboxRouteLineApi(routeLineOptions) }
-    val routeLineView = remember(mapView) { MapboxRouteLineView(routeLineOptions) }
 
     LaunchedEffect(key1 = state.feedingRouteState) {
-        when (state.feedingRouteState.isRouteActive) {
-            true -> {
+        when (state.feedingRouteState) {
+            FeedingRouteState.Started -> {
                 state.currentFeedingPoint?.location?.let { feedingPointLocation ->
                     mapView.drawRoute(
+                        mapBoxRouteInitOptions,
                         mapboxNavigation,
-                        routeLineApi,
-                        routeLineView,
-                        state.currentLocation.toPoint(),
-                        feedingPointLocation.toPoint(),
+                        MapPath(
+                            state.currentLocation.toPoint(),
+                            feedingPointLocation.toPoint()
+                        ),
                         onRouteResult = onRouteResult
                     )
                 }
@@ -115,10 +123,10 @@ private fun SetUpRoute(
                     setLocationOnRoute(mapView, state)
                 }
             }
-            false -> {
-                mapView.removeRoute(routeLineApi, routeLineView)
-                mapView.setLocation(location = state.currentLocation)
+            FeedingRouteState.Disabled -> {
+                mapView.removeRoute(mapBoxRouteInitOptions)
             }
+            else -> {}
         }
     }
 

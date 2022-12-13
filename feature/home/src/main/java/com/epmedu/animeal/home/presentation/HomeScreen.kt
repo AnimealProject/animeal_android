@@ -33,8 +33,6 @@ fun HomeScreen() {
                     launch {
                         if (bottomSheetState.isHidden) {
                             bottomSheetState.show()
-                        } else {
-                            bottomSheetState.hide()
                         }
                     }
                 }

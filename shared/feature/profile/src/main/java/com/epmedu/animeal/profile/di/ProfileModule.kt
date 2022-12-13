@@ -2,11 +2,13 @@ package com.epmedu.animeal.profile.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
+import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
@@ -30,9 +32,10 @@ internal object ProfileModule {
     @ViewModelScoped
     @Provides
     fun provideProfileRepository(
-        dataStore: DataStore<Preferences>
+        dataStore: DataStore<Preferences>,
+        authAPI: AuthAPI,
     ): ProfileRepository =
-        ProfileRepositoryImpl(dataStore)
+        ProfileRepositoryImpl(dataStore, authAPI)
 
     @ViewModelScoped
     @Provides
@@ -75,4 +78,10 @@ internal object ProfileModule {
     fun provideValidateBirthDateUseCase(
         validator: ProfileValidator
     ) = ValidateBirthDateUseCase(validator)
+
+    @ViewModelScoped
+    @Provides
+    fun provideLogOutUseCase(
+        repository: ProfileRepository
+    ) = LogOutUseCase(repository)
 }

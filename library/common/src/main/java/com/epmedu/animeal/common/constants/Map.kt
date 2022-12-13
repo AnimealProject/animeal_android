@@ -1,6 +1,6 @@
 package com.epmedu.animeal.common.constants
 
-object MapView {
+object Map {
     const val DEFAULT_ZOOM = 13.0
     const val DEFAULT_MAP_START_PADDING = 200.0
     const val DEFAULT_MAP_END_PADDING = 200.0

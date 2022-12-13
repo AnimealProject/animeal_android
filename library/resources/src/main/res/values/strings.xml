@@ -12,6 +12,7 @@
     <string name="enter_phone_title">Please, enter your phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="next">Next</string>
+    <string name="enter_phone_error">Something went wrong</string>
 
     <string name="enter_code_title">Enter verification code</string>
     <string name="enter_code_subtitle">Code was sent to: %s</string>
@@ -77,6 +78,8 @@
     <string name="onboarding_image_title">Take care of pets</string>
     <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>
 
+    <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
+
     <string name="help_page_app_version">App version: %s</string>
 
     <string name="done">Done</string>
@@ -89,6 +92,7 @@
     <string name="yes">Yes</string>
     <string name="i_will_feed">I will feed</string>
     <string name="last_feeder">Last feeder</string>
+    <string name="agree">Agree</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
@@ -97,5 +101,7 @@
     <string name="routes_not_found">No routes available</string>
     <string name="routes_failed">Route request failed</string>
     <string name="routes_cancelled">Route request cancelled</string>
+
+    <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
 
 </resources>

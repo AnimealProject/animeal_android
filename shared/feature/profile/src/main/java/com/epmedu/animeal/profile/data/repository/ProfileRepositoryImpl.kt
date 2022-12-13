@@ -3,6 +3,8 @@ package com.epmedu.animeal.profile.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val authAPI: AuthAPI,
 ) : ProfileRepository {
 
     override fun getProfile(): Flow<Profile> {
@@ -41,6 +44,12 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 preference[birthDateKey] = profile.birthDate
             }
         }
+    }
+
+    override suspend fun logOut(
+        authRequestHandler: AuthRequestHandler
+    ) {
+        authAPI.signOut(authRequestHandler)
     }
 
     override suspend fun clearProfile() {

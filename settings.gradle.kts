@@ -1,6 +1,9 @@
 import java.io.FileInputStream
 import java.util.*
 
+include(":shared:feature:settings")
+
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -67,6 +70,7 @@ include(":feature:tabsflow:tabs")
 include(":feature:tabsflow:favourites")
 
 include(":library:analytics")
+include(":library:auth")
 include(":library:common")
 include(":library:extensions")
 include(":library:foundation")
@@ -75,3 +79,4 @@ include(":library:navigation")
 include(":library:resources")
 
 include(":shared:feature:profile")
+include(":shared:feature:feedconfirmation")

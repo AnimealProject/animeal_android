@@ -10,12 +10,16 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.geolocation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.feedconfirmation)
+    implementation(projects.shared.feature.profile)
 
     implementation(libs.accompanist.permissions)
 

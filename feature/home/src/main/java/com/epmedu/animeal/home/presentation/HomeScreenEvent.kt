@@ -8,8 +8,11 @@ sealed interface HomeScreenEvent {
         HomeScreenEvent
 
     data class FeedingRouteUpdateRequest(val result: RouteResult) : HomeScreenEvent
+    data class FeedingTimerUpdateRequest(val timeLeft: Long) : HomeScreenEvent
 
     object FeedingRouteStartRequest : HomeScreenEvent
     object FeedingRouteCancellationRequest : HomeScreenEvent
     object UserCurrentGeolocationRequest : HomeScreenEvent
+    object ShowWillFeedDialog : HomeScreenEvent
+    object DismissWillFeedDialog : HomeScreenEvent
 }
