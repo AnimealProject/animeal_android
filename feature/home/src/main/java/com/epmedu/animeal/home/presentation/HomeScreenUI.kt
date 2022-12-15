@@ -83,7 +83,7 @@ internal fun HomeScreenUI(
                         PermissionStatus.Denied -> geolocationPermissionState.launchPermissionRequest()
                         PermissionStatus.Granted -> when (state.gpsSettingState) {
                             GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
-                            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.currentLocation)
+                            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
                         }
                     }
                 },
