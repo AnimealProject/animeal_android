@@ -39,6 +39,8 @@ import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -240,7 +242,7 @@ private fun FavouritesScreenPreview() {
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
-                favourites = favourites,
+                favourites = favourites.toImmutableList(),
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
         ) {}
@@ -253,7 +255,7 @@ private fun FavouritesScreenEmptyPreview() {
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
-                emptyList()
+                persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
         ) {}
