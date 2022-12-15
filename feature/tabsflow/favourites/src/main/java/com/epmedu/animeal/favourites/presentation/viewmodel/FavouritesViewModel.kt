@@ -8,6 +8,7 @@ import com.epmedu.animeal.favourites.data.FavouritesRepository
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ internal class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             feedSpotRepository.getFavouriteFeedSpots().collect {
                 favouritesSnapshot = it
-                updateState { copy(favourites = it) }
+                updateState { copy(favourites = it.toImmutableList()) }
             }
         }
     }
@@ -36,7 +37,7 @@ internal class FavouritesViewModel @Inject constructor(
 
                 updateState {
                     copy(
-                        favourites = favouritesSnapshot.filter { it.isFavourite },
+                        favourites = favouritesSnapshot.filter { it.isFavourite }.toImmutableList(),
                         showingFeedSpot = showingFeedSpot
                     )
                 }

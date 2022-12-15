@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
 
+    implementation(libs.immutable.collections)
+
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

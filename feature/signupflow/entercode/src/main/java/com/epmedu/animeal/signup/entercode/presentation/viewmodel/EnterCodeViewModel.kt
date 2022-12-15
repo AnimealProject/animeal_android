@@ -11,6 +11,7 @@ import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -81,7 +82,7 @@ internal class EnterCodeViewModel @Inject constructor(
         position: Int,
         digit: Int?
     ) {
-        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit)) }
+        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit).toImmutableList()) }
     }
 
     private fun getNewCodeWithReplacedDigit(
@@ -107,6 +108,6 @@ internal class EnterCodeViewModel @Inject constructor(
 
         private const val CODE_SIZE = 6
 
-        internal fun emptyCode() = List(CODE_SIZE) { null }
+        internal fun emptyCode() = List(CODE_SIZE) { null }.toImmutableList()
     }
 }
