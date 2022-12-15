@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberPrefixKey
 import javax.inject.Inject
 
 internal class EnterPhoneRepositoryImpl @Inject constructor(
@@ -13,8 +14,12 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
     private val authAPI: AuthAPI,
 ) : EnterPhoneRepository {
 
-    override suspend fun savePhoneNumber(phoneNumber: String) {
+    override suspend fun savePhoneNumberAndPrefix(
+        prefix: String,
+        phoneNumber: String
+    ) {
         dataStore.edit { preferences ->
+            preferences[phoneNumberPrefixKey] = prefix
             preferences[phoneNumberKey] = phoneNumber
         }
     }
