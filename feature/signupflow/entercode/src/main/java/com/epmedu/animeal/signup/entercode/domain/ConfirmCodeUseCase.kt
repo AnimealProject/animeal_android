@@ -1,5 +1,6 @@
 package com.epmedu.animeal.signup.entercode.domain
 
+import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 
@@ -11,7 +12,11 @@ class ConfirmCodeUseCase(private val repository: EnterCodeRepository) {
     ) {
         val requestHandler = object : AuthRequestHandler {
             override fun onSuccess(result: Any?) {
-                onSuccess()
+                val authResult = result as AuthSignInResult
+                when {
+                    authResult.isSignInComplete -> onSuccess()
+                    else -> onError(InvalidCodeError())
+                }
             }
 
             override fun onError(exception: Exception) {
@@ -22,3 +27,5 @@ class ConfirmCodeUseCase(private val repository: EnterCodeRepository) {
         repository.confirmCode(code, requestHandler)
     }
 }
+
+class InvalidCodeError : Exception()
