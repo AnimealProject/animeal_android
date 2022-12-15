@@ -4,7 +4,7 @@ import com.epmedu.animeal.auth.AuthRequestHandler
 import kotlinx.coroutines.flow.Flow
 
 interface EnterCodeRepository {
-    val phoneNumber: Flow<String>
+    val phoneNumberWithPrefix: Flow<String>
 
     suspend fun sendCode(requestHandler: AuthRequestHandler)
 

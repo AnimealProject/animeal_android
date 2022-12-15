@@ -4,7 +4,10 @@ import com.epmedu.animeal.auth.AuthRequestHandler
 
 interface EnterPhoneRepository {
 
-    suspend fun savePhoneNumber(phoneNumber: String)
+    suspend fun savePhoneNumberAndPrefix(
+        prefix: String,
+        phoneNumber: String
+    )
 
     fun signUp(
         phone: String,
