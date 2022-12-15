@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(libs.amplify.aws.auth.cognito)
+
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)
 
