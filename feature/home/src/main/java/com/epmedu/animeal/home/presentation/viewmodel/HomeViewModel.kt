@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.StableList
@@ -12,10 +11,13 @@ import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
-import com.epmedu.animeal.home.presentation.RouteManager
 import com.epmedu.animeal.home.presentation.model.*
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
+import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,28 +25,19 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
-    private val profileRepository: ProfileRepository,
-    private val buildConfigProvider: BuildConfigProvider,
-    private val locationProvider: LocationProvider,
-    private val gpsSettingsProvider: GpsSettingsProvider,
+    private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
+    private val saveUserAsFeederUseCase: SaveUserAsFeederUseCase,
+    stateDelegate: StateDelegate<HomeState>,
+    defaultHomeHandler: DefaultHomeHandler
 ) : ViewModel(),
-    StateDelegate<HomeState> by DefaultStateDelegate(initialState = HomeState()),
-    EventDelegate<HomeViewModelEvent> by DefaultEventDelegate() {
-
-    private val routeManager: RouteManager = object : RouteManager {
-        override fun startRoute() {
-            //this@HomeViewModel::startRoute
-        }
-
-        override fun stopRoute() {
-            TODO("Not yet implemented")
-        }
-
-        override fun updateRoute() {
-            TODO("Not yet implemented")
-        }
-    }
+    StateDelegate<HomeState> by stateDelegate,
+    EventDelegate<HomeViewModelEvent> by DefaultEventDelegate(),
+    RouteHandler by defaultHomeHandler,
+    WillFeedHandler by defaultHomeHandler,
+    LocationProvider by homeProviders,
+    GpsSettingsProvider by homeProviders,
+    BuildConfigProvider by homeProviders {
 
     init {
         initialize()
@@ -57,19 +50,22 @@ internal class HomeViewModel @Inject constructor(
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
         is HomeScreenEvent.UserCurrentGeolocationRequest -> changeGpsSetting()
-        is HomeScreenEvent.FeedingRouteStartRequest -> routeManager.startRoute()
-        is HomeScreenEvent.FeedingRouteCancellationRequest -> stopRoute()
-        is HomeScreenEvent.FeedingRouteUpdateRequest -> updateRoute(event)
-        is HomeScreenEvent.FeedingTimerUpdateRequest -> updateTimer(event)
-        is HomeScreenEvent.ShowWillFeedDialog -> showWillFeedDialog()
-        is HomeScreenEvent.DismissWillFeedDialog -> dismissWillFeedDialog()
+        is HomeScreenEvent.RouteEvent -> {
+            handleRouteEvent(event)
+            when (event) {
+                HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest -> fetchFeedingPoints()
+                HomeScreenEvent.RouteEvent.FeedingRouteStartRequest -> hideFeedingPointsAndSaveFeeder()
+                else -> {}
+            }
+        }
+        is HomeScreenEvent.WillFeedEvent -> handleWillFeedEvent(event)
     }
 
     private fun initialize() {
         updateState {
             copy(
-                mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
-                mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI,
+                mapBoxPublicKey = homeProviders.mapBoxPublicKey,
+                mapBoxStyleUri = mapBoxStyleURI,
                 isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase()
             )
         }
@@ -77,29 +73,30 @@ internal class HomeViewModel @Inject constructor(
 
     private fun fetchLocationUpdates() {
         viewModelScope.launch {
-            locationProvider.fetchUpdates().collect {
+            fetchUpdates().collect {
                 updateState { copy(currentLocation = MapLocation(it)) }
             }
         }
     }
 
-    private fun fetchGpsSettingsUpdates() {
+    // Commented for detekt purposes
+    /*private fun fetchGpsSettingsUpdates() {
         viewModelScope.launch {
             // TODO: Fix crash
             // gpsSettingsProvider.fetchUpdates().collect(::collectGpsSettings)
         }
-    }
+    }*/
 
-    @Suppress("UnusedPrivateMember")
+    /*@Suppress("UnusedPrivateMember")
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
         val uiGpsState = when (state) {
             GpsSettingsProvider.GpsSettingState.Enabled -> GpsSettingState.Enabled
             GpsSettingsProvider.GpsSettingState.Disabled -> GpsSettingState.Disabled
         }
         updateState { copy(gpsSettingState = uiGpsState) }
-    }
+    }*/
 
-    private fun changeGpsSetting() = gpsSettingsProvider.changeGpsSettings()
+    private fun changeGpsSetting() = changeGpsSettings()
 
     private fun fetchFeedingPoints() {
         viewModelScope.launch {
@@ -134,57 +131,6 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun showWillFeedDialog() {
-        updateState { copy(willFeedState = WillFeedState.Showing) }
-    }
-
-    private fun dismissWillFeedDialog() {
-        updateState { copy(willFeedState = WillFeedState.Dismissed) }
-    }
-
-    // Route
-
-    /*private fun startRoute() {
-        dismissWillFeedDialog()
-        state.currentFeedingPoint?.let { selectedFeedingPoint ->
-            hideAllFeedingPointsButOne(FeedingPointUi(selectedFeedingPoint))
-            saveUserAsCurrentFeeder(selectedFeedingPoint.id)
-        }
-        viewModelScope.launch {
-            updateState {
-                copy(feedingRouteState = FeedingRouteState.Started)
-            }
-            sendEvent(HomeViewModelEvent.StartRouteFlow)
-        }
-    }*/
-
-    private fun stopRoute() {
-        updateState { copy(feedingRouteState = FeedingRouteState.Disabled) }
-        fetchFeedingPoints()
-    }
-
-    private fun updateRoute(event: HomeScreenEvent.FeedingRouteUpdateRequest) {
-        updateState {
-            copy(
-                feedingRouteState = FeedingRouteState.Updated(
-                    event.result.distanceLeft,
-                    state.feedingRouteState.timeLeft
-                )
-            )
-        }
-    }
-
-    private fun updateTimer(event: HomeScreenEvent.FeedingTimerUpdateRequest) {
-        updateState {
-            copy(
-                feedingRouteState = FeedingRouteState.Updated(
-                    state.feedingRouteState.distanceLeft,
-                    event.timeLeft
-                )
-            )
-        }
-    }
-
     private fun hideAllFeedingPointsButOne(selectedFeedingPoint: FeedingPointUi) {
         updateState {
             copy(feedingPoints = StableList(listOf(selectedFeedingPoint)))
@@ -193,13 +139,21 @@ internal class HomeViewModel @Inject constructor(
 
     private fun saveUserAsCurrentFeeder(feedingPointId: Int) {
         viewModelScope.launch {
-            profileRepository.getProfile().collect { profile ->
-                feedingPointRepository.saveUserAsCurrentFeeder(profile, feedingPointId).collect {
+            saveUserAsFeederUseCase(feedingPointId).collect { isSuccessful ->
+                if (isSuccessful) {
                     updateState {
                         copy(feedingPoints = state.feedingPoints)
                     }
                 }
             }
+        }
+    }
+
+    private fun hideFeedingPointsAndSaveFeeder() {
+        viewModelScope.launch { sendEvent(HomeViewModelEvent.StartRouteFlow) }
+        state.currentFeedingPoint?.let { selectedFeedingPoint ->
+            hideAllFeedingPointsButOne(FeedingPointUi(selectedFeedingPoint))
+            saveUserAsCurrentFeeder(selectedFeedingPoint.id)
         }
     }
 }

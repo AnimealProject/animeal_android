@@ -7,7 +7,7 @@ interface GpsSettingsProvider {
 
     val isGpsSettingsEnabled: Boolean
 
-    fun fetchUpdates(): Flow<GpsSettingState>
+    fun fetchGpsSettingsUpdates(): Flow<GpsSettingState>
 
     fun changeGpsSettings()
 

@@ -7,12 +7,17 @@ sealed interface HomeScreenEvent {
     data class FeedingPointFavouriteChange(val id: Int = -1, val isFavourite: Boolean) :
         HomeScreenEvent
 
-    data class FeedingRouteUpdateRequest(val result: RouteResult) : HomeScreenEvent
-    data class FeedingTimerUpdateRequest(val timeLeft: Long) : HomeScreenEvent
+    sealed interface RouteEvent : HomeScreenEvent {
+        object FeedingRouteStartRequest : RouteEvent
+        object FeedingRouteCancellationRequest : RouteEvent
+        data class FeedingRouteUpdateRequest(val result: RouteResult) : RouteEvent
+        data class FeedingTimerUpdateRequest(val timeLeft: Long) : RouteEvent
+    }
 
-    object FeedingRouteStartRequest : HomeScreenEvent
-    object FeedingRouteCancellationRequest : HomeScreenEvent
+    sealed interface WillFeedEvent : HomeScreenEvent {
+        object ShowWillFeedDialog : WillFeedEvent
+        object DismissWillFeedDialog : WillFeedEvent
+    }
+
     object UserCurrentGeolocationRequest : HomeScreenEvent
-    object ShowWillFeedDialog : HomeScreenEvent
-    object DismissWillFeedDialog : HomeScreenEvent
 }

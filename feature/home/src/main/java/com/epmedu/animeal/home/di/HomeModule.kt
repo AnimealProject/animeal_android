@@ -1,11 +1,20 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.component.AppSettingsProvider
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
 import com.epmedu.animeal.home.data.FeedingPointRepository
 import com.epmedu.animeal.home.data.FeedingPointRepositoryImpl
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
+import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
+import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +31,22 @@ internal object HomeModule {
 
     @ViewModelScoped
     @Provides
+    fun providesStateDelegate(): StateDelegate<HomeState> = DefaultStateDelegate(HomeState())
+
+    @ViewModelScoped
+    @Provides
+    fun providesRouteHandler(
+        stateDelegate: StateDelegate<HomeState>
+    ): RouteHandler = DefaultRouteHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesWillFeedHandler(
+        stateDelegate: StateDelegate<HomeState>
+    ): WillFeedHandler = DefaultWillFeedHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
     fun providesApplicationSettingsRepository(
         appSettingsProvider: AppSettingsProvider,
     ): ApplicationSettingsRepository = ApplicationSettingsRepositoryImpl(appSettingsProvider)
@@ -32,4 +57,12 @@ internal object HomeModule {
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): GetGeolocationPermissionRequestedSettingUseCase =
         GetGeolocationPermissionRequestedSettingUseCase(applicationSettingsRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesSaveUserAsFeederUseCase(
+        feedingPointRepository: FeedingPointRepository,
+        profileRepository: ProfileRepository
+    ): SaveUserAsFeederUseCase =
+        SaveUserAsFeederUseCase(feedingPointRepository, profileRepository)
 }

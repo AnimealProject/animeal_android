@@ -21,13 +21,19 @@ import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityControlle
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.FeedingPointUi
 import com.epmedu.animeal.home.presentation.model.RouteResult
-import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.model.WillFeedState
+import com.epmedu.animeal.home.presentation.ui.CheckLocationPermission
+import com.epmedu.animeal.home.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.home.presentation.ui.GeoLocationFloatingActionButton
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetLayout
+import com.epmedu.animeal.home.presentation.ui.HomeBottomSheetState
+import com.epmedu.animeal.home.presentation.ui.MapboxMap
 import com.epmedu.animeal.home.presentation.ui.map.RouteTopBar
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -41,47 +47,16 @@ internal fun HomeScreenUI(
 
     LaunchedEffect(bottomSheetState.progress) {
         val showBottomBar = if (bottomSheetState.isShowing) false else bottomSheetState.isHidden
-
         changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
     }
 
-    val contentAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isExpanding -> bottomSheetState.progress.fraction
-            bottomSheetState.isCollapsing -> 1f - bottomSheetState.progress.fraction
-            else -> 0f
-        }
-    )
-
-    val buttonAlpha: Float by animateFloatAsState(
-        targetValue = when {
-            bottomSheetState.isShowing -> bottomSheetState.progress.fraction
-            bottomSheetState.isHiding -> 1f - bottomSheetState.progress.fraction
-            else -> 1f
-        }
-    )
+    val contentAlpha: Float by animateFloatAsState(targetValue = getContentAlpha(bottomSheetState))
+    val buttonAlpha: Float by animateFloatAsState(targetValue = getButtonAlpha(bottomSheetState))
 
     val scope = rememberCoroutineScope()
+    val timerHandler: CountDownTimer = remember { getTimeHandler(onScreenEvent) }
 
-    val timerHandler: CountDownTimer = remember {
-        object : CountDownTimer(HOUR_IN_MILLIS, MINUTE_IN_MILLIS) {
-            override fun onTick(timeLeftInMillis: Long) {
-                onScreenEvent(FeedingTimerUpdateRequest(timeLeftInMillis))
-            }
-
-            override fun onFinish() {
-                cancel()
-            }
-        }
-    }
-
-    BackHandler(enabled = bottomSheetState.isVisible) {
-        scope.launch { bottomSheetState.hide() }
-    }
-
-    BackHandler(enabled = state.willFeedState.isDialogShowing) {
-        scope.launch { onScreenEvent(DismissWillFeedDialog) }
-    }
+    OnBackHandling(scope = scope, bottomSheetState = bottomSheetState, state = state, onScreenEvent = onScreenEvent)
 
     CheckLocationPermission {
         HomeBottomSheetLayout(
@@ -93,7 +68,7 @@ internal fun HomeScreenUI(
                         feedingPoint = FeedingPointUi(feedingPoint),
                         contentAlpha = contentAlpha,
                         onFavouriteChange = {
-                            onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
+                            onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                         }
                     )
                 }
@@ -101,30 +76,32 @@ internal fun HomeScreenUI(
             sheetControls = {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    onClick = { onScreenEvent(ShowWillFeedDialog) }
+                    onClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.ShowWillFeedDialog) }
                 )
             }
         ) {
             MapContent(
                 state = state,
-                onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
-                onGeolocationClick = { onScreenEvent(UserCurrentGeolocationRequest) },
+                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) },
+                onGeolocationClick = { onScreenEvent(HomeScreenEvent.UserCurrentGeolocationRequest) },
                 onMapInteraction = {
                     if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
                         scope.launch { bottomSheetState.show() }
                     }
                 },
                 onCancelRouteClick = {
-                    onScreenEvent(FeedingRouteCancellationRequest)
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
                     timerHandler.cancel()
                 },
-                onRouteResult = { result -> onScreenEvent(FeedingRouteUpdateRequest(result)) }
+                onRouteResult = { result ->
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest(result))
+                }
             )
         }
-    }
 
-    WillFeedConfirmationDialog(state, onScreenEvent) {
-        timerHandler.start()
+        WillFeedConfirmationDialog(state, onScreenEvent) {
+            timerHandler.start()
+        }
     }
 }
 
@@ -197,13 +174,55 @@ private fun WillFeedConfirmationDialog(
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onAgreeClick: () -> Unit
 ) {
-    if (state.willFeedState.isDialogShowing) {
+    if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
             onAgreeClick = {
-                onScreenEvent(FeedingRouteStartRequest)
+                onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog)
+                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest)
                 onAgreeClick.invoke()
             },
-            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
+            onCancelClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
         )
     }
+}
+
+@Composable
+fun OnBackHandling(
+    scope: CoroutineScope,
+    bottomSheetState: HomeBottomSheetState,
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit
+) {
+    BackHandler(enabled = bottomSheetState.isVisible) {
+        scope.launch { bottomSheetState.hide() }
+    }
+
+    BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
+        scope.launch { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
+    }
+}
+
+private fun getTimeHandler(onScreenEvent: (HomeScreenEvent) -> Unit) =
+    object : CountDownTimer(HOUR_IN_MILLIS, MINUTE_IN_MILLIS) {
+        override fun onTick(timeLeftInMillis: Long) {
+            onScreenEvent(HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest(timeLeftInMillis))
+        }
+
+        override fun onFinish() {
+            cancel()
+        }
+    }
+
+@OptIn(ExperimentalMaterialApi::class)
+private fun getButtonAlpha(bottomSheetState: HomeBottomSheetState) = when {
+    bottomSheetState.isExpanding -> bottomSheetState.progress.fraction
+    bottomSheetState.isCollapsing -> 1f - bottomSheetState.progress.fraction
+    else -> 0f
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+private fun getContentAlpha(bottomSheetState: HomeBottomSheetState) = when {
+    bottomSheetState.isShowing -> bottomSheetState.progress.fraction
+    bottomSheetState.isHiding -> 1f - bottomSheetState.progress.fraction
+    else -> 1f
 }

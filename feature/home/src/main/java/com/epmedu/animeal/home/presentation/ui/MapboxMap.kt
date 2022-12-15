@@ -12,7 +12,19 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
-import com.epmedu.animeal.home.presentation.ui.map.*
+import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.MapBoxRouteInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
+import com.epmedu.animeal.home.presentation.ui.map.MarkerController
+import com.epmedu.animeal.home.presentation.ui.map.drawRoute
+import com.epmedu.animeal.home.presentation.ui.map.fetchRoute
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapRouteInitOptions
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapUiSettings
+import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
+import com.epmedu.animeal.home.presentation.ui.map.removeRoute
+import com.epmedu.animeal.home.presentation.ui.map.setGesturesListener
+import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
@@ -109,7 +121,7 @@ private fun SetUpRoute(
         when (state.feedingRouteState) {
             FeedingRouteState.Started -> {
                 state.currentFeedingPoint?.location?.let { feedingPointLocation ->
-                    mapView.drawRoute(
+                    mapView.fetchRoute(
                         mapBoxRouteInitOptions,
                         mapboxNavigation,
                         MapPath(
@@ -119,14 +131,18 @@ private fun SetUpRoute(
                         onRouteResult = onRouteResult
                     )
                 }
-                if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
-                    setLocationOnRoute(mapView, state)
-                }
             }
             FeedingRouteState.Disabled -> {
                 mapView.removeRoute(mapBoxRouteInitOptions)
             }
-            else -> {}
+            is FeedingRouteState.Updated -> {
+                state.feedingRouteState.routeData?.let {
+                    mapView.drawRoute(mapBoxRouteInitOptions, it)
+                }
+                if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
+                    setLocationOnRoute(mapView, state)
+                }
+            }
         }
     }
 

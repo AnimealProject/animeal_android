@@ -19,7 +19,11 @@ import com.epmedu.animeal.resources.R
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
@@ -89,7 +93,7 @@ fun MapView.setLocation(
     getMapboxMap().setCamera(cameraPosition)
 }
 
-fun MapView.drawRoute(
+fun MapView.fetchRoute(
     mapBoxRouteInitOptions: MapBoxRouteInitOptions,
     navigation: MapboxNavigation,
     path: MapPath,
@@ -105,23 +109,14 @@ fun MapView.drawRoute(
         routeOptions,
         object : NavigationRouterCallback {
             override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
-                mapBoxRouteInitOptions.routeLineApi.setNavigationRoutes(routes) { value ->
-                    getMapboxMap().getStyle()
-                        ?.let { style ->
-                            mapBoxRouteInitOptions.routeLineView.renderRouteDrawData(
-                                style,
-                                value
-                            )
-                        }
-                }
-
                 // Mapbox always considers the first route the better one
                 routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
                     onRouteResult(
                         RouteResult(
                             true,
                             distanceLeft = distance().toLong().formatMetersToKilometers(),
-                            timeLeft = duration().toLong().formatNumberToHourMin()
+                            timeLeft = duration().toLong().formatNumberToHourMin(),
+                            routeData = routes.first()
                         )
                     )
                     return
@@ -159,6 +154,17 @@ fun MapView.drawRoute(
         mapBoxRouteInitOptions.run {
             routeLineApi.cancel()
             routeLineView.cancel()
+        }
+    }
+}
+
+fun MapView.drawRoute(
+    mapBoxRouteInitOptions: MapBoxRouteInitOptions,
+    route: NavigationRoute
+) {
+    mapBoxRouteInitOptions.routeLineApi.setNavigationRoutes(listOf(route)) { value ->
+        getMapboxMap().getStyle()?.let { style ->
+            mapBoxRouteInitOptions.routeLineView.renderRouteDrawData(style, value)
         }
     }
 }

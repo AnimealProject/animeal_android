@@ -23,7 +23,7 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
         Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(FLAG_ACTIVITY_NEW_TASK)
     )
 
-    override fun fetchUpdates() = callbackFlow {
+    override fun fetchGpsSettingsUpdates() = callbackFlow {
         val gnssStatusCompat = GnssStatusCompat(
             locationManager = locationManager,
             onGpsStarted = {
