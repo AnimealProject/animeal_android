@@ -23,14 +23,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_FORMAT
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
+@Suppress("LongParameterList")
 @Composable
 fun PhoneNumberInput(
     value: String,
+    prefix: String,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     error: String = "",
@@ -61,7 +62,7 @@ fun PhoneNumberInput(
                     contentDescription = null
                 )
                 Text(
-                    text = PHONE_NUMBER_PREFIX,
+                    text = prefix,
                     color = Color.Black,
                     fontWeight = FontWeight.ExtraLight
                 )
@@ -74,7 +75,6 @@ fun PhoneNumberInput(
 }
 
 object PhoneFormatTransformation : VisualTransformation {
-    const val PHONE_NUMBER_PREFIX = "+995"
     internal const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -126,16 +126,19 @@ private fun PhoneNumberInputPreview() {
     AnimealTheme {
         Column {
             PhoneNumberInput(
-                value = ""
+                value = "",
+                prefix = "+995"
             )
             Divider()
             PhoneNumberInput(
                 value = "123456789",
+                prefix = "+995",
                 isEnabled = false
             )
             Divider()
             PhoneNumberInput(
                 value = "1234567",
+                prefix = "+995",
                 isEnabled = false,
                 error = "Phone Number is too short"
             )

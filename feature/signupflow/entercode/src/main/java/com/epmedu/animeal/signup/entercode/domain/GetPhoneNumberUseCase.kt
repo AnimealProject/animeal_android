@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 class GetPhoneNumberUseCase(private val repository: EnterCodeRepository) {
     operator fun invoke(): Flow<String> {
-        return repository.phoneNumber
+        return repository.phoneNumberWithPrefix
     }
 }

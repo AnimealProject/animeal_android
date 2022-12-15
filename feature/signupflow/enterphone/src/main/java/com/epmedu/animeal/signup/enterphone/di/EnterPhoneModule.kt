@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepositoryImpl
-import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberUseCase
+import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberAndPrefixUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import dagger.Module
 import dagger.Provides
@@ -34,5 +34,5 @@ internal object EnterPhoneModule {
     @Provides
     fun provideSavePhoneNumberUseCase(
         repository: EnterPhoneRepository
-    ) = SavePhoneNumberUseCase(repository)
+    ) = SavePhoneNumberAndPrefixUseCase(repository)
 }

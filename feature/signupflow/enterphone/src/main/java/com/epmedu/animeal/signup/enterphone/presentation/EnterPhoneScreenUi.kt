@@ -15,15 +15,16 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneState
 
 @Composable
 internal fun EnterPhoneScreenUi(
     state: EnterPhoneState,
     focusRequester: FocusRequester,
-    onNumberChange: (String) -> Unit,
+    onEvent: (EnterPhoneScreenEvent) -> Unit,
     onBack: () -> Unit,
-    onNext: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -41,7 +42,7 @@ internal fun EnterPhoneScreenUi(
             AnimealShortButton(
                 text = stringResource(id = R.string.next),
                 enabled = state.isNextEnabled,
-                onClick = onNext
+                onClick = { onEvent(NextButtonClicked) }
             )
         }
     ) { padding ->
@@ -52,10 +53,11 @@ internal fun EnterPhoneScreenUi(
         ) {
             PhoneNumberInput(
                 value = state.phoneNumber,
+                prefix = state.prefix,
                 modifier = Modifier
                     .padding(top = 56.dp)
                     .focusRequester(focusRequester),
-                onValueChange = onNumberChange,
+                onValueChange = { onEvent(UpdatePhoneNumber(it)) },
                 error = if (state.isError) stringResource(id = R.string.enter_phone_error) else ""
             )
         }
@@ -69,9 +71,8 @@ private fun EnterPhoneScreenPreview() {
         EnterPhoneScreenUi(
             focusRequester = FocusRequester(),
             state = EnterPhoneState(),
-            onNumberChange = {},
-            onBack = {},
-            onNext = {}
+            onEvent = {},
+            onBack = {}
         )
     }
 }
