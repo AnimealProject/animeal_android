@@ -17,9 +17,13 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.feeding)
+    implementation(projects.shared.feature.feedconfirmation)
 
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
+
+    implementation(libs.immutable.collections)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

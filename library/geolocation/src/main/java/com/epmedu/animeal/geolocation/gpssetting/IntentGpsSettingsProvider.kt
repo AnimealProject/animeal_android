@@ -18,11 +18,6 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
     override val isGpsSettingsEnabled: Boolean
         get() = LocationManagerCompat.isLocationEnabled(locationManager)
 
-    // FLAG_ACTIVITY_NEW_TASK is required when we're starting activity from app context
-    override fun changeGpsSettings() = context.startActivity(
-        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(FLAG_ACTIVITY_NEW_TASK)
-    )
-
     override fun fetchGpsSettingsUpdates() = callbackFlow {
         val gnssStatusCompat = GnssStatusCompat(
             locationManager = locationManager,

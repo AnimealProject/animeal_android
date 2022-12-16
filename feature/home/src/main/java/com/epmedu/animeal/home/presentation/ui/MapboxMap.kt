@@ -7,9 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnDetach
-import com.epmedu.animeal.home.presentation.model.FeedingPointUi
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
-import com.epmedu.animeal.home.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
@@ -35,7 +35,7 @@ import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 @Composable
 fun MapboxMap(
     state: HomeState,
-    onFeedingPointClick: (point: FeedingPointUi) -> Unit,
+    onFeedingPointClick: (point: FeedingPointModel) -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onMapInteraction: () -> Unit
 ) {

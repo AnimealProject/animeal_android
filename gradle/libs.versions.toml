@@ -21,6 +21,7 @@ detektCompose = "1.2.1"
 dialogCore = "0.8.1-rc"
 firebaseBom = "30.5.0"
 googleServices = "4.3.14"
+immutableCollections = "0.3.5"
 javapoet = "1.13.0"
 junit = "4.13.2"
 hilt = "2.43.2"
@@ -84,6 +85,8 @@ desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+
+immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutableCollections"}
 
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 

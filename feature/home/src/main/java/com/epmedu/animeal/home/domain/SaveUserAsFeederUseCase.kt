@@ -1,6 +1,6 @@
 package com.epmedu.animeal.home.domain
 
-import com.epmedu.animeal.home.data.FeedingPointRepository
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first

@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation
 
+import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.RouteResult
 
 sealed interface HomeScreenEvent {
@@ -19,5 +20,5 @@ sealed interface HomeScreenEvent {
         object DismissWillFeedDialog : WillFeedEvent
     }
 
-    object UserCurrentGeolocationRequest : HomeScreenEvent
+    data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
 }

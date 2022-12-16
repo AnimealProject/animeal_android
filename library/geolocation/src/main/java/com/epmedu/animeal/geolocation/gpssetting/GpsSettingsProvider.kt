@@ -9,8 +9,6 @@ interface GpsSettingsProvider {
 
     fun fetchGpsSettingsUpdates(): Flow<GpsSettingState>
 
-    fun changeGpsSettings()
-
     sealed interface GpsSettingState {
 
         object Enabled : GpsSettingState

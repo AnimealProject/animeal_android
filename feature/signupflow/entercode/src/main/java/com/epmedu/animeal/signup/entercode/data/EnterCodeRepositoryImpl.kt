@@ -5,6 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberPrefixKey
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -15,13 +18,15 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
     private val authAPI: AuthAPI,
 ) : EnterCodeRepository {
 
-    override val phoneNumber: Flow<String> = dataStore.data
+    override val phoneNumberWithPrefix: Flow<String> = dataStore.data
         .map { preferences ->
-            preferences[phoneNumberKey] ?: ""
+            val prefix = preferences[phoneNumberPrefixKey] ?: PHONE_NUMBER_PREFIX
+            val phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING
+            prefix + phoneNumber
         }
 
     override suspend fun sendCode(requestHandler: AuthRequestHandler) {
-        authAPI.sendCode(phoneNumber.first(), requestHandler)
+        authAPI.sendCode(phoneNumberWithPrefix.first(), requestHandler)
     }
 
     override fun confirmCode(

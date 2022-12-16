@@ -11,7 +11,7 @@ dependencies {
     implementation(projects.feature.tabsflow.moreflow.about)
     implementation(projects.feature.tabsflow.moreflow.account)
     implementation(projects.feature.tabsflow.moreflow.donate)
-    implementation(projects.feature.tabsflow.moreflow.help)
+    implementation(projects.feature.tabsflow.moreflow.faq)
     implementation(projects.feature.tabsflow.moreflow.more)
     implementation(projects.feature.tabsflow.moreflow.profile)
 

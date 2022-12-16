@@ -7,9 +7,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_PREFIX
-import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberUseCase
+import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
+import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberAndPrefixUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,12 +20,19 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
-    private val savePhoneNumberUseCase: SavePhoneNumberUseCase,
+    private val savePhoneNumberAndPrefixUseCase: SavePhoneNumberAndPrefixUseCase,
 ) : ViewModel(),
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState()),
-    EventDelegate<EnterPhoneViewModel.Event> by DefaultEventDelegate() {
+    EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
 
-    fun updatePhoneNumber(newNumber: String) {
+    fun handleEvents(event: EnterPhoneScreenEvent) {
+        when (event) {
+            is UpdatePhoneNumber -> updatePhoneNumber(event.phoneNumber)
+            is NextButtonClicked -> sendCodeAndSavePhoneNumberAndPrefix()
+        }
+    }
+
+    private fun updatePhoneNumber(newNumber: String) {
         updateState {
             copy(
                 phoneNumber = newNumber,
@@ -35,15 +45,15 @@ internal class EnterPhoneViewModel @Inject constructor(
         return length == PHONE_NUMBER_LENGTH && PhoneNumberUtils.isGlobalPhoneNumber(this)
     }
 
-    fun savePhoneNumberAndSendCode() {
-        val phoneNumber = PHONE_NUMBER_PREFIX + state.phoneNumber
+    private fun sendCodeAndSavePhoneNumberAndPrefix() {
+        val phoneNumber = state.prefix + state.phoneNumber
 
         viewModelScope.launch {
             signUpAndSignInUseCase(
                 phoneNumber,
                 AMPLIFY_PASSWORD,
                 {
-                    savePhoneNumberAndNavigateNext(phoneNumber)
+                    savePhoneNumberAndPrefixAndNavigateNext()
                 },
                 {
                     updateNextEnabled()
@@ -53,10 +63,11 @@ internal class EnterPhoneViewModel @Inject constructor(
         }
     }
 
-    private fun savePhoneNumberAndNavigateNext(phoneNumber: String) {
+    private fun savePhoneNumberAndPrefixAndNavigateNext() {
         viewModelScope.launch {
-            savePhoneNumberUseCase(
-                phoneNumber = phoneNumber,
+            savePhoneNumberAndPrefixUseCase(
+                prefix = state.prefix,
+                phoneNumber = state.phoneNumber,
                 onSuccess = {
                     updateError(false)
                     navigateToEnterCode()
@@ -70,7 +81,7 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun navigateToEnterCode() {
         viewModelScope.launch {
-            sendEvent(Event.NavigateToEnterCode)
+            sendEvent(EnterPhoneEvent.NavigateToEnterCode)
         }
     }
 
@@ -86,12 +97,7 @@ internal class EnterPhoneViewModel @Inject constructor(
         updateState { copy(isError = isError) }
     }
 
-    sealed interface Event {
-        object NavigateToEnterCode : Event
-    }
-
     companion object {
-        private const val PHONE_NUMBER_LENGTH = 9
         private const val AMPLIFY_PASSWORD = "Password1)"
     }
 }

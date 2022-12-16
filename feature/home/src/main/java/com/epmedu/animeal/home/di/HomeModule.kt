@@ -5,10 +5,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
-import com.epmedu.animeal.home.data.FeedingPointRepository
-import com.epmedu.animeal.home.data.FeedingPointRepositoryImpl
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
+import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
@@ -57,6 +58,13 @@ internal object HomeModule {
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): GetGeolocationPermissionRequestedSettingUseCase =
         GetGeolocationPermissionRequestedSettingUseCase(applicationSettingsRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesUpdateGeolocationPermissionRequestedSettingUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository,
+    ): UpdateGeolocationPermissionRequestedSettingUseCase =
+        UpdateGeolocationPermissionRequestedSettingUseCase(applicationSettingsRepository)
 
     @ViewModelScoped
     @Provides

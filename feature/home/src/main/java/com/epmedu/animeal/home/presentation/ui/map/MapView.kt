@@ -12,7 +12,7 @@ import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_TOP_PADDING
 import com.epmedu.animeal.common.constants.Map.DEFAULT_ZOOM
 import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
-import com.epmedu.animeal.home.presentation.model.MapLocation
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.resources.R

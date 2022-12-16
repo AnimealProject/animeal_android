@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.library.geolocation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.feeding)
     implementation(projects.shared.feature.feedconfirmation)
     implementation(projects.shared.feature.profile)
 
@@ -25,6 +26,8 @@ dependencies {
 
     implementation(libs.mapbox.android)
     implementation(libs.mapbox.navigation)
+
+    implementation(libs.immutable.collections)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
