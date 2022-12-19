@@ -136,7 +136,6 @@ private fun MapboxMap(
     )
 
     SetUpRoute(mapView = mapboxMapView, state = state, onRouteResult = onRouteResult)
-
 }
 
 @Composable

@@ -79,7 +79,7 @@ internal fun HomeScreenUI(
         ) { geolocationPermissionState ->
             HomeMapbox(
                 state = state,
-                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) },
+                onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
                 onMapInteraction = {
                     if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
                         scope.launch { bottomSheetState.show() }
@@ -104,10 +104,10 @@ internal fun HomeScreenUI(
                 }
             )
         }
+    }
 
-        WillFeedConfirmationDialog(state, onScreenEvent) {
-            timerHandler.start()
-        }
+    WillFeedConfirmationDialog(state, onScreenEvent) {
+        timerHandler.start()
     }
 }
 
@@ -155,4 +155,3 @@ private fun getTimeHandler(onScreenEvent: (HomeScreenEvent) -> Unit) =
             cancel()
         }
     }
-

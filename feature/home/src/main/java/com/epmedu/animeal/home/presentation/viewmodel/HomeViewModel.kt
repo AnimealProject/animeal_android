@@ -6,12 +6,12 @@ import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
@@ -71,7 +71,7 @@ internal class HomeViewModel @Inject constructor(
     private fun initialize() {
         updateState {
             copy(
-                mapBoxPublicKey = mapBoxPublicKey,
+                mapBoxPublicKey = homeProviders.mapBoxPublicKey,
                 mapBoxStyleUri = mapBoxStyleURI,
                 isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
                 gpsSettingState = when {
@@ -177,7 +177,7 @@ internal class HomeViewModel @Inject constructor(
 
         if (event.status is PermissionStatus.Granted) {
             viewModelScope.launch {
-                fetchUpdates().collect{ collectGpsSettings(state.gpsSettingState) }
+                fetchGpsSettingsUpdates().collect(::collectGpsSettings)
             }
         }
     }

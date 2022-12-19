@@ -1,9 +1,6 @@
 package com.epmedu.animeal.geolocation.gpssetting
 
 import android.content.Context
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.provider.Settings
 import androidx.core.location.LocationManagerCompat
 import com.epmedu.animeal.extensions.locationManager
 import dagger.hilt.android.qualifiers.ApplicationContext

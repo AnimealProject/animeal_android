@@ -3,10 +3,10 @@ package com.epmedu.animeal.home.di
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
-import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
 import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
