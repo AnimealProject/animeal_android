@@ -28,6 +28,8 @@ import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.mapbox.maps.MapView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -55,13 +57,10 @@ internal fun HomeScreenUI(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
             state.currentFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(
+                FeedingPointSheet(
                     feedingPoint = FeedingPointModel(feedingPoint),
-                    contentAlpha = contentAlpha,
-                    modifier = Modifier.wrapContentHeight(),
-                    onFavouriteChange = {
-                        onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
-                    }
+                    alpha = contentAlpha,
+                    onScreenEvent = onScreenEvent
                 )
             }
         },
@@ -93,14 +92,7 @@ internal fun HomeScreenUI(
                     onScreenEvent(RouteEvent.FeedingRouteUpdateRequest(result))
                 },
                 onGeolocationClick = { mapView ->
-                    when (state.geolocationPermissionStatus) {
-                        PermissionStatus.Restricted -> mapView.context.launchAppSettings()
-                        PermissionStatus.Denied -> geolocationPermissionState.launchPermissionRequest()
-                        PermissionStatus.Granted -> when (state.gpsSettingState) {
-                            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
-                            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
-                        }
-                    }
+                    onGeoLocationClick(mapView, state, geolocationPermissionState)
                 }
             )
         }
@@ -130,6 +122,22 @@ private fun WillFeedConfirmationDialog(
 }
 
 @Composable
+fun FeedingPointSheet(
+    feedingPoint: FeedingPointModel,
+    alpha: Float,
+    onScreenEvent: (HomeScreenEvent) -> Unit
+) {
+    FeedingPointSheetContent(
+        feedingPoint = feedingPoint,
+        contentAlpha = alpha,
+        modifier = Modifier.wrapContentHeight(),
+        onFavouriteChange = {
+            onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
+        }
+    )
+}
+
+@Composable
 fun OnBackHandling(
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
@@ -142,6 +150,22 @@ fun OnBackHandling(
 
     BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
         scope.launch { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+private fun onGeoLocationClick(
+    mapView: MapView,
+    state: HomeState,
+    geolocationPermission: PermissionState
+) {
+    when (state.geolocationPermissionStatus) {
+        PermissionStatus.Restricted -> mapView.context.launchAppSettings()
+        PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
+        PermissionStatus.Granted -> when (state.gpsSettingState) {
+            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
+        }
     }
 }
 

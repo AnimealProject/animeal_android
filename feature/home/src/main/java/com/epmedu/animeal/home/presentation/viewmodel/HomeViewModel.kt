@@ -8,17 +8,17 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
-import com.epmedu.animeal.geolocation.location.model.Location
-import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.PermissionStatus
-import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
-import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.SaveUserAsFeederUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
@@ -30,7 +30,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
-    private val feedingPointRepository: FeedingPointRepository,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
@@ -44,7 +43,10 @@ internal class HomeViewModel @Inject constructor(
     WillFeedHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
-    BuildConfigProvider by homeProviders {
+    BuildConfigProvider by homeProviders,
+    FeedingPointRepository by homeProviders,
+    LocationHandler by homeProviders,
+    GpsHandler by homeProviders {
 
     init {
         initialize()
@@ -88,27 +90,9 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun collectLocations(currentLocation: Location) {
-        val mapLocation = MapLocation(currentLocation)
-
-        val locationState = when (state.locationState) {
-            is LocationState.UndefinedLocation -> LocationState.InitialLocation(mapLocation)
-            else -> LocationState.ExactLocation(mapLocation)
-        }
-        updateState { copy(locationState = locationState) }
-    }
-
-    private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
-        val uiGpsState = when (state) {
-            GpsSettingsProvider.GpsSettingState.Enabled -> GpsSettingState.Enabled
-            GpsSettingsProvider.GpsSettingState.Disabled -> GpsSettingState.Disabled
-        }
-        updateState { copy(gpsSettingState = uiGpsState) }
-    }
-
     private fun fetchFeedingPoints() {
         viewModelScope.launch {
-            feedingPointRepository.getAllFeedingPoints().collect {
+            getAllFeedingPoints().collect {
                 updateState {
                     copy(
                         feedingPoints = it.take(15)
@@ -122,7 +106,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun selectFeedingPoint(event: HomeScreenEvent.FeedingPointSelected) {
         viewModelScope.launch {
-            feedingPointRepository.getFeedingPoint(event.id).collect { feedingPoint ->
+            getFeedingPoint(event.id).collect { feedingPoint ->
                 updateState {
                     copy(currentFeedingPoint = feedingPoint)
                 }

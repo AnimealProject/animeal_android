@@ -11,8 +11,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 
 class DefaultRouteHandler(
     stateDelegate: StateDelegate<HomeState>
-) : StateDelegate<HomeState> by stateDelegate,
-    RouteHandler {
+) : RouteHandler, StateDelegate<HomeState> by stateDelegate {
 
     override fun handleRouteEvent(event: HomeScreenEvent.RouteEvent) {
         when (event) {

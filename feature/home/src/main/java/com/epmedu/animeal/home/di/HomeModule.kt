@@ -7,10 +7,14 @@ import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
-import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
-import com.epmedu.animeal.home.domain.SaveUserAsFeederUseCase
-import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.SaveUserAsFeederUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
@@ -45,6 +49,18 @@ internal object HomeModule {
     fun providesWillFeedHandler(
         stateDelegate: StateDelegate<HomeState>
     ): WillFeedHandler = DefaultWillFeedHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesLocationHandler(
+        stateDelegate: StateDelegate<HomeState>
+    ): LocationHandler = DefaultLocationHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesGpsHandler(
+        stateDelegate: StateDelegate<HomeState>
+    ): GpsHandler = DefaultGpsHandler(stateDelegate)
 
     @ViewModelScoped
     @Provides
