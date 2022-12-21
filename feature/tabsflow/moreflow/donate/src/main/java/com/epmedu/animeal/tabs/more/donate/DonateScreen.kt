@@ -1,18 +1,22 @@
 package com.epmedu.animeal.tabs.more.donate
 
 import androidx.compose.runtime.Composable
-import com.epmedu.animeal.extensions.currentOrThrow
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
-import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.tabs.more.donate.viewmodel.DonateViewModel
 
 @Composable
 fun DonateScreen() {
-    val navigator = LocalNavigator.currentOrThrow
+    val viewModel = hiltViewModel<DonateViewModel>()
 
     BottomBarVisibility(HIDDEN)
 
+    val state = viewModel.stateFlow.collectAsState()
+
     DonateScreenUI(
-        onBack = navigator::popBackStack,
+        state = state.value,
+        onEvent = viewModel::handleEvent
     )
 }

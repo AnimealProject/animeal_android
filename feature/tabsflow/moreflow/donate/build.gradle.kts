@@ -14,8 +14,10 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+    implementation(projects.library.common)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
+    implementation(libs.compose.material)
     debugImplementation(libs.compose.ui.tooling)
 }
