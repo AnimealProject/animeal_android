@@ -1,11 +1,11 @@
-package com.epmedu.animeal.tabs.more.donate
+package com.epmedu.animeal.tabs.more.donate.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
-import com.epmedu.animeal.tabs.more.donate.viewmodel.DonateViewModel
+import com.epmedu.animeal.tabs.more.donate.presentation.viewmodel.DonateViewModel
 
 @Composable
 fun DonateScreen() {

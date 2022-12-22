@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.donate
+package com.epmedu.animeal.tabs.more.donate.presentation
 
 sealed class DonateScreenEvent {
     object BackClicked : DonateScreenEvent()
