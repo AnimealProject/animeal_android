@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
+    implementation(libs.immutable.collections)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

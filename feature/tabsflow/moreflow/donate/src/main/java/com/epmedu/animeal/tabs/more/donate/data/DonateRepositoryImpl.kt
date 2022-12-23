@@ -3,14 +3,16 @@ package com.epmedu.animeal.tabs.more.donate.data
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
 import com.epmedu.animeal.tabs.more.donate.domain.DonateRepository
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class DonateRepositoryImpl : DonateRepository {
 
-    override fun getDonateInformation(): Flow<List<DonateInformation>> {
+    override fun getDonateInformation(): Flow<ImmutableList<DonateInformation>> {
         return flowOf(
-            listOf(
+            persistentListOf(
                 DonateInformation(
                     title = "Bank of Georgia",
                     number = "1GE82983752093855555",
