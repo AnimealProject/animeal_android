@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.theme.AnimealIcon
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor.secondaryBackground
 import com.epmedu.animeal.resources.R
@@ -35,6 +34,7 @@ internal fun DonateListItem(
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.subtitle1
         )
+        Spacer(modifier = Modifier.height(2.dp))
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
@@ -56,7 +56,7 @@ internal fun DonateListItem(
                 text = bankNumber,
             )
             Icon(
-                painter = AnimealIcon.copyIcon,
+                painter = painterResource(id = R.drawable.ic_copy),
                 contentDescription = null,
                 tint = Color.Unspecified,
             )
@@ -66,7 +66,7 @@ internal fun DonateListItem(
 
 @AnimealPreview
 @Composable
-fun DonateListItemPreview() {
+private fun DonateListItemPreview() {
     AnimealTheme {
         DonateListItem(
             icon = R.drawable.ic_bank_of_georgia,

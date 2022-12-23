@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,9 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.copyText
 import com.epmedu.animeal.extensions.currentOrThrow
-import com.epmedu.animeal.foundation.placeholder.ScreenPlaceholder
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.topbar.BackButton
+import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
@@ -33,52 +35,65 @@ internal fun DonateScreenUI(
 ) {
     onState(state, onEvent)
 
-    ScreenPlaceholder(
-        title = stringResource(id = R.string.page_donate),
-        onBack = { onEvent(DonateScreenEvent.BackClicked) },
-        content = {
-            Column {
-                Text(
-                    modifier = Modifier.padding(26.dp, 10.dp, 26.dp, 21.dp),
-                    style = MaterialTheme.typography.subtitle1,
-                    text = stringResource(R.string.donation_subtitle),
-                )
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopBar(
+                title = stringResource(id = R.string.page_donate),
+                modifier = Modifier.statusBarsPadding()
+            ) {
+                BackButton { onEvent(DonateScreenEvent.BackClicked) }
+            }
+        },
+        content = { Content(state, onEvent) }
+    )
+}
 
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = PaddingValues(vertical = 21.dp)
-                ) {
-                    item {
-                        Image(
-                            modifier = Modifier
-                                .padding(37.dp, 12.dp, 37.dp, 12.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .aspectRatio(2.0f),
-                            painter = painterResource(id = R.drawable.doggo),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                    items(state.donationInformation) { donationInfo: DonateInformation ->
-                        DonateListItem(
-                            Modifier.padding(horizontal = 26.dp),
-                            icon = donationInfo.icon,
-                            header = donationInfo.title,
-                            bankNumber = donationInfo.number,
-                            onEvent = onEvent,
-                        )
-                    }
-                    item {
-                        Text(
-                            text = stringResource(id = R.string.donation_thanks),
-                            style = MaterialTheme.typography.body1,
-                        )
-                    }
-                }
+@Composable
+private fun Content(
+    state: DonateState,
+    onEvent: (event: DonateScreenEvent) -> Unit
+) {
+    Column {
+        Text(
+            modifier = Modifier.padding(26.dp, 10.dp, 26.dp, 21.dp),
+            style = MaterialTheme.typography.subtitle1,
+            text = stringResource(R.string.donation_subtitle),
+        )
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(vertical = 21.dp)
+        ) {
+            item {
+                Image(
+                    modifier = Modifier
+                        .padding(37.dp, 12.dp, 37.dp, 12.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .aspectRatio(2.0f),
+                    painter = painterResource(id = R.drawable.doggo),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            }
+            items(state.donationInformation) { donationInfo: DonateInformation ->
+                DonateListItem(
+                    Modifier.padding(horizontal = 26.dp),
+                    icon = donationInfo.icon,
+                    header = donationInfo.title,
+                    bankNumber = donationInfo.number,
+                    onEvent = onEvent,
+                )
+            }
+            item {
+                Text(
+                    text = stringResource(id = R.string.donation_thanks),
+                    style = MaterialTheme.typography.body1,
+                )
             }
         }
-    )
+    }
 }
 
 @Composable

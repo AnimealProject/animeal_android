@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.getSystemService
+import com.epmedu.animeal.resources.R
 
 private const val URI_SCHEME = "package"
 
@@ -35,7 +36,7 @@ fun Context.drawableCompat(id: Int) = requireNotNull(AppCompatResources.getDrawa
 
 fun Context.copyText(
     text: String,
-    @StringRes label: Int = com.epmedu.animeal.resources.R.string.text_copy_label,
+    @StringRes label: Int = R.string.text_copy_label,
     @StringRes toastText: Int?
 ) {
     val clipboard = getSystemService<ClipboardManager>()!!
