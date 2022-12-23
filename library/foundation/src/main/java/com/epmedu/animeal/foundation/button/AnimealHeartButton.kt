@@ -1,6 +1,5 @@
 package com.epmedu.animeal.foundation.button
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape

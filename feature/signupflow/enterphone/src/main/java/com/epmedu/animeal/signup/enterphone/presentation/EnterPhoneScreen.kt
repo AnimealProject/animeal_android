@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneEvent
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneViewModel
 
 @Composable
@@ -22,16 +23,13 @@ fun EnterPhoneScreen() {
     EnterPhoneScreenUi(
         state = state,
         focusRequester = focusRequester,
-        onNumberChange = { viewModel.updatePhoneNumber(it) },
-        onBack = navigator::popBackStack,
-        onNext = {
-            viewModel.savePhoneNumberAndSendCode()
-        }
+        onEvent = viewModel::handleEvents,
+        onBack = navigator::popBackStack
     )
 
     LaunchedEffect(Unit) {
         viewModel.events.collect {
-            if (it is EnterPhoneViewModel.Event.NavigateToEnterCode) {
+            if (it is EnterPhoneEvent.NavigateToEnterCode) {
                 navigator.navigate(SignUpRoute.EnterCode.name)
             }
         }

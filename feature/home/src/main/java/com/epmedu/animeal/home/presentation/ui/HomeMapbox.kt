@@ -88,8 +88,10 @@ private fun MapboxMap(
         )
     }
 
-    LaunchedEffect(key1 = state.currentLocation) {
-        mapboxMapView.setLocation(state.currentLocation)
+    LaunchedEffect(key1 = state.locationState) {
+        if (state.locationState.isInitial || state.locationState.isUndefined) {
+            mapboxMapView.setLocation(state.locationState.location)
+        }
     }
 
     AndroidView(

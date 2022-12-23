@@ -57,6 +57,7 @@ fun ProfileInputForm(
             )
             PhoneNumberInput(
                 value = phoneNumber,
+                prefix = profile.phoneNumberPrefix,
                 onValueChange = { onEvent(PhoneNumberChanged(it)) },
                 error = phoneNumberError.asString(),
                 isEnabled = isPhoneNumberEnabled,

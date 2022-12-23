@@ -25,6 +25,8 @@ dependencies {
 
     implementation(libs.mapbox.android)
 
+    implementation(libs.immutable.collections)
+
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)

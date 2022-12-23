@@ -7,12 +7,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.StableList
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
+import com.epmedu.animeal.geolocation.location.model.Location
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.UpdateGeolocationPermissionRequestedSettingUseCase
@@ -20,10 +20,12 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("TooManyFunctions")
 class HomeViewModel @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
     private val buildConfigProvider: BuildConfigProvider,
@@ -54,20 +56,32 @@ class HomeViewModel @Inject constructor(
             copy(
                 mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
                 mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI,
-                isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase()
+                isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
+                gpsSettingState = when {
+                    gpsSettingsProvider.isGpsSettingsEnabled -> GpsSettingState.Enabled
+                    else -> GpsSettingState.Disabled
+                }
             )
         }
     }
 
     private fun fetchLocationUpdates() {
         viewModelScope.launch {
-            locationProvider.fetchUpdates().collect {
-                updateState { copy(currentLocation = MapLocation(it)) }
-            }
+            locationProvider.fetchUpdates().collect(::collectLocations)
         }
     }
 
-    @Suppress("UnusedPrivateMember")
+    private fun collectLocations(currentLocation: Location) {
+        val mapLocation = MapLocation(currentLocation)
+
+        val locationState = when (state.locationState) {
+            is LocationState.UndefinedLocation -> LocationState.InitialLocation(mapLocation)
+            else -> LocationState.ExactLocation(mapLocation)
+        }
+
+        updateState { copy(locationState = locationState) }
+    }
+
     private fun collectGpsSettings(state: GpsSettingsProvider.GpsSettingState) {
         val uiGpsState = when (state) {
             GpsSettingsProvider.GpsSettingState.Enabled -> GpsSettingState.Enabled
@@ -81,13 +95,8 @@ class HomeViewModel @Inject constructor(
             feedingPointRepository.getAllFeedingPoints().collect {
                 updateState {
                     copy(
-                        feedingPoints = StableList(
-                            it.take(15).map { feedingPoint ->
-                                FeedingPointModel(
-                                    feedingPoint
-                                )
-                            }
-                        )
+                        feedingPoints = it.take(15)
+                            .map { feedingPoint -> FeedingPointModel(feedingPoint) }.toImmutableList()
                     )
                 }
             }
