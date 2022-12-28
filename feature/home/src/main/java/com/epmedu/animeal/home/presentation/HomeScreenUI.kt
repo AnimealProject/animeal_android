@@ -63,7 +63,7 @@ internal fun HomeScreenUI(
             }
         },
         sheetControls = {
-            if (bottomSheetState.isVisible){
+            if (bottomSheetState.isVisible) {
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
