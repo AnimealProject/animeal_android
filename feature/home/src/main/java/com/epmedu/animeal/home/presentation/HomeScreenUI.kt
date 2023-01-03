@@ -63,11 +63,13 @@ internal fun HomeScreenUI(
             }
         },
         sheetControls = {
-            FeedingPointActionButton(
-                alpha = buttonAlpha,
-                enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onScreenEvent(ShowWillFeedDialog) }
-            )
+            if (bottomSheetState.isVisible) {
+                FeedingPointActionButton(
+                    alpha = buttonAlpha,
+                    enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
+                    onClick = { onScreenEvent(ShowWillFeedDialog) }
+                )
+            }
         }
     ) {
         HomeGeolocationPermission(
