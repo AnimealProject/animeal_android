@@ -17,7 +17,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.CardClicked
-import com.epmedu.animeal.tabs.more.faq.presentation.model.FrequentlyAskedQuestionCard
+import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQHeader
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.toComposable
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
@@ -78,7 +78,7 @@ private fun FAQScreenUIPreview() {
         FAQScreenUI(
             state = FAQState(
                 questionCards = List(3) { index ->
-                    FrequentlyAskedQuestionCard(
+                    FAQCard(
                         question = "Question ${index + 1}",
                         answer = generateLoremIpsum(),
                         isExpanded = index == 2

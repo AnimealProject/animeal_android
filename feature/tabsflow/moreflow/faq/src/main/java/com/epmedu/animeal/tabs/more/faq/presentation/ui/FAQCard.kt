@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.tabs.more.faq.presentation.model.FrequentlyAskedQuestionCard
+import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun FrequentlyAskedQuestionCard.toComposable(
+internal fun FAQCard.toComposable(
     onClick: () -> Unit
 ) {
     Column {
@@ -63,10 +63,10 @@ internal fun FrequentlyAskedQuestionCard.toComposable(
 
 @AnimealPreview
 @Composable
-private fun FrequentlyAskedQuestionCardPreview(@PreviewParameter(LoremIpsum::class) text: String) {
+private fun FAQCardPreview(@PreviewParameter(LoremIpsum::class) text: String) {
     AnimealTheme {
         Column {
-            FrequentlyAskedQuestionCard(
+            FAQCard(
                 question = "Expanded",
                 answer = text,
                 isExpanded = true
@@ -74,7 +74,7 @@ private fun FrequentlyAskedQuestionCardPreview(@PreviewParameter(LoremIpsum::cla
                 onClick = {}
             )
             Divider()
-            FrequentlyAskedQuestionCard(
+            FAQCard(
                 question = "Collapsed",
                 answer = text
             ).toComposable(
