@@ -80,8 +80,6 @@
 
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
 
-    <string name="faq_page_app_version">App version: %s</string>
-
     <string name="done">Done</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -100,5 +98,8 @@
     <string name="back_to_home">Back to home</string>
 
     <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
+    
+    <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
+    <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at example@gmail.com</string>
 
 </resources>
