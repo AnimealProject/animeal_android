@@ -2,7 +2,7 @@ package com.epmedu.animeal.tabs.more.donate.data
 
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
-import com.epmedu.animeal.tabs.more.donate.domain.DonateRepository
+import com.epmedu.animeal.tabs.more.donate.domain.repository.DonateRepository
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
@@ -15,17 +15,17 @@ class DonateRepositoryImpl : DonateRepository {
             persistentListOf(
                 DonateInformation(
                     title = "Bank of Georgia",
-                    number = "1GE82983752093855555",
+                    paymentCredentials = "1GE82983752093855555",
                     icon = R.drawable.ic_bank_of_georgia,
                 ),
                 DonateInformation(
                     title = "TBC Bank",
-                    number = "2GE82983752093855555",
+                    paymentCredentials = "2GE82983752093855555",
                     icon = R.drawable.ic_tbc_bank,
                 ),
                 DonateInformation(
                     title = "PayPal",
-                    number = "3GE82983752093855555",
+                    paymentCredentials = "donate.me@example.com",
                     icon = R.drawable.ic_paypal,
                 ),
             )

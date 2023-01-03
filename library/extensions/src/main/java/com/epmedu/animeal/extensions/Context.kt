@@ -39,9 +39,9 @@ fun Context.copyText(
     @StringRes label: Int = R.string.text_copy_label,
     @StringRes toastText: Int?
 ) {
-    val clipboard = getSystemService<ClipboardManager>()!!
+    val clipboard = getSystemService<ClipboardManager>()
     val clip = ClipData.newPlainText(getString(label), text)
-    clipboard.setPrimaryClip(clip)
+    clipboard?.setPrimaryClip(clip)
     toastText?.let {
         Toast
             .makeText(this, getString(toastText), Toast.LENGTH_SHORT)

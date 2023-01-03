@@ -27,6 +27,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
 import com.epmedu.animeal.tabs.more.donate.presentation.viewmodel.DonateState
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun DonateScreenUI(
@@ -56,7 +57,7 @@ private fun Content(
 ) {
     Column {
         Text(
-            modifier = Modifier.padding(26.dp, 10.dp, 26.dp, 21.dp),
+            modifier = Modifier.padding(start = 26.dp, top = 10.dp, end = 26.dp, bottom = 21.dp),
             style = MaterialTheme.typography.subtitle1,
             text = stringResource(R.string.donation_subtitle),
         )
@@ -82,7 +83,7 @@ private fun Content(
                     Modifier.padding(horizontal = 26.dp),
                     icon = donationInfo.icon,
                     header = donationInfo.title,
-                    bankNumber = donationInfo.number,
+                    paymentCredentials = donationInfo.paymentCredentials,
                     onEvent = onEvent,
                 )
             }
@@ -119,7 +120,20 @@ private fun DonateScreenPreview() {
     AnimealTheme {
         DonateScreenUI(
             onEvent = {},
-            state = DonateState()
+            state = DonateState(
+                donationInformation = persistentListOf(
+                    DonateInformation(
+                        title = "TBC Bank",
+                        paymentCredentials = "2GE82983752093855555",
+                        icon = R.drawable.ic_tbc_bank,
+                    ),
+                    DonateInformation(
+                        title = "PayPal",
+                        paymentCredentials = "donate.me@example.com",
+                        icon = R.drawable.ic_paypal,
+                    ),
+                )
+            )
         )
     }
 }

@@ -25,7 +25,7 @@ internal fun DonateListItem(
     modifier: Modifier = Modifier,
     @DrawableRes icon: Int,
     header: String,
-    bankNumber: String,
+    paymentCredentials: String,
     onEvent: (event: DonateScreenEvent) -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -40,7 +40,7 @@ internal fun DonateListItem(
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = secondaryBackground)
                 .clickable {
-                    onEvent(DonateScreenEvent.DonateNumberClicked(bankNumber))
+                    onEvent(DonateScreenEvent.DonateNumberClicked(paymentCredentials))
                 }
                 .padding(16.dp)
         ) {
@@ -53,7 +53,7 @@ internal fun DonateListItem(
             Text(
                 modifier = Modifier.weight(1.0f),
                 style = MaterialTheme.typography.body1,
-                text = bankNumber,
+                text = paymentCredentials,
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_copy),
@@ -71,7 +71,7 @@ private fun DonateListItemPreview() {
         DonateListItem(
             icon = R.drawable.ic_bank_of_georgia,
             header = "Bank of Georgia",
-            bankNumber = "1GE82983752093855555",
+            paymentCredentials = "1GE82983752093855555",
             onEvent = {},
         )
     }

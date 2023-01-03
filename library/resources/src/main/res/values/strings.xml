@@ -105,6 +105,6 @@
 
     <string name="donation_subtitle">We can leave a donation for animals and in support of the developers</string>
     <string name="donation_thanks">Thank you for donate!</string>
-    <string name="donation_copy_toast">Number is copied</string>
+    <string name="donation_copy_toast">Copied</string>
 
 </resources>

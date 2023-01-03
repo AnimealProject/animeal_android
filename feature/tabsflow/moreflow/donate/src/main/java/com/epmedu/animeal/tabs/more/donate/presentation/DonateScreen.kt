@@ -2,6 +2,7 @@ package com.epmedu.animeal.tabs.more.donate.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
@@ -13,10 +14,10 @@ fun DonateScreen() {
 
     BottomBarVisibility(HIDDEN)
 
-    val state = viewModel.stateFlow.collectAsState()
+    val state by viewModel.stateFlow.collectAsState()
 
     DonateScreenUI(
-        state = state.value,
+        state = state,
         onEvent = viewModel::handleEvent
     )
 }
