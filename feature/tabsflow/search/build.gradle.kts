@@ -17,5 +17,8 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
 
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicator)
+
     debugImplementation(libs.compose.ui.tooling)
 }
