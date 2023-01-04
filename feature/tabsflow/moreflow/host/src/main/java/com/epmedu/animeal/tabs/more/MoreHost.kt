@@ -7,7 +7,7 @@ import com.epmedu.animeal.common.route.MoreRoute
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.tabs.more.about.AboutScreen
 import com.epmedu.animeal.tabs.more.account.AccountScreen
-import com.epmedu.animeal.tabs.more.donate.DonateScreen
+import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreen
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreen
 import com.epmedu.animeal.tabs.more.profile.ProfileScreen
 

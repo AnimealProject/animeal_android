@@ -102,4 +102,10 @@
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
     <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at example@gmail.com</string>
 
+    <string name="text_copy_label">Animeal text</string>
+
+    <string name="donation_subtitle">We can leave a donation for animals and in support of the developers</string>
+    <string name="donation_thanks">Thank you for donate!</string>
+    <string name="donation_copy_toast">Copied</string>
+
 </resources>
