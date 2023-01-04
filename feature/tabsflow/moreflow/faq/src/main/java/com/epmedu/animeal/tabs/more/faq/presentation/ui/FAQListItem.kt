@@ -13,19 +13,20 @@ import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 
 @Composable
 internal fun FAQListItem(
-    faqCard: FAQCard,
+    frequentlyAskedQuestion: FrequentlyAskedQuestion,
+    isExpanded: Boolean,
     onClick: () -> Unit
 ) {
     ExpandableListItem(
-        title = faqCard.question,
+        title = frequentlyAskedQuestion.question,
         onClick = onClick,
         modifier = Modifier.padding(top = 16.dp),
-        isExpanded = faqCard.isSelected
+        isExpanded = isExpanded
     ) {
         Card(
             modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp),
@@ -33,7 +34,7 @@ internal fun FAQListItem(
             elevation = 3.dp
         ) {
             Text(
-                text = faqCard.answer,
+                text = frequentlyAskedQuestion.answer,
                 modifier = Modifier
                     .padding(16.dp)
                     .padding(start = 4.dp),
@@ -51,19 +52,20 @@ private fun FAQCardPreview() {
     AnimealTheme {
         Column {
             FAQListItem(
-                faqCard = FAQCard(
+                frequentlyAskedQuestion = FrequentlyAskedQuestion(
                     question = "Expanded",
-                    answer = answer,
-                    isSelected = true
+                    answer = answer
                 ),
+                isExpanded = true,
                 onClick = {}
             )
             Divider()
             FAQListItem(
-                faqCard = FAQCard(
+                frequentlyAskedQuestion = FrequentlyAskedQuestion(
                     question = "Collapsed",
                     answer = answer
                 ),
+                isExpanded = false,
                 onClick = {}
             )
         }

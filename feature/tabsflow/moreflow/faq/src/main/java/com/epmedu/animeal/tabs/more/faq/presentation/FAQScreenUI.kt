@@ -8,6 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,9 +21,8 @@ import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
-import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.CardClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQHeader
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQListItem
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
@@ -31,6 +34,8 @@ internal fun FAQScreenUI(
     state: FAQState,
     onEvent: (FAQScreenEvent) -> Unit
 ) {
+    var selectedQuestion: FrequentlyAskedQuestion? by remember { mutableStateOf(null) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -39,10 +44,16 @@ internal fun FAQScreenUI(
         verticalArrangement = Arrangement.LastElementBottom,
     ) {
         item { FAQHeader(onBack = { onEvent(BackClicked) }) }
-        items(state.questionCards) {
+        items(state.questions) { question ->
             FAQListItem(
-                faqCard = it,
-                onClick = { onEvent(CardClicked(it)) }
+                frequentlyAskedQuestion = question,
+                isExpanded = question == selectedQuestion,
+                onClick = {
+                    selectedQuestion = when (question) {
+                        selectedQuestion -> null
+                        else -> question
+                    }
+                }
             )
         }
         item {
@@ -61,11 +72,10 @@ private fun FAQScreenUIPreview() {
     AnimealTheme {
         FAQScreenUI(
             state = FAQState(
-                questionCards = List(3) { index ->
-                    FAQCard(
+                questions = List(3) { index ->
+                    FrequentlyAskedQuestion(
                         question = "Question ${index + 1}",
-                        answer = generateLoremIpsum(),
-                        isSelected = index == 2
+                        answer = generateLoremIpsum()
                     )
                 }.toImmutableList()
             ),

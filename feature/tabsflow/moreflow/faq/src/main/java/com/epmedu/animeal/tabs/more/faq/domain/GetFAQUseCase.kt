@@ -1,22 +1,11 @@
 package com.epmedu.animeal.tabs.more.faq.domain
 
-import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 internal class GetFAQUseCase(
     private val repository: FAQRepository
 ) {
-    operator fun invoke(): Flow<ImmutableList<FAQCard>> {
-        return repository.getFAQ().map { questions ->
-            questions.map { frequentlyAskedQuestion ->
-                FAQCard(
-                    question = frequentlyAskedQuestion.question,
-                    answer = frequentlyAskedQuestion.answer
-                )
-            }.toImmutableList()
-        }
-    }
+    operator fun invoke(): Flow<ImmutableList<FrequentlyAskedQuestion>> = repository.getFAQ()
 }

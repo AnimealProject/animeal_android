@@ -6,15 +6,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.tabs.more.faq.domain.GetFAQUseCase
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
-import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.CardClicked
-import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQEvent.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +28,7 @@ internal class FAQViewModel @Inject constructor(
     private fun getFAQ() {
         viewModelScope.launch {
             getFAQUseCase().collect {
-                updateState { copy(questionCards = it) }
+                updateState { copy(questions = it) }
             }
         }
     }
@@ -40,49 +36,10 @@ internal class FAQViewModel @Inject constructor(
     fun handleEvents(event: FAQScreenEvent) {
         when (event) {
             BackClicked -> navigateBack()
-            is CardClicked -> updateCards(event.card)
         }
     }
 
     private fun navigateBack() {
         viewModelScope.launch { sendEvent(NavigateBack) }
-    }
-
-    private fun updateCards(clickedCard: FAQCard) {
-        when {
-            clickedCard.isSelected -> {
-                collapseCard(clickedCard)
-            }
-            else -> {
-                collapseAllCards()
-                expandCard(clickedCard)
-            }
-        }
-    }
-
-    private fun collapseCard(card: FAQCard) {
-        updateState {
-            copy(
-                questionCards = questionCards.replaceElement(
-                    oldElement = card,
-                    newElement = card.copy(isSelected = false)
-                ).toImmutableList()
-            )
-        }
-    }
-
-    private fun collapseAllCards() {
-        state.questionCards.forEach { if (it.isSelected) collapseCard(it) }
-    }
-
-    private fun expandCard(card: FAQCard) {
-        updateState {
-            copy(
-                questionCards = questionCards.replaceElement(
-                    oldElement = card,
-                    newElement = card.copy(isSelected = true)
-                ).toImmutableList()
-            )
-        }
     }
 }
