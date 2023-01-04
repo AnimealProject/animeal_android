@@ -1,6 +1,6 @@
 package com.epmedu.animeal.tabs.more.faq.presentation.viewmodel
 
-import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

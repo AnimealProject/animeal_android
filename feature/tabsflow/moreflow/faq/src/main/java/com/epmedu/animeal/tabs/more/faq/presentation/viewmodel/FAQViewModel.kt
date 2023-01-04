@@ -11,7 +11,7 @@ import com.epmedu.animeal.tabs.more.faq.domain.GetFAQUseCase
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.CardClicked
-import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQEvent.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -50,7 +50,7 @@ internal class FAQViewModel @Inject constructor(
 
     private fun updateCards(clickedCard: FAQCard) {
         when {
-            clickedCard.isExpanded -> {
+            clickedCard.isSelected -> {
                 collapseCard(clickedCard)
             }
             else -> {
@@ -65,14 +65,14 @@ internal class FAQViewModel @Inject constructor(
             copy(
                 questionCards = questionCards.replaceElement(
                     oldElement = card,
-                    newElement = card.copy(isExpanded = false)
+                    newElement = card.copy(isSelected = false)
                 ).toImmutableList()
             )
         }
     }
 
     private fun collapseAllCards() {
-        state.questionCards.forEach { if (it.isExpanded) collapseCard(it) }
+        state.questionCards.forEach { if (it.isSelected) collapseCard(it) }
     }
 
     private fun expandCard(card: FAQCard) {
@@ -80,7 +80,7 @@ internal class FAQViewModel @Inject constructor(
             copy(
                 questionCards = questionCards.replaceElement(
                     oldElement = card,
-                    newElement = card.copy(isExpanded = true)
+                    newElement = card.copy(isSelected = true)
                 ).toImmutableList()
             )
         }

@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
+import com.epmedu.animeal.tabs.more.faq.domain.model.FAQCard
 import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 
 @Composable
@@ -25,7 +25,7 @@ internal fun FAQListItem(
         title = faqCard.question,
         onClick = onClick,
         modifier = Modifier.padding(top = 16.dp),
-        isExpanded = faqCard.isExpanded
+        isExpanded = faqCard.isSelected
     ) {
         Card(
             modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp),
@@ -54,7 +54,7 @@ private fun FAQCardPreview() {
                 faqCard = FAQCard(
                     question = "Expanded",
                     answer = answer,
-                    isExpanded = true
+                    isSelected = true
                 ),
                 onClick = {}
             )
