@@ -5,7 +5,7 @@ import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
-import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.switch.model.AnimalType
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 

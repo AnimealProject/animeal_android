@@ -32,4 +32,5 @@ object CustomColor {
     val StatusGreen = Color(0xFF3BC372)
     val StatusRed = Color(0xFFF64E53)
     val SeaSerpent = AnimealColor.Light.SeaSerpent
+    val VeryLightGray = Color(0xFFF0F0F0)
 }

@@ -5,7 +5,15 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabPosition
@@ -25,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.switch.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 
 private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"
 private const val INDICATOR_LEFT_TRANSITION_LABEL = "TAB_INDICATOR_LEFT"
@@ -56,7 +64,7 @@ fun AnimealSwitch(
         },
         divider = {}
     ) {
-        AnimalTab(
+        AnimealSwitchTab(
             titleResId = AnimalType.Dogs.title,
             selected = currentAnimalType == AnimalType.Dogs,
             onClick = {
@@ -64,7 +72,7 @@ fun AnimealSwitch(
                 currentAnimalType = AnimalType.Dogs
             }
         )
-        AnimalTab(
+        AnimealSwitchTab(
             titleResId = AnimalType.Cats.title,
             selected = currentAnimalType == AnimalType.Cats,
             onClick = {
@@ -127,7 +135,7 @@ private fun TabIndicator(
  * @param modifier The [Modifier].
  */
 @Composable
-private fun AnimalTab(
+private fun AnimealSwitchTab(
     modifier: Modifier = Modifier,
     @StringRes titleResId: Int,
     selected: Boolean,
@@ -148,11 +156,6 @@ private fun AnimalTab(
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
         )
     }
-}
-
-enum class AnimalType(@StringRes val title: Int) {
-    Dogs(R.string.switch_dogs_title),
-    Cats(R.string.switch_cats_title)
 }
 
 @AnimealPreview
