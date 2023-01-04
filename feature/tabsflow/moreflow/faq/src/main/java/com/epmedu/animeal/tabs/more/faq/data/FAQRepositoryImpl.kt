@@ -1,8 +1,8 @@
 package com.epmedu.animeal.tabs.more.faq.data
 
+import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.tabs.more.faq.domain.FAQRepository
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
-import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow

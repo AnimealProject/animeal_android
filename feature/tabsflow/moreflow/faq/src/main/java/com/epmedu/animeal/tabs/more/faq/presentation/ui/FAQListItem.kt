@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
-import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 
 @Composable
 internal fun FAQListItem(

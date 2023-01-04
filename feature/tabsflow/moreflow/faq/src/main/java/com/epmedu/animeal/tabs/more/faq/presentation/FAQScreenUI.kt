@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQHeader
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQListItem
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
-import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
