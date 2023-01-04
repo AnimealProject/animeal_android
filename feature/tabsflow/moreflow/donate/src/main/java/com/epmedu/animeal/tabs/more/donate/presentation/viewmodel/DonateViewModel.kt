@@ -30,11 +30,6 @@ class DonateViewModel @Inject constructor(private val getDonateInformationUseCas
                     copy(donationNumberToCopy = event.number)
                 }
             }
-            is DonateScreenEvent.BackClicked -> {
-                updateState {
-                    copy(popBackstack = true)
-                }
-            }
             is DonateScreenEvent.NumberIsCopied -> {
                 updateState {
                     copy(donationNumberToCopy = null)

@@ -18,12 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.copyText
-import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
 import com.epmedu.animeal.tabs.more.donate.presentation.viewmodel.DonateState
@@ -32,6 +30,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun DonateScreenUI(
     onEvent: (event: DonateScreenEvent) -> Unit,
+    onBack: () -> Unit,
     state: DonateState,
 ) {
     onState(state, onEvent)
@@ -43,7 +42,7 @@ internal fun DonateScreenUI(
                 title = stringResource(id = R.string.page_donate),
                 modifier = Modifier.statusBarsPadding()
             ) {
-                BackButton { onEvent(DonateScreenEvent.BackClicked) }
+                BackButton { onBack() }
             }
         },
         content = { Content(state, onEvent) }
@@ -102,9 +101,6 @@ private fun onState(
     state: DonateState,
     onEvent: (event: DonateScreenEvent) -> Unit
 ) {
-    if (state.popBackstack) {
-        LocalNavigator.currentOrThrow.popBackStack()
-    }
     state.donationNumberToCopy?.let { number ->
         LocalContext.current.copyText(
             text = number,
@@ -120,6 +116,7 @@ private fun DonateScreenPreview() {
     AnimealTheme {
         DonateScreenUI(
             onEvent = {},
+            onBack = {},
             state = DonateState(
                 donationInformation = persistentListOf(
                     DonateInformation(

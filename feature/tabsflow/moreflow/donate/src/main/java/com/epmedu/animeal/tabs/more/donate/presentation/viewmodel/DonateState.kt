@@ -7,5 +7,4 @@ import kotlinx.collections.immutable.persistentListOf
 data class DonateState(
     val donationInformation: ImmutableList<DonateInformation> = persistentListOf(),
     val donationNumberToCopy: String? = null,
-    val popBackstack: Boolean = false
 )
