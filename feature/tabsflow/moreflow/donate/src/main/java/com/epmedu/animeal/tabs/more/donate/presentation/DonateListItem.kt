@@ -3,6 +3,7 @@ package com.epmedu.animeal.tabs.more.donate.presentation
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -21,7 +22,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.spacer.WidthSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.theme.CustomColor.secondaryBackground
+import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -42,7 +43,7 @@ internal fun DonateListItem(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(color = secondaryBackground)
+                .background(color = backgroundColor())
                 .clickable {
                     onEvent(DonateScreenEvent.DonateNumberClicked(paymentCredentials))
                 }
@@ -66,6 +67,11 @@ internal fun DonateListItem(
             )
         }
     }
+}
+
+@Composable
+private fun backgroundColor(): Color {
+    return if (isSystemInDarkTheme()) CustomColor.DarkestGrey else CustomColor.LynxWhite
 }
 
 @AnimealPreview

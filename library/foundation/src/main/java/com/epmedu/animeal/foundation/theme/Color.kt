@@ -1,7 +1,5 @@
 package com.epmedu.animeal.foundation.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val DisabledButtonColor = Color(0xFFD9DEE1)
@@ -26,6 +24,7 @@ object CustomColor {
     val Orange = Color(0xFFFB7A2C)
     val LynxWhite = Color(0xFFF7F7F7)
     val DarkerGrey = Color(0xFF99A8B0)
+    val DarkestGrey = Color(0xFF262626)
     val Error = Color(0xFFF04E45)
     val HitGrey = Color(0xFF99A8B0)
 
@@ -34,9 +33,4 @@ object CustomColor {
     val StatusGreen = Color(0xFF3BC372)
     val StatusRed = Color(0xFFF64E53)
     val SeaSerpent = AnimealColor.Light.SeaSerpent
-
-    private val DarkestGrey = Color(0xFF262626)
-    val secondaryBackground: Color
-        @Composable
-        get() = if (isSystemInDarkTheme()) DarkestGrey else LynxWhite
 }
