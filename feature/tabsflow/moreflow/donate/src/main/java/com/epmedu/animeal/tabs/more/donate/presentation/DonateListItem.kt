@@ -3,7 +3,9 @@ package com.epmedu.animeal.tabs.more.donate.presentation
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -16,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
+import com.epmedu.animeal.foundation.spacer.WidthSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor.secondaryBackground
 import com.epmedu.animeal.resources.R
@@ -34,7 +38,7 @@ internal fun DonateListItem(
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.subtitle1
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        HeightSpacer(2.dp)
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
@@ -49,7 +53,7 @@ internal fun DonateListItem(
                 contentDescription = null,
                 tint = Color.Unspecified,
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            WidthSpacer(width = 16.dp)
             Text(
                 modifier = Modifier.weight(1.0f),
                 style = MaterialTheme.typography.body1,
