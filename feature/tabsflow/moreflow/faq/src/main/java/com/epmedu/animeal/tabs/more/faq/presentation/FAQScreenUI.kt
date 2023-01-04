@@ -19,7 +19,7 @@ import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.BackClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.CardClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.model.FAQCard
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQHeader
-import com.epmedu.animeal.tabs.more.faq.presentation.ui.toComposable
+import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQListItem
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
 import com.epmedu.animeal.tabs.more.faq.util.generateLoremIpsum
 import kotlinx.collections.immutable.toImmutableList
@@ -57,7 +57,8 @@ internal fun FAQScreenUI(
     ) {
         item { FAQHeader(onBack = { onEvent(BackClicked) }) }
         items(state.questionCards) {
-            it.toComposable(
+            FAQListItem(
+                faqCard = it,
                 onClick = { onEvent(CardClicked(it)) }
             )
         }
