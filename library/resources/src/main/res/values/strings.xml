@@ -110,4 +110,10 @@
     <string name="hours">h</string>
     <string name="minutes">min</string>
 
+    <string name="text_copy_label">Animeal text</string>
+
+    <string name="donation_subtitle">We can leave a donation for animals and in support of the developers</string>
+    <string name="donation_thanks">Thank you for donate!</string>
+    <string name="donation_copy_toast">Copied</string>
+
 </resources>

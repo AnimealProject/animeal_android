@@ -25,7 +25,9 @@ import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
-import com.epmedu.animeal.home.presentation.ui.*
+import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
+import com.epmedu.animeal.home.presentation.ui.HomeMapbox
+import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -35,6 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
+@Suppress("LongMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
@@ -57,19 +60,24 @@ internal fun HomeScreenUI(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
             state.currentFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheet(
+                FeedingPointSheetContent(
                     feedingPoint = FeedingPointModel(feedingPoint),
-                    alpha = contentAlpha,
-                    onScreenEvent = onScreenEvent
+                    contentAlpha = contentAlpha,
+                    modifier = Modifier.wrapContentHeight(),
+                    onFavouriteChange = {
+                        onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
+                    }
                 )
             }
         },
         sheetControls = {
-            FeedingPointActionButton(
-                alpha = buttonAlpha,
-                enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
-            )
+            if (bottomSheetState.isVisible) {
+                FeedingPointActionButton(
+                    alpha = buttonAlpha,
+                    enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
+                    onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                )
+            }
         }
     ) {
         HomeGeolocationPermission(
@@ -119,22 +127,6 @@ private fun WillFeedConfirmationDialog(
             onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
         )
     }
-}
-
-@Composable
-fun FeedingPointSheet(
-    feedingPoint: FeedingPointModel,
-    alpha: Float,
-    onScreenEvent: (HomeScreenEvent) -> Unit
-) {
-    FeedingPointSheetContent(
-        feedingPoint = feedingPoint,
-        contentAlpha = alpha,
-        modifier = Modifier.wrapContentHeight(),
-        onFavouriteChange = {
-            onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
-        }
-    )
 }
 
 @Composable
