@@ -8,10 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,6 +19,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
+import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.QuestionClicked
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQHeader
 import com.epmedu.animeal.tabs.more.faq.presentation.ui.FAQListItem
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
@@ -31,10 +28,9 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun FAQScreenUI(
     state: FAQState,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onEvent: (FAQScreenEvent) -> Unit
 ) {
-    var selectedQuestion: FrequentlyAskedQuestion? by rememberSaveable { mutableStateOf(null) }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -46,13 +42,8 @@ internal fun FAQScreenUI(
         items(state.questions) { question ->
             FAQListItem(
                 frequentlyAskedQuestion = question,
-                isExpanded = question == selectedQuestion,
-                onClick = {
-                    selectedQuestion = when (question) {
-                        selectedQuestion -> null
-                        else -> question
-                    }
-                }
+                isExpanded = question == state.selectedQuestion,
+                onClick = { onEvent(QuestionClicked(question)) }
             )
         }
         item {
@@ -79,6 +70,7 @@ private fun FAQScreenUIPreview() {
                 }.toImmutableList()
             ),
             onBack = {},
+            onEvent = {}
         )
     }
 }

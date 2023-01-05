@@ -22,5 +22,6 @@ fun FAQScreen() {
     FAQScreenUI(
         state = state,
         onBack = navigator::popBackStack,
+        onEvent = viewModel::handleEvents
     )
 }
