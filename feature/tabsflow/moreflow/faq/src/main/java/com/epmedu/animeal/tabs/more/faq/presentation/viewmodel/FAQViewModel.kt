@@ -16,6 +16,10 @@ internal class FAQViewModel @Inject constructor(
     StateDelegate<FAQState> by DefaultStateDelegate(initialState = FAQState()) {
 
     init {
+        getFaq()
+    }
+
+    private fun getFaq() {
         viewModelScope.launch {
             getFAQUseCase().collect {
                 updateState { copy(questions = it) }
