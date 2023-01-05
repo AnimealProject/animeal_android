@@ -8,7 +8,7 @@ import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.tabs.more.about.AboutScreen
 import com.epmedu.animeal.tabs.more.account.AccountScreen
 import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreen
-import com.epmedu.animeal.tabs.more.faq.FAQScreen
+import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreen
 import com.epmedu.animeal.tabs.more.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)

@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    
+    implementation(libs.immutable.collections)
 }
