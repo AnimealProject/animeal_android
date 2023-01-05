@@ -114,7 +114,7 @@ private fun WillFeedConfirmationDialog(
             onAgreeClick = {
                 onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
                 onScreenEvent(RouteEvent.FeedingRouteStartRequest)
-                onAgreeClick.invoke()
+                onAgreeClick()
             },
             onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
         )

@@ -4,8 +4,8 @@ import com.mapbox.navigation.base.route.NavigationRoute
 
 data class RouteResult(
     val isSuccessful: Boolean,
-    val timeLeft: String? = null,
+    val timeLeft: Long? = null,
     val routeData: NavigationRoute? = null,
-    val distanceLeft: String? = null,
+    val distanceLeft: Long? = null,
     val errorMessage: String? = null
 )

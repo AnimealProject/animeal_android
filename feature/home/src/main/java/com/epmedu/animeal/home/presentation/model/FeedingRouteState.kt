@@ -4,15 +4,20 @@ import com.mapbox.navigation.base.route.NavigationRoute
 
 sealed class FeedingRouteState(
     val timeLeft: Long? = null,
-    val distanceLeft: String? = null,
+    val distanceLeft: Long? = null,
     val isRouteActive: Boolean = false,
     val routeData: NavigationRoute? = null
 ) {
-    object Disabled : FeedingRouteState(null, null, false)
+    object Disabled : FeedingRouteState(timeLeft = null, distanceLeft = null, isRouteActive = false)
     object Started : FeedingRouteState(isRouteActive = true)
     class Updated(
-        distanceLeft: String? = null,
+        distanceLeft: Long? = null,
         timeLeft: Long? = null,
         routeData: NavigationRoute? = null
-    ) : FeedingRouteState(timeLeft, distanceLeft, true, routeData)
+    ) : FeedingRouteState(
+        timeLeft = timeLeft,
+        distanceLeft = distanceLeft,
+        isRouteActive = true,
+        routeData = routeData
+    )
 }

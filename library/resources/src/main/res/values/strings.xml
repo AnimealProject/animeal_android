@@ -105,4 +105,9 @@
 
     <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
 
+    <string name="kilometers">km</string>
+    <string name="meters">m</string>
+    <string name="hours">h</string>
+    <string name="minutes">min</string>
+
 </resources>

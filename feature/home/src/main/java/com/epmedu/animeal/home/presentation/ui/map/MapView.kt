@@ -5,16 +5,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
-import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_BOTTOM_PADDING
-import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_END_PADDING
-import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_START_PADDING
-import com.epmedu.animeal.common.constants.Map.DEFAULT_MAP_TOP_PADDING
-import com.epmedu.animeal.common.constants.Map.DEFAULT_ZOOM
-import com.epmedu.animeal.extensions.formatMetersToKilometers
-import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_START_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_TOP_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_ZOOM
 import com.epmedu.animeal.resources.R
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
@@ -105,50 +103,7 @@ fun MapView.fetchRoute(
         .coordinates(origin = path.origin, destination = path.destination)
         .build()
 
-    navigation.requestRoutes(
-        routeOptions,
-        object : NavigationRouterCallback {
-            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
-                // Mapbox always considers the first route the better one
-                routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
-                    onRouteResult(
-                        RouteResult(
-                            true,
-                            distanceLeft = distance().toLong().formatMetersToKilometers(),
-                            timeLeft = duration().toLong().formatNumberToHourMin(),
-                            routeData = routes.first()
-                        )
-                    )
-                    return
-                }
-
-                onRouteResult(
-                    RouteResult(
-                        false,
-                        errorMessage = context.getString(R.string.routes_not_found)
-                    )
-                )
-            }
-
-            override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
-                onRouteResult(
-                    RouteResult(
-                        false,
-                        errorMessage = context.getString(R.string.routes_failed)
-                    )
-                )
-            }
-
-            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
-                onRouteResult(
-                    RouteResult(
-                        false,
-                        errorMessage = context.getString(R.string.routes_cancelled)
-                    )
-                )
-            }
-        }
-    )
+    requestRoutes(navigation, routeOptions, onRouteResult)
 
     doOnDetach {
         mapBoxRouteInitOptions.run {
@@ -183,3 +138,54 @@ fun MapView.setGesturesListener(onMapInteraction: () -> Unit) =
     getMapboxMap().addOnCameraChangeListener {
         onMapInteraction()
     }
+
+private fun MapView.requestRoutes(
+    navigation: MapboxNavigation,
+    routeOptions: RouteOptions,
+    onRouteResult: (result: RouteResult) -> Unit
+) {
+    navigation.requestRoutes(
+        routeOptions,
+        object : NavigationRouterCallback {
+            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
+                // Mapbox always considers the first route the better one
+                routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
+                    onRouteResult(
+                        RouteResult(
+                            true,
+                            distanceLeft = distance().toLong(),
+                            timeLeft = duration().toLong(),
+                            routeData = routes.first()
+                        )
+                    )
+                    return
+                }
+
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_not_found)
+                    )
+                )
+            }
+
+            override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_failed)
+                    )
+                )
+            }
+
+            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_cancelled)
+                    )
+                )
+            }
+        }
+    )
+}

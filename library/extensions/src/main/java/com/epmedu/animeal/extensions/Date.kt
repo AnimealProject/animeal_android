@@ -1,5 +1,7 @@
 package com.epmedu.animeal.extensions
 
+import android.content.Context
+import com.epmedu.animeal.resources.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,10 +43,10 @@ fun tryParseDate(rawDate: String?): LocalDate? {
 /**
  * Consider number in milliseconds
  */
-fun Long.formatNumberToHourMin(): String? {
-    if (this < 0) return null
-    val hours = this / HOUR_IN_MILLIS
-    val minutes = this % HOUR_IN_MILLIS / MINUTE_IN_MILLIS
+fun Context.formatNumberToHourMin(time: Long?): String? {
+    if (time == null || time < 0) return null
+    val hours = time / HOUR_IN_MILLIS
+    val minutes = time % HOUR_IN_MILLIS / MINUTE_IN_MILLIS
 
-    return "${if (hours > 0) "$hours h " else ""}$minutes min"
+    return "${if (hours > 0) "$hours ${R.string.hours} " else ""}$minutes ${R.string.minutes}"
 }

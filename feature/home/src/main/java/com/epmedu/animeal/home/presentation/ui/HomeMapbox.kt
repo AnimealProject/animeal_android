@@ -9,10 +9,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnDetach
+import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -42,6 +44,8 @@ internal fun HomeMapbox(
     onCancelRouteClick: () -> Unit,
     onMapInteraction: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     Box(modifier = Modifier.fillMaxSize()) {
         val mapboxMapView = rememberMapboxMapView(homeState = state)
 
@@ -67,9 +71,11 @@ internal fun HomeMapbox(
                     .statusBarsPadding()
                     .padding(top = 16.dp)
                     .padding(horizontal = 20.dp),
-                timeLeft = state.feedingRouteState.timeLeft?.formatNumberToHourMin()
+                timeLeft = context.formatNumberToHourMin(state.feedingRouteState.timeLeft)
                     ?: stringResource(R.string.calculating_route),
-                distanceLeft = state.feedingRouteState.distanceLeft?.run { " • $this" } ?: "",
+                distanceLeft = state.feedingRouteState.distanceLeft?.run {
+                    " • ${context.formatMetersToKilometers(this)}"
+                } ?: "",
                 onCancelClick = onCancelRouteClick
             )
         }

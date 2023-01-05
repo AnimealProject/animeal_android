@@ -58,11 +58,10 @@ internal class HomeViewModel @Inject constructor(
         is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
         is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
         is HomeScreenEvent.RouteEvent -> {
-            handleRouteEvent(event)
             when (event) {
                 HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest -> fetchFeedingPoints()
                 HomeScreenEvent.RouteEvent.FeedingRouteStartRequest -> hideFeedingPointsAndSaveFeeder()
-                else -> {}
+                else -> handleRouteEvent(event)
             }
         }
         is HomeScreenEvent.WillFeedEvent -> handleWillFeedEvent(event)

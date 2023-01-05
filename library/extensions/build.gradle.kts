@@ -11,5 +11,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.appcompat)
+    implementation(projects.library.resources)
     implementation(libs.compose.runtime)
 }
