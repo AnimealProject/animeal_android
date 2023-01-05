@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.faq
+package com.epmedu.animeal.tabs.more.faq.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,7 +8,7 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.tabs.more.faq.viewmodel.FAQViewModel
+import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQViewModel
 
 @Composable
 fun FAQScreen() {
@@ -22,5 +22,6 @@ fun FAQScreen() {
     FAQScreenUI(
         state = state,
         onBack = navigator::popBackStack,
+        onEvent = viewModel::handleEvents
     )
 }
