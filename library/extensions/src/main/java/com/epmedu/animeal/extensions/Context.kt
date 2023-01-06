@@ -1,6 +1,10 @@
 package com.epmedu.animeal.extensions
 
 import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
