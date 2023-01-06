@@ -1,5 +1,8 @@
 package com.epmedu.animeal.foundation.button
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -34,44 +37,29 @@ fun AnimealSocialButton(
 
 @AnimealPreview
 @Composable
-private fun FbAnimealSocialButtonPreview() {
+private fun AnimealSocialButtonPreview() {
     AnimealTheme {
-        AnimealSocialButton(
-            onClick = {},
-            iconResource = R.drawable.icon_fb
-        )
-    }
-}
-
-@AnimealPreview
-@Composable
-private fun InstAnimealSocialButtonPreview() {
-    AnimealTheme {
-        AnimealSocialButton(
-            onClick = {},
-            iconResource = R.drawable.icon_inst
-        )
-    }
-}
-
-@AnimealPreview
-@Composable
-private fun LinkAnimealSocialButtonPreview() {
-    AnimealTheme {
-        AnimealSocialButton(
-            onClick = {},
-            iconResource = R.drawable.icon_link
-        )
-    }
-}
-
-@AnimealPreview
-@Composable
-private fun WebAnimealSocialButtonPreview() {
-    AnimealTheme {
-        AnimealSocialButton(
-            onClick = {},
-            iconResource = R.drawable.icon_web
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+        ) {
+            AnimealSocialButton(
+                onClick = { },
+                iconResource = R.drawable.ic_facebook
+            )
+            AnimealSocialButton(
+                onClick = { },
+                iconResource = R.drawable.ic_instagram
+            )
+            AnimealSocialButton(
+                onClick = { },
+                iconResource = R.drawable.ic_linkedin
+            )
+            AnimealSocialButton(
+                onClick = { },
+                iconResource = R.drawable.ic_web
+            )
+        }
     }
 }

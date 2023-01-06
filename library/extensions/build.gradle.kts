@@ -13,5 +13,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.compose.runtime)
 
+    implementation(projects.library.common)
     implementation(projects.library.resources)
 }
