@@ -8,6 +8,9 @@ import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
 
 class AuthAPI {
+
+    val currentUserId get() = Amplify.Auth.currentUser.userId
+
     fun signUp(
         phone: String,
         password: String,

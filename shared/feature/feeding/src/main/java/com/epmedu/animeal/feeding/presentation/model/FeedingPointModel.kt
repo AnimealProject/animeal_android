@@ -3,7 +3,6 @@ package com.epmedu.animeal.feeding.presentation.model
 import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.resources.R
@@ -11,10 +10,9 @@ import com.mapbox.geojson.Point
 
 @Stable
 data class FeedingPointModel(
-    val id: Int, // For future implementations
+    val id: String,
     val title: String,
     val description: String,
-    val animalPriority: AnimalPriority,
     val feedStatus: FeedStatus,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
@@ -27,7 +25,6 @@ data class FeedingPointModel(
         feedingPoint.id,
         feedingPoint.title,
         feedingPoint.description,
-        feedingPoint.animalPriority,
         feedingPoint.animalStatus.toFeedStatus(),
         feedingPoint.animalType,
         feedingPoint.isFavourite,

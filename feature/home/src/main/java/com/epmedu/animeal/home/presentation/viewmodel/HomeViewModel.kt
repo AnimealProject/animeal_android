@@ -95,8 +95,9 @@ class HomeViewModel @Inject constructor(
             feedingPointRepository.getAllFeedingPoints().collect {
                 updateState {
                     copy(
-                        feedingPoints = it.take(15)
-                            .map { feedingPoint -> FeedingPointModel(feedingPoint) }.toImmutableList()
+                        feedingPoints = it.map { feedingPoint ->
+                            FeedingPointModel(feedingPoint)
+                        }.toImmutableList()
                     )
                 }
             }
@@ -106,10 +107,10 @@ class HomeViewModel @Inject constructor(
     private fun selectFeedingPoint(event: HomeScreenEvent.FeedingPointSelected) {
         viewModelScope.launch {
             feedingPointRepository.getFeedingPoint(event.id).collect { feedingPoint ->
-                updateState {
-                    copy(currentFeedingPoint = feedingPoint)
+                feedingPoint?.let {
+                    updateState { copy(currentFeedingPoint = it) }
+                    sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
                 }
-                sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
             }
         }
     }

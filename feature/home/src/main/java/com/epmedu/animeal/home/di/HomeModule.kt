@@ -1,8 +1,6 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.component.AppSettingsProvider
-import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
 import com.epmedu.animeal.home.domain.GetGeolocationPermissionRequestedSettingUseCase
@@ -16,10 +14,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object HomeModule {
-
-    @ViewModelScoped
-    @Provides
-    fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
 
     @ViewModelScoped
     @Provides

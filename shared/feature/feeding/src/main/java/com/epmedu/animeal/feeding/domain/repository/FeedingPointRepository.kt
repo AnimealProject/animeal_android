@@ -13,5 +13,5 @@ interface FeedingPointRepository {
 
     fun getFavourites(): Flow<List<FeedingPoint>>
 
-    fun getFeedingPoint(id: Int): Flow<FeedingPoint>
+    fun getFeedingPoint(id: String): Flow<FeedingPoint?>
 }

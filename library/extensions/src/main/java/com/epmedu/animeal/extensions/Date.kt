@@ -1,5 +1,6 @@
 package com.epmedu.animeal.extensions
 
+import com.amplifyframework.core.model.temporal.Temporal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -22,7 +23,10 @@ val DAY_MONTH_YEAR_DOT_FORMATTER = DateTimeFormatter
 val DEFAULT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
     .withLocale(DEFAULT_LOCALE)
 
-fun formatDateToString(date: LocalDate?, formatter: DateTimeFormatter): String {
+fun formatDateToString(
+    date: LocalDate?,
+    formatter: DateTimeFormatter = DAY_MONTH_COMMA_YEAR_FORMATTER
+): String {
     date ?: return ""
     return date.format(formatter)
 }
@@ -34,4 +38,12 @@ fun tryParseDate(rawDate: String?): LocalDate? {
     return runCatching {
         LocalDate.parse(rawDate, DAY_MONTH_COMMA_YEAR_FORMATTER)
     }.getOrNull()
+}
+
+fun Temporal.DateTime.toLocalDate(): LocalDate {
+    return LocalDate.parse(format(), DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+}
+
+fun Temporal.Timestamp.toLocalDate(): LocalDate {
+    return LocalDate.ofEpochDay(secondsSinceEpoch)
 }

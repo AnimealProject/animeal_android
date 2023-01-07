@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.domain.model.Feeder
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -229,17 +228,16 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
     AnimealTheme {
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
-                -1,
-                text.take(30),
+                id = "",
+                title = text.take(30),
                 feedStatus = FeedStatus.RED,
                 description = text.take(200),
                 isFavourite = true,
                 lastFeeder = Feeder(
-                    id = -1,
+                    id = "-1",
                     name = text.take(20),
                     time = "14 hours ago"
                 ),
-                animalPriority = AnimalPriority.HIGH,
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)
