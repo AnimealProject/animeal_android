@@ -48,5 +48,5 @@ fun Context.formatNumberToHourMin(time: Long?): String? {
     val hours = time / HOUR_IN_MILLIS
     val minutes = time % HOUR_IN_MILLIS / MINUTE_IN_MILLIS
 
-    return "${if (hours > 0) "$hours ${R.string.hours} " else ""}$minutes ${R.string.minutes}"
+    return "${if (hours > 0) "$hours ${getString(R.string.hours)} " else ""}$minutes ${getString(R.string.minutes)}"
 }
