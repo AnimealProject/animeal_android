@@ -15,11 +15,16 @@ import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.navigation.route.AuthenticationType
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToNextPage
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.FacebookEnterCodeViewModel
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.MobileEnterCodeViewModel
 
 @Composable
 fun EnterCodeScreen(authenticationType: AuthenticationType) {
     val navigator = LocalNavigator.currentOrThrow
-    val viewModel: EnterCodeViewModel = hiltViewModel()
+    val viewModel: EnterCodeViewModel = when (authenticationType) {
+        AuthenticationType.Mobile -> hiltViewModel<MobileEnterCodeViewModel>()
+        AuthenticationType.Facebook -> hiltViewModel<FacebookEnterCodeViewModel>()
+    }
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.stateFlow.collectAsState()
 

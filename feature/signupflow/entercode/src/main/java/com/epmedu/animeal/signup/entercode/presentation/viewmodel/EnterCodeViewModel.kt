@@ -6,18 +6,15 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
-import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
-import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.*
+import com.epmedu.animeal.signup.entercode.domain.confirmcode.ConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.sendcode.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToNextPage
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-internal class EnterCodeViewModel @Inject constructor(
+internal abstract class EnterCodeViewModel constructor(
     private val sendCodeUseCase: SendCodeUseCase,
     private val confirmCodeUseCase: ConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,

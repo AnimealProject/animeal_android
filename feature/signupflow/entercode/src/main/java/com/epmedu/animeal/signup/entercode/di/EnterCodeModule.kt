@@ -5,9 +5,11 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepositoryImpl
-import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
-import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.confirmcode.FacebookConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.confirmcode.MobileConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.sendcode.FacebookSendCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.sendcode.MobileSendCodeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,15 +29,27 @@ internal object EnterCodeModule {
 
     @ViewModelScoped
     @Provides
-    fun provideConfirmCodeUseCase(
+    fun provideMobileConfirmCodeUseCase(
         repository: EnterCodeRepository
-    ) = ConfirmCodeUseCase(repository)
+    ) = MobileConfirmCodeUseCase(repository)
 
     @ViewModelScoped
     @Provides
-    fun provideSendCodeUseCase(
+    fun provideFacebookConfirmCodeUseCase(
         repository: EnterCodeRepository
-    ) = SendCodeUseCase(repository)
+    ) = FacebookConfirmCodeUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideMobileSendCodeUseCase(
+        repository: EnterCodeRepository
+    ) = MobileSendCodeUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideFacebookSendCodeUseCase(
+        repository: EnterCodeRepository
+    ) = FacebookSendCodeUseCase(repository)
 
     @ViewModelScoped
     @Provides

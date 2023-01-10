@@ -61,6 +61,18 @@ class AuthAPI {
         )
     }
 
+    fun confirmPhoneNumber(
+        code: String,
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.confirmUserAttribute(
+            AuthUserAttributeKey.phoneNumber(),
+            code,
+            handler::onSuccess,
+            handler::onError
+        )
+    }
+
     fun deleteUser(
         handler: AuthRequestHandler
     ) {
@@ -71,10 +83,13 @@ class AuthAPI {
     }
 
     fun sendCode(
-        phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
-        signIn(phoneNumber, handler)
+        Amplify.Auth.resendUserAttributeConfirmationCode(
+            AuthUserAttributeKey.phoneNumber(),
+            handler::onSuccess,
+            handler::onError
+        )
     }
 
     fun fetchUserAttributes(
