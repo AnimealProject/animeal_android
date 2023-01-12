@@ -15,8 +15,12 @@ dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
+    implementation(projects.library.generatedmodel)
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
+
+    implementation(libs.amplify.aws.api)
+    implementation(libs.amplify.core)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

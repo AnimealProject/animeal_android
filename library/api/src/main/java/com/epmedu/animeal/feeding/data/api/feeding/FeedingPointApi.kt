@@ -1,8 +1,8 @@
 package com.epmedu.animeal.feeding.data.api.feeding
 
-import com.epmedu.animeal.feeding.data.model.FeedingPointData
+import com.amplifyframework.datastore.generated.model.FeedingPoint
 import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointApi {
-    fun getAllFeedingPoints(): Flow<List<FeedingPointData>>
+    fun getAllFeedingPoints(): Flow<List<FeedingPoint>>
 }

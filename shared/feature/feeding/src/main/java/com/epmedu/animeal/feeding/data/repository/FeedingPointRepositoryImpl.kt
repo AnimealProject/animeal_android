@@ -1,16 +1,13 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import com.amplifyframework.datastore.generated.model.CategoryTag.cats
+import com.amplifyframework.datastore.generated.model.Feeding
+import com.amplifyframework.datastore.generated.model.FeedingPointStatus.fed
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
-import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.feeding.data.api.favourite.FavouriteApi
 import com.epmedu.animeal.feeding.data.api.feeding.FeedingPointApi
-import com.epmedu.animeal.feeding.data.model.CategoryTagData.Cats
-import com.epmedu.animeal.feeding.data.model.FeedingData
-import com.epmedu.animeal.feeding.data.model.FeedingPointData
-import com.epmedu.animeal.feeding.data.model.FeedingPointDataStatus.Fed
 import com.epmedu.animeal.feeding.domain.model.Feeder
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -18,6 +15,8 @@ import com.epmedu.animeal.foundation.switch.AnimalType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
     private val authAPI: AuthAPI,
@@ -25,13 +24,13 @@ internal class FeedingPointRepositoryImpl(
     private val feedingPointApi: FeedingPointApi
 ) : FeedingPointRepository {
 
-    private var feedingPoints: List<FeedingPoint> = emptyList()
+    private var feedingPoints: List<DomainFeedingPoint> = emptyList()
 
-    override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> {
+    override fun getAllFeedingPoints(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.getAllFeedingPoints()
             .combine(favouriteApi.getFavouriteList(authAPI.currentUserId)) { feedingPointDataList, favouriteDataList ->
                 feedingPointDataList.map { feedingPointData ->
-                    feedingPointData.toFeedingPoint(
+                    feedingPointData.toDomainFeedingPoint(
                         isFavourite = favouriteDataList.any { it.feedingPointId == feedingPointData.id }
                     )
                 }.also {
@@ -40,32 +39,32 @@ internal class FeedingPointRepositoryImpl(
             }
     }
 
-    override fun getCats(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getCats(): Flow<List<DomainFeedingPoint>> = flowOf(
         feedingPoints.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Cats }
     )
 
-    override fun getDogs(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getDogs(): Flow<List<DomainFeedingPoint>> = flowOf(
         feedingPoints.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Dogs }
     )
 
-    override fun getFavourites(): Flow<List<FeedingPoint>> = flowOf(
+    override fun getFavourites(): Flow<List<DomainFeedingPoint>> = flowOf(
         feedingPoints.filter { feedingPoint -> feedingPoint.isFavourite }
     )
 
-    override fun getFeedingPoint(id: String): Flow<FeedingPoint?> = flowOf(
+    override fun getFeedingPoint(id: String): Flow<DomainFeedingPoint?> = flowOf(
         feedingPoints.find { feedingPoint -> feedingPoint.id == id }
     )
 
-    private fun FeedingPointData.toFeedingPoint(isFavourite: Boolean) = FeedingPoint(
+    private fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) = DomainFeedingPoint(
         id = id ?: EMPTY_STRING,
         title = name ?: EMPTY_STRING,
         description = description ?: EMPTY_STRING,
         animalStatus = when (status) {
-            Fed -> AnimalState.GREEN
+            fed -> AnimalState.GREEN
             else -> AnimalState.RED
         },
-        animalType = when (categoryTag) {
-            Cats -> AnimalType.Cats
+        animalType = when (category?.tag) {
+            cats -> AnimalType.Cats
             else -> AnimalType.Dogs
         },
         isFavourite = isFavourite,
@@ -76,9 +75,9 @@ internal class FeedingPointRepositoryImpl(
         )
     )
 
-    private fun FeedingData.toFeeder() = Feeder(
+    private fun Feeding.toFeeder() = Feeder(
         id = userId ?: EMPTY_STRING,
         name = updatedBy ?: EMPTY_STRING,
-        time = formatDateToString(updatedAt)
+        time = updatedAt?.format() ?: EMPTY_STRING
     )
 }

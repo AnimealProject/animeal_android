@@ -1,8 +1,8 @@
 package com.epmedu.animeal.feeding.data.api.favourite
 
-import com.epmedu.animeal.feeding.data.model.FavouriteData
+import com.amplifyframework.datastore.generated.model.Favourite
 import kotlinx.coroutines.flow.Flow
 
 interface FavouriteApi {
-    fun getFavouriteList(userId: String): Flow<List<FavouriteData>>
+    fun getFavouriteList(userId: String): Flow<List<Favourite>>
 }
