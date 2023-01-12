@@ -12,19 +12,15 @@ import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.epmedu.animeal.navigation.route.AuthenticationType
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToNextPage
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.FacebookEnterCodeViewModel
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.MobileEnterCodeViewModel
 
 @Composable
-fun EnterCodeScreen(authenticationType: AuthenticationType) {
+fun EnterCodeScreen() {
     val navigator = LocalNavigator.currentOrThrow
-    val viewModel: EnterCodeViewModel = when (authenticationType) {
-        AuthenticationType.Mobile -> hiltViewModel<MobileEnterCodeViewModel>()
-        AuthenticationType.Facebook -> hiltViewModel<FacebookEnterCodeViewModel>()
-    }
+    val viewModel: EnterCodeViewModel = hiltViewModel()
+
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.stateFlow.collectAsState()
 
@@ -45,10 +41,12 @@ fun EnterCodeScreen(authenticationType: AuthenticationType) {
         focusRequester.requestFocus()
 
         viewModel.events.collect {
-            if (it is NavigateToNextPage) {
-                when (authenticationType) {
-                    AuthenticationType.Mobile -> navigator.navigate(SignUpRoute.FinishProfile.name)
-                    AuthenticationType.Facebook -> navigator.navigateToTabs()
+            when (it) {
+                NavigateToFinishProfile -> {
+                    navigator.navigate(SignUpRoute.FinishProfile.name)
+                }
+                NavigateToHomeScreen -> {
+                    navigator.navigateToTabs()
                 }
             }
         }

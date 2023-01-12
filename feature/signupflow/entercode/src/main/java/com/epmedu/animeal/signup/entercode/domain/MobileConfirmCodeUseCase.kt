@@ -1,12 +1,12 @@
-package com.epmedu.animeal.signup.entercode.domain.confirmcode
+package com.epmedu.animeal.signup.entercode.domain
 
 import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 
-class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) : ConfirmCodeUseCase {
+class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
 
-    override operator fun invoke(
+    operator fun invoke(
         code: List<Int?>,
         onSuccess: () -> Unit,
         onError: (exception: Exception) -> Unit,
@@ -28,3 +28,5 @@ class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) : Co
         repository.confirmSignInCode(code, requestHandler)
     }
 }
+
+class InvalidCodeError : Exception()

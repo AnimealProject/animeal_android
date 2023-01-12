@@ -6,8 +6,11 @@ import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.navigation.route.AuthenticationType
 
 class AuthAPI {
+
+    var authenticationType = AuthenticationType.Mobile
 
     val currentUserId get() = Amplify.Auth.currentUser.userId
 
@@ -83,13 +86,19 @@ class AuthAPI {
     }
 
     fun sendCode(
+        phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
-        Amplify.Auth.resendUserAttributeConfirmationCode(
-            AuthUserAttributeKey.phoneNumber(),
-            handler::onSuccess,
-            handler::onError
-        )
+        when (authenticationType) {
+            AuthenticationType.Mobile -> signIn(phoneNumber, handler)
+            AuthenticationType.Facebook -> {
+                Amplify.Auth.resendUserAttributeConfirmationCode(
+                    AuthUserAttributeKey.phoneNumber(),
+                    handler::onSuccess,
+                    handler::onError
+                )
+            }
+        }
     }
 
     fun fetchUserAttributes(

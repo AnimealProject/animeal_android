@@ -1,11 +1,12 @@
-package com.epmedu.animeal.signup.entercode.domain.sendcode
+package com.epmedu.animeal.signup.entercode.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import java.lang.Exception
 
-class FacebookSendCodeUseCase(private val repository: EnterCodeRepository) : SendCodeUseCase {
-    override suspend operator fun invoke(
+class SendCodeUseCase(private val repository: EnterCodeRepository) {
+
+    suspend operator fun invoke(
         onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
@@ -18,6 +19,6 @@ class FacebookSendCodeUseCase(private val repository: EnterCodeRepository) : Sen
                 onError()
             }
         }
-        repository.sendCodeByResend(handler)
+        repository.sendCode(handler)
     }
 }

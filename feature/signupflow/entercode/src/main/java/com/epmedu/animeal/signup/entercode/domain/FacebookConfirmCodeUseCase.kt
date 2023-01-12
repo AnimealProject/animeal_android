@@ -1,11 +1,11 @@
-package com.epmedu.animeal.signup.entercode.domain.confirmcode
+package com.epmedu.animeal.signup.entercode.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 
-class FacebookConfirmCodeUseCase(private val repository: EnterCodeRepository) : ConfirmCodeUseCase {
+class FacebookConfirmCodeUseCase(private val repository: EnterCodeRepository) {
 
-    override operator fun invoke(
+    operator fun invoke(
         code: List<Int?>,
         onSuccess: () -> Unit,
         onError: (exception: Exception) -> Unit,

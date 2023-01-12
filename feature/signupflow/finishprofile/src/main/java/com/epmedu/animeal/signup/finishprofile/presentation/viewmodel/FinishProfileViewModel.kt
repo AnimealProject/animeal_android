@@ -12,6 +12,7 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
+import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.domain.network.DeleteNetworkUserUseCase
 import com.epmedu.animeal.profile.domain.network.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
@@ -20,8 +21,10 @@ import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBack
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBackToEnterPhone
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBackToOnboarding
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateToConfirmPhone
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.ProfileFinished
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
+    private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
     private val updateNetworkProfileUseCase: UpdateNetworkProfileUseCase,
     private val deleteNetworkUserUseCase: DeleteNetworkUserUseCase,
@@ -47,8 +51,11 @@ internal class FinishProfileViewModel @Inject constructor(
 ),
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
+    private var authenticationType: AuthenticationType = AuthenticationType.Mobile
+
     init {
         loadProfile()
+        loadAuthenticationType()
     }
 
     private fun loadProfile() {
@@ -61,8 +68,13 @@ internal class FinishProfileViewModel @Inject constructor(
         }
     }
 
-    fun enablePhoneInput() {
-        updateState { copy(isPhoneNumberEnabled = true) }
+    private fun loadAuthenticationType() {
+        viewModelScope.launch {
+            authenticationType = getAuthenticationTypeUseCase()
+            if (authenticationType == AuthenticationType.Facebook) {
+                updateState { copy(isPhoneNumberEnabled = true) }
+            }
+        }
     }
 
     override fun handlePhoneNumberChangedEvent(event: PhoneNumberChanged) {
@@ -76,7 +88,6 @@ internal class FinishProfileViewModel @Inject constructor(
 
     fun handleScreenEvents(
         event: FinishProfileScreenEvent,
-        authenticationType: AuthenticationType
     ) {
         when (event) {
             Submit -> submitProfile()
@@ -121,7 +132,10 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun navigateBack() {
         viewModelScope.launch {
-            sendEvent(NavigateBack)
+            when (authenticationType) {
+                AuthenticationType.Mobile -> sendEvent(NavigateBackToEnterPhone)
+                AuthenticationType.Facebook -> sendEvent(NavigateBackToOnboarding)
+            }
         }
     }
 
@@ -147,7 +161,10 @@ internal class FinishProfileViewModel @Inject constructor(
                     onSuccess = {},
                     onError = {}
                 )
-                sendEvent(Saved)
+                when (authenticationType) {
+                    AuthenticationType.Mobile -> sendEvent(ProfileFinished)
+                    AuthenticationType.Facebook -> sendEvent(NavigateToConfirmPhone)
+                }
             }
         }
     }

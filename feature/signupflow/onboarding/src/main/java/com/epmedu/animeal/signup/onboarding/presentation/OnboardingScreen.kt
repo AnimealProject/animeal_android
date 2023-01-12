@@ -21,7 +21,7 @@ import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingViewModel.Event
 
 @Composable
-fun OnboardingScreen(onAuthenticationTypeChange: (AuthenticationType) -> Unit) {
+fun OnboardingScreen() {
     val viewModel: OnboardingViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val activity = LocalContext.current.getActivity()
@@ -31,7 +31,7 @@ fun OnboardingScreen(onAuthenticationTypeChange: (AuthenticationType) -> Unit) {
     ) {
         when (it.resultCode) {
             RESULT_OK -> {
-                onAuthenticationTypeChange(AuthenticationType.Facebook)
+                viewModel.changeAuthenticationType(AuthenticationType.Facebook)
                 viewModel.loadNetworkProfile()
             }
             RESULT_CANCELED -> {
@@ -60,7 +60,7 @@ fun OnboardingScreen(onAuthenticationTypeChange: (AuthenticationType) -> Unit) {
 
     OnboardingScreenUI(
         onSignInMobile = {
-            onAuthenticationTypeChange(AuthenticationType.Mobile)
+            viewModel.changeAuthenticationType(AuthenticationType.Mobile)
             navigator.navigate(SignUpRoute.EnterPhone.name)
         },
         onSignInFacebook = {
