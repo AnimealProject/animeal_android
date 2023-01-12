@@ -14,7 +14,7 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
@@ -24,36 +24,44 @@ internal class FeedingPointRepositoryImpl(
     private val feedingPointApi: FeedingPointApi
 ) : FeedingPointRepository {
 
-    private var feedingPoints: List<DomainFeedingPoint> = emptyList()
+    private val feedingPoints: Flow<List<DomainFeedingPoint>> by lazy { fetchFeedingPoints() }
 
-    override fun getAllFeedingPoints(): Flow<List<DomainFeedingPoint>> {
+    private fun fetchFeedingPoints(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.getAllFeedingPoints()
-            .combine(favouriteApi.getFavouriteList(authAPI.currentUserId)) { feedingPointDataList, favouriteDataList ->
-                feedingPointDataList.map { feedingPointData ->
-                    feedingPointData.toDomainFeedingPoint(
-                        isFavourite = favouriteDataList.any { it.feedingPointId == feedingPointData.id }
+            .combine(favouriteApi.getFavouriteList(authAPI.currentUserId)) { dataFeedingPointsList, favouriteList ->
+                dataFeedingPointsList.map { dataFeedingPoint ->
+                    dataFeedingPoint.toDomainFeedingPoint(
+                        isFavourite = favouriteList.any { it.feedingPointId == dataFeedingPoint.id }
                     )
-                }.also {
-                    feedingPoints = it
                 }
             }
     }
 
-    override fun getCats(): Flow<List<DomainFeedingPoint>> = flowOf(
-        feedingPoints.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Cats }
-    )
+    override fun getAllFeedingPoints(): Flow<List<DomainFeedingPoint>> = feedingPoints
 
-    override fun getDogs(): Flow<List<DomainFeedingPoint>> = flowOf(
-        feedingPoints.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Dogs }
-    )
+    override fun getCats(): Flow<List<DomainFeedingPoint>> {
+        return feedingPoints.map { feedingPointsList ->
+            feedingPointsList.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Cats }
+        }
+    }
 
-    override fun getFavourites(): Flow<List<DomainFeedingPoint>> = flowOf(
-        feedingPoints.filter { feedingPoint -> feedingPoint.isFavourite }
-    )
+    override fun getDogs(): Flow<List<DomainFeedingPoint>> {
+        return feedingPoints.map { feedingPointsList ->
+            feedingPointsList.filter { feedingPoint -> feedingPoint.animalType == AnimalType.Dogs }
+        }
+    }
 
-    override fun getFeedingPoint(id: String): Flow<DomainFeedingPoint?> = flowOf(
-        feedingPoints.find { feedingPoint -> feedingPoint.id == id }
-    )
+    override fun getFavourites(): Flow<List<DomainFeedingPoint>> {
+        return feedingPoints.map { feedingPointsList ->
+            feedingPointsList.filter { feedingPoint -> feedingPoint.isFavourite }
+        }
+    }
+
+    override fun getFeedingPoint(id: String): Flow<DomainFeedingPoint?> {
+        return feedingPoints.map { feedingPointsList ->
+            feedingPointsList.find { feedingPoint -> feedingPoint.id == id }
+        }
+    }
 
     private fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) = DomainFeedingPoint(
         id = id ?: EMPTY_STRING,
