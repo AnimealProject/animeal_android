@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation
 
+import android.util.Log
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,13 +34,6 @@ fun HomeScreen() {
                     launch {
                         if (bottomSheetState.isHidden) {
                             bottomSheetState.show()
-                        }
-                    }
-                }
-                is StartRouteFlow -> {
-                    launch {
-                        if (bottomSheetState.isVisible) {
-                            bottomSheetState.hide()
                         }
                     }
                 }

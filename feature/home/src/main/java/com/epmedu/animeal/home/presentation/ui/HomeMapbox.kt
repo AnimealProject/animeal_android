@@ -13,16 +13,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.doOnDetach
 import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
-import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.*
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -31,9 +27,6 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
-import com.mapbox.navigation.base.options.NavigationOptions
-import com.mapbox.navigation.core.MapboxNavigation
-import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 
 @Composable
 internal fun HomeMapbox(
@@ -141,7 +134,7 @@ private fun MapboxMap(
         factory = { mapboxMapView }
     )
 
-    SetUpRoute(mapView = mapboxMapView, state = state, onRouteResult = onRouteResult)
+    RouteView(mapView = mapboxMapView, state = state, onRouteResult = onRouteResult)
 }
 
 @Composable
@@ -161,73 +154,6 @@ private fun rememberMapboxMapView(homeState: HomeState): MapView {
             )
         )
     )
-}
-
-@Composable
-private fun SetUpRoute(
-    mapView: MapView,
-    state: HomeState,
-    onRouteResult: (result: RouteResult) -> Unit
-) {
-    val mapBoxRouteInitOptions = rememberMapRouteInitOptions(
-        mapView = mapView,
-        mapBoxNavigationInitOptions = MapBoxRouteInitOptions(
-            MapboxRouteLineOptions.Builder(mapView.context).build()
-        )
-    )
-
-    val mapboxNavigation = remember(mapView) {
-        MapboxNavigation(
-            NavigationOptions.Builder(mapView.context)
-                .accessToken(mapView.getMapboxMap().getResourceOptions().accessToken)
-                .build()
-        )
-    }
-
-    LaunchedEffect(key1 = state.feedingRouteState) {
-        when (state.feedingRouteState) {
-            FeedingRouteState.Started -> {
-                state.currentFeedingPoint?.location?.let { feedingPointLocation ->
-                    mapView.fetchRoute(
-                        mapBoxRouteInitOptions,
-                        mapboxNavigation,
-                        MapPath(
-                            state.currentLocation.toPoint(),
-                            feedingPointLocation.toPoint()
-                        ),
-                        onRouteResult = onRouteResult
-                    )
-                }
-            }
-            FeedingRouteState.Disabled -> {
-                mapView.removeRoute(mapBoxRouteInitOptions)
-            }
-            is FeedingRouteState.Updated -> {
-                state.feedingRouteState.routeData?.let {
-                    mapView.drawRoute(mapBoxRouteInitOptions, it)
-                }
-                if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
-                    setLocationOnRoute(mapView, state)
-                }
-            }
-        }
-    }
-
-    // App crashes if we don't destroy mapNavigation onDetach
-    mapView.doOnDetach {
-        mapboxNavigation.onDestroy()
-    }
-}
-
-private fun setLocationOnRoute(mapView: MapView, state: HomeState) {
-    state.currentFeedingPoint?.location?.let { feedingPointLocation ->
-        mapView.setLocation(
-            points = listOf(
-                state.currentLocation.toPoint(),
-                feedingPointLocation.toPoint()
-            )
-        )
-    }
 }
 
 internal fun MapView.showCurrentLocation(location: MapLocation) = getMapboxMap().setCamera(

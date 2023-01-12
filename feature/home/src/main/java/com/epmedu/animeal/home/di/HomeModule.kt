@@ -1,7 +1,9 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.component.AppSettingsProvider
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
@@ -11,6 +13,9 @@ import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequested
 import com.epmedu.animeal.home.domain.usecases.SaveUserAsFeederUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFeedingHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
@@ -41,8 +46,9 @@ internal object HomeModule {
     @ViewModelScoped
     @Provides
     fun providesRouteHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): RouteHandler = DefaultRouteHandler(stateDelegate)
+        stateDelegate: StateDelegate<HomeState>,
+        feedingHandler: FeedingHandler
+    ): RouteHandler = DefaultRouteHandler(stateDelegate, feedingHandler)
 
     @ViewModelScoped
     @Provides
@@ -61,6 +67,18 @@ internal object HomeModule {
     fun providesGpsHandler(
         stateDelegate: StateDelegate<HomeState>
     ): GpsHandler = DefaultGpsHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesFeedingHandler(
+        feedingPointRepository: FeedingPointRepository,
+        saveUserAsFeederUseCase: SaveUserAsFeederUseCase,
+        stateDelegate: StateDelegate<HomeState>
+    ): FeedingHandler = DefaultFeedingHandler(
+        feedingPointRepository,
+        saveUserAsFeederUseCase,
+        stateDelegate
+    )
 
     @ViewModelScoped
     @Provides

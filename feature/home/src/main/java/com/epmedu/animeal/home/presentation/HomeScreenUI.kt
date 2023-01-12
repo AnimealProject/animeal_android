@@ -23,6 +23,7 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
@@ -44,9 +45,13 @@ internal fun HomeScreenUI(
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
-
     val scope = rememberCoroutineScope()
-    val timerHandler: CountDownTimer = remember { getTimeHandler(onScreenEvent) }
+
+    scope.launch {
+        if (state.feedingRouteState !is FeedingRouteState.Disabled && !bottomSheetState.isHiding) {
+            bottomSheetState.hide()
+        }
+    }
 
     OnBackHandling(
         scope = scope,
@@ -94,7 +99,6 @@ internal fun HomeScreenUI(
                 },
                 onCancelRouteClick = {
                     onScreenEvent(RouteEvent.FeedingRouteCancellationRequest)
-                    timerHandler.cancel()
                 },
                 onRouteResult = { result ->
                     onScreenEvent(RouteEvent.FeedingRouteUpdateRequest(result))
@@ -106,23 +110,19 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(state, onScreenEvent) {
-        timerHandler.start()
-    }
+    WillFeedConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
 private fun WillFeedConfirmationDialog(
     state: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
-    onAgreeClick: () -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
             onAgreeClick = {
                 onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
                 onScreenEvent(RouteEvent.FeedingRouteStartRequest)
-                onAgreeClick()
             },
             onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
         )
@@ -160,14 +160,3 @@ private fun onGeoLocationClick(
         }
     }
 }
-
-private fun getTimeHandler(onScreenEvent: (HomeScreenEvent) -> Unit) =
-    object : CountDownTimer(HOUR_IN_MILLIS, MINUTE_IN_MILLIS) {
-        override fun onTick(timeLeftInMillis: Long) {
-            onScreenEvent(RouteEvent.FeedingTimerUpdateRequest(timeLeftInMillis))
-        }
-
-        override fun onFinish() {
-            cancel()
-        }
-    }
