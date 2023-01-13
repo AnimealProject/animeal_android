@@ -1,7 +1,5 @@
 package com.epmedu.animeal.feeding.data.mapper
 
-import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 import com.amplifyframework.datastore.generated.model.CategoryTag
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.amplifyframework.datastore.generated.model.FeedingPointStatus
@@ -10,6 +8,8 @@ import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) =
     DomainFeedingPoint(
