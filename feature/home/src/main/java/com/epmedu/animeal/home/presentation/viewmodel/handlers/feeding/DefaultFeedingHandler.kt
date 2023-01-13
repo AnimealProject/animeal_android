@@ -35,11 +35,8 @@ class DefaultFeedingHandler @Inject internal constructor(
     }
 
     override fun saveFeeder(): Flow<Boolean> {
-        state.currentFeedingPoint?.let { selectedFeedingPoint ->
-            return saveUserAsFeederUseCase(selectedFeedingPoint.id)
-        }
-
-        return flow { emit(false) }
+        return saveUserAsFeederUseCase(
+            state.currentFeedingPoint?.id ?: return flow { emit(false) }
+        )
     }
-
 }

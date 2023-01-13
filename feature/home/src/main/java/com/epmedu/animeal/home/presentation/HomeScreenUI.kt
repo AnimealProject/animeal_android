@@ -1,16 +1,12 @@
 package com.epmedu.animeal.home.presentation
 
-import android.os.CountDownTimer
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
-import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.launchGpsSettings
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
@@ -22,7 +18,6 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.home.domain.PermissionStatus
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
@@ -70,7 +65,7 @@ internal fun HomeScreenUI(
                     contentAlpha = contentAlpha,
                     modifier = Modifier.wrapContentHeight(),
                     onFavouriteChange = {
-                        onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
+                        onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                     }
                 )
             }
@@ -80,7 +75,7 @@ internal fun HomeScreenUI(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
-                    onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                    onClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.ShowWillFeedDialog) }
                 )
             }
         }
@@ -91,17 +86,17 @@ internal fun HomeScreenUI(
         ) { geolocationPermissionState ->
             HomeMapbox(
                 state = state,
-                onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
+                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) },
                 onMapInteraction = {
                     if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
                         scope.launch { bottomSheetState.show() }
                     }
                 },
                 onCancelRouteClick = {
-                    onScreenEvent(RouteEvent.FeedingRouteCancellationRequest)
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
                 },
                 onRouteResult = { result ->
-                    onScreenEvent(RouteEvent.FeedingRouteUpdateRequest(result))
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest(result))
                 },
                 onGeolocationClick = { mapView ->
                     onGeoLocationClick(mapView, state, geolocationPermissionState)
@@ -121,10 +116,10 @@ private fun WillFeedConfirmationDialog(
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
             onAgreeClick = {
-                onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
-                onScreenEvent(RouteEvent.FeedingRouteStartRequest)
+                onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog)
+                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest)
             },
-            onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
+            onCancelClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
         )
     }
 }
@@ -141,7 +136,7 @@ fun OnBackHandling(
     }
 
     BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
-        scope.launch { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
+        scope.launch { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
     }
 }
 

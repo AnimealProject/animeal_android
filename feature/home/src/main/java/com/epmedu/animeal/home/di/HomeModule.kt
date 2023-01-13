@@ -1,9 +1,7 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.component.AppSettingsProvider
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
@@ -13,7 +11,6 @@ import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequested
 import com.epmedu.animeal.home.domain.usecases.SaveUserAsFeederUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
@@ -31,6 +28,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 
+@Suppress("TooManyFunctions")
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object HomeModule {

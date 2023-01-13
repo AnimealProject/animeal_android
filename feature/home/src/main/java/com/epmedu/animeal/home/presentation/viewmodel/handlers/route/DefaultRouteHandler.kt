@@ -4,7 +4,6 @@ import android.os.CountDownTimer
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest
