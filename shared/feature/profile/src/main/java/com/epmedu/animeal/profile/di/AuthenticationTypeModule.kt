@@ -4,7 +4,8 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.profile.data.repository.AuthenticationTypeRepository
 import com.epmedu.animeal.profile.data.repository.AuthenticationTypeRepositoryImpl
 import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.authenticationtype.UpdateAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.authenticationtype.SetMobileAuthenticationTypeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +30,13 @@ object AuthenticationTypeModule {
 
     @ViewModelScoped
     @Provides
-    fun provideUpdateAuthenticationTypeUseCase(
+    fun provideSetMobileAuthenticationTypeUseCase(
         repository: AuthenticationTypeRepository,
-    ) = UpdateAuthenticationTypeUseCase(repository)
+    ) = SetMobileAuthenticationTypeUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideSetFacebookAuthenticationTypeUseCase(
+        repository: AuthenticationTypeRepository,
+    ) = SetFacebookAuthenticationTypeUseCase(repository)
 }

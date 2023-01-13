@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.epmedu.animeal.profile"
+    namespace = "com.epmedu.animeal.networkuser"
 }
 
 dependencies {
@@ -17,6 +17,8 @@ dependencies {
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
+
+    implementation(projects.shared.feature.profile)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)

@@ -1,9 +1,11 @@
 package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.navigation.route.AuthenticationType
+import com.epmedu.animeal.networkuser.domain.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -13,8 +15,6 @@ import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.network.DeleteNetworkUserUseCase
-import com.epmedu.animeal.profile.domain.network.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE

@@ -2,11 +2,11 @@ package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.navigation.route.AuthenticationType
 import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.signup.entercode.domain.*
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase

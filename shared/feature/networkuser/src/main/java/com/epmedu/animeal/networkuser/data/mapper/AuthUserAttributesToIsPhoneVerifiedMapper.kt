@@ -1,4 +1,4 @@
-package com.epmedu.animeal.profile.data.mapper
+package com.epmedu.animeal.networkuser.data.mapper
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey

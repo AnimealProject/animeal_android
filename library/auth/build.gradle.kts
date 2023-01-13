@@ -16,6 +16,4 @@ dependencies {
 
     implementation(libs.amplify.core)
     implementation(libs.amplify.aws.auth.cognito)
-
-    implementation(projects.library.navigation)
 }

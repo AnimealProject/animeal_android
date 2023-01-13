@@ -1,12 +1,12 @@
-package com.epmedu.animeal.profile.di
+package com.epmedu.animeal.networkuser.di
 
-import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.profile.data.mapper.ProfileToAuthUserAttributesMapper
-import com.epmedu.animeal.profile.data.repository.NetworkRepository
-import com.epmedu.animeal.profile.data.repository.NetworkRepositoryImpl
-import com.epmedu.animeal.profile.domain.network.DeleteNetworkUserUseCase
-import com.epmedu.animeal.profile.domain.network.FetchNetworkUserAttributesUseCase
-import com.epmedu.animeal.profile.domain.network.UpdateNetworkProfileUseCase
+import com.epmedu.animeal.auth.UserAttributesAPI
+import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
+import com.epmedu.animeal.networkuser.data.repository.NetworkRepository
+import com.epmedu.animeal.networkuser.data.repository.NetworkRepositoryImpl
+import com.epmedu.animeal.networkuser.domain.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.FetchNetworkUserAttributesUseCase
+import com.epmedu.animeal.networkuser.domain.UpdateNetworkProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +21,12 @@ object NetworkModule {
     @Provides
     fun provideNetworkRepository(
         profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
-        authAPI: AuthAPI,
-    ): NetworkRepository = NetworkRepositoryImpl(profileToAuthUserMapper, authAPI)
+        userAttributesAPI: UserAttributesAPI,
+    ): NetworkRepository =
+        NetworkRepositoryImpl(
+            profileToAuthUserMapper,
+            userAttributesAPI
+        )
 
     @ViewModelScoped
     @Provides

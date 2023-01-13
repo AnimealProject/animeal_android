@@ -1,17 +1,15 @@
-package com.epmedu.animeal.profile.domain.network
+package com.epmedu.animeal.networkuser.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.profile.data.model.Profile
-import com.epmedu.animeal.profile.data.repository.NetworkRepository
+import com.epmedu.animeal.networkuser.data.repository.NetworkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UpdateNetworkProfileUseCase(private val repository: NetworkRepository) {
+class DeleteNetworkUserUseCase(private val repository: NetworkRepository) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     suspend operator fun invoke(
-        profile: Profile,
         onSuccess: () -> Unit,
         onError: (exception: Exception) -> Unit
     ) {
@@ -25,7 +23,7 @@ class UpdateNetworkProfileUseCase(private val repository: NetworkRepository) {
             }
         }
         coroutineScope.launch {
-            repository.updateNetworkUserAttributes(profile, requestHandler)
+            repository.deleteNetworkUser(requestHandler)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.onboarding.presentation
+package com.epmedu.animeal.signup.onboarding.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,13 +7,13 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.MONTH_DAY_YEAR_SLASH_FORMATTER
 import com.epmedu.animeal.extensions.reformatDateToString
-import com.epmedu.animeal.navigation.route.AuthenticationType
-import com.epmedu.animeal.profile.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
-import com.epmedu.animeal.profile.data.mapper.AuthUserAttributesToProfileMapper
+import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
+import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
+import com.epmedu.animeal.networkuser.domain.FetchNetworkUserAttributesUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.profile.domain.authenticationtype.UpdateAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.network.FetchNetworkUserAttributesUseCase
-import com.epmedu.animeal.signup.onboarding.presentation.OnboardingViewModel.Event
+import com.epmedu.animeal.profile.domain.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.authenticationtype.SetMobileAuthenticationTypeUseCase
+import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,14 +23,21 @@ internal class OnboardingViewModel @Inject constructor(
     private val authUserAttributesToProfileMapper: AuthUserAttributesToProfileMapper,
     private val authUserAttributesToIsPhoneVerifiedMapper: AuthUserAttributesToIsPhoneVerifiedMapper,
     private val fetchNetworkUserAttributesUseCase: FetchNetworkUserAttributesUseCase,
-    private val updateAuthenticationTypeUseCase: UpdateAuthenticationTypeUseCase,
+    private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
+    private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
 ) : ViewModel(),
     EventDelegate<Event> by DefaultEventDelegate() {
 
-    fun changeAuthenticationType(authenticationType: AuthenticationType) {
+    fun changeAuthenticationTypeToMobile() {
         viewModelScope.launch {
-            updateAuthenticationTypeUseCase.invoke(authenticationType)
+            setMobileAuthenticationTypeUseCase.invoke()
+        }
+    }
+
+    fun changeAuthenticationTypeToFacebook() {
+        viewModelScope.launch {
+            setFacebookAuthenticationTypeUseCase.invoke()
         }
     }
 

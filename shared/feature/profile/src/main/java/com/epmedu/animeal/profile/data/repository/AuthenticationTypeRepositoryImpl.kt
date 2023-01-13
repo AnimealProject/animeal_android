@@ -1,7 +1,7 @@
 package com.epmedu.animeal.profile.data.repository
 
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.navigation.route.AuthenticationType
+import com.epmedu.animeal.auth.AuthenticationType
 import javax.inject.Inject
 
 class AuthenticationTypeRepositoryImpl @Inject constructor(
@@ -10,7 +10,11 @@ class AuthenticationTypeRepositoryImpl @Inject constructor(
 
     override suspend fun getAuthenticationType(): AuthenticationType = authAPI.authenticationType
 
-    override suspend fun updateAuthenticationType(authenticationType: AuthenticationType) {
-        authAPI.authenticationType = authenticationType
+    override suspend fun setAuthenticationTypeAsMobile() {
+        authAPI.setMobileAuthenticationType()
+    }
+
+    override suspend fun setAuthenticationTypeAsFacebook() {
+        authAPI.setFacebookAuthenticationType()
     }
 }

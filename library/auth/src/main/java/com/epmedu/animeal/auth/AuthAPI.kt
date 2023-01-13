@@ -6,11 +6,19 @@ import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
-import com.epmedu.animeal.navigation.route.AuthenticationType
 
 class AuthAPI {
 
     var authenticationType = AuthenticationType.Mobile
+        private set
+
+    fun setMobileAuthenticationType() {
+        authenticationType = AuthenticationType.Mobile
+    }
+
+    fun setFacebookAuthenticationType() {
+        authenticationType = AuthenticationType.Facebook
+    }
 
     val currentUserId get() = Amplify.Auth.currentUser.userId
 
@@ -76,38 +84,14 @@ class AuthAPI {
         )
     }
 
-    fun deleteUser(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.deleteUser(
-            handler::onSuccess,
-            handler::onError,
-        )
-    }
-
     fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
         when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber, handler)
-            AuthenticationType.Facebook -> {
-                Amplify.Auth.resendUserAttributeConfirmationCode(
-                    AuthUserAttributeKey.phoneNumber(),
-                    handler::onSuccess,
-                    handler::onError
-                )
-            }
+            AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
         }
-    }
-
-    fun fetchUserAttributes(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.fetchUserAttributes(
-            handler::onSuccess,
-            handler::onError,
-        )
     }
 
     fun fetchSession(
@@ -128,14 +112,11 @@ class AuthAPI {
         )
     }
 
-    fun updateUserAttributes(
-        userAttributes: List<AuthUserAttribute>,
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.updateUserAttributes(
-            userAttributes,
+    private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
+        Amplify.Auth.resendUserAttributeConfirmationCode(
+            AuthUserAttributeKey.phoneNumber(),
             handler::onSuccess,
-            handler::onError,
+            handler::onError
         )
     }
 }

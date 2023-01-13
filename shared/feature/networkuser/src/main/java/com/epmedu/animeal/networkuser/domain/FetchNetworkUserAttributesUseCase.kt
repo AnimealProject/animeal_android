@@ -1,8 +1,8 @@
-package com.epmedu.animeal.profile.domain.network
+package com.epmedu.animeal.networkuser.domain
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.profile.data.repository.NetworkRepository
+import com.epmedu.animeal.networkuser.data.repository.NetworkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

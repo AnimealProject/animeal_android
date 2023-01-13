@@ -16,9 +16,9 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.getActivity
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.epmedu.animeal.navigation.route.AuthenticationType
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.signup.onboarding.presentation.OnboardingViewModel.Event
+import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
+import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel.Event
 
 @Composable
 fun OnboardingScreen() {
@@ -31,7 +31,7 @@ fun OnboardingScreen() {
     ) {
         when (it.resultCode) {
             RESULT_OK -> {
-                viewModel.changeAuthenticationType(AuthenticationType.Facebook)
+                viewModel.changeAuthenticationTypeToFacebook()
                 viewModel.loadNetworkProfile()
             }
             RESULT_CANCELED -> {
@@ -60,7 +60,7 @@ fun OnboardingScreen() {
 
     OnboardingScreenUI(
         onSignInMobile = {
-            viewModel.changeAuthenticationType(AuthenticationType.Mobile)
+            viewModel.changeAuthenticationTypeToMobile()
             navigator.navigate(SignUpRoute.EnterPhone.name)
         },
         onSignInFacebook = {

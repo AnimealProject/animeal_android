@@ -1,4 +1,4 @@
-package com.epmedu.animeal.navigation.route
+package com.epmedu.animeal.auth
 
 enum class AuthenticationType {
     Mobile,
