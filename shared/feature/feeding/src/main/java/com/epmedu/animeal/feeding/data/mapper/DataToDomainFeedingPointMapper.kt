@@ -3,7 +3,7 @@ package com.epmedu.animeal.feeding.data.mapper
 import com.amplifyframework.datastore.generated.model.CategoryTag
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.amplifyframework.datastore.generated.model.FeedingPointStatus
-import com.epmedu.animeal.common.constants.DefaultConstants
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -13,9 +13,9 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoin
 
 internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) =
     DomainFeedingPoint(
-        id = id ?: DefaultConstants.EMPTY_STRING,
-        title = name ?: DefaultConstants.EMPTY_STRING,
-        description = description ?: DefaultConstants.EMPTY_STRING,
+        id = id ?: EMPTY_STRING,
+        title = name ?: EMPTY_STRING,
+        description = description ?: EMPTY_STRING,
         animalStatus = when (status) {
             FeedingPointStatus.fed -> AnimalState.GREEN
             else -> AnimalState.RED
@@ -33,7 +33,7 @@ internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) =
     )
 
 internal fun Feeding.toFeeder() = Feeder(
-    id = userId ?: DefaultConstants.EMPTY_STRING,
-    name = updatedBy ?: DefaultConstants.EMPTY_STRING,
-    time = updatedAt?.format() ?: DefaultConstants.EMPTY_STRING
+    id = userId ?: EMPTY_STRING,
+    name = updatedBy ?: EMPTY_STRING,
+    time = updatedAt?.format() ?: EMPTY_STRING
 )

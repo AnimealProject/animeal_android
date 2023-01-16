@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
-import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -31,7 +31,9 @@ fun HomeScreen() {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
                     launch {
-                        if (bottomSheetState.isHidden) bottomSheetState.show()
+                        if (bottomSheetState.isHidden) {
+                            bottomSheetState.show()
+                        }
                     }
                 }
             }

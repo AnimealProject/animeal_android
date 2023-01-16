@@ -96,11 +96,20 @@
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
     <string name="back_to_home">Back to home</string>
+    <string name="calculating_route">Calculating route…</string>
+    <string name="routes_not_found">No routes available</string>
+    <string name="routes_failed">Route request failed</string>
+    <string name="routes_cancelled">Route request cancelled</string>
 
     <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
     
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
     <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at example@gmail.com</string>
+
+    <string name="kilometers">km</string>
+    <string name="meters">m</string>
+    <string name="hours">h</string>
+    <string name="minutes">min</string>
 
     <string name="text_copy_label">Animeal text</string>
 

@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.profile)
+
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.core)
 

@@ -20,10 +20,12 @@ dependencies {
     implementation(projects.library.resources)
     implementation(projects.shared.feature.feeding)
     implementation(projects.shared.feature.feedconfirmation)
+    implementation(projects.shared.feature.profile)
 
     implementation(libs.accompanist.permissions)
 
     implementation(libs.mapbox.android)
+    implementation(libs.mapbox.navigation)
 
     implementation(libs.immutable.collections)
 

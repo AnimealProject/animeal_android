@@ -6,8 +6,10 @@ import com.epmedu.animeal.feeding.data.api.feeding.FeedingPointApi
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
@@ -55,4 +57,10 @@ internal class FeedingPointRepositoryImpl(
             feedingPointsList.find { feedingPoint -> feedingPoint.id == id }
         }
     }
+
+    // TODO: Replace with actual feeding flow
+    override fun saveUserAsCurrentFeeder(
+        user: Profile,
+        feedingPointId: String
+    ): Flow<Boolean> = flow { emit(true) }
 }

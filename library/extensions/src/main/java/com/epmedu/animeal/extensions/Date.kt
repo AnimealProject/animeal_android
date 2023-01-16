@@ -1,12 +1,16 @@
 package com.epmedu.animeal.extensions
 
+import android.content.Context
 import com.amplifyframework.core.model.temporal.Temporal
+import com.epmedu.animeal.resources.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 private const val DAY_MONTH_COMMA_YEAR_FORMATTER_PATTERN = "d MMM, yyyy"
 private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
+const val HOUR_IN_MILLIS = 3_600_000L
+const val MINUTE_IN_MILLIS = 60_000L
 
 val DEFAULT_LOCALE: Locale
     get() = Locale.getDefault()
@@ -46,4 +50,15 @@ fun Temporal.DateTime.toLocalDate(): LocalDate {
 
 fun Temporal.Timestamp.toLocalDate(): LocalDate {
     return LocalDate.ofEpochDay(secondsSinceEpoch)
+}
+
+/**
+ * Consider number in milliseconds
+ */
+fun Context.formatNumberToHourMin(time: Long?): String? {
+    if (time == null || time < 0) return null
+    val hours = time / HOUR_IN_MILLIS
+    val minutes = time % HOUR_IN_MILLIS / MINUTE_IN_MILLIS
+
+    return "${if (hours > 0) "$hours ${getString(R.string.hours)} " else ""}$minutes ${getString(R.string.minutes)}"
 }

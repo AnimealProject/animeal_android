@@ -14,5 +14,6 @@ dependencies {
 
     implementation(libs.amplify.aws.api)
     implementation(libs.androidx.appcompat)
+    implementation(projects.library.resources)
     implementation(libs.compose.runtime)
 }

@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.domain
+package com.epmedu.animeal.home.domain.usecases
 
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 
