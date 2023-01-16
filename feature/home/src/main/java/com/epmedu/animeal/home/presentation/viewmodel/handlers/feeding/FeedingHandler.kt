@@ -1,10 +1,9 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding
 
-import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import kotlinx.coroutines.flow.Flow
+import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import kotlinx.coroutines.CoroutineScope
 
-interface FeedingHandler {
-    suspend fun fetchFeedingPoints()
-    fun hideFeedingPointsButOne(feedingPoint: FeedingPointModel)
-    fun saveFeeder(): Flow<Boolean>
+internal interface FeedingHandler {
+
+    fun CoroutineScope.handleFeedingEvent(event: HomeScreenEvent.FeedingEvent)
 }

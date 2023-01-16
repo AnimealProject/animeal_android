@@ -1,0 +1,1378 @@
+# this is an auto generated file. This will be overwritten
+mutation StartFeeding($feedingPointId: String!) {
+  startFeeding(feedingPointId: $feedingPointId)
+}
+mutation FinishFeeding($feedingId: String!, $images: [String!]!) {
+  finishFeeding(feedingId: $feedingId, images: $images)
+}
+mutation RejectFeeding($feedingId: String!, $feeding: FeedingInput) {
+  rejectFeeding(feedingId: $feedingId, feeding: $feeding)
+}
+mutation ApproveFeeding($feedingId: String!, $feeding: FeedingInput) {
+  approveFeeding(feedingId: $feedingId, feeding: $feeding)
+}
+mutation CancelFeeding($feedingId: String!) {
+  cancelFeeding(feedingId: $feedingId)
+}
+mutation CreatePet(
+  $input: CreatePetInput!
+  $condition: ModelPetConditionInput
+) {
+  createPet(input: $input, condition: $condition) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+mutation UpdatePet(
+  $input: UpdatePetInput!
+  $condition: ModelPetConditionInput
+) {
+  updatePet(input: $input, condition: $condition) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+mutation DeletePet(
+  $input: DeletePetInput!
+  $condition: ModelPetConditionInput
+) {
+  deletePet(input: $input, condition: $condition) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+mutation CreateCategory(
+  $input: CreateCategoryInput!
+  $condition: ModelCategoryConditionInput
+) {
+  createCategory(input: $input, condition: $condition) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation UpdateCategory(
+  $input: UpdateCategoryInput!
+  $condition: ModelCategoryConditionInput
+) {
+  updateCategory(input: $input, condition: $condition) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation DeleteCategory(
+  $input: DeleteCategoryInput!
+  $condition: ModelCategoryConditionInput
+) {
+  deleteCategory(input: $input, condition: $condition) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation CreateFeedingPoint(
+  $input: CreateFeedingPointInput!
+  $condition: ModelFeedingPointConditionInput
+) {
+  createFeedingPoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+mutation UpdateFeedingPoint(
+  $input: UpdateFeedingPointInput!
+  $condition: ModelFeedingPointConditionInput
+) {
+  updateFeedingPoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+mutation DeleteFeedingPoint(
+  $input: DeleteFeedingPointInput!
+  $condition: ModelFeedingPointConditionInput
+) {
+  deleteFeedingPoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+mutation CreateFeeding(
+  $input: CreateFeedingInput!
+  $condition: ModelFeedingConditionInput
+) {
+  createFeeding(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+mutation UpdateFeeding(
+  $input: UpdateFeedingInput!
+  $condition: ModelFeedingConditionInput
+) {
+  updateFeeding(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+mutation DeleteFeeding(
+  $input: DeleteFeedingInput!
+  $condition: ModelFeedingConditionInput
+) {
+  deleteFeeding(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+mutation CreateFeedingHistory(
+  $input: CreateFeedingHistoryInput!
+  $condition: ModelFeedingHistoryConditionInput
+) {
+  createFeedingHistory(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+mutation UpdateFeedingHistory(
+  $input: UpdateFeedingHistoryInput!
+  $condition: ModelFeedingHistoryConditionInput
+) {
+  updateFeedingHistory(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+mutation DeleteFeedingHistory(
+  $input: DeleteFeedingHistoryInput!
+  $condition: ModelFeedingHistoryConditionInput
+) {
+  deleteFeedingHistory(input: $input, condition: $condition) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+mutation CreateRelationPetFeedingPoint(
+  $input: CreateRelationPetFeedingPointInput!
+  $condition: ModelRelationPetFeedingPointConditionInput
+) {
+  createRelationPetFeedingPoint(input: $input, condition: $condition) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateRelationPetFeedingPoint(
+  $input: UpdateRelationPetFeedingPointInput!
+  $condition: ModelRelationPetFeedingPointConditionInput
+) {
+  updateRelationPetFeedingPoint(input: $input, condition: $condition) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteRelationPetFeedingPoint(
+  $input: DeleteRelationPetFeedingPointInput!
+  $condition: ModelRelationPetFeedingPointConditionInput
+) {
+  deleteRelationPetFeedingPoint(input: $input, condition: $condition) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateRelationUserFeedingPoint(
+  $input: CreateRelationUserFeedingPointInput!
+  $condition: ModelRelationUserFeedingPointConditionInput
+) {
+  createRelationUserFeedingPoint(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateRelationUserFeedingPoint(
+  $input: UpdateRelationUserFeedingPointInput!
+  $condition: ModelRelationUserFeedingPointConditionInput
+) {
+  updateRelationUserFeedingPoint(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteRelationUserFeedingPoint(
+  $input: DeleteRelationUserFeedingPointInput!
+  $condition: ModelRelationUserFeedingPointConditionInput
+) {
+  deleteRelationUserFeedingPoint(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateRelationUserPet(
+  $input: CreateRelationUserPetInput!
+  $condition: ModelRelationUserPetConditionInput
+) {
+  createRelationUserPet(input: $input, condition: $condition) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateRelationUserPet(
+  $input: UpdateRelationUserPetInput!
+  $condition: ModelRelationUserPetConditionInput
+) {
+  updateRelationUserPet(input: $input, condition: $condition) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteRelationUserPet(
+  $input: DeleteRelationUserPetInput!
+  $condition: ModelRelationUserPetConditionInput
+) {
+  deleteRelationUserPet(input: $input, condition: $condition) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateMedication(
+  $input: CreateMedicationInput!
+  $condition: ModelMedicationConditionInput
+) {
+  createMedication(input: $input, condition: $condition) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateMedication(
+  $input: UpdateMedicationInput!
+  $condition: ModelMedicationConditionInput
+) {
+  updateMedication(input: $input, condition: $condition) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteMedication(
+  $input: DeleteMedicationInput!
+  $condition: ModelMedicationConditionInput
+) {
+  deleteMedication(input: $input, condition: $condition) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateSettings(
+  $input: CreateSettingsInput!
+  $condition: ModelSettingsConditionInput
+) {
+  createSettings(input: $input, condition: $condition) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateSettings(
+  $input: UpdateSettingsInput!
+  $condition: ModelSettingsConditionInput
+) {
+  updateSettings(input: $input, condition: $condition) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteSettings(
+  $input: DeleteSettingsInput!
+  $condition: ModelSettingsConditionInput
+) {
+  deleteSettings(input: $input, condition: $condition) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateLanguage(
+  $input: CreateLanguageInput!
+  $condition: ModelLanguageConditionInput
+) {
+  createLanguage(input: $input, condition: $condition) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+mutation UpdateLanguage(
+  $input: UpdateLanguageInput!
+  $condition: ModelLanguageConditionInput
+) {
+  updateLanguage(input: $input, condition: $condition) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+mutation DeleteLanguage(
+  $input: DeleteLanguageInput!
+  $condition: ModelLanguageConditionInput
+) {
+  deleteLanguage(input: $input, condition: $condition) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+mutation CreateLanguagesSetting(
+  $input: CreateLanguagesSettingInput!
+  $condition: ModelLanguagesSettingConditionInput
+) {
+  createLanguagesSetting(input: $input, condition: $condition) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation UpdateLanguagesSetting(
+  $input: UpdateLanguagesSettingInput!
+  $condition: ModelLanguagesSettingConditionInput
+) {
+  updateLanguagesSetting(input: $input, condition: $condition) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation DeleteLanguagesSetting(
+  $input: DeleteLanguagesSettingInput!
+  $condition: ModelLanguagesSettingConditionInput
+) {
+  deleteLanguagesSetting(input: $input, condition: $condition) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation CreateFavourite(
+  $input: CreateFavouriteInput!
+  $condition: ModelFavouriteConditionInput
+) {
+  createFavourite(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateFavourite(
+  $input: UpdateFavouriteInput!
+  $condition: ModelFavouriteConditionInput
+) {
+  updateFavourite(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteFavourite(
+  $input: DeleteFavouriteInput!
+  $condition: ModelFavouriteConditionInput
+) {
+  deleteFavourite(input: $input, condition: $condition) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateQuestion(
+  $input: CreateQuestionInput!
+  $condition: ModelQuestionConditionInput
+) {
+  createQuestion(input: $input, condition: $condition) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation UpdateQuestion(
+  $input: UpdateQuestionInput!
+  $condition: ModelQuestionConditionInput
+) {
+  updateQuestion(input: $input, condition: $condition) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation DeleteQuestion(
+  $input: DeleteQuestionInput!
+  $condition: ModelQuestionConditionInput
+) {
+  deleteQuestion(input: $input, condition: $condition) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+mutation CreateBankAccount(
+  $input: CreateBankAccountInput!
+  $condition: ModelBankAccountConditionInput
+) {
+  createBankAccount(input: $input, condition: $condition) {
+    id
+    name
+    value
+    icon
+    enabled
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateBankAccount(
+  $input: UpdateBankAccountInput!
+  $condition: ModelBankAccountConditionInput
+) {
+  updateBankAccount(input: $input, condition: $condition) {
+    id
+    name
+    value
+    icon
+    enabled
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteBankAccount(
+  $input: DeleteBankAccountInput!
+  $condition: ModelBankAccountConditionInput
+) {
+  deleteBankAccount(input: $input, condition: $condition) {
+    id
+    name
+    value
+    icon
+    enabled
+    createdAt
+    updatedAt
+    owner
+  }
+}

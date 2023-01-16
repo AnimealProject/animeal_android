@@ -1,5 +1,5 @@
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 include(":shared:feature:settings")
 
@@ -31,6 +31,21 @@ dependencyResolutionManagement {
                 username = "mapbox"
                 // Use the secret token you stored in local.properties as the password
                 password = mapBoxSecretToken
+            }
+        }
+
+        // Declare the Node.js download repository
+        ivy {
+            name = "Node.js"
+            setUrl("https://nodejs.org/dist/")
+            patternLayout {
+                artifact("v[revision]/[artifact](-v[revision]-[classifier]).[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("org.nodejs", "node")
             }
         }
     }
@@ -71,11 +86,11 @@ include(":feature:tabsflow:favourites")
 
 include(":library:analytics")
 include(":library:auth")
+include(":library:codegen")
 include(":library:common")
 include(":library:extensions")
 include(":library:api")
 include(":library:foundation")
-include(":library:generatedmodel")
 include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")

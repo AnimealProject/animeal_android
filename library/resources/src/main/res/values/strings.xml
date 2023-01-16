@@ -38,6 +38,8 @@
     <string name="location_permission_denied">Location permission is permanently denied. Navigate to app settings to enable it.</string>
     <string name="location_rationale_text">Location permission is needed to access Maps!</string>
 
+    <string name="something_went_wrong">Something went wrong</string>
+
     <string name="navigate_to_app_settings">Navigate to app settings</string>
     <string name="request_permission">Request permission</string>
 

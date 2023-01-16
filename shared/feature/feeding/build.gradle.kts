@@ -12,10 +12,10 @@ android {
 dependencies {
     implementation(projects.library.api)
     implementation(projects.library.auth)
+    implementation(projects.library.codegen)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
-    implementation(projects.library.generatedmodel)
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
 

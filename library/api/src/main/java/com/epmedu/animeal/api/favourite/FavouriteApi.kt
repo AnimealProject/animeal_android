@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feeding.data.api.favourite
+package com.epmedu.animeal.api.favourite
 
 import com.amplifyframework.datastore.generated.model.Favourite
 import kotlinx.coroutines.flow.Flow

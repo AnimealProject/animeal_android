@@ -1,7 +1,6 @@
 package com.epmedu.animeal.extensions
 
 import android.content.Context
-import com.amplifyframework.core.model.temporal.Temporal
 import com.epmedu.animeal.resources.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -57,14 +56,6 @@ fun tryParseDate(rawDate: String?): LocalDate? {
     return runCatching {
         LocalDate.parse(rawDate, DAY_MONTH_NAME_COMMA_YEAR_FORMATTER)
     }.getOrNull()
-}
-
-fun Temporal.DateTime.toLocalDate(): LocalDate {
-    return LocalDate.parse(format(), DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-}
-
-fun Temporal.Timestamp.toLocalDate(): LocalDate {
-    return LocalDate.ofEpochDay(secondsSinceEpoch)
 }
 
 /**

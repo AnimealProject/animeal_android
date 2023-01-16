@@ -1,9 +1,9 @@
-package com.epmedu.animeal.feeding.di
+package com.epmedu.animeal.api.di
 
-import com.epmedu.animeal.feeding.data.api.favourite.FavouriteApi
-import com.epmedu.animeal.feeding.data.api.favourite.FavouriteApiImpl
-import com.epmedu.animeal.feeding.data.api.feeding.FeedingPointApi
-import com.epmedu.animeal.feeding.data.api.feeding.FeedingPointApiImpl
+import com.epmedu.animeal.api.favourite.FavouriteApi
+import com.epmedu.animeal.api.favourite.FavouriteApiImpl
+import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.feeding.FeedingPointApiImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
