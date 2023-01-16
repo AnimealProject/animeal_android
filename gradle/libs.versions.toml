@@ -32,6 +32,7 @@ navigationCompose = "2.5.2"
 navigationComposeHilt = "1.0.0"
 playServicesLocation = "20.0.0"
 mapbox = "10.8.0"
+mapboxNavigation = "2.8.0"
 versions = "0.42.0"
 
 [libraries]
@@ -53,6 +54,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
+mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "mapboxNavigation" }
 
 amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
 amplify-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify" }

@@ -15,7 +15,7 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
     override val isGpsSettingsEnabled: Boolean
         get() = LocationManagerCompat.isLocationEnabled(locationManager)
 
-    override fun fetchUpdates() = callbackFlow {
+    override fun fetchGpsSettingsUpdates() = callbackFlow {
         val gnssStatusCompat = GnssStatusCompat(
             locationManager = locationManager,
             onGpsStarted = {

@@ -4,15 +4,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
+import com.epmedu.animeal.home.presentation.model.MapPath
+import com.epmedu.animeal.home.presentation.model.RouteResult
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_START_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_TOP_PADDING
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_ZOOM
+import com.epmedu.animeal.resources.R
+import com.mapbox.api.directions.v5.DirectionsCriteria
+import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
+import com.mapbox.navigation.base.extensions.coordinates
+import com.mapbox.navigation.base.route.NavigationRoute
+import com.mapbox.navigation.base.route.NavigationRouterCallback
+import com.mapbox.navigation.base.route.RouterFailure
+import com.mapbox.navigation.base.route.RouterOrigin
+import com.mapbox.navigation.core.MapboxNavigation
 
 @Composable
 fun rememberMapViewWithLifecycle(
@@ -51,14 +70,122 @@ fun rememberMapViewWithLifecycle(
     return mapView
 }
 
-fun MapView.setLocation(location: MapLocation) = getMapboxMap().setCamera(
-    CameraOptions.Builder()
-        .zoom(13.0)
-        .center(Point.fromLngLat(location.longitude, location.latitude))
+fun MapView.setLocation(location: MapLocation, zoom: Double = DEFAULT_ZOOM) =
+    getMapboxMap().setCamera(
+        CameraOptions.Builder()
+            .zoom(zoom)
+            .center(Point.fromLngLat(location.longitude, location.latitude))
+            .build()
+    )
+
+fun MapView.setLocation(
+    points: List<Point>,
+    padding: EdgeInsets = EdgeInsets(
+        DEFAULT_MAP_TOP_PADDING,
+        DEFAULT_MAP_START_PADDING,
+        DEFAULT_MAP_BOTTOM_PADDING,
+        DEFAULT_MAP_END_PADDING
+    )
+) {
+    val cameraPosition = getMapboxMap().cameraForCoordinates(points, padding)
+    getMapboxMap().setCamera(cameraPosition)
+}
+
+fun MapView.fetchRoute(
+    mapBoxRouteInitOptions: MapBoxRouteInitOptions,
+    navigation: MapboxNavigation,
+    path: MapPath,
+    onRouteResult: (result: RouteResult) -> Unit
+) {
+    val routeOptions = RouteOptions.builder()
+        .applyDefaultNavigationOptions()
+        .profile(DirectionsCriteria.PROFILE_WALKING) // Assuming people will walk to their destinations...
+        .coordinates(origin = path.origin, destination = path.destination)
         .build()
-)
+
+    requestRoutes(navigation, routeOptions, onRouteResult)
+
+    doOnDetach {
+        mapBoxRouteInitOptions.run {
+            routeLineApi.cancel()
+            routeLineView.cancel()
+        }
+    }
+}
+
+fun MapView.drawRoute(
+    mapBoxRouteInitOptions: MapBoxRouteInitOptions,
+    route: NavigationRoute
+) {
+    mapBoxRouteInitOptions.routeLineApi.setNavigationRoutes(listOf(route)) { value ->
+        getMapboxMap().getStyle()?.let { style ->
+            mapBoxRouteInitOptions.routeLineView.renderRouteDrawData(style, value)
+        }
+    }
+}
+
+fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
+    mapBoxRouteInitOptions.run {
+        routeLineApi.clearRouteLine { value ->
+            getMapboxMap().getStyle()?.let { style ->
+                routeLineView.renderClearRouteLineValue(style, value)
+            }
+        }
+    }
+}
 
 fun MapView.setGesturesListener(onMapInteraction: () -> Unit) =
     getMapboxMap().addOnCameraChangeListener {
         onMapInteraction()
     }
+
+private fun MapView.requestRoutes(
+    navigation: MapboxNavigation,
+    routeOptions: RouteOptions,
+    onRouteResult: (result: RouteResult) -> Unit
+) {
+    navigation.requestRoutes(
+        routeOptions,
+        object : NavigationRouterCallback {
+            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
+                // Mapbox always considers the first route the better one
+                routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
+                    onRouteResult(
+                        RouteResult(
+                            true,
+                            distanceLeft = distance().toLong(),
+                            timeLeft = duration().toLong(),
+                            routeData = routes.first()
+                        )
+                    )
+                    return
+                }
+
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_not_found)
+                    )
+                )
+            }
+
+            override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_failed)
+                    )
+                )
+            }
+
+            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
+                onRouteResult(
+                    RouteResult(
+                        false,
+                        errorMessage = context.getString(R.string.routes_cancelled)
+                    )
+                )
+            }
+        }
+    )
+}

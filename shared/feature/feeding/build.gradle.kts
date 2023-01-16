@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
     implementation(projects.library.geolocation)
+    implementation(projects.shared.feature.profile)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

@@ -18,13 +18,17 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.home.domain.PermissionStatus
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.*
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.mapbox.maps.MapView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -36,16 +40,20 @@ internal fun HomeScreenUI(
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
-
     val scope = rememberCoroutineScope()
 
-    BackHandler(enabled = bottomSheetState.isVisible) {
-        scope.launch { bottomSheetState.hide() }
+    scope.launch {
+        if (state.feedingRouteState !is FeedingRouteState.Disabled && !bottomSheetState.isHiding) {
+            bottomSheetState.hide()
+        }
     }
 
-    BackHandler(enabled = state.willFeedState.isDialogShowing) {
-        scope.launch { onScreenEvent(DismissWillFeedDialog) }
-    }
+    OnBackHandling(
+        scope = scope,
+        bottomSheetState = bottomSheetState,
+        state = state,
+        onScreenEvent = onScreenEvent
+    )
 
     AnimealBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -57,7 +65,7 @@ internal fun HomeScreenUI(
                     contentAlpha = contentAlpha,
                     modifier = Modifier.wrapContentHeight(),
                     onFavouriteChange = {
-                        onScreenEvent(FeedingPointFavouriteChange(isFavourite = it))
+                        onScreenEvent(HomeScreenEvent.FeedingPointFavouriteChange(isFavourite = it))
                     }
                 )
             }
@@ -67,7 +75,7 @@ internal fun HomeScreenUI(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.currentFeedingPoint?.animalStatus == AnimalState.RED,
-                    onClick = { onScreenEvent(ShowWillFeedDialog) }
+                    onClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.ShowWillFeedDialog) }
                 )
             }
         }
@@ -78,18 +86,21 @@ internal fun HomeScreenUI(
         ) { geolocationPermissionState ->
             HomeMapbox(
                 state = state,
-                onFeedingPointSelect = { onScreenEvent(FeedingPointSelected(it.id)) },
-                onGeolocationClick = { mapView ->
-                    when (state.geolocationPermissionStatus) {
-                        PermissionStatus.Restricted -> mapView.context.launchAppSettings()
-                        PermissionStatus.Denied -> geolocationPermissionState.launchPermissionRequest()
-                        PermissionStatus.Granted -> when (state.gpsSettingState) {
-                            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
-                            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
-                        }
+                onFeedingPointSelect = { onScreenEvent(HomeScreenEvent.FeedingPointSelected(it.id)) },
+                onMapInteraction = {
+                    if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
+                        scope.launch { bottomSheetState.show() }
                     }
                 },
-                onMapInteraction = { if (!bottomSheetState.isHiding) scope.launch { bottomSheetState.show() } }
+                onCancelRouteClick = {
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
+                },
+                onRouteResult = { result ->
+                    onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest(result))
+                },
+                onGeolocationClick = { mapView ->
+                    onGeoLocationClick(mapView, state, geolocationPermissionState)
+                }
             )
         }
     }
@@ -98,11 +109,49 @@ internal fun HomeScreenUI(
 }
 
 @Composable
-private fun WillFeedConfirmationDialog(state: HomeState, onScreenEvent: (HomeScreenEvent) -> Unit) {
-    if (state.willFeedState.isDialogShowing) {
+private fun WillFeedConfirmationDialog(
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit
+) {
+    if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
-            onAgreeClick = { onScreenEvent(DismissWillFeedDialog) },
-            onCancelClick = { onScreenEvent(DismissWillFeedDialog) }
+            onAgreeClick = {
+                onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog)
+                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest)
+            },
+            onCancelClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
         )
+    }
+}
+
+@Composable
+fun OnBackHandling(
+    scope: CoroutineScope,
+    bottomSheetState: AnimealBottomSheetState,
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit
+) {
+    BackHandler(enabled = bottomSheetState.isVisible) {
+        scope.launch { bottomSheetState.hide() }
+    }
+
+    BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
+        scope.launch { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+private fun onGeoLocationClick(
+    mapView: MapView,
+    state: HomeState,
+    geolocationPermission: PermissionState
+) {
+    when (state.geolocationPermissionStatus) {
+        PermissionStatus.Restricted -> mapView.context.launchAppSettings()
+        PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
+        PermissionStatus.Granted -> when (state.gpsSettingState) {
+            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
+        }
     }
 }
