@@ -8,7 +8,7 @@ interface EnterCodeRepository {
 
     suspend fun sendCode(requestHandler: AuthRequestHandler)
 
-    fun confirmSignInCode(code: List<Int?>, requestHandler: AuthRequestHandler)
+    fun confirmSignIn(code: List<Int?>, requestHandler: AuthRequestHandler)
 
     fun confirmResendCode(code: List<Int?>, requestHandler: AuthRequestHandler)
 }

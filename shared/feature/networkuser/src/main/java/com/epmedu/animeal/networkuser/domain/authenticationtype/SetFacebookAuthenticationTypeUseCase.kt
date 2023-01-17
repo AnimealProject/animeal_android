@@ -1,6 +1,6 @@
-package com.epmedu.animeal.profile.domain.authenticationtype
+package com.epmedu.animeal.networkuser.domain.authenticationtype
 
-import com.epmedu.animeal.profile.data.repository.AuthenticationTypeRepository
+import com.epmedu.animeal.networkuser.data.repository.AuthenticationTypeRepository
 
 class SetFacebookAuthenticationTypeUseCase(private val repository: AuthenticationTypeRepository) {
 

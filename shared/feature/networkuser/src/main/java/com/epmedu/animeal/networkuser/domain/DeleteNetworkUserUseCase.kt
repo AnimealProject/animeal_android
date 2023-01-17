@@ -2,12 +2,10 @@ package com.epmedu.animeal.networkuser.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.networkuser.data.repository.NetworkRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DeleteNetworkUserUseCase(private val repository: NetworkRepository) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     suspend operator fun invoke(
         onSuccess: () -> Unit,
@@ -22,7 +20,7 @@ class DeleteNetworkUserUseCase(private val repository: NetworkRepository) {
                 onError(exception)
             }
         }
-        coroutineScope.launch {
+        withContext(Dispatchers.IO) {
             repository.deleteNetworkUser(requestHandler)
         }
     }

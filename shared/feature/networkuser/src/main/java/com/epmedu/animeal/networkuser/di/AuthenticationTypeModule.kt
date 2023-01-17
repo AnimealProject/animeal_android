@@ -1,11 +1,11 @@
-package com.epmedu.animeal.profile.di
+package com.epmedu.animeal.networkuser.di
 
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.profile.data.repository.AuthenticationTypeRepository
-import com.epmedu.animeal.profile.data.repository.AuthenticationTypeRepositoryImpl
-import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.authenticationtype.SetFacebookAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.authenticationtype.SetMobileAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.data.repository.AuthenticationTypeRepository
+import com.epmedu.animeal.networkuser.data.repository.AuthenticationTypeRepositoryImpl
+import com.epmedu.animeal.networkuser.domain.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.authenticationtype.SetMobileAuthenticationTypeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +20,8 @@ object AuthenticationTypeModule {
     @Provides
     fun provideAuthenticationTypeRepository(
         authAPI: AuthAPI,
-    ): AuthenticationTypeRepository = AuthenticationTypeRepositoryImpl(authAPI)
+    ): AuthenticationTypeRepository =
+        AuthenticationTypeRepositoryImpl(authAPI)
 
     @ViewModelScoped
     @Provides

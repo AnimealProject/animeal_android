@@ -25,7 +25,7 @@ class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
             }
         }
 
-        repository.confirmSignInCode(code, requestHandler)
+        repository.confirmSignIn(code, requestHandler)
     }
 }
 

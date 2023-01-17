@@ -7,7 +7,8 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
@@ -17,22 +18,24 @@ import com.epmedu.animeal.extensions.getActivity
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingState
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
-import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel.Event
 
 @Composable
 fun OnboardingScreen() {
     val viewModel: OnboardingViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val activity = LocalContext.current.getActivity()
+    val state by viewModel.stateFlow.collectAsState()
+
+    onState(state = state, navigator = navigator, onEvent = viewModel::handleEvent)
 
     val facebookSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         when (it.resultCode) {
             RESULT_OK -> {
-                viewModel.changeAuthenticationTypeToFacebook()
-                viewModel.loadNetworkProfile()
+                viewModel.handleEvent(OnboardingScreenEvent.RedirectedFromFacebookWebUi)
             }
             RESULT_CANCELED -> {
                 // TODO temporary decision, discuss how to handle
@@ -45,22 +48,9 @@ fun OnboardingScreen() {
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.events.collect {
-            when (it) {
-                is Event.NavigateToFinishPageInFacebookAuthFlow -> {
-                    navigator.navigate(SignUpRoute.FinishProfile.name)
-                }
-                is Event.NavigateToHomeScreen -> {
-                    navigator.navigateToTabs()
-                }
-            }
-        }
-    }
-
     OnboardingScreenUI(
         onSignInMobile = {
-            viewModel.changeAuthenticationTypeToMobile()
+            viewModel.handleEvent(OnboardingScreenEvent.SignInWithMobileClicked)
             navigator.navigate(SignUpRoute.EnterPhone.name)
         },
         onSignInFacebook = {
@@ -68,6 +58,22 @@ fun OnboardingScreen() {
             facebookSignInLauncher.launch(intent)
         },
     )
+}
+
+@Composable
+private fun onState(
+    state: OnboardingState,
+    navigator: Navigator,
+    onEvent: (event: OnboardingScreenEvent) -> Unit
+) {
+    state.facebookAuthorization?.let {
+        if (it.isPhoneNumberVerified) {
+            navigator.navigateToTabs()
+        } else {
+            navigator.navigate(SignUpRoute.FinishProfile.name)
+        }
+        onEvent(OnboardingScreenEvent.FacebookSignInFinished)
+    }
 }
 
 private fun Navigator.navigateToTabs() {

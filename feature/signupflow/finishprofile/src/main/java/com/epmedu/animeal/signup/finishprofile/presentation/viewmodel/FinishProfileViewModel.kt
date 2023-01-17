@@ -6,6 +6,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.networkuser.domain.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.UpdateNetworkProfileUseCase
+import com.epmedu.animeal.networkuser.domain.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -14,7 +15,6 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
-import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE

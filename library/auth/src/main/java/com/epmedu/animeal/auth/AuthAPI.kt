@@ -72,7 +72,7 @@ class AuthAPI {
         )
     }
 
-    fun confirmPhoneNumber(
+    fun confirmResendCode(
         code: String,
         handler: AuthRequestHandler
     ) {

@@ -7,7 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.profile.domain.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.signup.entercode.domain.*
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
@@ -78,7 +78,7 @@ internal class EnterCodeViewModel @Inject constructor(
             if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
                 lastCode = state.code
                 when (authenticationType) {
-                    AuthenticationType.Mobile -> confirmSignInCode()
+                    AuthenticationType.Mobile -> confirmSignIn()
                     AuthenticationType.Facebook -> confirmResendCode()
                 }
             }
@@ -89,7 +89,7 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(isError = isCodeFilled() && state.isError) }
     }
 
-    private fun confirmSignInCode() {
+    private fun confirmSignIn() {
         viewModelScope.launch {
             mobileConfirmCodeUseCase(
                 code = state.code,
