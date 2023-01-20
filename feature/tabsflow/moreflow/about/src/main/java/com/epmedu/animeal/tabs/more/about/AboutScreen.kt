@@ -2,10 +2,13 @@ package com.epmedu.animeal.tabs.more.about
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.epmedu.animeal.extensions.*
+import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.extensions.openAnimealWebsite
+import com.epmedu.animeal.extensions.openFacebook
+import com.epmedu.animeal.extensions.openInstagram
+import com.epmedu.animeal.extensions.openLinkedin
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
-import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 
 @Composable
@@ -29,7 +32,5 @@ fun AboutScreen() {
         onSocialWebClick = {
             context.openAnimealWebsite()
         },
-        text = generateLoremIpsum(),
-        text2 = generateLoremIpsum()
     )
 }

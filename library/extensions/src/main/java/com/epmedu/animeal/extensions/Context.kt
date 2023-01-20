@@ -1,6 +1,6 @@
 package com.epmedu.animeal.extensions
 
-import android.content.*
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -8,6 +8,7 @@ import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
@@ -59,43 +60,31 @@ fun Context.startAppOrBrowser(appIntent: Intent, webIntent: Intent) {
     try {
         startActivity(appIntent)
     } catch (e: ActivityNotFoundException) {
-        e.printStackTrace()
+        Log.e("tag", e.message.toString())
         startActivity(webIntent)
     }
 }
 
-fun Context.openFacebook(){
-    val facebookAppIntent = Intent(Intent.ACTION_VIEW,
-        Uri.parse(FACEBOOK_APP_LINK))
-    val facebookWebIntent = Intent(Intent.ACTION_VIEW,
-        Uri.parse(FACEBOOK_WEB_LINK))
+fun Context.openFacebook() {
+    val facebookAppIntent = Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_APP_LINK))
+    val facebookWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_WEB_LINK))
     startAppOrBrowser(facebookAppIntent, facebookWebIntent)
 }
 
-fun Context.openInstagram(){
-    val instagramAppIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(INSTAGRAM_WEB_LINK))
-            .setPackage("com.instagram.android")
-    val instagramWebIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(INSTAGRAM_WEB_LINK))
+fun Context.openInstagram() {
+    val instagramAppIntent = Intent(Intent.ACTION_VIEW, Uri.parse(INSTAGRAM_WEB_LINK))
+        .setPackage("com.instagram.android")
+    val instagramWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(INSTAGRAM_WEB_LINK))
     startAppOrBrowser(instagramAppIntent, instagramWebIntent)
 }
 
-fun Context.openLinkedin(){
-    val linkedinWebIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(LINKEDIN_WEB_LINK)
-        )
+fun Context.openLinkedin() {
+    val linkedinWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(LINKEDIN_WEB_LINK))
     startActivity(linkedinWebIntent)
 }
 
-fun Context.openAnimealWebsite(){
-    val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(ANIMEAL_WEB_LINK)
-        )
+fun Context.openAnimealWebsite() {
+    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(ANIMEAL_WEB_LINK))
     startActivity(webIntent)
 }
 

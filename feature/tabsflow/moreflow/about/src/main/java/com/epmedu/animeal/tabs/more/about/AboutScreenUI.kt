@@ -2,8 +2,15 @@ package com.epmedu.animeal.tabs.more.about
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceAround
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -33,13 +40,11 @@ internal fun AboutScreenUI(
     onSocialInstagramClick: () -> Unit,
     onSocialLinkedinClick: () -> Unit,
     onSocialWebClick: () -> Unit,
-    text: String,
-    text2: String,
 ) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding(),
+            .statusBarsPadding(),
         topBar = {
             TopBar(
                 title = stringResource(id = R.string.page_about),
@@ -51,14 +56,14 @@ internal fun AboutScreenUI(
     ) {
         Column(
             modifier = Modifier
-                .statusBarsPadding()
                 .fillMaxSize()
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 18.dp)
+                modifier = Modifier
+                    .padding(horizontal = 32.dp, vertical = 18.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Fit,
                 painter = painterResource(R.drawable.about),
@@ -66,41 +71,56 @@ internal fun AboutScreenUI(
             )
             Text(
                 modifier = Modifier.padding(vertical = 12.dp),
-                text = text,
+                text = generateLoremIpsum(29..30),
                 style = MaterialTheme.typography.body2,
                 lineHeight = 20.sp,
             )
             Text(
                 modifier = Modifier.padding(vertical = 12.dp),
-                text = text2,
+                text = generateLoremIpsum(29..30),
                 style = MaterialTheme.typography.body2,
                 lineHeight = 20.sp,
             )
             Spacer(modifier = Modifier.weight(1f))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp),
-                horizontalArrangement = SpaceAround,
-            ) {
-                AnimealSocialButton(
-                    onClick = onSocialFacebookClick,
-                    iconResource = R.drawable.ic_facebook
-                )
-                AnimealSocialButton(
-                    onClick = onSocialInstagramClick,
-                    iconResource = R.drawable.ic_instagram
-                )
-                AnimealSocialButton(
-                    onClick = onSocialLinkedinClick,
-                    iconResource = R.drawable.ic_linkedin
-                )
-                AnimealSocialButton(
-                    onClick = onSocialWebClick,
-                    iconResource = R.drawable.ic_web
-                )
-            }
+            SocialButtonsRow(
+                onSocialFacebookClick = onSocialFacebookClick,
+                onSocialInstagramClick = onSocialInstagramClick,
+                onSocialLinkedinClick = onSocialLinkedinClick,
+                onSocialWebClick = onSocialWebClick,
+            )
         }
+    }
+}
+
+@Composable
+internal fun SocialButtonsRow(
+    onSocialFacebookClick: () -> Unit,
+    onSocialInstagramClick: () -> Unit,
+    onSocialLinkedinClick: () -> Unit,
+    onSocialWebClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 32.dp),
+        horizontalArrangement = SpaceAround,
+    ) {
+        AnimealSocialButton(
+            onClick = onSocialFacebookClick,
+            iconResource = R.drawable.ic_facebook
+        )
+        AnimealSocialButton(
+            onClick = onSocialInstagramClick,
+            iconResource = R.drawable.ic_instagram
+        )
+        AnimealSocialButton(
+            onClick = onSocialLinkedinClick,
+            iconResource = R.drawable.ic_linkedin
+        )
+        AnimealSocialButton(
+            onClick = onSocialWebClick,
+            iconResource = R.drawable.ic_web
+        )
     }
 }
 
@@ -114,8 +134,6 @@ private fun AboutScreenUIPreview() {
             onSocialInstagramClick = {},
             onSocialLinkedinClick = {},
             onSocialWebClick = {},
-            text = generateLoremIpsum(29..30),
-            text2 = generateLoremIpsum(29..30),
         )
     }
 }
