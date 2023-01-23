@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.networkuser.domain.DeleteNetworkUserUseCase
-import com.epmedu.animeal.networkuser.domain.UpdateNetworkProfileUseCase
-import com.epmedu.animeal.networkuser.domain.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -71,7 +71,7 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun loadAuthenticationType() {
         viewModelScope.launch {
             authenticationType = getAuthenticationTypeUseCase()
-            if (authenticationType == AuthenticationType.Facebook) {
+            if (authenticationType is AuthenticationType.Facebook) {
                 updateState { copy(isPhoneNumberEnabled = true) }
             }
         }
@@ -94,7 +94,7 @@ internal class FinishProfileViewModel @Inject constructor(
             Cancel -> {
                 when (authenticationType) {
                     AuthenticationType.Mobile -> logout()
-                    AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
+                    is AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
                 }
             }
         }
@@ -134,7 +134,7 @@ internal class FinishProfileViewModel @Inject constructor(
         viewModelScope.launch {
             when (authenticationType) {
                 AuthenticationType.Mobile -> sendEvent(NavigateBackToEnterPhone)
-                AuthenticationType.Facebook -> sendEvent(NavigateBackToOnboarding)
+                is AuthenticationType.Facebook -> sendEvent(NavigateBackToOnboarding)
             }
         }
     }
@@ -163,7 +163,7 @@ internal class FinishProfileViewModel @Inject constructor(
                 )
                 when (authenticationType) {
                     AuthenticationType.Mobile -> sendEvent(ProfileFinished)
-                    AuthenticationType.Facebook -> sendEvent(NavigateToConfirmPhone)
+                    is AuthenticationType.Facebook -> sendEvent(NavigateToConfirmPhone)
                 }
             }
         }

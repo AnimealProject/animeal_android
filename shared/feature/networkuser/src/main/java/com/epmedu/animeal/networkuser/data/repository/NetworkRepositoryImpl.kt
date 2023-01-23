@@ -3,6 +3,7 @@ package com.epmedu.animeal.networkuser.data.repository
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.auth.UserAttributesAPI
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
+import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.profile.data.model.Profile
 import javax.inject.Inject
 

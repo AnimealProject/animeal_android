@@ -9,15 +9,15 @@ import com.amplifyframework.core.Amplify
 
 class AuthAPI {
 
-    var authenticationType = AuthenticationType.Mobile
+    var authenticationType: AuthenticationType = AuthenticationType.Mobile
         private set
 
     fun setMobileAuthenticationType() {
         authenticationType = AuthenticationType.Mobile
     }
 
-    fun setFacebookAuthenticationType() {
-        authenticationType = AuthenticationType.Facebook
+    fun setFacebookAuthenticationType(isPhoneNumberVerified: Boolean) {
+        authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
     }
 
     val currentUserId get() = Amplify.Auth.currentUser.userId
@@ -90,7 +90,7 @@ class AuthAPI {
     ) {
         when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber, handler)
-            AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
+            is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
         }
     }
 

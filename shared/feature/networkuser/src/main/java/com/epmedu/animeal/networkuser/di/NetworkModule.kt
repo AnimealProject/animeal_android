@@ -2,11 +2,11 @@ package com.epmedu.animeal.networkuser.di
 
 import com.epmedu.animeal.auth.UserAttributesAPI
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
-import com.epmedu.animeal.networkuser.data.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.data.repository.NetworkRepositoryImpl
-import com.epmedu.animeal.networkuser.domain.DeleteNetworkUserUseCase
-import com.epmedu.animeal.networkuser.domain.FetchNetworkUserAttributesUseCase
-import com.epmedu.animeal.networkuser.domain.UpdateNetworkProfileUseCase
+import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
+import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.FetchNetworkUserAttributesUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

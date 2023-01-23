@@ -1,6 +1,6 @@
-package com.epmedu.animeal.networkuser.domain.authenticationtype
+package com.epmedu.animeal.networkuser.domain.usecase.authenticationtype
 
-import com.epmedu.animeal.networkuser.data.repository.AuthenticationTypeRepository
+import com.epmedu.animeal.networkuser.domain.repository.AuthenticationTypeRepository
 
 class SetMobileAuthenticationTypeUseCase(private val repository: AuthenticationTypeRepository) {
 

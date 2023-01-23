@@ -1,4 +1,4 @@
-package com.epmedu.animeal.networkuser.data.repository
+package com.epmedu.animeal.networkuser.domain.repository
 
 import com.epmedu.animeal.auth.AuthenticationType
 
@@ -8,5 +8,5 @@ interface AuthenticationTypeRepository {
 
     suspend fun setAuthenticationTypeAsMobile()
 
-    suspend fun setAuthenticationTypeAsFacebook()
+    suspend fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean)
 }

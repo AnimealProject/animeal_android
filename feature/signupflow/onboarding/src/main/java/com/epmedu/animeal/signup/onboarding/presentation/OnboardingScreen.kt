@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
@@ -51,7 +52,6 @@ fun OnboardingScreen() {
     OnboardingScreenUI(
         onSignInMobile = {
             viewModel.handleEvent(OnboardingScreenEvent.SignInWithMobileClicked)
-            navigator.navigate(SignUpRoute.EnterPhone.name)
         },
         onSignInFacebook = {
             val intent = Intent(activity, FacebookSignInActivity::class.java)
@@ -66,13 +66,19 @@ private fun onState(
     navigator: Navigator,
     onEvent: (event: OnboardingScreenEvent) -> Unit
 ) {
-    state.facebookAuthorization?.let {
-        if (it.isPhoneNumberVerified) {
-            navigator.navigateToTabs()
-        } else {
-            navigator.navigate(SignUpRoute.FinishProfile.name)
+    state.authenticationType?.let {
+        when (it) {
+            AuthenticationType.Mobile -> navigator.navigate(SignUpRoute.EnterPhone.name)
+            is AuthenticationType.Facebook -> {
+                if (it.isPhoneNumberVerified) {
+                    navigator.navigateToTabs()
+                } else {
+                    navigator.navigate(SignUpRoute.FinishProfile.name)
+                }
+            }
         }
-        onEvent(OnboardingScreenEvent.FacebookSignInFinished)
+
+        onEvent(OnboardingScreenEvent.SignInFinished)
     }
 }
 

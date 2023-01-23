@@ -2,18 +2,16 @@ package com.epmedu.animeal.signup.onboarding.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
-import com.epmedu.animeal.extensions.MONTH_DAY_YEAR_SLASH_FORMATTER
-import com.epmedu.animeal.extensions.reformatDateToString
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
-import com.epmedu.animeal.networkuser.domain.FetchNetworkUserAttributesUseCase
-import com.epmedu.animeal.networkuser.domain.authenticationtype.SetFacebookAuthenticationTypeUseCase
-import com.epmedu.animeal.networkuser.domain.authenticationtype.SetMobileAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.FetchNetworkUserAttributesUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.signup.onboarding.domain.FacebookAuthorization
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,15 +31,14 @@ internal class OnboardingViewModel @Inject constructor(
     fun handleEvent(event: OnboardingScreenEvent) {
         when (event) {
             OnboardingScreenEvent.RedirectedFromFacebookWebUi -> {
-                changeAuthenticationTypeToFacebook()
-                loadNetworkUserAttributesIntoLocalDatastoreProfile()
+                loadNetworkUserAttributesIntoLocalProfile()
             }
             OnboardingScreenEvent.SignInWithMobileClicked -> {
                 changeAuthenticationTypeToMobile()
             }
-            OnboardingScreenEvent.FacebookSignInFinished -> {
+            OnboardingScreenEvent.SignInFinished -> {
                 updateState {
-                    copy(facebookAuthorization = null)
+                    copy(authenticationType = null)
                 }
             }
         }
@@ -50,43 +47,49 @@ internal class OnboardingViewModel @Inject constructor(
     private fun changeAuthenticationTypeToMobile() {
         viewModelScope.launch {
             setMobileAuthenticationTypeUseCase.invoke()
+            updateState {
+                copy(
+                    authenticationType = AuthenticationType.Mobile
+                )
+            }
         }
     }
 
-    private fun changeAuthenticationTypeToFacebook() {
+    private fun changeAuthenticationTypeToFacebook(isPhoneNumberVerified: Boolean) {
         viewModelScope.launch {
-            setFacebookAuthenticationTypeUseCase.invoke()
+            setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified)
         }
     }
 
-    private fun loadNetworkUserAttributesIntoLocalDatastoreProfile() {
+    private fun loadNetworkUserAttributesIntoLocalProfile() {
         viewModelScope.launch {
             fetchNetworkUserAttributesUseCase(
                 onSuccess = { networkUserAttributes ->
                     val isPhoneNumberVerified =
                         authUserAttributesToIsPhoneVerifiedMapper.map(networkUserAttributes)
-                    var profile = authUserAttributesToProfileMapper.map(networkUserAttributes)
-                    val convertedLocalFormatDate = reformatDateToString(
-                        dateString = profile.birthDate,
-                        originalFormatter = MONTH_DAY_YEAR_SLASH_FORMATTER,
-                        newFormatter = DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
-                    )
-                    profile = profile.copy(birthDate = convertedLocalFormatDate)
-                    viewModelScope.launch {
-                        saveProfileUseCase(profile).collect {
-                            updateState {
-                                copy(
-                                    facebookAuthorization =
-                                    FacebookAuthorization(isPhoneNumberVerified)
-                                )
-                            }
-                        }
-                    }
+                    changeAuthenticationTypeToFacebook(isPhoneNumberVerified)
+                    val profile = authUserAttributesToProfileMapper.map(networkUserAttributes)
+                    saveLocalProfile(profile, isPhoneNumberVerified)
                 },
                 onError = {
                     // TODO discuss how to handle
                 }
             )
+        }
+    }
+
+    private fun saveLocalProfile(
+        profile: Profile,
+        isPhoneNumberVerified: Boolean
+    ) {
+        viewModelScope.launch {
+            saveProfileUseCase(profile).collect {
+                updateState {
+                    copy(
+                        authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
+                    )
+                }
+            }
         }
     }
 }

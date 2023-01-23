@@ -1,7 +1,7 @@
 package com.epmedu.animeal.signup.onboarding.presentation.viewmodel
 
-import com.epmedu.animeal.signup.onboarding.domain.FacebookAuthorization
+import com.epmedu.animeal.auth.AuthenticationType
 
 data class OnboardingState(
-    val facebookAuthorization: FacebookAuthorization? = null
+    val authenticationType: AuthenticationType? = null
 )

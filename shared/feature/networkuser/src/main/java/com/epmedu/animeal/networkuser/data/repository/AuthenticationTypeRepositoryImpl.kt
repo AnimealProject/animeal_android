@@ -2,6 +2,7 @@ package com.epmedu.animeal.networkuser.data.repository
 
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.networkuser.domain.repository.AuthenticationTypeRepository
 import javax.inject.Inject
 
 class AuthenticationTypeRepositoryImpl @Inject constructor(
@@ -14,7 +15,7 @@ class AuthenticationTypeRepositoryImpl @Inject constructor(
         authAPI.setMobileAuthenticationType()
     }
 
-    override suspend fun setAuthenticationTypeAsFacebook() {
-        authAPI.setFacebookAuthenticationType()
+    override suspend fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean) {
+        authAPI.setFacebookAuthenticationType(isPhoneNumberVerified)
     }
 }
