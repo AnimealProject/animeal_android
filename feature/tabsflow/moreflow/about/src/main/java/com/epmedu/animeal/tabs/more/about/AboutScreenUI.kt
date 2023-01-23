@@ -11,9 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,23 +42,22 @@ internal fun AboutScreenUI(
     onSocialLinkedinClick: () -> Unit,
     onSocialWebClick: () -> Unit,
 ) {
-    Scaffold(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding(),
-        topBar = {
-            TopBar(
-                title = stringResource(id = R.string.page_about),
-                navigationIcon = {
-                    BackButton(onClick = onBack)
-                }
-            )
-        }
+            .statusBarsPadding()
     ) {
+        TopBar(
+            title = stringResource(id = R.string.page_about),
+            navigationIcon = {
+                BackButton(onClick = onBack)
+            }
+        )
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 32.dp)
+                .verticalScroll(rememberScrollState())
+                .weight(1f, fill = false),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -81,14 +81,14 @@ internal fun AboutScreenUI(
                 style = MaterialTheme.typography.body2,
                 lineHeight = 20.sp,
             )
-            Spacer(modifier = Modifier.weight(1f))
-            SocialButtonsRow(
-                onSocialFacebookClick = onSocialFacebookClick,
-                onSocialInstagramClick = onSocialInstagramClick,
-                onSocialLinkedinClick = onSocialLinkedinClick,
-                onSocialWebClick = onSocialWebClick,
-            )
         }
+        Spacer(modifier = Modifier.weight(1f))
+        SocialButtonsRow(
+            onSocialFacebookClick = onSocialFacebookClick,
+            onSocialInstagramClick = onSocialInstagramClick,
+            onSocialLinkedinClick = onSocialLinkedinClick,
+            onSocialWebClick = onSocialWebClick,
+        )
     }
 }
 
@@ -102,7 +102,7 @@ internal fun SocialButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 32.dp),
+            .padding(bottom = 32.dp, top = 8.dp),
         horizontalArrangement = SpaceAround,
     ) {
         AnimealSocialButton(
