@@ -76,11 +76,11 @@ internal fun AboutScreenUI(
                 style = MaterialTheme.typography.body2,
                 lineHeight = 20.sp,
             )
-            Spacer(modifier = Modifier.weight(1f))
-            SocialButtonsRow(
-                onSocialClick = onSocialClick
-            )
         }
+        Spacer(modifier = Modifier.weight(1f))
+        SocialButtonsRow(
+            onSocialClick = onSocialClick
+        )
     }
 }
 
@@ -91,8 +91,7 @@ internal fun SocialButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 32.dp, top = 8.dp)
-            .padding(horizontal = 36.dp),
+            .padding(32.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AnimealSocialButton(
