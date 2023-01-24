@@ -14,5 +14,6 @@ dependencies {
     implementation(projects.library.resources)
     implementation(libs.compose.runtime)
 
+    implementation(projects.library.common)
     implementation(projects.library.resources)
 }
