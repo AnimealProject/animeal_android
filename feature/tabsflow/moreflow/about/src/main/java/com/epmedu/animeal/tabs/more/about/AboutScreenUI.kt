@@ -36,10 +36,7 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun AboutScreenUI(
     onBack: () -> Unit,
-    onSocialFacebookClick: () -> Unit,
-    onSocialInstagramClick: () -> Unit,
-    onSocialLinkedinClick: () -> Unit,
-    onSocialWebClick: () -> Unit,
+    onSocialClick: (type: SocialMedia) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -79,23 +76,17 @@ internal fun AboutScreenUI(
                 style = MaterialTheme.typography.body2,
                 lineHeight = 20.sp,
             )
+            Spacer(modifier = Modifier.weight(1f))
+            SocialButtonsRow(
+                onSocialClick = onSocialClick
+            )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        SocialButtonsRow(
-            onSocialFacebookClick = onSocialFacebookClick,
-            onSocialInstagramClick = onSocialInstagramClick,
-            onSocialLinkedinClick = onSocialLinkedinClick,
-            onSocialWebClick = onSocialWebClick,
-        )
     }
 }
 
 @Composable
 internal fun SocialButtonsRow(
-    onSocialFacebookClick: () -> Unit,
-    onSocialInstagramClick: () -> Unit,
-    onSocialLinkedinClick: () -> Unit,
-    onSocialWebClick: () -> Unit,
+    onSocialClick: (type: SocialMedia) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -105,19 +96,19 @@ internal fun SocialButtonsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AnimealSocialButton(
-            onClick = onSocialFacebookClick,
+            onClick = { onSocialClick(SocialMedia.FACEBOOK) },
             iconResource = R.drawable.ic_facebook
         )
         AnimealSocialButton(
-            onClick = onSocialInstagramClick,
+            onClick = { onSocialClick(SocialMedia.INSTAGRAM) },
             iconResource = R.drawable.ic_instagram
         )
         AnimealSocialButton(
-            onClick = onSocialLinkedinClick,
+            onClick = { onSocialClick(SocialMedia.LINKEDIN) },
             iconResource = R.drawable.ic_linkedin
         )
         AnimealSocialButton(
-            onClick = onSocialWebClick,
+            onClick = { onSocialClick(SocialMedia.WEB) },
             iconResource = R.drawable.ic_web
         )
     }
@@ -129,10 +120,7 @@ private fun AboutScreenUIPreview() {
     AnimealTheme {
         AboutScreenUI(
             onBack = {},
-            onSocialFacebookClick = {},
-            onSocialInstagramClick = {},
-            onSocialLinkedinClick = {},
-            onSocialWebClick = {},
+            onSocialClick = {}
         )
     }
 }

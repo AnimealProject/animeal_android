@@ -1,5 +1,6 @@
 package com.epmedu.animeal.tabs.more.about
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.epmedu.animeal.extensions.currentOrThrow
@@ -20,17 +21,22 @@ fun AboutScreen() {
 
     AboutScreenUI(
         onBack = navigator::popBackStack,
-        onSocialFacebookClick = {
-            context.openFacebook()
-        },
-        onSocialInstagramClick = {
-            context.openInstagram()
-        },
-        onSocialLinkedinClick = {
-            context.openLinkedin()
-        },
-        onSocialWebClick = {
-            context.openAnimealWebsite()
-        },
+        onSocialClick = { socialMedia -> handleSocialClick(context, socialMedia) }
     )
+}
+
+fun handleSocialClick(context: Context, type: SocialMedia) {
+    when (type) {
+        SocialMedia.FACEBOOK -> context.openFacebook()
+        SocialMedia.INSTAGRAM -> context.openInstagram()
+        SocialMedia.LINKEDIN -> context.openLinkedin()
+        SocialMedia.WEB -> context.openAnimealWebsite()
+    }
+}
+
+enum class SocialMedia {
+    FACEBOOK,
+    INSTAGRAM,
+    LINKEDIN,
+    WEB
 }
