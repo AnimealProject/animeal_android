@@ -91,7 +91,7 @@ internal fun SocialButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(32.dp),
+            .padding(36.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AnimealSocialButton(
