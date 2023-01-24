@@ -3,7 +3,6 @@ package com.epmedu.animeal.tabs.more.about
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.SpaceAround
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +44,8 @@ internal fun AboutScreenUI(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+            .verticalScroll(rememberScrollState())
+            .statusBarsPadding(),
     ) {
         TopBar(
             title = stringResource(id = R.string.page_about),
@@ -55,9 +55,7 @@ internal fun AboutScreenUI(
         )
         Column(
             modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .verticalScroll(rememberScrollState())
-                .weight(1f, fill = false),
+                .padding(horizontal = 36.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -102,8 +100,9 @@ internal fun SocialButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 32.dp, top = 8.dp),
-        horizontalArrangement = SpaceAround,
+            .padding(bottom = 32.dp, top = 8.dp)
+            .padding(horizontal = 36.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AnimealSocialButton(
             onClick = onSocialFacebookClick,
