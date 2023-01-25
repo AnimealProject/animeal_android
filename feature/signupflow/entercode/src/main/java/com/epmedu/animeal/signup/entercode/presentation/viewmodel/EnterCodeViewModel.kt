@@ -9,9 +9,10 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
-import com.epmedu.animeal.signup.entercode.domain.*
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
