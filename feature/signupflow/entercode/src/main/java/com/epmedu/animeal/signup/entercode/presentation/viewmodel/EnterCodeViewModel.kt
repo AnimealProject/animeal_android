@@ -28,7 +28,7 @@ internal class EnterCodeViewModel @Inject constructor(
     private val facebookConfirmCodeUseCase: FacebookConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
-    ) : ViewModel(),
+) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
 

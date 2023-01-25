@@ -12,6 +12,8 @@ class AuthAPI {
     var authenticationType: AuthenticationType = AuthenticationType.Mobile
         private set
 
+    val currentUserId get() = Amplify.Auth.currentUser.userId
+
     fun setMobileAuthenticationType() {
         authenticationType = AuthenticationType.Mobile
     }
@@ -19,8 +21,6 @@ class AuthAPI {
     fun setFacebookAuthenticationType(isPhoneNumberVerified: Boolean) {
         authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
     }
-
-    val currentUserId get() = Amplify.Auth.currentUser.userId
 
     fun signUp(
         phone: String,
