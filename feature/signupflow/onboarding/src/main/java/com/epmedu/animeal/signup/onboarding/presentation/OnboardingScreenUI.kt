@@ -1,6 +1,7 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.epmedu.animeal.foundation.preview.AnimealPreview

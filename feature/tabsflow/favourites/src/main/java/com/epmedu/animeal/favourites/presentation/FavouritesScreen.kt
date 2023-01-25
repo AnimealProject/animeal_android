@@ -1,7 +1,10 @@
 package com.epmedu.animeal.favourites.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.favourites.presentation.ui.FavouritesScreenUI
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesViewModel

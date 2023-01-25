@@ -1,7 +1,10 @@
 package com.epmedu.animeal.profile.domain
 
 import com.epmedu.animeal.foundation.common.UiText
-import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult.*
+import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult.BlankSurnameError
+import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult.InvalidSurnameError
+import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult.ValidSurname
+import com.epmedu.animeal.foundation.common.validation.result.SurnameValidationResult.WrongSurnameLengthError
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.resources.R
 

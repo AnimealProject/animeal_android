@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
-import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.*
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
