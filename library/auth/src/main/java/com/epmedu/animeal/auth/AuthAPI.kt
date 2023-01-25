@@ -9,7 +9,18 @@ import com.amplifyframework.core.Amplify
 
 class AuthAPI {
 
+    var authenticationType: AuthenticationType = AuthenticationType.Mobile
+        private set
+
     val currentUserId get() = Amplify.Auth.currentUser.userId
+
+    fun setMobileAuthenticationType() {
+        authenticationType = AuthenticationType.Mobile
+    }
+
+    fun setFacebookAuthenticationType(isPhoneNumberVerified: Boolean) {
+        authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
+    }
 
     fun signUp(
         phone: String,
@@ -61,11 +72,26 @@ class AuthAPI {
         )
     }
 
+    fun confirmResendCode(
+        code: String,
+        handler: AuthRequestHandler
+    ) {
+        Amplify.Auth.confirmUserAttribute(
+            AuthUserAttributeKey.phoneNumber(),
+            code,
+            handler::onSuccess,
+            handler::onError
+        )
+    }
+
     fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
-        signIn(phoneNumber, handler)
+        when (authenticationType) {
+            AuthenticationType.Mobile -> signIn(phoneNumber, handler)
+            is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
+        }
     }
 
     fun fetchSession(
@@ -83,6 +109,14 @@ class AuthAPI {
         Amplify.Auth.signOut(
             handler::onSuccess,
             handler::onError,
+        )
+    }
+
+    private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
+        Amplify.Auth.resendUserAttributeConfirmationCode(
+            AuthUserAttributeKey.phoneNumber(),
+            handler::onSuccess,
+            handler::onError
         )
     }
 }
