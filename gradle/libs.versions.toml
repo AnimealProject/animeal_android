@@ -56,15 +56,15 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "mapboxNavigation" }
 
-amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
+amplify-aws-api = { module = "com.amplifyframework:aws-api", version.ref = "amplify" }
 amplify-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify" }
+amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-compose-hilt = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "navigationComposeHilt" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxEspresso" }
@@ -86,7 +86,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 
-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutableCollections"}
+immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutableCollections" }
 
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 

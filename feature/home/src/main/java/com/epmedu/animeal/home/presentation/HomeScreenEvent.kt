@@ -1,12 +1,12 @@
 package com.epmedu.animeal.home.presentation
 
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.RouteResult
 
 sealed interface HomeScreenEvent {
-    data class FeedingPointSelected(val id: Int = -1) : HomeScreenEvent
-    data class FeedingPointFavouriteChange(val id: Int = -1, val isFavourite: Boolean) :
-        HomeScreenEvent
+    data class FeedingPointSelected(val id: String = EMPTY_STRING) : HomeScreenEvent
+    data class FeedingPointFavouriteChange(val id: String = EMPTY_STRING, val isFavourite: Boolean) : HomeScreenEvent
 
     sealed interface RouteEvent : HomeScreenEvent {
         object FeedingRouteStartRequest : RouteEvent

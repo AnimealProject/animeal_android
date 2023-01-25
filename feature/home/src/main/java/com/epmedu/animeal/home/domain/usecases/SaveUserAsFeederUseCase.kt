@@ -11,7 +11,7 @@ class SaveUserAsFeederUseCase @Inject constructor(
     private val feedingPointRepository: FeedingPointRepository,
     private val profileRepository: ProfileRepository
 ) {
-    operator fun invoke(feedingPointId: Int) = flow {
+    operator fun invoke(feedingPointId: String) = flow {
         profileRepository.getProfile().map { profile ->
             feedingPointRepository.saveUserAsCurrentFeeder(
                 profile,
