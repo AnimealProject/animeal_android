@@ -1,6 +1,7 @@
 package com.epmedu.animeal.tabs
 
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
