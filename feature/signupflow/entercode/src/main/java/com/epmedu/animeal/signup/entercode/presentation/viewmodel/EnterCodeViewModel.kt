@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.signup.entercode.domain.*
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
@@ -26,7 +27,8 @@ internal class EnterCodeViewModel @Inject constructor(
     private val mobileConfirmCodeUseCase: MobileConfirmCodeUseCase,
     private val facebookConfirmCodeUseCase: FacebookConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
-) : ViewModel(),
+    private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
+    ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
 
@@ -110,6 +112,9 @@ internal class EnterCodeViewModel @Inject constructor(
                 code = state.code,
                 onSuccess = {
                     updateState { copy(isError = false) }
+                    viewModelScope.launch {
+                        setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified = true)
+                    }
                     viewModelScope.launch { sendEvent(NavigateToHomeScreen) }
                 },
                 onError = {

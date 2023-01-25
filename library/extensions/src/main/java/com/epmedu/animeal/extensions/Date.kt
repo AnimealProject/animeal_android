@@ -34,7 +34,7 @@ val DEFAULT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DAT
 
 fun formatDateToString(
     date: LocalDate?,
-    formatter: DateTimeFormatter = DAY_MONTH_COMMA_YEAR_FORMATTER
+    formatter: DateTimeFormatter = DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 ): String {
     date ?: return ""
     return date.format(formatter)
