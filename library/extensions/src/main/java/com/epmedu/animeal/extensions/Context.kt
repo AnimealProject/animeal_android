@@ -1,9 +1,11 @@
 package com.epmedu.animeal.extensions
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
@@ -39,6 +41,12 @@ fun Context.launchGpsSettings() {
 
 fun Context.drawableCompat(id: Int) = requireNotNull(AppCompatResources.getDrawable(this, id)) {
     "Drawable with $id is null"
+}
+
+fun Context.getActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.getActivity()
+    else -> null
 }
 
 fun Context.copyText(

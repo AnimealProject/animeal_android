@@ -29,10 +29,17 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
         authAPI.sendCode(phoneNumberWithPrefix.first(), requestHandler)
     }
 
-    override fun confirmCode(
+    override fun confirmSignIn(
         code: List<Int?>,
         requestHandler: AuthRequestHandler
     ) {
         authAPI.confirmSignIn(code.joinToString(""), requestHandler)
+    }
+
+    override fun confirmResendCode(
+        code: List<Int?>,
+        requestHandler: AuthRequestHandler
+    ) {
+        authAPI.confirmResendCode(code.joinToString(""), requestHandler)
     }
 }

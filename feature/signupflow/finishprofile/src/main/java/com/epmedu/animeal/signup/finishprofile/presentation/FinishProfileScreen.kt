@@ -14,8 +14,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBack
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.Saved
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel
 
 @Composable
@@ -29,8 +28,18 @@ fun FinishProfileScreen() {
         focusRequester.requestFocus()
         viewModel.events.collect {
             when (it) {
-                NavigateBack -> navigator.popBackStack(SignUpRoute.EnterPhone.name)
-                Saved -> navigator.navigateToTabs()
+                FinishProfileEvent.NavigateBackToOnboarding -> {
+                    navigator.popBackStack(SignUpRoute.Onboarding.name)
+                }
+                FinishProfileEvent.NavigateBackToEnterPhone -> {
+                    navigator.popBackStack(SignUpRoute.EnterPhone.name)
+                }
+                FinishProfileEvent.ProfileFinished -> {
+                    navigator.navigateToTabs()
+                }
+                FinishProfileEvent.NavigateToConfirmPhone -> {
+                    navigator.navigate(SignUpRoute.EnterCode.name)
+                }
             }
         }
     }

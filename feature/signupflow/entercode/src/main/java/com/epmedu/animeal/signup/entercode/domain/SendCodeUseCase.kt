@@ -5,6 +5,7 @@ import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import java.lang.Exception
 
 class SendCodeUseCase(private val repository: EnterCodeRepository) {
+
     suspend operator fun invoke(
         onSuccess: () -> Unit,
         onError: () -> Unit

@@ -2,14 +2,19 @@ package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
+import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -18,20 +23,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
+    private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
-    private val confirmCodeUseCase: ConfirmCodeUseCase,
+    private val mobileConfirmCodeUseCase: MobileConfirmCodeUseCase,
+    private val facebookConfirmCodeUseCase: FacebookConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
+    private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
 ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
+
+    private var authenticationType: AuthenticationType = AuthenticationType.Mobile
+
+    private var lastCode: List<Int?> = emptyCode()
 
     init {
         viewModelScope.launch { getPhoneNumber() }
         viewModelScope.launch { launchResendTimer() }
         viewModelScope.launch { launchCodeValidation() }
+        viewModelScope.launch { loadAuthenticationType() }
     }
 
-    private var lastCode: List<Int?> = emptyCode()
+    fun resendCode() {
+        updateState { copy(code = emptyCode(), isResendEnabled = false) }
+        viewModelScope.launch { launchResendTimer() }
+        viewModelScope.launch { sendCodeUseCase({}, {}) }
+    }
+
+    fun changeDigit(
+        position: Int,
+        digit: Int?
+    ) {
+        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit).toImmutableList()) }
+    }
 
     private suspend fun getPhoneNumber() {
         getPhoneNumberUseCase().collect { updateState { copy(phoneNumber = it) } }
@@ -45,10 +69,22 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(isResendEnabled = true, resendDelay = 0) }
     }
 
+    private suspend fun loadAuthenticationType() {
+        viewModelScope.launch {
+            authenticationType = getAuthenticationTypeUseCase()
+        }
+    }
+
     private suspend fun launchCodeValidation() {
         stateFlow.collect {
             updateIsError()
-            navigateToFinishProfileIfCodeIsCorrect()
+            if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
+                lastCode = state.code
+                when (authenticationType) {
+                    AuthenticationType.Mobile -> confirmSignIn()
+                    is AuthenticationType.Facebook -> confirmResendCode()
+                }
+            }
         }
     }
 
@@ -56,16 +92,9 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(isError = isCodeFilled() && state.isError) }
     }
 
-    private fun navigateToFinishProfileIfCodeIsCorrect() {
-        if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
-            lastCode = state.code
-            confirmCode()
-        }
-    }
-
-    private fun confirmCode() {
+    private fun confirmSignIn() {
         viewModelScope.launch {
-            confirmCodeUseCase(
+            mobileConfirmCodeUseCase(
                 code = state.code,
                 onSuccess = {
                     updateState { copy(isError = false) }
@@ -78,11 +107,22 @@ internal class EnterCodeViewModel @Inject constructor(
         }
     }
 
-    fun changeDigit(
-        position: Int,
-        digit: Int?
-    ) {
-        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit).toImmutableList()) }
+    private fun confirmResendCode() {
+        viewModelScope.launch {
+            facebookConfirmCodeUseCase(
+                code = state.code,
+                onSuccess = {
+                    updateState { copy(isError = false) }
+                    viewModelScope.launch {
+                        setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified = true)
+                    }
+                    viewModelScope.launch { sendEvent(NavigateToHomeScreen) }
+                },
+                onError = {
+                    updateState { copy(isError = true) }
+                },
+            )
+        }
     }
 
     private fun getNewCodeWithReplacedDigit(
@@ -95,12 +135,6 @@ internal class EnterCodeViewModel @Inject constructor(
                 else -> currentDigit
             }
         }
-    }
-
-    fun resendCode() {
-        updateState { copy(code = emptyCode(), isResendEnabled = false) }
-        viewModelScope.launch { launchResendTimer() }
-        viewModelScope.launch { sendCodeUseCase({}, {}) }
     }
 
     companion object {
