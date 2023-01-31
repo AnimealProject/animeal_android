@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.favourites.data.FavouritesRepository
+import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
-    private val feedSpotRepository: FavouritesRepository
+    private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()) {
 
@@ -22,7 +22,7 @@ internal class FavouritesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            feedSpotRepository.getFavouriteFeedSpots().collect {
+            getFavouriteFeedingPointsUseCase().collect {
                 favouritesSnapshot = it
                 updateState { copy(favourites = it.toImmutableList()) }
             }

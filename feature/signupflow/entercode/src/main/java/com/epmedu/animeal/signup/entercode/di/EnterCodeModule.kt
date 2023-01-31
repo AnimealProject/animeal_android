@@ -5,8 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepositoryImpl
-import com.epmedu.animeal.signup.entercode.domain.ConfirmCodeUseCase
+import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
+import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import dagger.Module
 import dagger.Provides
@@ -27,9 +28,15 @@ internal object EnterCodeModule {
 
     @ViewModelScoped
     @Provides
-    fun provideConfirmCodeUseCase(
+    fun provideMobileConfirmCodeUseCase(
         repository: EnterCodeRepository
-    ) = ConfirmCodeUseCase(repository)
+    ) = MobileConfirmCodeUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideFacebookConfirmCodeUseCase(
+        repository: EnterCodeRepository
+    ) = FacebookConfirmCodeUseCase(repository)
 
     @ViewModelScoped
     @Provides

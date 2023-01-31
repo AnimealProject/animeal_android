@@ -8,11 +8,12 @@ android {
 }
 
 dependencies {
+    implementation(projects.library.common)
+    implementation(projects.library.resources)
+
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(libs.amplify.aws.api)
     implementation(libs.androidx.appcompat)
-    implementation(projects.library.resources)
     implementation(libs.compose.runtime)
-
-    implementation(projects.library.resources)
 }

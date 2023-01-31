@@ -21,8 +21,9 @@ class DefaultFeedingHandler @Inject internal constructor(
         repository.getAllFeedingPoints().collect {
             updateState {
                 copy(
-                    feedingPoints = it.take(15)
-                        .map { feedingPoint -> FeedingPointModel(feedingPoint) }.toImmutableList()
+                    feedingPoints = it.map { feedingPoint ->
+                        FeedingPointModel(feedingPoint)
+                    }.toImmutableList()
                 )
             }
         }

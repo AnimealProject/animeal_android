@@ -2,7 +2,8 @@ package com.epmedu.animeal.splash.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amplifyframework.auth.AuthSession
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
+import com.amplifyframework.auth.result.AuthSessionResult.Type.SUCCESS
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.splash.domain.FetchUserSessionUseCase
@@ -30,15 +31,15 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun verifyProfileSuccess(result: Any?) {
-        if (result is AuthSession) {
+        if (result is AWSCognitoAuthSession) {
             processSession(result)
         } else {
             navigateToOnboarding()
         }
     }
 
-    private fun processSession(session: AuthSession) {
-        if (session.isSignedIn) {
+    private fun processSession(session: AWSCognitoAuthSession) {
+        if (session.isSignedIn && session.awsCredentials.type == SUCCESS) {
             navigateToHome()
         } else {
             navigateToOnboarding()

@@ -3,7 +3,6 @@ package com.epmedu.animeal.home.di
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
@@ -32,10 +31,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object HomeModule {
-
-    @ViewModelScoped
-    @Provides
-    fun providesFeedingPointRepository(): FeedingPointRepository = FeedingPointRepositoryImpl()
 
     @ViewModelScoped
     @Provides

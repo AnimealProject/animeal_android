@@ -4,7 +4,8 @@ import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 
-class ConfirmCodeUseCase(private val repository: EnterCodeRepository) {
+class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
+
     operator fun invoke(
         code: List<Int?>,
         onSuccess: () -> Unit,
@@ -24,7 +25,7 @@ class ConfirmCodeUseCase(private val repository: EnterCodeRepository) {
             }
         }
 
-        repository.confirmCode(code, requestHandler)
+        repository.confirmSignIn(code, requestHandler)
     }
 }
 
