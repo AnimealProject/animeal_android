@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
+    implementation(libs.androidx.emoji2)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)

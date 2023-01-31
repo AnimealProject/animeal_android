@@ -6,6 +6,7 @@ minSdk = "24"
 accompanist = "0.27.0"
 activityCompose = "1.5.1"
 androidxComposeBom = "2022.11.00"
+androidxEmoji2 = "1.1.0"
 appcompat = "1.5.1"
 amplify = "1.37.3"
 androidxEspresso = "3.4.0"
@@ -63,6 +64,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+androidx-emoji2 = { module = "androidx.emoji2:emoji2" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

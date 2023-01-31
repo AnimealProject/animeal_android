@@ -7,6 +7,6 @@ object Constants {
     const val MAX_SURNAME_LENGTH = 35
     const val MIN_EMAIL_LENGTH = 7
     const val MAX_EMAIL_LENGTH = 255
-    const val PHONE_NUMBER_LENGTH = 9
+    const val GE_PHONE_NUMBER_LENGTH = 9
     const val MIN_AGE = 15L
 }
