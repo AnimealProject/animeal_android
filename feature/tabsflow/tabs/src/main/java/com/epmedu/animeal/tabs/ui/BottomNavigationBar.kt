@@ -1,7 +1,13 @@
 package com.epmedu.animeal.tabs.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
