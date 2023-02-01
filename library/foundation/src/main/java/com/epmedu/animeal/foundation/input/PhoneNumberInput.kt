@@ -40,6 +40,7 @@ fun PhoneNumberInput(
     onValueChange: (String) -> Unit = {},
     error: String = "",
     isEnabled: Boolean = true,
+    isFlagClickable: Boolean = false,
     flag: Flag = Flag(iconFlag = R.drawable.ic_georgia),
     useNumberFormatter: Boolean = true,
     format: String = GE_PHONE_NUMBER_FORMAT,
@@ -62,7 +63,7 @@ fun PhoneNumberInput(
         leadingIcon = {
             Row(
                 modifier = Modifier
-                    .clickable { onCountryClick?.invoke() }
+                    .clickable(enabled = isFlagClickable) { onCountryClick?.invoke() }
                     .padding(start = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)

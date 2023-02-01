@@ -37,6 +37,10 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.countryName
+import com.epmedu.animeal.profile.domain.model.flagEmoji
+import com.epmedu.animeal.profile.domain.model.phoneNumberCode
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
@@ -95,8 +99,6 @@ private fun BottomSheet(
     sheetContent: @Composable ColumnScope.() -> Unit
 ) {
     ModalBottomSheetLayout(
-        modifier = Modifier
-            .background(Color.Black),
         scrimColor = Color.Transparent,
         sheetState = bottomSheetState,
         sheetContent = sheetContent
@@ -156,6 +158,7 @@ private fun ScaffoldAndBody(
                 format = state.format,
                 numberLength = state.numberLength,
                 useNumberFormatter = state.region == Region.GE,
+                isFlagClickable = state.isDebug,
                 flag = if (state.region == Region.GE) {
                     Flag(R.drawable.ic_georgia)
                 } else {
@@ -182,7 +185,7 @@ private fun EnterPhoneScreenPreview() {
     AnimealTheme {
         EnterPhoneScreenUi(
             focusRequester = FocusRequester(),
-            state = EnterPhoneState(),
+            state = EnterPhoneState(isDebug = true),
             onEvent = {},
             onBack = {}
         )

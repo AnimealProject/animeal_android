@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.profile)
+
     implementation(libs.amplify.core)
 
     implementation(libs.androidx.datastore)

@@ -1,16 +1,17 @@
 package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
-import com.epmedu.animeal.signup.enterphone.presentation.Region
-import com.epmedu.animeal.signup.enterphone.presentation.getFormat
-import com.epmedu.animeal.signup.enterphone.presentation.phoneNumberCode
-import com.epmedu.animeal.signup.enterphone.presentation.phoneNumberDigitsCount
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.getFormat
+import com.epmedu.animeal.profile.domain.model.phoneNumberCode
+import com.epmedu.animeal.profile.domain.model.phoneNumberDigitsCount
 
 internal data class EnterPhoneState(
     val region: Region = Region.GE,
     val phoneNumber: String = EMPTY_STRING,
     val isNextEnabled: Boolean = false,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isDebug: Boolean,
 ) {
     val prefix: String
         get() {

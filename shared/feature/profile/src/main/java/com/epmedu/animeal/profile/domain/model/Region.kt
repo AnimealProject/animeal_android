@@ -4,7 +4,7 @@
     "ReturnCount"
 )
 
-package com.epmedu.animeal.signup.enterphone.presentation
+package com.epmedu.animeal.profile.domain.model
 
 import com.epmedu.animeal.extensions.toIntArray
 import java.util.*

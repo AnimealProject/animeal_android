@@ -8,8 +8,12 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.flagEmoji
+import com.epmedu.animeal.profile.domain.model.phoneNumberCode
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
@@ -18,6 +22,7 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumber
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
+import com.epmedu.animeal.resources.R
 
 @Composable
 fun ProfileInputForm(
@@ -58,7 +63,12 @@ fun ProfileInputForm(
             )
             PhoneNumberInput(
                 value = phoneNumber,
-                prefix = profile.phoneNumberPrefix,
+                prefix = profile.phoneNumberRegion.phoneNumberCode(),
+                flag = if (profile.phoneNumberRegion == Region.GE) {
+                    Flag(R.drawable.ic_georgia)
+                } else {
+                    Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())
+                },
                 onValueChange = { onEvent(PhoneNumberChanged(it)) },
                 error = phoneNumberError.asString(),
                 isEnabled = isPhoneNumberEnabled,

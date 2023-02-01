@@ -1,11 +1,12 @@
 package com.epmedu.animeal.signup.enterphone.data
 
 import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.profile.domain.model.Region
 
 interface EnterPhoneRepository {
 
-    suspend fun savePhoneNumberAndPrefix(
-        prefix: String,
+    suspend fun savePhoneNumberAndRegion(
+        region: Region,
         phoneNumber: String
     )
 

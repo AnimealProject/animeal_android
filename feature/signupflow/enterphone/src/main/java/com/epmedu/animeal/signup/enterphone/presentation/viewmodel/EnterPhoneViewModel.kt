@@ -3,18 +3,19 @@ package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.DefaultConstants
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberAndPrefixUseCase
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.phoneNumberDigitsCount
+import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
-import com.epmedu.animeal.signup.enterphone.presentation.Region
-import com.epmedu.animeal.signup.enterphone.presentation.phoneNumberDigitsCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,9 +23,10 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
-    private val savePhoneNumberAndPrefixUseCase: SavePhoneNumberAndPrefixUseCase,
+    private val savePhoneNumberInfoUseCase: SavePhoneNumberInfoUseCase,
+    private val buildConfigProvider: BuildConfigProvider,
 ) : ViewModel(),
-    StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState()),
+    StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)),
     EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
 
     fun handleEvents(event: EnterPhoneScreenEvent) {
@@ -72,8 +74,8 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun savePhoneNumberAndPrefixAndNavigateNext() {
         viewModelScope.launch {
-            savePhoneNumberAndPrefixUseCase(
-                prefix = state.prefix,
+            savePhoneNumberInfoUseCase(
+                region = state.region,
                 phoneNumber = state.phoneNumber,
                 onSuccess = {
                     updateError(false)
