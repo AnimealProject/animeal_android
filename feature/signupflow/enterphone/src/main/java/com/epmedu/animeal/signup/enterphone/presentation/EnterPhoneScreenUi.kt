@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
@@ -68,22 +69,20 @@ internal fun EnterPhoneScreenUi(
         LazyColumn(
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
-            Region.values().forEach { region: Region ->
-                item {
-                    ListItem(
-                        modifier = Modifier.clickable {
-                            scope.launch { bottomSheetState.hide() }
-                            onEvent(
-                                EnterPhoneScreenEvent.RegionChosen(region)
-                            )
-                        },
-                        text = {
-                            Text(
-                                region.codesListText()
-                            )
-                        },
-                    )
-                }
+            items(Region.values()) { region ->
+                ListItem(
+                    modifier = Modifier.clickable {
+                        scope.launch { bottomSheetState.hide() }
+                        onEvent(
+                            EnterPhoneScreenEvent.RegionChosen(region)
+                        )
+                    },
+                    text = {
+                        Text(
+                            region.codesListText()
+                        )
+                    },
+                )
             }
         }
     }

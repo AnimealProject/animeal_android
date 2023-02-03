@@ -64,10 +64,9 @@ fun ProfileInputForm(
             PhoneNumberInput(
                 value = phoneNumber,
                 prefix = profile.phoneNumberRegion.phoneNumberCode(),
-                flag = if (profile.phoneNumberRegion == Region.GE) {
-                    Flag(R.drawable.ic_georgia)
-                } else {
-                    Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())
+                flag = when (profile.phoneNumberRegion) {
+                    Region.GE -> Flag(R.drawable.ic_georgia)
+                    else -> Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())
                 },
                 onValueChange = { onEvent(PhoneNumberChanged(it)) },
                 error = phoneNumberError.asString(),
