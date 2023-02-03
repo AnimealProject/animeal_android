@@ -67,6 +67,10 @@ internal fun HomeScreenUI(
         }
     }
 
+    LaunchedEffect(state.currentFeedingPoint) {
+        if (state.currentFeedingPoint == null) bottomSheetState.hide()
+    }
+
     OnBackHandling(
         scope = scope,
         bottomSheetState = bottomSheetState,
@@ -88,10 +92,10 @@ internal fun HomeScreenUI(
             }
         },
         sheetControls = {
-            if (bottomSheetState.isVisible) {
+            state.currentFeedingPoint?.let { feedingPoint ->
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    enabled = state.currentFeedingPoint?.feedStatus == FeedStatus.RED,
+                    enabled = feedingPoint.feedStatus == FeedStatus.RED,
                     onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
                 )
             }

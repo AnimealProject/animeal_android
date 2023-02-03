@@ -1,12 +1,19 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("com.amazonaws.appsync")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.epmedu.animeal.feeding"
+}
+
+configure<com.moowork.gradle.node.NodeExtension> {
+    distBaseUrl = null
+    download = true
+    version = "19.6.0"
 }
 
 dependencies {
@@ -23,6 +30,7 @@ dependencies {
 
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.core)
+    implementation(libs.appsync)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

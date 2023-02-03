@@ -1,0 +1,868 @@
+# this is an auto generated file. This will be overwritten
+query Translate($text: String!, $to: String!, $from: String) {
+  translate(text: $text, to: $to, from: $from)
+}
+query SearchByBounds(
+  $bounds: BoundsInput!
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $filter: SearchableFilterInput
+) {
+  searchByBounds(
+    bounds: $bounds
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    filter: $filter
+  ) {
+    items {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    total
+    nextToken
+  }
+}
+query GetPet($id: ID!) {
+  getPet(id: $id) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+query ListPets($filter: ModelPetFilterInput, $limit: Int, $nextToken: String) {
+  listPets(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    nextToken
+  }
+}
+query GetCategory($id: ID!) {
+  getCategory(id: $id) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+query ListCategories(
+  $filter: ModelCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    nextToken
+  }
+}
+query GetFeedingPoint($id: ID!) {
+  getFeedingPoint(id: $id) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+query ListFeedingPoints(
+  $filter: ModelFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFeedingPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    nextToken
+  }
+}
+query GetFeeding($id: ID!) {
+  getFeeding(id: $id) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+query ListFeedings(
+  $filter: ModelFeedingFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFeedings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      images
+      status
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      expireAt
+      feedingPointFeedingsId
+    }
+    nextToken
+  }
+}
+query GetFeedingHistory($id: ID!) {
+  getFeedingHistory(id: $id) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+query ListFeedingHistories(
+  $filter: ModelFeedingHistoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFeedingHistories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      images
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      feedingPointId
+    }
+    nextToken
+  }
+}
+query GetRelationPetFeedingPoint($id: ID!) {
+  getRelationPetFeedingPoint(id: $id) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListRelationPetFeedingPoints(
+  $filter: ModelRelationPetFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRelationPetFeedingPoints(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      petId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query RelationPetFeedingPointByPetId(
+  $petId: ID!
+  $feedingPointId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationPetFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationPetFeedingPointByPetId(
+    petId: $petId
+    feedingPointId: $feedingPointId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      petId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query RelationPetFeedingPointByFeedingPointId(
+  $feedingPointId: ID!
+  $petId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationPetFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationPetFeedingPointByFeedingPointId(
+    feedingPointId: $feedingPointId
+    petId: $petId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      petId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetRelationUserFeedingPoint($id: ID!) {
+  getRelationUserFeedingPoint(id: $id) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListRelationUserFeedingPoints(
+  $filter: ModelRelationUserFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRelationUserFeedingPoints(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query RelationUserFeedingPointByUserId(
+  $userId: String!
+  $feedingPointId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationUserFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationUserFeedingPointByUserId(
+    userId: $userId
+    feedingPointId: $feedingPointId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query RelationUserFeedingPointByFeedingPointId(
+  $feedingPointId: ID!
+  $userId: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationUserFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationUserFeedingPointByFeedingPointId(
+    feedingPointId: $feedingPointId
+    userId: $userId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetRelationUserPet($id: ID!) {
+  getRelationUserPet(id: $id) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListRelationUserPets(
+  $filter: ModelRelationUserPetFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRelationUserPets(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      petId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetMedication($id: ID!) {
+  getMedication(id: $id) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListMedications(
+  $filter: ModelMedicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMedications(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      petId
+      date
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetSettings($id: ID!) {
+  getSettings(id: $id) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListSettings(
+  $filter: ModelSettingsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listSettings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      key
+      value
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetLanguage($id: ID!) {
+  getLanguage(id: $id) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+query ListLanguages(
+  $filter: ModelLanguageFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLanguages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      code
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      direction
+      owner
+    }
+    nextToken
+  }
+}
+query GetLanguagesSetting($id: ID!) {
+  getLanguagesSetting(id: $id) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+query ListLanguagesSettings(
+  $filter: ModelLanguagesSettingFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLanguagesSettings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    nextToken
+  }
+}
+query GetFavourite($id: ID!) {
+  getFavourite(id: $id) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListFavourites(
+  $filter: ModelFavouriteFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFavourites(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query GetQuestion($id: ID!) {
+  getQuestion(id: $id) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+query ListQuestions(
+  $filter: ModelQuestionFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      value
+      answer
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    nextToken
+  }
+}
+query GetBankAccount($id: ID!) {
+  getBankAccount(id: $id) {
+    id
+    name
+    value
+    cover
+    images
+    enabled
+    createdBy
+    updatedBy
+    owner
+    createdAt
+    updatedAt
+  }
+}
+query ListBankAccounts(
+  $filter: ModelBankAccountFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listBankAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      value
+      cover
+      images
+      enabled
+      createdBy
+      updatedBy
+      owner
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
