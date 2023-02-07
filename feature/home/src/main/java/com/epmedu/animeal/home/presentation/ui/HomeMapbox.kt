@@ -118,7 +118,7 @@ private fun MapboxMap(
             if (state.feedingRouteState.isRouteActive) {
                 setLocationOnRoute(mapboxMapView, state)
             } else {
-                mapboxMapView.setLocation(state.currentLocation)
+                mapboxMapView.setLocation(state.locationState.location)
             }
         }
     }

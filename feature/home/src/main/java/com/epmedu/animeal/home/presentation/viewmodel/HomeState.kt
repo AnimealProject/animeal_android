@@ -11,7 +11,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
-    val currentLocation: MapLocation = MapLocation.Tbilisi,
     val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
