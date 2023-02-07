@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface FeedingHandler {
     suspend fun fetchFeedingPoints()
-    fun hideFeedingPointsButOne(feedingPoint: FeedingPointModel)
+    fun showSingleFeedingPoint(feedingPoint: FeedingPointModel)
     fun saveFeeder(): Flow<Boolean>
 }

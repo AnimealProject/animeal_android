@@ -126,9 +126,11 @@ fun MapView.drawRoute(
 
 fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
     mapBoxRouteInitOptions.run {
-        routeLineApi.clearRouteLine { value ->
-            getMapboxMap().getStyle()?.let { style ->
-                routeLineView.renderClearRouteLineValue(style, value)
+        if (routeLineApi.getNavigationRoutes().isNotEmpty()) {
+            routeLineApi.clearRouteLine { value ->
+                getMapboxMap().getStyle()?.let { style ->
+                    routeLineView.renderClearRouteLineValue(style, value)
+                }
             }
         }
     }

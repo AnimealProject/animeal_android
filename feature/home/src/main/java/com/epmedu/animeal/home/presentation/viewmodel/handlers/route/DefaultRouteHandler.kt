@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest
@@ -30,9 +31,13 @@ class DefaultRouteHandler @Inject constructor(
         }
 
         override fun onFinish() {
+            onTimerExpire?.apply { invoke() }
+            expireRoute()
             cancel()
         }
     }
+
+    private var onTimerExpire: (() -> Unit)? = null
 
     override fun handleRouteEvent(
         event: HomeScreenEvent.RouteEvent,
@@ -44,12 +49,12 @@ class DefaultRouteHandler @Inject constructor(
                 timer.cancel()
                 scope?.launch { fetchFeedingPoints() }
             }
-            FeedingRouteStartRequest -> {
+            is FeedingRouteStartRequest -> {
                 scope?.launch {
                     saveFeeder().collect { result ->
                         if (saveFeederWasSuccessful(result)) {
-                            hideFeedingPointsButOne(FeedingPointModel(state.currentFeedingPoint!!))
                             startRoute()
+                            onTimerExpire = event.onTimerExpire
                             timer.start()
                         } else {
                             updateRouteError()
@@ -63,14 +68,30 @@ class DefaultRouteHandler @Inject constructor(
     }
 
     private fun startRoute() {
+        val reservedFeedingPoint = state.currentFeedingPoint?.copy(animalStatus = AnimalState.YELLOW)
+        reservedFeedingPoint?.let { showSingleFeedingPoint(FeedingPointModel(it)) }
         updateState {
-            copy(feedingRouteState = FeedingRouteState.Active())
+            copy(
+                currentFeedingPoint = reservedFeedingPoint,
+                feedingRouteState = FeedingRouteState.Active()
+            )
         }
     }
 
     private fun stopRoute() {
         updateState {
             copy(feedingRouteState = FeedingRouteState.Disabled)
+        }
+    }
+
+    private fun expireRoute() {
+        val canceledFeedingPoint = state.currentFeedingPoint?.copy(animalStatus = AnimalState.RED)
+        canceledFeedingPoint?.let { showSingleFeedingPoint(FeedingPointModel(it)) }
+        updateState {
+            copy(
+                currentFeedingPoint = canceledFeedingPoint,
+                feedingRouteState = FeedingRouteState.TimerExpired
+            )
         }
     }
 

@@ -38,6 +38,7 @@ internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
+    onTimerExpire: () -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
@@ -105,19 +106,20 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(state, onScreenEvent)
+    WillFeedConfirmationDialog(state, onScreenEvent, onTimerExpire)
 }
 
 @Composable
 private fun WillFeedConfirmationDialog(
     state: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onTimerExpire: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
             onAgreeClick = {
                 onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog)
-                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest)
+                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest(onTimerExpire))
             },
             onCancelClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
         )

@@ -29,7 +29,7 @@ class DefaultFeedingHandler @Inject internal constructor(
         }
     }
 
-    override fun hideFeedingPointsButOne(feedingPoint: FeedingPointModel) {
+    override fun showSingleFeedingPoint(feedingPoint: FeedingPointModel) {
         updateState {
             copy(feedingPoints = persistentListOf(feedingPoint))
         }

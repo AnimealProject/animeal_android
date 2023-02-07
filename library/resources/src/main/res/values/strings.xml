@@ -71,6 +71,7 @@
     <string name="profile_logout_success">You have successfully logged out</string>
 
     <string name="feed_status_green">Newly fed</string>
+    <string name="feed_status_yellow">Feeding in progress</string>
     <string name="feed_status_red">There is no food</string>
 
     <string name="account_delete">Delete Account</string>
@@ -80,9 +81,11 @@
     <string name="onboarding_facebook_sign_in_error">Error during Facebook sign-in occurred, please check network connection and try again</string>
 
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
+    <string name="feeding_timer_expired">Your feeding time is over. You can book a new feeding from the home page.</string>
 
     <string name="done">Done</string>
     <string name="ok">OK</string>
+    <string name="got_it">Got it</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
     <string name="discard">Discard</string>
