@@ -42,7 +42,7 @@ internal fun DigitField(
             }
         },
         modifier = modifier
-            .shadow(2.dp, shape = RoundedCornerShape(8.dp))
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
             .background(color = MaterialTheme.colors.background)
             .size(width = 49.dp, height = 53.dp),
         textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
