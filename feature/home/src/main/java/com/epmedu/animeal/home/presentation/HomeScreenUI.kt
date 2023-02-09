@@ -21,6 +21,7 @@ import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
+import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
@@ -42,6 +43,14 @@ internal fun HomeScreenUI(
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
+
+    if (state.feedingRouteState is FeedingRouteState.TimerExpired) {
+        FeedingExpiredDialog(
+            onConfirm = {
+                onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
+            }
+        )
+    }
 
     scope.launch {
         if (state.feedingRouteState !is FeedingRouteState.Disabled && !bottomSheetState.isHiding) {

@@ -6,41 +6,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.epmedu.animeal.common.route.TabsRoute
-import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
-import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
-import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onTimerExpire: () -> Unit) {
     val viewModel = hiltViewModel<HomeViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
-    val navigator = LocalNavigator.currentOrThrow
-
-    val onTimerExpire = {
-        navigator.navigate(TabsRoute.Home.name) {
-            popUpTo(TabsRoute.Home.name) { saveState = true }
-            launchSingleTop = true
-            restoreState = true
-        }
-    }
-
-    if (state.feedingRouteState is FeedingRouteState.TimerExpired) {
-        FeedingExpiredDialog(
-            onConfirm = {
-                viewModel.handleEvents(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
-            }
-        )
-    }
 
     HomeScreenUI(
         state = state,

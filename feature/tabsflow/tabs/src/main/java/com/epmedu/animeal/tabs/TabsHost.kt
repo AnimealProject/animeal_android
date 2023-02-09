@@ -71,20 +71,23 @@ fun TabsHost() {
         CompositionLocalProvider(
             LocalBottomBarVisibilityController provides onChangeBottomBarVisibility
         ) {
-            NavigationTabs(navigationController)
+            NavigationTabs(navigationController, onNavigate)
         }
     }
 }
 
 @Composable
-private fun NavigationTabs(navigationController: NavHostController) {
+private fun NavigationTabs(
+    navigationController: NavHostController,
+    onNavigate: (TabsRoute) -> Unit
+) {
     ScreenNavHost(
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name
     ) {
         screen(TabsRoute.Search.name) { SearchScreen() }
         screen(TabsRoute.Favourites.name) { FavouritesScreen() }
-        screen(TabsRoute.Home.name) { HomeScreen() }
+        screen(TabsRoute.Home.name) { HomeScreen { onNavigate(TabsRoute.Home) } }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
     }
