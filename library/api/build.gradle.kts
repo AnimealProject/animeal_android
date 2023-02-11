@@ -1,3 +1,5 @@
+import com.moowork.gradle.node.NodeExtension
+
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
@@ -8,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.epmedu.animeal.api"
+}
 
-    node {
-        download = true
-        // Do not declare the repository
-        distBaseUrl = null
-    }
+configure<NodeExtension> {
+    distBaseUrl = null
+    download = true
+    version = "19.6.0"
 }
 
 animealPlugin {
