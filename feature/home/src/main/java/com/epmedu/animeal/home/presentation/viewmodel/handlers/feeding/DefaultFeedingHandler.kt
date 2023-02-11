@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding
 
-import android.util.Log
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
@@ -16,24 +16,22 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandle
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
 internal class DefaultFeedingHandler @Inject constructor(
     stateDelegate: StateDelegate<HomeState>,
+    actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     feedingPointHandler: FeedingPointHandler,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
-    private val finishFeedingUseCase: FinishFeedingUseCase,
-    private val dispatchers: Dispatchers
+    private val finishFeedingUseCase: FinishFeedingUseCase
 ) : FeedingHandler,
     StateDelegate<HomeState> by stateDelegate,
+    ActionDelegate by actionDelegate,
     FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,
     ErrorHandler by errorHandler {
@@ -83,21 +81,11 @@ internal class DefaultFeedingHandler @Inject constructor(
         onSuccess: suspend (FeedingPointModel) -> Unit
     ) {
         state.currentFeedingPoint?.let { currentFeedingPoint ->
-            coroutineScope {
-                when (val result = withContext(dispatchers.IO) { action(currentFeedingPoint.id) }) {
-                    is ActionResult.Success -> {
-                        onSuccess(currentFeedingPoint)
-                    }
-                    is ActionResult.Failure -> {
-                        showError()
-                        Log.e(LOG_TAG, result.error.toString())
-                    }
-                }
-            }
+            performAction(
+                action = { action(currentFeedingPoint.id) },
+                onSuccess = { onSuccess(currentFeedingPoint) },
+                onError = ::showError
+            )
         } ?: showError()
-    }
-
-    private companion object {
-        const val LOG_TAG = "DefaultFeedingHandler"
     }
 }

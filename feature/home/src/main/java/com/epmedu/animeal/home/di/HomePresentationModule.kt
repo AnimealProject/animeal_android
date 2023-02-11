@@ -1,7 +1,9 @@
-@file:Suppress("LongParameterList")
+@file:Suppress("LongParameterList", "TooManyFunctions")
 
 package com.epmedu.animeal.home.di
 
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -44,6 +46,10 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
+    fun providesActionDelegate(): ActionDelegate = DefaultActionDelegate(dispatchers = Dispatchers)
+
+    @ViewModelScoped
+    @Provides
     fun providesEventDelegate(): EventDelegate<HomeViewModelEvent> = DefaultEventDelegate()
 
     @ViewModelScoped
@@ -74,6 +80,7 @@ internal object HomePresentationModule {
     @Provides
     fun providesFeedingHandler(
         stateDelegate: StateDelegate<HomeState>,
+        actionDelegate: ActionDelegate,
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
         feedingPointHandler: FeedingPointHandler,
@@ -81,14 +88,14 @@ internal object HomePresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
     ): FeedingHandler = DefaultFeedingHandler(
-        stateDelegate = stateDelegate,
-        routeHandler = routeHandler,
-        errorHandler = errorHandler,
-        feedingPointHandler = feedingPointHandler,
-        startFeedingUseCase = startFeedingUseCase,
-        cancelFeedingUseCase = cancelFeedingUseCase,
-        finishFeedingUseCase = finishFeedingUseCase,
-        dispatchers = Dispatchers
+        stateDelegate,
+        actionDelegate,
+        routeHandler,
+        errorHandler,
+        feedingPointHandler,
+        startFeedingUseCase,
+        cancelFeedingUseCase,
+        finishFeedingUseCase
     )
 
     @ViewModelScoped
