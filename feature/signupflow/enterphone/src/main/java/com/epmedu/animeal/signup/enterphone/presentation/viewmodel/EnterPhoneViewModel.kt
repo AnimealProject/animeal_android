@@ -10,7 +10,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.profile.domain.model.Region
-import com.epmedu.animeal.profile.domain.model.phoneNumberDigitsCount
 import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
@@ -45,7 +44,7 @@ internal class EnterPhoneViewModel @Inject constructor(
         updateState {
             copy(
                 phoneNumber = newNumber,
-                isNextEnabled = newNumber.isValidPhoneNumber(this.region.phoneNumberDigitsCount())
+                isNextEnabled = newNumber.isValidPhoneNumber(this.region.phoneNumberDigitsCount)
             )
         }
     }
@@ -98,7 +97,7 @@ internal class EnterPhoneViewModel @Inject constructor(
         updateState {
             copy(
                 isNextEnabled = isNextEnabled
-                    ?: state.phoneNumber.isValidPhoneNumber(region.phoneNumberDigitsCount())
+                    ?: state.phoneNumber.isValidPhoneNumber(region.phoneNumberDigitsCount)
             )
         }
     }

@@ -41,7 +41,6 @@ import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.model.countryName
 import com.epmedu.animeal.profile.domain.model.flagEmoji
-import com.epmedu.animeal.profile.domain.model.phoneNumberCode
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
@@ -157,7 +156,9 @@ private fun ScaffoldAndBody(
                 format = state.format,
                 numberLength = state.numberLength,
                 useNumberFormatter = state.region == Region.GE,
-                isFlagClickable = state.isDebug,
+                // TODO use state.isDebug
+                // TODO Update state.isDebug flag to be true for devs and QA, false for prod
+                isFlagClickable = true,
                 flag = if (state.region == Region.GE) {
                     Flag(R.drawable.ic_georgia)
                 } else {
@@ -175,7 +176,7 @@ private fun ScaffoldAndBody(
 }
 
 private fun Region.codesListText(): String {
-    return "${EmojiCompat.get().process(flagEmoji())} ${phoneNumberCode()} ${countryName()}"
+    return "${EmojiCompat.get().process(flagEmoji())} $phoneNumberCode ${countryName()}"
 }
 
 @AnimealPreview

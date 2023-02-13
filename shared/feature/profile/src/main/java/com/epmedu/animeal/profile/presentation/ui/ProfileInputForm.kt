@@ -13,7 +13,6 @@ import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.model.flagEmoji
-import com.epmedu.animeal.profile.domain.model.phoneNumberCode
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
@@ -63,7 +62,7 @@ fun ProfileInputForm(
             )
             PhoneNumberInput(
                 value = phoneNumber,
-                prefix = profile.phoneNumberRegion.phoneNumberCode(),
+                prefix = profile.phoneNumberRegion.phoneNumberCode,
                 flag = when (profile.phoneNumberRegion) {
                     Region.GE -> Flag(R.drawable.ic_georgia)
                     else -> Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())

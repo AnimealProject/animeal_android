@@ -3,8 +3,6 @@ package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.model.getFormat
-import com.epmedu.animeal.profile.domain.model.phoneNumberCode
-import com.epmedu.animeal.profile.domain.model.phoneNumberDigitsCount
 
 internal data class EnterPhoneState(
     val region: Region = Region.GE,
@@ -15,7 +13,7 @@ internal data class EnterPhoneState(
 ) {
     val prefix: String
         get() {
-            return region.phoneNumberCode()
+            return region.phoneNumberCode
         }
     val format: String
         get() {
@@ -23,6 +21,6 @@ internal data class EnterPhoneState(
         }
     val numberLength: Int
         get() {
-            return region.phoneNumberDigitsCount().last()
+            return region.phoneNumberDigitsCount.last()
         }
 }
