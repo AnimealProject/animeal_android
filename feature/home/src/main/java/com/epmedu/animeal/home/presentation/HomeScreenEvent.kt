@@ -9,7 +9,7 @@ sealed interface HomeScreenEvent {
     data class FeedingPointFavouriteChange(val id: String = EMPTY_STRING, val isFavourite: Boolean) : HomeScreenEvent
 
     sealed interface RouteEvent : HomeScreenEvent {
-        data class FeedingRouteStartRequest(val onTimerExpire: () -> Unit) : RouteEvent
+        object FeedingRouteStartRequest : RouteEvent
         object FeedingRouteCancellationRequest : RouteEvent
         data class FeedingRouteUpdateRequest(val result: RouteResult) : RouteEvent
         data class FeedingTimerUpdateRequest(val timeLeft: Long) : RouteEvent

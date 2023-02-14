@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
+import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
@@ -32,7 +32,7 @@ internal fun ProfileScreenUI(
     }
 
     if (showDiscardAlert) {
-        AnimealAlertDialog(
+        AnimealQuestionDialog(
             title = stringResource(id = R.string.profile_edit_discard),
             dismissText = stringResource(id = R.string.no),
             acceptText = stringResource(id = R.string.yes),

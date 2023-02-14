@@ -4,10 +4,12 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -18,15 +20,21 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.presentation.HomeScreen
+import com.epmedu.animeal.home.presentation.TimerEvent
+import com.epmedu.animeal.home.presentation.viewmodel.TimerState
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
+import com.epmedu.animeal.tabs.viewmodel.TabsViewModel
 
 @Composable
 fun TabsHost() {
+    val viewModel = hiltViewModel<TabsViewModel>()
+    val state by viewModel.stateFlow.collectAsState()
+
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -34,6 +42,7 @@ fun TabsHost() {
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility
     }
+
     val onNavigate: (TabsRoute) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
@@ -43,6 +52,8 @@ fun TabsHost() {
             restoreState = true
         }
     }
+
+    if (state is TimerState.Expired) onNavigate(TabsRoute.Home)
 
     Scaffold(
         isFloatingActionButtonDocked = true,
@@ -71,7 +82,7 @@ fun TabsHost() {
         CompositionLocalProvider(
             LocalBottomBarVisibilityController provides onChangeBottomBarVisibility
         ) {
-            NavigationTabs(navigationController, onNavigate)
+            NavigationTabs(navigationController, viewModel::handleTimerEvent, state)
         }
     }
 }
@@ -79,7 +90,8 @@ fun TabsHost() {
 @Composable
 private fun NavigationTabs(
     navigationController: NavHostController,
-    onNavigate: (TabsRoute) -> Unit
+    onTimerEvent: (TimerEvent) -> Unit,
+    state: TimerState
 ) {
     ScreenNavHost(
         navController = navigationController,
@@ -87,7 +99,7 @@ private fun NavigationTabs(
     ) {
         screen(TabsRoute.Search.name) { SearchScreen() }
         screen(TabsRoute.Favourites.name) { FavouritesScreen() }
-        screen(TabsRoute.Home.name) { HomeScreen { onNavigate(TabsRoute.Home) } }
+        screen(TabsRoute.Home.name) { HomeScreen(onTimerEvent, state) }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
     }

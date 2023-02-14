@@ -1,6 +1,8 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -27,4 +29,7 @@ dependencies {
     implementation(libs.compose.ui.preview)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

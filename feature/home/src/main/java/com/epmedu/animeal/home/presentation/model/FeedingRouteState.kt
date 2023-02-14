@@ -16,13 +16,6 @@ sealed class FeedingRouteState(
         isError = false
     )
 
-    object TimerExpired : FeedingRouteState(
-        timeLeft = null,
-        distanceLeft = null,
-        isRouteActive = false,
-        isError = false
-    )
-
     class Active(
         distanceLeft: Long? = null,
         timeLeft: Long? = null,

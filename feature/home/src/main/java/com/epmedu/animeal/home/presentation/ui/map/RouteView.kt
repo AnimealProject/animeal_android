@@ -40,9 +40,6 @@ internal fun RouteView(
             FeedingRouteState.Disabled -> {
                 mapView.removeRoute(mapBoxRouteInitOptions)
             }
-            FeedingRouteState.TimerExpired -> {
-                mapView.removeRoute(mapBoxRouteInitOptions)
-            }
             is FeedingRouteState.Active -> {
                 if (state.feedingRouteState.routeData != null) {
                     drawRoute(state, mapView, mapBoxRouteInitOptions)
