@@ -4,24 +4,16 @@ import android.os.CountDownTimer
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
-import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.home.presentation.HomeScreenEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteStartRequest
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DefaultRouteHandler @Inject constructor(
-    stateDelegate: StateDelegate<HomeState>,
-    feedingHandler: FeedingHandler
+internal class DefaultRouteHandler @Inject constructor(
+    stateDelegate: StateDelegate<HomeState>
 ) : RouteHandler,
-    FeedingHandler by feedingHandler,
     StateDelegate<HomeState> by stateDelegate {
 
     private val timer = object : CountDownTimer(HOUR_IN_MILLIS, MINUTE_IN_MILLIS) {
@@ -34,44 +26,21 @@ class DefaultRouteHandler @Inject constructor(
         }
     }
 
-    override fun handleRouteEvent(
-        event: HomeScreenEvent.RouteEvent,
-        scope: CoroutineScope?
-    ) {
+    override fun handleRouteEvent(event: RouteEvent) {
         when (event) {
-            FeedingRouteCancellationRequest -> {
-                stopRoute()
-                timer.cancel()
-                scope?.launch { fetchFeedingPoints() }
-            }
-            FeedingRouteStartRequest -> {
-                scope?.launch {
-                    saveFeeder().collect { result ->
-                        if (saveFeederWasSuccessful(result)) {
-                            hideFeedingPointsButOne(FeedingPointModel(state.currentFeedingPoint!!))
-                            startRoute()
-                            timer.start()
-                        } else {
-                            updateRouteError()
-                        }
-                    }
-                }
-            }
             is FeedingRouteUpdateRequest -> updateRoute(event)
             is FeedingTimerUpdateRequest -> updateTimer(event)
         }
     }
 
-    private fun startRoute() {
-        updateState {
-            copy(feedingRouteState = FeedingRouteState.Active())
-        }
+    override fun startRouteAndTimer() {
+        updateState { copy(feedingRouteState = FeedingRouteState.Active(), isError = false) }
+        timer.start()
     }
 
-    private fun stopRoute() {
-        updateState {
-            copy(feedingRouteState = FeedingRouteState.Disabled)
-        }
+    override fun stopRouteAndTimer() {
+        updateState { copy(feedingRouteState = FeedingRouteState.Disabled) }
+        timer.cancel()
     }
 
     private fun updateRoute(event: FeedingRouteUpdateRequest) {
@@ -96,15 +65,5 @@ class DefaultRouteHandler @Inject constructor(
                 )
             )
         }
-    }
-
-    private fun updateRouteError() {
-        updateState {
-            copy(feedingRouteState = FeedingRouteState.Active(isError = true))
-        }
-    }
-
-    private fun saveFeederWasSuccessful(result: Boolean): Boolean {
-        return result && state.currentFeedingPoint != null
     }
 }
