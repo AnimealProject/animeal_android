@@ -5,7 +5,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey
 import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.MONTH_DAY_YEAR_SLASH_FORMATTER
 import com.epmedu.animeal.extensions.reformatDateToString
-import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
+import com.epmedu.animeal.foundation.common.validation.Constants.GE_PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.profile.data.model.Profile
 
 class AuthUserAttributesToProfileMapper {
@@ -24,7 +24,7 @@ class AuthUserAttributesToProfileMapper {
             surname = attributes.find { it.key == AuthUserAttributeKey.familyName() }?.value ?: "",
             birthDate = convertedLocalFormatDate,
             phoneNumber = attributes.find { it.key == AuthUserAttributeKey.phoneNumber() }?.value
-                ?.takeLast(PHONE_NUMBER_LENGTH) ?: "",
+                ?.takeLast(GE_PHONE_NUMBER_LENGTH) ?: "",
             email = attributes.find { it.key == AuthUserAttributeKey.email() }?.value ?: ""
         )
     }

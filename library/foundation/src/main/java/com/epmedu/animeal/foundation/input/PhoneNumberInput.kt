@@ -1,6 +1,7 @@
 package com.epmedu.animeal.foundation.input
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,8 +26,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
-import com.epmedu.animeal.foundation.input.PhoneFormatTransformation.PHONE_NUMBER_FORMAT
+import com.epmedu.animeal.foundation.common.validation.Constants.GE_PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -40,14 +40,20 @@ fun PhoneNumberInput(
     onValueChange: (String) -> Unit = {},
     error: String = "",
     isEnabled: Boolean = true,
+    isFlagClickable: Boolean = false,
+    flag: Flag = Flag(iconFlag = R.drawable.ic_georgia),
+    useNumberFormatter: Boolean = true,
+    format: String = GE_PHONE_NUMBER_FORMAT,
+    numberLength: Int = GE_PHONE_NUMBER_LENGTH,
+    onCountryClick: (() -> Unit)? = null,
     onDone: KeyboardActionScope.() -> Unit = {},
 ) {
     TextInputField(
         modifier = modifier,
         title = stringResource(id = R.string.phone_number),
-        hint = PHONE_NUMBER_FORMAT,
+        hint = format,
         onValueChange = {
-            if (it.length <= PHONE_NUMBER_LENGTH) {
+            if (it.length <= numberLength) {
                 onValueChange(it)
             }
         },
@@ -56,34 +62,37 @@ fun PhoneNumberInput(
         errorText = error,
         leadingIcon = {
             Row(
-                modifier = Modifier.padding(start = 12.dp),
+                modifier = Modifier
+                    .clickable(enabled = isFlagClickable) { onCountryClick?.invoke() }
+                    .padding(start = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Image(
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(R.drawable.ic_georgia),
-                    contentDescription = null
-                )
+                if (flag.iconFlag != null) {
+                    Image(
+                        contentScale = ContentScale.Crop,
+                        painter = painterResource(flag.iconFlag),
+                        contentDescription = null
+                    )
+                }
                 Text(
-                    text = prefix,
+                    text = if (flag.emojiFlag == null) prefix else "${flag.emojiFlag} $prefix",
                     color = Color.Black,
                     fontWeight = FontWeight.ExtraLight
                 )
             }
         },
-        visualTransformation = PhoneFormatTransformation,
+        visualTransformation = if (useNumberFormatter)GePhoneFormatTransformation else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         keyboardActions = KeyboardActions(onDone = onDone)
     )
 }
-
-object PhoneFormatTransformation : VisualTransformation {
-    internal const val PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
+internal const val GE_PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
+object GePhoneFormatTransformation : VisualTransformation {
 
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed =
-            if (text.text.length >= PHONE_NUMBER_LENGTH) {
+            if (text.text.length >= GE_PHONE_NUMBER_LENGTH) {
                 text.text.substring(0..8)
             } else {
                 text.text
@@ -97,7 +106,7 @@ object PhoneFormatTransformation : VisualTransformation {
                     append("-")
                 }
             }
-            PHONE_NUMBER_FORMAT.takeLast(PHONE_NUMBER_FORMAT.length - length)
+            GE_PHONE_NUMBER_FORMAT.takeLast(GE_PHONE_NUMBER_FORMAT.length - length)
             toAnnotatedString()
         }
         @Suppress("ReturnCount")
@@ -131,20 +140,26 @@ private fun PhoneNumberInputPreview() {
         Column {
             PhoneNumberInput(
                 value = "",
-                prefix = "+995"
+                prefix = "+995",
+                format = GE_PHONE_NUMBER_FORMAT,
+                onCountryClick = {},
             )
             Divider()
             PhoneNumberInput(
                 value = "123456789",
                 prefix = "+995",
-                isEnabled = false
+                format = GE_PHONE_NUMBER_FORMAT,
+                isEnabled = false,
+                onCountryClick = {}
             )
             Divider()
             PhoneNumberInput(
                 value = "1234567",
                 prefix = "+995",
+                format = GE_PHONE_NUMBER_FORMAT,
                 isEnabled = false,
-                error = "Phone Number is too short"
+                error = "Phone Number is too short",
+                onCountryClick = {}
             )
         }
     }

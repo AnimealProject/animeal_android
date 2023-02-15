@@ -1,12 +1,13 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
+import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.withContext
 
-class SavePhoneNumberAndPrefixUseCase(private val repository: EnterPhoneRepository) {
+class SavePhoneNumberInfoUseCase(private val repository: EnterPhoneRepository) {
     suspend operator fun invoke(
-        prefix: String,
+        region: Region,
         phoneNumber: String,
         onSuccess: () -> Unit,
         onError: () -> Unit,
@@ -16,7 +17,7 @@ class SavePhoneNumberAndPrefixUseCase(private val repository: EnterPhoneReposito
                 onError()
             }
         ) {
-            repository.savePhoneNumberAndPrefix(prefix, phoneNumber)
+            repository.savePhoneNumberAndRegion(region, phoneNumber)
             onSuccess()
         }
     }

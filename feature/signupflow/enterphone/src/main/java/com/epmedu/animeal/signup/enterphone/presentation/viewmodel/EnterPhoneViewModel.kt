@@ -3,12 +3,14 @@ package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.component.BuildConfigProvider
+import com.epmedu.animeal.common.constants.DefaultConstants
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
-import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberAndPrefixUseCase
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
@@ -20,29 +22,35 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
-    private val savePhoneNumberAndPrefixUseCase: SavePhoneNumberAndPrefixUseCase,
+    private val savePhoneNumberInfoUseCase: SavePhoneNumberInfoUseCase,
+    private val buildConfigProvider: BuildConfigProvider,
 ) : ViewModel(),
-    StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState()),
+    StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)),
     EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
 
     fun handleEvents(event: EnterPhoneScreenEvent) {
         when (event) {
             is UpdatePhoneNumber -> updatePhoneNumber(event.phoneNumber)
             is NextButtonClicked -> sendCodeAndSavePhoneNumberAndPrefix()
+            is EnterPhoneScreenEvent.RegionChosen -> updateRegion(event.region)
         }
+    }
+
+    private fun updateRegion(region: Region) {
+        updateState { copy(region = region, phoneNumber = DefaultConstants.EMPTY_STRING) }
     }
 
     private fun updatePhoneNumber(newNumber: String) {
         updateState {
             copy(
                 phoneNumber = newNumber,
-                isNextEnabled = newNumber.isValidPhoneNumber()
+                isNextEnabled = newNumber.isValidPhoneNumber(this.region.phoneNumberDigitsCount)
             )
         }
     }
 
-    private fun String.isValidPhoneNumber(): Boolean {
-        return length == PHONE_NUMBER_LENGTH && PhoneNumberUtils.isGlobalPhoneNumber(this)
+    private fun String.isValidPhoneNumber(phoneNumberDigitsCount: IntArray): Boolean {
+        return phoneNumberDigitsCount.contains(length) && PhoneNumberUtils.isGlobalPhoneNumber(this)
     }
 
     private fun sendCodeAndSavePhoneNumberAndPrefix() {
@@ -65,8 +73,8 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun savePhoneNumberAndPrefixAndNavigateNext() {
         viewModelScope.launch {
-            savePhoneNumberAndPrefixUseCase(
-                prefix = state.prefix,
+            savePhoneNumberInfoUseCase(
+                region = state.region,
                 phoneNumber = state.phoneNumber,
                 onSuccess = {
                     updateError(false)
@@ -88,7 +96,8 @@ internal class EnterPhoneViewModel @Inject constructor(
     private fun updateNextEnabled(isNextEnabled: Boolean? = null) {
         updateState {
             copy(
-                isNextEnabled = isNextEnabled ?: state.phoneNumber.isValidPhoneNumber()
+                isNextEnabled = isNextEnabled
+                    ?: state.phoneNumber.isValidPhoneNumber(region.phoneNumberDigitsCount)
             )
         }
     }
