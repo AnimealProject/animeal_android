@@ -20,8 +20,6 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.home.presentation.HomeScreen
-import com.epmedu.animeal.home.presentation.TimerEvent
-import com.epmedu.animeal.home.presentation.viewmodel.TimerState
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
@@ -29,6 +27,7 @@ import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
 import com.epmedu.animeal.tabs.viewmodel.TabsViewModel
+import com.epmedu.animeal.timer.data.model.TimerState
 
 @Composable
 fun TabsHost() {
@@ -82,7 +81,7 @@ fun TabsHost() {
         CompositionLocalProvider(
             LocalBottomBarVisibilityController provides onChangeBottomBarVisibility
         ) {
-            NavigationTabs(navigationController, viewModel::handleTimerEvent, state)
+            NavigationTabs(navigationController)
         }
     }
 }
@@ -90,8 +89,6 @@ fun TabsHost() {
 @Composable
 private fun NavigationTabs(
     navigationController: NavHostController,
-    onTimerEvent: (TimerEvent) -> Unit,
-    state: TimerState
 ) {
     ScreenNavHost(
         navController = navigationController,
@@ -99,7 +96,7 @@ private fun NavigationTabs(
     ) {
         screen(TabsRoute.Search.name) { SearchScreen() }
         screen(TabsRoute.Favourites.name) { FavouritesScreen() }
-        screen(TabsRoute.Home.name) { HomeScreen(onTimerEvent, state) }
+        screen(TabsRoute.Home.name) { HomeScreen() }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
     }

@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.viewmodel
+package com.epmedu.animeal.timer.data.model
 
 sealed class TimerState {
     object Disabled : TimerState()

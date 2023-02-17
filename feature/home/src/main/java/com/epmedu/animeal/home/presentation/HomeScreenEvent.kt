@@ -20,5 +20,10 @@ sealed interface HomeScreenEvent {
         object DismissWillFeedDialog : WillFeedEvent
     }
 
+    sealed interface TimerEvent : HomeScreenEvent {
+        object Started : TimerEvent
+        object ExpirationAccepted : TimerEvent
+    }
+
     data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
 }

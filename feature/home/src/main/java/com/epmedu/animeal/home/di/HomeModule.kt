@@ -18,9 +18,13 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultL
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTimerHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.timer.domain.AcceptTimerExpirationUseCase
+import com.epmedu.animeal.timer.domain.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +58,14 @@ internal object HomeModule {
     fun providesLocationHandler(
         stateDelegate: StateDelegate<HomeState>
     ): LocationHandler = DefaultLocationHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesTimerHandler(
+        stateDelegate: StateDelegate<HomeState>,
+        startTimerUseCase: StartTimerUseCase,
+        acceptTimerExpirationUseCase: AcceptTimerExpirationUseCase
+    ): TimerHandler = DefaultTimerHandler(stateDelegate, startTimerUseCase, acceptTimerExpirationUseCase)
 
     @ViewModelScoped
     @Provides

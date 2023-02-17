@@ -10,12 +10,11 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
-import com.epmedu.animeal.home.presentation.viewmodel.TimerState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen(onTimerEvent: (TimerEvent) -> Unit, timerState: TimerState) {
+fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
@@ -23,10 +22,8 @@ fun HomeScreen(onTimerEvent: (TimerEvent) -> Unit, timerState: TimerState) {
 
     HomeScreenUI(
         state = state,
-        timerState = timerState,
         bottomSheetState = bottomSheetState,
-        onScreenEvent = viewModel::handleEvents,
-        onTimerEvent = onTimerEvent
+        onScreenEvent = viewModel::handleEvents
     )
 
     LaunchedEffect(Unit) {

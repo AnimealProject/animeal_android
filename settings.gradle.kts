@@ -1,6 +1,9 @@
 import java.io.FileInputStream
 import java.util.*
 
+include(":shared:feature:timer")
+
+
 include(":shared:feature:settings")
 
 

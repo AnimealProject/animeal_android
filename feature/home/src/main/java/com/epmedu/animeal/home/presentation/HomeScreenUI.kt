@@ -25,7 +25,7 @@ import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.home.presentation.viewmodel.TimerState
+import com.epmedu.animeal.timer.data.model.TimerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.mapbox.maps.MapView
@@ -37,10 +37,8 @@ import kotlinx.coroutines.launch
 @Suppress("LongMethod")
 internal fun HomeScreenUI(
     state: HomeState,
-    timerState: TimerState,
     bottomSheetState: AnimealBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
-    onTimerEvent: (TimerEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
@@ -51,10 +49,10 @@ internal fun HomeScreenUI(
         }
     }
 
-    when (timerState) {
+    when (state.timerState) {
         is TimerState.Active -> onScreenEvent(
             HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest(
-                timerState.timeLeft
+                state.timerState.timeLeft
             )
         )
         TimerState.Expired -> {
@@ -62,7 +60,7 @@ internal fun HomeScreenUI(
             onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
             FeedingExpiredDialog(
                 onConfirm = {
-                    onTimerEvent(TimerEvent.ExpirationAccepted)
+                    onScreenEvent(HomeScreenEvent.TimerEvent.ExpirationAccepted)
                 }
             )
         }
@@ -126,14 +124,13 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(state, onScreenEvent, onTimerEvent, hideBottomSheet)
+    WillFeedConfirmationDialog(state, onScreenEvent, hideBottomSheet)
 }
 
 @Composable
 private fun WillFeedConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
-    onTimerEvent: (TimerEvent) -> Unit,
     onHideBottomSheet: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
@@ -142,7 +139,7 @@ private fun WillFeedConfirmationDialog(
                 onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog)
                 onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteStartRequest)
                 onHideBottomSheet()
-                onTimerEvent(TimerEvent.Started)
+                onScreenEvent(HomeScreenEvent.TimerEvent.Started)
             },
             onCancelClick = { onScreenEvent(HomeScreenEvent.WillFeedEvent.DismissWillFeedDialog) }
         )
