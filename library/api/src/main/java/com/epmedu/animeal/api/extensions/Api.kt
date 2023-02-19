@@ -21,13 +21,14 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.fetcher.ResponseFetcher
 import com.epmedu.animeal.api.wrapper.ApiResult
 import com.epmedu.animeal.api.wrapper.ResponseError
+import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.CancellationException
+import kotlin.coroutines.resume
 
 /**
  * Creates a query for list of models of type [GraphQLModel] with provided [predicate]
@@ -65,7 +66,7 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
  * On failure, returns [ApiResult.Failure] with [ApiException].
  */
 internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, T, V>.performMutation(): ApiResult<R> {
-    return suspendCancellableCoroutine { continuation ->
+    return suspendCancellableCoroutine {
         Amplify.API.mutate(
             SimpleGraphQLRequest(
                 queryDocument(),
@@ -74,16 +75,14 @@ internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, 
                 GsonVariablesSerializer()
             ),
             { response ->
-                response.data?.let { data ->
-                    continuation.resumeWith(Result.success(ApiResult.Success(data)))
-                } ?: continuation.resumeWith(
-                    Result.success(
-                        ApiResult.Failure(ResponseError(response.errors))
-                    )
+                resume(
+                    response.data?.let { data ->
+                        ApiResult.Success(data)
+                    } ?: ApiResult.Failure(ResponseError(response.errors))
                 )
             },
             { apiException ->
-                continuation.resumeWith(Result.success(ApiResult.Failure(apiException)))
+                resume(ApiResult.Failure(apiException))
             }
         )
     }
@@ -105,23 +104,21 @@ internal suspend fun <D : Data, T, V : Variables, R> AWSAppSyncClient.query(
     getData: T.() -> R?,
     responseFetcher: ResponseFetcher = CACHE_AND_NETWORK
 ): ApiResult<R> {
-    return suspendCancellableCoroutine { continuation ->
+    return suspendCancellableCoroutine {
         val queryCall = query(query).responseFetcher(responseFetcher)
 
         queryCall.enqueue(
             object : GraphQLCall.Callback<T>() {
                 override fun onResponse(response: Response<T>) {
-                    response.data()?.getData()?.let {
-                        continuation.resumeWith(Result.success(ApiResult.Success(it)))
-                    } ?: continuation.resumeWith(
-                        Result.success(
-                            ApiResult.Failure(ResponseError(response.errors()))
-                        )
+                    resume(
+                        response.data()?.getData()?.let {
+                            ApiResult.Success(it)
+                        } ?: ApiResult.Failure(ResponseError(response.errors()))
                     )
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    continuation.resumeWith(Result.success(ApiResult.Failure(e)))
+                    resume(ApiResult.Failure(e))
                 }
             }
         )
