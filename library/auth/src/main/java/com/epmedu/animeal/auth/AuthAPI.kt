@@ -8,7 +8,7 @@ import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class AuthAPI {
@@ -26,22 +26,20 @@ class AuthAPI {
             userSub.type == AuthSessionResult.Type.SUCCESS
 
     suspend fun isSignedIn(): Boolean {
-        return suspendCancellableCoroutine { continuation ->
-            with(continuation) {
-                Amplify.Auth.fetchAuthSession(
-                    { session ->
-                        resume(
-                            when (session) {
-                                is AWSCognitoAuthSession -> session.isSignedInWithoutErrors
-                                else -> session.isSignedIn
-                            }
-                        )
-                    },
-                    {
-                        resume(false)
-                    }
-                )
-            }
+        return suspendCancellableCoroutine {
+            Amplify.Auth.fetchAuthSession(
+                { session ->
+                    resume(
+                        when (session) {
+                            is AWSCognitoAuthSession -> session.isSignedInWithoutErrors
+                            else -> session.isSignedIn
+                        }
+                    )
+                },
+                {
+                    resume(false)
+                }
+            )
         }
     }
 
