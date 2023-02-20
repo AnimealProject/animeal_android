@@ -1,31 +1,46 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding
 
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.home.domain.usecases.SaveUserAsFeederUseCase
+import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Cancel
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Finish
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Start
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DefaultFeedingHandler @Inject internal constructor(
-    private val repository: FeedingPointRepository,
-    private val saveUserAsFeederUseCase: SaveUserAsFeederUseCase,
-    stateDelegate: StateDelegate<HomeState>
-) : FeedingHandler, StateDelegate<HomeState> by stateDelegate {
+@Suppress("LongParameterList")
+internal class DefaultFeedingHandler @Inject constructor(
+    stateDelegate: StateDelegate<HomeState>,
+    actionDelegate: ActionDelegate,
+    routeHandler: RouteHandler,
+    errorHandler: ErrorHandler,
+    feedingPointHandler: FeedingPointHandler,
+    private val startFeedingUseCase: StartFeedingUseCase,
+    private val cancelFeedingUseCase: CancelFeedingUseCase,
+    private val finishFeedingUseCase: FinishFeedingUseCase
+) : FeedingHandler,
+    StateDelegate<HomeState> by stateDelegate,
+    ActionDelegate by actionDelegate,
+    FeedingPointHandler by feedingPointHandler,
+    RouteHandler by routeHandler,
+    ErrorHandler by errorHandler {
 
-    override suspend fun fetchFeedingPoints() {
-        repository.getAllFeedingPoints().collect {
-            updateState {
-                copy(
-                    feedingPoints = it.map { feedingPoint ->
-                        FeedingPointModel(feedingPoint)
-                    }.toImmutableList()
-                )
-            }
+    override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
+        when (event) {
+            Start -> launch { startFeeding() }
+            Cancel -> launch { cancelFeeding() }
+            Finish -> launch { finishFeeding() }
         }
     }
 
@@ -35,9 +50,48 @@ class DefaultFeedingHandler @Inject internal constructor(
         }
     }
 
-    override fun saveFeeder(): Flow<Boolean> {
-        return saveUserAsFeederUseCase(
-            state.currentFeedingPoint?.id ?: return flow { emit(false) }
+    private suspend fun startFeeding() {
+        performFeedingAction(
+            action = startFeedingUseCase::invoke,
+            onSuccess = { currentFeedingPoint ->
+                hideOtherFeedingPoints(currentFeedingPoint)
+                startRouteAndTimer()
+            }
         )
+    }
+
+    private suspend fun cancelFeeding() {
+        performFeedingAction(
+            action = cancelFeedingUseCase::invoke,
+            onSuccess = {
+                stopRouteAndTimer()
+                fetchFeedingPoints()
+            }
+        )
+    }
+
+    private suspend fun finishFeeding() {
+        performFeedingAction(
+            action = { feedingPointId ->
+                finishFeedingUseCase(feedingPointId, listOf(""))
+            },
+            onSuccess = {
+                stopRouteAndTimer()
+                fetchFeedingPoints()
+            }
+        )
+    }
+
+    private suspend fun performFeedingAction(
+        action: suspend (String) -> ActionResult,
+        onSuccess: suspend (FeedingPointModel) -> Unit
+    ) {
+        state.currentFeedingPoint?.let { currentFeedingPoint ->
+            performAction(
+                action = { action(currentFeedingPoint.id) },
+                onSuccess = { onSuccess(currentFeedingPoint) },
+                onError = ::showError
+            )
+        } ?: showError()
     }
 }

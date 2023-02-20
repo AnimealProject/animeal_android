@@ -19,6 +19,7 @@ buildscript {
     }
 
     dependencies {
+        classpath(libs.gradle.plugin.appsync)
         classpath(libs.gradle.plugin.buildtools)
         classpath(libs.gradle.plugin.crashlytics)
         classpath(libs.gradle.plugin.googleservices)

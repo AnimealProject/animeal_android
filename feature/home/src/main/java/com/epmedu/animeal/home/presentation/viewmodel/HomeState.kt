@@ -1,6 +1,5 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.domain.PermissionStatus
@@ -13,8 +12,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
-    val currentLocation: MapLocation = MapLocation.Tbilisi,
-    val currentFeedingPoint: FeedingPoint? = null,
+    val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val willFeedState: WillFeedState = WillFeedState.Dismissed,
@@ -28,7 +26,9 @@ data class HomeState(
     val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
     val isInitialGeolocationPermissionAsked: Boolean = false,
 
-    val timerState: TimerState? = null
+    val timerState: TimerState? = null,
+
+    val isError: Boolean = false
 )
 
 sealed interface LocationState {

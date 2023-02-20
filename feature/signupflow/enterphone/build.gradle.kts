@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.profile)
+
     implementation(libs.amplify.core)
 
     implementation(libs.androidx.datastore)
@@ -27,6 +29,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
+    implementation(libs.androidx.emoji2)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)

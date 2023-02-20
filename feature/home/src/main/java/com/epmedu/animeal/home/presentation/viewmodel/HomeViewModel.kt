@@ -3,19 +3,25 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
@@ -34,20 +40,22 @@ internal class HomeViewModel @Inject constructor(
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     stateDelegate: StateDelegate<HomeState>,
+    eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
 ) : ViewModel(),
     StateDelegate<HomeState> by stateDelegate,
-    EventDelegate<HomeViewModelEvent> by DefaultEventDelegate(),
+    EventDelegate<HomeViewModelEvent> by eventDelegate,
+    FeedingPointHandler by defaultHomeHandler,
     RouteHandler by defaultHomeHandler,
     WillFeedHandler by defaultHomeHandler,
     FeedingHandler by defaultHomeHandler,
     LocationHandler by defaultHomeHandler,
     TimerHandler by defaultHomeHandler,
     GpsHandler by defaultHomeHandler,
+    ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
-    BuildConfigProvider by homeProviders,
-    FeedingPointRepository by homeProviders {
+    BuildConfigProvider by homeProviders {
 
     init {
         initialize()
@@ -64,14 +72,16 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    fun handleEvents(event: HomeScreenEvent) = when (event) {
-        is HomeScreenEvent.FeedingPointSelected -> selectFeedingPoint(event)
-        is HomeScreenEvent.FeedingPointFavouriteChange -> changeFavouriteFeedingPoint(event)
-        is HomeScreenEvent.RouteEvent -> handleRouteEvent(event = event, scope = viewModelScope)
-        is HomeScreenEvent.WillFeedEvent -> handleWillFeedEvent(event)
-        is HomeScreenEvent.GeolocationPermissionStatusChanged ->
-            changeGeolocationPermissionStatus(event)
-        is HomeScreenEvent.TimerEvent -> handleTimerEvent(event)
+    fun handleEvents(event: HomeScreenEvent) {
+        when (event) {
+            is FeedingPointEvent -> viewModelScope.handleFeedingPointEvent(event)
+            is FeedingEvent -> viewModelScope.handleFeedingEvent(event)
+            is RouteEvent -> handleRouteEvent(event = event)
+            is WillFeedEvent -> handleWillFeedEvent(event)
+            is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
+            is TimerEvent -> handleTimerEvent(event)
+            is ErrorShowed -> hideError()
+        }
     }
 
     private fun initialize() {
@@ -94,26 +104,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun selectFeedingPoint(event: HomeScreenEvent.FeedingPointSelected) {
-        viewModelScope.launch {
-            getFeedingPoint(event.id).collect { feedingPoint ->
-                updateState {
-                    copy(currentFeedingPoint = feedingPoint)
-                }
-                sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
-            }
-        }
-    }
-
-    private fun changeFavouriteFeedingPoint(event: HomeScreenEvent.FeedingPointFavouriteChange) {
-        updateState {
-            copy(
-                currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
-            )
-        }
-    }
-
-    private fun changeGeolocationPermissionStatus(event: HomeScreenEvent.GeolocationPermissionStatusChanged) {
+    private fun changeGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
         if (!state.isInitialGeolocationPermissionAsked) {
             viewModelScope.launch {
                 updateGeolocationPermissionRequestedSettingUseCase(true)

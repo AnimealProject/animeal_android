@@ -63,11 +63,11 @@ internal fun RouteView(
 }
 
 internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
-    state.currentFeedingPoint?.location?.let { feedingPointLocation ->
+    state.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
         mapView.setLocation(
             points = listOf(
-                state.currentLocation.toPoint(),
-                feedingPointLocation.toPoint()
+                state.locationState.location.toPoint(),
+                feedingPointLocation
             )
         )
     }
@@ -93,13 +93,13 @@ private fun fetchRoute(
     mapboxNavigation: MapboxNavigation,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
-    state.currentFeedingPoint?.location?.let { feedingPointLocation ->
+    state.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
         mapView.fetchRoute(
-            mapBoxRouteInitOptions,
-            mapboxNavigation,
-            MapPath(
-                state.currentLocation.toPoint(),
-                feedingPointLocation.toPoint()
+            mapBoxRouteInitOptions = mapBoxRouteInitOptions,
+            navigation = mapboxNavigation,
+            path = MapPath(
+                state.locationState.location.toPoint(),
+                feedingPointLocation
             ),
             onRouteResult = onRouteResult
         )
