@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface TimerRepository {
 
-    fun acceptTimerExpiration()
+    suspend fun acceptTimerExpiration()
 
     fun startTimer(timeInMillis: Long, intervalInMillis: Long)
 

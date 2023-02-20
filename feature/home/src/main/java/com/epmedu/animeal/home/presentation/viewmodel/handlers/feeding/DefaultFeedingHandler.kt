@@ -15,6 +15,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +27,7 @@ internal class DefaultFeedingHandler @Inject constructor(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     feedingPointHandler: FeedingPointHandler,
+    timerHandler: TimerHandler,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase
@@ -34,6 +36,7 @@ internal class DefaultFeedingHandler @Inject constructor(
     ActionDelegate by actionDelegate,
     FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,
+    TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
@@ -44,18 +47,13 @@ internal class DefaultFeedingHandler @Inject constructor(
         }
     }
 
-    override fun showSingleFeedingPoint(feedingPoint: FeedingPointModel) {
-        updateState {
-            copy(feedingPoints = persistentListOf(feedingPoint))
-        }
-    }
-
     private suspend fun startFeeding() {
         performFeedingAction(
             action = startFeedingUseCase::invoke,
             onSuccess = { currentFeedingPoint ->
-                hideOtherFeedingPoints(currentFeedingPoint)
-                startRouteAndTimer()
+                showSingleReservedFeedingPoint(currentFeedingPoint)
+                startRoute()
+                startTimer()
             }
         )
     }
@@ -64,8 +62,9 @@ internal class DefaultFeedingHandler @Inject constructor(
         performFeedingAction(
             action = cancelFeedingUseCase::invoke,
             onSuccess = {
-                stopRouteAndTimer()
+                stopRoute()
                 fetchFeedingPoints()
+                disableTimer()
             }
         )
     }
@@ -76,7 +75,7 @@ internal class DefaultFeedingHandler @Inject constructor(
                 finishFeedingUseCase(feedingPointId, listOf(""))
             },
             onSuccess = {
-                stopRouteAndTimer()
+                stopRoute()
                 fetchFeedingPoints()
             }
         )

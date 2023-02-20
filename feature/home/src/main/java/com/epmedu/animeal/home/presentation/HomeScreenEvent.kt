@@ -28,7 +28,7 @@ sealed interface HomeScreenEvent {
     }
 
     sealed interface TimerEvent : HomeScreenEvent {
-        object Started : TimerEvent
+        object Expired : TimerEvent
         object ExpirationAccepted : TimerEvent
     }
 

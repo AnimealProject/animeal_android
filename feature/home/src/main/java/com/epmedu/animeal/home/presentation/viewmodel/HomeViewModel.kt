@@ -16,6 +16,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -33,6 +34,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val homeProviders: HomeProviders,
@@ -79,7 +81,7 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
-            is TimerEvent -> handleTimerEvent(event)
+            is TimerEvent -> viewModelScope.handleTimerEvent(event)
             is ErrorShowed -> hideError()
         }
     }

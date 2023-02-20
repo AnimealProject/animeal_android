@@ -22,11 +22,9 @@ internal class TimerRepositoryImpl : TimerRepository {
 
     override fun getTimerState() = timerFlow.asStateFlow()
 
-    override fun acceptTimerExpiration() {
-        coroutineScope.launch {
-            timerState = TimerState.Disabled
-            timerFlow.emit(timerState)
-        }
+    override suspend fun acceptTimerExpiration() {
+        timerState = TimerState.Disabled
+        timerFlow.emit(timerState)
     }
 
     private fun countDownTimer(timeInMillis: Long, intervalInMillis: Long) =

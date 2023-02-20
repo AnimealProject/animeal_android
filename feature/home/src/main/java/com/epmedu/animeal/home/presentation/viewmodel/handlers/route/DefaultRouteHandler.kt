@@ -1,7 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.route
 
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest
@@ -21,14 +20,12 @@ internal class DefaultRouteHandler @Inject constructor(
         }
     }
 
-    override fun startRouteAndTimer() {
+    override fun startRoute() {
         updateState { copy(feedingRouteState = FeedingRouteState.Active(), isError = false) }
-        timer.start()
     }
 
-    override fun stopRouteAndTimer() {
+    override fun stopRoute() {
         updateState { copy(feedingRouteState = FeedingRouteState.Disabled) }
-        timer.cancel()
     }
 
     private fun updateRoute(event: FeedingRouteUpdateRequest) {

@@ -18,6 +18,7 @@ internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean) =
         description = description ?: EMPTY_STRING,
         animalStatus = when (status) {
             FeedingPointStatus.fed -> AnimalState.GREEN
+            FeedingPointStatus.pending -> AnimalState.YELLOW
             else -> AnimalState.RED
         },
         animalType = when (category?.tag) {

@@ -5,7 +5,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,8 +24,8 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
@@ -71,16 +70,16 @@ internal fun HomeScreenUI(
 
     when (state.timerState) {
         is TimerState.Active -> onScreenEvent(
-            HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest(
+            RouteEvent.FeedingTimerUpdateRequest(
                 state.timerState.timeLeft
             )
         )
         TimerState.Expired -> {
             hideBottomSheet()
-            onScreenEvent(HomeScreenEvent.RouteEvent.FeedingRouteCancellationRequest)
+            onScreenEvent(TimerEvent.Expired)
             FeedingExpiredDialog(
                 onConfirm = {
-                    onScreenEvent(HomeScreenEvent.TimerEvent.ExpirationAccepted)
+                    onScreenEvent(TimerEvent.ExpirationAccepted)
                 }
             )
         }
@@ -160,7 +159,6 @@ private fun WillFeedConfirmationDialog(
                 scope.launch { bottomSheetState.hide() }
                 onScreenEvent(FeedingEvent.Start)
                 onHideBottomSheet()
-                onScreenEvent(HomeScreenEvent.TimerEvent.Started)
             },
             onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
         )
