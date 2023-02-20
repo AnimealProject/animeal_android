@@ -7,7 +7,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
-import com.epmedu.animeal.timer.domain.AcceptTimerExpirationUseCase
+import com.epmedu.animeal.timer.domain.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.StartTimerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ internal class DefaultTimerHandler @Inject constructor(
     routeHandler: RouteHandler,
     feedingPointHandler: FeedingPointHandler,
     private val startTimerUseCase: StartTimerUseCase,
-    private val acceptTimerExpirationUseCase: AcceptTimerExpirationUseCase
+    private val disableTimerUseCase: DisableTimerUseCase
 ) : TimerHandler,
     FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,
@@ -41,6 +41,6 @@ internal class DefaultTimerHandler @Inject constructor(
     }
 
     override suspend fun disableTimer() {
-        acceptTimerExpirationUseCase.invoke()
+        disableTimerUseCase.invoke()
     }
 }

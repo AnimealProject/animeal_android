@@ -2,7 +2,7 @@ package com.epmedu.animeal.timer.di
 
 import com.epmedu.animeal.timer.data.repository.TimerRepository
 import com.epmedu.animeal.timer.data.repository.TimerRepositoryImpl
-import com.epmedu.animeal.timer.domain.AcceptTimerExpirationUseCase
+import com.epmedu.animeal.timer.domain.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.GetTimerStateUseCase
 import com.epmedu.animeal.timer.domain.StartTimerUseCase
 import dagger.Module
@@ -35,5 +35,5 @@ object TimerModule {
     @Provides
     fun provideAcceptTimerExpirationUseCase(
         repository: TimerRepository
-    ) = AcceptTimerExpirationUseCase(repository)
+    ) = DisableTimerUseCase(repository)
 }

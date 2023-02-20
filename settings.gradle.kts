@@ -1,9 +1,6 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-include(":shared:feature:timer")
-
-
 include(":shared:feature:settings")
 
 
@@ -102,3 +99,4 @@ include(":shared:feature:profile")
 include(":shared:feature:feeding")
 include(":shared:feature:feedconfirmation")
 include(":shared:feature:networkuser")
+include(":shared:feature:timer")

@@ -22,7 +22,7 @@ internal class TimerRepositoryImpl : TimerRepository {
 
     override fun getTimerState() = timerFlow.asStateFlow()
 
-    override suspend fun acceptTimerExpiration() {
+    override suspend fun disableTimer() {
         timerState = TimerState.Disabled
         timerFlow.emit(timerState)
     }

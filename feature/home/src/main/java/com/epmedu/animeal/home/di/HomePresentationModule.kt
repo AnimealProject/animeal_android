@@ -31,7 +31,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTime
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
-import com.epmedu.animeal.timer.domain.AcceptTimerExpirationUseCase
+import com.epmedu.animeal.timer.domain.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
@@ -123,13 +123,13 @@ internal object HomePresentationModule {
         routeHandler: RouteHandler,
         feedingPointHandler: FeedingPointHandler,
         startTimerUseCase: StartTimerUseCase,
-        acceptTimerExpirationUseCase: AcceptTimerExpirationUseCase
+        disableTimerUseCase: DisableTimerUseCase
     ): TimerHandler = DefaultTimerHandler(
         stateDelegate,
         routeHandler,
         feedingPointHandler,
         startTimerUseCase,
-        acceptTimerExpirationUseCase
+        disableTimerUseCase
     )
 
     @ViewModelScoped
