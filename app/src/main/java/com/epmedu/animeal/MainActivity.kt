@@ -56,7 +56,7 @@ class MainActivity :
             { signInResult ->
                 if (signInResult.isSignInComplete) onSuccess()
             },
-            {}
+            onError
         )
     }
 }
