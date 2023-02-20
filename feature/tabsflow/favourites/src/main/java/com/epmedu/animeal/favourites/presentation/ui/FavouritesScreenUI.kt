@@ -26,6 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.DismissWillFeedDialog
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.Feeder
@@ -57,7 +62,7 @@ internal fun FavouritesScreenUI(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
-    handleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
+    HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
 
@@ -77,7 +82,7 @@ internal fun FavouritesScreenUI(
 }
 
 @Composable
-private fun handleFeedingPointSheetHiddenState(
+private fun HandleFeedingPointSheetHiddenState(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
@@ -86,7 +91,7 @@ private fun handleFeedingPointSheetHiddenState(
             .distinctUntilChanged()
             .filter { it }
             .collect {
-                onEvent(FavouritesScreenEvent.FeedingPointSheetHidden)
+                onEvent(FeedingPointHidden)
             }
     }
 }
@@ -105,7 +110,7 @@ private fun ScreenScaffold(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         isHalfExpandedStateEnabled = false,
         sheetContent = {
-            state.showingFeedSpot?.let { feedingPoint ->
+            state.showingFeedingPoint?.let { feedingPoint ->
                 FeedingPointSheetContent(
                     feedingPoint = FeedingPointModel(
                         feedingPoint
@@ -113,13 +118,8 @@ private fun ScreenScaffold(
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
-                    onFavouriteChange = { selected ->
-                        onEvent(
-                            FavouritesScreenEvent.FeedSpotChanged(
-                                feedingPoint.id,
-                                isFavorite = selected,
-                            )
-                        )
+                    onFavouriteChange = { isFavourite ->
+                        onEvent(FavouriteChange(isFavourite, feedingPoint))
                     }
                 )
             }
@@ -127,8 +127,8 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
-                onClick = { onEvent(FavouritesScreenEvent.ShowWillFeedDialog(state.showingFeedSpot!!.id)) },
+                enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
+                onClick = { onEvent(ShowWillFeedDialog) },
             )
         }
     ) {
@@ -198,17 +198,15 @@ private fun FavouritesList(
             contentPadding = PaddingValues(30.dp)
 
         ) {
-            items(favourites) { item ->
+            items(favourites) { feedingPoint ->
                 FavouriteFeedingPointItem(
-                    title = item.title,
-                    status = item.animalStatus.toFeedStatus(),
-                    isFavourite = item.isFavourite,
-                    onFavouriteChange = {
-                        onEvent(FavouritesScreenEvent.FeedSpotChanged(item.id, isFavorite = false))
+                    title = feedingPoint.title,
+                    status = feedingPoint.animalStatus.toFeedStatus(),
+                    isFavourite = feedingPoint.isFavourite,
+                    onFavouriteChange = { isFavourite ->
+                        onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
-                    onClick = {
-                        onEvent(FavouritesScreenEvent.FeedSpotSelected(item.id))
-                    }
+                    onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
         }
@@ -222,8 +220,8 @@ internal fun WillFeedConfirmationDialog(
 ) {
     if (state.showingWillFeedDialog) {
         FeedConfirmationDialog(
-            onAgreeClick = { onEvent(FavouritesScreenEvent.DismissWillFeedDialog) },
-            onCancelClick = { onEvent(FavouritesScreenEvent.DismissWillFeedDialog) }
+            onAgreeClick = { onEvent(DismissWillFeedDialog) },
+            onCancelClick = { onEvent(DismissWillFeedDialog) }
         )
     }
 }

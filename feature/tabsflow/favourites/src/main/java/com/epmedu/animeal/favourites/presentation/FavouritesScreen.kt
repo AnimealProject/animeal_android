@@ -22,7 +22,7 @@ fun FavouritesScreen() {
     FavouritesScreenUI(state, bottomSheetState, onEvent = {
         viewModel.handleEvents(it)
     })
-    if (state.showingFeedSpot != null) {
+    if (state.showingFeedingPoint != null) {
         LaunchedEffect(Unit) { bottomSheetState.expand() }
     }
 }

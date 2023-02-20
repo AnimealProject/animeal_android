@@ -1,12 +1,16 @@
 package com.epmedu.animeal.favourites.presentation
 
-import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 
-internal sealed class FavouritesScreenEvent(open val id: String = EMPTY_STRING) {
-    data class FeedSpotSelected(override val id: String) : FavouritesScreenEvent(id)
-    object FeedingPointSheetHidden : FavouritesScreenEvent("0")
-    data class FeedSpotChanged(override val id: String, val isFavorite: Boolean) :
-        FavouritesScreenEvent(id)
-    data class ShowWillFeedDialog(override val id: String) : FavouritesScreenEvent(id)
-    object DismissWillFeedDialog : FavouritesScreenEvent("0")
+internal sealed interface FavouritesScreenEvent {
+    data class FeedingPointSelected(val feedingPoint: FeedingPoint) : FavouritesScreenEvent
+    object FeedingPointHidden : FavouritesScreenEvent
+
+    data class FavouriteChange(
+        val isFavourite: Boolean,
+        val feedingPoint: FeedingPoint
+    ) : FavouritesScreenEvent
+
+    object ShowWillFeedDialog : FavouritesScreenEvent
+    object DismissWillFeedDialog : FavouritesScreenEvent
 }

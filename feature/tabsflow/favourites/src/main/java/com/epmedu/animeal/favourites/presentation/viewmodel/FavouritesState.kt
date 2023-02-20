@@ -6,6 +6,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class FavouritesState(
     val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
-    val showingFeedSpot: FeedingPoint? = null,
+    val showingFeedingPoint: FeedingPoint? = null,
     val showingWillFeedDialog: Boolean = false,
 )
