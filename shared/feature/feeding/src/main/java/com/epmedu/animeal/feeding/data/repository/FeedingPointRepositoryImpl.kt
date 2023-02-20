@@ -1,12 +1,11 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
-import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
+import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,9 +16,8 @@ import kotlinx.coroutines.flow.merge
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
-    private val authAPI: AuthAPI,
-    private val favouriteApi: FavouriteApi,
     private val feedingPointApi: FeedingPointApi,
+    private val favouriteRepository: FavouriteRepository,
     private val dispatchers: Dispatchers
 ) : FeedingPointRepository {
 
@@ -32,10 +30,12 @@ internal class FeedingPointRepositoryImpl(
             subscribeToFeedingPointsCreation(),
             subscribeToFeedingPointsUpdates(),
             subscribeToFeedingPointsDeletion()
-        ).combine(favouriteApi.getFavouriteList(authAPI.currentUserId)) { feedingPointsList, favourites ->
+        ).combine(
+            favouriteRepository.getFavouriteFeedingPointIds()
+        ) { feedingPointsList, favouriteIds ->
             cachedFeedingPoints = feedingPointsList.map { dataFeedingPoint ->
                 dataFeedingPoint.copy(
-                    isFavourite = favourites.any { it.feedingPointId == dataFeedingPoint.id }
+                    isFavourite = favouriteIds.any { it == dataFeedingPoint.id }
                 )
             }
             cachedFeedingPoints

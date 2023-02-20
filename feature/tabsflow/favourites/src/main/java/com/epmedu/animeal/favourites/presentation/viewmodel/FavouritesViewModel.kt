@@ -7,6 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.usecase.AddFavouriteFeedingPointUseCase
+import com.epmedu.animeal.feeding.domain.usecase.DeleteFavouriteFeedingPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -14,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
-    private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase
+    private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
+    private val addFavouriteFeedingPointUseCase: AddFavouriteFeedingPointUseCase,
+    private val deleteFavouriteFeedingPointUseCase: DeleteFavouriteFeedingPointUseCase
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()) {
 
@@ -22,9 +26,9 @@ internal class FavouritesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getFavouriteFeedingPointsUseCase().collect {
-                favouritesSnapshot = it
-                updateState { copy(favourites = it.toImmutableList()) }
+            getFavouriteFeedingPointsUseCase().collect { feedingPoints ->
+                updateState { copy(favourites = feedingPoints.toImmutableList()) }
+                favouritesSnapshot = feedingPoints
             }
         }
     }
@@ -32,15 +36,14 @@ internal class FavouritesViewModel @Inject constructor(
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
             is FavouritesScreenEvent.FeedSpotChanged -> {
-                val showingFeedSpot = updateShowingFeedSpot(event)
-                updateSnapshot(event)
-
-                updateState {
-                    copy(
-                        favourites = favouritesSnapshot.filter { it.isFavourite }.toImmutableList(),
-                        showingFeedSpot = showingFeedSpot
-                    )
+                viewModelScope.launch {
+                    when {
+                        event.isFavorite -> addFavouriteFeedingPointUseCase(event.id)
+                        else -> deleteFavouriteFeedingPointUseCase(event.id)
+                    }
                 }
+                updateSnapshot(event)
+                updateShowingFeedSpot(event)
             }
             is FavouritesScreenEvent.FeedSpotSelected -> {
                 updateState { copy(showingFeedSpot = favourites.first { it.id == event.id }) }
@@ -57,11 +60,11 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun updateShowingFeedSpot(event: FavouritesScreenEvent.FeedSpotChanged): FeedingPoint? {
-        return if (state.showingFeedSpot?.id == event.id) {
-            state.showingFeedSpot.copy(isFavourite = event.isFavorite)
-        } else {
-            state.showingFeedSpot
+    private fun updateShowingFeedSpot(event: FavouritesScreenEvent.FeedSpotChanged) {
+        if (state.showingFeedSpot?.id == event.id) {
+            updateState {
+                copy(showingFeedSpot = showingFeedSpot?.copy(isFavourite = event.isFavorite))
+            }
         }
     }
 
@@ -72,6 +75,9 @@ internal class FavouritesViewModel @Inject constructor(
             } else {
                 feedingPoint
             }
+        }
+        updateState {
+            copy(favourites = favouritesSnapshot.toImmutableList())
         }
     }
 }

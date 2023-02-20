@@ -45,5 +45,7 @@ internal object ApiModule {
 
     @Singleton
     @Provides
-    fun providesFavouriteApi(): FavouriteApi = FavouriteApiImpl()
+    fun providesFavouriteApi(
+        awsAppSyncClient: AWSAppSyncClient
+    ): FavouriteApi = FavouriteApiImpl(awsAppSyncClient)
 }
