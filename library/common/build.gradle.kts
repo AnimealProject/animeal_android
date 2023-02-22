@@ -16,6 +16,5 @@ android {
 dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
-    implementation(projects.library.auth)
     kapt(libs.hilt.compiler)
 }
