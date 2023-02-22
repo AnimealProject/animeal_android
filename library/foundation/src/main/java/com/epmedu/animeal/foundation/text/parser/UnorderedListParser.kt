@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.markuptext
+package com.epmedu.animeal.foundation.text.parser
 
 import java.util.regex.Pattern
 

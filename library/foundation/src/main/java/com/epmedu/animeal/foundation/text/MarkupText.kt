@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.markuptext
+package com.epmedu.animeal.foundation.text
 
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -11,6 +11,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.foundation.text.parser.OrderedListParser
+import com.epmedu.animeal.foundation.text.parser.UnorderedListParser
 import com.ireward.htmlcompose.HtmlText
 
 @Composable
