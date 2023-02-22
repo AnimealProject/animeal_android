@@ -21,5 +21,7 @@ dependencies {
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.material.dialog.datetime)
 
+    implementation(libs.htmlText)
+
     debugImplementation(libs.compose.ui.tooling)
 }
