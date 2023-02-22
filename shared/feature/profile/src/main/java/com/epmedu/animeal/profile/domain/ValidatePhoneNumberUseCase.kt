@@ -8,8 +8,8 @@ import com.epmedu.animeal.resources.R
 
 class ValidatePhoneNumberUseCase(private val validator: ProfileValidator) {
 
-    operator fun invoke(phoneNumber: String): UiText {
-        return when (validator.validatePhoneNumber(phoneNumber)) {
+    operator fun invoke(phoneNumber: String, phoneNumberDigitsCount: IntArray): UiText {
+        return when (validator.validatePhoneNumber(phoneNumber, phoneNumberDigitsCount)) {
             is ValidPhoneNumber -> {
                 UiText.Empty
             }

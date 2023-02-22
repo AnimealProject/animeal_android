@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
 import androidx.compose.foundation.layout.Column
@@ -9,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -30,10 +36,11 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun FinishProfileContent(
     state: ProfileState,
+    bottomSheetState: ModalBottomSheetState,
     focusRequester: FocusRequester,
     onCancel: () -> Unit,
     onDone: () -> Unit,
-    onInputFormEvent: (ProfileInputFormEvent) -> Unit
+    onInputFormEvent: (ProfileInputFormEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -59,11 +66,12 @@ internal fun FinishProfileContent(
                 style = MaterialTheme.typography.subtitle1,
             )
             ProfileInputForm(
-                state = state,
-                onEvent = onInputFormEvent,
                 modifier = Modifier
                     .padding(top = 24.dp)
-                    .focusRequester(focusRequester)
+                    .focusRequester(focusRequester),
+                state = state,
+                bottomSheetState = bottomSheetState,
+                onEvent = onInputFormEvent
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -93,7 +101,8 @@ private fun FinishProfileContentPreview() {
             focusRequester = FocusRequester(),
             onCancel = {},
             onDone = {},
-            onInputFormEvent = {}
+            onInputFormEvent = {},
+            bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
         )
     }
 }

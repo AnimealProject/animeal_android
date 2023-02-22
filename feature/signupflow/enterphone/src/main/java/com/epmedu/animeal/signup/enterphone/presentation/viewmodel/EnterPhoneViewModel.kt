@@ -1,6 +1,5 @@
 package com.epmedu.animeal.signup.enterphone.presentation.viewmodel
 
-import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
@@ -9,6 +8,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.foundation.common.validation.result.PhoneNumberValidationResult
+import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
@@ -23,6 +24,7 @@ import javax.inject.Inject
 internal class EnterPhoneViewModel @Inject constructor(
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
     private val savePhoneNumberInfoUseCase: SavePhoneNumberInfoUseCase,
+    private val validator: ProfileValidator,
     private val buildConfigProvider: BuildConfigProvider,
 ) : ViewModel(),
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)),
@@ -50,7 +52,10 @@ internal class EnterPhoneViewModel @Inject constructor(
     }
 
     private fun String.isValidPhoneNumber(phoneNumberDigitsCount: IntArray): Boolean {
-        return phoneNumberDigitsCount.contains(length) && PhoneNumberUtils.isGlobalPhoneNumber(this)
+        return validator.validatePhoneNumber(
+            this,
+            phoneNumberDigitsCount
+        ) == PhoneNumberValidationResult.ValidPhoneNumber
     }
 
     private fun sendCodeAndSavePhoneNumberAndPrefix() {

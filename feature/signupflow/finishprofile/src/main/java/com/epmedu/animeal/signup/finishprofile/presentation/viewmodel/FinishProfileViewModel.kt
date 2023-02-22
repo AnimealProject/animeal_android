@@ -81,7 +81,7 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             copy(
                 profile = profile.copy(phoneNumber = event.phoneNumber),
-                phoneNumberError = validatePhoneNumberUseCase(event.phoneNumber)
+                phoneNumberError = validatePhoneNumberUseCase(event.phoneNumber, state.phoneNumberDigitsCount)
             )
         }
     }
@@ -146,7 +146,7 @@ internal class FinishProfileViewModel @Inject constructor(
                     nameError = validateNameUseCase(name),
                     surnameError = validateSurnameUseCase(surname),
                     emailError = validateEmailUseCase(email),
-                    phoneNumberError = validatePhoneNumberUseCase(phoneNumber),
+                    phoneNumberError = validatePhoneNumberUseCase(phoneNumber, state.phoneNumberDigitsCount),
                     birthDateError = validateBirthDateUseCase(birthDate)
                 )
             }
