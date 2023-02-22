@@ -7,8 +7,8 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
-import com.epmedu.animeal.timer.domain.DisableTimerUseCase
-import com.epmedu.animeal.timer.domain.StartTimerUseCase
+import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
+import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

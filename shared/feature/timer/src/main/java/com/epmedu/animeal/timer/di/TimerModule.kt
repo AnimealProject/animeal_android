@@ -1,10 +1,10 @@
 package com.epmedu.animeal.timer.di
 
-import com.epmedu.animeal.timer.data.repository.TimerRepository
 import com.epmedu.animeal.timer.data.repository.TimerRepositoryImpl
-import com.epmedu.animeal.timer.domain.DisableTimerUseCase
-import com.epmedu.animeal.timer.domain.GetTimerStateUseCase
-import com.epmedu.animeal.timer.domain.StartTimerUseCase
+import com.epmedu.animeal.timer.domain.TimerRepository
+import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
+import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
+import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

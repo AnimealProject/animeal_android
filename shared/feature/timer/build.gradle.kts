@@ -12,6 +12,8 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(projects.library.common)
+
     implementation(libs.compose.material)
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)

@@ -29,7 +29,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandle
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
-import com.epmedu.animeal.timer.domain.GetTimerStateUseCase
+import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

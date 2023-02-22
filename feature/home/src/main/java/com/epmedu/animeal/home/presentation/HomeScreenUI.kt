@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -68,22 +69,29 @@ internal fun HomeScreenUI(
         }
     }
 
-    when (state.timerState) {
-        is TimerState.Active -> onScreenEvent(
-            RouteEvent.FeedingTimerUpdateRequest(
-                state.timerState.timeLeft
-            )
-        )
-        TimerState.Expired -> {
-            hideBottomSheet()
-            onScreenEvent(TimerEvent.Expired)
-            FeedingExpiredDialog(
-                onConfirm = {
-                    onScreenEvent(TimerEvent.ExpirationAccepted)
-                }
-            )
+    LaunchedEffect(key1 = state.timerState, key2 = state.feedingRouteState) {
+        when (state.timerState) {
+            is TimerState.Active -> {
+                onScreenEvent(
+                    RouteEvent.FeedingTimerUpdateRequest(
+                        state.timerState.timeLeft
+                    )
+                )
+            }
+            TimerState.Expired -> {
+                hideBottomSheet()
+                onScreenEvent(TimerEvent.Expired)
+            }
+            else -> Unit
         }
-        else -> Unit
+    }
+
+    if (state.timerState == TimerState.Expired) {
+        FeedingExpiredDialog(
+            onConfirm = {
+                onScreenEvent(TimerEvent.ExpirationAccepted)
+            }
+        )
     }
 
     OnBackHandling(

@@ -11,6 +11,7 @@ private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
 private const val MONTH_DAY_YEAR_SLASH_FORMATTER_PATTERN = "MM/dd/yyyy"
 const val HOUR_IN_MILLIS = 3_600_000L
 const val MINUTE_IN_MILLIS = 60_000L
+const val SECOND_IN_MILLIS = 1_000L
 
 val DEFAULT_LOCALE: Locale
     get() = Locale.getDefault()

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.timer.data.model.TimerState
-import com.epmedu.animeal.timer.domain.GetTimerStateUseCase
+import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

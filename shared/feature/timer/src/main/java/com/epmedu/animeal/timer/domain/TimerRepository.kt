@@ -1,4 +1,4 @@
-package com.epmedu.animeal.timer.data.repository
+package com.epmedu.animeal.timer.domain
 
 import com.epmedu.animeal.timer.data.model.TimerState
 import kotlinx.coroutines.flow.StateFlow
