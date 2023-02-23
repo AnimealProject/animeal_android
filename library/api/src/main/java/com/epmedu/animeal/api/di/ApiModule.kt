@@ -5,6 +5,8 @@ import com.amazonaws.mobile.config.AWSConfiguration
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.amazonaws.mobileconnectors.appsync.sigv4.BasicCognitoUserPoolsAuthProvider
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
+import com.epmedu.animeal.api.faq.FAQApi
+import com.epmedu.animeal.api.faq.FAQApiImpl
 import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.favourite.FavouriteApiImpl
 import com.epmedu.animeal.api.feeding.FeedingPointApi
@@ -46,4 +48,8 @@ internal object ApiModule {
     @Singleton
     @Provides
     fun providesFavouriteApi(): FavouriteApi = FavouriteApiImpl()
+
+    @Singleton
+    @Provides
+    fun providesFAQApi(): FAQApi = FAQApiImpl()
 }
