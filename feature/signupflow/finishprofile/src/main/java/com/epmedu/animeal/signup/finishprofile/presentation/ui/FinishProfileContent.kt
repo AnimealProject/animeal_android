@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 
 package com.epmedu.animeal.signup.finishprofile.presentation.ui
 
@@ -18,10 +18,13 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -32,6 +35,7 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ui.ProfileInputForm
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.resources.R
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun FinishProfileContent(
@@ -43,6 +47,8 @@ internal fun FinishProfileContent(
     onInputFormEvent: (ProfileInputFormEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -66,12 +72,15 @@ internal fun FinishProfileContent(
                 style = MaterialTheme.typography.subtitle1,
             )
             ProfileInputForm(
+                state = state,
+                onEvent = onInputFormEvent,
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .focusRequester(focusRequester),
-                state = state,
-                bottomSheetState = bottomSheetState,
-                onEvent = onInputFormEvent
+                onCountryClick = {
+                    keyboardController?.hide()
+                    scope.launch { bottomSheetState.show() }
+                }
             )
         }
         Spacer(modifier = Modifier.weight(1f))

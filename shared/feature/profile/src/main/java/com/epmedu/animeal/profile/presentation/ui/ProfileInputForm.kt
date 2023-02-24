@@ -1,22 +1,12 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
-
 package com.epmedu.animeal.profile.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.input.Flag
@@ -33,20 +23,16 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChan
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
 import com.epmedu.animeal.resources.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileInputForm(
-    modifier: Modifier = Modifier,
     state: ProfileState,
-    bottomSheetState: ModalBottomSheetState? = null,
-    onEvent: (ProfileInputFormEvent) -> Unit
+    onEvent: (ProfileInputFormEvent) -> Unit,
+    modifier: Modifier = Modifier,
+    onCountryClick: (() -> Unit)? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val isFormEnabled = state.formState != READ_ONLY
-    val scope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = modifier,
@@ -76,7 +62,7 @@ fun ProfileInputForm(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 onDone = { focusManager.clearFocus() }
             )
-            PhoneInput(onEvent, keyboardController, scope, bottomSheetState, focusManager)
+            PhoneInput(onEvent, onCountryClick, focusManager)
             BirthDateInput(
                 value = profile.birthDate,
                 onValueChange = { onEvent(BirthDateChanged(it)) },
@@ -90,9 +76,7 @@ fun ProfileInputForm(
 @Composable
 private fun ProfileState.PhoneInput(
     onEvent: (ProfileInputFormEvent) -> Unit,
-    keyboardController: SoftwareKeyboardController?,
-    scope: CoroutineScope,
-    bottomSheetState: ModalBottomSheetState?,
+    onCountryClick: (() -> Unit)? = null,
     focusManager: FocusManager
 ) {
     PhoneNumberInput(
@@ -109,10 +93,7 @@ private fun ProfileState.PhoneInput(
         error = phoneNumberError.asString(),
         isEnabled = isPhoneNumberEnabled,
         isFlagClickable = isPhoneNumberEnabled,
-        onCountryClick = {
-            keyboardController?.hide()
-            scope.launch { bottomSheetState?.show() }
-        },
+        onCountryClick = onCountryClick,
         onDone = { focusManager.clearFocus() },
     )
 }
@@ -123,7 +104,7 @@ private fun ProfileInputFormPreview() {
     com.epmedu.animeal.foundation.theme.AnimealTheme {
         ProfileInputForm(
             state = ProfileState(),
-            bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-        ) {}
+            {}
+        )
     }
 }
