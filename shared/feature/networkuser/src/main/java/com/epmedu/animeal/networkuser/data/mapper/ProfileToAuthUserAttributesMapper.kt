@@ -1,7 +1,11 @@
 package com.epmedu.animeal.networkuser.data.mapper
 
 import com.amplifyframework.auth.AuthUserAttribute
-import com.amplifyframework.auth.AuthUserAttributeKey
+import com.epmedu.animeal.auth.constants.UserAttributesKey.birthDateKey
+import com.epmedu.animeal.auth.constants.UserAttributesKey.emailKey
+import com.epmedu.animeal.auth.constants.UserAttributesKey.nameKey
+import com.epmedu.animeal.auth.constants.UserAttributesKey.phoneNumberKey
+import com.epmedu.animeal.auth.constants.UserAttributesKey.surnameKey
 import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.DAY_MONTH_YEAR_SLASH_FORMATTER
 import com.epmedu.animeal.extensions.reformatDateToString
@@ -16,12 +20,12 @@ class ProfileToAuthUserAttributesMapper {
             newFormatter = DAY_MONTH_YEAR_SLASH_FORMATTER
         )
         return listOf(
-            AuthUserAttribute(AuthUserAttributeKey.name(), profile.name),
-            AuthUserAttribute(AuthUserAttributeKey.familyName(), profile.surname),
-            AuthUserAttribute(AuthUserAttributeKey.email(), profile.email),
-            AuthUserAttribute(AuthUserAttributeKey.birthdate(), convertedAmplifyFormatDate),
+            AuthUserAttribute(nameKey, profile.name),
+            AuthUserAttribute(surnameKey, profile.surname),
+            AuthUserAttribute(emailKey, profile.email),
+            AuthUserAttribute(birthDateKey, convertedAmplifyFormatDate),
             AuthUserAttribute(
-                AuthUserAttributeKey.phoneNumber(),
+                phoneNumberKey,
                 profile.phoneNumberRegion.phoneNumberCode + profile.phoneNumber
             )
         )
