@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -21,5 +22,10 @@ object FeedingModule {
         authAPI: AuthAPI,
         favouriteApi: FavouriteApi,
         feedingPointApi: FeedingPointApi
-    ): FeedingPointRepository = FeedingPointRepositoryImpl(authAPI, favouriteApi, feedingPointApi)
+    ): FeedingPointRepository = FeedingPointRepositoryImpl(
+        authAPI = authAPI,
+        favouriteApi = favouriteApi,
+        feedingPointApi = feedingPointApi,
+        dispatchers = Dispatchers
+    )
 }

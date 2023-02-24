@@ -1,24 +1,9 @@
 # this is an auto generated file. This will be overwritten
-mutation StartFeeding($feedingPointId: String!) {
-  startFeeding(feedingPointId: $feedingPointId)
-}
-mutation FinishFeeding($feedingId: String!, $images: [String!]!) {
-  finishFeeding(feedingId: $feedingId, images: $images)
-}
-mutation RejectFeeding($feedingId: String!, $feeding: FeedingInput) {
-  rejectFeeding(feedingId: $feedingId, feeding: $feeding)
-}
-mutation ApproveFeeding($feedingId: String!, $feeding: FeedingInput) {
-  approveFeeding(feedingId: $feedingId, feeding: $feeding)
-}
-mutation CancelFeeding($feedingId: String!) {
-  cancelFeeding(feedingId: $feedingId)
-}
-mutation CreatePet(
-  $input: CreatePetInput!
-  $condition: ModelPetConditionInput
+subscription OnCreatePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
 ) {
-  createPet(input: $input, condition: $condition) {
+  onCreatePet(filter: $filter, owner: $owner) {
     id
     name
     images
@@ -67,11 +52,11 @@ mutation CreatePet(
     petCategoryId
   }
 }
-mutation UpdatePet(
-  $input: UpdatePetInput!
-  $condition: ModelPetConditionInput
+subscription OnUpdatePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
 ) {
-  updatePet(input: $input, condition: $condition) {
+  onUpdatePet(filter: $filter, owner: $owner) {
     id
     name
     images
@@ -120,11 +105,11 @@ mutation UpdatePet(
     petCategoryId
   }
 }
-mutation DeletePet(
-  $input: DeletePetInput!
-  $condition: ModelPetConditionInput
+subscription OnDeletePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
 ) {
-  deletePet(input: $input, condition: $condition) {
+  onDeletePet(filter: $filter, owner: $owner) {
     id
     name
     images
@@ -173,11 +158,11 @@ mutation DeletePet(
     petCategoryId
   }
 }
-mutation CreateCategory(
-  $input: CreateCategoryInput!
-  $condition: ModelCategoryConditionInput
+subscription OnCreateCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
 ) {
-  createCategory(input: $input, condition: $condition) {
+  onCreateCategory(filter: $filter, owner: $owner) {
     id
     name
     icon
@@ -193,11 +178,11 @@ mutation CreateCategory(
     owner
   }
 }
-mutation UpdateCategory(
-  $input: UpdateCategoryInput!
-  $condition: ModelCategoryConditionInput
+subscription OnUpdateCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
 ) {
-  updateCategory(input: $input, condition: $condition) {
+  onUpdateCategory(filter: $filter, owner: $owner) {
     id
     name
     icon
@@ -213,11 +198,11 @@ mutation UpdateCategory(
     owner
   }
 }
-mutation DeleteCategory(
-  $input: DeleteCategoryInput!
-  $condition: ModelCategoryConditionInput
+subscription OnDeleteCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
 ) {
-  deleteCategory(input: $input, condition: $condition) {
+  onDeleteCategory(filter: $filter, owner: $owner) {
     id
     name
     icon
@@ -233,11 +218,8 @@ mutation DeleteCategory(
     owner
   }
 }
-mutation CreateFeedingPoint(
-  $input: CreateFeedingPointInput!
-  $condition: ModelFeedingPointConditionInput
-) {
-  createFeedingPoint(input: $input, condition: $condition) {
+subscription OnCreateFeedingPoint {
+  onCreateFeedingPoint {
     id
     name
     description
@@ -297,11 +279,8 @@ mutation CreateFeedingPoint(
     feedingPointCategoryId
   }
 }
-mutation UpdateFeedingPoint(
-  $input: UpdateFeedingPointInput!
-  $condition: ModelFeedingPointConditionInput
-) {
-  updateFeedingPoint(input: $input, condition: $condition) {
+subscription OnUpdateFeedingPoint {
+  onUpdateFeedingPoint {
     id
     name
     description
@@ -361,11 +340,8 @@ mutation UpdateFeedingPoint(
     feedingPointCategoryId
   }
 }
-mutation DeleteFeedingPoint(
-  $input: DeleteFeedingPointInput!
-  $condition: ModelFeedingPointConditionInput
-) {
-  deleteFeedingPoint(input: $input, condition: $condition) {
+subscription OnDeleteFeedingPoint {
+  onDeleteFeedingPoint {
     id
     name
     description
@@ -425,11 +401,11 @@ mutation DeleteFeedingPoint(
     feedingPointCategoryId
   }
 }
-mutation CreateFeeding(
-  $input: CreateFeedingInput!
-  $condition: ModelFeedingConditionInput
+subscription OnCreateFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
 ) {
-  createFeeding(input: $input, condition: $condition) {
+  onCreateFeeding(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -464,11 +440,11 @@ mutation CreateFeeding(
     feedingPointFeedingsId
   }
 }
-mutation UpdateFeeding(
-  $input: UpdateFeedingInput!
-  $condition: ModelFeedingConditionInput
+subscription OnUpdateFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
 ) {
-  updateFeeding(input: $input, condition: $condition) {
+  onUpdateFeeding(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -503,11 +479,11 @@ mutation UpdateFeeding(
     feedingPointFeedingsId
   }
 }
-mutation DeleteFeeding(
-  $input: DeleteFeedingInput!
-  $condition: ModelFeedingConditionInput
+subscription OnDeleteFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
 ) {
-  deleteFeeding(input: $input, condition: $condition) {
+  onDeleteFeeding(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -542,11 +518,11 @@ mutation DeleteFeeding(
     feedingPointFeedingsId
   }
 }
-mutation CreateFeedingHistory(
-  $input: CreateFeedingHistoryInput!
-  $condition: ModelFeedingHistoryConditionInput
+subscription OnCreateFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
 ) {
-  createFeedingHistory(input: $input, condition: $condition) {
+  onCreateFeedingHistory(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -558,11 +534,11 @@ mutation CreateFeedingHistory(
     feedingPointId
   }
 }
-mutation UpdateFeedingHistory(
-  $input: UpdateFeedingHistoryInput!
-  $condition: ModelFeedingHistoryConditionInput
+subscription OnUpdateFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
 ) {
-  updateFeedingHistory(input: $input, condition: $condition) {
+  onUpdateFeedingHistory(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -574,11 +550,11 @@ mutation UpdateFeedingHistory(
     feedingPointId
   }
 }
-mutation DeleteFeedingHistory(
-  $input: DeleteFeedingHistoryInput!
-  $condition: ModelFeedingHistoryConditionInput
+subscription OnDeleteFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
 ) {
-  deleteFeedingHistory(input: $input, condition: $condition) {
+  onDeleteFeedingHistory(filter: $filter, owner: $owner) {
     id
     userId
     images
@@ -590,11 +566,11 @@ mutation DeleteFeedingHistory(
     feedingPointId
   }
 }
-mutation CreateRelationPetFeedingPoint(
-  $input: CreateRelationPetFeedingPointInput!
-  $condition: ModelRelationPetFeedingPointConditionInput
+subscription OnCreateRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
 ) {
-  createRelationPetFeedingPoint(input: $input, condition: $condition) {
+  onCreateRelationPetFeedingPoint(filter: $filter, owner: $owner) {
     id
     petId
     feedingPointId
@@ -641,11 +617,11 @@ mutation CreateRelationPetFeedingPoint(
     owner
   }
 }
-mutation UpdateRelationPetFeedingPoint(
-  $input: UpdateRelationPetFeedingPointInput!
-  $condition: ModelRelationPetFeedingPointConditionInput
+subscription OnUpdateRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
 ) {
-  updateRelationPetFeedingPoint(input: $input, condition: $condition) {
+  onUpdateRelationPetFeedingPoint(filter: $filter, owner: $owner) {
     id
     petId
     feedingPointId
@@ -692,11 +668,11 @@ mutation UpdateRelationPetFeedingPoint(
     owner
   }
 }
-mutation DeleteRelationPetFeedingPoint(
-  $input: DeleteRelationPetFeedingPointInput!
-  $condition: ModelRelationPetFeedingPointConditionInput
+subscription OnDeleteRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
 ) {
-  deleteRelationPetFeedingPoint(input: $input, condition: $condition) {
+  onDeleteRelationPetFeedingPoint(filter: $filter, owner: $owner) {
     id
     petId
     feedingPointId
@@ -743,11 +719,11 @@ mutation DeleteRelationPetFeedingPoint(
     owner
   }
 }
-mutation CreateRelationUserFeedingPoint(
-  $input: CreateRelationUserFeedingPointInput!
-  $condition: ModelRelationUserFeedingPointConditionInput
+subscription OnCreateRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
 ) {
-  createRelationUserFeedingPoint(input: $input, condition: $condition) {
+  onCreateRelationUserFeedingPoint(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -777,11 +753,11 @@ mutation CreateRelationUserFeedingPoint(
     owner
   }
 }
-mutation UpdateRelationUserFeedingPoint(
-  $input: UpdateRelationUserFeedingPointInput!
-  $condition: ModelRelationUserFeedingPointConditionInput
+subscription OnUpdateRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
 ) {
-  updateRelationUserFeedingPoint(input: $input, condition: $condition) {
+  onUpdateRelationUserFeedingPoint(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -811,11 +787,11 @@ mutation UpdateRelationUserFeedingPoint(
     owner
   }
 }
-mutation DeleteRelationUserFeedingPoint(
-  $input: DeleteRelationUserFeedingPointInput!
-  $condition: ModelRelationUserFeedingPointConditionInput
+subscription OnDeleteRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
 ) {
-  deleteRelationUserFeedingPoint(input: $input, condition: $condition) {
+  onDeleteRelationUserFeedingPoint(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -845,11 +821,11 @@ mutation DeleteRelationUserFeedingPoint(
     owner
   }
 }
-mutation CreateRelationUserPet(
-  $input: CreateRelationUserPetInput!
-  $condition: ModelRelationUserPetConditionInput
+subscription OnCreateRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
 ) {
-  createRelationUserPet(input: $input, condition: $condition) {
+  onCreateRelationUserPet(filter: $filter, owner: $owner) {
     id
     userId
     petId
@@ -875,11 +851,11 @@ mutation CreateRelationUserPet(
     owner
   }
 }
-mutation UpdateRelationUserPet(
-  $input: UpdateRelationUserPetInput!
-  $condition: ModelRelationUserPetConditionInput
+subscription OnUpdateRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
 ) {
-  updateRelationUserPet(input: $input, condition: $condition) {
+  onUpdateRelationUserPet(filter: $filter, owner: $owner) {
     id
     userId
     petId
@@ -905,11 +881,11 @@ mutation UpdateRelationUserPet(
     owner
   }
 }
-mutation DeleteRelationUserPet(
-  $input: DeleteRelationUserPetInput!
-  $condition: ModelRelationUserPetConditionInput
+subscription OnDeleteRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
 ) {
-  deleteRelationUserPet(input: $input, condition: $condition) {
+  onDeleteRelationUserPet(filter: $filter, owner: $owner) {
     id
     userId
     petId
@@ -935,11 +911,11 @@ mutation DeleteRelationUserPet(
     owner
   }
 }
-mutation CreateMedication(
-  $input: CreateMedicationInput!
-  $condition: ModelMedicationConditionInput
+subscription OnCreateMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
 ) {
-  createMedication(input: $input, condition: $condition) {
+  onCreateMedication(filter: $filter, owner: $owner) {
     id
     name
     petId
@@ -969,11 +945,11 @@ mutation CreateMedication(
     owner
   }
 }
-mutation UpdateMedication(
-  $input: UpdateMedicationInput!
-  $condition: ModelMedicationConditionInput
+subscription OnUpdateMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
 ) {
-  updateMedication(input: $input, condition: $condition) {
+  onUpdateMedication(filter: $filter, owner: $owner) {
     id
     name
     petId
@@ -1003,11 +979,11 @@ mutation UpdateMedication(
     owner
   }
 }
-mutation DeleteMedication(
-  $input: DeleteMedicationInput!
-  $condition: ModelMedicationConditionInput
+subscription OnDeleteMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
 ) {
-  deleteMedication(input: $input, condition: $condition) {
+  onDeleteMedication(filter: $filter, owner: $owner) {
     id
     name
     petId
@@ -1037,11 +1013,11 @@ mutation DeleteMedication(
     owner
   }
 }
-mutation CreateSettings(
-  $input: CreateSettingsInput!
-  $condition: ModelSettingsConditionInput
+subscription OnCreateSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
 ) {
-  createSettings(input: $input, condition: $condition) {
+  onCreateSettings(filter: $filter, owner: $owner) {
     id
     key
     value
@@ -1050,11 +1026,11 @@ mutation CreateSettings(
     owner
   }
 }
-mutation UpdateSettings(
-  $input: UpdateSettingsInput!
-  $condition: ModelSettingsConditionInput
+subscription OnUpdateSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
 ) {
-  updateSettings(input: $input, condition: $condition) {
+  onUpdateSettings(filter: $filter, owner: $owner) {
     id
     key
     value
@@ -1063,11 +1039,11 @@ mutation UpdateSettings(
     owner
   }
 }
-mutation DeleteSettings(
-  $input: DeleteSettingsInput!
-  $condition: ModelSettingsConditionInput
+subscription OnDeleteSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
 ) {
-  deleteSettings(input: $input, condition: $condition) {
+  onDeleteSettings(filter: $filter, owner: $owner) {
     id
     key
     value
@@ -1076,11 +1052,11 @@ mutation DeleteSettings(
     owner
   }
 }
-mutation CreateLanguage(
-  $input: CreateLanguageInput!
-  $condition: ModelLanguageConditionInput
+subscription OnCreateLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
 ) {
-  createLanguage(input: $input, condition: $condition) {
+  onCreateLanguage(filter: $filter, owner: $owner) {
     id
     name
     code
@@ -1092,11 +1068,11 @@ mutation CreateLanguage(
     owner
   }
 }
-mutation UpdateLanguage(
-  $input: UpdateLanguageInput!
-  $condition: ModelLanguageConditionInput
+subscription OnUpdateLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
 ) {
-  updateLanguage(input: $input, condition: $condition) {
+  onUpdateLanguage(filter: $filter, owner: $owner) {
     id
     name
     code
@@ -1108,11 +1084,11 @@ mutation UpdateLanguage(
     owner
   }
 }
-mutation DeleteLanguage(
-  $input: DeleteLanguageInput!
-  $condition: ModelLanguageConditionInput
+subscription OnDeleteLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
 ) {
-  deleteLanguage(input: $input, condition: $condition) {
+  onDeleteLanguage(filter: $filter, owner: $owner) {
     id
     name
     code
@@ -1124,11 +1100,11 @@ mutation DeleteLanguage(
     owner
   }
 }
-mutation CreateLanguagesSetting(
-  $input: CreateLanguagesSettingInput!
-  $condition: ModelLanguagesSettingConditionInput
+subscription OnCreateLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
 ) {
-  createLanguagesSetting(input: $input, condition: $condition) {
+  onCreateLanguagesSetting(filter: $filter, owner: $owner) {
     id
     name
     value
@@ -1139,11 +1115,11 @@ mutation CreateLanguagesSetting(
     owner
   }
 }
-mutation UpdateLanguagesSetting(
-  $input: UpdateLanguagesSettingInput!
-  $condition: ModelLanguagesSettingConditionInput
+subscription OnUpdateLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
 ) {
-  updateLanguagesSetting(input: $input, condition: $condition) {
+  onUpdateLanguagesSetting(filter: $filter, owner: $owner) {
     id
     name
     value
@@ -1154,11 +1130,11 @@ mutation UpdateLanguagesSetting(
     owner
   }
 }
-mutation DeleteLanguagesSetting(
-  $input: DeleteLanguagesSettingInput!
-  $condition: ModelLanguagesSettingConditionInput
+subscription OnDeleteLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
 ) {
-  deleteLanguagesSetting(input: $input, condition: $condition) {
+  onDeleteLanguagesSetting(filter: $filter, owner: $owner) {
     id
     name
     value
@@ -1169,11 +1145,11 @@ mutation DeleteLanguagesSetting(
     owner
   }
 }
-mutation CreateFavourite(
-  $input: CreateFavouriteInput!
-  $condition: ModelFavouriteConditionInput
+subscription OnCreateFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
 ) {
-  createFavourite(input: $input, condition: $condition) {
+  onCreateFavourite(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -1203,11 +1179,11 @@ mutation CreateFavourite(
     owner
   }
 }
-mutation UpdateFavourite(
-  $input: UpdateFavouriteInput!
-  $condition: ModelFavouriteConditionInput
+subscription OnUpdateFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
 ) {
-  updateFavourite(input: $input, condition: $condition) {
+  onUpdateFavourite(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -1237,11 +1213,11 @@ mutation UpdateFavourite(
     owner
   }
 }
-mutation DeleteFavourite(
-  $input: DeleteFavouriteInput!
-  $condition: ModelFavouriteConditionInput
+subscription OnDeleteFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
 ) {
-  deleteFavourite(input: $input, condition: $condition) {
+  onDeleteFavourite(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -1271,11 +1247,11 @@ mutation DeleteFavourite(
     owner
   }
 }
-mutation CreateQuestion(
-  $input: CreateQuestionInput!
-  $condition: ModelQuestionConditionInput
+subscription OnCreateQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
 ) {
-  createQuestion(input: $input, condition: $condition) {
+  onCreateQuestion(filter: $filter, owner: $owner) {
     id
     value
     answer
@@ -1291,11 +1267,11 @@ mutation CreateQuestion(
     owner
   }
 }
-mutation UpdateQuestion(
-  $input: UpdateQuestionInput!
-  $condition: ModelQuestionConditionInput
+subscription OnUpdateQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
 ) {
-  updateQuestion(input: $input, condition: $condition) {
+  onUpdateQuestion(filter: $filter, owner: $owner) {
     id
     value
     answer
@@ -1311,11 +1287,11 @@ mutation UpdateQuestion(
     owner
   }
 }
-mutation DeleteQuestion(
-  $input: DeleteQuestionInput!
-  $condition: ModelQuestionConditionInput
+subscription OnDeleteQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
 ) {
-  deleteQuestion(input: $input, condition: $condition) {
+  onDeleteQuestion(filter: $filter, owner: $owner) {
     id
     value
     answer
@@ -1331,11 +1307,11 @@ mutation DeleteQuestion(
     owner
   }
 }
-mutation CreateBankAccount(
-  $input: CreateBankAccountInput!
-  $condition: ModelBankAccountConditionInput
+subscription OnCreateBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
 ) {
-  createBankAccount(input: $input, condition: $condition) {
+  onCreateBankAccount(filter: $filter, owner: $owner) {
     id
     name
     value
@@ -1349,11 +1325,11 @@ mutation CreateBankAccount(
     updatedAt
   }
 }
-mutation UpdateBankAccount(
-  $input: UpdateBankAccountInput!
-  $condition: ModelBankAccountConditionInput
+subscription OnUpdateBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
 ) {
-  updateBankAccount(input: $input, condition: $condition) {
+  onUpdateBankAccount(filter: $filter, owner: $owner) {
     id
     name
     value
@@ -1367,11 +1343,11 @@ mutation UpdateBankAccount(
     updatedAt
   }
 }
-mutation DeleteBankAccount(
-  $input: DeleteBankAccountInput!
-  $condition: ModelBankAccountConditionInput
+subscription OnDeleteBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
 ) {
-  deleteBankAccount(input: $input, condition: $condition) {
+  onDeleteBankAccount(filter: $filter, owner: $owner) {
     id
     name
     value
