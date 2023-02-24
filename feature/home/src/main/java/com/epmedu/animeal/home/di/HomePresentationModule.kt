@@ -27,8 +27,12 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultL
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTimerHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
+import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
+import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,6 +88,7 @@ internal object HomePresentationModule {
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
         feedingPointHandler: FeedingPointHandler,
+        timerHandler: TimerHandler,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
@@ -93,6 +98,7 @@ internal object HomePresentationModule {
         routeHandler,
         errorHandler,
         feedingPointHandler,
+        timerHandler,
         startFeedingUseCase,
         cancelFeedingUseCase,
         finishFeedingUseCase
@@ -112,6 +118,22 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
+    fun providesTimerHandler(
+        stateDelegate: StateDelegate<HomeState>,
+        routeHandler: RouteHandler,
+        feedingPointHandler: FeedingPointHandler,
+        startTimerUseCase: StartTimerUseCase,
+        disableTimerUseCase: DisableTimerUseCase
+    ): TimerHandler = DefaultTimerHandler(
+        stateDelegate,
+        routeHandler,
+        feedingPointHandler,
+        startTimerUseCase,
+        disableTimerUseCase
+    )
+
+    @ViewModelScoped
+    @Provides
     fun providesErrorHandler(
         stateDelegate: StateDelegate<HomeState>
     ): ErrorHandler = DefaultErrorHandler(stateDelegate)
@@ -124,6 +146,7 @@ internal object HomePresentationModule {
         willFeedHandler: WillFeedHandler,
         feedingHandler: FeedingHandler,
         locationHandler: LocationHandler,
+        timerHandler: TimerHandler,
         gpsHandler: GpsHandler,
         errorHandler: ErrorHandler
     ) = DefaultHomeHandler(
@@ -132,6 +155,7 @@ internal object HomePresentationModule {
         willFeedHandler,
         feedingHandler,
         locationHandler,
+        timerHandler,
         gpsHandler,
         errorHandler
     )

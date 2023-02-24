@@ -13,11 +13,13 @@ enum class FeedStatus(
     val color: Color
 ) {
     GREEN(R.string.feed_status_green, R.drawable.ic_face_happy, CustomColor.StatusGreen),
+    YELLOW(R.string.feed_status_yellow, R.drawable.ic_face_neutral, CustomColor.StatusYellow),
     RED(R.string.feed_status_red, R.drawable.ic_face_upset, CustomColor.StatusRed);
 }
 
 fun AnimalState.toFeedStatus(): FeedStatus =
     when (this) {
         AnimalState.GREEN -> FeedStatus.GREEN
+        AnimalState.YELLOW -> FeedStatus.YELLOW
         AnimalState.RED -> FeedStatus.RED
     }

@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.shared.feature.feeding)
     implementation(projects.shared.feature.feedconfirmation)
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.timer)
 
     implementation(libs.accompanist.permissions)
 

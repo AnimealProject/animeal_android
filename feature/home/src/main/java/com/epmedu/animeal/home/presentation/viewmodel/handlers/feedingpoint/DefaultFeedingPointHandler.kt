@@ -2,6 +2,7 @@ package com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint
 
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
@@ -36,8 +37,9 @@ internal class DefaultFeedingPointHandler(
         }
     }
 
-    override fun hideOtherFeedingPoints(feedingPoint: FeedingPointModel) {
-        updateState { copy(feedingPoints = persistentListOf(feedingPoint)) }
+    override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
+        val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
+        updateState { copy(feedingPoints = persistentListOf(reservedFeedingPoint)) }
     }
 
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {

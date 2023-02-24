@@ -1,9 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.route
 
-import android.os.CountDownTimer
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
-import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest
@@ -16,16 +13,6 @@ internal class DefaultRouteHandler @Inject constructor(
 ) : RouteHandler,
     StateDelegate<HomeState> by stateDelegate {
 
-    private val timer = object : CountDownTimer(HOUR_IN_MILLIS, MINUTE_IN_MILLIS) {
-        override fun onTick(timeLeftInMillis: Long) {
-            handleRouteEvent(FeedingTimerUpdateRequest(timeLeftInMillis))
-        }
-
-        override fun onFinish() {
-            cancel()
-        }
-    }
-
     override fun handleRouteEvent(event: RouteEvent) {
         when (event) {
             is FeedingRouteUpdateRequest -> updateRoute(event)
@@ -33,14 +20,12 @@ internal class DefaultRouteHandler @Inject constructor(
         }
     }
 
-    override fun startRouteAndTimer() {
+    override fun startRoute() {
         updateState { copy(feedingRouteState = FeedingRouteState.Active(), isError = false) }
-        timer.start()
     }
 
-    override fun stopRouteAndTimer() {
+    override fun stopRoute() {
         updateState { copy(feedingRouteState = FeedingRouteState.Disabled) }
-        timer.cancel()
     }
 
     private fun updateRoute(event: FeedingRouteUpdateRequest) {

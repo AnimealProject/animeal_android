@@ -1,5 +1,7 @@
 package com.epmedu.animeal.signup.entercode.presentation.viewmodel
 
+import android.text.format.DateUtils.MINUTE_IN_MILLIS
+import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
@@ -7,6 +9,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.common.timer.tickerFlow
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
@@ -17,7 +20,9 @@ import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,11 +67,13 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private suspend fun launchResendTimer() {
-        for (tick in RESEND_DELAY downTo 1L) {
-            updateState { copy(resendDelay = tick) }
-            delay(1000)
-        }
-        updateState { copy(isResendEnabled = true, resendDelay = 0) }
+        tickerFlow(RESEND_DELAY, SECOND_IN_MILLIS)
+            .onEach {
+                val secondsLeft = it / SECOND_IN_MILLIS
+                updateState { copy(resendDelay = secondsLeft) }
+            }
+            .onCompletion { updateState { copy(isResendEnabled = true, resendDelay = 0) } }
+            .collect()
     }
 
     private suspend fun loadAuthenticationType() {
@@ -138,7 +145,7 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     companion object {
-        const val RESEND_DELAY = 30L
+        const val RESEND_DELAY = MINUTE_IN_MILLIS / 2
 
         private const val CODE_SIZE = 6
 

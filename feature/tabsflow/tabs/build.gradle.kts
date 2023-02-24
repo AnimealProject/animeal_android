@@ -1,6 +1,8 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -16,6 +18,7 @@ dependencies {
     implementation(projects.feature.tabsflow.search)
     implementation(projects.feature.tabsflow.favourites)
     implementation(projects.shared.feature.feedconfirmation)
+    implementation(projects.shared.feature.timer)
 
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
@@ -27,4 +30,7 @@ dependencies {
     implementation(libs.compose.ui.preview)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
