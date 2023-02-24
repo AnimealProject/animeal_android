@@ -8,7 +8,7 @@ internal interface FeedingPointHandler {
 
     suspend fun fetchFeedingPoints()
 
-    fun hideOtherFeedingPoints(feedingPoint: FeedingPointModel)
+    fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel)
 
     fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent)
 }

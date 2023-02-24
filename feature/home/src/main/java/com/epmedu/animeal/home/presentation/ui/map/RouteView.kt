@@ -9,6 +9,7 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.core.MapboxNavigation
@@ -36,11 +37,12 @@ internal fun RouteView(
     }
 
     LaunchedEffect(key1 = state.feedingRouteState) {
-        when (state.feedingRouteState) {
-            FeedingRouteState.Disabled -> {
+        when {
+            state.feedingRouteState is FeedingRouteState.Disabled -> {
                 mapView.removeRoute(mapBoxRouteInitOptions)
             }
-            is FeedingRouteState.Active -> {
+            state.feedingRouteState is FeedingRouteState.Active &&
+                state.timerState is TimerState.Active -> {
                 if (state.feedingRouteState.routeData != null) {
                     drawRoute(state, mapView, mapBoxRouteInitOptions)
                 } else {

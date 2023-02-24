@@ -6,6 +6,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.Feed
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ internal class DefaultHomeHandler @Inject constructor(
     private val willFeedHandler: WillFeedHandler,
     private val feedingHandler: FeedingHandler,
     private val locationHandler: LocationHandler,
+    private val timerHandler: TimerHandler,
     private val gpsHandler: GpsHandler,
     private val errorHandler: ErrorHandler
 ) : FeedingPointHandler by feedingPointHandler,
@@ -23,5 +25,6 @@ internal class DefaultHomeHandler @Inject constructor(
     WillFeedHandler by willFeedHandler,
     FeedingHandler by feedingHandler,
     LocationHandler by locationHandler,
+    TimerHandler by timerHandler,
     GpsHandler by gpsHandler,
     ErrorHandler by errorHandler

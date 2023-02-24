@@ -14,6 +14,7 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateCh
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.RegionChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import java.time.LocalDate
 
@@ -53,6 +54,13 @@ abstract class BaseProfileViewModel(
             }
             is PhoneNumberChanged -> {
                 handlePhoneNumberChangedEvent(event)
+            }
+            is RegionChanged -> {
+                updateState {
+                    copy(
+                        profile = profile.copy(phoneNumberRegion = event.region, phoneNumber = ""),
+                    )
+                }
             }
             is BirthDateChanged -> {
                 val formattedBirthDate = formatBirthDate(event.birthDate)

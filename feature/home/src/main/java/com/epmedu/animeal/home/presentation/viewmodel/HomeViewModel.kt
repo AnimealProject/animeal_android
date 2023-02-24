@@ -16,6 +16,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -25,17 +26,21 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.Feed
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
+import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
+    private val getTimerStateUseCase: GetTimerStateUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
@@ -47,6 +52,7 @@ internal class HomeViewModel @Inject constructor(
     WillFeedHandler by defaultHomeHandler,
     FeedingHandler by defaultHomeHandler,
     LocationHandler by defaultHomeHandler,
+    TimerHandler by defaultHomeHandler,
     GpsHandler by defaultHomeHandler,
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
@@ -57,6 +63,15 @@ internal class HomeViewModel @Inject constructor(
         initialize()
         fetchLocationUpdates()
         viewModelScope.launch { fetchFeedingPoints() }
+        viewModelScope.launch { getTimerState() }
+    }
+
+    private suspend fun getTimerState() {
+        getTimerStateUseCase().collect {
+            updateState {
+                copy(timerState = it)
+            }
+        }
     }
 
     fun handleEvents(event: HomeScreenEvent) {
@@ -66,6 +81,7 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
+            is TimerEvent -> viewModelScope.handleTimerEvent(event)
             is ErrorShowed -> hideError()
         }
     }

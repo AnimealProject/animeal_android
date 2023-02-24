@@ -6,7 +6,7 @@ internal interface RouteHandler {
 
     fun handleRouteEvent(event: HomeScreenEvent.RouteEvent)
 
-    fun startRouteAndTimer()
+    fun startRoute()
 
-    fun stopRouteAndTimer()
+    fun stopRoute()
 }

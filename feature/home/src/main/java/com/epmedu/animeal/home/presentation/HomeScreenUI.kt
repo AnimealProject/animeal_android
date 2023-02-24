@@ -25,15 +25,17 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
+import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.timer.data.model.TimerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.mapbox.maps.MapView
@@ -46,7 +48,7 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onScreenEvent: (HomeScreenEvent) -> Unit
 ) {
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -61,10 +63,35 @@ internal fun HomeScreenUI(
         onScreenEvent(ErrorShowed)
     }
 
-    LaunchedEffect(state.feedingRouteState) {
-        if (state.feedingRouteState !is FeedingRouteState.Disabled && !bottomSheetState.isHiding) {
+    val hideBottomSheet: () -> Unit = {
+        scope.launch {
             bottomSheetState.hide()
         }
+    }
+
+    LaunchedEffect(key1 = state.timerState, key2 = state.feedingRouteState) {
+        when (state.timerState) {
+            is TimerState.Active -> {
+                onScreenEvent(
+                    RouteEvent.FeedingTimerUpdateRequest(
+                        state.timerState.timeLeft
+                    )
+                )
+            }
+            TimerState.Expired -> {
+                hideBottomSheet()
+                onScreenEvent(TimerEvent.Expired)
+            }
+            else -> Unit
+        }
+    }
+
+    if (state.timerState == TimerState.Expired) {
+        FeedingExpiredDialog(
+            onConfirm = {
+                onScreenEvent(TimerEvent.ExpirationAccepted)
+            }
+        )
     }
 
     LaunchedEffect(state.currentFeedingPoint) {
@@ -126,7 +153,7 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent)
+    WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)
 }
 
 @Composable
@@ -134,7 +161,8 @@ private fun WillFeedConfirmationDialog(
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     state: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onHideBottomSheet: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(
@@ -142,6 +170,7 @@ private fun WillFeedConfirmationDialog(
                 onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
                 scope.launch { bottomSheetState.hide() }
                 onScreenEvent(FeedingEvent.Start)
+                onHideBottomSheet()
             },
             onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
         )

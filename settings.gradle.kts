@@ -11,6 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
 
         maven {
             url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
@@ -99,3 +100,4 @@ include(":shared:feature:profile")
 include(":shared:feature:feeding")
 include(":shared:feature:feedconfirmation")
 include(":shared:feature:networkuser")
+include(":shared:feature:timer")
