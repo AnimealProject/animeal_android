@@ -27,6 +27,7 @@ import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProf
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.ProfileFinished
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
@@ -158,13 +159,18 @@ internal class FinishProfileViewModel @Inject constructor(
             saveProfileUseCase(state.profile).collect {
                 updateNetworkProfileUseCase.invoke(
                     profile = state.profile,
-                    onSuccess = {},
+                    onSuccess = {
+                        runBlocking {
+                            sendEvent(
+                                when (authenticationType) {
+                                    AuthenticationType.Mobile -> ProfileFinished
+                                    is AuthenticationType.Facebook -> NavigateToConfirmPhone
+                                }
+                            )
+                        }
+                    },
                     onError = {}
                 )
-                when (authenticationType) {
-                    AuthenticationType.Mobile -> sendEvent(ProfileFinished)
-                    is AuthenticationType.Facebook -> sendEvent(NavigateToConfirmPhone)
-                }
             }
         }
     }
