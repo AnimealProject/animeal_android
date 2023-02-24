@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.epmedu.animeal.tabs.more.profile.ui
 
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -59,9 +62,9 @@ internal fun ProfileContent(
                 style = MaterialTheme.typography.subtitle1,
             )
             ProfileInputForm(
+                modifier = Modifier.padding(top = 24.dp),
                 state = state,
-                onEvent = onInputFormEvent,
-                modifier = Modifier.padding(top = 24.dp)
+                onEvent = onInputFormEvent
             )
         }
         Spacer(modifier = Modifier.weight(1f))

@@ -10,6 +10,6 @@ interface ProfileValidator {
     fun validateName(name: String): NameValidationResult
     fun validateSurname(surname: String): SurnameValidationResult
     fun validateEmail(email: String): EmailValidationResult
-    fun validatePhoneNumber(phoneNumber: String): PhoneNumberValidationResult
+    fun validatePhoneNumber(phoneNumber: String, phoneNumberDigitsCount: IntArray): PhoneNumberValidationResult
     fun validateBirthDate(birthDate: String): BirthDateValidationResult
 }
