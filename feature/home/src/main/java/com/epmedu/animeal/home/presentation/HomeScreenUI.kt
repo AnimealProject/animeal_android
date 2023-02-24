@@ -93,7 +93,7 @@ internal fun HomeScreenUI(
             }
         )
     }
-        
+
     LaunchedEffect(state.currentFeedingPoint) {
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
     }
