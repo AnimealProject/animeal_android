@@ -1339,11 +1339,14 @@ mutation CreateBankAccount(
     id
     name
     value
-    icon
+    cover
+    images
     enabled
+    createdBy
+    updatedBy
+    owner
     createdAt
     updatedAt
-    owner
   }
 }
 mutation UpdateBankAccount(
@@ -1354,11 +1357,14 @@ mutation UpdateBankAccount(
     id
     name
     value
-    icon
+    cover
+    images
     enabled
+    createdBy
+    updatedBy
+    owner
     createdAt
     updatedAt
-    owner
   }
 }
 mutation DeleteBankAccount(
@@ -1369,10 +1375,13 @@ mutation DeleteBankAccount(
     id
     name
     value
-    icon
+    cover
+    images
     enabled
+    createdBy
+    updatedBy
+    owner
     createdAt
     updatedAt
-    owner
   }
 }

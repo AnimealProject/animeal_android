@@ -24,12 +24,14 @@ internal class DefaultFeedingPointHandler(
     EventDelegate<HomeViewModelEvent> by eventDelegate {
 
     override suspend fun fetchFeedingPoints() {
-        getAllFeedingPointsUseCase().collect {
+        getAllFeedingPointsUseCase().collect { domainFeedingPoints ->
+            val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
+                FeedingPointModel(domainFeedingPoint)
+            }
             updateState {
                 copy(
-                    feedingPoints = it.map { feedingPoint ->
-                        FeedingPointModel(feedingPoint)
-                    }.toImmutableList()
+                    currentFeedingPoint = feedingPoints.find { it.id == state.currentFeedingPoint?.id },
+                    feedingPoints = feedingPoints.toImmutableList()
                 )
             }
         }

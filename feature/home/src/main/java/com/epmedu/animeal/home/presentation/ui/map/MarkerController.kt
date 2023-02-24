@@ -19,11 +19,9 @@ class MarkerController(
 
     private val onPointClickListener: (PointAnnotation) -> Boolean = { pointAnnotation ->
         consume {
-            onFeedingPointClick(
-                currentFeedingPoints.single {
-                    pointAnnotation.point == it.coordinates
-                }
-            )
+            currentFeedingPoints.find { pointAnnotation.point == it.coordinates }?.let {
+                onFeedingPointClick(it)
+            }
         }
     }
 

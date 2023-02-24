@@ -6,7 +6,7 @@ package com.epmedu.animeal.extensions
  * @param oldElement Element to be replaced
  * @param newElement Element to replace
  */
-fun <T> List<T>.replaceElement(oldElement: T, newElement: T) = map {
+fun <T : Any> List<T>.replaceElement(oldElement: T, newElement: T) = map {
     when (it) {
         oldElement -> newElement
         else -> it

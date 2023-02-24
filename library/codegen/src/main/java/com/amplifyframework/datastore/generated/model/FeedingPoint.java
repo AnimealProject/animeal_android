@@ -14,6 +14,7 @@ import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.ModelOperation;
 import com.amplifyframework.core.model.annotations.AuthRule;
+import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
@@ -74,11 +75,11 @@ public final class FeedingPoint implements Model {
   private final @ModelField(targetType="String") String updatedBy;
   private final @ModelField(targetType="String") String owner;
   private final @ModelField(targetType="RelationPetFeedingPoint") @HasMany(associatedWith = "feedingPoint", type = RelationPetFeedingPoint.class) List<RelationPetFeedingPoint> pets = null;
-  private final @ModelField(targetType="Category", isRequired = true) @HasOne(associatedWith = "id", type = Category.class) Category category = null;
+  private final @ModelField(targetType="Category") @HasOne(associatedWith = "id", type = Category.class) Category category = null;
   private final @ModelField(targetType="RelationUserFeedingPoint") @HasMany(associatedWith = "feedingPoint", type = RelationUserFeedingPoint.class) List<RelationUserFeedingPoint> users = null;
   private final @ModelField(targetType="Feeding") @HasMany(associatedWith = "feedingPoint", type = Feeding.class) List<Feeding> feedings = null;
   private final @ModelField(targetType="String") String cover;
-  private final @ModelField(targetType="ID", isRequired = true) String feedingPointCategoryId;
+  private final @ModelField(targetType="ID") String feedingPointCategoryId;
   public String getId() {
       return id;
   }
@@ -429,12 +430,7 @@ public final class FeedingPoint implements Model {
   
 
   public interface UpdatedAtStep {
-    FeedingPointCategoryIdStep updatedAt(Temporal.DateTime updatedAt);
-  }
-  
-
-  public interface FeedingPointCategoryIdStep {
-    BuildStep feedingPointCategoryId(String feedingPointCategoryId);
+    BuildStep updatedAt(Temporal.DateTime updatedAt);
   }
   
 
@@ -447,10 +443,11 @@ public final class FeedingPoint implements Model {
     BuildStep updatedBy(String updatedBy);
     BuildStep owner(String owner);
     BuildStep cover(String cover);
+    BuildStep feedingPointCategoryId(String feedingPointCategoryId);
   }
   
 
-  public static class Builder implements NameStep, DescriptionStep, CityStep, StreetStep, AddressStep, PointStep, LocationStep, RegionStep, NeighborhoodStep, DistanceStep, StatusStep, StatusUpdatedAtStep, CreatedAtStep, UpdatedAtStep, FeedingPointCategoryIdStep, BuildStep {
+  public static class Builder implements NameStep, DescriptionStep, CityStep, StreetStep, AddressStep, PointStep, LocationStep, RegionStep, NeighborhoodStep, DistanceStep, StatusStep, StatusUpdatedAtStep, CreatedAtStep, UpdatedAtStep, BuildStep {
     private String id;
     private String name;
     private String description;
@@ -466,13 +463,13 @@ public final class FeedingPoint implements Model {
     private Temporal.DateTime statusUpdatedAt;
     private Temporal.DateTime createdAt;
     private Temporal.DateTime updatedAt;
-    private String feedingPointCategoryId;
     private List<String> images;
     private List<FeedingPointI18n> i18n;
     private String createdBy;
     private String updatedBy;
     private String owner;
     private String cover;
+    private String feedingPointCategoryId;
     @Override
      public FeedingPoint build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -594,16 +591,9 @@ public final class FeedingPoint implements Model {
     }
     
     @Override
-     public FeedingPointCategoryIdStep updatedAt(Temporal.DateTime updatedAt) {
+     public BuildStep updatedAt(Temporal.DateTime updatedAt) {
         Objects.requireNonNull(updatedAt);
         this.updatedAt = updatedAt;
-        return this;
-    }
-    
-    @Override
-     public BuildStep feedingPointCategoryId(String feedingPointCategoryId) {
-        Objects.requireNonNull(feedingPointCategoryId);
-        this.feedingPointCategoryId = feedingPointCategoryId;
         return this;
     }
     
@@ -643,6 +633,12 @@ public final class FeedingPoint implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep feedingPointCategoryId(String feedingPointCategoryId) {
+        this.feedingPointCategoryId = feedingPointCategoryId;
+        return this;
+    }
+    
     /**
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -671,13 +667,13 @@ public final class FeedingPoint implements Model {
         .statusUpdatedAt(statusUpdatedAt)
         .createdAt(createdAt)
         .updatedAt(updatedAt)
-        .feedingPointCategoryId(feedingPointCategoryId)
         .images(images)
         .i18n(i18n)
         .createdBy(createdBy)
         .updatedBy(updatedBy)
         .owner(owner)
-        .cover(cover);
+        .cover(cover)
+        .feedingPointCategoryId(feedingPointCategoryId);
     }
     
     @Override
@@ -751,11 +747,6 @@ public final class FeedingPoint implements Model {
     }
     
     @Override
-     public CopyOfBuilder feedingPointCategoryId(String feedingPointCategoryId) {
-      return (CopyOfBuilder) super.feedingPointCategoryId(feedingPointCategoryId);
-    }
-    
-    @Override
      public CopyOfBuilder images(List<String> images) {
       return (CopyOfBuilder) super.images(images);
     }
@@ -783,6 +774,11 @@ public final class FeedingPoint implements Model {
     @Override
      public CopyOfBuilder cover(String cover) {
       return (CopyOfBuilder) super.cover(cover);
+    }
+    
+    @Override
+     public CopyOfBuilder feedingPointCategoryId(String feedingPointCategoryId) {
+      return (CopyOfBuilder) super.feedingPointCategoryId(feedingPointCategoryId);
     }
   }
   
