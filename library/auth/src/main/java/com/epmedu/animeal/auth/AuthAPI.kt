@@ -2,10 +2,14 @@ package com.epmedu.animeal.auth
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 class AuthAPI {
 
@@ -13,6 +17,31 @@ class AuthAPI {
         private set
 
     val currentUserId get() = Amplify.Auth.currentUser.userId
+
+    private val AWSCognitoAuthSession.isSignedInWithoutErrors
+        get() = isSignedIn &&
+            awsCredentials.type == AuthSessionResult.Type.SUCCESS &&
+            identityId.type == AuthSessionResult.Type.SUCCESS &&
+            userPoolTokens.type == AuthSessionResult.Type.SUCCESS &&
+            userSub.type == AuthSessionResult.Type.SUCCESS
+
+    suspend fun isSignedIn(): Boolean {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.fetchAuthSession(
+                { session ->
+                    resume(
+                        when (session) {
+                            is AWSCognitoAuthSession -> session.isSignedInWithoutErrors
+                            else -> session.isSignedIn
+                        }
+                    )
+                },
+                {
+                    resume(false)
+                }
+            )
+        }
+    }
 
     fun setMobileAuthenticationType() {
         authenticationType = AuthenticationType.Mobile
@@ -92,15 +121,6 @@ class AuthAPI {
             AuthenticationType.Mobile -> signIn(phoneNumber, handler)
             is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
         }
-    }
-
-    fun fetchSession(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.fetchAuthSession(
-            handler::onSuccess,
-            handler::onError,
-        )
     }
 
     fun signOut(

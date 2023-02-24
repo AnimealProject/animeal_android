@@ -1,9 +1,9 @@
 package com.epmedu.animeal.splash.di
 
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.splash.data.SplashRepository
-import com.epmedu.animeal.splash.data.SplashRepositoryImpl
-import com.epmedu.animeal.splash.domain.FetchUserSessionUseCase
+import com.epmedu.animeal.splash.data.repository.SplashRepositoryImpl
+import com.epmedu.animeal.splash.domain.repository.SplashRepository
+import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,7 @@ class SplashModule {
 
     @ViewModelScoped
     @Provides
-    fun provideFetchUserSessionUseCase(
+    fun provideGetIsSignedInUseCase(
         repository: SplashRepository
-    ) = FetchUserSessionUseCase(repository)
+    ) = GetIsSignedInUseCase(repository)
 }
