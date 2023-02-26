@@ -3,8 +3,8 @@ package com.epmedu.animeal.feeding.data.mapper
 import OnUpdateFeedingPointSubscription.OnUpdateFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.foundation.switch.AnimalType
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
+import com.epmedu.animeal.foundation.switch.model.AnimalType
 
 internal fun OnUpdateFeedingPoint.toDomainFeedingPoint() =
     DomainFeedingPoint(
