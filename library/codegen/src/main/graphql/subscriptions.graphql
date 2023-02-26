@@ -1,0 +1,1363 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreatePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
+) {
+  onCreatePet(filter: $filter, owner: $owner) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+subscription OnUpdatePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
+) {
+  onUpdatePet(filter: $filter, owner: $owner) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+subscription OnDeletePet(
+  $filter: ModelSubscriptionPetFilterInput
+  $owner: String
+) {
+  onDeletePet(filter: $filter, owner: $owner) {
+    id
+    name
+    images
+    breed
+    color
+    chipNumber
+    vaccinatedAt
+    yearOfBirth
+    caretaker {
+      fullName
+      email
+      phoneNumber
+    }
+    i18n {
+      locale
+      name
+      breed
+      color
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoints {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    medications {
+      nextToken
+    }
+    users {
+      nextToken
+    }
+    cover
+    petCategoryId
+  }
+}
+subscription OnCreateCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
+) {
+  onCreateCategory(filter: $filter, owner: $owner) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnUpdateCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
+) {
+  onUpdateCategory(filter: $filter, owner: $owner) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnDeleteCategory(
+  $filter: ModelSubscriptionCategoryFilterInput
+  $owner: String
+) {
+  onDeleteCategory(filter: $filter, owner: $owner) {
+    id
+    name
+    icon
+    tag
+    i18n {
+      locale
+      name
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnCreateFeedingPoint {
+  onCreateFeedingPoint {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+subscription OnUpdateFeedingPoint {
+  onUpdateFeedingPoint {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+subscription OnDeleteFeedingPoint {
+  onDeleteFeedingPoint {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+    }
+    location {
+      lat
+      lon
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+    }
+    users {
+      nextToken
+    }
+    feedings {
+      nextToken
+    }
+    cover
+    feedingPointCategoryId
+  }
+}
+subscription OnCreateFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
+) {
+  onCreateFeeding(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+subscription OnUpdateFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
+) {
+  onUpdateFeeding(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+subscription OnDeleteFeeding(
+  $filter: ModelSubscriptionFeedingFilterInput
+  $owner: String
+) {
+  onDeleteFeeding(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    expireAt
+    feedingPointFeedingsId
+  }
+}
+subscription OnCreateFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
+) {
+  onCreateFeedingHistory(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+subscription OnUpdateFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
+) {
+  onUpdateFeedingHistory(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+subscription OnDeleteFeedingHistory(
+  $filter: ModelSubscriptionFeedingHistoryFilterInput
+  $owner: String
+) {
+  onDeleteFeedingHistory(filter: $filter, owner: $owner) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+  }
+}
+subscription OnCreateRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
+) {
+  onCreateRelationPetFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
+) {
+  onUpdateRelationPetFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteRelationPetFeedingPoint(
+  $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
+  $owner: String
+) {
+  onDeleteRelationPetFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    petId
+    feedingPointId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
+) {
+  onCreateRelationUserFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
+) {
+  onUpdateRelationUserFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteRelationUserFeedingPoint(
+  $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
+  $owner: String
+) {
+  onDeleteRelationUserFeedingPoint(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
+) {
+  onCreateRelationUserPet(filter: $filter, owner: $owner) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
+) {
+  onUpdateRelationUserPet(filter: $filter, owner: $owner) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteRelationUserPet(
+  $filter: ModelSubscriptionRelationUserPetFilterInput
+  $owner: String
+) {
+  onDeleteRelationUserPet(filter: $filter, owner: $owner) {
+    id
+    userId
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
+) {
+  onCreateMedication(filter: $filter, owner: $owner) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
+) {
+  onUpdateMedication(filter: $filter, owner: $owner) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteMedication(
+  $filter: ModelSubscriptionMedicationFilterInput
+  $owner: String
+) {
+  onDeleteMedication(filter: $filter, owner: $owner) {
+    id
+    name
+    petId
+    pet {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+    }
+    date
+    i18n {
+      name
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
+) {
+  onCreateSettings(filter: $filter, owner: $owner) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
+) {
+  onUpdateSettings(filter: $filter, owner: $owner) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteSettings(
+  $filter: ModelSubscriptionSettingsFilterInput
+  $owner: String
+) {
+  onDeleteSettings(filter: $filter, owner: $owner) {
+    id
+    key
+    value
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
+) {
+  onCreateLanguage(filter: $filter, owner: $owner) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+subscription OnUpdateLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
+) {
+  onUpdateLanguage(filter: $filter, owner: $owner) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+subscription OnDeleteLanguage(
+  $filter: ModelSubscriptionLanguageFilterInput
+  $owner: String
+) {
+  onDeleteLanguage(filter: $filter, owner: $owner) {
+    id
+    name
+    code
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    direction
+    owner
+  }
+}
+subscription OnCreateLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
+) {
+  onCreateLanguagesSetting(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnUpdateLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
+) {
+  onUpdateLanguagesSetting(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnDeleteLanguagesSetting(
+  $filter: ModelSubscriptionLanguagesSettingFilterInput
+  $owner: String
+) {
+  onDeleteLanguagesSetting(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnCreateFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
+) {
+  onCreateFavourite(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
+) {
+  onUpdateFavourite(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
+) {
+  onDeleteFavourite(filter: $filter, owner: $owner) {
+    id
+    userId
+    feedingPointId
+    feedingPoint {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
+) {
+  onCreateQuestion(filter: $filter, owner: $owner) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnUpdateQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
+) {
+  onUpdateQuestion(filter: $filter, owner: $owner) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnDeleteQuestion(
+  $filter: ModelSubscriptionQuestionFilterInput
+  $owner: String
+) {
+  onDeleteQuestion(filter: $filter, owner: $owner) {
+    id
+    value
+    answer
+    i18n {
+      locale
+      value
+      answer
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+  }
+}
+subscription OnCreateBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
+) {
+  onCreateBankAccount(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    cover
+    images
+    enabled
+    createdBy
+    updatedBy
+    owner
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
+) {
+  onUpdateBankAccount(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    cover
+    images
+    enabled
+    createdBy
+    updatedBy
+    owner
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteBankAccount(
+  $filter: ModelSubscriptionBankAccountFilterInput
+  $owner: String
+) {
+  onDeleteBankAccount(filter: $filter, owner: $owner) {
+    id
+    name
+    value
+    cover
+    images
+    enabled
+    createdBy
+    updatedBy
+    owner
+    createdAt
+    updatedAt
+  }
+}

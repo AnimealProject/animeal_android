@@ -3,7 +3,7 @@ package com.epmedu.animeal.profile.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.DAY_MONTH_COMMA_YEAR_FORMATTER
+import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
@@ -14,6 +14,7 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateCh
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.RegionChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import java.time.LocalDate
 
@@ -54,6 +55,13 @@ abstract class BaseProfileViewModel(
             is PhoneNumberChanged -> {
                 handlePhoneNumberChangedEvent(event)
             }
+            is RegionChanged -> {
+                updateState {
+                    copy(
+                        profile = profile.copy(phoneNumberRegion = event.region, phoneNumber = ""),
+                    )
+                }
+            }
             is BirthDateChanged -> {
                 val formattedBirthDate = formatBirthDate(event.birthDate)
                 updateState {
@@ -70,6 +78,6 @@ abstract class BaseProfileViewModel(
 
     private fun formatBirthDate(birthDate: LocalDate) = formatDateToString(
         date = birthDate,
-        formatter = DAY_MONTH_COMMA_YEAR_FORMATTER
+        formatter = DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
     )
 }

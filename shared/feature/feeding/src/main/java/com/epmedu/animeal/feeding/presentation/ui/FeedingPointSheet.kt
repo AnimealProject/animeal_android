@@ -1,10 +1,24 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -19,13 +33,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.domain.model.Feeder
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.switch.model.AnimalType
+import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.text.MarkupText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
@@ -142,10 +156,11 @@ internal fun FeedingPointDetails(
             LocalContentColor provides MaterialTheme.colors.onSurface,
             LocalContentAlpha provides scrimAlpha,
         ) {
-            Text(
+            MarkupText(
                 text = description,
                 style = MaterialTheme.typography.body2,
                 overflow = TextOverflow.Ellipsis,
+                alpha = scrimAlpha
             )
             FeedingPointLastFeeder(
                 name = lastFeederName,
@@ -229,17 +244,23 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
     AnimealTheme {
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
-                -1,
-                text.take(30),
+                id = "",
+                title = text.take(30),
                 feedStatus = FeedStatus.RED,
-                description = text.take(200),
+                description = "Ordered list : <ol> <li>first item</li> <li>second item</li> " +
+                    "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +
+                    "<h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by" +
+                    " <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph " +
+                    "</p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and " +
+                    "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
+                    " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
+                    " <li>third item</li> </ul> Text outside markup tags",
                 isFavourite = true,
                 lastFeeder = Feeder(
-                    id = -1,
+                    id = "-1",
                     name = text.take(20),
                     time = "14 hours ago"
                 ),
-                animalPriority = AnimalPriority.HIGH,
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)

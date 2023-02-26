@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(projects.library.auth)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
@@ -19,6 +20,7 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.networkuser)
 
     implementation(libs.androidx.viewmodel)
 

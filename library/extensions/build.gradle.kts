@@ -8,6 +8,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.library.common)
+    implementation(projects.library.resources)
+
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.appcompat)

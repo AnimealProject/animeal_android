@@ -9,11 +9,11 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberPrefixKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
-import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.Region
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -30,7 +30,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
             Profile(
                 name = preferences[nameKey] ?: EMPTY_STRING,
                 surname = preferences[surnameKey] ?: EMPTY_STRING,
-                phoneNumberPrefix = preferences[phoneNumberPrefixKey] ?: PHONE_NUMBER_PREFIX,
+                phoneNumberRegion = Region.valueOf(preferences[phoneNumberRegionKey] ?: Region.GE.name),
                 phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING,
                 email = preferences[emailKey] ?: EMPTY_STRING,
                 birthDate = preferences[birthDateKey] ?: EMPTY_STRING,
@@ -43,6 +43,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
             dataStore.edit { preference ->
                 preference[nameKey] = profile.name
                 preference[surnameKey] = profile.surname
+                preference[phoneNumberKey] = profile.phoneNumber
                 preference[emailKey] = profile.email
                 preference[birthDateKey] = profile.birthDate
             }

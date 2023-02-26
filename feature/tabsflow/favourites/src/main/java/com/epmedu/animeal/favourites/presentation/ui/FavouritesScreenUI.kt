@@ -2,7 +2,14 @@ package com.epmedu.animeal.favourites.presentation.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +30,6 @@ import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalPriority
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -228,14 +234,13 @@ private fun FavouritesScreenPreview() {
     val title = "FeedSpot"
     val favourites = listOf(
         FeedingPoint(
-            id = 0,
+            id = "0",
             title = title,
             isFavourite = true,
-            animalPriority = AnimalPriority.HIGH,
             animalStatus = AnimalState.RED,
             animalType = AnimalType.Dogs,
             description = "Hungry dog",
-            lastFeeder = Feeder(id = 0, "Fred", "12:00"),
+            lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
         ),
     )

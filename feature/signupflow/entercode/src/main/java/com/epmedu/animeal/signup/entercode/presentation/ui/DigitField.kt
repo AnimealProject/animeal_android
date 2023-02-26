@@ -1,13 +1,19 @@
 package com.epmedu.animeal.signup.entercode.presentation.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,14 +41,18 @@ internal fun DigitField(
                 value.isEmpty() -> onDigitRemove()
             }
         },
-        modifier = modifier.size(width = 49.dp, height = 53.dp),
+        modifier = modifier
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+            .background(color = MaterialTheme.colors.background)
+            .size(width = 49.dp, height = 53.dp),
         textStyle = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center, lineHeight = 34.sp),
         isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = LocalContentColor.current,
-            focusedBorderColor = Color.Gray
+            focusedBorderColor = Color.White,
+            unfocusedBorderColor = Color.White
         ),
         shape = RoundedCornerShape(8.dp),
         customPadding = 8.dp

@@ -1,14 +1,19 @@
 package com.epmedu.animeal.profile.presentation.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.flagEmoji
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
@@ -17,12 +22,14 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumber
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
+import com.epmedu.animeal.resources.R
 
 @Composable
 fun ProfileInputForm(
     state: ProfileState,
     onEvent: (ProfileInputFormEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCountryClick: (() -> Unit)? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val isFormEnabled = state.formState != READ_ONLY
@@ -55,14 +62,7 @@ fun ProfileInputForm(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 onDone = { focusManager.clearFocus() }
             )
-            PhoneNumberInput(
-                value = phoneNumber,
-                prefix = profile.phoneNumberPrefix,
-                onValueChange = { onEvent(PhoneNumberChanged(it)) },
-                error = phoneNumberError.asString(),
-                isEnabled = isPhoneNumberEnabled,
-                onDone = { focusManager.clearFocus() },
-            )
+            PhoneInput(onEvent, onCountryClick, focusManager)
             BirthDateInput(
                 value = profile.birthDate,
                 onValueChange = { onEvent(BirthDateChanged(it)) },
@@ -73,13 +73,38 @@ fun ProfileInputForm(
     }
 }
 
+@Composable
+private fun ProfileState.PhoneInput(
+    onEvent: (ProfileInputFormEvent) -> Unit,
+    onCountryClick: (() -> Unit)? = null,
+    focusManager: FocusManager
+) {
+    PhoneNumberInput(
+        value = phoneNumber,
+        prefix = prefix,
+        flag = when (region) {
+            Region.GE -> Flag(R.drawable.ic_georgia)
+            else -> Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())
+        },
+        format = format,
+        numberLength = numberLength,
+        useNumberFormatter = region == Region.GE,
+        onValueChange = { onEvent(PhoneNumberChanged(it)) },
+        error = phoneNumberError.asString(),
+        isEnabled = isPhoneNumberEnabled,
+        isFlagClickable = isPhoneNumberEnabled,
+        onCountryClick = onCountryClick,
+        onDone = { focusManager.clearFocus() },
+    )
+}
+
 @AnimealPreview
 @Composable
 private fun ProfileInputFormPreview() {
     com.epmedu.animeal.foundation.theme.AnimealTheme {
         ProfileInputForm(
             state = ProfileState(),
-            onEvent = {}
+            {}
         )
     }
 }

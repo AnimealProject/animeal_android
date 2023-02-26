@@ -72,13 +72,14 @@ dependencies {
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
 
-    implementation(libs.amplify.core)
+    implementation(libs.amplify.aws.api)
     implementation(libs.amplify.aws.auth.cognito)
+    implementation(libs.amplify.core)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
     implementation(libs.androidx.datastore)
-    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 

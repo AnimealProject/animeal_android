@@ -19,6 +19,9 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.networkuser)
+
     implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.androidx.datastore)

@@ -38,6 +38,8 @@
     <string name="location_permission_denied">Location permission is permanently denied. Navigate to app settings to enable it.</string>
     <string name="location_rationale_text">Location permission is needed to access Maps!</string>
 
+    <string name="something_went_wrong">Something went wrong</string>
+
     <string name="navigate_to_app_settings">Navigate to app settings</string>
     <string name="request_permission">Request permission</string>
 
@@ -71,19 +73,21 @@
     <string name="profile_logout_success">You have successfully logged out</string>
 
     <string name="feed_status_green">Newly fed</string>
+    <string name="feed_status_yellow">Feeding in progress</string>
     <string name="feed_status_red">There is no food</string>
 
     <string name="account_delete">Delete Account</string>
 
     <string name="onboarding_image_title">Take care of pets</string>
     <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>
+    <string name="onboarding_facebook_sign_in_error">Error during Facebook sign-in occurred, please check network connection and try again</string>
 
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
-
-    <string name="faq_page_app_version">App version: %s</string>
+    <string name="feeding_timer_expired">Your feeding time is over. You can book a new feeding from the home page.</string>
 
     <string name="done">Done</string>
     <string name="ok">OK</string>
+    <string name="got_it">Got it</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
     <string name="discard">Discard</string>
@@ -98,7 +102,25 @@
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
     <string name="back_to_home">Back to home</string>
+    <string name="calculating_route">Calculating route…</string>
+    <string name="routes_not_found">No routes available</string>
+    <string name="routes_failed">Route request failed</string>
+    <string name="routes_cancelled">Route request cancelled</string>
 
     <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
+    
+    <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
+    <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at example@gmail.com</string>
+
+    <string name="kilometers">km</string>
+    <string name="meters">m</string>
+    <string name="hours">h</string>
+    <string name="minutes">min</string>
+
+    <string name="text_copy_label">Animeal text</string>
+
+    <string name="donation_subtitle">We can leave a donation for animals and in support of the developers</string>
+    <string name="donation_thanks">Thank you for donate!</string>
+    <string name="donation_copy_toast">Copied</string>
 
 </resources>

@@ -2,58 +2,37 @@ package com.epmedu.animeal.splash.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amplifyframework.auth.AuthSession
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.splash.domain.FetchUserSessionUseCase
-import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToHome
-import com.epmedu.animeal.splash.presentation.viewmodel.SplashEvent.NavigateToOnboarding
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.Home
+import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.Onboarding
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-    private val fetchUserSessionUseCase: FetchUserSessionUseCase,
-) :
-    ViewModel(),
-    EventDelegate<SplashEvent> by DefaultEventDelegate() {
+internal class SplashViewModel @Inject constructor(
+    private val getIsSignedInUseCase: GetIsSignedInUseCase
+) : ViewModel(),
+    StateDelegate<SplashState> by DefaultStateDelegate(SplashState()) {
 
-    fun verifyProfileSaved() {
+    init {
+        checkIfUserIsSignedIn()
+    }
+
+    private fun checkIfUserIsSignedIn() {
         viewModelScope.launch {
-            fetchUserSessionUseCase(
-                ::verifyProfileSuccess
-            ) {
-                navigateToOnboarding()
-            }
+            navigateToNextDirection(
+                when {
+                    getIsSignedInUseCase() -> Home
+                    else -> Onboarding
+                }
+            )
         }
     }
 
-    private fun verifyProfileSuccess(result: Any?) {
-        if (result is AuthSession) {
-            processSession(result)
-        } else {
-            navigateToOnboarding()
-        }
-    }
-
-    private fun processSession(session: AuthSession) {
-        if (session.isSignedIn) {
-            navigateToHome()
-        } else {
-            navigateToOnboarding()
-        }
-    }
-
-    private fun navigateToHome() {
-        viewModelScope.launch {
-            sendEvent(NavigateToHome)
-        }
-    }
-
-    private fun navigateToOnboarding() {
-        viewModelScope.launch {
-            sendEvent(NavigateToOnboarding)
-        }
+    private fun navigateToNextDirection(destination: SplashNextDestination) {
+        updateState { copy(nextDestination = destination) }
     }
 }

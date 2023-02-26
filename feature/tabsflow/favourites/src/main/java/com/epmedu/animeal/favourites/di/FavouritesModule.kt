@@ -1,7 +1,7 @@
 package com.epmedu.animeal.favourites.di
 
-import com.epmedu.animeal.favourites.data.FavouritesRepository
-import com.epmedu.animeal.favourites.data.FavouritesRepositoryImpl
+import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +14,8 @@ internal object FavouritesModule {
 
     @ViewModelScoped
     @Provides
-    fun provideFeedSpotRepository(): FavouritesRepository = FavouritesRepositoryImpl()
+    fun provideGetFavouriteFeedingPointsUseCase(
+        feedingPointRepository: FeedingPointRepository
+    ): GetFavouriteFeedingPointsUseCase =
+        GetFavouriteFeedingPointsUseCase(feedingPointRepository)
 }

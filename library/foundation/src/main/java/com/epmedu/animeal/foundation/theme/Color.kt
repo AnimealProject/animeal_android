@@ -24,12 +24,14 @@ object CustomColor {
     val Orange = Color(0xFFFB7A2C)
     val LynxWhite = Color(0xFFF7F7F7)
     val DarkerGrey = Color(0xFF99A8B0)
+    val DarkestGrey = Color(0xFF262626)
     val Error = Color(0xFFF04E45)
     val HitGrey = Color(0xFF99A8B0)
 
     val Porcelain = Color(0xFFF2F2F2)
 
     val StatusGreen = Color(0xFF3BC372)
+    val StatusYellow = Color(0xFFF1A000)
     val StatusRed = Color(0xFFF64E53)
     val SeaSerpent = AnimealColor.Light.SeaSerpent
     val VeryLightGray = Color(0xFFF0F0F0)

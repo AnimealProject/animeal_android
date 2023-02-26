@@ -23,7 +23,7 @@ fun HomeScreen() {
     HomeScreenUI(
         state = state,
         bottomSheetState = bottomSheetState,
-        onScreenEvent = viewModel::handleEvents,
+        onScreenEvent = viewModel::handleEvents
     )
 
     LaunchedEffect(Unit) {
@@ -31,7 +31,9 @@ fun HomeScreen() {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
                     launch {
-                        if (bottomSheetState.isHidden) bottomSheetState.show()
+                        if (bottomSheetState.isHidden) {
+                            bottomSheetState.show()
+                        }
                     }
                 }
             }

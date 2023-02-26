@@ -1,12 +1,16 @@
 package com.epmedu.animeal.foundation.common.validation.validator
 
-import com.epmedu.animeal.foundation.common.validation.Constants.PHONE_NUMBER_LENGTH
+import android.telephony.PhoneNumberUtils
 import com.epmedu.animeal.foundation.common.validation.result.PhoneNumberValidationResult.TooShortPhoneNumberError
 import com.epmedu.animeal.foundation.common.validation.result.PhoneNumberValidationResult.ValidPhoneNumber
 
 internal object PhoneNumberValidator {
-    fun validate(value: String) = when {
-        value.length < PHONE_NUMBER_LENGTH -> TooShortPhoneNumberError
+    fun validate(value: String, phoneNumberDigitsCount: IntArray) = when {
+        !value.isValidPhoneNumber(phoneNumberDigitsCount) -> TooShortPhoneNumberError
         else -> ValidPhoneNumber
+    }
+
+    private fun String.isValidPhoneNumber(phoneNumberDigitsCount: IntArray): Boolean {
+        return phoneNumberDigitsCount.contains(length) && PhoneNumberUtils.isGlobalPhoneNumber(this)
     }
 }

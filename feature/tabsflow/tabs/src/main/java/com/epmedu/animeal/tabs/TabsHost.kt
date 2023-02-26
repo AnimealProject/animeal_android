@@ -2,8 +2,14 @@ package com.epmedu.animeal.tabs
 
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -20,9 +26,14 @@ import com.epmedu.animeal.tabs.more.MoreHost
 import com.epmedu.animeal.tabs.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
+import com.epmedu.animeal.tabs.viewmodel.TabsViewModel
+import com.epmedu.animeal.timer.data.model.TimerState
 
 @Composable
 fun TabsHost() {
+    val viewModel = hiltViewModel<TabsViewModel>()
+    val state by viewModel.stateFlow.collectAsState()
+
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -30,6 +41,7 @@ fun TabsHost() {
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility
     }
+
     val onNavigate: (TabsRoute) -> Unit = { route ->
         navigationController.navigate(route.name) {
             navigationController.graph.startDestinationRoute?.let { route ->
@@ -39,6 +51,8 @@ fun TabsHost() {
             restoreState = true
         }
     }
+
+    if (state is TimerState.Expired) onNavigate(TabsRoute.Home)
 
     Scaffold(
         isFloatingActionButtonDocked = true,
@@ -73,7 +87,9 @@ fun TabsHost() {
 }
 
 @Composable
-private fun NavigationTabs(navigationController: NavHostController) {
+private fun NavigationTabs(
+    navigationController: NavHostController,
+) {
     ScreenNavHost(
         navController = navigationController,
         startDestination = NavigationTab.Home.route.name

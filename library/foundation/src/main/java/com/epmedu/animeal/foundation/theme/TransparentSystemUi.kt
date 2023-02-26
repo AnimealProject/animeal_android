@@ -1,6 +1,7 @@
 package com.epmedu.animeal.foundation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -12,6 +13,7 @@ fun TransparentSystemUi(
     content: @Composable () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
+    val colors = MaterialTheme.colors
 
     LaunchedEffect(Unit) {
         systemUiController.run {
@@ -19,7 +21,7 @@ fun TransparentSystemUi(
                 color = Color.Transparent
             )
             setSystemBarsColor(
-                color = Color.Transparent,
+                color = colors.background,
                 darkIcons = darkTheme.not()
             )
         }
