@@ -80,8 +80,9 @@ jobs:
           files: "app/animeal_key_store.jks"
 
       - name: Increment build number 
-        run: ./increment.sh    
-        shell: bash                 
+        run: |
+           ./increment.sh    
+           echo "MAJOR_VERSION=dev.$MAJOR_VERSION" >> $GITHUB_ENV # variable redefinition for dev build                 
 
       - name: Build release APK DEV env
         run: ./gradlew clean assembleRelease
@@ -151,15 +152,19 @@ jobs:
           tag: test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: variable redefinition 
+        run: |
+           ./increment.sh    
+           echo "MAJOR_VERSION=test.$MAJOR_VERSION" >> $GITHUB_ENV # variable redefinition for test build  
 
-     # - name: Firebase App Distribution TEST env
-     #   uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
-     #   with:
-     #     appId: ${{secrets.FIREBASE_APP_ID}}
-     #     serviceCredentialsFile: service_account.json
-     #     groups: qa_team
-     #     file: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-      
+      - name: Firebase App Distribution TEST env
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFile: service_account.json
+          groups: qa_team
+          file: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk 
       # End
       
       - name: Commit files
