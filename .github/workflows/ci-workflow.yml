@@ -57,8 +57,8 @@ jobs:
         run: |
           mkdir -p app/src/main/res/raw
 
-          cat android-keystore/amplify-keys/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
-          cat android-keystore/amplify-keys/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
 
       - name: Setup Java 11
         uses: actions/setup-java@v2
