@@ -111,7 +111,7 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
-          groups: qa_team
+          groups: developers
           file: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       
       # Start build for test env
@@ -151,13 +151,13 @@ jobs:
           name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
           
-     # - name: Firebase App Distribution TEST env
-     #   uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
-     #   with:
-     #     appId: ${{secrets.FIREBASE_APP_ID}}
-     #     serviceCredentialsFile: service_account.json
-     #     groups: qa_team
-     #     file: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk 
+      - name: Firebase App Distribution TEST env
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFile: service_account.json
+          groups: qa_team
+          file: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk 
       # End
       
       - name: Commit files
