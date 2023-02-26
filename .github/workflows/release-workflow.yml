@@ -80,8 +80,7 @@ jobs:
           files: "app/animeal_key_store.jks"
 
       - name: Increment build number 
-        run: ./increment.sh
-           
+        run: ./increment.sh    
         shell: bash                 
 
       - name: Build release APK DEV env
@@ -96,6 +95,14 @@ jobs:
         with:
           name: app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           path: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+
+      - name: Create release Tag DEV env
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Google Service Account.json
         run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
@@ -137,6 +144,14 @@ jobs:
           name: app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           path: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
+      - name: Create release Tag TEST env
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
      # - name: Firebase App Distribution TEST env
      #   uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
      #   with:
@@ -159,18 +174,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
 
-      - name: Create release Tag DEV env
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          tag: dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          name: Release dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create release Tag TEST env
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: app/build/outputs/apk/release/app-release-test-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          tag: test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          token: ${{ secrets.GITHUB_TOKEN }}
