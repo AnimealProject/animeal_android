@@ -5,7 +5,9 @@ import com.epmedu.animeal.profile.data.model.Profile
 
 interface NetworkRepository {
 
-    suspend fun fetchNetworkUserAttributes(authRequestHandler: AuthRequestHandler)
+    suspend fun isPhoneNumberVerified(): Boolean
+
+    suspend fun getNetworkProfile(): Profile?
 
     suspend fun updateNetworkUserAttributes(profile: Profile, authRequestHandler: AuthRequestHandler)
 

@@ -3,7 +3,6 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -38,7 +37,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -47,10 +45,6 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesStateDelegate(): StateDelegate<HomeState> = DefaultStateDelegate(HomeState())
-
-    @ViewModelScoped
-    @Provides
-    fun providesActionDelegate(): ActionDelegate = DefaultActionDelegate(dispatchers = Dispatchers)
 
     @ViewModelScoped
     @Provides

@@ -2,16 +2,23 @@ package com.epmedu.animeal.auth
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 class UserAttributesAPI {
 
-    fun fetchUserAttributes(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.fetchUserAttributes(
-            handler::onSuccess,
-            handler::onError,
-        )
+    suspend fun fetchUserAttributes(): ApiResult<List<AuthUserAttribute>> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.fetchUserAttributes(
+                { userAttributes ->
+                    resume(ApiResult.Success(userAttributes))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 
     fun updateUserAttributes(

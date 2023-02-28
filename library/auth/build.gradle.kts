@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.library.common)
     implementation(projects.library.extensions)
 
     implementation(platform(libs.androidx.compose.bom))
