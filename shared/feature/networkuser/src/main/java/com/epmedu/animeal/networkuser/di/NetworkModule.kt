@@ -2,7 +2,6 @@ package com.epmedu.animeal.networkuser.di
 
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.UserAttributesAPI
-import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import com.epmedu.animeal.networkuser.data.repository.NetworkRepositoryImpl
@@ -26,14 +25,12 @@ object NetworkModule {
     fun provideNetworkRepository(
         authAPI: AuthAPI,
         userAttributesAPI: UserAttributesAPI,
-        authUserAttributesToIsPhoneVerifiedMapper: AuthUserAttributesToIsPhoneVerifiedMapper,
         authUserAttributesToProfileMapper: AuthUserAttributesToProfileMapper,
         profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
     ): NetworkRepository =
         NetworkRepositoryImpl(
             authAPI,
             userAttributesAPI,
-            authUserAttributesToIsPhoneVerifiedMapper,
             authUserAttributesToProfileMapper,
             profileToAuthUserMapper,
         )
