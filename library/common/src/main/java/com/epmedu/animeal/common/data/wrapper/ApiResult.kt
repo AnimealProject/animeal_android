@@ -1,4 +1,4 @@
-package com.epmedu.animeal.api.wrapper
+package com.epmedu.animeal.common.data.wrapper
 
 sealed interface ApiResult<out T> {
 

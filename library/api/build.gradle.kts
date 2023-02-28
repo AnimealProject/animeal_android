@@ -24,6 +24,7 @@ animealPlugin {
 
 dependencies {
     implementation(projects.library.codegen)
+    implementation(projects.library.common)
     implementation(projects.library.extensions)
 
     implementation(libs.amplify.aws.api)

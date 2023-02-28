@@ -13,7 +13,7 @@ import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.extensions.getModelList
 import com.epmedu.animeal.api.extensions.performMutation
 import com.epmedu.animeal.api.extensions.subscribe
-import com.epmedu.animeal.api.wrapper.ApiResult
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 internal class FeedingPointApiImpl(

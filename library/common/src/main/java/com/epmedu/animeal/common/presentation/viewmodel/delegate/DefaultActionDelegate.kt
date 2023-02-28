@@ -28,6 +28,12 @@ class DefaultActionDelegate(
         }
     }
 
+    override suspend fun <T> performAction(action: suspend () -> T): T {
+        return coroutineScope {
+            withContext(dispatchers.IO) { action() }
+        }
+    }
+
     private companion object {
         const val LOG_TAG = "DefaultActionDelegate"
     }

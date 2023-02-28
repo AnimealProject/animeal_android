@@ -1,11 +1,14 @@
 package com.epmedu.animeal.networkuser.di
 
+import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.UserAttributesAPI
+import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import com.epmedu.animeal.networkuser.data.repository.NetworkRepositoryImpl
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
-import com.epmedu.animeal.networkuser.domain.usecase.FetchNetworkUserAttributesUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import dagger.Module
 import dagger.Provides
@@ -20,19 +23,29 @@ object NetworkModule {
     @ViewModelScoped
     @Provides
     fun provideNetworkRepository(
-        profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
+        authAPI: AuthAPI,
         userAttributesAPI: UserAttributesAPI,
+        authUserAttributesToProfileMapper: AuthUserAttributesToProfileMapper,
+        profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
     ): NetworkRepository =
         NetworkRepositoryImpl(
+            authAPI,
+            userAttributesAPI,
+            authUserAttributesToProfileMapper,
             profileToAuthUserMapper,
-            userAttributesAPI
         )
 
     @ViewModelScoped
     @Provides
-    fun provideFetchNetworkUserAttributesUseCase(
+    fun provideGetIsPhoneNumberVerifiedUseCase(
         repository: NetworkRepository,
-    ) = FetchNetworkUserAttributesUseCase(repository)
+    ) = GetIsPhoneNumberVerifiedUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetNetworkProfileUseCase(
+        repository: NetworkRepository,
+    ) = GetNetworkProfileUseCase(repository)
 
     @ViewModelScoped
     @Provides

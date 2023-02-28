@@ -19,8 +19,8 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.Subscription
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.fetcher.ResponseFetcher
-import com.epmedu.animeal.api.wrapper.ApiResult
 import com.epmedu.animeal.api.wrapper.ResponseError
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
