@@ -26,6 +26,8 @@ class MarkerController(
     }
 
     fun drawMarkers(feedingPoints: List<FeedingPointModel>) {
+        val pointAnnotationOptionsList = mutableListOf<PointAnnotationOptions>()
+
         pointAnnotationManager.deleteAll()
         pointAnnotationManager.removeClickListener(onPointClickListener)
 
@@ -39,8 +41,10 @@ class MarkerController(
                 .withPoint(feedingPoint.coordinates)
                 .withIconImage(icon)
 
-            pointAnnotationManager.create(pointAnnotationOptions)
+            pointAnnotationOptionsList.add(pointAnnotationOptions)
         }
+        pointAnnotationManager.create(pointAnnotationOptionsList)
+
         pointAnnotationManager.addClickListener(onPointClickListener)
     }
 }
