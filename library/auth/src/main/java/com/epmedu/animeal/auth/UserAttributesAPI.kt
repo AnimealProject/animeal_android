@@ -21,23 +21,32 @@ class UserAttributesAPI {
         }
     }
 
-    fun updateUserAttributes(
+    suspend fun updateUserAttributes(
         userAttributes: List<AuthUserAttribute>,
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.updateUserAttributes(
-            userAttributes,
-            handler::onSuccess,
-            handler::onError,
-        )
+    ): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.updateUserAttributes(
+                userAttributes,
+                {
+                    resume(ApiResult.Success(Unit))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 
-    fun deleteUser(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.deleteUser(
-            handler::onSuccess,
-            handler::onError,
-        )
+    suspend fun deleteUser(): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.deleteUser(
+                {
+                    resume(ApiResult.Success(Unit))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 }
