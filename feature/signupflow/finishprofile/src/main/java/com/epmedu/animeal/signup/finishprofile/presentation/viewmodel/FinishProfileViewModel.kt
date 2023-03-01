@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -37,6 +38,7 @@ internal class FinishProfileViewModel @Inject constructor(
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
     private val updateNetworkProfileUseCase: UpdateNetworkProfileUseCase,
+    private val clearProfileUseCase: ClearProfileUseCase,
     private val deleteNetworkUserUseCase: DeleteNetworkUserUseCase,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
@@ -82,7 +84,10 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             copy(
                 profile = profile.copy(phoneNumber = event.phoneNumber),
-                phoneNumberError = validatePhoneNumberUseCase(event.phoneNumber, state.phoneNumberDigitsCount)
+                phoneNumberError = validatePhoneNumberUseCase(
+                    event.phoneNumber,
+                    state.phoneNumberDigitsCount
+                )
             )
         }
     }
@@ -116,7 +121,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun logout() {
         viewModelScope.launch {
             logOutUseCase(
-                onSuccess = { navigateBack() },
+                onSuccess = {
+                    clearProfileUseCase()
+                    navigateBack()
+                },
                 onError = {}
             )
         }
@@ -125,7 +133,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun removeUnfinishedNetworkUser() {
         viewModelScope.launch {
             deleteNetworkUserUseCase(
-                onSuccess = { navigateBack() },
+                onSuccess = {
+                    clearProfileUseCase()
+                    navigateBack()
+                },
                 onError = {}
             )
         }
@@ -147,7 +158,10 @@ internal class FinishProfileViewModel @Inject constructor(
                     nameError = validateNameUseCase(name),
                     surnameError = validateSurnameUseCase(surname),
                     emailError = validateEmailUseCase(email),
-                    phoneNumberError = validatePhoneNumberUseCase(phoneNumber, state.phoneNumberDigitsCount),
+                    phoneNumberError = validatePhoneNumberUseCase(
+                        phoneNumber,
+                        state.phoneNumberDigitsCount
+                    ),
                     birthDateError = validateBirthDateUseCase(birthDate)
                 )
             }
