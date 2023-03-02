@@ -2,6 +2,7 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
@@ -34,6 +35,7 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val getProfileUseCase: GetProfileUseCase,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
@@ -52,6 +54,7 @@ internal class FinishProfileViewModel @Inject constructor(
     validateEmailUseCase,
     validateBirthDateUseCase
 ),
+    ActionDelegate by actionDelegate,
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
     private var authenticationType: AuthenticationType = AuthenticationType.Mobile
@@ -132,7 +135,8 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun removeUnfinishedNetworkUser() {
         viewModelScope.launch {
-            deleteNetworkUserUseCase(
+            performAction(
+                action = deleteNetworkUserUseCase::invoke,
                 onSuccess = {
                     clearProfileUseCase()
                     navigateBack()
@@ -171,8 +175,8 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun saveProfile() {
         viewModelScope.launch {
             saveProfileUseCase(state.profile).collect {
-                updateNetworkProfileUseCase.invoke(
-                    profile = state.profile,
+                performAction(
+                    action = { updateNetworkProfileUseCase(state.profile) },
                     onSuccess = {
                         runBlocking {
                             sendEvent(

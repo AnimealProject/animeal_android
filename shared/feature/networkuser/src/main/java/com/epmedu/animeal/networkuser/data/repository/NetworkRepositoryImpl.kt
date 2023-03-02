@@ -6,6 +6,7 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.UserAttributesAPI
 import com.epmedu.animeal.auth.constants.UserAttributesKey
 import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
@@ -38,24 +39,18 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateNetworkUserAttributes(
-        profile: Profile,
-        onSuccess: () -> Unit,
-        onError: (exception: Throwable) -> Unit
-    ) {
-        when (val result = userAttributesAPI.updateUserAttributes(profileToAuthUserMapper.map(profile))) {
-            is ApiResult.Success -> onSuccess()
-            is ApiResult.Failure -> onError(result.error)
-        }
+    override suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult {
+        return userAttributesAPI.updateUserAttributes(profileToAuthUserMapper.map(profile)).toActionResult()
     }
 
-    override suspend fun deleteNetworkUser(
-        onSuccess: () -> Unit,
-        onError: (exception: Throwable) -> Unit
-    ) {
-        when (val result = userAttributesAPI.deleteUser()) {
-            is ApiResult.Success -> onSuccess()
-            is ApiResult.Failure -> onError(result.error)
-        }
+    override suspend fun deleteNetworkUser(): ActionResult {
+        return userAttributesAPI.deleteUser().toActionResult()
+    }
+}
+
+private fun ApiResult<Unit>.toActionResult(): ActionResult {
+    return when (this) {
+        is ApiResult.Success -> ActionResult.Success
+        is ApiResult.Failure -> ActionResult.Failure(error)
     }
 }
