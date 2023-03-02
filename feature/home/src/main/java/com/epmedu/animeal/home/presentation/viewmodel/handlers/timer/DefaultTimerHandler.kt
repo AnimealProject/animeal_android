@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.timer
 
+import android.text.format.DateUtils.HOUR_IN_MILLIS
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -27,7 +27,7 @@ internal class DefaultTimerHandler @Inject constructor(
     override fun CoroutineScope.handleTimerEvent(event: TimerEvent) {
         when (event) {
             TimerEvent.Expired -> launch { expireTimer() }
-            TimerEvent.ExpirationAccepted -> launch { disableTimer() }
+            TimerEvent.Disable -> launch { disableTimer() }
         }
     }
 

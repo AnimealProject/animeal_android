@@ -23,11 +23,14 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
+import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
@@ -86,13 +89,7 @@ internal fun HomeScreenUI(
         }
     }
 
-    if (state.timerState == TimerState.Expired) {
-        FeedingExpiredDialog(
-            onConfirm = {
-                onScreenEvent(TimerEvent.ExpirationAccepted)
-            }
-        )
-    }
+    OnState(state, onScreenEvent)
 
     LaunchedEffect(state.currentFeedingPoint) {
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
@@ -155,7 +152,7 @@ internal fun HomeScreenUI(
                     }
                 },
                 onCancelRouteClick = {
-                    onScreenEvent(FeedingEvent.Cancel)
+                    onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },
                 onRouteResult = { result ->
                     onScreenEvent(RouteEvent.FeedingRouteUpdateRequest(result))
@@ -168,6 +165,30 @@ internal fun HomeScreenUI(
     }
 
     WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)
+}
+
+@Composable
+private fun OnState(
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit
+) {
+    when {
+        state.timerState is TimerState.Expired &&
+            state.cancellationRequestState == CancellationRequestState.Dismissed -> FeedingExpiredDialog(
+            onConfirm = {
+                onScreenEvent(TimerEvent.Disable)
+            }
+        )
+        state.cancellationRequestState is CancellationRequestState.Showing -> FeedingCancellationRequestDialog(
+            onConfirm = {
+                onScreenEvent(TimerCancellationEvent.CancellationAccepted)
+            },
+            onDismiss = {
+                onScreenEvent(TimerCancellationEvent.CancellationDismissed)
+            }
+        )
+        else -> Unit
+    }
 }
 
 @Composable

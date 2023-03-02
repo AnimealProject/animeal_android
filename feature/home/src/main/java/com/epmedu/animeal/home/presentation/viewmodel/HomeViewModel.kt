@@ -16,8 +16,10 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
@@ -29,6 +31,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandle
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
+import com.epmedu.animeal.timer.data.model.TimerState
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -82,6 +85,7 @@ internal class HomeViewModel @Inject constructor(
             is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
             is TimerEvent -> viewModelScope.handleTimerEvent(event)
+            is TimerCancellationEvent -> handleTimerCancellationEvent(event = event)
             is ErrorShowed -> hideError()
         }
     }
@@ -98,6 +102,32 @@ internal class HomeViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun handleTimerCancellationEvent(event: TimerCancellationEvent) {
+        when (event) {
+            TimerCancellationEvent.CancellationAttempt -> showCancellationRequest()
+            TimerCancellationEvent.CancellationAccepted -> {
+                dismissCancellation()
+                when (state.timerState) {
+                    is TimerState.Active -> viewModelScope.launch { cancelFeeding() }
+                    is TimerState.Expired -> viewModelScope.launch {
+                        fetchFeedingPoints()
+                        disableTimer()
+                    }
+                    else -> Unit
+                }
+            }
+            TimerCancellationEvent.CancellationDismissed -> dismissCancellation()
+        }
+    }
+
+    private fun showCancellationRequest() {
+        updateState { copy(cancellationRequestState = CancellationRequestState.Showing) }
+    }
+
+    private fun dismissCancellation() {
+        updateState { copy(cancellationRequestState = CancellationRequestState.Dismissed) }
     }
 
     private fun fetchLocationUpdates() {

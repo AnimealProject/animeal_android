@@ -70,7 +70,7 @@ fun tryParseDate(rawDate: String?): LocalDate? {
 fun Context.formatNumberToHourMin(time: Long?): String? {
     if (time == null || time < 0) return null
     val hours = time / HOUR_IN_MILLIS
-    val minutes = time % HOUR_IN_MILLIS / MINUTE_IN_MILLIS
+    val minutes = time % HOUR_IN_MILLIS % MINUTE_IN_MILLIS / 1000
 
     return "${if (hours > 0) "$hours ${getString(R.string.hours)} " else ""}$minutes ${getString(R.string.minutes)}"
 }

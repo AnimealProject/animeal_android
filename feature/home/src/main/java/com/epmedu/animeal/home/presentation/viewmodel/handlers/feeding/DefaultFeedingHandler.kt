@@ -58,7 +58,7 @@ internal class DefaultFeedingHandler @Inject constructor(
         )
     }
 
-    private suspend fun cancelFeeding() {
+    override suspend fun cancelFeeding() {
         performFeedingAction(
             action = cancelFeedingUseCase::invoke,
             onSuccess = {
