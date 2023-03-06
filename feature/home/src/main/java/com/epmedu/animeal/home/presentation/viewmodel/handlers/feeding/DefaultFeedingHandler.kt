@@ -63,8 +63,8 @@ internal class DefaultFeedingHandler @Inject constructor(
             action = cancelFeedingUseCase::invoke,
             onSuccess = {
                 stopRoute()
-                fetchFeedingPoints()
                 disableTimer()
+                fetchFeedingPoints()
             }
         )
     }

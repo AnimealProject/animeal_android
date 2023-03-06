@@ -44,7 +44,10 @@ internal fun RouteView(
             state.feedingRouteState is FeedingRouteState.Active &&
                 state.timerState is TimerState.Active -> {
                 if (state.feedingRouteState.routeData != null) {
-                    drawRoute(state, mapView, mapBoxRouteInitOptions)
+                    mapView.drawRoute(mapBoxRouteInitOptions, state.feedingRouteState.routeData)
+                    if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
+                        setLocationOnRoute(mapView, state)
+                    }
                 } else {
                     fetchRoute(
                         state,
@@ -72,19 +75,6 @@ internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
                 feedingPointLocation
             )
         )
-    }
-}
-
-private fun drawRoute(
-    state: HomeState,
-    mapView: MapView,
-    mapBoxRouteInitOptions: MapBoxRouteInitOptions
-) {
-    state.feedingRouteState.routeData?.let {
-        mapView.drawRoute(mapBoxRouteInitOptions, it)
-    }
-    if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
-        setLocationOnRoute(mapView, state)
     }
 }
 

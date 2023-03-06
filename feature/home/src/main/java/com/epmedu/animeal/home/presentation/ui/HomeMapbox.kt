@@ -19,6 +19,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
@@ -60,15 +61,7 @@ internal fun HomeMapbox(
             onMapInteraction = onMapInteraction,
         )
 
-        if (!state.feedingRouteState.isRouteActive) {
-            AnimealSwitch(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .align(alignment = Alignment.TopCenter)
-                    .padding(top = 24.dp),
-                onSelectTab = {}
-            )
-        } else {
+        if (state.feedingRouteState is FeedingRouteState.Active) {
             RouteTopBar(
                 modifier = Modifier
                     .statusBarsPadding()
@@ -80,6 +73,14 @@ internal fun HomeMapbox(
                     " • ${context.formatMetersToKilometers(this)}"
                 } ?: "",
                 onCancelClick = onCancelRouteClick
+            )
+        } else {
+            AnimealSwitch(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(alignment = Alignment.TopCenter)
+                    .padding(top = 24.dp),
+                onSelectTab = {}
             )
         }
 
@@ -115,7 +116,7 @@ private fun MapboxMap(
     // so we have to make sure the map is loaded before setting location
     val onStyleLoadedListener = OnStyleLoadedListener { event ->
         event.end?.run {
-            if (state.feedingRouteState.isRouteActive) {
+            if (state.feedingRouteState is FeedingRouteState.Active) {
                 setLocationOnRoute(mapboxMapView, state)
             } else {
                 mapboxMapView.setLocation(state.locationState.location)
