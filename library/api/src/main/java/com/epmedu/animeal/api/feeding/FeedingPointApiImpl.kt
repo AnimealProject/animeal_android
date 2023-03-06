@@ -50,7 +50,10 @@ internal class FeedingPointApiImpl(
     }
 
     override suspend fun cancelFeeding(feedingPointId: String): ApiResult<String> {
-        return CancelFeedingMutation(feedingPointId).performMutation()
+        return CancelFeedingMutation(
+            feedingPointId,
+            "reason"
+        ).performMutation()
     }
 
     override suspend fun finishFeeding(
