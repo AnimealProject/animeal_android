@@ -3,7 +3,7 @@ package com.epmedu.animeal.api.feeding
 import OnCreateFeedingPointSubscription
 import OnUpdateFeedingPointSubscription
 import com.amplifyframework.datastore.generated.model.FeedingPoint
-import com.epmedu.animeal.api.wrapper.ApiResult
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointApi {

@@ -1,7 +1,10 @@
+@file:OptIn(FlowPreview::class)
+
 package com.epmedu.animeal.home.presentation.ui.map
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
@@ -22,6 +25,7 @@ import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
+import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
@@ -32,6 +36,12 @@ import com.mapbox.navigation.base.route.NavigationRouterCallback
 import com.mapbox.navigation.base.route.RouterFailure
 import com.mapbox.navigation.base.route.RouterOrigin
 import com.mapbox.navigation.core.MapboxNavigation
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+
+private const val GESTURE_INTERACTION_DEBOUNCE = 100L
 
 @Composable
 fun rememberMapViewWithLifecycle(
@@ -136,10 +146,28 @@ fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
     }
 }
 
-fun MapView.setGesturesListener(onMapInteraction: () -> Unit) =
-    getMapboxMap().addOnCameraChangeListener {
-        onMapInteraction()
+@Composable
+fun MapView.GesturesListener(onMapInteraction: () -> Unit) {
+    val debounceState = remember {
+        MutableSharedFlow<CameraChangedEventData>(
+            replay = 0,
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
     }
+
+    LaunchedEffect(true) {
+        debounceState
+            .debounce(GESTURE_INTERACTION_DEBOUNCE)
+            .collect {
+                onMapInteraction()
+            }
+    }
+
+    getMapboxMap().addOnCameraChangeListener {
+        debounceState.tryEmit(it)
+    }
+}
 
 private fun MapView.requestRoutes(
     navigation: MapboxNavigation,

@@ -1,6 +1,5 @@
 package com.epmedu.animeal.networkuser.di
 
-import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import dagger.Module
@@ -17,11 +16,6 @@ object MapperModule {
     @Provides
     fun provideAuthUserAttributesToProfileMapper() =
         AuthUserAttributesToProfileMapper()
-
-    @ViewModelScoped
-    @Provides
-    fun provideAuthUserAttributesToIsPhoneVerifiedMapper() =
-        AuthUserAttributesToIsPhoneVerifiedMapper()
 
     @ViewModelScoped
     @Provides

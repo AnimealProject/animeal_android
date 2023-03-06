@@ -20,6 +20,7 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.switch.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.home.presentation.model.RouteResult
+import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.MarkerController
@@ -28,7 +29,6 @@ import com.epmedu.animeal.home.presentation.ui.map.RouteView
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
-import com.epmedu.animeal.home.presentation.ui.map.setGesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.map.setLocationOnRoute
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -137,7 +137,7 @@ private fun MapboxMap(
 
     // TODO check if it is needed to remove, probably yes
     mapboxMapView.getMapboxMap().addOnStyleLoadedListener(onStyleLoadedListener)
-    mapboxMapView.setGesturesListener(onMapInteraction = onMapInteraction)
+    mapboxMapView.GesturesListener(onMapInteraction = onMapInteraction)
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),

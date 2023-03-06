@@ -9,4 +9,8 @@ interface ActionDelegate {
         onSuccess: suspend () -> Unit,
         onError: () -> Unit
     )
+
+    suspend fun <T> performAction(
+        action: suspend () -> T
+    ): T
 }

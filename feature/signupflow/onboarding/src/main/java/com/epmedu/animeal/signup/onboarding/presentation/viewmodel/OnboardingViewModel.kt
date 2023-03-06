@@ -3,78 +3,67 @@ package com.epmedu.animeal.signup.onboarding.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToIsPhoneVerifiedMapper
-import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
-import com.epmedu.animeal.networkuser.domain.usecase.FetchNetworkUserAttributesUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.RedirectedFromFacebookWebUi
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInFinished
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithMobileClicked
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
-    private val authUserAttributesToProfileMapper: AuthUserAttributesToProfileMapper,
-    private val authUserAttributesToIsPhoneVerifiedMapper: AuthUserAttributesToIsPhoneVerifiedMapper,
-    private val fetchNetworkUserAttributesUseCase: FetchNetworkUserAttributesUseCase,
+    actionDelegate: ActionDelegate,
+    private val getIsPhoneNumberVerifiedUseCase: GetIsPhoneNumberVerifiedUseCase,
+    private val getNetworkProfileUseCase: GetNetworkProfileUseCase,
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
 ) : ViewModel(),
-    StateDelegate<OnboardingState> by DefaultStateDelegate(initialState = OnboardingState()) {
+    StateDelegate<OnboardingState> by DefaultStateDelegate(initialState = OnboardingState()),
+    ActionDelegate by actionDelegate {
 
     fun handleEvent(event: OnboardingScreenEvent) {
         when (event) {
-            OnboardingScreenEvent.RedirectedFromFacebookWebUi -> {
-                loadNetworkUserAttributesIntoLocalProfile()
-            }
-            OnboardingScreenEvent.SignInWithMobileClicked -> {
-                changeAuthenticationTypeToMobile()
-            }
-            OnboardingScreenEvent.SignInFinished -> {
-                updateState {
-                    copy(authenticationType = null)
-                }
-            }
+            RedirectedFromFacebookWebUi -> saveAuthenticationTypeAndProfile()
+            SignInWithMobileClicked -> changeAuthenticationTypeToMobile()
+            SignInFinished -> updateState { copy(authenticationType = null) }
         }
     }
 
-    private fun changeAuthenticationTypeToMobile() {
+    private fun saveAuthenticationTypeAndProfile() {
         viewModelScope.launch {
-            setMobileAuthenticationTypeUseCase.invoke()
-            updateState {
-                copy(
-                    authenticationType = AuthenticationType.Mobile
-                )
+            val isPhoneNumberVerified = performAction { getIsPhoneNumberVerifiedUseCase() }
+            changeAuthenticationTypeToFacebook(isPhoneNumberVerified)
+            performAction { getNetworkProfileUseCase() }?.let { profile ->
+                saveLocalProfile(profile, isPhoneNumberVerified)
             }
         }
     }
 
     private fun changeAuthenticationTypeToFacebook(isPhoneNumberVerified: Boolean) {
         viewModelScope.launch {
-            setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified)
+            setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified)
         }
     }
 
-    private fun loadNetworkUserAttributesIntoLocalProfile() {
+    private fun changeAuthenticationTypeToMobile() {
         viewModelScope.launch {
-            fetchNetworkUserAttributesUseCase(
-                onSuccess = { networkUserAttributes ->
-                    val isPhoneNumberVerified =
-                        authUserAttributesToIsPhoneVerifiedMapper.map(networkUserAttributes)
-                    changeAuthenticationTypeToFacebook(isPhoneNumberVerified)
-                    val profile = authUserAttributesToProfileMapper.map(networkUserAttributes)
-                    saveLocalProfile(profile, isPhoneNumberVerified)
-                },
-                onError = {
-                    // TODO discuss how to handle
-                }
-            )
+            setMobileAuthenticationTypeUseCase()
+            updateState {
+                copy(
+                    authenticationType = AuthenticationType.Mobile
+                )
+            }
         }
     }
 

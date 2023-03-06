@@ -3,6 +3,7 @@ package com.epmedu.animeal.profile.data.model
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.profile.domain.model.Region
 
+// TODO: Move to domain
 data class Profile(
     val name: String = EMPTY_STRING,
     val surname: String = EMPTY_STRING,
