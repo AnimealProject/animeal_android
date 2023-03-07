@@ -27,6 +27,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Fa
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
@@ -136,7 +137,7 @@ internal fun HomeScreenUI(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
                 onMapInteraction = {
-                    if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
+                    if (bottomSheetState.isExpanding && state.feedingRouteState is FeedingRouteState.Disabled) {
                         scope.launch { bottomSheetState.show() }
                     }
                 },
