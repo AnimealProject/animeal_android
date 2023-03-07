@@ -18,7 +18,10 @@ fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
-    val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
+    val bottomSheetState = rememberAnimealBottomSheetState(
+        initialValue = AnimealBottomSheetValue.Hidden,
+        skipHalfExpanded = state.feedingRouteState.isRouteActive
+    )
 
     HomeScreenUI(
         state = state,

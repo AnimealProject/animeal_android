@@ -125,18 +125,21 @@ internal fun HomeScreenUI(
         },
         sheetControls = {
             state.currentFeedingPoint?.let { feedingPoint ->
-                if (state.feedingRouteState is FeedingRouteState.Active) {
-                    MarkFeedingDoneActionButton(
-                        alpha = buttonAlpha,
-                        enabled = state.feedingPhotos.isNotEmpty(),
-                        onClick = {}
-                    )
-                } else {
-                    FeedingPointActionButton(
-                        alpha = buttonAlpha,
-                        enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                        onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
-                    )
+                when (state.feedingRouteState) {
+                    is FeedingRouteState.Active -> {
+                        MarkFeedingDoneActionButton(
+                            alpha = buttonAlpha,
+                            enabled = state.feedingPhotos.isNotEmpty(),
+                            onClick = {}
+                        )
+                    }
+                    else -> {
+                        FeedingPointActionButton(
+                            alpha = buttonAlpha,
+                            enabled = feedingPoint.feedStatus == FeedStatus.RED,
+                            onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                        )
+                    }
                 }
             }
         }
