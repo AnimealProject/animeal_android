@@ -52,7 +52,9 @@ fun MarkFeedingDonePhotoGallery(
         items(items = photos) { photoUri ->
             PhotoItem(
                 uri = photoUri,
-                onDeleteClick = onDeletePhotoClick
+                onDeleteClick = {
+                    onDeletePhotoClick(photoUri)
+                }
             )
         }
     }
@@ -81,14 +83,14 @@ private fun TakePhotoItem(
 @Composable
 private fun PhotoItem(
     uri: Uri,
-    onDeleteClick: (Uri) -> Unit
+    onDeleteClick: () -> Unit
 ) {
     val iconSize = 24.dp
     val offsetInPx = LocalDensity.current.run { (iconSize / 3).roundToPx() }
 
     Box(
         modifier = Modifier
-            .padding((iconSize / 2))
+            .padding(iconSize / 2)
             .size(70.dp)
             .background(
                 color = CustomColor.LynxWhite,
@@ -101,9 +103,7 @@ private fun PhotoItem(
         )
 
         IconButton(
-            onClick = {
-                onDeleteClick(uri)
-            },
+            onClick = onDeleteClick,
             modifier = Modifier
                 .offset { IntOffset(x = +offsetInPx, y = -offsetInPx) }
                 .border(width = 1.dp, color = Color.White, shape = CircleShape)
