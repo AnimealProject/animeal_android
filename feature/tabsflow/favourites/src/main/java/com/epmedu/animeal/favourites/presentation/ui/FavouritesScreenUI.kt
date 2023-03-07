@@ -103,7 +103,6 @@ private fun ScreenScaffold(
         modifier = Modifier.statusBarsPadding(),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        isHalfExpandedStateEnabled = false,
         sheetContent = {
             state.showingFeedSpot?.let { feedingPoint ->
                 FeedingPointSheetContent(
