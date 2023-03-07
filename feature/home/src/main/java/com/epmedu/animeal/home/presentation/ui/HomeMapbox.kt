@@ -61,27 +61,30 @@ internal fun HomeMapbox(
             onMapInteraction = onMapInteraction,
         )
 
-        if (state.feedingRouteState is FeedingRouteState.Active) {
-            RouteTopBar(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(top = 16.dp)
-                    .padding(horizontal = 20.dp),
-                timeLeft = context.formatNumberToHourMin(state.feedingRouteState.timeLeft)
-                    ?: stringResource(R.string.calculating_route),
-                distanceLeft = state.feedingRouteState.distanceLeft?.run {
-                    " • ${context.formatMetersToKilometers(this)}"
-                } ?: "",
-                onCancelClick = onCancelRouteClick
-            )
-        } else {
-            AnimealSwitch(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .align(alignment = Alignment.TopCenter)
-                    .padding(top = 24.dp),
-                onSelectTab = {}
-            )
+        when (state.feedingRouteState) {
+            is FeedingRouteState.Disabled -> {
+                AnimealSwitch(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .align(alignment = Alignment.TopCenter)
+                        .padding(top = 24.dp),
+                    onSelectTab = {}
+                )
+            }
+            is FeedingRouteState.Active -> {
+                RouteTopBar(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(top = 16.dp)
+                        .padding(horizontal = 20.dp),
+                    timeLeft = context.formatNumberToHourMin(state.feedingRouteState.timeLeft)
+                        ?: stringResource(R.string.calculating_route),
+                    distanceLeft = state.feedingRouteState.distanceLeft?.run {
+                        " • ${context.formatMetersToKilometers(this)}"
+                    } ?: "",
+                    onCancelClick = onCancelRouteClick
+                )
+            }
         }
 
         GeoLocationFloatingActionButton(
@@ -116,10 +119,9 @@ private fun MapboxMap(
     // so we have to make sure the map is loaded before setting location
     val onStyleLoadedListener = OnStyleLoadedListener { event ->
         event.end?.run {
-            if (state.feedingRouteState is FeedingRouteState.Active) {
-                setLocationOnRoute(mapboxMapView, state)
-            } else {
-                mapboxMapView.setLocation(state.locationState.location)
+            when (state.feedingRouteState) {
+                is FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
+                is FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
             }
         }
     }
