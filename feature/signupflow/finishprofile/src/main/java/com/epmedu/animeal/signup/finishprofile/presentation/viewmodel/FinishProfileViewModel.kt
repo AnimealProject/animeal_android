@@ -2,11 +2,13 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -27,16 +29,17 @@ import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProf
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.ProfileFinished
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val getProfileUseCase: GetProfileUseCase,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
     private val updateNetworkProfileUseCase: UpdateNetworkProfileUseCase,
+    private val clearProfileUseCase: ClearProfileUseCase,
     private val deleteNetworkUserUseCase: DeleteNetworkUserUseCase,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
@@ -50,6 +53,7 @@ internal class FinishProfileViewModel @Inject constructor(
     validateEmailUseCase,
     validateBirthDateUseCase
 ),
+    ActionDelegate by actionDelegate,
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
 
     private var authenticationType: AuthenticationType = AuthenticationType.Mobile
@@ -82,7 +86,10 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             copy(
                 profile = profile.copy(phoneNumber = event.phoneNumber),
-                phoneNumberError = validatePhoneNumberUseCase(event.phoneNumber, state.phoneNumberDigitsCount)
+                phoneNumberError = validatePhoneNumberUseCase(
+                    event.phoneNumber,
+                    state.phoneNumberDigitsCount
+                )
             )
         }
     }
@@ -116,7 +123,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun logout() {
         viewModelScope.launch {
             logOutUseCase(
-                onSuccess = { navigateBack() },
+                onSuccess = {
+                    clearProfileUseCase()
+                    navigateBack()
+                },
                 onError = {}
             )
         }
@@ -124,8 +134,12 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun removeUnfinishedNetworkUser() {
         viewModelScope.launch {
-            deleteNetworkUserUseCase(
-                onSuccess = { navigateBack() },
+            performAction(
+                action = deleteNetworkUserUseCase::invoke,
+                onSuccess = {
+                    clearProfileUseCase()
+                    navigateBack()
+                },
                 onError = {}
             )
         }
@@ -147,7 +161,10 @@ internal class FinishProfileViewModel @Inject constructor(
                     nameError = validateNameUseCase(name),
                     surnameError = validateSurnameUseCase(surname),
                     emailError = validateEmailUseCase(email),
-                    phoneNumberError = validatePhoneNumberUseCase(phoneNumber, state.phoneNumberDigitsCount),
+                    phoneNumberError = validatePhoneNumberUseCase(
+                        phoneNumber,
+                        state.phoneNumberDigitsCount
+                    ),
                     birthDateError = validateBirthDateUseCase(birthDate)
                 )
             }
@@ -157,17 +174,15 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun saveProfile() {
         viewModelScope.launch {
             saveProfileUseCase(state.profile).collect {
-                updateNetworkProfileUseCase.invoke(
-                    profile = state.profile,
+                performAction(
+                    action = { updateNetworkProfileUseCase(state.profile) },
                     onSuccess = {
-                        runBlocking {
-                            sendEvent(
-                                when (authenticationType) {
-                                    AuthenticationType.Mobile -> ProfileFinished
-                                    is AuthenticationType.Facebook -> NavigateToConfirmPhone
-                                }
-                            )
-                        }
+                        sendEvent(
+                            when (authenticationType) {
+                                AuthenticationType.Mobile -> ProfileFinished
+                                is AuthenticationType.Facebook -> NavigateToConfirmPhone
+                            }
+                        )
                     },
                     onError = {}
                 )

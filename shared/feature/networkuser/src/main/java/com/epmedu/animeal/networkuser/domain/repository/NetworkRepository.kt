@@ -1,6 +1,6 @@
 package com.epmedu.animeal.networkuser.domain.repository
 
-import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.profile.data.model.Profile
 
 interface NetworkRepository {
@@ -9,7 +9,7 @@ interface NetworkRepository {
 
     suspend fun getNetworkProfile(): Profile?
 
-    suspend fun updateNetworkUserAttributes(profile: Profile, authRequestHandler: AuthRequestHandler)
+    suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult
 
-    suspend fun deleteNetworkUser(authRequestHandler: AuthRequestHandler)
+    suspend fun deleteNetworkUser(): ActionResult
 }

@@ -152,7 +152,7 @@ internal fun HomeScreenUI(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
                 onMapInteraction = {
-                    if (bottomSheetState.isExpanding && !state.feedingRouteState.isRouteActive) {
+                    if (bottomSheetState.isExpanding && state.feedingRouteState is FeedingRouteState.Disabled) {
                         scope.launch { bottomSheetState.show() }
                     }
                 },

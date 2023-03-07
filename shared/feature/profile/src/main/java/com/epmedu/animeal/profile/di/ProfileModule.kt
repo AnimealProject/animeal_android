@@ -7,6 +7,7 @@ import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileV
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
+import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -23,6 +24,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
+@Suppress("TooManyFunctions")
 internal object ProfileModule {
 
     @ViewModelScoped
@@ -84,4 +86,10 @@ internal object ProfileModule {
     fun provideLogOutUseCase(
         repository: ProfileRepository
     ) = LogOutUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideClearProfileUseCase(
+        repository: ProfileRepository
+    ) = ClearProfileUseCase(repository)
 }

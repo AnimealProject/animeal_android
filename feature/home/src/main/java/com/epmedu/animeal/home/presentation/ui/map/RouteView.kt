@@ -12,6 +12,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
 import com.mapbox.navigation.base.options.NavigationOptions
+import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.core.MapboxNavigation
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 
@@ -44,7 +45,12 @@ internal fun RouteView(
             state.feedingRouteState is FeedingRouteState.Active &&
                 state.timerState is TimerState.Active -> {
                 if (state.feedingRouteState.routeData != null) {
-                    drawRoute(state, mapView, mapBoxRouteInitOptions)
+                    drawRoute(
+                        state,
+                        state.feedingRouteState.routeData,
+                        mapView,
+                        mapBoxRouteInitOptions
+                    )
                 } else {
                     fetchRoute(
                         state,
@@ -77,10 +83,11 @@ internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
 
 private fun drawRoute(
     state: HomeState,
+    routeData: NavigationRoute?,
     mapView: MapView,
     mapBoxRouteInitOptions: MapBoxRouteInitOptions
 ) {
-    state.feedingRouteState.routeData?.let {
+    routeData?.let {
         mapView.drawRoute(mapBoxRouteInitOptions, it)
     }
     if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {

@@ -5,14 +5,22 @@ mutation StartFeeding($feedingPointId: String!) {
 mutation FinishFeeding($feedingId: String!, $images: [String!]!) {
   finishFeeding(feedingId: $feedingId, images: $images)
 }
-mutation RejectFeeding($feedingId: String!, $feeding: FeedingInput) {
-  rejectFeeding(feedingId: $feedingId, feeding: $feeding)
+mutation RejectFeeding(
+  $feedingId: String!
+  $reason: String!
+  $feeding: FeedingInput
+) {
+  rejectFeeding(feedingId: $feedingId, reason: $reason, feeding: $feeding)
 }
-mutation ApproveFeeding($feedingId: String!, $feeding: FeedingInput) {
-  approveFeeding(feedingId: $feedingId, feeding: $feeding)
+mutation ApproveFeeding(
+  $feedingId: String!
+  $reason: String!
+  $feeding: FeedingInput
+) {
+  approveFeeding(feedingId: $feedingId, reason: $reason, feeding: $feeding)
 }
-mutation CancelFeeding($feedingId: String!) {
-  cancelFeeding(feedingId: $feedingId)
+mutation CancelFeeding($feedingId: String!, $reason: String!) {
+  cancelFeeding(feedingId: $feedingId, reason: $reason)
 }
 mutation CreatePet(
   $input: CreatePetInput!
@@ -44,6 +52,121 @@ mutation CreatePet(
     updatedBy
     owner
     feedingPoints {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -51,6 +174,10 @@ mutation CreatePet(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -58,9 +185,125 @@ mutation CreatePet(
       owner
     }
     medications {
+      items {
+        id
+        name
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        date
+        i18n {
+          name
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     users {
+      items {
+        id
+        userId
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     cover
@@ -97,6 +340,121 @@ mutation UpdatePet(
     updatedBy
     owner
     feedingPoints {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -104,6 +462,10 @@ mutation UpdatePet(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -111,9 +473,125 @@ mutation UpdatePet(
       owner
     }
     medications {
+      items {
+        id
+        name
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        date
+        i18n {
+          name
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     users {
+      items {
+        id
+        userId
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     cover
@@ -150,6 +628,121 @@ mutation DeletePet(
     updatedBy
     owner
     feedingPoints {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -157,6 +750,10 @@ mutation DeletePet(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -164,9 +761,125 @@ mutation DeletePet(
       owner
     }
     medications {
+      items {
+        id
+        name
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        date
+        i18n {
+          name
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     users {
+      items {
+        id
+        userId
+        petId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     cover
@@ -274,6 +987,121 @@ mutation CreateFeedingPoint(
     updatedBy
     owner
     pets {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -281,6 +1109,10 @@ mutation CreateFeedingPoint(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -288,9 +1120,148 @@ mutation CreateFeedingPoint(
       owner
     }
     users {
+      items {
+        id
+        userId
+        feedingPointId
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     feedings {
+      items {
+        id
+        userId
+        images
+        status
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        expireAt
+        feedingPointFeedingsId
+      }
       nextToken
     }
     cover
@@ -338,6 +1309,121 @@ mutation UpdateFeedingPoint(
     updatedBy
     owner
     pets {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -345,6 +1431,10 @@ mutation UpdateFeedingPoint(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -352,9 +1442,148 @@ mutation UpdateFeedingPoint(
       owner
     }
     users {
+      items {
+        id
+        userId
+        feedingPointId
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     feedings {
+      items {
+        id
+        userId
+        images
+        status
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        expireAt
+        feedingPointFeedingsId
+      }
       nextToken
     }
     cover
@@ -402,6 +1631,121 @@ mutation DeleteFeedingPoint(
     updatedBy
     owner
     pets {
+      items {
+        id
+        petId
+        feedingPointId
+        pet {
+          id
+          name
+          images
+          breed
+          color
+          chipNumber
+          vaccinatedAt
+          yearOfBirth
+          caretaker {
+            fullName
+            email
+            phoneNumber
+          }
+          i18n {
+            locale
+            name
+            breed
+            color
+          }
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoints {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          medications {
+            nextToken
+          }
+          users {
+            nextToken
+          }
+          cover
+          petCategoryId
+        }
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     category {
@@ -409,6 +1753,10 @@ mutation DeleteFeedingPoint(
       name
       icon
       tag
+      i18n {
+        locale
+        name
+      }
       createdAt
       updatedAt
       createdBy
@@ -416,9 +1764,148 @@ mutation DeleteFeedingPoint(
       owner
     }
     users {
+      items {
+        id
+        userId
+        feedingPointId
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       nextToken
     }
     feedings {
+      items {
+        id
+        userId
+        images
+        status
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+        feedingPoint {
+          id
+          name
+          description
+          city
+          street
+          address
+          images
+          point {
+            type
+            coordinates
+          }
+          location {
+            lat
+            lon
+          }
+          region
+          neighborhood
+          distance
+          status
+          i18n {
+            locale
+            name
+            description
+            city
+            street
+            address
+            region
+            neighborhood
+          }
+          statusUpdatedAt
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          pets {
+            nextToken
+          }
+          category {
+            id
+            name
+            icon
+            tag
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+          }
+          users {
+            nextToken
+          }
+          feedings {
+            nextToken
+          }
+          cover
+          feedingPointCategoryId
+        }
+        expireAt
+        feedingPointFeedingsId
+      }
       nextToken
     }
     cover
@@ -447,16 +1934,167 @@ mutation CreateFeeding(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -486,16 +2124,167 @@ mutation UpdateFeeding(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -525,16 +2314,167 @@ mutation DeleteFeeding(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -556,6 +2496,8 @@ mutation CreateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 mutation UpdateFeedingHistory(
@@ -572,6 +2514,8 @@ mutation UpdateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 mutation DeleteFeedingHistory(
@@ -588,6 +2532,8 @@ mutation DeleteFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 mutation CreateRelationPetFeedingPoint(
@@ -607,11 +2553,146 @@ mutation CreateRelationPetFeedingPoint(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -623,16 +2704,167 @@ mutation CreateRelationPetFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -658,11 +2890,146 @@ mutation UpdateRelationPetFeedingPoint(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -674,16 +3041,167 @@ mutation UpdateRelationPetFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -709,11 +3227,146 @@ mutation DeleteRelationPetFeedingPoint(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -725,16 +3378,167 @@ mutation DeleteRelationPetFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -759,16 +3563,167 @@ mutation CreateRelationUserFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -793,16 +3748,167 @@ mutation UpdateRelationUserFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -827,16 +3933,167 @@ mutation DeleteRelationUserFeedingPoint(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -862,11 +4119,146 @@ mutation CreateRelationUserPet(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -892,11 +4284,146 @@ mutation UpdateRelationUserPet(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -922,11 +4449,146 @@ mutation DeleteRelationUserPet(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -952,11 +4614,146 @@ mutation CreateMedication(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -986,11 +4783,146 @@ mutation UpdateMedication(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -1020,11 +4952,146 @@ mutation DeleteMedication(
       chipNumber
       vaccinatedAt
       yearOfBirth
+      caretaker {
+        fullName
+        email
+        phoneNumber
+      }
+      i18n {
+        locale
+        name
+        breed
+        color
+      }
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      feedingPoints {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      medications {
+        items {
+          id
+          name
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          date
+          i18n {
+            name
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userId
+          petId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       cover
       petCategoryId
     }
@@ -1185,16 +5252,167 @@ mutation CreateFavourite(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -1219,16 +5437,167 @@ mutation UpdateFavourite(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
@@ -1253,16 +5622,167 @@ mutation DeleteFavourite(
       street
       address
       images
+      point {
+        type
+        coordinates
+      }
+      location {
+        lat
+        lon
+      }
       region
       neighborhood
       distance
       status
+      i18n {
+        locale
+        name
+        description
+        city
+        street
+        address
+        region
+        neighborhood
+      }
       statusUpdatedAt
       createdAt
       updatedAt
       createdBy
       updatedBy
       owner
+      pets {
+        items {
+          id
+          petId
+          feedingPointId
+          pet {
+            id
+            name
+            images
+            breed
+            color
+            chipNumber
+            vaccinatedAt
+            yearOfBirth
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            petCategoryId
+          }
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      category {
+        id
+        name
+        icon
+        tag
+        i18n {
+          locale
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+      }
+      users {
+        items {
+          id
+          userId
+          feedingPointId
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      feedings {
+        items {
+          id
+          userId
+          images
+          status
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          owner
+          feedingPoint {
+            id
+            name
+            description
+            city
+            street
+            address
+            images
+            region
+            neighborhood
+            distance
+            status
+            statusUpdatedAt
+            createdAt
+            updatedAt
+            createdBy
+            updatedBy
+            owner
+            cover
+            feedingPointCategoryId
+          }
+          expireAt
+          feedingPointFeedingsId
+        }
+        nextToken
+      }
       cover
       feedingPointCategoryId
     }
