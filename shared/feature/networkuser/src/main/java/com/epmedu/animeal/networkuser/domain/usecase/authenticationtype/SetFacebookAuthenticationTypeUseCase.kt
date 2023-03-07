@@ -4,6 +4,6 @@ import com.epmedu.animeal.networkuser.domain.repository.AuthenticationTypeReposi
 
 class SetFacebookAuthenticationTypeUseCase(private val repository: AuthenticationTypeRepository) {
 
-    suspend operator fun invoke(isPhoneNumberVerified: Boolean) =
+    operator fun invoke(isPhoneNumberVerified: Boolean) =
         repository.setAuthenticationTypeAsFacebook(isPhoneNumberVerified)
 }

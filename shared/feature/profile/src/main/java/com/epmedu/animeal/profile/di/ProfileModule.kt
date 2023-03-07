@@ -16,6 +16,7 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
+import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,8 +85,9 @@ internal object ProfileModule {
     @ViewModelScoped
     @Provides
     fun provideLogOutUseCase(
-        repository: ProfileRepository
-    ) = LogOutUseCase(repository)
+        profileRepository: ProfileRepository,
+        routerRepository: RouterRepository
+    ) = LogOutUseCase(profileRepository, routerRepository)
 
     @ViewModelScoped
     @Provides

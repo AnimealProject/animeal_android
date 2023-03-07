@@ -11,4 +11,7 @@ data class Profile(
     val phoneNumberRegion: Region = Region.GE,
     val phoneNumber: String = EMPTY_STRING,
     val email: String = EMPTY_STRING
-)
+) {
+    fun isFilled() =
+        name.isNotBlank() && surname.isNotBlank() && birthDate.isNotBlank() && email.isNotBlank()
+}

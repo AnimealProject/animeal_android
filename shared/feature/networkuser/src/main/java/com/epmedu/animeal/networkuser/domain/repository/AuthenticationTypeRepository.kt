@@ -6,7 +6,7 @@ interface AuthenticationTypeRepository {
 
     suspend fun getAuthenticationType(): AuthenticationType
 
-    suspend fun setAuthenticationTypeAsMobile()
+    fun setAuthenticationTypeAsMobile()
 
-    suspend fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean)
+    fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean)
 }

@@ -2,6 +2,7 @@
 
 package com.epmedu.animeal.signup.enterphone.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +50,8 @@ internal fun EnterPhoneScreenUi(
     val scope = rememberCoroutineScope()
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+
+    BackHandler(onBack = onBack)
 
     BottomSheet(
         bottomSheetState,

@@ -2,8 +2,12 @@ package com.epmedu.animeal.profile.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.router.domain.RouterRepository
 
-class LogOutUseCase(private val repository: ProfileRepository) {
+class LogOutUseCase(
+    private val profileRepository: ProfileRepository,
+    private val routerRepository: RouterRepository
+) {
 
     suspend operator fun invoke(
         onSuccess: () -> Unit,
@@ -11,6 +15,7 @@ class LogOutUseCase(private val repository: ProfileRepository) {
     ) {
         val requestHandler = object : AuthRequestHandler {
             override fun onSuccess(result: Any?) {
+                routerRepository.setOnboardingAsSignUpStartDestination()
                 onSuccess()
             }
 
@@ -19,6 +24,6 @@ class LogOutUseCase(private val repository: ProfileRepository) {
             }
         }
 
-        repository.logOut(requestHandler)
+        profileRepository.logOut(requestHandler)
     }
 }

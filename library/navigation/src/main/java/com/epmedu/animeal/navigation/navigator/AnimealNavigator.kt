@@ -24,4 +24,18 @@ internal class AnimealNavigator(
     override fun popBackStack(route: String, inclusive: Boolean, saveState: Boolean) {
         navController.popBackStack(route, inclusive, saveState)
     }
+
+    override fun popBackStackOrNavigate(
+        route: String,
+        inclusive: Boolean,
+        saveState: Boolean
+    ) {
+        if (navController.popBackStack(route, inclusive, saveState).not()) {
+            navController.navigate(route) {
+                popUpTo(navController.currentDestination?.route!!) {
+                    this.inclusive = true
+                }
+            }
+        }
+    }
 }

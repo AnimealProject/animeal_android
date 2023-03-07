@@ -10,8 +10,10 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.timer.tickerFlow
+import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
+import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
@@ -27,12 +29,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("TooManyFunctions", "LongParameterList")
 internal class EnterCodeViewModel @Inject constructor(
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     private val mobileConfirmCodeUseCase: MobileConfirmCodeUseCase,
     private val facebookConfirmCodeUseCase: FacebookConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
+    private val getNetworkProfileUseCase: GetNetworkProfileUseCase,
+    private val saveProfileUseCase: SaveProfileUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
 ) : ViewModel(),
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
@@ -105,12 +110,27 @@ internal class EnterCodeViewModel @Inject constructor(
                 code = state.code,
                 onSuccess = {
                     updateState { copy(isError = false) }
-                    viewModelScope.launch { sendEvent(NavigateToFinishProfile) }
+                    fetchNetworkProfile()
                 },
                 onError = {
                     updateState { copy(isError = true) }
                 },
             )
+        }
+    }
+
+    private fun fetchNetworkProfile() {
+        viewModelScope.launch {
+            getNetworkProfileUseCase()?.let { networkProfile ->
+                saveProfileUseCase(networkProfile).collect {
+                    sendEvent(
+                        when {
+                            networkProfile.isFilled() -> NavigateToHomeScreen
+                            else -> NavigateToFinishProfile
+                        }
+                    )
+                }
+            } ?: sendEvent(NavigateToFinishProfile)
         }
     }
 

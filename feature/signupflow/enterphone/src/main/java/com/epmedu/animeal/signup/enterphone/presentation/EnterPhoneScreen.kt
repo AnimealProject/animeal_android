@@ -24,7 +24,7 @@ fun EnterPhoneScreen() {
         state = state,
         focusRequester = focusRequester,
         onEvent = viewModel::handleEvents,
-        onBack = navigator::popBackStack
+        onBack = { navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name) }
     )
 
     LaunchedEffect(Unit) {
