@@ -80,8 +80,7 @@ class AnimealBottomSheetState(
         get() = progress.from == Expanded && progress.to == Shown
 
     suspend fun show() {
-        if (skipHalfExpanded) animateTo(Expanded)
-        else animateTo(Shown)
+        if (skipHalfExpanded) animateTo(Expanded) else animateTo(Shown)
     }
 
     suspend fun expand() = animateTo(Expanded)

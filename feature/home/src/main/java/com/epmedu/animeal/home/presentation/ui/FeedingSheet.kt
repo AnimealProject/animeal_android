@@ -9,6 +9,7 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 
+@Suppress("LongParameterList")
 @Composable
 fun FeedingSheet(
     modifier: Modifier = Modifier,
