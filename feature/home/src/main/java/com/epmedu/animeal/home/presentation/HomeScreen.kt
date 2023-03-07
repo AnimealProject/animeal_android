@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ fun HomeScreen() {
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
         initialValue = AnimealBottomSheetValue.Hidden,
-        skipHalfExpanded = state.feedingRouteState.isRouteActive
+        skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active
     )
 
     HomeScreenUI(
