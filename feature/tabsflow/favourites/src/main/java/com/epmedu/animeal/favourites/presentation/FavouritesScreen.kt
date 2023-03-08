@@ -19,7 +19,6 @@ fun FavouritesScreen() {
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
         initialValue = AnimealBottomSheetValue.Hidden,
-        skipHalfExpanded = true
     )
 
     FavouritesScreenUI(state, bottomSheetState, onEvent = {

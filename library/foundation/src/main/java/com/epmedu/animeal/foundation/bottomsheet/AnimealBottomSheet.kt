@@ -55,7 +55,6 @@ class AnimealBottomSheetState(
     initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
     val confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true },
-    val skipHalfExpanded: Boolean = true,
 ) : SwipeableState<AnimealBottomSheetValue>(
     initialValue = initialValue,
     animationSpec = animationSpec,
@@ -79,9 +78,7 @@ class AnimealBottomSheetState(
     val isCollapsing: Boolean
         get() = progress.from == Expanded && progress.to == Shown
 
-    suspend fun show() {
-        if (skipHalfExpanded) animateTo(Expanded) else animateTo(Shown)
-    }
+    suspend fun show() = animateTo(Shown)
 
     suspend fun expand() = animateTo(Expanded)
 
@@ -116,13 +113,11 @@ fun rememberAnimealBottomSheetState(
     initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
     confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true },
-    skipHalfExpanded: Boolean = true,
 ): AnimealBottomSheetState {
     return rememberSaveable(
         initialValue,
         animationSpec,
         confirmStateChange,
-        skipHalfExpanded,
         saver = AnimealBottomSheetState.Saver(
             animationSpec = animationSpec,
             confirmStateChange = confirmStateChange
@@ -132,7 +127,6 @@ fun rememberAnimealBottomSheetState(
             initialValue = initialValue,
             animationSpec = animationSpec,
             confirmStateChange = confirmStateChange,
-            skipHalfExpanded = skipHalfExpanded
         )
     }
 }
@@ -142,6 +136,7 @@ fun rememberAnimealBottomSheetState(
 @Composable
 fun AnimealBottomSheetLayout(
     modifier: Modifier = Modifier,
+    skipHalfExpanded: Boolean,
     sheetState: AnimealBottomSheetState = rememberAnimealBottomSheetState(Hidden),
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
@@ -171,7 +166,7 @@ fun AnimealBottomSheetLayout(
                     fullHeight,
                     shownHeight,
                     sheetHeightState,
-                    sheetState.skipHalfExpanded
+                    skipHalfExpanded
                 )
                 .onGloballyPositioned {
                     sheetHeightState.value = it.size.height.toFloat()

@@ -2,12 +2,10 @@ package com.epmedu.animeal.home.presentation
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
@@ -108,12 +106,12 @@ internal fun HomeScreenUI(
     )
 
     AnimealBottomSheetLayout(
+        skipHalfExpanded = state.feedingRouteState.isRouteActive,
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
             state.currentFeedingPoint?.let { feedingPoint ->
                 FeedingSheet(
-                    modifier = Modifier.wrapContentHeight(),
                     feedingState = state.feedingRouteState,
                     feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,

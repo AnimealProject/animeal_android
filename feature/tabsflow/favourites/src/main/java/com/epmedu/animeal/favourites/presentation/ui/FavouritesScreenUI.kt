@@ -101,6 +101,7 @@ private fun ScreenScaffold(
 ) {
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
+        skipHalfExpanded = true,
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {

@@ -12,7 +12,6 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 @Suppress("LongParameterList")
 @Composable
 fun FeedingSheet(
-    modifier: Modifier = Modifier,
     feedingState: FeedingRouteState,
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
@@ -23,7 +22,7 @@ fun FeedingSheet(
     when (feedingState) {
         is FeedingRouteState.Active -> {
             MarkFeedingDoneSheet(
-                modifier = modifier.wrapContentHeight(),
+                modifier = Modifier.wrapContentHeight(),
                 feedingPointTitle = feedingPoint.title,
                 onDeletePhotoClick = onDeletePhotoClick,
                 onTakePhotoClick = onTakePhotoClick
@@ -31,7 +30,7 @@ fun FeedingSheet(
         }
         else -> {
             FeedingPointSheetContent(
-                modifier = modifier.wrapContentHeight(),
+                modifier = Modifier.wrapContentHeight(),
                 feedingPoint = feedingPoint,
                 contentAlpha = contentAlpha,
                 onFavouriteChange = onFavouriteChange
