@@ -24,9 +24,9 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExpandableListItem(
+    modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     content: @Composable () -> Unit,
 ) {
