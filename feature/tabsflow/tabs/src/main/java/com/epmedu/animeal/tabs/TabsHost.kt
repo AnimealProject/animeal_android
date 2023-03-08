@@ -24,7 +24,7 @@ import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
-import com.epmedu.animeal.tabs.search.presentation.SearchScreen
+import com.epmedu.animeal.tabs.search.presentation.search.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
 import com.epmedu.animeal.tabs.viewmodel.TabsViewModel

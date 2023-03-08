@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation
+package com.epmedu.animeal.tabs.search.presentation.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +34,9 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun SearchScreenUi(searchState: SearchState) {
+internal fun SearchScreenUi(
+    searchState: SearchState, onEvent: (SearchScreenEvent) -> Unit
+) {
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -48,7 +50,7 @@ internal fun SearchScreenUi(searchState: SearchState) {
             )
         ) { animalType ->
             when (animalType) {
-                AnimalType.Dogs -> DogsContent(searchState.dogsState)
+                AnimalType.Dogs -> DogsContent(searchState.dogsState, onEvent)
                 AnimalType.Cats -> CatsContent()
             }
         }
@@ -144,6 +146,6 @@ fun AnimalTypeHorizontalPager(
 @Composable
 private fun SearchScreenUiPreview() {
     AnimealTheme {
-        SearchScreenUi(SearchState())
+        SearchScreenUi(SearchState()) {}
     }
 }

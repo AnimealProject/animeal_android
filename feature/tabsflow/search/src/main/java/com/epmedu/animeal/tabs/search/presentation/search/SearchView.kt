@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation
+package com.epmedu.animeal.tabs.search.presentation.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +15,10 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -32,19 +33,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
 @Composable
 fun SearchView(
-    state: MutableState<TextFieldValue>, modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    initialValue: String = EMPTY_STRING,
+    onValueChanged: (TextFieldValue) -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
+    var query by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(initialValue))
+    }
+
     TextField(
-        value = state.value,
+        value = query,
         onValueChange = { value ->
-            state.value = value
+            query = value
+            onValueChanged(query)
         },
         //TODO Inner padding break everything with designed 40.dp height, mb migrate to BasicTextField
         modifier = modifier
@@ -66,14 +75,14 @@ fun SearchView(
             )
         },
         trailingIcon = {
-            if (state.value != TextFieldValue("")) {
+            if (query != TextFieldValue()) {
                 IconButton(onClick = {
-                    state.value = TextFieldValue("")
+                    query = TextFieldValue()
                     // Remove text from TextField when you press the 'X' icon
                 }) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "",
+                        contentDescription = EMPTY_STRING,
                         modifier = Modifier.size(18.dp),
                         tint = CustomColor.TrolleyGrey
                     )
@@ -110,6 +119,5 @@ fun SearchView(
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-    SearchView(textState)
+    SearchView()
 }

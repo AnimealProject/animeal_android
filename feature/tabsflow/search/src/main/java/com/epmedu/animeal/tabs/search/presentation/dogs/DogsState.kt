@@ -9,8 +9,8 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.presentation.model.GroupFeedingPointsModel
 
 data class DogsState(
-    val query: String = "",
-    val groupFeedingPointsModels: List<GroupFeedingPointsModel> = getFakeMappedFeedingPoints()
+    val groupFeedingPointsModels: List<GroupFeedingPointsModel> = getFakeMappedFeedingPoints(),
+    var query: String = "",
 )
 
 fun getFakeMappedFeedingPoints(): List<GroupFeedingPointsModel> {

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
-import com.epmedu.animeal.tabs.search.presentation.AnimalExpandableList
+import com.epmedu.animeal.tabs.search.presentation.search.AnimalExpandableList
 
 @Composable
 fun CatsContent() {

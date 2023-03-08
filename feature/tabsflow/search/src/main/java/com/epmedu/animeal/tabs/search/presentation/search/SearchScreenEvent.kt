@@ -1,6 +1,7 @@
-package com.epmedu.animeal.tabs.search.presentation
+package com.epmedu.animeal.tabs.search.presentation.search
 
 import com.epmedu.animeal.common.constants.DefaultConstants
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 
 internal sealed class SearchScreenEvent(open val id: String = DefaultConstants.EMPTY_STRING) {
     data class FeedSpotSelected(override val id: String) : SearchScreenEvent(id)
@@ -15,4 +16,6 @@ internal sealed class SearchScreenEvent(open val id: String = DefaultConstants.E
     data class ShowWillFeedDialog(override val id: String) : SearchScreenEvent(id)
 
     object DismissWillFeedDialog : SearchScreenEvent()
+
+    data class Search(val query: String, val animalType: AnimalType) : SearchScreenEvent()
 }
