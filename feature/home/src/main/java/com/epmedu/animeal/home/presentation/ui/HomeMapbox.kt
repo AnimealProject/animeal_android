@@ -17,7 +17,7 @@ import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.foundation.switch.AnimealSwitch
+import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener

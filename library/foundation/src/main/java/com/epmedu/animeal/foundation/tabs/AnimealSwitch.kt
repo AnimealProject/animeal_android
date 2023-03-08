@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.switch
+package com.epmedu.animeal.foundation.tabs
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDp
@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.switch.model.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"

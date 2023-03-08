@@ -38,7 +38,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.switch.model.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.text.MarkupText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -248,13 +248,14 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 title = text.take(30),
                 feedStatus = FeedStatus.RED,
                 description = "Ordered list : <ol> <li>first item</li> <li>second item</li> " +
-                    "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +
-                    "<h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by" +
-                    " <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph " +
-                    "</p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and " +
-                    "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
-                    " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
-                    " <li>third item</li> </ul> Text outside markup tags",
+                        "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +
+                        "<h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by" +
+                        " <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph " +
+                        "</p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and " +
+                        "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
+                        " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
+                        " <li>third item</li> </ul> Text outside markup tags",
+                city = "Minsk",
                 isFavourite = true,
                 lastFeeder = Feeder(
                     id = "-1",

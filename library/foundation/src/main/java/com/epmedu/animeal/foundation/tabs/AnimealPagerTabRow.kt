@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.switch
+package com.epmedu.animeal.foundation.tabs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.switch.model.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState

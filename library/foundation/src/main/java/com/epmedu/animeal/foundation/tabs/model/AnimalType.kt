@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.switch.model
+package com.epmedu.animeal.foundation.tabs.model
 
 import androidx.annotation.StringRes
 import com.epmedu.animeal.resources.R
