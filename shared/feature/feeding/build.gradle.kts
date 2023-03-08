@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.amplify.core)
     implementation(libs.appsync)
 
+    implementation(libs.coil)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

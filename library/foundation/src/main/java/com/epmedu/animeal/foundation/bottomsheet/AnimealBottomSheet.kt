@@ -54,7 +54,7 @@ import kotlin.math.roundToInt
 class AnimealBottomSheetState(
     initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    val confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true }
+    val confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true },
 ) : SwipeableState<AnimealBottomSheetValue>(
     initialValue = initialValue,
     animationSpec = animationSpec,
@@ -112,7 +112,7 @@ enum class AnimealBottomSheetValue {
 fun rememberAnimealBottomSheetState(
     initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true }
+    confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true },
 ): AnimealBottomSheetState {
     return rememberSaveable(
         initialValue,
@@ -126,7 +126,7 @@ fun rememberAnimealBottomSheetState(
         AnimealBottomSheetState(
             initialValue = initialValue,
             animationSpec = animationSpec,
-            confirmStateChange = confirmStateChange
+            confirmStateChange = confirmStateChange,
         )
     }
 }
@@ -136,12 +136,12 @@ fun rememberAnimealBottomSheetState(
 @Composable
 fun AnimealBottomSheetLayout(
     modifier: Modifier = Modifier,
+    skipHalfExpanded: Boolean,
     sheetState: AnimealBottomSheetState = rememberAnimealBottomSheetState(Hidden),
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
-    isHalfExpandedStateEnabled: Boolean = true,
     sheetContent: @Composable ColumnScope.() -> Unit,
     sheetControls: @Composable () -> Unit,
     content: @Composable () -> Unit
@@ -166,7 +166,7 @@ fun AnimealBottomSheetLayout(
                     fullHeight,
                     shownHeight,
                     sheetHeightState,
-                    isHalfExpandedStateEnabled
+                    skipHalfExpanded
                 )
                 .onGloballyPositioned {
                     sheetHeightState.value = it.size.height.toFloat()
@@ -221,19 +221,19 @@ private fun Modifier.bottomSheetSwipeable(
     fullHeight: Float,
     shownHeight: Float,
     sheetHeightState: State<Float?>,
-    isHalfExpandedStateEnabled: Boolean
+    skipHalfExpanded: Boolean
 ): Modifier {
     val sheetHeight = sheetHeightState.value
     val modifier = if (sheetHeight != null) {
-        val anchors = if (isHalfExpandedStateEnabled) {
+        val anchors = if (skipHalfExpanded) {
             mapOf(
                 fullHeight to Hidden,
-                shownHeight to Shown,
                 max(0f, fullHeight - sheetHeight) to Expanded
             )
         } else {
             mapOf(
                 fullHeight to Hidden,
+                shownHeight to Shown,
                 max(0f, fullHeight - sheetHeight) to Expanded
             )
         }

@@ -2,12 +2,10 @@ package com.epmedu.animeal.home.presentation
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
@@ -15,7 +13,7 @@ import com.epmedu.animeal.extensions.launchGpsSettings
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
-import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
@@ -31,6 +29,7 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
+import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
@@ -107,25 +106,39 @@ internal fun HomeScreenUI(
     )
 
     AnimealBottomSheetLayout(
+        skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
             state.currentFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(
+                FeedingSheet(
+                    feedingState = state.feedingRouteState,
                     feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
-                    modifier = Modifier.wrapContentHeight(),
-                    onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) }
+                    onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
+                    onTakePhotoClick = {},
+                    onDeletePhotoClick = {}
                 )
             }
         },
         sheetControls = {
             state.currentFeedingPoint?.let { feedingPoint ->
-                FeedingPointActionButton(
-                    alpha = buttonAlpha,
-                    enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                    onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
-                )
+                when (state.feedingRouteState) {
+                    is FeedingRouteState.Active -> {
+                        MarkFeedingDoneActionButton(
+                            alpha = buttonAlpha,
+                            enabled = state.feedingPhotos.isNotEmpty(),
+                            onClick = {}
+                        )
+                    }
+                    else -> {
+                        FeedingPointActionButton(
+                            alpha = buttonAlpha,
+                            enabled = feedingPoint.feedStatus == FeedStatus.RED,
+                            onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                        )
+                    }
+                }
             }
         }
     ) {
