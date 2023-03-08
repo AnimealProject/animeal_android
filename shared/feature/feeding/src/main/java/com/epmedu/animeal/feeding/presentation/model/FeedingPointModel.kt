@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
-import com.epmedu.animeal.foundation.switch.model.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
@@ -13,6 +13,7 @@ data class FeedingPointModel(
     val id: String,
     val title: String,
     val description: String,
+    val city: String,
     val feedStatus: FeedStatus,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
@@ -25,6 +26,7 @@ data class FeedingPointModel(
         feedingPoint.id,
         feedingPoint.title,
         feedingPoint.description,
+        feedingPoint.city,
         feedingPoint.animalStatus.toFeedStatus(),
         feedingPoint.animalType,
         feedingPoint.isFavourite,
