@@ -106,7 +106,7 @@ internal fun HomeScreenUI(
     )
 
     AnimealBottomSheetLayout(
-        skipHalfExpanded = state.feedingRouteState.isRouteActive,
+        skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
