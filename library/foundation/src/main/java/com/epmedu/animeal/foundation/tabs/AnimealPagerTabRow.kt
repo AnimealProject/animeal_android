@@ -12,7 +12,11 @@ import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,13 +64,16 @@ fun AnimealPagerTabRow(
         backgroundColor = backgroundColor
     ) {
         AnimalType.values().forEachIndexed { index, animalType ->
+
             AnimealPagerTab(
                 animalType = animalType,
                 selected = pagerState.currentPage == index,
                 onClick = { onSelectTab(index) })
+
         }
     }
 }
+
 
 @Composable
 private fun AnimealPagerTab(
@@ -75,29 +82,44 @@ private fun AnimealPagerTab(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Tab(
-        selected = selected,
-        onClick = onClick,
-        modifier = modifier
-            .height(50.dp)
-    ) {
-        Box(
+    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme()) {
+        Tab(
+            selected = selected,
+            onClick = onClick,
             modifier = modifier
-                .fillMaxHeight()
-                .padding(bottom = 4.dp),
-            contentAlignment = Alignment.BottomCenter
+                .height(50.dp)
         ) {
-            Text(
-                text = stringResource(id = animalType.title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .zIndex(1f)
-                    .padding(horizontal = 6.dp),
-                color = MaterialTheme.colors.primary
-            )
+            Box(
+                modifier = modifier
+                    .fillMaxHeight()
+                    .padding(bottom = 4.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Text(
+                    text = stringResource(id = animalType.title),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .zIndex(1f)
+                        .padding(horizontal = 6.dp),
+                    color = MaterialTheme.colors.primary
+                )
+            }
         }
     }
+}
+
+class NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor(): Color = Color.Unspecified
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(
+        draggedAlpha = 0f,
+        focusedAlpha = 0f,
+        hoveredAlpha = 0f,
+        pressedAlpha = 0f,
+    )
 }
 
 @Composable

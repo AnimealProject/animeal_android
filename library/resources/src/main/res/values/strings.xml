@@ -123,4 +123,6 @@
     <string name="donation_thanks">Thank you for donate!</string>
     <string name="donation_copy_toast">Copied</string>
 
+    <string name="search_hint">Search here</string>
+
 </resources>

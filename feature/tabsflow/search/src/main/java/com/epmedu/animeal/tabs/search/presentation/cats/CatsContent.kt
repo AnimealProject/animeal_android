@@ -19,6 +19,6 @@ fun CatsContent() {
         AnimalExpandableList(
             padding = PaddingValues(0.dp),
             groupedPoints = emptyList()
-        )
+        ) {}
     }
 }

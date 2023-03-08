@@ -1,35 +1,44 @@
 package com.epmedu.animeal.tabs.search.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.resources.R
 
 @Composable
-fun SearchView(state: MutableState<TextFieldValue>) {
+fun SearchView(
+    state: MutableState<TextFieldValue>, modifier: Modifier = Modifier
+) {
     val focusManager = LocalFocusManager.current
 
     TextField(
@@ -37,32 +46,46 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         onValueChange = { value ->
             state.value = value
         },
-        modifier = Modifier
+        //TODO Inner padding break everything with designed 40.dp height, mb migrate to BasicTextField
+        modifier = modifier
+            .height(50.dp)
             .fillMaxWidth(),
-        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+        textStyle = TextStyle(
+            color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Light, lineHeight = 20.sp
+        ),
+        placeholder = {
+            Text(
+                text = stringResource(R.string.search_hint),
+                style = TextStyle(
+                    color = CustomColor.TrolleyGrey,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp
+                ),
+            )
+        },
         trailingIcon = {
             if (state.value != TextFieldValue("")) {
-                IconButton(
-                    onClick = {
-                        state.value = TextFieldValue("")
-                        // Remove text from TextField when you press the 'X' icon
-                    }
-                ) {
+                IconButton(onClick = {
+                    state.value = TextFieldValue("")
+                    // Remove text from TextField when you press the 'X' icon
+                }) {
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(24.dp)
+                        modifier = Modifier.size(18.dp),
+                        tint = CustomColor.TrolleyGrey
                     )
                 }
             } else {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .size(24.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    colorFilter = ColorFilter.tint(
+                        color = CustomColor.TrolleyGrey
+                    )
                 )
             }
         },
@@ -71,13 +94,12 @@ fun SearchView(state: MutableState<TextFieldValue>) {
             focusManager.clearFocus()
         }),
         singleLine = true,
-        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
+        shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.textFieldColors(
             textColor = Color.Black,
-            cursorColor = Color.Black,
-            leadingIconColor = Color.Black,
+            cursorColor = CustomColor.SeaSerpent,
             trailingIconColor = Color.Black,
-            backgroundColor = MaterialTheme.colors.onPrimary,
+            backgroundColor = CustomColor.LynxWhite,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent

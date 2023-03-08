@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -58,13 +59,16 @@ internal fun SearchScreenUi(searchState: SearchState) {
 fun AnimalExpandableList(
     padding: PaddingValues,
     groupedPoints: List<GroupFeedingPointsModel>,
+    topItemContent: @Composable LazyItemScope.() -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     LazyColumn(
         state = scrollState,
         modifier = Modifier.padding(top = 12.dp),
-        contentPadding = PaddingValues(bottom = 60.dp)
+        contentPadding = PaddingValues(bottom = 8.dp)
     ) {
+
+        item { topItemContent() }
 
         items(groupedPoints) { group ->
             var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
