@@ -89,12 +89,44 @@ internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, 
 }
 
 /**
+ * Performs a GraphQL mutation.
+ *
+ * On success, returns [ApiResult.Success] if the response data is not null,
+ * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
+ *
+ * On failure, returns [ApiResult.Failure] with [ApolloException].
+ */
+internal suspend inline fun <D : Data, T, V : Variables> AWSAppSyncClient.performMutation(
+    mutation: Mutation<D, T, V>
+): ApiResult<Unit> {
+    return suspendCancellableCoroutine {
+        val mutationCall = mutate(mutation)
+
+        mutationCall.enqueue(
+            object : GraphQLCall.Callback<T>() {
+                override fun onResponse(response: Response<T>) {
+                    resume(
+                        response.data()?.let {
+                            ApiResult.Success(Unit)
+                        } ?: ApiResult.Failure(ResponseError(response.errors()))
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    resume(ApiResult.Failure(e))
+                }
+            }
+        )
+    }
+}
+
+/**
  * Performs a GraphQL query.
  *
  * On success, returns [ApiResult.Success] if the response data is not null,
  * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
  *
- * On failure, returns [ApiResult.Failure] with [ApiException].
+ * On failure, returns [ApiResult.Failure] with [ApolloException].
  * @param query [Query] to perform.
  * @param getData method to get required data from response.
  * @param responseFetcher cache control strategy for query. By default [CACHE_AND_NETWORK]

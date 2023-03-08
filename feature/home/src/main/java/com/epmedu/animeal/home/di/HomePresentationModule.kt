@@ -7,6 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
@@ -103,11 +105,19 @@ internal object HomePresentationModule {
     fun providesFeedingPointHandler(
         stateDelegate: StateDelegate<HomeState>,
         eventDelegate: EventDelegate<HomeViewModelEvent>,
-        getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase
+        actionDelegate: ActionDelegate,
+        errorHandler: ErrorHandler,
+        getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+        addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
+        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
     ): FeedingPointHandler = DefaultFeedingPointHandler(
         stateDelegate,
         eventDelegate,
-        getAllFeedingPointsUseCase
+        actionDelegate,
+        errorHandler,
+        getAllFeedingPointsUseCase,
+        addFeedingPointToFavouritesUseCase,
+        removeFeedingPointFromFavouritesUseCase
     )
 
     @ViewModelScoped

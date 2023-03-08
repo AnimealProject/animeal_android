@@ -1,7 +1,10 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint
 
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
@@ -10,18 +13,26 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Fa
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Select
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@Suppress("LongParameterList")
 internal class DefaultFeedingPointHandler(
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
-    private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase
+    actionDelegate: ActionDelegate,
+    errorHandler: ErrorHandler,
+    private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+    private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : FeedingPointHandler,
     StateDelegate<HomeState> by stateDelegate,
-    EventDelegate<HomeViewModelEvent> by eventDelegate {
+    EventDelegate<HomeViewModelEvent> by eventDelegate,
+    ActionDelegate by actionDelegate,
+    ErrorHandler by errorHandler {
 
     override suspend fun fetchFeedingPoints() {
         getAllFeedingPointsUseCase().collect { domainFeedingPoints ->
@@ -45,7 +56,7 @@ internal class DefaultFeedingPointHandler(
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {
         when (event) {
             is Select -> launch { selectFeedingPoint(event) }
-            is FavouriteChange -> changeFavouriteFeedingPoint(event)
+            is FavouriteChange -> launch { handleFavouriteChange(event) }
         }
     }
 
@@ -54,11 +65,42 @@ internal class DefaultFeedingPointHandler(
         sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
     }
 
-    private fun changeFavouriteFeedingPoint(event: FavouriteChange) {
+    private suspend fun handleFavouriteChange(event: FavouriteChange) {
+        state.currentFeedingPoint?.let { feedingPoint ->
+            changeFavouriteState(event.isFavourite, feedingPoint)
+            tryModifyingFavourites(event.isFavourite, feedingPoint)
+        }
+    }
+
+    private fun changeFavouriteState(
+        isFavourite: Boolean,
+        feedingPoint: FeedingPointModel
+    ) {
         updateState {
             copy(
-                currentFeedingPoint = currentFeedingPoint?.copy(isFavourite = event.isFavourite)
+                currentFeedingPoint = when (currentFeedingPoint) {
+                    feedingPoint -> feedingPoint.copy(isFavourite = isFavourite)
+                    else -> currentFeedingPoint
+                }
             )
         }
+    }
+
+    private suspend fun tryModifyingFavourites(
+        isFavourite: Boolean,
+        feedingPoint: FeedingPointModel
+    ) {
+        performAction(
+            action = {
+                when {
+                    isFavourite -> addFeedingPointToFavouritesUseCase(feedingPoint.id)
+                    else -> removeFeedingPointFromFavouritesUseCase(feedingPoint.id)
+                }
+            },
+            onError = {
+                changeFavouriteState(!isFavourite, feedingPoint)
+                showError()
+            }
+        )
     }
 }
