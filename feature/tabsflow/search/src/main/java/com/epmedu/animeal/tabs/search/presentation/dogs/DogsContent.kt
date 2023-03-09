@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -17,6 +18,15 @@ import com.epmedu.animeal.tabs.search.presentation.search.SearchView
 
 @Composable
 internal fun DogsContent(state: SearchState, onEvent: (SearchScreenEvent) -> Unit) {
+    val sortedContacts = remember(state.feedingPoints) {
+        state.feedingPoints.groupBy { it.city }
+            .map { entry ->
+                GroupFeedingPointsModel(
+                    title = entry.key,
+                    points = entry.value
+                )
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -24,13 +34,7 @@ internal fun DogsContent(state: SearchState, onEvent: (SearchScreenEvent) -> Uni
             .padding(bottom = bottomBarHeight)
     ) {
         AnimalExpandableList(
-            groupedPoints = state.feedingPoints.groupBy { it.city }
-                .map { entry ->
-                    GroupFeedingPointsModel(
-                        title = entry.key,
-                        points = entry.value
-                    )
-                },
+            groupedPoints = sortedContacts,
             onEvent = onEvent,
         ) {
             SearchView(

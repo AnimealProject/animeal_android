@@ -19,6 +19,8 @@ class SearchScreenViewModel @Inject constructor(
 
     private var favouritesSnapshot: List<FeedingPoint> = emptyList()
 
+    private var query = ""
+
     init {
         viewModelScope.launch {
             getFeedingPointsUseCase().collect {
@@ -53,7 +55,9 @@ class SearchScreenViewModel @Inject constructor(
             SearchScreenEvent.FeedingPointSheetHidden -> {
                 updateState { copy(showingFeedSpot = null) }
             }
-            is SearchScreenEvent.Search -> {}
+            is SearchScreenEvent.Search -> {
+                updateState { copy(query = event.query) }
+            }
         }
     }
 

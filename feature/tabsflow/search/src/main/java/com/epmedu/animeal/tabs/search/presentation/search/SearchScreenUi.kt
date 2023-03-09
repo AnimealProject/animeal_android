@@ -207,7 +207,7 @@ fun AnimalExpandableList(
 
         item { topItemContent() }
 
-        items(groupedPoints) { group ->
+        items(groupedPoints, key = { group -> group.title }) { group ->
             var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
 
             ExpandableListItem(
