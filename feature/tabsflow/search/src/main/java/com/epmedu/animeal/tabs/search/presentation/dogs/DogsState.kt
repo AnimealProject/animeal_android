@@ -6,19 +6,19 @@ import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.tabs.search.presentation.model.GroupFeedingPointsModel
+import com.epmedu.animeal.tabs.search.domain.model.GroupFeedingPointsModel
 
 data class DogsState(
-    val groupFeedingPointsModels: List<GroupFeedingPointsModel> = getFakeMappedFeedingPoints(),
+    val groupFeedingPointsModels: List<GroupFeedingPointsModel> = emptyList(),
     var query: String = "",
 )
-
-fun getFakeMappedFeedingPoints(): List<GroupFeedingPointsModel> {
-
-    return feedingPoints
-        .groupBy { it.city }
-        .map { GroupFeedingPointsModel(title = it.key, points = it.value) }
-}
+//
+//fun getFakeMappedFeedingPoints(): List<GroupFeedingPointsModel> {
+//
+//    return feedingPoints
+//        .groupBy { it.city }
+//        .map { GroupFeedingPointsModel(title = it.key, points = it.value) }
+//}
 
 val feedingPoints: List<FeedingPointModel> = listOf(
     FeedingPointModel(

@@ -1,23 +1,27 @@
 package com.epmedu.animeal.tabs.search.presentation.search
 
-import android.widget.Toast
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
+import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen() {
-    val searchViewModel = hiltViewModel<SearchScreenViewModel>()
+    val searchViewModel: SearchScreenViewModel = hiltViewModel()
     val searchState by searchViewModel.stateFlow.collectAsState()
 
-    val context = LocalContext.current.applicationContext
+    val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
 
-    SearchScreenUi(searchState, onEvent = {
-        Toast.makeText(
-            context, "${(it as? SearchScreenEvent.Search)?.query}", Toast.LENGTH_SHORT
-        ).show()
-//        viewModel.handleEvents(it)
+    SearchScreenUi(searchState, bottomSheetState, onEvent = {
+        searchViewModel.handleEvents(it)
     })
+
+    if (searchState.showingFeedSpot != null) {
+        LaunchedEffect(Unit) { bottomSheetState.expand() }
+    }
 }

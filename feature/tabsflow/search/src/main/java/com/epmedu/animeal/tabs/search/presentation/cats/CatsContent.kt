@@ -1,6 +1,5 @@
 package com.epmedu.animeal.tabs.search.presentation.cats
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,8 +16,8 @@ fun CatsContent() {
         isExpanded = true
     ) {
         AnimalExpandableList(
-            padding = PaddingValues(0.dp),
-            groupedPoints = emptyList()
+            groupedPoints = emptyList(),
+            {}
         ) {}
     }
 }

@@ -1,7 +1,6 @@
 package com.epmedu.animeal.tabs.search.presentation.dogs
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -9,13 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.tabs.search.domain.model.GroupFeedingPointsModel
 import com.epmedu.animeal.tabs.search.presentation.search.AnimalExpandableList
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent
+import com.epmedu.animeal.tabs.search.presentation.search.SearchState
 import com.epmedu.animeal.tabs.search.presentation.search.SearchView
 
 
 @Composable
-internal fun DogsContent(dogsState: DogsState, onEvent: (SearchScreenEvent) -> Unit) {
+internal fun DogsContent(state: SearchState, onEvent: (SearchScreenEvent) -> Unit) {
 
     Column(
         modifier = Modifier
@@ -23,8 +24,14 @@ internal fun DogsContent(dogsState: DogsState, onEvent: (SearchScreenEvent) -> U
             .padding(bottom = bottomBarHeight)
     ) {
         AnimalExpandableList(
-            padding = PaddingValues(0.dp),
-            groupedPoints = dogsState.groupFeedingPointsModels
+            groupedPoints = state.feedingPoints.groupBy { it.city }
+                .map { entry ->
+                    GroupFeedingPointsModel(
+                        title = entry.key,
+                        points = entry.value
+                    )
+                },
+            onEvent = onEvent,
         ) {
             SearchView(
                 modifier = Modifier
@@ -32,7 +39,7 @@ internal fun DogsContent(dogsState: DogsState, onEvent: (SearchScreenEvent) -> U
                         horizontal = 30.dp,
                         vertical = 28.dp
                     ),
-                initialValue = dogsState.query
+                initialValue = state.query
             ) { textFieldValue ->
                 onEvent(SearchScreenEvent.Search(textFieldValue.text, AnimalType.Dogs))
             }
