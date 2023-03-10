@@ -9,6 +9,7 @@ import com.epmedu.animeal.tabs.search.domain.GetFeedingPointsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -19,15 +20,16 @@ class SearchScreenViewModel @Inject constructor(
 
     private var favouritesSnapshot: List<FeedingPoint> = emptyList()
 
-    private var query = ""
-
     init {
         viewModelScope.launch {
-            getFeedingPointsUseCase().collect {
-                favouritesSnapshot = it
-                updateState { copy(feedingPoints = it.toImmutableList()) }
+            stateFlow.collectLatest { state ->
+                getFeedingPointsUseCase(state.query).collect {
+                    favouritesSnapshot = it
+                    updateState { copy(feedingPoints = it.toImmutableList()) }
+                }
             }
         }
+
     }
 
     fun handleEvents(event: SearchScreenEvent) {

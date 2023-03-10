@@ -5,6 +5,10 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlinx.coroutines.flow.map
 
 class GetFeedingPointsUseCase(private val feedingPointRepository: FeedingPointRepository) {
-    operator fun invoke() = feedingPointRepository.getAllFeedingPoints()
-        .map { feedingPoints -> feedingPoints.filter { it.animalType == AnimalType.Dogs } }
+    operator fun invoke(s: String = "") = feedingPointRepository.getAllFeedingPoints()
+        .map { feedingPoints ->
+            feedingPoints.filter {
+                it.animalType == AnimalType.Dogs && it.title.startsWith(s, ignoreCase = true)
+            }
+        }
 }
