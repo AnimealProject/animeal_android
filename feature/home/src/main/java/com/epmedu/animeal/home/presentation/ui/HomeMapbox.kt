@@ -27,6 +27,7 @@ import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.MarkerController
 import com.epmedu.animeal.home.presentation.ui.map.RouteTopBar
 import com.epmedu.animeal.home.presentation.ui.map.RouteView
+import com.epmedu.animeal.home.presentation.ui.map.focusOnFeedingPoint
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
@@ -134,6 +135,12 @@ private fun MapboxMap(
 
     LaunchedEffect(key1 = state.locationState) {
         if (state.locationState.isInitial || state.locationState.isUndefined) {
+            if (state.currentFeedingPoint != null) {
+                focusOnFeedingPoint(
+                    state,
+                    mapboxMapView
+                )
+            }
             mapboxMapView.setLocation(state.locationState.location)
         }
     }
