@@ -4,14 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.view.doOnDetach
-import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.home.utils.MapConstants
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
 import com.mapbox.navigation.base.options.NavigationOptions
@@ -43,9 +41,8 @@ internal fun RouteView(
     LaunchedEffect(key1 = state.feedingRouteState) {
         when {
             state.gpsSettingState is GpsSettingState.Disabled && state.currentFeedingPoint != null -> {
-                focusOnFeedingPoint(
-                    state,
-                    mapView
+                mapView.focusOnFeedingPoint(
+                    state.currentFeedingPoint,
                 )
             }
             state.feedingRouteState is FeedingRouteState.Disabled -> {
@@ -101,21 +98,6 @@ private fun drawRoute(
     }
     if (mapView.getMapboxMap().getStyle()?.isStyleLoaded == true) {
         setLocationOnRoute(mapView, state)
-    }
-}
-
-private fun focusOnFeedingPoint(
-    state: HomeState,
-    mapView: MapView
-) {
-    state.currentFeedingPoint?.coordinates?.let {
-        mapView.setLocation(
-            location = MapLocation(
-                state.currentFeedingPoint.coordinates.latitude(),
-                state.currentFeedingPoint.coordinates.longitude()
-            ),
-            zoom = MapConstants.DEFAULT_ZOOM
-        )
     }
 }
 
