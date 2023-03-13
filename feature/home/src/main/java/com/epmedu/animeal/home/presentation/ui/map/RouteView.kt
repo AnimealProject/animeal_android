@@ -104,7 +104,7 @@ private fun drawRoute(
     }
 }
 
-internal fun focusOnFeedingPoint(
+private fun focusOnFeedingPoint(
     state: HomeState,
     mapView: MapView
 ) {
