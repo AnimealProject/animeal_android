@@ -135,12 +135,6 @@ private fun MapboxMap(
 
     LaunchedEffect(key1 = state.locationState) {
         if (state.locationState.isInitial || state.locationState.isUndefined) {
-            if (state.currentFeedingPoint != null) {
-                focusOnFeedingPoint(
-                    state,
-                    mapboxMapView
-                )
-            }
             mapboxMapView.setLocation(state.locationState.location)
         }
     }
