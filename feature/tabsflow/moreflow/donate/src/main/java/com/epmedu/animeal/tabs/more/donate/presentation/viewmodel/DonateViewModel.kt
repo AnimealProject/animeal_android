@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DonateViewModel @Inject constructor(private val getDonateInformationUseCase: GetDonateInformationUseCase) :
+class DonateViewModel @Inject constructor(
+    private val getDonateInformationUseCase: GetDonateInformationUseCase
+) :
     ViewModel(),
     StateDelegate<DonateState> by DefaultStateDelegate(initialState = DonateState()) {
 
@@ -30,6 +32,7 @@ class DonateViewModel @Inject constructor(private val getDonateInformationUseCas
                     copy(donationNumberToCopy = event.number)
                 }
             }
+
             is DonateScreenEvent.NumberIsCopied -> {
                 updateState {
                     copy(donationNumberToCopy = null)
