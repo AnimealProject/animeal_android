@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -39,6 +40,11 @@ internal fun RouteView(
 
     LaunchedEffect(key1 = state.feedingRouteState) {
         when {
+            state.gpsSettingState is GpsSettingState.Disabled && state.currentFeedingPoint != null -> {
+                mapView.focusOnFeedingPoint(
+                    state.currentFeedingPoint,
+                )
+            }
             state.feedingRouteState is FeedingRouteState.Disabled -> {
                 mapView.removeRoute(mapBoxRouteInitOptions)
             }
