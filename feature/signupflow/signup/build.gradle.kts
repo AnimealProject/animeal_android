@@ -1,6 +1,8 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -15,8 +17,13 @@ dependencies {
     implementation(projects.feature.signupflow.finishprofile)
     implementation(projects.feature.signupflow.onboarding)
 
-    implementation(projects.library.navigation)
     implementation(projects.library.common)
+    implementation(projects.library.navigation)
+
+    implementation(projects.shared.feature.router)
 
     implementation(libs.compose.ui)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

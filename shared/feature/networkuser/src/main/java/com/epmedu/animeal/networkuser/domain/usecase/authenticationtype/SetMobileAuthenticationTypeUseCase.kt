@@ -4,5 +4,5 @@ import com.epmedu.animeal.networkuser.domain.repository.AuthenticationTypeReposi
 
 class SetMobileAuthenticationTypeUseCase(private val repository: AuthenticationTypeRepository) {
 
-    suspend operator fun invoke() = repository.setAuthenticationTypeAsMobile()
+    operator fun invoke() = repository.setAuthenticationTypeAsMobile()
 }

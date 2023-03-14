@@ -1,7 +1,6 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-include(":shared:feature:settings")
 
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -96,8 +95,9 @@ include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
 
-include(":shared:feature:profile")
-include(":shared:feature:feeding")
 include(":shared:feature:feedconfirmation")
+include(":shared:feature:feeding")
 include(":shared:feature:networkuser")
+include(":shared:feature:profile")
+include(":shared:feature:router")
 include(":shared:feature:timer")
