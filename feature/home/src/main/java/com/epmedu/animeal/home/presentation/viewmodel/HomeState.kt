@@ -4,6 +4,7 @@ import android.net.Uri
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.WillFeedState
@@ -27,6 +28,8 @@ data class HomeState(
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
     val isInitialGeolocationPermissionAsked: Boolean = false,
+
+    val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,
 
     val timerState: TimerState? = null,
 

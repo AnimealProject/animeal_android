@@ -30,6 +30,8 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRout
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.DefaultTimerCancellationHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
@@ -138,6 +140,20 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
+    fun providesTimerCancellationHandler(
+        stateDelegate: StateDelegate<HomeState>,
+        feedingPointHandler: FeedingPointHandler,
+        timerHandler: TimerHandler,
+        feedingHandler: FeedingHandler
+    ): TimerCancellationHandler = DefaultTimerCancellationHandler(
+        stateDelegate,
+        feedingPointHandler,
+        timerHandler,
+        feedingHandler
+    )
+
+    @ViewModelScoped
+    @Provides
     fun providesErrorHandler(
         stateDelegate: StateDelegate<HomeState>
     ): ErrorHandler = DefaultErrorHandler(stateDelegate)
@@ -151,6 +167,7 @@ internal object HomePresentationModule {
         feedingHandler: FeedingHandler,
         locationHandler: LocationHandler,
         timerHandler: TimerHandler,
+        timerCancellationHandler: TimerCancellationHandler,
         gpsHandler: GpsHandler,
         errorHandler: ErrorHandler
     ) = DefaultHomeHandler(
@@ -160,6 +177,7 @@ internal object HomePresentationModule {
         feedingHandler,
         locationHandler,
         timerHandler,
+        timerCancellationHandler,
         gpsHandler,
         errorHandler
     )

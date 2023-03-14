@@ -5,6 +5,7 @@ import com.epmedu.animeal.timer.data.model.TimerState
 import com.epmedu.animeal.timer.domain.TimerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -20,8 +21,10 @@ internal class TimerRepositoryImpl : TimerRepository {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
+    private var job: Job? = null
+
     override fun startTimer(timeInMillis: Long, intervalInMillis: Long) {
-        coroutineScope.launch {
+        job = coroutineScope.launch {
             tickerFlow(timeInMillis, intervalInMillis)
                 .onEach { updateTimer(it) }
                 .onCompletion { expireTimer() }
@@ -32,6 +35,7 @@ internal class TimerRepositoryImpl : TimerRepository {
     override fun getTimerState() = timerFlow.asStateFlow()
 
     override suspend fun disableTimer() {
+        job?.run { cancel() }
         timerState = TimerState.Disabled
         timerFlow.emit(timerState)
     }
@@ -42,7 +46,9 @@ internal class TimerRepositoryImpl : TimerRepository {
     }
 
     private suspend fun expireTimer() {
-        timerState = TimerState.Expired
-        timerFlow.emit(timerState)
+        if (timerState is TimerState.Active) {
+            timerState = TimerState.Expired
+            timerFlow.emit(timerState)
+        }
     }
 }
