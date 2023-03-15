@@ -11,6 +11,7 @@ import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Select
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
@@ -39,10 +40,18 @@ internal class DefaultFeedingPointHandler(
             val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
                 FeedingPointModel(domainFeedingPoint)
             }
+            val currentFeedingPoint =
+                feedingPoints.find { it.id == state.currentFeedingPoint?.id }
+            val feedingPointsToShow = when {
+                state.feedingRouteState is FeedingRouteState.Active &&
+                    currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
+                else -> feedingPoints.toImmutableList()
+            }
+
             updateState {
                 copy(
-                    currentFeedingPoint = feedingPoints.find { it.id == state.currentFeedingPoint?.id },
-                    feedingPoints = feedingPoints.toImmutableList()
+                    currentFeedingPoint = currentFeedingPoint,
+                    feedingPoints = feedingPointsToShow
                 )
             }
         }
@@ -50,7 +59,12 @@ internal class DefaultFeedingPointHandler(
 
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
         val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
-        updateState { copy(feedingPoints = persistentListOf(reservedFeedingPoint)) }
+        updateState {
+            copy(
+                currentFeedingPoint = reservedFeedingPoint,
+                feedingPoints = persistentListOf(reservedFeedingPoint)
+            )
+        }
     }
 
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {

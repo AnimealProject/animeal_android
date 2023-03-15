@@ -3,12 +3,14 @@ package com.epmedu.animeal.home.di
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +40,16 @@ object HomeDomainModule {
     fun providesGetAllFeedingPointsUseCase(
         feedingPointRepository: FeedingPointRepository
     ): GetAllFeedingPointsUseCase = GetAllFeedingPointsUseCase(feedingPointRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesFetchCurrentFeedingUseCase(
+        startTimerUseCase: StartTimerUseCase,
+        feedingPointRepository: FeedingPointRepository
+    ): FetchCurrentFeedingPointUseCase = FetchCurrentFeedingPointUseCase(
+        startTimerUseCase,
+        feedingPointRepository
+    )
 
     @ViewModelScoped
     @Provides

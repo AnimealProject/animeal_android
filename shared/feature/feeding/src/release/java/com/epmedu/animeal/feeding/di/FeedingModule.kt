@@ -23,12 +23,14 @@ object FeedingModule {
     @Singleton
     @Provides
     fun providesFeedingPointRepository(
+        authApi: AuthAPI,
+        feedingPointApi: FeedingPointApi,
         favouriteRepository: FavouriteRepository,
-        feedingPointApi: FeedingPointApi
     ): FeedingPointRepository = FeedingPointRepositoryImpl(
-        feedingPointApi = feedingPointApi,
+        dispatchers = Dispatchers,
+        authApi = authApi,
         favouriteRepository = favouriteRepository,
-        dispatchers = Dispatchers
+        feedingPointApi = feedingPointApi,
     )
 
     @Singleton

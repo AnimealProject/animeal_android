@@ -1,10 +1,13 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
+import com.epmedu.animeal.feeding.data.mapper.toDomain
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
+import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import kotlinx.coroutines.CoroutineScope
@@ -13,15 +16,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
+    private val dispatchers: Dispatchers,
+    private val favouriteRepository: FavouriteRepository,
+    private val authApi: AuthAPI,
     private val feedingPointApi: FeedingPointApi,
-    favouriteRepository: FavouriteRepository,
-    dispatchers: Dispatchers
 ) : FeedingPointRepository {
 
     private val coroutineScope = CoroutineScope(dispatchers.IO)
@@ -90,6 +96,19 @@ internal class FeedingPointRepositoryImpl(
 
     override fun getFeedingPointsBy(predicate: (DomainFeedingPoint) -> Boolean): Flow<List<DomainFeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
+    }
+
+    override suspend fun getUserFeedings(): List<Feeding>? {
+        return combine(
+            feedingPointApi.getUserFeedings(userId = authApi.getCurrentUserId()),
+            favouriteRepository.getFavouriteFeedingPointIds()
+        ) { feedings, favouriteIds ->
+            feedings.map { feeding ->
+                feeding.toDomain(isFavourite = favouriteIds.any { it == feeding.feedingPoint.id })
+            }
+        }
+            .flowOn(dispatchers.IO)
+            .firstOrNull()
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {

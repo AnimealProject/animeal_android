@@ -2,6 +2,7 @@ package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
@@ -74,6 +75,10 @@ internal class FeedingPointRepositoryMock(
 
     override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
+    }
+
+    override suspend fun getUserFeedings(): List<Feeding> {
+        return emptyList()
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {

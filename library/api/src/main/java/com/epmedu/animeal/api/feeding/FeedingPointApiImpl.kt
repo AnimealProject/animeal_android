@@ -5,6 +5,7 @@ import FinishFeedingMutation
 import RejectFeedingMutation
 import StartFeedingMutation
 import com.amplifyframework.api.graphql.SubscriptionType
+import com.amplifyframework.datastore.generated.model.Feeding
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.extensions.getModelList
 import com.epmedu.animeal.api.extensions.launch
@@ -28,6 +29,10 @@ internal class FeedingPointApiImpl : FeedingPointApi {
 
     override fun subscribeToFeedingPointsDeletion(): Flow<FeedingPoint> {
         return subscribe(SubscriptionType.ON_DELETE)
+    }
+
+    override fun getUserFeedings(userId: String): Flow<List<Feeding>> {
+        return getModelList(predicate = Feeding.USER_ID.eq(userId))
     }
 
     override suspend fun startFeeding(feedingPointId: String): ApiResult<String> {
