@@ -40,13 +40,11 @@ internal class SplashViewModel @Inject constructor(
 
     private fun checkIfUserIsSignedIn() {
         viewModelScope.launch {
-            val (isSignedIn, isProfileSaved, isPhoneNumberVerified) = awaitAll(
-                async { getIsSignedInUseCase() },
-                async { getIsProfileSavedUseCase() },
-                async { getIsPhoneNumberVerifiedUseCase() }
-            )
-
-            if (isSignedIn) {
+            if (getIsSignedInUseCase()) {
+                val (isPhoneNumberVerified, isProfileSaved) = awaitAll(
+                    async { getIsPhoneNumberVerifiedUseCase() },
+                    async { getIsProfileSavedUseCase() }
+                )
                 selectNextDirection(isPhoneNumberVerified, isProfileSaved)
             } else {
                 navigateToNextDirection(SignUp)
