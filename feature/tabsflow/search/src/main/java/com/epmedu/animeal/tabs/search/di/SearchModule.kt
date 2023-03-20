@@ -1,7 +1,8 @@
 package com.epmedu.animeal.tabs.search.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
-import com.epmedu.animeal.tabs.search.domain.GetFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,8 +15,15 @@ internal object SearchModule {
 
     @ViewModelScoped
     @Provides
-    fun provideGetFavouriteFeedingPointsUseCase(
+    fun provideSearchDogsFeedingPointsUseCase(
         feedingPointRepository: FeedingPointRepository
-    ): GetFeedingPointsUseCase =
-        GetFeedingPointsUseCase(feedingPointRepository)
+    ): SearchDogsFeedingPointsUseCase =
+        SearchDogsFeedingPointsUseCase(feedingPointRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideSearchCatsFeedingPointsUseCase(
+        feedingPointRepository: FeedingPointRepository
+    ): SearchCatsFeedingPointsUseCase =
+        SearchCatsFeedingPointsUseCase(feedingPointRepository)
 }

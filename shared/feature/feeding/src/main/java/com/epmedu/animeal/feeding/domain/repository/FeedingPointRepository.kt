@@ -8,6 +8,9 @@ interface FeedingPointRepository {
 
     fun getAllFeedingPoints(): Flow<List<FeedingPoint>>
 
+    fun getCats(query: String): Flow<List<FeedingPoint>>
+    fun getDogs(query: String): Flow<List<FeedingPoint>>
+
     suspend fun startFeeding(feedingPointId: String): ActionResult
 
     suspend fun cancelFeeding(feedingPointId: String): ActionResult

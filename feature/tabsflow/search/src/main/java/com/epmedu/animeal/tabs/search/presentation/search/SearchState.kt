@@ -5,9 +5,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class SearchState(
-    val feedingPoints: ImmutableList<FeedingPoint> = persistentListOf(),
+    val catsFeedingPoints: ImmutableList<FeedingPoint> = persistentListOf(),
+    val catsQuery: String = "",
+    val dogsFeedingPoints: ImmutableList<FeedingPoint> = persistentListOf(),
+    val dogsQuery: String = "",
     val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
-    val query: String = "",
     val showingFeedingPoint: FeedingPoint? = null,
     val showingWillFeedDialog: Boolean = false
 )

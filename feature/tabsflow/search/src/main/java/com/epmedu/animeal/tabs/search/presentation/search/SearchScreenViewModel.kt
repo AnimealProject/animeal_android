@@ -8,7 +8,9 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.tabs.search.domain.GetFeedingPointsUseCase
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointHidden
@@ -17,32 +19,40 @@ import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Show
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
-    private val getFeedingPointsUseCase: GetFeedingPointsUseCase,
+    private val searchCatsFeedingPointsUseCase: SearchCatsFeedingPointsUseCase,
+    private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
-) : ViewModel(), StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
+) : ViewModel(),
+    StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
     ActionDelegate by actionDelegate {
 
     init {
         viewModelScope.launch {
             stateFlow.collectLatest { state ->
-                getFeedingPointsUseCase(state.query).collect { points ->
+                combine(
+                    searchDogsFeedingPointsUseCase(state.dogsQuery),
+                    searchCatsFeedingPointsUseCase(state.catsQuery)
+                ) { dogs, cats ->
                     updateState {
                         copy(
-                            feedingPoints = points.toImmutableList(),
-                            favourites = points.filter { it.isFavourite }.toImmutableList()
+                            catsFeedingPoints = cats.toImmutableList(),
+                            dogsFeedingPoints = dogs.toImmutableList(),
+                            favourites = (cats + dogs).filter { it.isFavourite }
+                                .toImmutableList()
                         )
                     }
-                }
+                }.collect()
             }
         }
-
     }
 
     fun handleEvents(event: SearchScreenEvent) {
@@ -52,7 +62,14 @@ class SearchScreenViewModel @Inject constructor(
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
             is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
-            is SearchScreenEvent.Search -> updateState { copy(query = event.query) }
+            is SearchScreenEvent.Search -> handleSearch(event)
+        }
+    }
+
+    private fun handleSearch(event: SearchScreenEvent.Search) {
+        when (event.animalType) {
+            AnimalType.Dogs -> updateState { copy(dogsQuery = event.query) }
+            AnimalType.Cats -> updateState { copy(catsQuery = event.query) }
         }
     }
 

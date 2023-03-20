@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,7 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
@@ -43,9 +47,9 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.AnimealPagerTabRow
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.search.domain.model.GroupFeedingPointsModel
-import com.epmedu.animeal.tabs.search.presentation.cats.CatsContent
-import com.epmedu.animeal.tabs.search.presentation.dogs.DogsContent
+import com.epmedu.animeal.tabs.search.presentation.AnimalListWithSearch
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -71,12 +75,7 @@ internal fun SearchScreenUi(
     }
 
     ScreenScaffold(
-        bottomSheetState,
-        state,
-        contentAlpha,
-        buttonAlpha,
-        scope,
-        onEvent
+        bottomSheetState, state, contentAlpha, buttonAlpha, scope, onEvent
     )
 }
 
@@ -90,26 +89,23 @@ private fun ScreenScaffold(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
-    AnimealBottomSheetLayout(
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(top = 20.dp),
+    AnimealBottomSheetLayout(modifier = Modifier
+        .statusBarsPadding()
+        .padding(top = 20.dp),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         skipHalfExpanded = true,
         sheetContent = {
             state.showingFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(
-                    feedingPoint = FeedingPointModel(
-                        feedingPoint
-                    ),
+                FeedingPointSheetContent(feedingPoint = FeedingPointModel(
+                    feedingPoint
+                ),
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
-                    }
-                )
+                    })
             }
         },
         sheetControls = {
@@ -118,8 +114,7 @@ private fun ScreenScaffold(
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
                 onClick = { onEvent(SearchScreenEvent.ShowWillFeedDialog) },
             )
-        }
-    ) {
+        }) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -134,29 +129,22 @@ private fun ScreenScaffold(
 
 @Composable
 private fun HandleFeedingPointSheetHiddenState(
-    bottomSheetState: AnimealBottomSheetState,
-    onEvent: (SearchScreenEvent) -> Unit
+    bottomSheetState: AnimealBottomSheetState, onEvent: (SearchScreenEvent) -> Unit
 ) {
     LaunchedEffect(bottomSheetState) {
-        snapshotFlow { bottomSheetState.isHidden }
-            .distinctUntilChanged()
-            .filter { it }
-            .collect {
-                onEvent(SearchScreenEvent.FeedingPointHidden)
-            }
+        snapshotFlow { bottomSheetState.isHidden }.distinctUntilChanged().filter { it }.collect {
+            onEvent(SearchScreenEvent.FeedingPointHidden)
+        }
     }
 }
 
 @Composable
 internal fun WillFeedConfirmationDialog(
-    state: SearchState,
-    onEvent: (SearchScreenEvent) -> Unit
+    state: SearchState, onEvent: (SearchScreenEvent) -> Unit
 ) {
     if (state.showingWillFeedDialog) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) },
-            onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) }
-        )
+        FeedConfirmationDialog(onAgreeClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) },
+            onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) })
     }
 }
 
@@ -173,15 +161,28 @@ private fun ScreenContent(
     ) {
         AnimalTypeHorizontalPager(
             modifier = Modifier.padding(
-                top = 16.dp,
-                start = 30.dp,
-                end = 30.dp
-            ),
-            scope = scope
+                top = 16.dp, start = 30.dp, end = 30.dp
+            ), scope = scope
         ) { animalType ->
+
             when (animalType) {
-                AnimalType.Dogs -> DogsContent(state, onEvent)
-                AnimalType.Cats -> CatsContent()
+                AnimalType.Dogs -> {
+                    AnimalListWithSearch(
+                        animalType = animalType,
+                        feedingPoints = state.dogsFeedingPoints,
+                        query = state.dogsQuery,
+                        onEvent = onEvent,
+                    )
+                }
+
+                AnimalType.Cats -> {
+                    AnimalListWithSearch(
+                        animalType = animalType,
+                        feedingPoints = state.catsFeedingPoints,
+                        query = state.catsQuery,
+                        onEvent = onEvent,
+                    )
+                }
             }
         }
     }
@@ -190,10 +191,12 @@ private fun ScreenContent(
 @Composable
 fun AnimalExpandableList(
     groupedPoints: List<GroupFeedingPointsModel>,
+    query: String,
     onEvent: (SearchScreenEvent) -> Unit,
-    topItemContent: @Composable LazyItemScope.() -> Unit,
+    topItemContent: @Composable (LazyItemScope.() -> Unit),
 ) {
     val scrollState = rememberLazyListState()
+
     LazyColumn(
         state = scrollState,
         modifier = Modifier.padding(top = 12.dp),
@@ -201,6 +204,17 @@ fun AnimalExpandableList(
     ) {
 
         item { topItemContent() }
+
+        if (groupedPoints.isEmpty() && query.isNotEmpty()) {
+            return@LazyColumn item {
+                Column(
+                    modifier = Modifier
+                        .fillParentMaxHeight(0.7f)
+                ) {
+                    EmptyListState(query)
+                }
+            }
+        }
 
         items(groupedPoints, key = { group -> group.title }) { group ->
             var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
@@ -220,20 +234,17 @@ fun AnimalExpandableList(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     group.points.forEach { feedingPoint ->
-                        FeedingPointItem(
-                            title = feedingPoint.title,
+                        FeedingPointItem(title = feedingPoint.title,
                             status = feedingPoint.animalStatus.toFeedStatus(),
                             isFavourite = feedingPoint.isFavourite,
                             onFavouriteChange = { isFavourite ->
                                 onEvent(
                                     SearchScreenEvent.FavouriteChange(
-                                        isFavourite,
-                                        feedingPoint
+                                        isFavourite, feedingPoint
                                     )
                                 )
                             },
-                            onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) }
-                        )
+                            onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) })
                     }
                 }
             }
@@ -241,6 +252,21 @@ fun AnimalExpandableList(
     }
 }
 
+
+@Composable
+private fun EmptyListState(query: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.search_no_items, query),
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -253,26 +279,19 @@ fun AnimalTypeHorizontalPager(
     val pagerState = rememberPagerState()
 
     Column() {
-        AnimealPagerTabRow(
-            modifier = modifier,
-            pagerState = pagerState,
-            onSelectTab = { tabIndex ->
-                scope.launch {
-                    pagerState.animateScrollToPage(tabIndex)
-                }
-            })
-
-        HorizontalPager(
-            count = pages.size,
-            state = pagerState,
-            content = { page ->
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    content(pages[page])
-                }
+        AnimealPagerTabRow(modifier = modifier, pagerState = pagerState, onSelectTab = { tabIndex ->
+            scope.launch {
+                pagerState.animateScrollToPage(tabIndex)
             }
-        )
+        })
+
+        HorizontalPager(count = pages.size, state = pagerState, content = { page ->
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                content(pages[page])
+            }
+        })
     }
 }
 
