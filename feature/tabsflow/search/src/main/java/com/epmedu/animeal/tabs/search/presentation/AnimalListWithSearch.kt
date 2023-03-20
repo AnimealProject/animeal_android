@@ -42,9 +42,13 @@ fun AnimalListWithSearch(
             query = query
         ) {
             SearchView(
-                modifier = Modifier.padding(
-                    horizontal = 30.dp, vertical = 28.dp
-                ), initialValue = query
+                modifier = Modifier
+                    .padding(horizontal = 30.dp)
+                    .padding(
+                        top = 14.dp,
+                        bottom = 14.dp
+                    ),
+                initialValue = query
             ) { textFieldValue ->
                 onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))
             }
