@@ -78,7 +78,7 @@ fun SearchView(
             if (query != TextFieldValue()) {
                 IconButton(onClick = {
                     query = TextFieldValue()
-                    // Remove text from TextField when you press the 'X' icon
+                    onValueChanged(query)
                 }) {
                     Icon(
                         Icons.Default.Close,
