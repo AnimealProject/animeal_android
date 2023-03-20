@@ -96,7 +96,7 @@ private fun ScreenScaffold(
             .padding(top = 20.dp),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        isHalfExpandedStateEnabled = false,
+        skipHalfExpanded = false,
         sheetContent = {
             state.showingFeedSpot?.let { feedingPoint ->
                 FeedingPointSheetContent(
