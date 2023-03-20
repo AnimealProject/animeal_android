@@ -1,21 +1,18 @@
 package com.epmedu.animeal.tabs.search.presentation.search
 
-import com.epmedu.animeal.common.constants.DefaultConstants
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 
-sealed class SearchScreenEvent(open val id: String = DefaultConstants.EMPTY_STRING) {
-    data class FeedSpotSelected(override val id: String) : SearchScreenEvent(id)
+sealed interface SearchScreenEvent {
+    data class FeedingPointSelected(val feedingPoint: FeedingPoint) : SearchScreenEvent
+    object FeedingPointHidden : SearchScreenEvent
 
-    data class FeedSpotChanged(
-        override val id: String,
-        val isFavorite: Boolean
-    ) : SearchScreenEvent(id)
+    data class FavouriteChange(
+        val isFavourite: Boolean,
+        val feedingPoint: FeedingPoint
+    ) : SearchScreenEvent
 
-    object FeedingPointSheetHidden : SearchScreenEvent()
-
-    data class ShowWillFeedDialog(override val id: String) : SearchScreenEvent(id)
-
-    object DismissWillFeedDialog : SearchScreenEvent()
-
-    data class Search(val query: String, val animalType: AnimalType) : SearchScreenEvent()
+    object ShowWillFeedDialog : SearchScreenEvent
+    object DismissWillFeedDialog : SearchScreenEvent
+    data class Search(val query: String, val animalType: AnimalType) : SearchScreenEvent
 }

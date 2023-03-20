@@ -21,7 +21,7 @@ fun SearchScreen() {
         searchViewModel.handleEvents(it)
     })
 
-    if (searchState.showingFeedSpot != null) {
+    if (searchState.showingFeedingPoint != null) {
         LaunchedEffect(Unit) { bottomSheetState.expand() }
     }
 }

@@ -6,7 +6,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class SearchState(
     val feedingPoints: ImmutableList<FeedingPoint> = persistentListOf(),
+    val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
     val query: String = "",
-    val showingFeedSpot: FeedingPoint? = null,
+    val showingFeedingPoint: FeedingPoint? = null,
     val showingWillFeedDialog: Boolean = false
 )

@@ -96,9 +96,9 @@ private fun ScreenScaffold(
             .padding(top = 20.dp),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        skipHalfExpanded = false,
+        skipHalfExpanded = true,
         sheetContent = {
-            state.showingFeedSpot?.let { feedingPoint ->
+            state.showingFeedingPoint?.let { feedingPoint ->
                 FeedingPointSheetContent(
                     feedingPoint = FeedingPointModel(
                         feedingPoint
@@ -106,13 +106,8 @@ private fun ScreenScaffold(
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
-                    onFavouriteChange = { selected ->
-                        onEvent(
-                            SearchScreenEvent.FeedSpotChanged(
-                                feedingPoint.id,
-                                isFavorite = selected,
-                            )
-                        )
+                    onFavouriteChange = { isFavourite ->
+                        onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
                     }
                 )
             }
@@ -120,8 +115,8 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedSpot?.animalStatus == AnimalState.RED,
-                onClick = { onEvent(SearchScreenEvent.ShowWillFeedDialog(state.showingFeedSpot!!.id)) },
+                enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
+                onClick = { onEvent(SearchScreenEvent.ShowWillFeedDialog) },
             )
         }
     ) {
@@ -147,7 +142,7 @@ private fun HandleFeedingPointSheetHiddenState(
             .distinctUntilChanged()
             .filter { it }
             .collect {
-                onEvent(SearchScreenEvent.FeedingPointSheetHidden)
+                onEvent(SearchScreenEvent.FeedingPointHidden)
             }
     }
 }
@@ -224,22 +219,20 @@ fun AnimalExpandableList(
                         .padding(vertical = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    group.points.forEach { item ->
+                    group.points.forEach { feedingPoint ->
                         FeedingPointItem(
-                            title = item.title,
-                            status = item.animalStatus.toFeedStatus(),
-                            isFavourite = item.isFavourite,
-                            onFavouriteChange = {
+                            title = feedingPoint.title,
+                            status = feedingPoint.animalStatus.toFeedStatus(),
+                            isFavourite = feedingPoint.isFavourite,
+                            onFavouriteChange = { isFavourite ->
                                 onEvent(
-                                    SearchScreenEvent.FeedSpotChanged(
-                                        item.id,
-                                        isFavorite = it
+                                    SearchScreenEvent.FavouriteChange(
+                                        isFavourite,
+                                        feedingPoint
                                     )
                                 )
                             },
-                            onClick = {
-                                onEvent(SearchScreenEvent.FeedSpotSelected(item.id))
-                            }
+                            onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) }
                         )
                     }
                 }
