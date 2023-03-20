@@ -1,6 +1,8 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
+    private val authApi: AuthAPI,
     private val feedingPointApi: FeedingPointApi,
     favouriteRepository: FavouriteRepository,
     dispatchers: Dispatchers
@@ -67,7 +70,7 @@ internal class FeedingPointRepositoryImpl(
 
     private fun subscribeToFeedingPointsUpdates(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.subscribeToFeedingPointsUpdates().map { updatedFeedingPoint ->
-            feedingPoints.find { it.id == updatedFeedingPoint.id() }?.let {
+            feedingPoints.find { it.id == updatedFeedingPoint.id }?.let {
                 feedingPoints.replaceElement(
                     oldElement = it,
                     newElement = updatedFeedingPoint.toDomainFeedingPoint()
@@ -77,8 +80,8 @@ internal class FeedingPointRepositoryImpl(
     }
 
     private fun subscribeToFeedingPointsDeletion(): Flow<List<DomainFeedingPoint>> {
-        return feedingPointApi.subscribeToFeedingPointsDeletion().map { deletedFeedingPointId ->
-            feedingPoints.find { it.id == deletedFeedingPointId }?.let {
+        return feedingPointApi.subscribeToFeedingPointsDeletion().map { deletedFeedingPoint ->
+            feedingPoints.find { it.id == deletedFeedingPoint.id }?.let {
                 feedingPoints - it
             } ?: feedingPoints
         }

@@ -26,6 +26,7 @@ object FeedingModule {
     @Singleton
     @Provides
     fun providesFeedingPointRepository(
+        authApi: AuthAPI,
         favouriteRepository: FavouriteRepository,
         feedingPointApi: FeedingPointApi,
         debugMenuRepository: DebugMenuRepository,
@@ -39,6 +40,7 @@ object FeedingModule {
             }
             else -> {
                 FeedingPointRepositoryImpl(
+                    authApi = authApi,
                     feedingPointApi = feedingPointApi,
                     favouriteRepository = favouriteRepository,
                     dispatchers = Dispatchers

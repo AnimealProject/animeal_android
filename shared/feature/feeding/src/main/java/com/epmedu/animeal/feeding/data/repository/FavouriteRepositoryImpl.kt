@@ -5,15 +5,10 @@ import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
-import com.epmedu.animeal.feeding.data.mapper.toFavourite
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class FavouriteRepositoryImpl(
@@ -46,28 +41,28 @@ class FavouriteRepositoryImpl(
         }
     }
 
-    private fun getFavourites(): Flow<List<Favourite>> {
-        return favouriteApi.getFavouriteList(authApi.currentUserId)
+    private suspend fun getFavourites(): Flow<List<Favourite>> {
+        return favouriteApi.getFavouriteList(authApi.getCurrentUserId())
     }
 
     private fun subscribeToFavouritesCreations(): Flow<List<Favourite>> {
         return favouriteApi.subscribeToFavouriteCreation()
-            .filter { it.userId() == authApi.currentUserId }
-            .map { favourites + it.toFavourite() }
+            .filter { it.userId == authApi.getCurrentUserId() }
+            .map { favourites + it }
     }
 
     private fun subscribeToFavouritesDeletions(): Flow<List<Favourite>> {
         return favouriteApi.subscribeToFavouriteDeletion()
-            .filter { it.userId() == authApi.currentUserId }
+            .filter { it.userId == authApi.getCurrentUserId() }
             .map { onDeleteFavourite ->
-                favourites.filterNot { it.feedingPointId == onDeleteFavourite.feedingPointId() }
+                favourites.filterNot { it.feedingPointId == onDeleteFavourite.feedingPointId }
             }
     }
 
     override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult {
         return favouriteApi.addFavourite(
             feedingPointId = feedingPointId,
-            userId = authApi.currentUserId
+            userId = authApi.getCurrentUserId()
         ).toActionResult()
     }
 

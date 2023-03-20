@@ -218,8 +218,11 @@ subscription OnDeleteCategory(
     owner
   }
 }
-subscription OnCreateFeedingPoint {
-  onCreateFeedingPoint {
+subscription OnCreateFeedingPoint(
+  $filter: ModelSubscriptionFeedingPointFilterInput
+  $owner: String
+) {
+  onCreateFeedingPoint(filter: $filter, owner: $owner) {
     id
     name
     description
@@ -279,8 +282,11 @@ subscription OnCreateFeedingPoint {
     feedingPointCategoryId
   }
 }
-subscription OnUpdateFeedingPoint {
-  onUpdateFeedingPoint {
+subscription OnUpdateFeedingPoint(
+  $filter: ModelSubscriptionFeedingPointFilterInput
+  $owner: String
+) {
+  onUpdateFeedingPoint(filter: $filter, owner: $owner) {
     id
     name
     description
@@ -340,8 +346,11 @@ subscription OnUpdateFeedingPoint {
     feedingPointCategoryId
   }
 }
-subscription OnDeleteFeedingPoint {
-  onDeleteFeedingPoint {
+subscription OnDeleteFeedingPoint(
+  $filter: ModelSubscriptionFeedingPointFilterInput
+  $owner: String
+) {
+  onDeleteFeedingPoint(filter: $filter, owner: $owner) {
     id
     name
     description
@@ -532,6 +541,8 @@ subscription OnCreateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 subscription OnUpdateFeedingHistory(
@@ -548,6 +559,8 @@ subscription OnUpdateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 subscription OnDeleteFeedingHistory(
@@ -564,6 +577,8 @@ subscription OnDeleteFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 subscription OnCreateRelationPetFeedingPoint(
@@ -1145,8 +1160,11 @@ subscription OnDeleteLanguagesSetting(
     owner
   }
 }
-subscription OnCreateFavourite {
-  onCreateFavourite {
+subscription OnCreateFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
+) {
+  onCreateFavourite(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId
@@ -1210,8 +1228,11 @@ subscription OnUpdateFavourite(
     owner
   }
 }
-subscription OnDeleteFavourite {
-  onDeleteFavourite {
+subscription OnDeleteFavourite(
+  $filter: ModelSubscriptionFavouriteFilterInput
+  $owner: String
+) {
+  onDeleteFavourite(filter: $filter, owner: $owner) {
     id
     userId
     feedingPointId

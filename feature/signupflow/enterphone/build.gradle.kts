@@ -21,6 +21,7 @@ dependencies {
 
     implementation(projects.shared.feature.profile)
 
+    implementation(libs.amplify.aws.auth.cognito)
     implementation(libs.amplify.core)
 
     implementation(libs.androidx.datastore)

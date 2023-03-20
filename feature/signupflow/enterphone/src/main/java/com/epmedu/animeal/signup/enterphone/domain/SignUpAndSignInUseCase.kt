@@ -1,6 +1,6 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
-import com.amplifyframework.auth.AuthException.UsernameExistsException
+import com.amplifyframework.auth.cognito.exceptions.service.UsernameExistsException
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 

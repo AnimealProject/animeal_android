@@ -84,6 +84,8 @@ dependencies {
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 
+    implementation(libs.appsync)
+
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)
