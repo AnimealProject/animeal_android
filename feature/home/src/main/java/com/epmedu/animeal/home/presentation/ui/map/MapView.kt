@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.model.RouteResult
@@ -121,6 +122,18 @@ fun MapView.fetchRoute(
             routeLineView.cancel()
         }
     }
+}
+
+fun MapView.focusOnFeedingPoint(
+    feedingPoint: FeedingPointModel
+) {
+    setLocation(
+        location = MapLocation(
+            feedingPoint.coordinates.latitude(),
+            feedingPoint.coordinates.longitude()
+        ),
+        zoom = DEFAULT_ZOOM
+    )
 }
 
 fun MapView.drawRoute(

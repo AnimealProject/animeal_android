@@ -29,10 +29,16 @@ sealed interface HomeScreenEvent {
 
     sealed interface TimerEvent : HomeScreenEvent {
         object Expired : TimerEvent
-        object ExpirationAccepted : TimerEvent
+        object Disable : TimerEvent
     }
 
     data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
+
+    sealed interface TimerCancellationEvent : HomeScreenEvent {
+        object CancellationAttempt : TimerCancellationEvent
+        object CancellationAccepted : TimerCancellationEvent
+        object CancellationDismissed : TimerCancellationEvent
+    }
 
     object ErrorShowed : HomeScreenEvent
 }

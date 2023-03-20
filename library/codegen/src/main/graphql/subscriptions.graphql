@@ -1145,11 +1145,8 @@ subscription OnDeleteLanguagesSetting(
     owner
   }
 }
-subscription OnCreateFavourite(
-  $filter: ModelSubscriptionFavouriteFilterInput
-  $owner: String
-) {
-  onCreateFavourite(filter: $filter, owner: $owner) {
+subscription OnCreateFavourite {
+  onCreateFavourite {
     id
     userId
     feedingPointId
@@ -1213,11 +1210,8 @@ subscription OnUpdateFavourite(
     owner
   }
 }
-subscription OnDeleteFavourite(
-  $filter: ModelSubscriptionFavouriteFilterInput
-  $owner: String
-) {
-  onDeleteFavourite(filter: $filter, owner: $owner) {
+subscription OnDeleteFavourite {
+  onDeleteFavourite {
     id
     userId
     feedingPointId

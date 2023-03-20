@@ -16,6 +16,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
@@ -27,6 +28,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
@@ -53,6 +55,7 @@ internal class HomeViewModel @Inject constructor(
     FeedingHandler by defaultHomeHandler,
     LocationHandler by defaultHomeHandler,
     TimerHandler by defaultHomeHandler,
+    TimerCancellationHandler by defaultHomeHandler,
     GpsHandler by defaultHomeHandler,
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
@@ -82,6 +85,7 @@ internal class HomeViewModel @Inject constructor(
             is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
             is TimerEvent -> viewModelScope.handleTimerEvent(event)
+            is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
         }
     }

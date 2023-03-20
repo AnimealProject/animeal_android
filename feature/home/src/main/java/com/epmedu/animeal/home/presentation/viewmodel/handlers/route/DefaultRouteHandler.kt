@@ -29,26 +29,30 @@ internal class DefaultRouteHandler @Inject constructor(
     }
 
     private fun updateRoute(event: FeedingRouteUpdateRequest) {
-        updateState {
-            copy(
-                feedingRouteState = FeedingRouteState.Active(
-                    event.result.distanceLeft,
-                    state.feedingRouteState.timeLeft,
-                    event.result.routeData
+        if (state.feedingRouteState is FeedingRouteState.Active) {
+            updateState {
+                copy(
+                    feedingRouteState = FeedingRouteState.Active(
+                        event.result.distanceLeft,
+                        state.feedingRouteState.timeLeft,
+                        event.result.routeData
+                    )
                 )
-            )
+            }
         }
     }
 
     private fun updateTimer(event: FeedingTimerUpdateRequest) {
-        updateState {
-            copy(
-                feedingRouteState = FeedingRouteState.Active(
-                    state.feedingRouteState.distanceLeft,
-                    event.timeLeft,
-                    state.feedingRouteState.routeData
+        if (state.feedingRouteState is FeedingRouteState.Active) {
+            updateState {
+                copy(
+                    feedingRouteState = FeedingRouteState.Active(
+                        state.feedingRouteState.distanceLeft,
+                        event.timeLeft,
+                        state.feedingRouteState.routeData
+                    )
                 )
-            )
+            }
         }
     }
 }

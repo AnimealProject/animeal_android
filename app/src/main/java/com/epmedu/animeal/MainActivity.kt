@@ -14,7 +14,7 @@ import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.TransparentSystemUi
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
-import com.epmedu.animeal.signup.SignUpFlow
+import com.epmedu.animeal.signup.presentation.SignUpFlow
 import com.epmedu.animeal.splash.presentation.SplashScreen
 import com.epmedu.animeal.tabs.TabsHost
 import dagger.hilt.android.AndroidEntryPoint

@@ -19,6 +19,10 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.networkuser)
+    implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.router)
+
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)

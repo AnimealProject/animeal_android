@@ -18,6 +18,8 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.router)
+
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.emoji2)
     implementation(libs.androidx.viewmodel)

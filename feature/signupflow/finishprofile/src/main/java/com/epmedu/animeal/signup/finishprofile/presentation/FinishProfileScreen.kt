@@ -29,10 +29,10 @@ fun FinishProfileScreen() {
         viewModel.events.collect {
             when (it) {
                 FinishProfileEvent.NavigateBackToOnboarding -> {
-                    navigator.popBackStack(SignUpRoute.Onboarding.name)
+                    navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name)
                 }
                 FinishProfileEvent.NavigateBackToEnterPhone -> {
-                    navigator.popBackStack(SignUpRoute.EnterPhone.name)
+                    navigator.popBackStackOrNavigate(SignUpRoute.EnterPhone.name)
                 }
                 FinishProfileEvent.ProfileFinished -> {
                     navigator.navigateToTabs()

@@ -2,11 +2,19 @@ package com.epmedu.animeal.favourites.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.DismissWillFeedDialog
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
+import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWillFeedDialog
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -14,64 +22,88 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
-    private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase
+    actionDelegate: ActionDelegate,
+    private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
+    private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
-    StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()) {
-
-    private var favouritesSnapshot: List<FeedingPoint> = emptyList()
+    StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
+    ActionDelegate by actionDelegate {
 
     init {
         viewModelScope.launch {
-            getFavouriteFeedingPointsUseCase().collect {
-                favouritesSnapshot = it
-                updateState { copy(favourites = it.toImmutableList()) }
+            getFavouriteFeedingPointsUseCase().collect { feedingPoints ->
+                updateState { copy(favourites = feedingPoints.toImmutableList()) }
             }
         }
     }
 
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
-            is FavouritesScreenEvent.FeedSpotChanged -> {
-                val showingFeedSpot = updateShowingFeedSpot(event)
-                updateSnapshot(event)
+            is FavouriteChange -> handleFavouriteChange(event)
+            is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
+            is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
+            is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
+            is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
+        }
+    }
 
-                updateState {
-                    copy(
-                        favourites = favouritesSnapshot.filter { it.isFavourite }.toImmutableList(),
-                        showingFeedSpot = showingFeedSpot
-                    )
+    private fun handleFavouriteChange(event: FavouriteChange) {
+        when {
+            event.isFavourite -> addFeedingPointToFavourites(event.feedingPoint)
+            else -> removeFeedingPointFromFavourites(event.feedingPoint)
+        }
+    }
+
+    private fun addFeedingPointToFavourites(feedingPoint: FeedingPoint) {
+        markFeedingPointAsFavourite(feedingPoint)
+        tryAddingFeedingPointToFavourites(feedingPoint)
+    }
+
+    private fun removeFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+        unmarkFeedingPointFromFavourites(feedingPoint)
+        tryRemovingFeedingPointFromFavourites(feedingPoint)
+    }
+
+    private fun markFeedingPointAsFavourite(feedingPoint: FeedingPoint) {
+        updateState {
+            copy(
+                favourites = (favourites + feedingPoint).toImmutableList(),
+                showingFeedingPoint = when (showingFeedingPoint) {
+                    feedingPoint -> feedingPoint.copy(isFavourite = true)
+                    else -> showingFeedingPoint
                 }
-            }
-            is FavouritesScreenEvent.FeedSpotSelected -> {
-                updateState { copy(showingFeedSpot = favourites.first { it.id == event.id }) }
-            }
-            FavouritesScreenEvent.DismissWillFeedDialog -> {
-                updateState { copy(showingWillFeedDialog = false) }
-            }
-            is FavouritesScreenEvent.ShowWillFeedDialog -> {
-                updateState { copy(showingWillFeedDialog = true) }
-            }
-            FavouritesScreenEvent.FeedingPointSheetHidden -> {
-                updateState { copy(showingFeedSpot = null) }
-            }
+            )
         }
     }
 
-    private fun updateShowingFeedSpot(event: FavouritesScreenEvent.FeedSpotChanged): FeedingPoint? {
-        return if (state.showingFeedSpot?.id == event.id) {
-            state.showingFeedSpot.copy(isFavourite = event.isFavorite)
-        } else {
-            state.showingFeedSpot
+    private fun unmarkFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+        updateState {
+            copy(
+                favourites = (favourites - feedingPoint).toImmutableList(),
+                showingFeedingPoint = when (showingFeedingPoint) {
+                    feedingPoint -> feedingPoint.copy(isFavourite = false)
+                    else -> showingFeedingPoint
+                }
+            )
         }
     }
 
-    private fun updateSnapshot(event: FavouritesScreenEvent.FeedSpotChanged) {
-        favouritesSnapshot = favouritesSnapshot.map { feedingPoint ->
-            if (event.id == feedingPoint.id) {
-                feedingPoint.copy(isFavourite = event.isFavorite)
-            } else {
-                feedingPoint
-            }
+    private fun tryAddingFeedingPointToFavourites(feedingPoint: FeedingPoint) {
+        viewModelScope.launch {
+            performAction(
+                action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
+                onError = { unmarkFeedingPointFromFavourites(feedingPoint) }
+            )
+        }
+    }
+
+    private fun tryRemovingFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+        viewModelScope.launch {
+            performAction(
+                action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },
+                onError = { markFeedingPointAsFavourite(feedingPoint) }
+            )
         }
     }
 }

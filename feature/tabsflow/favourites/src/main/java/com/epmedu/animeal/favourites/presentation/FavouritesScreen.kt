@@ -17,12 +17,14 @@ fun FavouritesScreen() {
     val viewModel = hiltViewModel<FavouritesViewModel>()
 
     val state by viewModel.stateFlow.collectAsState()
-    val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
+    val bottomSheetState = rememberAnimealBottomSheetState(
+        initialValue = AnimealBottomSheetValue.Hidden,
+    )
 
     FavouritesScreenUI(state, bottomSheetState, onEvent = {
         viewModel.handleEvents(it)
     })
-    if (state.showingFeedSpot != null) {
+    if (state.showingFeedingPoint != null) {
         LaunchedEffect(Unit) { bottomSheetState.expand() }
     }
 }

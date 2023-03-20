@@ -43,7 +43,9 @@ internal class ProfileRepositoryImpl @Inject constructor(
             dataStore.edit { preference ->
                 preference[nameKey] = profile.name
                 preference[surnameKey] = profile.surname
+                preference[phoneNumberRegionKey] = profile.phoneNumberRegion.name
                 preference[phoneNumberKey] = profile.phoneNumber
+                preference[phoneNumberRegionKey] = profile.phoneNumberRegion.name
                 preference[emailKey] = profile.email
                 preference[birthDateKey] = profile.birthDate
             }
@@ -68,7 +70,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun isProfileSaved(): Boolean {
         return with(getProfile().first()) {
-            listOf(name, surname, phoneNumber, email, birthDate).all { it.isNotEmpty() }
+            listOf(name, surname, email, birthDate).all { it.isNotEmpty() }
         }
     }
 }

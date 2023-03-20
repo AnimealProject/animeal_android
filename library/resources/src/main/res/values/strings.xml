@@ -83,7 +83,10 @@
     <string name="onboarding_facebook_sign_in_error">Error during Facebook sign-in occurred, please check network connection and try again</string>
 
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
+    <string name="feeding_timer_suspended">Do you really want to cancel feeding?</string>
     <string name="feeding_timer_expired">Your feeding time is over. You can book a new feeding from the home page.</string>
+
+    <string name="feeding_take_pictures">Please take pictures where pet and food is detected</string>
 
     <string name="done">Done</string>
     <string name="ok">OK</string>
@@ -98,6 +101,7 @@
     <string name="last_feeder">Last feeder</string>
     <string name="show_on_map">Show on map</string>
     <string name="agree">Agree</string>
+    <string name="finish">Finish</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
