@@ -68,16 +68,14 @@ fun AnimealPagerTabRow(
             AnimealPagerTab(
                 animalType = animalType,
                 selected = pagerState.currentPage == index,
-                onClick = { onSelectTab(index) })
-
+                onClick = { onSelectTab(index) }
+            )
         }
     }
 }
 
-
 @Composable
 private fun AnimealPagerTab(
-    modifier: Modifier = Modifier,
     animalType: AnimalType,
     selected: Boolean,
     onClick: () -> Unit
@@ -86,11 +84,11 @@ private fun AnimealPagerTab(
         Tab(
             selected = selected,
             onClick = onClick,
-            modifier = modifier
+            modifier = Modifier
                 .height(50.dp)
         ) {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxHeight()
                     .padding(bottom = 4.dp),
                 contentAlignment = Alignment.BottomCenter

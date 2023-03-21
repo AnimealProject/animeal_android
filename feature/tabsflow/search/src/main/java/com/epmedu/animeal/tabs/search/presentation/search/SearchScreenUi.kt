@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,10 +76,14 @@ internal fun SearchScreenUi(
     }
 
     ScreenScaffold(
-        bottomSheetState, state, contentAlpha, buttonAlpha, scope, onEvent
+        bottomSheetState,
+        state,
+        contentAlpha,
+        buttonAlpha,
+        scope,
+        onEvent
     )
 }
-
 
 @Composable
 private fun ScreenScaffold(
@@ -89,23 +94,26 @@ private fun ScreenScaffold(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
-    AnimealBottomSheetLayout(modifier = Modifier
-        .statusBarsPadding()
-        .padding(top = 20.dp),
+    AnimealBottomSheetLayout(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(top = 20.dp),
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         skipHalfExpanded = true,
         sheetContent = {
             state.showingFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(feedingPoint = FeedingPointModel(
-                    feedingPoint
-                ),
+                FeedingPointSheetContent(
+                    feedingPoint = FeedingPointModel(
+                        feedingPoint
+                    ),
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
-                    })
+                    }
+                )
             }
         },
         sheetControls = {
@@ -114,7 +122,8 @@ private fun ScreenScaffold(
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
                 onClick = { onEvent(SearchScreenEvent.ShowWillFeedDialog) },
             )
-        }) {
+        }
+    ) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -129,7 +138,8 @@ private fun ScreenScaffold(
 
 @Composable
 private fun HandleFeedingPointSheetHiddenState(
-    bottomSheetState: AnimealBottomSheetState, onEvent: (SearchScreenEvent) -> Unit
+    bottomSheetState: AnimealBottomSheetState,
+    onEvent: (SearchScreenEvent) -> Unit
 ) {
     LaunchedEffect(bottomSheetState) {
         snapshotFlow { bottomSheetState.isHidden }.distinctUntilChanged().filter { it }.collect {
@@ -140,14 +150,16 @@ private fun HandleFeedingPointSheetHiddenState(
 
 @Composable
 internal fun WillFeedConfirmationDialog(
-    state: SearchState, onEvent: (SearchScreenEvent) -> Unit
+    state: SearchState,
+    onEvent: (SearchScreenEvent) -> Unit
 ) {
     if (state.showingWillFeedDialog) {
-        FeedConfirmationDialog(onAgreeClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) },
-            onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) })
+        FeedConfirmationDialog(
+            onAgreeClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) },
+            onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) }
+        )
     }
 }
-
 
 @Composable
 private fun ScreenContent(
@@ -155,14 +167,17 @@ private fun ScreenContent(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit,
 ) {
-
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                top = 16.dp,
+                start = 30.dp,
+                end = 30.dp
+            ),
     ) {
         AnimalTypeHorizontalPager(
-            modifier = Modifier.padding(
-                top = 16.dp, start = 30.dp, end = 30.dp
-            ), scope = scope
+            scope = scope
         ) { animalType ->
 
             when (animalType) {
@@ -196,75 +211,79 @@ fun AnimalExpandableList(
     topItemContent: @Composable (LazyItemScope.() -> Unit),
 ) {
     val scrollState = rememberLazyListState()
+    val isSearchResultsEmpty = groupedPoints.isEmpty() && query.isNotEmpty()
 
     LazyColumn(
         state = scrollState,
         modifier = Modifier.padding(top = 12.dp),
         contentPadding = PaddingValues(bottom = 8.dp)
     ) {
-
         item { topItemContent() }
 
-        if (groupedPoints.isEmpty() && query.isNotEmpty()) {
-            return@LazyColumn item {
-                Column(
-                    modifier = Modifier
-                        .fillParentMaxHeight(0.7f)
-                ) {
-                    EmptyListState(query)
-                }
-            }
+        if (isSearchResultsEmpty) {
+            renderEmptyListState(query)
+        } else {
+            renderGroupedFeedingPoints(groupedPoints, onEvent)
         }
+    }
+}
 
-        items(groupedPoints, key = { group -> group.title }) { group ->
-            var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
+private fun LazyListScope.renderGroupedFeedingPoints(
+    groupedPoints: List<GroupFeedingPointsModel>,
+    onEvent: (SearchScreenEvent) -> Unit
+) {
+    items(groupedPoints, key = { group -> group.title }) { group ->
+        var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
 
-            ExpandableListItem(
-                title = group.title,
-                onClick = {
-                    group.isExpanded = !group.isExpanded
-                    isExpanded = group.isExpanded
-                },
-                isExpanded = isExpanded
+        ExpandableListItem(
+            title = group.title,
+            onClick = {
+                isExpanded = !group.isExpanded
+                onEvent(SearchScreenEvent.GroupChanged(isExpanded, group))
+            },
+            isExpanded = isExpanded
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 30.dp)
+                    .padding(vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 30.dp)
-                        .padding(vertical = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    group.points.forEach { feedingPoint ->
-                        FeedingPointItem(title = feedingPoint.title,
-                            status = feedingPoint.animalStatus.toFeedStatus(),
-                            isFavourite = feedingPoint.isFavourite,
-                            onFavouriteChange = { isFavourite ->
-                                onEvent(
-                                    SearchScreenEvent.FavouriteChange(
-                                        isFavourite, feedingPoint
-                                    )
+                group.points.forEach { feedingPoint ->
+                    FeedingPointItem(
+                        title = feedingPoint.title,
+                        status = feedingPoint.animalStatus.toFeedStatus(),
+                        isFavourite = feedingPoint.isFavourite,
+                        onFavouriteChange = { isFavourite ->
+                            onEvent(
+                                SearchScreenEvent.FavouriteChange(
+                                    isFavourite,
+                                    feedingPoint
                                 )
-                            },
-                            onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) })
-                    }
+                            )
+                        },
+                        onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) }
+                    )
                 }
             }
         }
     }
 }
 
-
-@Composable
-private fun EmptyListState(query: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.search_no_items, query),
-            modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
+private fun LazyListScope.renderEmptyListState(query: String) {
+    item {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillParentMaxHeight(0.7f)
+                .padding(horizontal = 32.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.search_no_items, query),
+                modifier = Modifier.align(Alignment.Center),
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
@@ -272,14 +291,13 @@ private fun EmptyListState(query: String) {
 @Composable
 fun AnimalTypeHorizontalPager(
     scope: CoroutineScope,
-    modifier: Modifier = Modifier,
     content: @Composable (animalType: AnimalType) -> Unit,
 ) {
     val pages = remember { AnimalType.values() }
     val pagerState = rememberPagerState()
 
-    Column() {
-        AnimealPagerTabRow(modifier = modifier, pagerState = pagerState, onSelectTab = { tabIndex ->
+    Column {
+        AnimealPagerTabRow(pagerState = pagerState, onSelectTab = { tabIndex ->
             scope.launch {
                 pagerState.animateScrollToPage(tabIndex)
             }

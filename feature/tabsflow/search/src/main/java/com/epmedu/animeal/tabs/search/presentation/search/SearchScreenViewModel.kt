@@ -1,3 +1,4 @@
+
 package com.epmedu.animeal.tabs.search.presentation.search
 
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,8 @@ import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Dism
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointSelected
+import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.GroupChanged
+import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Search
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.ShowWillFeedDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -46,8 +49,7 @@ class SearchScreenViewModel @Inject constructor(
                         copy(
                             catsFeedingPoints = cats.toImmutableList(),
                             dogsFeedingPoints = dogs.toImmutableList(),
-                            favourites = (cats + dogs).filter { it.isFavourite }
-                                .toImmutableList()
+                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList()
                         )
                     }
                 }.collect()
@@ -62,17 +64,17 @@ class SearchScreenViewModel @Inject constructor(
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
             is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
-            is SearchScreenEvent.Search -> handleSearch(event)
+            is GroupChanged -> {}
+            is Search -> handleSearch(event)
         }
     }
 
-    private fun handleSearch(event: SearchScreenEvent.Search) {
+    private fun handleSearch(event: Search) {
         when (event.animalType) {
             AnimalType.Dogs -> updateState { copy(dogsQuery = event.query) }
             AnimalType.Cats -> updateState { copy(catsQuery = event.query) }
         }
     }
-
 
     private fun handleFavouriteChange(event: FavouriteChange) {
         when {
@@ -117,16 +119,19 @@ class SearchScreenViewModel @Inject constructor(
 
     private fun tryAddingFeedingPointToFavourites(feedingPoint: FeedingPoint) {
         viewModelScope.launch {
-            performAction(action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
-                onError = { unmarkFeedingPointFromFavourites(feedingPoint) })
+            performAction(
+                action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
+                onError = { unmarkFeedingPointFromFavourites(feedingPoint) }
+            )
         }
     }
 
     private fun tryRemovingFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
         viewModelScope.launch {
-            performAction(action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },
-                onError = { markFeedingPointAsFavourite(feedingPoint) })
+            performAction(
+                action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },
+                onError = { markFeedingPointAsFavourite(feedingPoint) }
+            )
         }
     }
 }
-

@@ -37,5 +37,4 @@ object CustomColor {
 
     val DarkGrey = Color(0xFFA3A3A3)
     val TrolleyGrey = Color(0xFF818181)
-
 }

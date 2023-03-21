@@ -5,7 +5,7 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 
 @Stable
 data class GroupFeedingPointsModel(
-    var isExpanded: Boolean = true,
+    val isExpanded: Boolean = true,
     val title: String,
     val points: List<FeedingPoint>
 )

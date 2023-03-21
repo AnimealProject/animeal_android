@@ -30,10 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
@@ -41,7 +41,7 @@ import com.epmedu.animeal.resources.R
 fun SearchView(
     modifier: Modifier = Modifier,
     initialValue: String = EMPTY_STRING,
-    onValueChanged: (TextFieldValue) -> Unit = {}
+    onValueChange: (TextFieldValue) -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -53,14 +53,17 @@ fun SearchView(
         value = query,
         onValueChange = { value ->
             query = value
-            onValueChanged(query)
+            onValueChange(query)
         },
-        //TODO Inner padding break everything with designed 40.dp height, mb migrate to BasicTextField
+        // TODO Inner padding break everything with designed 40.dp height, mb migrate to BasicTextField
         modifier = modifier
             .height(50.dp)
             .fillMaxWidth(),
         textStyle = TextStyle(
-            color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Light, lineHeight = 20.sp
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Light,
+            lineHeight = 20.sp
         ),
         placeholder = {
             Text(
@@ -74,30 +77,7 @@ fun SearchView(
                 ),
             )
         },
-        trailingIcon = {
-            if (query != TextFieldValue()) {
-                IconButton(onClick = {
-                    query = TextFieldValue()
-                    onValueChanged(query)
-                }) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = EMPTY_STRING,
-                        modifier = Modifier.size(18.dp),
-                        tint = CustomColor.TrolleyGrey
-                    )
-                }
-            } else {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_search),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(
-                        color = CustomColor.TrolleyGrey
-                    )
-                )
-            }
-        },
+        trailingIcon = { searchTrailingIcon(query, onValueChange) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
             focusManager.clearFocus()
@@ -116,8 +96,36 @@ fun SearchView(
     )
 }
 
-@Preview(showBackground = true)
 @Composable
-fun SearchViewPreview() {
+private fun searchTrailingIcon(
+    query: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit
+) {
+    if (query != TextFieldValue()) {
+        IconButton(onClick = {
+            onValueChange(TextFieldValue())
+        }) {
+            Icon(
+                Icons.Default.Close,
+                contentDescription = EMPTY_STRING,
+                modifier = Modifier.size(18.dp),
+                tint = CustomColor.TrolleyGrey
+            )
+        }
+    } else {
+        Image(
+            painter = painterResource(id = R.drawable.ic_search),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            colorFilter = ColorFilter.tint(
+                color = CustomColor.TrolleyGrey
+            )
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun SearchViewPreview() {
     SearchView()
 }

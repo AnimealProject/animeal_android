@@ -26,7 +26,8 @@ fun AnimalListWithSearch(
     val sortedPoints = remember(feedingPoints) {
         feedingPoints.groupBy { it.city }.map { entry ->
             GroupFeedingPointsModel(
-                title = entry.key, points = entry.value
+                title = entry.key,
+                points = entry.value
             )
         }
     }
@@ -55,4 +56,3 @@ fun AnimalListWithSearch(
         }
     }
 }
-
