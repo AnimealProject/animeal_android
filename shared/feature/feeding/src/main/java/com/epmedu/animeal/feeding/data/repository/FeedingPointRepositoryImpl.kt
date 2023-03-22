@@ -53,7 +53,7 @@ internal class FeedingPointRepositoryImpl(
 
     private fun getFeedingPoints(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.getAllFeedingPoints().map { dataFeedingPoints ->
-            dataFeedingPoints.filterNotNull().map { dataFeedingPoint ->
+            dataFeedingPoints.map { dataFeedingPoint ->
                 dataFeedingPoint.toDomainFeedingPoint()
             }
         }
