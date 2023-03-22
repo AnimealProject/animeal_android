@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
@@ -167,13 +168,10 @@ private fun ScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 16.dp,
-                start = 30.dp,
-                end = 30.dp
-            ),
+            .padding(top = 16.dp),
     ) {
         AnimalTypeHorizontalPager(
+            tabRowHorizontalPadding = 30.dp,
             scope = scope
         ) { animalType ->
 
@@ -279,6 +277,7 @@ private fun LazyListScope.renderEmptyListState(query: String) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun AnimalTypeHorizontalPager(
+    tabRowHorizontalPadding: Dp = 0.dp,
     scope: CoroutineScope,
     content: @Composable (animalType: AnimalType) -> Unit,
 ) {
@@ -286,11 +285,15 @@ fun AnimalTypeHorizontalPager(
     val pagerState = rememberPagerState()
 
     Column {
-        AnimealPagerTabRow(pagerState = pagerState, onSelectTab = { tabIndex ->
-            scope.launch {
-                pagerState.animateScrollToPage(tabIndex)
+        AnimealPagerTabRow(
+            modifier = Modifier.padding(horizontal = tabRowHorizontalPadding),
+            pagerState = pagerState,
+            onSelectTab = { tabIndex ->
+                scope.launch {
+                    pagerState.animateScrollToPage(tabIndex)
+                }
             }
-        })
+        )
 
         HorizontalPager(count = pages.size, state = pagerState, content = { page ->
             Box(

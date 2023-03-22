@@ -8,7 +8,6 @@ import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
-import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -89,16 +88,8 @@ internal class FeedingPointRepositoryImpl(
         return feedingPointsFlow.asStateFlow()
     }
 
-    override fun getCats(query: String): Flow<List<DomainFeedingPoint>> {
-        return getAllFeedingPoints().map { feedingPoints ->
-            feedingPoints.filter { it.animalType == AnimalType.Cats }
-        }
-    }
-
-    override fun getDogs(query: String): Flow<List<DomainFeedingPoint>> {
-        return getAllFeedingPoints().map { feedingPoints ->
-            feedingPoints.filter { it.animalType == AnimalType.Dogs }
-        }
+    override fun getFeedingPointsBy(predicate: (DomainFeedingPoint) -> Boolean): Flow<List<DomainFeedingPoint>> {
+        return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {
