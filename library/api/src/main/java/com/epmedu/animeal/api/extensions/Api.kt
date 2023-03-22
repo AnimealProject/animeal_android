@@ -45,8 +45,10 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
                 ModelQuery.list(GraphQLModel::class.java, it)
             } ?: ModelQuery.list(GraphQLModel::class.java),
             { response ->
-                response.data?.items?.let {
-                    trySendBlocking(it.toList())
+                val itemsList = response.data?.items?.filterNotNull()
+
+                if (itemsList != null && itemsList.isNotEmpty()) {
+                    trySendBlocking(itemsList)
                 }
             },
             { exception ->
