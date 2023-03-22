@@ -77,7 +77,12 @@ fun SearchView(
                 ),
             )
         },
-        trailingIcon = { searchTrailingIcon(query, onValueChange) },
+        trailingIcon = {
+            SearchTrailingIcon(query) { value ->
+                query = value
+                onValueChange(value)
+            }
+        },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
             focusManager.clearFocus()
@@ -97,7 +102,7 @@ fun SearchView(
 }
 
 @Composable
-private fun searchTrailingIcon(
+private fun SearchTrailingIcon(
     query: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit
 ) {
