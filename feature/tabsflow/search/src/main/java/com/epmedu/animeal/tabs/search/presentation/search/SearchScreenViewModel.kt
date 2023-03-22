@@ -1,4 +1,3 @@
-
 package com.epmedu.animeal.tabs.search.presentation.search
 
 import androidx.lifecycle.ViewModel
@@ -16,7 +15,6 @@ import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Dism
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointSelected
-import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.GroupChanged
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Search
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.ShowWillFeedDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,7 +62,6 @@ class SearchScreenViewModel @Inject constructor(
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
             is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
-            is GroupChanged -> {}
             is Search -> handleSearch(event)
         }
     }

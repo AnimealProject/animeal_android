@@ -21,11 +21,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -233,16 +230,8 @@ private fun LazyListScope.renderGroupedFeedingPoints(
     onEvent: (SearchScreenEvent) -> Unit
 ) {
     items(groupedPoints, key = { group -> group.title }) { group ->
-        var isExpanded by remember(key1 = group.title) { mutableStateOf(group.isExpanded) }
 
-        ExpandableListItem(
-            title = group.title,
-            onClick = {
-                isExpanded = !group.isExpanded
-                onEvent(SearchScreenEvent.GroupChanged(isExpanded, group))
-            },
-            isExpanded = isExpanded
-        ) {
+        ExpandableListItem(title = group.title) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 30.dp)
