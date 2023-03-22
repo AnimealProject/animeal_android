@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
     private val feedingPointApi: FeedingPointApi,

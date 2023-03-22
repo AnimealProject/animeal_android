@@ -18,12 +18,12 @@ import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Feed
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.Search
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.ShowWillFeedDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
