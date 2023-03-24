@@ -62,6 +62,8 @@ rootProject.name = "Animeal"
 
 include(":app")
 
+include(":feature:debugmenu")
+
 include(":feature:home")
 
 include(":feature:signupflow:entercode")
@@ -85,16 +87,17 @@ include(":feature:tabsflow:tabs")
 include(":feature:tabsflow:favourites")
 
 include(":library:analytics")
+include(":library:api")
 include(":library:auth")
 include(":library:codegen")
 include(":library:common")
 include(":library:extensions")
-include(":library:api")
 include(":library:foundation")
 include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
 
+include(":shared:feature:debugmenu")
 include(":shared:feature:feedconfirmation")
 include(":shared:feature:feeding")
 include(":shared:feature:networkuser")
