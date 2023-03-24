@@ -26,9 +26,14 @@ internal class FeedingPointRepositoryMock(
         FeedingPoint(
             id = index.toString(),
             title = "$index - Near to Bukia Garden M.S Technical University",
-            description = "$index - This area covers about 100 sq.m. -S, it starts with Bukia Garden " +
-                    "and Sports At the palace. There are about 1000 homeless people here " +
-                    "The dog lives with the habit of helping You need.",
+            description = "Ordered list : <ol> <li>first item</li> <li>second item</li> " +
+                    "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +
+                    "<h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by" +
+                    " <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph " +
+                    "</p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and " +
+                    "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
+                    " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
+                    " <li>third item</li> </ul> Text outside markup tags",
             animalStatus = AnimalState.values().random(),
             animalType = AnimalType.values().random(),
             isFavourite = Random.nextBoolean(),
