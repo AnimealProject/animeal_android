@@ -1,5 +1,6 @@
 package com.epmedu.animeal.tabs.search.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -63,6 +64,7 @@ internal fun SearchScreenUi(
 }
 
 @Composable
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: SearchState,
