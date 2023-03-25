@@ -5,7 +5,7 @@ import com.amplifyframework.datastore.generated.model.FeedingPointStatus
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
@@ -14,6 +14,7 @@ internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean = false)
         id = id ?: EMPTY_STRING,
         title = name ?: EMPTY_STRING,
         description = description ?: EMPTY_STRING,
+        city = city.orEmpty(),
         animalStatus = when (status) {
             FeedingPointStatus.fed -> AnimalState.GREEN
             FeedingPointStatus.pending -> AnimalState.YELLOW

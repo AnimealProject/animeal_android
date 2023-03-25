@@ -1,4 +1,4 @@
-package com.epmedu.animeal.foundation.switch
+package com.epmedu.animeal.foundation.tabs
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDp
@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 
 private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"
 private const val INDICATOR_LEFT_TRANSITION_LABEL = "TAB_INDICATOR_LEFT"
@@ -64,7 +64,7 @@ fun AnimealSwitch(
         },
         divider = {}
     ) {
-        AnimalTab(
+        AnimealSwitchTab(
             titleResId = AnimalType.Dogs.title,
             selected = currentAnimalType == AnimalType.Dogs,
             onClick = {
@@ -72,7 +72,7 @@ fun AnimealSwitch(
                 currentAnimalType = AnimalType.Dogs
             }
         )
-        AnimalTab(
+        AnimealSwitchTab(
             titleResId = AnimalType.Cats.title,
             selected = currentAnimalType == AnimalType.Cats,
             onClick = {
@@ -135,7 +135,7 @@ private fun TabIndicator(
  * @param modifier The [Modifier].
  */
 @Composable
-private fun AnimalTab(
+private fun AnimealSwitchTab(
     modifier: Modifier = Modifier,
     @StringRes titleResId: Int,
     selected: Boolean,
@@ -156,11 +156,6 @@ private fun AnimalTab(
             color = if (selected) Color.White else MaterialTheme.colors.onSurface
         )
     }
-}
-
-enum class AnimalType(@StringRes val title: Int) {
-    Dogs(R.string.switch_dogs_title),
-    Cats(R.string.switch_cats_title)
 }
 
 @AnimealPreview

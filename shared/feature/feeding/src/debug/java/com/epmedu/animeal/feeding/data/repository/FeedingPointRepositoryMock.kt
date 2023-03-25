@@ -7,7 +7,7 @@ import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlin.random.Random
 import kotlin.random.nextInt
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal class FeedingPointRepositoryMock(
@@ -22,6 +23,7 @@ internal class FeedingPointRepositoryMock(
     private val favouriteRepository: FavouriteRepository
 ) : FeedingPointRepository {
 
+    private val cities = setOf("Batumi", "Tbilisi", "Suhumi")
     private val stubData = List(25) { index ->
         FeedingPoint(
             id = index.toString(),
@@ -34,6 +36,7 @@ internal class FeedingPointRepositoryMock(
                     "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
                     " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
                     " <li>third item</li> </ul> Text outside markup tags",
+            city = cities.random(),
             animalStatus = AnimalState.values().random(),
             animalType = AnimalType.values().random(),
             isFavourite = Random.nextBoolean(),
@@ -67,6 +70,10 @@ internal class FeedingPointRepositoryMock(
 
     override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> {
         return feedingPointsFlow.asStateFlow()
+    }
+
+    override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
+        return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {

@@ -15,6 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,9 +28,9 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExpandableListItem(
+    modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     content: @Composable () -> Unit,
 ) {
@@ -53,15 +57,38 @@ fun ExpandableListItem(
     }
 }
 
+/**
+ * List Item with collapsing content.
+ *
+ * Contains default item remember logic, retained to configurations changes.
+ *
+ * @see[ExpandableListItem]
+ */
+@Composable
+fun ExpandableListItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: @Composable () -> Unit,
+) {
+    var isExpanded by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    ExpandableListItem(
+        modifier = modifier,
+        title = title,
+        onClick = { isExpanded = !isExpanded },
+        isExpanded = isExpanded,
+        content = content
+    )
+}
+
 @AnimealPreview
 @Composable
 private fun ExpandableListItemPreview() {
     AnimealTheme {
         Column {
-            ExpandableListItem(
-                title = "Collapsed",
-                onClick = {}
-            ) {}
+            ExpandableListItem(title = "Collapsed", onClick = {}) {}
             Divider()
             ExpandableListItem(
                 title = "Expanded",

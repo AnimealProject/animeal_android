@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.pager.indicator)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

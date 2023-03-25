@@ -40,13 +40,14 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
@@ -199,7 +200,7 @@ private fun FavouritesList(
 
         ) {
             items(favourites) { feedingPoint ->
-                FavouriteFeedingPointItem(
+                FeedingPointItem(
                     title = feedingPoint.title,
                     status = feedingPoint.animalStatus.toFeedStatus(),
                     isFavourite = feedingPoint.isFavourite,
@@ -234,10 +235,11 @@ private fun FavouritesScreenPreview() {
         FeedingPoint(
             id = "0",
             title = title,
-            isFavourite = true,
+            description = "Hungry dog",
+            city = "Minsk",
             animalStatus = AnimalState.RED,
             animalType = AnimalType.Dogs,
-            description = "Hungry dog",
+            isFavourite = true,
             lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
         ),

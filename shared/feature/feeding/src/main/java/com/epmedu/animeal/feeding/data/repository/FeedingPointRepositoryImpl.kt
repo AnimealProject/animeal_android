@@ -88,6 +88,10 @@ internal class FeedingPointRepositoryImpl(
         return feedingPointsFlow.asStateFlow()
     }
 
+    override fun getFeedingPointsBy(predicate: (DomainFeedingPoint) -> Boolean): Flow<List<DomainFeedingPoint>> {
+        return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
+    }
+
     override suspend fun startFeeding(feedingPointId: String): ActionResult {
         return feedingPointApi.startFeeding(feedingPointId).toActionResult(feedingPointId)
     }

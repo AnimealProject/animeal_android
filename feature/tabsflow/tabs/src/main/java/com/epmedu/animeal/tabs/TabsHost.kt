@@ -1,5 +1,6 @@
 package com.epmedu.animeal.tabs
 
+import android.annotation.SuppressLint
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,13 +24,14 @@ import com.epmedu.animeal.home.presentation.HomeScreen
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.tabs.analytics.AnalyticsScreen
 import com.epmedu.animeal.tabs.more.MoreHost
-import com.epmedu.animeal.tabs.search.SearchScreen
+import com.epmedu.animeal.tabs.search.presentation.SearchScreen
 import com.epmedu.animeal.tabs.ui.BottomAppBarFab
 import com.epmedu.animeal.tabs.ui.BottomNavigationBar
 import com.epmedu.animeal.tabs.viewmodel.TabsViewModel
 import com.epmedu.animeal.timer.data.model.TimerState
 
 @Composable
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 fun TabsHost() {
     val viewModel = hiltViewModel<TabsViewModel>()
     val state by viewModel.stateFlow.collectAsState()

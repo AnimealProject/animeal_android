@@ -3,7 +3,7 @@ package com.epmedu.animeal.feeding.data.mapper
 import OnUpdateFeedingPointSubscription.OnUpdateFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.foundation.switch.AnimalType
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal fun OnUpdateFeedingPoint.toDomainFeedingPoint() =
@@ -11,6 +11,7 @@ internal fun OnUpdateFeedingPoint.toDomainFeedingPoint() =
         id = id(),
         title = name(),
         description = description(),
+        city = city(),
         animalStatus = when (status()) {
             type.FeedingPointStatus.fed -> AnimalState.GREEN
             else -> AnimalState.RED

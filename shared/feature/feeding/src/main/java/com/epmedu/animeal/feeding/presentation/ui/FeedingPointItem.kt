@@ -1,4 +1,4 @@
-package com.epmedu.animeal.favourites.presentation.ui
+package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
-import com.epmedu.animeal.feeding.presentation.ui.FeedStatusItem
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -34,7 +33,7 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FavouriteFeedingPointItem(
+fun FeedingPointItem(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
@@ -102,13 +101,13 @@ fun MoreScreenPreview() {
 
     AnimealTheme {
         Column {
-            FavouriteFeedingPointItem(
+            FeedingPointItem(
                 longText,
                 FeedStatus.RED,
                 isFavourite = true,
                 {}
             ) {}
-            FavouriteFeedingPointItem(
+            FeedingPointItem(
                 shortText,
                 FeedStatus.GREEN,
                 isFavourite = false,
