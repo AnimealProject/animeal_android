@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
@@ -132,5 +133,7 @@ private fun SearchTrailingIcon(
 @AnimealPreview
 @Composable
 private fun SearchViewPreview() {
-    SearchView()
+    AnimealTheme {
+        SearchView()
+    }
 }
