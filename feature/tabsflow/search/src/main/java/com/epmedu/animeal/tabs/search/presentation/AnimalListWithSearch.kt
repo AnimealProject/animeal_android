@@ -8,12 +8,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.foundation.search.SearchView
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.tabs.search.domain.model.GroupFeedingPointsModel
 import com.epmedu.animeal.tabs.search.presentation.search.AnimalExpandableList
-import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent
-import com.epmedu.animeal.tabs.search.presentation.search.SearchView
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -43,12 +42,7 @@ fun AnimalListWithSearch(
             query = query
         ) {
             SearchView(
-                modifier = Modifier
-                    .padding(horizontal = 30.dp)
-                    .padding(
-                        top = 14.dp,
-                        bottom = 14.dp
-                    ),
+                modifier = Modifier.padding(horizontal = 30.dp, vertical = 14.dp),
                 initialValue = query
             ) { textFieldValue ->
                 onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))

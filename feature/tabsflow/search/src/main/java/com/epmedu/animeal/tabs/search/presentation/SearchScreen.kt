@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation.search
+package com.epmedu.animeal.tabs.search.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenUi
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchViewModel
 
 @OptIn(ExperimentalMaterialApi::class)

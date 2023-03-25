@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation.search
+package com.epmedu.animeal.foundation.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -41,8 +40,8 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun SearchView(
     modifier: Modifier = Modifier,
-    initialValue: String = EMPTY_STRING,
-    onValueChange: (TextFieldValue) -> Unit = {}
+    initialValue: String,
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -56,7 +55,6 @@ fun SearchView(
             query = value
             onValueChange(query)
         },
-        // TODO Inner padding break everything with designed 40.dp height, mb migrate to BasicTextField
         modifier = modifier
             .height(50.dp)
             .fillMaxWidth(),
@@ -113,7 +111,7 @@ private fun SearchTrailingIcon(
         }) {
             Icon(
                 Icons.Default.Close,
-                contentDescription = EMPTY_STRING,
+                contentDescription = "",
                 modifier = Modifier.size(18.dp),
                 tint = CustomColor.TrolleyGrey
             )
@@ -134,6 +132,6 @@ private fun SearchTrailingIcon(
 @Composable
 private fun SearchViewPreview() {
     AnimealTheme {
-        SearchView()
+        SearchView(initialValue = "", onValueChange = {})
     }
 }

@@ -49,6 +49,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.search.domain.model.GroupFeedingPointsModel
 import com.epmedu.animeal.tabs.search.presentation.AnimalListWithSearch
+import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager

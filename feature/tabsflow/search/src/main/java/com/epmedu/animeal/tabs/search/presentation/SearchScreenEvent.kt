@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation.search
+package com.epmedu.animeal.tabs.search.presentation
 
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
