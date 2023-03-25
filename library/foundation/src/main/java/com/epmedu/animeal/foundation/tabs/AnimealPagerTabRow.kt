@@ -127,7 +127,6 @@ private fun AnimealPagerTabIndicator(
 ) {
     Spacer(
         modifier
-            .padding(start = 30.dp, end = 30.dp)
             .height(2.dp)
             .background(
                 color = color,
