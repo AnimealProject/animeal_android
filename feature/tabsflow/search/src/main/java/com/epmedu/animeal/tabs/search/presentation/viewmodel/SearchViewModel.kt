@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation.search
+package com.epmedu.animeal.tabs.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +11,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.search.SearchScreenEvent.FeedingPointHidden
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchScreenViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val searchCatsFeedingPointsUseCase: SearchCatsFeedingPointsUseCase,
     private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,

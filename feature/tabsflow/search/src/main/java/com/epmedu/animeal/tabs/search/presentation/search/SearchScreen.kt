@@ -8,11 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen() {
-    val searchViewModel: SearchScreenViewModel = hiltViewModel()
+    val searchViewModel: SearchViewModel = hiltViewModel()
     val searchState by searchViewModel.stateFlow.collectAsState()
 
     val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)

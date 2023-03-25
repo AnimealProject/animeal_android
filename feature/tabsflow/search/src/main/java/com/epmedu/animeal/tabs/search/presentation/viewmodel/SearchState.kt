@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.search.presentation.search
+package com.epmedu.animeal.tabs.search.presentation.viewmodel
 
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import kotlinx.collections.immutable.ImmutableList
