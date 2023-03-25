@@ -54,7 +54,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
+    debugImplementation(projects.feature.debugmenu)
 
     implementation(projects.feature.signupflow.signup)
     implementation(projects.feature.splash)
@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.amplify.aws.auth.cognito)
     implementation(libs.amplify.core)
 
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
     implementation(libs.androidx.datastore)

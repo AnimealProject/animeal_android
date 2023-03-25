@@ -26,6 +26,7 @@ dependencies {
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
 
+    debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.profile)
 
     implementation(libs.amplify.aws.api)
