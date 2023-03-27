@@ -27,8 +27,8 @@ import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProf
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateToConfirmPhone
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.ProfileFinished
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Suppress("LongParameterList")
 @HiltViewModel
