@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.epmedu.animeal.common.route.MainRoute
+import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SetFinishProfileAsStartDestination
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SwitchUsingMockedFeedingPoints
 import com.epmedu.animeal.debugmenu.presentation.ui.DebugMenuButton
 import com.epmedu.animeal.debugmenu.presentation.viewmodel.DebugMenuViewModel
@@ -72,6 +73,13 @@ fun DebugMenu(
                 DebugMenuButton(
                     text = "Open SignUpFlow",
                     onClick = { navController.navigate(route = MainRoute.SignUp.name) }
+                )
+                DebugMenuButton(
+                    text = "Open FinishProfileScreen",
+                    onClick = {
+                        viewModel.handleEvents(SetFinishProfileAsStartDestination)
+                        navController.navigate(route = MainRoute.SignUp.name)
+                    }
                 )
                 DebugMenuButton(
                     text = "Open TabsFlow",

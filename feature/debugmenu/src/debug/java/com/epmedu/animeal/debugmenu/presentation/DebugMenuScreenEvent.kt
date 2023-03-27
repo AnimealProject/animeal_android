@@ -5,4 +5,6 @@ sealed interface DebugMenuScreenEvent {
     data class SwitchUsingMockedFeedingPoints(
         val useMockedFeedingPoint: Boolean
     ) : DebugMenuScreenEvent
+
+    object SetFinishProfileAsStartDestination : DebugMenuScreenEvent
 }
