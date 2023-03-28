@@ -207,8 +207,13 @@ fun AnimealBottomSheetLayout(
             )
         }
 
+        var buttonOffset = sheetState.offset.value.roundToInt() - shownHeight.roundToInt()
+        if (buttonOffset < 0) buttonOffset = 0
+
         Box(
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter).offset {
+                IntOffset(0, buttonOffset)
+            }
         ) {
             sheetControls()
         }
