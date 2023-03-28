@@ -31,9 +31,6 @@ fun FinishProfileScreen() {
                 FinishProfileEvent.NavigateBackToOnboarding -> {
                     navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name)
                 }
-                FinishProfileEvent.NavigateBackToEnterPhone -> {
-                    navigator.popBackStackOrNavigate(SignUpRoute.EnterPhone.name)
-                }
                 FinishProfileEvent.ProfileFinished -> {
                     navigator.navigateToTabs()
                 }

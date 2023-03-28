@@ -23,7 +23,6 @@ import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBackToEnterPhone
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBackToOnboarding
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateToConfirmPhone
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.ProfileFinished
@@ -147,10 +146,7 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun navigateBack() {
         viewModelScope.launch {
-            when (authenticationType) {
-                AuthenticationType.Mobile -> sendEvent(NavigateBackToEnterPhone)
-                is AuthenticationType.Facebook -> sendEvent(NavigateBackToOnboarding)
-            }
+            sendEvent(NavigateBackToOnboarding)
         }
     }
 

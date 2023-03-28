@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent
+import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SetFinishProfileAsStartDestination
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SwitchUsingMockedFeedingPoints
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import kotlinx.coroutines.launch
@@ -42,6 +43,13 @@ internal fun DebugMenuContent(
         DebugMenuItem.Button(
             title = "Open SignUpFlow",
             onClick = { onNavigate(MainRoute.SignUp) }
+        ),
+        DebugMenuItem.Button(
+            title = "Open FinishProfileScreen",
+            onClick = {
+                onEvent(SetFinishProfileAsStartDestination)
+                onNavigate(MainRoute.SignUp)
+            }
         ),
         DebugMenuItem.Button(
             title = "Open TabsFlow",
