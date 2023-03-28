@@ -72,20 +72,19 @@ internal fun HomeScreenUI(
         }
     }
 
+    LaunchedEffect(key1 = state.timerState) {
+        if (state.timerState == TimerState.Expired) {
+            hideBottomSheet()
+            onScreenEvent(FeedingEvent.Expired)
+        }
+    }
     LaunchedEffect(key1 = state.timerState, key2 = state.feedingRouteState) {
-        when (state.timerState) {
-            is TimerState.Active -> {
-                onScreenEvent(
-                    RouteEvent.FeedingTimerUpdateRequest(
-                        state.timerState.timeLeft
-                    )
+        if (state.timerState is TimerState.Active) {
+            onScreenEvent(
+                RouteEvent.FeedingTimerUpdateRequest(
+                    state.timerState.timeLeft
                 )
-            }
-            TimerState.Expired -> {
-                hideBottomSheet()
-                onScreenEvent(TimerEvent.Expired)
-            }
-            else -> Unit
+            )
         }
     }
 

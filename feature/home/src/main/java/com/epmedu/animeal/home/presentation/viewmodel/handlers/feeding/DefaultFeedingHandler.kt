@@ -9,6 +9,7 @@ import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Cancel
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Expired
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Finish
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Start
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -43,6 +44,7 @@ internal class DefaultFeedingHandler @Inject constructor(
         when (event) {
             Start -> launch { startFeeding() }
             Cancel -> launch { cancelFeeding() }
+            Expired -> launch { expireFeeding() }
             Finish -> launch { finishFeeding() }
         }
     }
@@ -64,6 +66,17 @@ internal class DefaultFeedingHandler @Inject constructor(
             onSuccess = {
                 stopRoute()
                 disableTimer()
+                fetchFeedingPoints()
+            }
+        )
+    }
+
+    override suspend fun expireFeeding() {
+        /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
+        stopRoute()
+        performFeedingAction(
+            action = cancelFeedingUseCase::invoke,
+            onSuccess = {
                 fetchFeedingPoints()
             }
         )

@@ -15,6 +15,7 @@ sealed interface HomeScreenEvent {
         object Start : FeedingEvent
         object Cancel : FeedingEvent
         object Finish : FeedingEvent
+        object Expired : FeedingEvent
     }
 
     sealed interface RouteEvent : HomeScreenEvent {
@@ -28,7 +29,6 @@ sealed interface HomeScreenEvent {
     }
 
     sealed interface TimerEvent : HomeScreenEvent {
-        object Expired : TimerEvent
         object Disable : TimerEvent
     }
 
