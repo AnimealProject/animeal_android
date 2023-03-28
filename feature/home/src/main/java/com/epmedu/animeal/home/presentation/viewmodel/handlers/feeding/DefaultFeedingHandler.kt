@@ -6,6 +6,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Cancel
@@ -31,6 +32,7 @@ internal class DefaultFeedingHandler @Inject constructor(
     timerHandler: TimerHandler,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
+    private val rejectFeedingUseCase: RejectFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase
 ) : FeedingHandler,
     StateDelegate<HomeState> by stateDelegate,
@@ -44,7 +46,7 @@ internal class DefaultFeedingHandler @Inject constructor(
         when (event) {
             Start -> launch { startFeeding() }
             Cancel -> launch { cancelFeeding() }
-            Expired -> launch { expireFeeding() }
+            is Expired -> launch { expireFeeding(event.rejectMessage) }
             Finish -> launch { finishFeeding() }
         }
     }
@@ -71,11 +73,13 @@ internal class DefaultFeedingHandler @Inject constructor(
         )
     }
 
-    override suspend fun expireFeeding() {
+    override suspend fun expireFeeding(rejectMessage: String) {
         /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
         stopRoute()
         performFeedingAction(
-            action = cancelFeedingUseCase::invoke,
+            action = { feedingPointId ->
+                rejectFeedingUseCase(feedingPointId, rejectMessage)
+            },
             onSuccess = {
                 fetchFeedingPoints()
             }

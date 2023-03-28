@@ -84,6 +84,10 @@ internal class FeedingPointRepositoryMock(
         return ActionResult.Success
     }
 
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult {
+        return ActionResult.Success
+    }
+
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>

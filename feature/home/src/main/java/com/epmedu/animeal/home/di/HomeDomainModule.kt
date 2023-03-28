@@ -6,6 +6,7 @@ import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import dagger.Module
@@ -49,6 +50,12 @@ object HomeDomainModule {
     fun providesCancelFeedingUseCase(
         feedingPointRepository: FeedingPointRepository
     ): CancelFeedingUseCase = CancelFeedingUseCase(feedingPointRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesRejectFeedingUseCase(
+        feedingPointRepository: FeedingPointRepository
+    ): RejectFeedingUseCase = RejectFeedingUseCase(feedingPointRepository)
 
     @ViewModelScoped
     @Provides
