@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
 
-    <debug-overrides>
+<!--Temporary solution to allow testers use Charles TODO: Separate into flavors-->
+    <base-config>
 
         <trust-anchors>
 
             <certificates src="user" />
+            <certificates src="system"/>
 
         </trust-anchors>
 
-    </debug-overrides>
+    </base-config>
 
 </network-security-config>
