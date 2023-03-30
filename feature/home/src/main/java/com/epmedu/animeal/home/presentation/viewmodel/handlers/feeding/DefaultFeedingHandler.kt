@@ -42,10 +42,6 @@ internal class DefaultFeedingHandler @Inject constructor(
     TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
 
-    companion object {
-        private const val FEEDING_TIMER_EXPIRED = "Feeding time has expired"
-    }
-
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
             Start -> launch { startFeeding() }
@@ -113,5 +109,9 @@ internal class DefaultFeedingHandler @Inject constructor(
                 onError = ::showError
             )
         } ?: showError()
+    }
+
+    companion object {
+        private const val FEEDING_TIMER_EXPIRED = "Feeding time has expired"
     }
 }
