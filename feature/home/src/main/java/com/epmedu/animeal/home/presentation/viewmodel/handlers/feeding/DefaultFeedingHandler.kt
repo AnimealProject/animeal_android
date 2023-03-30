@@ -42,11 +42,15 @@ internal class DefaultFeedingHandler @Inject constructor(
     TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
 
+    companion object {
+        private const val FEEDING_TIMER_EXPIRED = "Feeding time has expired"
+    }
+
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
             Start -> launch { startFeeding() }
             Cancel -> launch { cancelFeeding() }
-            is Expired -> launch { expireFeeding(event.rejectMessage) }
+            Expired -> launch { expireFeeding() }
             Finish -> launch { finishFeeding() }
         }
     }
@@ -73,12 +77,12 @@ internal class DefaultFeedingHandler @Inject constructor(
         )
     }
 
-    override suspend fun expireFeeding(rejectMessage: String) {
+    override suspend fun expireFeeding() {
         /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
         stopRoute()
         performFeedingAction(
             action = { feedingPointId ->
-                rejectFeedingUseCase(feedingPointId, rejectMessage)
+                rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
             },
             onSuccess = {
                 fetchFeedingPoints()

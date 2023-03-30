@@ -15,7 +15,7 @@ sealed interface HomeScreenEvent {
         object Start : FeedingEvent
         object Cancel : FeedingEvent
         object Finish : FeedingEvent
-        data class Expired(val rejectMessage: String) : FeedingEvent
+        object Expired : FeedingEvent
     }
 
     sealed interface RouteEvent : HomeScreenEvent {

@@ -73,19 +73,19 @@ internal fun HomeScreenUI(
     }
 
     LaunchedEffect(key1 = state.timerState) {
-        if (state.timerState == TimerState.Expired) {
-            hideBottomSheet()
-            val expiredMessage = context.getString(R.string.feeding_timer_expired)
-            onScreenEvent(FeedingEvent.Expired(expiredMessage))
-        }
-    }
-    LaunchedEffect(key1 = state.timerState, key2 = state.feedingRouteState) {
-        if (state.timerState is TimerState.Active) {
-            onScreenEvent(
-                RouteEvent.FeedingTimerUpdateRequest(
-                    state.timerState.timeLeft
+        when (state.timerState) {
+            is TimerState.Active -> {
+                onScreenEvent(
+                    RouteEvent.FeedingTimerUpdateRequest(
+                        state.timerState.timeLeft
+                    )
                 )
-            )
+            }
+            TimerState.Expired -> {
+                hideBottomSheet()
+                onScreenEvent(FeedingEvent.Expired)
+            }
+            else -> Unit
         }
     }
 

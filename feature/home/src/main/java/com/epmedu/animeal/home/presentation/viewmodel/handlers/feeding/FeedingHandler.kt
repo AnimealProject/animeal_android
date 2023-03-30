@@ -9,5 +9,5 @@ internal interface FeedingHandler {
 
     suspend fun cancelFeeding()
 
-    suspend fun expireFeeding(rejectMessage: String)
+    suspend fun expireFeeding()
 }
