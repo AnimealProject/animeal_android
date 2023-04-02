@@ -3,6 +3,7 @@ package com.epmedu.animeal.api.feeding
 import CancelFeedingMutation
 import FinishFeedingMutation
 import StartFeedingMutation
+import RejectFeedingMutation
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.extensions.getModelList
@@ -37,6 +38,14 @@ internal class FeedingPointApiImpl : FeedingPointApi {
         return CancelFeedingMutation(
             feedingPointId,
             "reason"
+        ).performMutation()
+    }
+
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+        return RejectFeedingMutation(
+            feedingPointId,
+            reason,
+            null
         ).performMutation()
     }
 

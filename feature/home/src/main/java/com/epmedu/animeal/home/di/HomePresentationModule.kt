@@ -12,6 +12,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
@@ -89,6 +90,7 @@ internal object HomePresentationModule {
         timerHandler: TimerHandler,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
+        rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
@@ -99,6 +101,7 @@ internal object HomePresentationModule {
         timerHandler,
         startFeedingUseCase,
         cancelFeedingUseCase,
+        rejectFeedingUseCase,
         finishFeedingUseCase
     )
 

@@ -103,6 +103,10 @@ internal class FeedingPointRepositoryImpl(
         return feedingPointApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult {
+        return feedingPointApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
+    }
+
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>
