@@ -20,5 +20,7 @@ interface FeedingPointApi {
 
     suspend fun cancelFeeding(feedingPointId: String): ApiResult<String>
 
+    suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String>
+
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ApiResult<String>
 }

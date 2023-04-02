@@ -7,6 +7,7 @@ import OnCreateFeedingPointSubscription.OnCreateFeedingPoint
 import OnDeleteFeedingPointSubscription
 import OnUpdateFeedingPointSubscription
 import OnUpdateFeedingPointSubscription.OnUpdateFeedingPoint
+import RejectFeedingMutation
 import StartFeedingMutation
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.amplifyframework.datastore.generated.model.FeedingPoint
@@ -53,6 +54,14 @@ internal class FeedingPointApiImpl(
         return CancelFeedingMutation(
             feedingPointId,
             "reason"
+        ).performMutation()
+    }
+
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+        return RejectFeedingMutation(
+            feedingPointId,
+            reason,
+            null
         ).performMutation()
     }
 

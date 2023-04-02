@@ -14,5 +14,7 @@ interface FeedingPointRepository {
 
     suspend fun cancelFeeding(feedingPointId: String): ActionResult
 
+    suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult
+
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult
 }
