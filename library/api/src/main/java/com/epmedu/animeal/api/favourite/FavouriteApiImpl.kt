@@ -5,7 +5,7 @@ import DeleteFavouriteMutation
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.datastore.generated.model.Favourite
 import com.epmedu.animeal.api.extensions.getModelList
-import com.epmedu.animeal.api.extensions.performMutation
+import com.epmedu.animeal.api.extensions.launch
 import com.epmedu.animeal.api.extensions.subscribe
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +36,7 @@ internal class FavouriteApiImpl : FavouriteApi {
                 .userId(userId)
                 .build(),
             null
-        ).performMutation()
+        ).launch()
     }
 
     override suspend fun deleteFavourite(
@@ -47,6 +47,6 @@ internal class FavouriteApiImpl : FavouriteApi {
                 .id(id)
                 .build(),
             null
-        ).performMutation()
+        ).launch()
     }
 }

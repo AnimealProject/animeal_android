@@ -15,13 +15,13 @@ import com.apollographql.apollo.api.Operation
 import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.coroutines.resume
 
 private const val LOG_TAG = "AnimealApi"
 
@@ -62,7 +62,7 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
  *
  * On failure, returns [ApiResult.Failure] with [ApiException].
  */
-internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Variables> Mutation<D, T, V>.performMutation(): ApiResult<R> {
+internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Variables> Mutation<D, T, V>.launch(): ApiResult<R> {
     return suspendCancellableCoroutine {
         Amplify.API.mutate(
             SimpleGraphQLRequest(
@@ -72,7 +72,7 @@ internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Var
                 GsonVariablesSerializer()
             ),
             { response ->
-                Log.i(LOG_TAG, "Mutation ${this@performMutation} received response $response")
+                Log.i(LOG_TAG, "Mutation ${this@launch} received response $response")
                 resume(
                     response.data?.let { data ->
                         ApiResult.Success(data)
@@ -80,7 +80,7 @@ internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Var
                 )
             },
             { apiException ->
-                Log.e(LOG_TAG, "Mutation ${this@performMutation} failed with $apiException")
+                Log.e(LOG_TAG, "Mutation ${this@launch} failed with $apiException")
                 resume(ApiResult.Failure(apiException))
             }
         )
@@ -105,7 +105,7 @@ internal inline fun <reified GraphQLModel : Model> subscribe(
                 Log.i(
                     LOG_TAG,
                     "Subscription $subscriptionId with type $subscriptionType " +
-                            "for ${GraphQLModel::class.simpleName} has been established"
+                        "for ${GraphQLModel::class.simpleName} has been established"
                 )
             },
             { response ->

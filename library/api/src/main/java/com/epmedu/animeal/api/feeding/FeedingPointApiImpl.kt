@@ -2,12 +2,12 @@ package com.epmedu.animeal.api.feeding
 
 import CancelFeedingMutation
 import FinishFeedingMutation
-import StartFeedingMutation
 import RejectFeedingMutation
+import StartFeedingMutation
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.extensions.getModelList
-import com.epmedu.animeal.api.extensions.performMutation
+import com.epmedu.animeal.api.extensions.launch
 import com.epmedu.animeal.api.extensions.subscribe
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
@@ -31,14 +31,14 @@ internal class FeedingPointApiImpl : FeedingPointApi {
     }
 
     override suspend fun startFeeding(feedingPointId: String): ApiResult<String> {
-        return StartFeedingMutation(feedingPointId).performMutation()
+        return StartFeedingMutation(feedingPointId).launch()
     }
 
     override suspend fun cancelFeeding(feedingPointId: String): ApiResult<String> {
         return CancelFeedingMutation(
             feedingPointId,
             "reason"
-        ).performMutation()
+        ).launch()
     }
 
     override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
@@ -46,13 +46,13 @@ internal class FeedingPointApiImpl : FeedingPointApi {
             feedingPointId,
             reason,
             null
-        ).performMutation()
+        ).launch()
     }
 
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>
     ): ApiResult<String> {
-        return FinishFeedingMutation(feedingPointId, images).performMutation()
+        return FinishFeedingMutation(feedingPointId, images).launch()
     }
 }

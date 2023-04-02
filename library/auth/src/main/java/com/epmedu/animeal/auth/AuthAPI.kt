@@ -12,10 +12,18 @@ import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@Suppress("TooManyFunctions")
 class AuthAPI {
 
     var authenticationType: AuthenticationType = AuthenticationType.Mobile
         private set
+
+    private val AWSCognitoAuthSession.isSignedInWithoutErrors
+        get() = isSignedIn &&
+            awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
+            identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
+            userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
+            userSubResult.type == AuthSessionResult.Type.SUCCESS
 
     suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
@@ -27,13 +35,6 @@ class AuthAPI {
             }
         )
     }
-
-    private val AWSCognitoAuthSession.isSignedInWithoutErrors
-        get() = isSignedIn &&
-            awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
-            identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
-            userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
-            userSubResult.type == AuthSessionResult.Type.SUCCESS
 
     suspend fun isSignedIn(): Boolean {
         return suspendCancellableCoroutine {

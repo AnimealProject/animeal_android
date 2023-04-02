@@ -1,8 +1,6 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.feeding.FeedingPointApi
-import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
@@ -21,7 +19,6 @@ import kotlinx.coroutines.launch
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
-    private val authApi: AuthAPI,
     private val feedingPointApi: FeedingPointApi,
     favouriteRepository: FavouriteRepository,
     dispatchers: Dispatchers
