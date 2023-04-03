@@ -1,9 +1,7 @@
 package com.epmedu.animeal.di
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.amazonaws.mobile.config.AWSConfiguration
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.component.AppSettingsProviderImpl
@@ -11,7 +9,6 @@ import com.epmedu.animeal.component.BuildConfigProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -28,10 +25,4 @@ class AppScopeModule {
     fun providesAppSettingsProvider(
         dataStore: DataStore<Preferences>,
     ): AppSettingsProvider = AppSettingsProviderImpl(dataStore)
-
-    @Singleton
-    @Provides
-    fun providesAWSConfiguration(
-        @ApplicationContext appContext: Context
-    ): AWSConfiguration = AWSConfiguration(appContext)
 }

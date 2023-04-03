@@ -15,7 +15,7 @@ class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
             override fun onSuccess(result: Any?) {
                 val authResult = result as AuthSignInResult
                 when {
-                    authResult.isSignInComplete -> onSuccess()
+                    authResult.isSignedIn -> onSuccess()
                     else -> onError(InvalidCodeError())
                 }
             }

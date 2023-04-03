@@ -1,34 +1,29 @@
 package com.epmedu.animeal.api.extensions
 
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
-import com.amazonaws.mobileconnectors.appsync.AppSyncSubscriptionCall
-import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers.CACHE_AND_NETWORK
+import android.util.Log
 import com.amplifyframework.api.ApiException
 import com.amplifyframework.api.aws.GsonVariablesSerializer
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest
+import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.api.graphql.model.ModelQuery
+import com.amplifyframework.api.graphql.model.ModelSubscription
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.model.Model
 import com.amplifyframework.core.model.query.predicate.QueryPredicate
-import com.apollographql.apollo.GraphQLCall
 import com.apollographql.apollo.api.Mutation
-import com.apollographql.apollo.api.Operation.Data
-import com.apollographql.apollo.api.Operation.Variables
-import com.apollographql.apollo.api.Query
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.api.Subscription
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.fetcher.ResponseFetcher
+import com.apollographql.apollo.api.Operation
 import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import java.util.concurrent.CancellationException
 import kotlin.coroutines.resume
+
+private const val LOG_TAG = "AnimealApi"
 
 /**
  * Creates a query for list of models of type [GraphQLModel] with provided [predicate]
@@ -67,7 +62,7 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
  *
  * On failure, returns [ApiResult.Failure] with [ApiException].
  */
-internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, T, V>.performMutation(): ApiResult<R> {
+internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Variables> Mutation<D, T, V>.launch(): ApiResult<R> {
     return suspendCancellableCoroutine {
         Amplify.API.mutate(
             SimpleGraphQLRequest(
@@ -77,6 +72,7 @@ internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, 
                 GsonVariablesSerializer()
             ),
             { response ->
+                Log.i(LOG_TAG, "Mutation ${this@launch} received response $response")
                 resume(
                     response.data?.let { data ->
                         ApiResult.Success(data)
@@ -84,6 +80,7 @@ internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, 
                 )
             },
             { apiException ->
+                Log.e(LOG_TAG, "Mutation ${this@launch} failed with $apiException")
                 resume(ApiResult.Failure(apiException))
             }
         )
@@ -91,104 +88,45 @@ internal suspend inline fun <reified R, D : Data, T, V : Variables> Mutation<D, 
 }
 
 /**
- * Performs a GraphQL mutation.
- *
- * On success, returns [ApiResult.Success] if the response data is not null,
- * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
- *
- * On failure, returns [ApiResult.Failure] with [ApolloException].
- */
-internal suspend inline fun <D : Data, T, V : Variables> AWSAppSyncClient.performMutation(
-    mutation: Mutation<D, T, V>
-): ApiResult<Unit> {
-    return suspendCancellableCoroutine {
-        val mutationCall = mutate(mutation)
-
-        mutationCall.enqueue(
-            object : GraphQLCall.Callback<T>() {
-                override fun onResponse(response: Response<T>) {
-                    resume(
-                        response.data()?.let {
-                            ApiResult.Success(Unit)
-                        } ?: ApiResult.Failure(ResponseError(response.errors()))
-                    )
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    resume(ApiResult.Failure(e))
-                }
-            }
-        )
-    }
-}
-
-/**
- * Performs a GraphQL query.
- *
- * On success, returns [ApiResult.Success] if the response data is not null,
- * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
- *
- * On failure, returns [ApiResult.Failure] with [ApolloException].
- * @param query [Query] to perform.
- * @param getData method to get required data from response.
- * @param responseFetcher cache control strategy for query. By default [CACHE_AND_NETWORK]
- */
-internal suspend fun <D : Data, T, V : Variables, R> AWSAppSyncClient.query(
-    query: Query<D, T, V>,
-    getData: T.() -> R?,
-    responseFetcher: ResponseFetcher = CACHE_AND_NETWORK
-): ApiResult<R> {
-    return suspendCancellableCoroutine {
-        val queryCall = query(query).responseFetcher(responseFetcher)
-
-        queryCall.enqueue(
-            object : GraphQLCall.Callback<T>() {
-                override fun onResponse(response: Response<T>) {
-                    resume(
-                        response.data()?.getData()?.let {
-                            ApiResult.Success(it)
-                        } ?: ApiResult.Failure(ResponseError(response.errors()))
-                    )
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    resume(ApiResult.Failure(e))
-                }
-            }
-        )
-    }
-}
-
-/**
  * Launches a GraphQL subscription.
- * @param subscription [Subscription] to be subscribed to.
- * @param getData method to get required data from response.
+ * @param subscriptionType Type of subscription.
+ * @param GraphQLModel Type of model to return.
  */
-internal fun <D : Data, T, V : Variables, R> AWSAppSyncClient.subscribe(
-    subscription: Subscription<D, T, V>,
-    getData: T.() -> R?,
-): Flow<R> {
+internal inline fun <reified GraphQLModel : Model> subscribe(
+    subscriptionType: SubscriptionType
+): Flow<GraphQLModel> {
     return callbackFlow {
-        val subscriptionCall = subscribe(subscription)
+        var subscriptionId = ""
 
-        subscriptionCall.execute(
-            object : AppSyncSubscriptionCall.Callback<T> {
-                override fun onResponse(response: Response<T>) {
-                    response.data()?.getData()?.let {
-                        trySendBlocking(it)
-                    }
+        val graphQLOperation = Amplify.API.subscribe(
+            ModelSubscription.of(GraphQLModel::class.java, subscriptionType),
+            { id ->
+                subscriptionId = id
+                Log.i(
+                    LOG_TAG,
+                    "Subscription $subscriptionId with type $subscriptionType " +
+                        "for ${GraphQLModel::class.simpleName} has been established"
+                )
+            },
+            { response ->
+                Log.i(LOG_TAG, "Subscription $subscriptionId received response: $response")
+                response.data?.let {
+                    trySendBlocking(response.data)
                 }
-
-                override fun onFailure(e: ApolloException) {
-                    cancel(CancellationException(e.message))
-                }
-
-                override fun onCompleted() {
-                    channel.close()
-                }
+            },
+            { apiException ->
+                Log.i(LOG_TAG, "Subscription $subscriptionId terminates with $apiException")
+                cancel(CancellationException(apiException.message, apiException))
+            },
+            {
+                Log.i(LOG_TAG, "Subscription $subscriptionId ended")
+                channel.close()
             }
         )
 
-        awaitClose { subscriptionCall.cancel() }
+        awaitClose {
+            Log.i(LOG_TAG, "Flow with subscription $subscriptionId is closed")
+            graphQLOperation?.cancel()
+        }
     }
 }

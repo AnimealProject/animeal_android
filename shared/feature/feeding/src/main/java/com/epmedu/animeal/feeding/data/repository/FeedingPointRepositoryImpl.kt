@@ -67,7 +67,7 @@ internal class FeedingPointRepositoryImpl(
 
     private fun subscribeToFeedingPointsUpdates(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.subscribeToFeedingPointsUpdates().map { updatedFeedingPoint ->
-            feedingPoints.find { it.id == updatedFeedingPoint.id() }?.let {
+            feedingPoints.find { it.id == updatedFeedingPoint.id }?.let {
                 feedingPoints.replaceElement(
                     oldElement = it,
                     newElement = updatedFeedingPoint.toDomainFeedingPoint()
@@ -77,8 +77,8 @@ internal class FeedingPointRepositoryImpl(
     }
 
     private fun subscribeToFeedingPointsDeletion(): Flow<List<DomainFeedingPoint>> {
-        return feedingPointApi.subscribeToFeedingPointsDeletion().map { deletedFeedingPointId ->
-            feedingPoints.find { it.id == deletedFeedingPointId }?.let {
+        return feedingPointApi.subscribeToFeedingPointsDeletion().map { deletedFeedingPoint ->
+            feedingPoints.find { it.id == deletedFeedingPoint.id }?.let {
                 feedingPoints - it
             } ?: feedingPoints
         }

@@ -10,20 +10,31 @@ import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
+@Suppress("TooManyFunctions")
 class AuthAPI {
 
     var authenticationType: AuthenticationType = AuthenticationType.Mobile
         private set
 
-    val currentUserId get() = Amplify.Auth.currentUser.userId
-
     private val AWSCognitoAuthSession.isSignedInWithoutErrors
         get() = isSignedIn &&
-            awsCredentials.type == AuthSessionResult.Type.SUCCESS &&
-            identityId.type == AuthSessionResult.Type.SUCCESS &&
-            userPoolTokens.type == AuthSessionResult.Type.SUCCESS &&
-            userSub.type == AuthSessionResult.Type.SUCCESS
+            awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
+            identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
+            userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
+            userSubResult.type == AuthSessionResult.Type.SUCCESS
+
+    suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
+        Amplify.Auth.getCurrentUser(
+            { user ->
+                resume(user.username)
+            },
+            { authException ->
+                resumeWithException(authException)
+            }
+        )
+    }
 
     suspend fun isSignedIn(): Boolean {
         return suspendCancellableCoroutine {
@@ -127,8 +138,7 @@ class AuthAPI {
         handler: AuthRequestHandler
     ) {
         Amplify.Auth.signOut(
-            handler::onSuccess,
-            handler::onError,
+            handler::onSuccess
         )
     }
 

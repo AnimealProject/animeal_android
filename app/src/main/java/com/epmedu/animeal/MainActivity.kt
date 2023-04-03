@@ -38,7 +38,7 @@ class MainActivity :
             AuthProvider.facebook(),
             this,
             { signInResult ->
-                if (signInResult.isSignInComplete) onSuccess()
+                if (signInResult.isSignedIn) onSuccess()
             },
             onError
         )

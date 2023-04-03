@@ -1,7 +1,5 @@
 package com.epmedu.animeal.api.feeding
 
-import OnCreateFeedingPointSubscription
-import OnUpdateFeedingPointSubscription
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
@@ -10,11 +8,11 @@ interface FeedingPointApi {
 
     fun getAllFeedingPoints(): Flow<List<FeedingPoint>>
 
-    fun subscribeToFeedingPointsUpdates(): Flow<OnUpdateFeedingPointSubscription.OnUpdateFeedingPoint>
+    fun subscribeToFeedingPointsUpdates(): Flow<FeedingPoint>
 
-    fun subscribeToFeedingPointsCreation(): Flow<OnCreateFeedingPointSubscription.OnCreateFeedingPoint>
+    fun subscribeToFeedingPointsCreation(): Flow<FeedingPoint>
 
-    fun subscribeToFeedingPointsDeletion(): Flow<String>
+    fun subscribeToFeedingPointsDeletion(): Flow<FeedingPoint>
 
     suspend fun startFeeding(feedingPointId: String): ApiResult<String>
 
