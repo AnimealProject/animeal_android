@@ -33,6 +33,7 @@ sealed interface HomeScreenEvent {
     }
 
     data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
+    data class CameraPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
 
     sealed interface TimerCancellationEvent : HomeScreenEvent {
         object CancellationAttempt : TimerCancellationEvent

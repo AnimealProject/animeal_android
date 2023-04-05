@@ -18,6 +18,9 @@ internal class AppSettingsProviderImpl(
     private val initialGeolocationPermission =
         booleanPreferencesKey("InitialGeolocationPermissionOnHomeScreen")
 
+    private val cameraPermission =
+        booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
+
     override suspend fun getAppSettings(): Flow<AppSettings> {
         return dataStore.data.map { preferences -> preferences.toAppSettings() }
     }
@@ -27,11 +30,13 @@ internal class AppSettingsProviderImpl(
             val scope = AppSettingsUpdateScopeImpl(preferences.toAppSettings()).apply(action)
             val settings = scope.toAppSettings()
             preferences.setInitialGeolocationPermissionRequest(settings.isInitialGeolocationPermissionRequested)
+            preferences.setCameraPermissionRequested(settings.isCameraPermissionRequested)
         }
     }
 
     private fun Preferences.toAppSettings() = AppSettings(
-        isInitialGeolocationPermissionRequested = getInitialGeolocationPermissionRequest()
+        isInitialGeolocationPermissionRequested = getInitialGeolocationPermissionRequest(),
+        isCameraPermissionRequested = getCameraPermissionRequested()
     )
 
     private fun Preferences.getInitialGeolocationPermissionRequest(): Boolean {
@@ -41,15 +46,28 @@ internal class AppSettingsProviderImpl(
     private fun MutablePreferences.setInitialGeolocationPermissionRequest(value: Boolean) {
         set(initialGeolocationPermission, value)
     }
+
+    private fun Preferences.getCameraPermissionRequested(): Boolean {
+        return get(cameraPermission) ?: false
+    }
+
+    private fun MutablePreferences.setCameraPermissionRequested(value: Boolean) {
+        set(cameraPermission, value)
+    }
 }
 
 private class AppSettingsUpdateScopeImpl(
     override var isInitialGeolocationPermissionRequested: Boolean,
+    override var isCameraPermissionRequested: Boolean,
 ) : AppSettingsUpdateScope {
 
-    constructor(settings: AppSettings) : this(settings.isInitialGeolocationPermissionRequested)
+    constructor(settings: AppSettings) : this(
+        settings.isInitialGeolocationPermissionRequested,
+        settings.isCameraPermissionRequested
+    )
 
     fun toAppSettings() = AppSettings(
-        isInitialGeolocationPermissionRequested = isInitialGeolocationPermissionRequested
+        isInitialGeolocationPermissionRequested = isInitialGeolocationPermissionRequested,
+        isCameraPermissionRequested = isCameraPermissionRequested
     )
 }

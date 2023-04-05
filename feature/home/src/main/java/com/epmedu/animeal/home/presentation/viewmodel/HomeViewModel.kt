@@ -8,9 +8,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
@@ -42,6 +45,8 @@ internal class HomeViewModel @Inject constructor(
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
+    private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
+    private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
@@ -87,7 +92,12 @@ internal class HomeViewModel @Inject constructor(
             is TimerEvent -> viewModelScope.handleTimerEvent(event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
+            is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
         }
+    }
+
+    private fun changeCameraPermissionStatus(cameraPermissionStatusChanged: CameraPermissionStatusChanged) {
+//        updateCameraPermissionRequestUseCase()
     }
 
     private fun initialize() {
@@ -99,7 +109,8 @@ internal class HomeViewModel @Inject constructor(
                 gpsSettingState = when {
                     isGpsSettingsEnabled -> GpsSettingState.Enabled
                     else -> GpsSettingState.Disabled
-                }
+                },
+                isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
             )
         }
     }

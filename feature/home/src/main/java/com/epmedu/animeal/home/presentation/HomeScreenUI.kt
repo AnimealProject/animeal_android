@@ -33,6 +33,7 @@ import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
+import com.epmedu.animeal.home.presentation.ui.HomeCameraPermission
 import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
@@ -162,6 +163,8 @@ internal fun HomeScreenUI(
                 }
             )
         }
+
+        if (!state.isCameraPermissionAsked) { HomeCameraPermission() }
     }
 
     WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)
@@ -200,15 +203,12 @@ private fun WillFeedConfirmationDialog(
     onHideBottomSheet: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
-        FeedConfirmationDialog(
-            onAgreeClick = {
-                onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
-                scope.launch { bottomSheetState.hide() }
-                onScreenEvent(FeedingEvent.Start)
-                onHideBottomSheet()
-            },
-            onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
-        )
+        FeedConfirmationDialog(onAgreeClick = {
+            onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
+            scope.launch { bottomSheetState.hide() }
+            onScreenEvent(FeedingEvent.Start)
+            onHideBottomSheet()
+        }, onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) })
     }
 }
 

@@ -11,8 +11,10 @@ interface AppSettingsProvider {
 
 interface AppSettingsUpdateScope {
     var isInitialGeolocationPermissionRequested: Boolean
+    var isCameraPermissionRequested: Boolean
 }
 
 data class AppSettings(
     val isInitialGeolocationPermissionRequested: Boolean,
+    val isCameraPermissionRequested: Boolean
 )

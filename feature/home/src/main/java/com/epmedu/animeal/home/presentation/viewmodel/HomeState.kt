@@ -28,6 +28,7 @@ data class HomeState(
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
     val isInitialGeolocationPermissionAsked: Boolean = false,
+    val isCameraPermissionAsked: Boolean = false,
 
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,
 
