@@ -84,7 +84,6 @@ internal class HomeViewModel @Inject constructor(
 
     init {
         initialize()
-        fetchLocationUpdates()
         viewModelScope.launch { fetchFeedingPoints() }
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
@@ -162,6 +161,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun markCameraPermissionAsAsked() {
         if (!state.isCameraPermissionAsked) {
+            fetchLocationUpdates()
             viewModelScope.launch {
                 updateCameraPermissionRequestUseCase(true)
             }

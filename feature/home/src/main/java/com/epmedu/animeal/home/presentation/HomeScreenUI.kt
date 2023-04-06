@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
-import com.epmedu.animeal.extensions.launchGpsSettings
+import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
@@ -242,7 +242,7 @@ private fun onGeoLocationClick(
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {
-            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }
