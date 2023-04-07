@@ -8,6 +8,7 @@ import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
 import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.signup.enterphone.domain.EnterPhoneRepository
 import javax.inject.Inject
 
 internal class EnterPhoneRepositoryImpl @Inject constructor(

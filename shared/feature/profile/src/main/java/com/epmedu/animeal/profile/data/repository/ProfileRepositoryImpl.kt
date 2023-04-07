@@ -14,6 +14,7 @@ import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

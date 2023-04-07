@@ -1,4 +1,4 @@
-package com.epmedu.animeal.profile.data.repository
+package com.epmedu.animeal.profile.domain.repository
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.profile.data.model.Profile

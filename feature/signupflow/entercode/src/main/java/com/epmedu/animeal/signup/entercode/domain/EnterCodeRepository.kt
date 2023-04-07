@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.entercode.data
+package com.epmedu.animeal.signup.entercode.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import kotlinx.coroutines.flow.Flow
