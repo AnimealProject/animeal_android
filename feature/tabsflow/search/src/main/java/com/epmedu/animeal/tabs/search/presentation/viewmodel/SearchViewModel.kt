@@ -9,8 +9,7 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
-import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.domain.SearchFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
@@ -19,18 +18,18 @@ import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPoin
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.Search
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.ShowWillFeedDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
-    private val searchCatsFeedingPointsUseCase: SearchCatsFeedingPointsUseCase,
-    private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,
+    private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,
+    private val searchDogsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
@@ -41,8 +40,8 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             stateFlow.collectLatest { state ->
                 combine(
-                    searchDogsFeedingPointsUseCase(state.dogsQuery),
-                    searchCatsFeedingPointsUseCase(state.catsQuery)
+                    searchDogsFeedingPointsUseCase(state.dogsQuery, AnimalType.Dogs),
+                    searchCatsFeedingPointsUseCase(state.catsQuery, AnimalType.Cats)
                 ) { dogs, cats ->
                     updateState {
                         copy(
