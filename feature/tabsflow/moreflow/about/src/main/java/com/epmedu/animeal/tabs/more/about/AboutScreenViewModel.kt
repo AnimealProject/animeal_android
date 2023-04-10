@@ -10,9 +10,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class AboutScreenViewModel @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider,
-): ViewModel(),
-    StateDelegate<AboutScreenState> by DefaultStateDelegate(AboutScreenState())
-{
+) : ViewModel(),
+    StateDelegate<AboutScreenState> by DefaultStateDelegate(AboutScreenState()) {
     init {
         updateState {
             copy(currentVersion = buildConfigProvider.appVersion)
