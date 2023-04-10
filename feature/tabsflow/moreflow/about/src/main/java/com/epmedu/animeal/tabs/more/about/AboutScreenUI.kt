@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.button.AnimealSocialButton
@@ -35,6 +37,7 @@ import com.epmedu.animeal.resources.R
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 internal fun AboutScreenUI(
+    currentVersion: String,
     onBack: () -> Unit,
     onSocialClick: (type: SocialMedia) -> Unit,
 ) {
@@ -78,6 +81,13 @@ internal fun AboutScreenUI(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.page_about_version, currentVersion),
+            style = MaterialTheme.typography.body1,
+            color = Color(0xFF898A8D),
+            textAlign = TextAlign.Center
+        )
         SocialButtonsRow(
             onSocialClick = onSocialClick
         )
@@ -118,6 +128,7 @@ internal fun SocialButtonsRow(
 private fun AboutScreenUIPreview() {
     AnimealTheme {
         AboutScreenUI(
+            currentVersion = "0.000",
             onBack = {},
             onSocialClick = {}
         )
