@@ -35,6 +35,21 @@ object FeedingModule {
 
     @Singleton
     @Provides
+    fun providesFeedingRepository(
+        authApi: AuthAPI,
+        feedingAPI: FeedingApi,
+        favouriteRepository: FavouriteRepository
+    ): FeedingRepository {
+        return FeedingRepositoryImpl(
+            dispatchers = Dispatchers,
+            authApi = authApi,
+            feedingApi = feedingAPI,
+            favouriteRepository = favouriteRepository
+        )
+    }
+
+    @Singleton
+    @Provides
     fun providesFavouriteRepository(
         authApi: AuthAPI,
         favouriteApi: FavouriteApi

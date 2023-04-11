@@ -1,6 +1,7 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
@@ -45,33 +46,33 @@ object HomeDomainModule {
     @Provides
     fun providesFetchCurrentFeedingUseCase(
         startTimerUseCase: StartTimerUseCase,
-        feedingPointRepository: FeedingPointRepository
+        feedingRepository: FeedingRepository
     ): FetchCurrentFeedingPointUseCase = FetchCurrentFeedingPointUseCase(
         startTimerUseCase,
-        feedingPointRepository
+        feedingRepository
     )
 
     @ViewModelScoped
     @Provides
     fun providesStartFeedingUseCase(
-        feedingPointRepository: FeedingPointRepository
-    ): StartFeedingUseCase = StartFeedingUseCase(feedingPointRepository)
+        feedingRepository: FeedingRepository
+    ): StartFeedingUseCase = StartFeedingUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides
     fun providesCancelFeedingUseCase(
-        feedingPointRepository: FeedingPointRepository
-    ): CancelFeedingUseCase = CancelFeedingUseCase(feedingPointRepository)
+        feedingRepository: FeedingRepository
+    ): CancelFeedingUseCase = CancelFeedingUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides
     fun providesRejectFeedingUseCase(
-        feedingPointRepository: FeedingPointRepository
-    ): RejectFeedingUseCase = RejectFeedingUseCase(feedingPointRepository)
+        feedingRepository: FeedingRepository
+    ): RejectFeedingUseCase = RejectFeedingUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides
     fun providesFinishFeedingUseCase(
-        feedingPointRepository: FeedingPointRepository
-    ): FinishFeedingUseCase = FinishFeedingUseCase(feedingPointRepository)
+        feedingRepository: FeedingRepository
+    ): FinishFeedingUseCase = FinishFeedingUseCase(feedingRepository)
 }

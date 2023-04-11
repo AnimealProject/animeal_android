@@ -4,12 +4,12 @@ import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 
 class FetchCurrentFeedingPointUseCase(
     private val startTimerUseCase: StartTimerUseCase,
-    private val repository: FeedingPointRepository
+    private val repository: FeedingRepository
 ) {
 
     suspend operator fun invoke(): FeedingPoint? {
