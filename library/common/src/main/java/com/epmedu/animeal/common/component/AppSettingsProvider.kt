@@ -11,8 +11,10 @@ interface AppSettingsProvider {
 
 interface AppSettingsUpdateScope {
     var isInitialGeolocationPermissionRequested: Boolean
+    var animalType: String
 }
 
 data class AppSettings(
     val isInitialGeolocationPermissionRequested: Boolean,
+    val animalType: String
 )

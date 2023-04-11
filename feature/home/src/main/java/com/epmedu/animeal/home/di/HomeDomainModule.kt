@@ -2,13 +2,7 @@ package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.home.data.ApplicationSettingsRepository
-import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
-import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +26,13 @@ object HomeDomainModule {
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): UpdateGeolocationPermissionRequestedSettingUseCase =
         UpdateGeolocationPermissionRequestedSettingUseCase(applicationSettingsRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesAnimalTypeSettingsUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository,
+    ): UpdateAnimalTypeSettingsUseCase =
+        UpdateAnimalTypeSettingsUseCase(applicationSettingsRepository)
 
     @ViewModelScoped
     @Provides
@@ -62,4 +63,10 @@ object HomeDomainModule {
     fun providesFinishFeedingUseCase(
         feedingPointRepository: FeedingPointRepository
     ): FinishFeedingUseCase = FinishFeedingUseCase(feedingPointRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesGetAnimalTypeSettingsUseCase(
+        repository: ApplicationSettingsRepository
+    ): GetAnimalTypeSettingsUseCase = GetAnimalTypeSettingsUseCase(repository)
 }
