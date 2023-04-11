@@ -1,9 +1,19 @@
 package com.epmedu.animeal.home.domain.usecases
 
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAllFeedingPointsUseCase @Inject constructor(private val repository: FeedingPointRepository) {
 
-    operator fun invoke() = repository.getAllFeedingPoints()
+    operator fun invoke(type: AnimalType? = null): Flow<List<FeedingPoint>> =
+        if (type == null) {
+            repository.getAllFeedingPoints()
+        } else {
+            repository.getFeedingPointsBy {
+                it.animalType == type
+            }
+        }
 }
