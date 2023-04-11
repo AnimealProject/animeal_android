@@ -1,6 +1,7 @@
 package com.epmedu.animeal.home.presentation
 
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.RouteResult
 
@@ -9,6 +10,7 @@ sealed interface HomeScreenEvent {
     sealed interface FeedingPointEvent : HomeScreenEvent {
         data class Select(val feedingPoint: FeedingPointModel) : FeedingPointEvent
         data class FavouriteChange(val isFavourite: Boolean) : FeedingPointEvent
+        data class AnimalTypeChange(val type: AnimalType) : FeedingPointEvent
     }
 
     sealed interface FeedingEvent : HomeScreenEvent {
