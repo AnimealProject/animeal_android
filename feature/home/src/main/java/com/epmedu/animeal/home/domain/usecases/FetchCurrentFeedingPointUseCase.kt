@@ -15,7 +15,7 @@ class FetchCurrentFeedingPointUseCase(
     suspend operator fun invoke(): FeedingPoint? {
         val feedings = repository.getUserFeedings()
         return when {
-            feedings.isNullOrEmpty() -> null
+            feedings.isEmpty() -> null
             else -> fetchFeedingPoint(feedings)
         }
     }

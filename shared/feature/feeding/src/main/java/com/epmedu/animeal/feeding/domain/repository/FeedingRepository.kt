@@ -5,7 +5,7 @@ import com.epmedu.animeal.feeding.domain.model.Feeding
 
 interface FeedingRepository {
 
-    suspend fun getUserFeedings(): List<Feeding>?
+    suspend fun getUserFeedings(): List<Feeding>
 
     suspend fun startFeeding(feedingPointId: String): ActionResult
 

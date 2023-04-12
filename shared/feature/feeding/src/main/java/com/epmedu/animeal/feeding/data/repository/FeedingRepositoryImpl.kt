@@ -10,7 +10,7 @@ import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 
 internal class FeedingRepositoryImpl(
@@ -20,7 +20,7 @@ internal class FeedingRepositoryImpl(
     private val favouriteRepository: FavouriteRepository
 ) : FeedingRepository {
 
-    override suspend fun getUserFeedings(): List<Feeding>? {
+    override suspend fun getUserFeedings(): List<Feeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
             favouriteRepository.getFavouriteFeedingPointIds()
@@ -30,7 +30,7 @@ internal class FeedingRepositoryImpl(
             }
         }
             .flowOn(dispatchers.IO)
-            .firstOrNull()
+            .first()
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {
