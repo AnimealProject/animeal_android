@@ -35,6 +35,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 
 @OptIn(ExperimentalMaterialApi::class)
+@Suppress("LongMethod")
 @Composable
 fun FeedingPointItem(
     title: String,
@@ -104,14 +105,13 @@ fun FeedingPointItem(
     }
 }
 
-@Suppress("LongMethod")
 @AnimealPreview
 @Composable
 fun MoreScreenPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
     val imgUrl = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
-            "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
 
     AnimealTheme {
         Column {
