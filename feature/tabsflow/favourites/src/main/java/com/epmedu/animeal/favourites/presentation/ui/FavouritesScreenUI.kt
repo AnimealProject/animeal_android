@@ -242,6 +242,7 @@ private fun FavouritesScreenPreview() {
             isFavourite = true,
             lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
+            images = emptyList(),
         ),
     )
     AnimealTheme {

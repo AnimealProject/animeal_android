@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
@@ -24,6 +25,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
@@ -80,6 +85,7 @@ fun FeedingPointSheetContent(
             title = feedingPoint.title,
             status = feedingPoint.feedStatus,
             isFavourite = feedingPoint.isFavourite,
+            imageUrl = feedingPoint.images[0],
             onFavouriteChange = onFavouriteChange
         )
         FeedingPointDetails(
@@ -99,6 +105,7 @@ internal fun FeedingPointHeader(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
+    imageUrl: String,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -108,12 +115,18 @@ internal fun FeedingPointHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colors.secondaryVariant)
-        )
+        Card(modifier = Modifier
+            .size(80.dp)
+            .clip(RoundedCornerShape(16.dp)),
+            elevation = 8.dp) {
+            AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+                contentScale = ContentScale.Crop,
+                contentDescription = title,
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxHeight()
