@@ -1,7 +1,11 @@
 package com.epmedu.animeal.component
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope

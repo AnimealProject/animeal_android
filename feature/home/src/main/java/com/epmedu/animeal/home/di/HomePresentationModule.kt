@@ -9,7 +9,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.home.domain.usecases.*
+import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
