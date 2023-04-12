@@ -110,6 +110,8 @@ fun FeedingPointItem(
 fun MoreScreenPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
+    val imgUrl = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
+            "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
 
     AnimealTheme {
         Column {
@@ -117,14 +119,14 @@ fun MoreScreenPreview() {
                 longText,
                 FeedStatus.RED,
                 isFavourite = true,
-                "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI",
+                imgUrl,
                 {}
             ) {}
             FeedingPointItem(
                 shortText,
                 FeedStatus.GREEN,
                 isFavourite = false,
-                "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI",
+                imgUrl,
                 {}
             ) {}
         }
