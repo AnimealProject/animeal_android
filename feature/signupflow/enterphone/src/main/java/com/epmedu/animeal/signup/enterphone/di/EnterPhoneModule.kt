@@ -3,8 +3,8 @@ package com.epmedu.animeal.signup.enterphone.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepositoryImpl
+import com.epmedu.animeal.signup.enterphone.domain.EnterPhoneRepository
 import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import dagger.Module

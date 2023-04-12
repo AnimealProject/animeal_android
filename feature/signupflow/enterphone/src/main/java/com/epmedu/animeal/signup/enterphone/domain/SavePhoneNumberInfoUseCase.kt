@@ -1,7 +1,6 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
 import com.epmedu.animeal.profile.domain.model.Region
-import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.withContext
 

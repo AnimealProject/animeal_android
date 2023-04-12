@@ -1,6 +1,7 @@
 package com.epmedu.animeal.auth.di
 
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.auth.AuthAPIImpl
 import com.epmedu.animeal.auth.UserAttributesAPI
 import dagger.Module
 import dagger.Provides
@@ -14,7 +15,7 @@ object AuthModule {
 
     @Singleton
     @Provides
-    fun providesAuthApi() = AuthAPI()
+    fun providesAuthApi(): AuthAPI = AuthAPIImpl()
 
     @Singleton
     @Provides

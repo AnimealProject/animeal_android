@@ -1,7 +1,7 @@
 package com.epmedu.animeal.profile.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 
 class LogOutUseCase(

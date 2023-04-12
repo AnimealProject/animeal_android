@@ -1,8 +1,8 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
-import com.epmedu.animeal.home.data.ApplicationSettingsRepository
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
