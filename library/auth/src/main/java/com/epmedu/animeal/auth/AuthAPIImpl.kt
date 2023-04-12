@@ -5,6 +5,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
+import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
@@ -16,6 +17,15 @@ import kotlin.coroutines.resumeWithException
 internal class AuthAPIImpl : AuthAPI {
 
     override var authenticationType: AuthenticationType = AuthenticationType.Mobile
+
+    private val AWSCognitoAuthSession.isExpired
+        get() = isSignedIn.not() &&
+            (
+                awsCredentialsResult.error is SessionExpiredException ||
+                    identityIdResult.error is SessionExpiredException ||
+                    userPoolTokensResult.error is SessionExpiredException ||
+                    userSubResult.error is SessionExpiredException
+                )
 
     private val AWSCognitoAuthSession.isSignedInWithoutErrors
         get() = isSignedIn &&
@@ -39,26 +49,34 @@ internal class AuthAPIImpl : AuthAPI {
         return suspendCancellableCoroutine {
             Amplify.Auth.fetchAuthSession(
                 { session ->
-                    resume(
-                        when (session) {
-                            is AWSCognitoAuthSession -> session.isSignedInWithoutErrors
-                            else -> session.isSignedIn
+                    when (session) {
+                        is AWSCognitoAuthSession -> {
+                            if (session.isExpired) {
+                                signOut(
+                                    object : AuthRequestHandler {
+                                        override fun onSuccess(result: Any?) {
+                                            resume(false)
+                                        }
+
+                                        override fun onError(exception: Exception) {
+                                            resume(false)
+                                        }
+                                    }
+                                )
+                            } else {
+                                resume(session.isSignedInWithoutErrors)
+                            }
                         }
-                    )
+                        else -> {
+                            resume(session.isSignedIn)
+                        }
+                    }
                 },
                 {
                     resume(false)
                 }
             )
         }
-    }
-
-    override fun setMobileAuthenticationType() {
-        authenticationType = AuthenticationType.Mobile
-    }
-
-    override fun setFacebookAuthenticationType(isPhoneNumberVerified: Boolean) {
-        authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
     }
 
     override fun signUp(

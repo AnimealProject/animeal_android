@@ -7,8 +7,6 @@ interface AuthAPI {
 
     suspend fun getCurrentUserId(): String
     suspend fun isSignedIn(): Boolean
-    fun setMobileAuthenticationType()
-    fun setFacebookAuthenticationType(isPhoneNumberVerified: Boolean)
     fun signUp(
         phone: String,
         password: String,
