@@ -1,5 +1,6 @@
 package com.epmedu.animeal.common.constants
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object DataStorePreferencesKey {
@@ -9,4 +10,8 @@ object DataStorePreferencesKey {
     val surnameKey = stringPreferencesKey("surname")
     val emailKey = stringPreferencesKey("email")
     val birthDateKey = stringPreferencesKey("birthdate")
+
+    val initialGeolocationPermissionKey =
+        booleanPreferencesKey("InitialGeolocationPermissionOnHomeScreen")
+    val initialCameraPermissionKey = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
 }

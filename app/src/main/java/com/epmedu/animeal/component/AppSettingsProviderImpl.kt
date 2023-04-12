@@ -3,23 +3,18 @@ package com.epmedu.animeal.component
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialCameraPermissionKey
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialGeolocationPermissionKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class AppSettingsProviderImpl(
     private val dataStore: DataStore<Preferences>,
 ) : AppSettingsProvider {
-
-    private val initialGeolocationPermission =
-        booleanPreferencesKey("InitialGeolocationPermissionOnHomeScreen")
-
-    private val cameraPermission =
-        booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
 
     override suspend fun getAppSettings(): Flow<AppSettings> {
         return dataStore.data.map { preferences -> preferences.toAppSettings() }
@@ -40,19 +35,19 @@ internal class AppSettingsProviderImpl(
     )
 
     private fun Preferences.getInitialGeolocationPermissionRequest(): Boolean {
-        return get(initialGeolocationPermission) ?: false
+        return get(initialGeolocationPermissionKey) ?: false
     }
 
     private fun MutablePreferences.setInitialGeolocationPermissionRequest(value: Boolean) {
-        set(initialGeolocationPermission, value)
+        set(initialGeolocationPermissionKey, value)
     }
 
     private fun Preferences.getCameraPermissionRequested(): Boolean {
-        return get(cameraPermission) ?: false
+        return get(initialCameraPermissionKey) ?: false
     }
 
     private fun MutablePreferences.setCameraPermissionRequested(value: Boolean) {
-        set(cameraPermission, value)
+        set(initialCameraPermissionKey, value)
     }
 }
 
