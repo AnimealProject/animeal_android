@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.button.AnimealSocialButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import com.epmedu.animeal.foundation.theme.CustomColor.TextGrey
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.foundation.util.generateLoremIpsum
@@ -85,7 +85,7 @@ internal fun AboutScreenUI(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.page_about_version, currentVersion),
             style = MaterialTheme.typography.body1,
-            color = Color(0xFF898A8D),
+            color = TextGrey,
             textAlign = TextAlign.Center
         )
         SocialButtonsRow(
