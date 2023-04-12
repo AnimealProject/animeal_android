@@ -207,6 +207,7 @@ private fun FavouritesList(
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
+                    imageUrl = feedingPoint.images[0],
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
