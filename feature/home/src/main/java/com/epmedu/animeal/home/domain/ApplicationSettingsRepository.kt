@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.data
+package com.epmedu.animeal.home.domain
 
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope

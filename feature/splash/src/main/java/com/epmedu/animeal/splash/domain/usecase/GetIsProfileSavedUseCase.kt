@@ -1,6 +1,6 @@
 package com.epmedu.animeal.splash.domain.usecase
 
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 
 class GetIsProfileSavedUseCase(private val repository: ProfileRepository) {
 

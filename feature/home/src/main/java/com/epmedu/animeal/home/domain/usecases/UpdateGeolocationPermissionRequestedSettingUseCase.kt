@@ -1,6 +1,6 @@
 package com.epmedu.animeal.home.domain.usecases
 
-import com.epmedu.animeal.home.data.ApplicationSettingsRepository
+import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 
 class UpdateGeolocationPermissionRequestedSettingUseCase(
     private val repository: ApplicationSettingsRepository,

@@ -12,10 +12,10 @@ class AuthenticationTypeRepositoryImpl @Inject constructor(
     override suspend fun getAuthenticationType(): AuthenticationType = authAPI.authenticationType
 
     override fun setAuthenticationTypeAsMobile() {
-        authAPI.setMobileAuthenticationType()
+        authAPI.authenticationType = AuthenticationType.Mobile
     }
 
     override fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean) {
-        authAPI.setFacebookAuthenticationType(isPhoneNumberVerified)
+        authAPI.authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
     }
 }

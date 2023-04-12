@@ -1,4 +1,4 @@
-package com.epmedu.animeal.signup.enterphone.data
+package com.epmedu.animeal.signup.enterphone.domain
 
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.profile.domain.model.Region

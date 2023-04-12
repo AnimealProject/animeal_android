@@ -1,7 +1,7 @@
 package com.epmedu.animeal.splash.di
 
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 import com.epmedu.animeal.splash.data.repository.SplashRepositoryImpl
 import com.epmedu.animeal.splash.domain.repository.SplashRepository

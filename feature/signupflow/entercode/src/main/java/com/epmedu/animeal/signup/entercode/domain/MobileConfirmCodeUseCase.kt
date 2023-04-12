@@ -2,7 +2,6 @@ package com.epmedu.animeal.signup.entercode.domain
 
 import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.signup.entercode.data.EnterCodeRepository
 
 class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
 
