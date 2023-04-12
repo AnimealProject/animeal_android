@@ -33,9 +33,8 @@ import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
-import com.epmedu.animeal.home.presentation.ui.HomeCameraPermission
-import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
+import com.epmedu.animeal.home.presentation.ui.HomePermissions
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
@@ -140,7 +139,7 @@ internal fun HomeScreenUI(
             }
         }
     ) {
-        HomeGeolocationPermission(
+        HomePermissions(
             homeState = state,
             onScreenEvent = onScreenEvent,
         ) { geolocationPermissionState ->
@@ -163,8 +162,6 @@ internal fun HomeScreenUI(
                 }
             )
         }
-
-        if (!state.isCameraPermissionAsked) { HomeCameraPermission() }
     }
 
     WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)

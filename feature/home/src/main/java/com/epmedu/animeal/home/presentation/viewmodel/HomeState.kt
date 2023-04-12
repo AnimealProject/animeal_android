@@ -27,6 +27,9 @@ data class HomeState(
     /** Current state of gms service */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
     val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
+
+    val cameraPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
+
     val isInitialGeolocationPermissionAsked: Boolean = false,
     val isCameraPermissionAsked: Boolean = false,
 
