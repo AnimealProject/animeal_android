@@ -104,6 +104,7 @@ fun FeedingPointItem(
     }
 }
 
+@Suppress("LongMethod")
 @AnimealPreview
 @Composable
 fun MoreScreenPreview() {
