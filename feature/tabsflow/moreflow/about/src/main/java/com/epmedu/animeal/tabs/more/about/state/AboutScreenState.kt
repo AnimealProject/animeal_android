@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.about
+package com.epmedu.animeal.tabs.more.about.state
 
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 

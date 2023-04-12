@@ -1,9 +1,10 @@
-package com.epmedu.animeal.tabs.more.about
+package com.epmedu.animeal.tabs.more.about.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.tabs.more.about.state.AboutScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

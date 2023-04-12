@@ -14,6 +14,7 @@ import com.epmedu.animeal.extensions.openLinkedin
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.tabs.more.about.viewmodel.AboutScreenViewModel
 
 @Composable
 fun AboutScreen() {
