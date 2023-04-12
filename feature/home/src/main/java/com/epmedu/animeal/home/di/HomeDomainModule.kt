@@ -37,7 +37,7 @@ object HomeDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesAnimalTypeSettingsUseCase(
+    fun providesUpdateAnimalTypeSettingsUseCase(
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): UpdateAnimalTypeSettingsUseCase =
         UpdateAnimalTypeSettingsUseCase(applicationSettingsRepository)

@@ -8,12 +8,8 @@ import javax.inject.Inject
 
 class GetAllFeedingPointsUseCase @Inject constructor(private val repository: FeedingPointRepository) {
 
-    operator fun invoke(type: AnimalType? = null): Flow<List<FeedingPoint>> =
-        if (type == null) {
-            repository.getAllFeedingPoints()
-        } else {
-            repository.getFeedingPointsBy {
-                it.animalType == type
-            }
+    operator fun invoke(type: AnimalType): Flow<List<FeedingPoint>> =
+        repository.getFeedingPointsBy {
+            it.animalType == type
         }
 }

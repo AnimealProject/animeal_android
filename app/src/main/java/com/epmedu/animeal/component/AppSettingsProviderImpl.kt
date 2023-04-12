@@ -44,7 +44,7 @@ internal class AppSettingsProviderImpl(
     }
 
     private fun Preferences.getAnimalType(): String {
-        return get(animalType) ?: ""
+        return get(animalType).orEmpty()
     }
 
     private fun MutablePreferences.setInitialGeolocationPermissionRequest(value: Boolean) {
