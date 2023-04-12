@@ -61,14 +61,17 @@ fun FeedingPointItem(
                 .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Card(modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(16.dp)),
-                elevation = 8.dp) {
-                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl)
-                    .crossfade(true)
-                    .build(),
+            Card(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                elevation = 8.dp
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUrl)
+                        .crossfade(true)
+                        .build(),
                     contentScale = ContentScale.Crop,
                     contentDescription = title,
                 )
