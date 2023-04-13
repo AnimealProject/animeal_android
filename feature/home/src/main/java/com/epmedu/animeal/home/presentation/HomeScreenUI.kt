@@ -159,6 +159,9 @@ internal fun HomeScreenUI(
                 },
                 onGeolocationClick = { mapView ->
                     onGeoLocationClick(mapView, state, geolocationPermissionState)
+                },
+                onSelectTab = {
+                    onScreenEvent(FeedingPointEvent.AnimalTypeChange(it))
                 }
             )
         }

@@ -14,6 +14,7 @@ import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -114,7 +115,8 @@ internal object HomePresentationModule {
         errorHandler: ErrorHandler,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
         addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+        updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
     ): FeedingPointHandler = DefaultFeedingPointHandler(
         stateDelegate,
         eventDelegate,
@@ -122,7 +124,8 @@ internal object HomePresentationModule {
         errorHandler,
         getAllFeedingPointsUseCase,
         addFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase
+        removeFeedingPointFromFavouritesUseCase,
+        updateAnimalTypeSettingsUseCase
     )
 
     @ViewModelScoped

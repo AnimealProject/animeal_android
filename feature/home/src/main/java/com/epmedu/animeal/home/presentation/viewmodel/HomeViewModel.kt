@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.domain.usecases.GetAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
@@ -50,6 +51,7 @@ internal class HomeViewModel @Inject constructor(
     private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
     private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
+    private val getAnimalTypeSettingsUseCase: GetAnimalTypeSettingsUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
@@ -101,17 +103,21 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private fun initialize() {
-        updateState {
-            copy(
-                mapBoxPublicKey = homeProviders.mapBoxPublicKey,
-                mapBoxStyleUri = mapBoxStyleURI,
-                isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
-                gpsSettingState = when {
-                    isGpsSettingsEnabled -> GpsSettingState.Enabled
-                    else -> GpsSettingState.Disabled
-                },
-                isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
-            )
+        viewModelScope.launch {
+            val defaultAnimalType = getAnimalTypeSettingsUseCase()
+            updateState {
+                copy(
+                    mapBoxPublicKey = homeProviders.mapBoxPublicKey,
+                    mapBoxStyleUri = mapBoxStyleURI,
+                    isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
+                    gpsSettingState = when {
+                        isGpsSettingsEnabled -> GpsSettingState.Enabled
+                        else -> GpsSettingState.Disabled
+                    },
+                    defaultAnimalType = defaultAnimalType,
+                    isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
+                )
+            }
         }
     }
 

@@ -7,7 +7,9 @@ import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseC
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Select
@@ -27,7 +29,8 @@ internal class DefaultFeedingPointHandler(
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
 ) : FeedingPointHandler,
     StateDelegate<HomeState> by stateDelegate,
     EventDelegate<HomeViewModelEvent> by eventDelegate,
@@ -35,7 +38,7 @@ internal class DefaultFeedingPointHandler(
     ErrorHandler by errorHandler {
 
     override suspend fun fetchFeedingPoints() {
-        getAllFeedingPointsUseCase().collect { domainFeedingPoints ->
+        getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
             val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
                 FeedingPointModel(domainFeedingPoint)
             }
@@ -57,12 +60,21 @@ internal class DefaultFeedingPointHandler(
         when (event) {
             is Select -> launch { selectFeedingPoint(event) }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
+            is FeedingPointEvent.AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
         }
     }
 
     private suspend fun selectFeedingPoint(event: Select) {
         updateState { copy(currentFeedingPoint = event.feedingPoint) }
         sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
+    }
+
+    private suspend fun handleAnimalTypeChange(type: AnimalType) {
+        updateState {
+            copy(defaultAnimalType = type)
+        }
+        updateAnimalTypeSettingsUseCase(type)
+        fetchFeedingPoints()
     }
 
     private suspend fun handleFavouriteChange(event: FavouriteChange) {

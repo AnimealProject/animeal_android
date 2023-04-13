@@ -37,7 +37,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
  *
  *  - default [backgroundColor] is [Color.Transparent]
  *
- * @param onSelectTab Called when the tab is switched.
+ * @param onSwitchTab Called when the tab is switched.
  * @param backgroundColor background color.
  * @param modifier The [Modifier].
  */
@@ -47,7 +47,7 @@ fun AnimealPagerTabRow(
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Transparent,
     pagerState: PagerState,
-    onSelectTab: (index: Int) -> Unit
+    onSwitchTab: (index: Int) -> Unit
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,
@@ -68,7 +68,7 @@ fun AnimealPagerTabRow(
             AnimealPagerTab(
                 animalType = animalType,
                 selected = pagerState.currentPage == index,
-                onClick = { onSelectTab(index) }
+                onClick = { onSwitchTab(index) }
             )
         }
     }
@@ -148,6 +148,6 @@ private fun AnimealPagerTabDivider(modifier: Modifier = Modifier) {
 @Composable
 private fun AnimealTabPreview() {
     AnimealTheme {
-        AnimealPagerTabRow(pagerState = PagerState(), onSelectTab = {})
+        AnimealPagerTabRow(pagerState = PagerState(), onSwitchTab = {})
     }
 }

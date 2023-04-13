@@ -31,7 +31,7 @@ fun AnimalTypeHorizontalPager(
         AnimealPagerTabRow(
             modifier = Modifier.padding(horizontal = tabRowHorizontalPadding),
             pagerState = pagerState,
-            onSelectTab = { tabIndex ->
+            onSwitchTab = { tabIndex ->
                 scope.launch {
                     pagerState.animateScrollToPage(tabIndex)
                 }
