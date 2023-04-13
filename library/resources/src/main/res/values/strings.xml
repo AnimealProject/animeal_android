@@ -25,6 +25,8 @@
     <string name="page_about">About</string>
     <string name="page_account">Account</string>
     <string name="page_about_detailed">About (terms and conditions)</string>
+    <string name="page_about_version">App version %s</string>
+
     <string name="sign_in_facebook">Sign in with Facebook</string>
     <string name="sign_in_mobile">Sign in with Mobile</string>
 
