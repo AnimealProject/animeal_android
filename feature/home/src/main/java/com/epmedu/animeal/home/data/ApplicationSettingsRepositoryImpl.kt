@@ -3,6 +3,7 @@ package com.epmedu.animeal.home.data
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope
+import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 import kotlinx.coroutines.flow.Flow
 
 class ApplicationSettingsRepositoryImpl(

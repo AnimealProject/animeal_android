@@ -1,6 +1,6 @@
 package com.epmedu.animeal.profile.domain
 
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

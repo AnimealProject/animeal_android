@@ -4,10 +4,10 @@ import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class GetGeolocationPermissionRequestedSettingUseCase(
-    private val repository: ApplicationSettingsRepository,
+class GetCameraPermissionRequestedUseCase(
+    private val repository: ApplicationSettingsRepository
 ) {
     operator fun invoke() = runBlocking {
-        repository.getAppSettings().first().isInitialGeolocationPermissionRequested
+        repository.getAppSettings().first().isCameraPermissionRequested
     }
 }

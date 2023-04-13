@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
-import com.epmedu.animeal.profile.data.repository.ProfileRepository
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
@@ -16,6 +15,7 @@ import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.Module
 import dagger.Provides

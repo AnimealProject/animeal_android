@@ -8,13 +8,18 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
@@ -43,6 +48,8 @@ internal class HomeViewModel @Inject constructor(
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
+    private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
+    private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val getAnimalTypeSettingsUseCase: GetAnimalTypeSettingsUseCase,
     stateDelegate: StateDelegate<HomeState>,
@@ -86,9 +93,12 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
+            GeolocationPermissionAsked -> markGeolocationPermissionAsAsked()
             is TimerEvent -> viewModelScope.handleTimerEvent(event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
+            is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
+            CameraPermissionAsked -> markCameraPermissionAsAsked()
         }
     }
 
@@ -104,7 +114,8 @@ internal class HomeViewModel @Inject constructor(
                         isGpsSettingsEnabled -> GpsSettingState.Enabled
                         else -> GpsSettingState.Disabled
                     },
-                    defaultAnimalType = defaultAnimalType
+                    defaultAnimalType = defaultAnimalType,
+                    isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
                 )
             }
         }
@@ -117,13 +128,6 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private fun changeGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
-        if (!state.isInitialGeolocationPermissionAsked) {
-            viewModelScope.launch {
-                updateGeolocationPermissionRequestedSettingUseCase(true)
-            }
-            updateState { copy(isInitialGeolocationPermissionAsked = true) }
-        }
-
         updateState { copy(geolocationPermissionStatus = event.status) }
 
         if (event.status is PermissionStatus.Granted) {
@@ -131,5 +135,27 @@ internal class HomeViewModel @Inject constructor(
                 fetchGpsSettingsUpdates().collect(::collectGpsSettings)
             }
         }
+    }
+
+    private fun markGeolocationPermissionAsAsked() {
+        if (!state.isInitialGeolocationPermissionAsked) {
+            viewModelScope.launch {
+                updateGeolocationPermissionRequestedSettingUseCase(true)
+            }
+            updateState { copy(isInitialGeolocationPermissionAsked = true) }
+        }
+    }
+
+    private fun markCameraPermissionAsAsked() {
+        if (!state.isCameraPermissionAsked) {
+            viewModelScope.launch {
+                updateCameraPermissionRequestUseCase(true)
+            }
+            updateState { copy(isCameraPermissionAsked = true) }
+        }
+    }
+
+    private fun changeCameraPermissionStatus(event: CameraPermissionStatusChanged) {
+        updateState { copy(cameraPermissionStatus = event.status) }
     }
 }
