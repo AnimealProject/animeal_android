@@ -9,7 +9,7 @@ class UpdateAnimalTypeSettingsUseCase(
 
     suspend operator fun invoke(type: AnimalType) {
         repository.updateAppSettings {
-            animalType = type.getName()
+            animalType = type.name
         }
     }
 }
