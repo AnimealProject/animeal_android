@@ -1,7 +1,7 @@
 package com.epmedu.animeal.home.domain.usecases
 
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.home.data.ApplicationSettingsRepository
+import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 import kotlinx.coroutines.flow.first
 
 class GetAnimalTypeSettingsUseCase(

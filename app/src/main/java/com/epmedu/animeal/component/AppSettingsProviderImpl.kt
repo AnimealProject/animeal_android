@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope
+import com.epmedu.animeal.common.constants.DataStorePreferencesKey.animalType
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialCameraPermissionKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialGeolocationPermissionKey
 import kotlinx.coroutines.flow.Flow
