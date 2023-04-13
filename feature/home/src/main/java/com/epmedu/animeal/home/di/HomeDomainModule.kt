@@ -7,9 +7,11 @@ import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
@@ -75,4 +77,18 @@ object HomeDomainModule {
     fun providesFinishFeedingUseCase(
         feedingRepository: FeedingRepository
     ): FinishFeedingUseCase = FinishFeedingUseCase(feedingRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetCameraPermissionRequestedUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository
+    ): GetCameraPermissionRequestedUseCase =
+        GetCameraPermissionRequestedUseCase(applicationSettingsRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideUpdateCameraPermissionRequestUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository
+    ): UpdateCameraPermissionRequestUseCase =
+        UpdateCameraPermissionRequestUseCase(applicationSettingsRepository)
 }
