@@ -1,6 +1,6 @@
 package com.epmedu.animeal.common.route
 
-enum class TabsRoute {
+enum class TabsRoute : RouteWithArgs {
     Search,
     Favourites,
     Home,
