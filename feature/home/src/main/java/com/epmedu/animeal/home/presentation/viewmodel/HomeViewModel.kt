@@ -8,7 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.home.domain.PermissionStatus
-import com.epmedu.animeal.home.domain.usecases.GetAnimalTypeSettingsUseCase
+import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
@@ -51,7 +51,7 @@ internal class HomeViewModel @Inject constructor(
     private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
     private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
-    private val getAnimalTypeSettingsUseCase: GetAnimalTypeSettingsUseCase,
+    private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
@@ -104,7 +104,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun initialize() {
         viewModelScope.launch {
-            val defaultAnimalType = getAnimalTypeSettingsUseCase()
+            val defaultAnimalType = animalTypeUseCase()
             updateState {
                 copy(
                     mapBoxPublicKey = homeProviders.mapBoxPublicKey,
