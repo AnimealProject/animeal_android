@@ -26,7 +26,7 @@ import com.epmedu.animeal.tabs.NavigationTab
 
 @Composable
 internal fun BottomAppBarFab(
-    currentRoute: String?,
+    currentRoute: TabsRoute?,
     associatedScreen: NavigationTab = NavigationTab.Home,
     onNavigate: (TabsRoute) -> Unit
 ) {
@@ -57,7 +57,7 @@ internal fun BottomAppBarFab(
                 modifier = Modifier
                     .background(
                         when (currentRoute) {
-                            route.name -> MaterialTheme.colors.primary
+                            route -> MaterialTheme.colors.primary
                             else -> MaterialTheme.colors.surface
                         }
                     )
@@ -70,7 +70,7 @@ internal fun BottomAppBarFab(
                     painter = painterResource(id = R.drawable.ic_home),
                     contentDescription = stringResource(associatedScreen.contentDescription),
                     tint = when (currentRoute) {
-                        route.name -> MaterialTheme.colors.surface
+                        route -> MaterialTheme.colors.surface
                         else -> MaterialTheme.colors.onSurface
                     }
                 )
@@ -85,11 +85,11 @@ private fun BottomAppBarFabPreview() {
     AnimealTheme {
         Column {
             BottomAppBarFab(
-                currentRoute = NavigationTab.Home.route.name,
+                currentRoute = NavigationTab.Home.route,
                 onNavigate = {},
             )
             BottomAppBarFab(
-                currentRoute = NavigationTab.More.route.name,
+                currentRoute = NavigationTab.More.route,
                 onNavigate = {},
             )
         }

@@ -38,7 +38,7 @@ fun TabsHost() {
 
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute: TabsRoute? = TabsRoute.fromRoutePath(navBackStackEntry?.destination?.route)
     var bottomBarVisibility by rememberSaveable { mutableStateOf(SHOWN) }
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility

@@ -5,5 +5,14 @@ enum class TabsRoute {
     Favourites,
     Home,
     Analytics,
-    More
+    More;
+    companion object {
+        fun fromRoutePath(routeName: String?): TabsRoute? {
+            routeName ?: return null
+
+            return TabsRoute.values().firstOrNull {
+                routeName.contains(it.name)
+            }
+        }
+    }
 }
