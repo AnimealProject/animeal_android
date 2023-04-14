@@ -13,6 +13,11 @@ sealed interface SearchScreenEvent {
     ) : SearchScreenEvent
 
     object ShowWillFeedDialog : SearchScreenEvent
+
+    data class AcceptFeedDialog(
+        val feedingPoint: FeedingPoint
+    ): SearchScreenEvent
+
     object DismissWillFeedDialog : SearchScreenEvent
 
     data class Search(val query: String, val animalType: AnimalType) : SearchScreenEvent

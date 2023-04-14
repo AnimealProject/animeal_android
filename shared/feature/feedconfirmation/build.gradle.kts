@@ -14,6 +14,8 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.feeding)
+
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

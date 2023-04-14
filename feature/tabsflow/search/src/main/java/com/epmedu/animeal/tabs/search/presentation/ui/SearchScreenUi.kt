@@ -133,10 +133,12 @@ internal fun WillFeedConfirmationDialog(
     onEvent: (SearchScreenEvent) -> Unit
 ) {
     if (state.showingWillFeedDialog) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) },
-            onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) }
-        )
+        state.showingFeedingPoint?.let {
+            FeedConfirmationDialog(
+                onAgreeClick = { onEvent(SearchScreenEvent.AcceptFeedDialog(it)) },
+                onCancelClick = { onEvent(SearchScreenEvent.DismissWillFeedDialog) }
+            )
+        }
     }
 }
 
