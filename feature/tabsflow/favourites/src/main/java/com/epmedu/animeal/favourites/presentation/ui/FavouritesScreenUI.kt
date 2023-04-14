@@ -121,6 +121,9 @@ private fun ScreenScaffold(
                     isShowOnMapVisible = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
+                    },
+                    onShowOnMap = {
+                        onEvent(FavouritesScreenEvent.ShowOnMap(feedingPoint.id, feedingPoint.animalType))
                     }
                 )
             }
