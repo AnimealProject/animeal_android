@@ -4,6 +4,8 @@ import com.epmedu.animeal.api.faq.FAQApi
 import com.epmedu.animeal.api.faq.FAQApiImpl
 import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.favourite.FavouriteApiImpl
+import com.epmedu.animeal.api.feeding.FeedingApi
+import com.epmedu.animeal.api.feeding.FeedingApiImpl
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.feeding.FeedingPointApiImpl
 import dagger.Module
@@ -19,6 +21,10 @@ internal object ApiModule {
     @Singleton
     @Provides
     fun providesFeedingPointApi(): FeedingPointApi = FeedingPointApiImpl()
+
+    @Singleton
+    @Provides
+    fun providesFeedingApi(): FeedingApi = FeedingApiImpl()
 
     @Singleton
     @Provides
