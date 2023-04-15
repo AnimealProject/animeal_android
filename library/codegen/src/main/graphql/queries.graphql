@@ -2,6 +2,12 @@
 query Translate($text: String!, $to: String!, $from: String) {
   translate(text: $text, to: $to, from: $from)
 }
+query GetSupportedLanguages {
+  getSupportedLanguages {
+    code
+    name
+  }
+}
 query SearchByBounds(
   $bounds: BoundsInput!
   $limit: Int
@@ -310,6 +316,8 @@ query GetFeedingHistory($id: ID!) {
     updatedBy
     owner
     feedingPointId
+    status
+    reason
   }
 }
 query ListFeedingHistories(
@@ -328,6 +336,8 @@ query ListFeedingHistories(
       updatedBy
       owner
       feedingPointId
+      status
+      reason
     }
     nextToken
   }
@@ -750,27 +760,6 @@ query GetFavourite($id: ID!) {
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner
@@ -782,6 +771,60 @@ query ListFavourites(
   $nextToken: String
 ) {
   listFavourites(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query FavouritesByUserId(
+  $userId: ID!
+  $feedingPointId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelFavouriteFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  favouritesByUserId(
+    userId: $userId
+    feedingPointId: $feedingPointId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+  }
+}
+query FavouritesByFeedingPointId(
+  $feedingPointId: ID!
+  $userId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelFavouriteFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  favouritesByFeedingPointId(
+    feedingPointId: $feedingPointId
+    userId: $userId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
     items {
       id
       userId

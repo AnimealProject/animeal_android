@@ -1168,27 +1168,6 @@ subscription OnCreateFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner
@@ -1202,27 +1181,6 @@ subscription OnUpdateFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner
@@ -1236,27 +1194,6 @@ subscription OnDeleteFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner

@@ -3,8 +3,8 @@ package com.amplifyframework.datastore.generated.model;
 
 import androidx.core.util.ObjectsCompat;
 
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 
 /** This is an auto generated class representing the Point type in your schema. */
 public final class Point {
