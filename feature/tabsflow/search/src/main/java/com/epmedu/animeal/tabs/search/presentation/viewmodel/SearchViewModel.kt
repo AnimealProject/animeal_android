@@ -3,7 +3,9 @@ package com.epmedu.animeal.tabs.search.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
@@ -35,6 +37,7 @@ class SearchViewModel @Inject constructor(
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
     StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
+    EventDelegate<SearchEvent> by DefaultEventDelegate(),
     ActionDelegate by actionDelegate {
 
     init {
@@ -64,6 +67,18 @@ class SearchViewModel @Inject constructor(
             is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
             is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
             is Search -> handleSearch(event)
+            is SearchScreenEvent.ShowOnMap -> showFeedingPointOnHomeScreen(event.feedingPointId, event.animalType)
+        }
+    }
+
+    private fun showFeedingPointOnHomeScreen(feedingPointId: String, animalType: AnimalType) {
+        viewModelScope.launch {
+            sendEvent(
+                SearchEvent.ShowHomePage(
+                    feedingPointId,
+                    animalType
+                )
+            )
         }
     }
 

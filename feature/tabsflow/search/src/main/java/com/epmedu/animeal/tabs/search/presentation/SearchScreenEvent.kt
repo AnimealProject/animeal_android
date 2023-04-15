@@ -16,4 +16,6 @@ sealed interface SearchScreenEvent {
     object DismissWillFeedDialog : SearchScreenEvent
 
     data class Search(val query: String, val animalType: AnimalType) : SearchScreenEvent
+
+    data class ShowOnMap(val feedingPointId: String, val animalType: AnimalType) : SearchScreenEvent
 }
