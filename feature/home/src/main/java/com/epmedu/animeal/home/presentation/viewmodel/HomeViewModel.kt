@@ -1,12 +1,15 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
+import com.epmedu.animeal.geolocation.location.model.Location
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
@@ -46,6 +49,7 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
@@ -159,5 +163,16 @@ internal class HomeViewModel @Inject constructor(
 
     private fun changeCameraPermissionStatus(event: CameraPermissionStatusChanged) {
         updateState { copy(cameraPermissionStatus = event.status) }
+    }
+
+    private fun handleForcedFeedingPoint() {
+        viewModelScope.launch {
+            val forcedFeedingPointId: String = savedStateHandle[FORCED_FEEDING_POINT_ID] ?: return@launch
+            savedStateHandle[FORCED_FEEDING_POINT_ID] = null
+            showFeedingPoint(forcedFeedingPointId)
+            state.currentFeedingPoint?.coordinates
+                ?.run { Location(latitude(), longitude()) }
+                ?.let(::collectLocations)
+        }
     }
 }

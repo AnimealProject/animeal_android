@@ -51,6 +51,12 @@ internal class DefaultFeedingPointHandler(
         }
     }
 
+    override suspend fun showFeedingPoint(feedingPointId: String) {
+        val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
+            ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
+        selectFeedingPoint(Select(forcedPoint))
+    }
+
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
         val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
         updateState { copy(feedingPoints = persistentListOf(reservedFeedingPoint)) }
