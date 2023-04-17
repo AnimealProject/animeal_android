@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feedconfirmation.domain.ValidateFeedingPointAvailableUseCase
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
@@ -13,7 +12,6 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
-import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.AcceptFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointHidden
@@ -25,7 +23,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,7 +31,6 @@ class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val searchCatsFeedingPointsUseCase: SearchCatsFeedingPointsUseCase,
     private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,
-    private val validateFeedingPointAvailableUseCase: ValidateFeedingPointAvailableUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
@@ -62,7 +58,6 @@ class SearchViewModel @Inject constructor(
 
     fun handleEvents(event: SearchScreenEvent) {
         when (event) {
-            is AcceptFeedDialog -> handleAcceptFeed(event)
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
@@ -76,19 +71,6 @@ class SearchViewModel @Inject constructor(
         when (event.animalType) {
             AnimalType.Dogs -> updateState { copy(dogsQuery = event.query) }
             AnimalType.Cats -> updateState { copy(catsQuery = event.query) }
-        }
-    }
-
-    private fun handleAcceptFeed(event: AcceptFeedDialog) {
-        viewModelScope.launch {
-            validateFeedingPointAvailableUseCase(event.feedingPoint.id)
-                .map {isAvailableYet ->
-                    if (isAvailableYet) {
-                        //TODO call update feeding status
-                    } else {
-                        //TODO show feeding point already taken dialog
-                    }
-                }.collect()
         }
     }
 

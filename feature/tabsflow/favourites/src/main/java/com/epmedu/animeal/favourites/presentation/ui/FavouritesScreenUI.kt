@@ -220,10 +220,12 @@ internal fun WillFeedConfirmationDialog(
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     if (state.showingWillFeedDialog) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onEvent(DismissWillFeedDialog) },
-            onCancelClick = { onEvent(DismissWillFeedDialog) }
-        )
+        state.showingFeedingPoint?.let {
+            FeedConfirmationDialog(
+                feedingPointId = it.id,
+                onCancelClick = { onEvent(DismissWillFeedDialog) }
+            )
+        }
     }
 }
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 
 class ValidateFeedingPointAvailableUseCase @Inject constructor(private val feedingPointRepository: FeedingPointRepository) {
     operator fun invoke(id: String): Flow<Boolean> {
-        return feedingPointRepository.getFeedingPointsBy { it.id == id  && it.animalStatus == AnimalState.RED}
+        return feedingPointRepository.getFeedingPointsBy { it.id == id  && it.animalStatus != AnimalState.RED}
             .map { it.isEmpty() }
     }
 }

@@ -203,12 +203,15 @@ private fun WillFeedConfirmationDialog(
     onHideBottomSheet: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
-        FeedConfirmationDialog(onAgreeClick = {
-            onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
-            scope.launch { bottomSheetState.hide() }
-            onScreenEvent(FeedingEvent.Start)
-            onHideBottomSheet()
-        }, onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) })
+        state.currentFeedingPoint?.let {
+            FeedConfirmationDialog(
+                feedingPointId = it.id,
+                onCancelClick = {
+                    onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
+                    scope.launch { bottomSheetState.hide() }
+                    onHideBottomSheet()
+                })
+        }
     }
 }
 

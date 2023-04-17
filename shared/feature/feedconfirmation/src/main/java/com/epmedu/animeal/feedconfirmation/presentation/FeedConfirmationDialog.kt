@@ -16,6 +16,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -23,17 +25,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.epmedu.animeal.feedconfirmation.viewmodel.FeedConfirmationViewModel
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
+import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
 fun FeedConfirmationDialog(
-    onAgreeClick: () -> Unit,
+    feedingPointId: String,
     onCancelClick: () -> Unit
 ) {
+
+    val viewModel = hiltViewModel<FeedConfirmationViewModel>()
+    val state by viewModel.stateFlow.collectAsState()
+
+    val showFeedingPointExpired = state.showBookingException
+
+    if (showFeedingPointExpired) {
+        AnimealQuestionDialog(
+            title = stringResource(R.string.feeding_point_expired_description),
+            acceptText = stringResource(R.string.feeding_point_expired_accept),
+            onDismiss = {},
+            onConfirm = onCancelClick )
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -79,7 +98,9 @@ fun FeedConfirmationDialog(
                 AnimealButton(
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = R.string.agree),
-                    onClick = onAgreeClick
+                    onClick = {
+                        viewModel.handleEvents(FeedConfirmationEvent.AcceptFeedDialog(feedingPointId))
+                    }
                 )
             }
         }
@@ -90,6 +111,6 @@ fun FeedConfirmationDialog(
 @Composable
 private fun FeedConfirmationPreview() {
     AnimealTheme {
-        FeedConfirmationDialog({}, {})
+        FeedConfirmationDialog("", {})
     }
 }

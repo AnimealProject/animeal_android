@@ -1,9 +1,6 @@
 package com.epmedu.animeal.foundation.dialog
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
@@ -22,8 +19,8 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 fun AnimealQuestionDialog(
     title: String,
-    dismissText: String,
-    acceptText: String,
+    dismissText: String? = null,
+    acceptText: String? = null,
     onDismissRequest: () -> Unit = {},
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
@@ -49,20 +46,24 @@ fun AnimealQuestionDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AnimealSecondaryButtonOutlined(
-                    modifier = Modifier.weight(1f),
-                    text = dismissText,
-                    onClick = {
-                        onDismiss()
-                    },
-                )
-                AnimealButton(
-                    modifier = Modifier.weight(1f),
-                    text = acceptText,
-                    onClick = {
-                        onConfirm()
-                    },
-                )
+                dismissText?.let{
+                    AnimealSecondaryButtonOutlined(
+                        modifier = Modifier.weight(1f),
+                        text = it,
+                        onClick = {
+                            onDismiss()
+                        },
+                    )
+                }
+                acceptText?.let {
+                    AnimealButton(
+                        modifier = Modifier.weight(1f),
+                        text = acceptText,
+                        onClick = {
+                            onConfirm()
+                        },
+                    )
+                }
             }
         }
     )
@@ -76,6 +77,19 @@ private fun AnimealAlertQuestionPreview() {
             title = "Title",
             dismissText = "No",
             acceptText = "Yes",
+            onDismiss = {},
+            onConfirm = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertQuestionSingleOptionPreview() {
+    AnimealTheme {
+        AnimealQuestionDialog(
+            title = "One Option",
+            dismissText = "Accept",
             onDismiss = {},
             onConfirm = {}
         )

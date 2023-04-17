@@ -86,7 +86,8 @@
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
     <string name="feeding_timer_suspended">Do you really want to cancel feeding?</string>
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
-
+    <string name="feeding_point_expired_accept">Choose another location</string>
+    <string name="feeding_point_expired_description">Sorry, another volunteer has booked this location for feeding</string>
     <string name="feeding_take_pictures">Please take pictures where pet and food is detected</string>
 
     <string name="done">Done</string>
