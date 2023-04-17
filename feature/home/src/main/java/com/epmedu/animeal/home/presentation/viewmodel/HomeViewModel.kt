@@ -15,6 +15,7 @@ import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseC
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
@@ -99,6 +100,7 @@ internal class HomeViewModel @Inject constructor(
             is ErrorShowed -> hideError()
             is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
             CameraPermissionAsked -> markCameraPermissionAsAsked()
+            ScreenDisplayed -> handleForcedFeedingPoint()
         }
     }
 

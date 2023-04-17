@@ -114,7 +114,7 @@ private fun NavigationTabs(
                     nullable = true
                 }
             )
-        ) { HomeScreen() }
+        ) { HomeScreen(it) }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
     }

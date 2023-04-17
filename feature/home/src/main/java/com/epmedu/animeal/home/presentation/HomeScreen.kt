@@ -6,6 +6,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.whenCreated
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(lifecycleOwner: LifecycleOwner) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
@@ -43,6 +45,12 @@ fun HomeScreen() {
                     }
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        lifecycleOwner.whenCreated {
+            viewModel.handleEvents(HomeScreenEvent.ScreenDisplayed)
         }
     }
 }
