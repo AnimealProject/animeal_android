@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
@@ -37,13 +38,14 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun MarkFeedingDonePhotoGallery(
     photos: List<Uri>,
+    isUploadingNextImage: Boolean,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (Uri) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
             TakePhotoItem(onClick = onTakePhotoClick)
@@ -56,6 +58,11 @@ fun MarkFeedingDonePhotoGallery(
                     onDeletePhotoClick(photoUri)
                 }
             )
+        }
+        if (isUploadingNextImage) {
+            item {
+                CircularProgressIndicator(Modifier.size(70.dp))
+            }
         }
     }
 }
@@ -90,7 +97,6 @@ private fun PhotoItem(
 
     Box(
         modifier = Modifier
-            .padding(iconSize / 2)
             .size(70.dp)
             .background(
                 color = CustomColor.LynxWhite,
@@ -98,8 +104,10 @@ private fun PhotoItem(
             )
     ) {
         AsyncImage(
+            modifier = Modifier.clip(RoundedCornerShape(16.dp)),
             model = uri,
-            contentDescription = null
+            contentDescription = null,
+            contentScale = ContentScale.Crop
         )
 
         IconButton(
@@ -126,7 +134,8 @@ private fun PhotoItem(
 private fun MarkFeedingDonePhotoGalleryPreview() {
     AnimealTheme {
         MarkFeedingDonePhotoGallery(
-            photos = listOf("http://example.com".toUri()),
+            photos = listOf("http://example.com".toUri(), "http://example.com".toUri()),
+            isUploadingNextImage = true,
             onTakePhotoClick = {},
             onDeletePhotoClick = {}
         )

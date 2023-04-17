@@ -2,6 +2,7 @@
 
 package com.epmedu.animeal.home.di
 
+import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
@@ -19,6 +20,8 @@ import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.DefaultCameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.DefaultErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFeedingHandler
@@ -80,6 +83,18 @@ internal object HomePresentationModule {
     fun providesGpsHandler(
         stateDelegate: StateDelegate<HomeState>
     ): GpsHandler = DefaultGpsHandler(stateDelegate)
+
+    @ViewModelScoped
+    @Provides
+    fun providesCameraHandler(
+        stateDelegate: StateDelegate<HomeState>,
+        actionDelegate: ActionDelegate,
+        uploadPhotoUseCase: UploadPhotoUseCase
+    ): CameraHandler = DefaultCameraHandler(
+        stateDelegate,
+        actionDelegate,
+        uploadPhotoUseCase
+    )
 
     @ViewModelScoped
     @Provides
@@ -170,6 +185,7 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesHomeHandler(
+        cameraHandler: DefaultCameraHandler,
         feedingPointHandler: FeedingPointHandler,
         routeHandler: RouteHandler,
         willFeedHandler: WillFeedHandler,
@@ -180,6 +196,7 @@ internal object HomePresentationModule {
         gpsHandler: GpsHandler,
         errorHandler: ErrorHandler
     ) = DefaultHomeHandler(
+        cameraHandler,
         feedingPointHandler,
         routeHandler,
         willFeedHandler,
