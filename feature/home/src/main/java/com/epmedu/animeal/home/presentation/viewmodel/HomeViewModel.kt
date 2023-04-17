@@ -18,7 +18,6 @@ import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseC
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
@@ -26,6 +25,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
@@ -167,12 +167,14 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleForcedFeedingPoint() {
         viewModelScope.launch {
-            val forcedFeedingPointId: String = savedStateHandle[FORCED_FEEDING_POINT_ID] ?: return@launch
-            savedStateHandle[FORCED_FEEDING_POINT_ID] = null
-            showFeedingPoint(forcedFeedingPointId)
-            state.currentFeedingPoint?.coordinates
-                ?.run { Location(latitude(), longitude()) }
-                ?.let(::collectLocations)
+            val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
+            if (forcedFeedingPointId != null) {
+                savedStateHandle[FORCED_FEEDING_POINT_ID] = null
+                showFeedingPoint(forcedFeedingPointId)
+                state.currentFeedingPoint?.coordinates
+                    ?.run { Location(latitude(), longitude()) }
+                    ?.let(::collectLocations)
+            }
         }
     }
 }
