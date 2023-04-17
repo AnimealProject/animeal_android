@@ -8,8 +8,6 @@ import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.ModelOperation;
 import com.amplifyframework.core.model.annotations.AuthRule;
-import com.amplifyframework.core.model.annotations.BelongsTo;
-import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
@@ -18,9 +16,9 @@ import com.amplifyframework.core.model.temporal.Temporal;
 import java.util.Objects;
 import java.util.UUID;
 
-/** This is an auto generated class representing the RelationUserPet type in your schema. */
+/** This is an auto generated class representing the Settings type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "RelationUserPets", authRules = {
+@ModelConfig(pluralName = "Settings", authRules = {
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Administrator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Moderator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Volunteer" }, provider = "userPools", operations = { ModelOperation.READ }),
@@ -28,27 +26,25 @@ import java.util.UUID;
   @AuthRule(allow = AuthStrategy.PUBLIC, provider = "apiKey", operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ }),
   @AuthRule(allow = AuthStrategy.PRIVATE, operations = { ModelOperation.READ })
 })
-@Index(name = "byUserId", fields = {"userId","petId"})
-@Index(name = "byPetId", fields = {"petId","userId"})
-public final class RelationUserPet implements Model {
-  public static final QueryField ID = field("RelationUserPet", "id");
-  public static final QueryField USER_ID = field("RelationUserPet", "userId");
-  public static final QueryField PET = field("RelationUserPet", "petId");
+public final class Settings implements Model {
+  public static final QueryField ID = field("Settings", "id");
+  public static final QueryField KEY = field("Settings", "key");
+  public static final QueryField VALUE = field("Settings", "value");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="String", isRequired = true) String userId;
-  private final @ModelField(targetType="Pet", isRequired = true) @BelongsTo(targetName = "petId", type = Pet.class) Pet pet;
+  private final @ModelField(targetType="String", isRequired = true) String key;
+  private final @ModelField(targetType="String", isRequired = true) String value;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
       return id;
   }
   
-  public String getUserId() {
-      return userId;
+  public String getKey() {
+      return key;
   }
   
-  public Pet getPet() {
-      return pet;
+  public String getValue() {
+      return value;
   }
   
   public Temporal.DateTime getCreatedAt() {
@@ -59,10 +55,10 @@ public final class RelationUserPet implements Model {
       return updatedAt;
   }
   
-  private RelationUserPet(String id, String userId, Pet pet) {
+  private Settings(String id, String key, String value) {
     this.id = id;
-    this.userId = userId;
-    this.pet = pet;
+    this.key = key;
+    this.value = value;
   }
   
   @Override
@@ -72,12 +68,12 @@ public final class RelationUserPet implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      RelationUserPet relationUserPet = (RelationUserPet) obj;
-      return ObjectsCompat.equals(getId(), relationUserPet.getId()) &&
-              ObjectsCompat.equals(getUserId(), relationUserPet.getUserId()) &&
-              ObjectsCompat.equals(getPet(), relationUserPet.getPet()) &&
-              ObjectsCompat.equals(getCreatedAt(), relationUserPet.getCreatedAt()) &&
-              ObjectsCompat.equals(getUpdatedAt(), relationUserPet.getUpdatedAt());
+      Settings settings = (Settings) obj;
+      return ObjectsCompat.equals(getId(), settings.getId()) &&
+              ObjectsCompat.equals(getKey(), settings.getKey()) &&
+              ObjectsCompat.equals(getValue(), settings.getValue()) &&
+              ObjectsCompat.equals(getCreatedAt(), settings.getCreatedAt()) &&
+              ObjectsCompat.equals(getUpdatedAt(), settings.getUpdatedAt());
       }
   }
   
@@ -85,8 +81,8 @@ public final class RelationUserPet implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getUserId())
-      .append(getPet())
+      .append(getKey())
+      .append(getValue())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .toString()
@@ -96,17 +92,17 @@ public final class RelationUserPet implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("RelationUserPet {")
+      .append("Settings {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("userId=" + String.valueOf(getUserId()) + ", ")
-      .append("pet=" + String.valueOf(getPet()) + ", ")
+      .append("key=" + String.valueOf(getKey()) + ", ")
+      .append("value=" + String.valueOf(getValue()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
       .toString();
   }
   
-  public static UserIdStep builder() {
+  public static KeyStep builder() {
       return new Builder();
   }
   
@@ -118,8 +114,8 @@ public final class RelationUserPet implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static RelationUserPet justId(String id) {
-    return new RelationUserPet(
+  public static Settings justId(String id) {
+    return new Settings(
       id,
       null,
       null
@@ -128,50 +124,50 @@ public final class RelationUserPet implements Model {
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      userId,
-      pet);
+      key,
+      value);
   }
-  public interface UserIdStep {
-    PetStep userId(String userId);
+  public interface KeyStep {
+    ValueStep key(String key);
   }
   
 
-  public interface PetStep {
-    BuildStep pet(Pet pet);
+  public interface ValueStep {
+    BuildStep value(String value);
   }
   
 
   public interface BuildStep {
-    RelationUserPet build();
+    Settings build();
     BuildStep id(String id);
   }
   
 
-  public static class Builder implements UserIdStep, PetStep, BuildStep {
+  public static class Builder implements KeyStep, ValueStep, BuildStep {
     private String id;
-    private String userId;
-    private Pet pet;
+    private String key;
+    private String value;
     @Override
-     public RelationUserPet build() {
+     public Settings build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new RelationUserPet(
+        return new Settings(
           id,
-          userId,
-          pet);
+          key,
+          value);
     }
     
     @Override
-     public PetStep userId(String userId) {
-        Objects.requireNonNull(userId);
-        this.userId = userId;
+     public ValueStep key(String key) {
+        Objects.requireNonNull(key);
+        this.key = key;
         return this;
     }
     
     @Override
-     public BuildStep pet(Pet pet) {
-        Objects.requireNonNull(pet);
-        this.pet = pet;
+     public BuildStep value(String value) {
+        Objects.requireNonNull(value);
+        this.value = value;
         return this;
     }
     
@@ -187,20 +183,20 @@ public final class RelationUserPet implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String userId, Pet pet) {
+    private CopyOfBuilder(String id, String key, String value) {
       super.id(id);
-      super.userId(userId)
-        .pet(pet);
+      super.key(key)
+        .value(value);
     }
     
     @Override
-     public CopyOfBuilder userId(String userId) {
-      return (CopyOfBuilder) super.userId(userId);
+     public CopyOfBuilder key(String key) {
+      return (CopyOfBuilder) super.key(key);
     }
     
     @Override
-     public CopyOfBuilder pet(Pet pet) {
-      return (CopyOfBuilder) super.pet(pet);
+     public CopyOfBuilder value(String value) {
+      return (CopyOfBuilder) super.value(value);
     }
   }
   
