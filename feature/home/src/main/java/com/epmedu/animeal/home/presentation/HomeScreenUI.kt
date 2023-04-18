@@ -177,7 +177,7 @@ private fun OnState(
 ) {
     when {
         state.timerState is TimerState.Expired &&
-            state.cancellationRequestState == CancellationRequestState.Dismissed -> FeedingExpiredDialog(
+                state.cancellationRequestState == CancellationRequestState.Dismissed -> FeedingExpiredDialog(
             onConfirm = {
                 onScreenEvent(TimerEvent.Disable)
             }
@@ -210,7 +210,8 @@ private fun WillFeedConfirmationDialog(
                     onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
                     scope.launch { bottomSheetState.hide() }
                     onHideBottomSheet()
-                })
+                }
+            )
         }
     }
 }
