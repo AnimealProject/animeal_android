@@ -34,12 +34,12 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
+@Suppress("LongMethod")
 @Composable
 fun FeedConfirmationDialog(
     feedingPointId: String,
     onCancelClick: () -> Unit
 ) {
-
     val viewModel = hiltViewModel<FeedConfirmationViewModel>()
     val state by viewModel.stateFlow.collectAsState()
 
@@ -50,7 +50,8 @@ fun FeedConfirmationDialog(
             title = stringResource(R.string.feeding_point_expired_description),
             acceptText = stringResource(R.string.feeding_point_expired_accept),
             onDismiss = {},
-            onConfirm = onCancelClick )
+            onConfirm = onCancelClick
+        )
     }
 
     Scaffold(
@@ -99,7 +100,9 @@ fun FeedConfirmationDialog(
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = R.string.agree),
                     onClick = {
-                        viewModel.handleEvents(FeedConfirmationEvent.AcceptFeedDialog(feedingPointId))
+                        viewModel.handleEvents(
+                            FeedConfirmationEvent.AcceptFeedDialog(feedingPointId)
+                        )
                     }
                 )
             }

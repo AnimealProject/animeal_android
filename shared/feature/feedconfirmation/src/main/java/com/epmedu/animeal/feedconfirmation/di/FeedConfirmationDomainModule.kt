@@ -18,5 +18,4 @@ object FeedConfirmationDomainModule {
         feedingPointRepository: FeedingPointRepository
     ): ValidateFeedingPointAvailableUseCase =
         ValidateFeedingPointAvailableUseCase(feedingPointRepository)
-
 }

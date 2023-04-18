@@ -21,26 +21,27 @@ class FeedConfirmationViewModel @Inject constructor(
     StateDelegate<FeedConfirmationState>
     by DefaultStateDelegate(initialState = FeedConfirmationState()) {
 
-    fun handleEvents(event: FeedConfirmationEvent) {
-             when (event) {
-                 is FeedConfirmationEvent.AcceptFeedDialog -> handleAcceptFeed(event)
-             }
+        fun handleEvents(event: FeedConfirmationEvent) {
+            when (event) {
+                is FeedConfirmationEvent.AcceptFeedDialog -> handleAcceptFeed(event)
+            }
         }
 
-    private fun handleAcceptFeed(event: FeedConfirmationEvent.AcceptFeedDialog) {
-        viewModelScope.launch {
-            validateFeedingPointAvailableUseCase(event.feedingPointId)
-                .map {isAvailableYet ->
-                    if (isAvailableYet) {
-                        startFeedingPointUseCase(event.feedingPointId)
-                    } else {
-                        updateState { copy(
-                            showLoader = false,
-                            showBookingException = true
-                        ) }
-                    }
-                }.collect()
+        private fun handleAcceptFeed(event: FeedConfirmationEvent.AcceptFeedDialog) {
+            viewModelScope.launch {
+                validateFeedingPointAvailableUseCase(event.feedingPointId)
+                    .map { isAvailableYet ->
+                        if (isAvailableYet) {
+                            startFeedingPointUseCase(event.feedingPointId)
+                        } else {
+                            updateState {
+                                copy(
+                                    showLoader = false,
+                                    showBookingException = true
+                                )
+                            }
+                        }
+                    }.collect()
+            }
         }
-    }
-
     }
