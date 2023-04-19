@@ -3,6 +3,7 @@ package com.epmedu.animeal.api.storage
 import android.net.Uri
 import androidx.core.net.toFile
 import com.amplifyframework.core.Amplify
+import com.amplifyframework.storage.options.StorageGetUrlOptions
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -20,5 +21,14 @@ internal class StorageApiImpl : StorageApi {
                 { resume(ApiResult.Failure(it)) }
             )
         }
+    }
+
+    override suspend fun parseAmplifyUrl(imageId: String): ApiResult<String> =
+    suspendCancellableCoroutine {
+        val options = StorageGetUrlOptions.builder().build()
+        Amplify.Storage.getUrl(imageId, options,
+            { resume(ApiResult.Success(it.url.toString())) },
+            { resume(ApiResult.Failure(it)) }
+        )
     }
 }

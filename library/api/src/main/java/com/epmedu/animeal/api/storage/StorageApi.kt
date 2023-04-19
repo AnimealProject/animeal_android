@@ -6,4 +6,6 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 interface StorageApi {
 
     suspend fun uploadFile(fileName: String, uri: Uri): ApiResult<Unit>
+
+    suspend fun parseAmplifyUrl(imageId: String): ApiResult<String>
 }
