@@ -24,11 +24,13 @@ internal class StorageApiImpl : StorageApi {
     }
 
     override suspend fun parseAmplifyUrl(imageId: String): ApiResult<String> =
-    suspendCancellableCoroutine {
-        val options = StorageGetUrlOptions.builder().build()
-        Amplify.Storage.getUrl(imageId, options,
-            { resume(ApiResult.Success(it.url.toString())) },
-            { resume(ApiResult.Failure(it)) }
-        )
-    }
+        suspendCancellableCoroutine {
+            val options = StorageGetUrlOptions.builder().build()
+            Amplify.Storage.getUrl(
+                imageId,
+                options,
+                { resume(ApiResult.Success(it.url.toString())) },
+                { resume(ApiResult.Failure(it)) }
+            )
+        }
 }
