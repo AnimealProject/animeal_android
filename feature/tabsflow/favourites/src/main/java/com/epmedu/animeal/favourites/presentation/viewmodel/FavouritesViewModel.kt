@@ -3,9 +3,7 @@ package com.epmedu.animeal.favourites.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
@@ -17,7 +15,6 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWill
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -31,7 +28,6 @@ internal class FavouritesViewModel @Inject constructor(
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
-    EventDelegate<FavouritesEvent> by DefaultEventDelegate(),
     ActionDelegate by actionDelegate {
 
     init {
@@ -49,21 +45,6 @@ internal class FavouritesViewModel @Inject constructor(
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
             is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
-            is FavouritesScreenEvent.ShowOnMap -> showFeedingPointOnHomeScreen(
-                event.feedingPointId,
-                event.animalType
-            )
-        }
-    }
-
-    private fun showFeedingPointOnHomeScreen(feedingPointId: String, animalType: AnimalType) {
-        viewModelScope.launch {
-            sendEvent(
-                FavouritesEvent.ShowHomePage(
-                    feedingPointId,
-                    animalType
-                )
-            )
         }
     }
 

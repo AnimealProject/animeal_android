@@ -18,6 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.common.constants.Arguments
+import com.epmedu.animeal.common.route.TabsRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -30,6 +33,7 @@ import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
 import kotlinx.coroutines.CoroutineScope
@@ -73,6 +77,7 @@ private fun ScreenScaffold(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
+    val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier
             .statusBarsPadding()
@@ -93,7 +98,12 @@ private fun ScreenScaffold(
                         onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
                     },
                     onShowOnMap = {
-                        onEvent(SearchScreenEvent.ShowOnMap(feedingPoint.id, feedingPoint.animalType))
+                        navigator.navigate(
+                            TabsRoute.Home.withArg(
+                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                            )
+                        )
                     }
                 )
             }
