@@ -8,8 +8,6 @@ import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.ModelOperation;
 import com.amplifyframework.core.model.annotations.AuthRule;
-import com.amplifyframework.core.model.annotations.BelongsTo;
-import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
@@ -18,9 +16,9 @@ import com.amplifyframework.core.model.temporal.Temporal;
 import java.util.Objects;
 import java.util.UUID;
 
-/** This is an auto generated class representing the RelationPetFeedingPoint type in your schema. */
+/** This is an auto generated class representing the LanguagesSetting type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "RelationPetFeedingPoints", authRules = {
+@ModelConfig(pluralName = "LanguagesSettings", authRules = {
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Administrator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Moderator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Volunteer" }, provider = "userPools", operations = { ModelOperation.READ }),
@@ -28,31 +26,31 @@ import java.util.UUID;
   @AuthRule(allow = AuthStrategy.PUBLIC, provider = "apiKey", operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ }),
   @AuthRule(allow = AuthStrategy.PRIVATE, operations = { ModelOperation.READ })
 })
-@Index(name = "byPetId", fields = {"petId","feedingPointId"})
-@Index(name = "byFeedingPointId", fields = {"feedingPointId","petId"})
-public final class RelationPetFeedingPoint implements Model {
-  public static final QueryField ID = field("RelationPetFeedingPoint", "id");
-  public static final QueryField PET = field("RelationPetFeedingPoint", "petId");
-  public static final QueryField FEEDING_POINT = field("RelationPetFeedingPoint", "feedingPointId");
-  public static final QueryField CREATED_AT = field("RelationPetFeedingPoint", "createdAt");
-  public static final QueryField UPDATED_AT = field("RelationPetFeedingPoint", "updatedAt");
-  public static final QueryField OWNER = field("RelationPetFeedingPoint", "owner");
+public final class LanguagesSetting implements Model {
+  public static final QueryField ID = field("LanguagesSetting", "id");
+  public static final QueryField NAME = field("LanguagesSetting", "name");
+  public static final QueryField VALUE = field("LanguagesSetting", "value");
+  public static final QueryField CREATED_AT = field("LanguagesSetting", "createdAt");
+  public static final QueryField UPDATED_AT = field("LanguagesSetting", "updatedAt");
+  public static final QueryField CREATED_BY = field("LanguagesSetting", "createdBy");
+  public static final QueryField UPDATED_BY = field("LanguagesSetting", "updatedBy");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="Pet", isRequired = true) @BelongsTo(targetName = "petId", type = Pet.class) Pet pet;
-  private final @ModelField(targetType="FeedingPoint", isRequired = true) @BelongsTo(targetName = "feedingPointId", type = FeedingPoint.class) FeedingPoint feedingPoint;
+  private final @ModelField(targetType="String", isRequired = true) String name;
+  private final @ModelField(targetType="String", isRequired = true) String value;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime createdAt;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime updatedAt;
-  private final @ModelField(targetType="String") String owner;
+  private final @ModelField(targetType="String") String createdBy;
+  private final @ModelField(targetType="String") String updatedBy;
   public String getId() {
       return id;
   }
   
-  public Pet getPet() {
-      return pet;
+  public String getName() {
+      return name;
   }
   
-  public FeedingPoint getFeedingPoint() {
-      return feedingPoint;
+  public String getValue() {
+      return value;
   }
   
   public Temporal.DateTime getCreatedAt() {
@@ -63,17 +61,22 @@ public final class RelationPetFeedingPoint implements Model {
       return updatedAt;
   }
   
-  public String getOwner() {
-      return owner;
+  public String getCreatedBy() {
+      return createdBy;
   }
   
-  private RelationPetFeedingPoint(String id, Pet pet, FeedingPoint feedingPoint, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String owner) {
+  public String getUpdatedBy() {
+      return updatedBy;
+  }
+  
+  private LanguagesSetting(String id, String name, String value, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy) {
     this.id = id;
-    this.pet = pet;
-    this.feedingPoint = feedingPoint;
+    this.name = name;
+    this.value = value;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.owner = owner;
+    this.createdBy = createdBy;
+    this.updatedBy = updatedBy;
   }
   
   @Override
@@ -83,13 +86,14 @@ public final class RelationPetFeedingPoint implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      RelationPetFeedingPoint relationPetFeedingPoint = (RelationPetFeedingPoint) obj;
-      return ObjectsCompat.equals(getId(), relationPetFeedingPoint.getId()) &&
-              ObjectsCompat.equals(getPet(), relationPetFeedingPoint.getPet()) &&
-              ObjectsCompat.equals(getFeedingPoint(), relationPetFeedingPoint.getFeedingPoint()) &&
-              ObjectsCompat.equals(getCreatedAt(), relationPetFeedingPoint.getCreatedAt()) &&
-              ObjectsCompat.equals(getUpdatedAt(), relationPetFeedingPoint.getUpdatedAt()) &&
-              ObjectsCompat.equals(getOwner(), relationPetFeedingPoint.getOwner());
+      LanguagesSetting languagesSetting = (LanguagesSetting) obj;
+      return ObjectsCompat.equals(getId(), languagesSetting.getId()) &&
+              ObjectsCompat.equals(getName(), languagesSetting.getName()) &&
+              ObjectsCompat.equals(getValue(), languagesSetting.getValue()) &&
+              ObjectsCompat.equals(getCreatedAt(), languagesSetting.getCreatedAt()) &&
+              ObjectsCompat.equals(getUpdatedAt(), languagesSetting.getUpdatedAt()) &&
+              ObjectsCompat.equals(getCreatedBy(), languagesSetting.getCreatedBy()) &&
+              ObjectsCompat.equals(getUpdatedBy(), languagesSetting.getUpdatedBy());
       }
   }
   
@@ -97,11 +101,12 @@ public final class RelationPetFeedingPoint implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getPet())
-      .append(getFeedingPoint())
+      .append(getName())
+      .append(getValue())
       .append(getCreatedAt())
       .append(getUpdatedAt())
-      .append(getOwner())
+      .append(getCreatedBy())
+      .append(getUpdatedBy())
       .toString()
       .hashCode();
   }
@@ -109,18 +114,19 @@ public final class RelationPetFeedingPoint implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("RelationPetFeedingPoint {")
+      .append("LanguagesSetting {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("pet=" + String.valueOf(getPet()) + ", ")
-      .append("feedingPoint=" + String.valueOf(getFeedingPoint()) + ", ")
+      .append("name=" + String.valueOf(getName()) + ", ")
+      .append("value=" + String.valueOf(getValue()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
-      .append("owner=" + String.valueOf(getOwner()))
+      .append("createdBy=" + String.valueOf(getCreatedBy()) + ", ")
+      .append("updatedBy=" + String.valueOf(getUpdatedBy()))
       .append("}")
       .toString();
   }
   
-  public static PetStep builder() {
+  public static NameStep builder() {
       return new Builder();
   }
   
@@ -132,9 +138,10 @@ public final class RelationPetFeedingPoint implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static RelationPetFeedingPoint justId(String id) {
-    return new RelationPetFeedingPoint(
+  public static LanguagesSetting justId(String id) {
+    return new LanguagesSetting(
       id,
+      null,
       null,
       null,
       null,
@@ -145,19 +152,20 @@ public final class RelationPetFeedingPoint implements Model {
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      pet,
-      feedingPoint,
+      name,
+      value,
       createdAt,
       updatedAt,
-      owner);
+      createdBy,
+      updatedBy);
   }
-  public interface PetStep {
-    FeedingPointStep pet(Pet pet);
+  public interface NameStep {
+    ValueStep name(String name);
   }
   
 
-  public interface FeedingPointStep {
-    CreatedAtStep feedingPoint(FeedingPoint feedingPoint);
+  public interface ValueStep {
+    CreatedAtStep value(String value);
   }
   
 
@@ -172,43 +180,46 @@ public final class RelationPetFeedingPoint implements Model {
   
 
   public interface BuildStep {
-    RelationPetFeedingPoint build();
+    LanguagesSetting build();
     BuildStep id(String id);
-    BuildStep owner(String owner);
+    BuildStep createdBy(String createdBy);
+    BuildStep updatedBy(String updatedBy);
   }
   
 
-  public static class Builder implements PetStep, FeedingPointStep, CreatedAtStep, UpdatedAtStep, BuildStep {
+  public static class Builder implements NameStep, ValueStep, CreatedAtStep, UpdatedAtStep, BuildStep {
     private String id;
-    private Pet pet;
-    private FeedingPoint feedingPoint;
+    private String name;
+    private String value;
     private Temporal.DateTime createdAt;
     private Temporal.DateTime updatedAt;
-    private String owner;
+    private String createdBy;
+    private String updatedBy;
     @Override
-     public RelationPetFeedingPoint build() {
+     public LanguagesSetting build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new RelationPetFeedingPoint(
+        return new LanguagesSetting(
           id,
-          pet,
-          feedingPoint,
+          name,
+          value,
           createdAt,
           updatedAt,
-          owner);
+          createdBy,
+          updatedBy);
     }
     
     @Override
-     public FeedingPointStep pet(Pet pet) {
-        Objects.requireNonNull(pet);
-        this.pet = pet;
+     public ValueStep name(String name) {
+        Objects.requireNonNull(name);
+        this.name = name;
         return this;
     }
     
     @Override
-     public CreatedAtStep feedingPoint(FeedingPoint feedingPoint) {
-        Objects.requireNonNull(feedingPoint);
-        this.feedingPoint = feedingPoint;
+     public CreatedAtStep value(String value) {
+        Objects.requireNonNull(value);
+        this.value = value;
         return this;
     }
     
@@ -227,8 +238,14 @@ public final class RelationPetFeedingPoint implements Model {
     }
     
     @Override
-     public BuildStep owner(String owner) {
-        this.owner = owner;
+     public BuildStep createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+    
+    @Override
+     public BuildStep updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
         return this;
     }
     
@@ -244,23 +261,24 @@ public final class RelationPetFeedingPoint implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, Pet pet, FeedingPoint feedingPoint, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String owner) {
+    private CopyOfBuilder(String id, String name, String value, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy) {
       super.id(id);
-      super.pet(pet)
-        .feedingPoint(feedingPoint)
+      super.name(name)
+        .value(value)
         .createdAt(createdAt)
         .updatedAt(updatedAt)
-        .owner(owner);
+        .createdBy(createdBy)
+        .updatedBy(updatedBy);
     }
     
     @Override
-     public CopyOfBuilder pet(Pet pet) {
-      return (CopyOfBuilder) super.pet(pet);
+     public CopyOfBuilder name(String name) {
+      return (CopyOfBuilder) super.name(name);
     }
     
     @Override
-     public CopyOfBuilder feedingPoint(FeedingPoint feedingPoint) {
-      return (CopyOfBuilder) super.feedingPoint(feedingPoint);
+     public CopyOfBuilder value(String value) {
+      return (CopyOfBuilder) super.value(value);
     }
     
     @Override
@@ -274,8 +292,13 @@ public final class RelationPetFeedingPoint implements Model {
     }
     
     @Override
-     public CopyOfBuilder owner(String owner) {
-      return (CopyOfBuilder) super.owner(owner);
+     public CopyOfBuilder createdBy(String createdBy) {
+      return (CopyOfBuilder) super.createdBy(createdBy);
+    }
+    
+    @Override
+     public CopyOfBuilder updatedBy(String updatedBy) {
+      return (CopyOfBuilder) super.updatedBy(updatedBy);
     }
   }
   

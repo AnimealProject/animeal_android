@@ -1,11 +1,6 @@
 package com.amplifyframework.datastore.generated.model;
 
-import com.amplifyframework.core.model.annotations.HasOne;
-import com.amplifyframework.core.model.temporal.Temporal;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.Objects;
+import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
 import androidx.core.util.ObjectsCompat;
 
@@ -17,8 +12,10 @@ import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
+import com.amplifyframework.core.model.temporal.Temporal;
 
-import static com.amplifyframework.core.model.query.predicate.QueryField.field;
+import java.util.Objects;
+import java.util.UUID;
 
 /** This is an auto generated class representing the Favourite type in your schema. */
 @SuppressWarnings("all")
@@ -39,7 +36,6 @@ public final class Favourite implements Model {
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="ID", isRequired = true) String userId;
   private final @ModelField(targetType="ID", isRequired = true) String feedingPointId;
-  private final @ModelField(targetType="FeedingPoint", isRequired = true) @HasOne(associatedWith = "id", type = FeedingPoint.class) FeedingPoint feedingPoint = null;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
@@ -52,10 +48,6 @@ public final class Favourite implements Model {
   
   public String getFeedingPointId() {
       return feedingPointId;
-  }
-  
-  public FeedingPoint getFeedingPoint() {
-      return feedingPoint;
   }
   
   public Temporal.DateTime getCreatedAt() {

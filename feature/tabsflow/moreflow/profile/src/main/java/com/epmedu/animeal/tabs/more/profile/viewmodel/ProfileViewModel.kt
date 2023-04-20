@@ -1,6 +1,8 @@
 package com.epmedu.animeal.tabs.more.profile.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
+import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
@@ -29,16 +31,19 @@ import javax.inject.Inject
 internal class ProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
+    private val updateNetworkProfileUseCase: UpdateNetworkProfileUseCase,
     validateNameUseCase: ValidateNameUseCase,
     validateSurnameUseCase: ValidateSurnameUseCase,
     validateEmailUseCase: ValidateEmailUseCase,
-    validateBirthDateUseCase: ValidateBirthDateUseCase
+    validateBirthDateUseCase: ValidateBirthDateUseCase,
+    actionDelegate: ActionDelegate
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
     validateEmailUseCase,
     validateBirthDateUseCase
-) {
+),
+    ActionDelegate by actionDelegate {
 
     private var lastSavedProfile = Profile()
 
@@ -92,8 +97,13 @@ internal class ProfileViewModel @Inject constructor(
     private fun saveChanges() {
         viewModelScope.launch {
             saveProfileUseCase(state.profile).collectLatest {
-                lastSavedProfile = state.profile
-                updateState { copy(formState = READ_ONLY) }
+                performAction(
+                    action = { updateNetworkProfileUseCase(state.profile) },
+                    onSuccess = {
+                        lastSavedProfile = state.profile
+                        updateState { copy(formState = READ_ONLY) }
+                    }
+                )
             }
         }
     }
