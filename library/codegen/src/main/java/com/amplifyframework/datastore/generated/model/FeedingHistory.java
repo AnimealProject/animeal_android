@@ -8,7 +8,6 @@ import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.ModelOperation;
 import com.amplifyframework.core.model.annotations.AuthRule;
-import com.amplifyframework.core.model.annotations.BelongsTo;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
@@ -18,9 +17,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** This is an auto generated class representing the Feeding type in your schema. */
+/** This is an auto generated class representing the FeedingHistory type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Feedings", authRules = {
+@ModelConfig(pluralName = "FeedingHistories", authRules = {
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Administrator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Moderator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Volunteer" }, provider = "userPools", operations = { ModelOperation.READ }),
@@ -28,29 +27,29 @@ import java.util.UUID;
   @AuthRule(allow = AuthStrategy.PUBLIC, provider = "apiKey", operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ }),
   @AuthRule(allow = AuthStrategy.PRIVATE, operations = { ModelOperation.READ })
 })
-public final class Feeding implements Model {
-  public static final QueryField ID = field("Feeding", "id");
-  public static final QueryField USER_ID = field("Feeding", "userId");
-  public static final QueryField IMAGES = field("Feeding", "images");
-  public static final QueryField STATUS = field("Feeding", "status");
-  public static final QueryField CREATED_AT = field("Feeding", "createdAt");
-  public static final QueryField UPDATED_AT = field("Feeding", "updatedAt");
-  public static final QueryField CREATED_BY = field("Feeding", "createdBy");
-  public static final QueryField UPDATED_BY = field("Feeding", "updatedBy");
-  public static final QueryField OWNER = field("Feeding", "owner");
-  public static final QueryField FEEDING_POINT = field("Feeding", "feedingPointFeedingsId");
-  public static final QueryField EXPIRE_AT = field("Feeding", "expireAt");
+public final class FeedingHistory implements Model {
+  public static final QueryField ID = field("FeedingHistory", "id");
+  public static final QueryField USER_ID = field("FeedingHistory", "userId");
+  public static final QueryField IMAGES = field("FeedingHistory", "images");
+  public static final QueryField CREATED_AT = field("FeedingHistory", "createdAt");
+  public static final QueryField UPDATED_AT = field("FeedingHistory", "updatedAt");
+  public static final QueryField CREATED_BY = field("FeedingHistory", "createdBy");
+  public static final QueryField UPDATED_BY = field("FeedingHistory", "updatedBy");
+  public static final QueryField OWNER = field("FeedingHistory", "owner");
+  public static final QueryField FEEDING_POINT_ID = field("FeedingHistory", "feedingPointId");
+  public static final QueryField STATUS = field("FeedingHistory", "status");
+  public static final QueryField REASON = field("FeedingHistory", "reason");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String userId;
   private final @ModelField(targetType="String", isRequired = true) List<String> images;
-  private final @ModelField(targetType="FeedingStatus", isRequired = true) FeedingStatus status;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime createdAt;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime updatedAt;
   private final @ModelField(targetType="String") String createdBy;
   private final @ModelField(targetType="String") String updatedBy;
   private final @ModelField(targetType="String") String owner;
-  private final @ModelField(targetType="FeedingPoint", isRequired = true) @BelongsTo(targetName = "feedingPointFeedingsId", type = FeedingPoint.class) FeedingPoint feedingPoint;
-  private final @ModelField(targetType="AWSTimestamp", isRequired = true) Temporal.Timestamp expireAt;
+  private final @ModelField(targetType="String", isRequired = true) String feedingPointId;
+  private final @ModelField(targetType="FeedingStatus") FeedingStatus status;
+  private final @ModelField(targetType="String") String reason;
   public String getId() {
       return id;
   }
@@ -61,10 +60,6 @@ public final class Feeding implements Model {
   
   public List<String> getImages() {
       return images;
-  }
-  
-  public FeedingStatus getStatus() {
-      return status;
   }
   
   public Temporal.DateTime getCreatedAt() {
@@ -87,26 +82,30 @@ public final class Feeding implements Model {
       return owner;
   }
   
-  public FeedingPoint getFeedingPoint() {
-      return feedingPoint;
+  public String getFeedingPointId() {
+      return feedingPointId;
   }
   
-  public Temporal.Timestamp getExpireAt() {
-      return expireAt;
+  public FeedingStatus getStatus() {
+      return status;
   }
   
-  private Feeding(String id, String userId, List<String> images, FeedingStatus status, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, FeedingPoint feedingPoint, Temporal.Timestamp expireAt) {
+  public String getReason() {
+      return reason;
+  }
+  
+  private FeedingHistory(String id, String userId, List<String> images, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String feedingPointId, FeedingStatus status, String reason) {
     this.id = id;
     this.userId = userId;
     this.images = images;
-    this.status = status;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.createdBy = createdBy;
     this.updatedBy = updatedBy;
     this.owner = owner;
-    this.feedingPoint = feedingPoint;
-    this.expireAt = expireAt;
+    this.feedingPointId = feedingPointId;
+    this.status = status;
+    this.reason = reason;
   }
   
   @Override
@@ -116,18 +115,18 @@ public final class Feeding implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      Feeding feeding = (Feeding) obj;
-      return ObjectsCompat.equals(getId(), feeding.getId()) &&
-              ObjectsCompat.equals(getUserId(), feeding.getUserId()) &&
-              ObjectsCompat.equals(getImages(), feeding.getImages()) &&
-              ObjectsCompat.equals(getStatus(), feeding.getStatus()) &&
-              ObjectsCompat.equals(getCreatedAt(), feeding.getCreatedAt()) &&
-              ObjectsCompat.equals(getUpdatedAt(), feeding.getUpdatedAt()) &&
-              ObjectsCompat.equals(getCreatedBy(), feeding.getCreatedBy()) &&
-              ObjectsCompat.equals(getUpdatedBy(), feeding.getUpdatedBy()) &&
-              ObjectsCompat.equals(getOwner(), feeding.getOwner()) &&
-              ObjectsCompat.equals(getFeedingPoint(), feeding.getFeedingPoint()) &&
-              ObjectsCompat.equals(getExpireAt(), feeding.getExpireAt());
+      FeedingHistory feedingHistory = (FeedingHistory) obj;
+      return ObjectsCompat.equals(getId(), feedingHistory.getId()) &&
+              ObjectsCompat.equals(getUserId(), feedingHistory.getUserId()) &&
+              ObjectsCompat.equals(getImages(), feedingHistory.getImages()) &&
+              ObjectsCompat.equals(getCreatedAt(), feedingHistory.getCreatedAt()) &&
+              ObjectsCompat.equals(getUpdatedAt(), feedingHistory.getUpdatedAt()) &&
+              ObjectsCompat.equals(getCreatedBy(), feedingHistory.getCreatedBy()) &&
+              ObjectsCompat.equals(getUpdatedBy(), feedingHistory.getUpdatedBy()) &&
+              ObjectsCompat.equals(getOwner(), feedingHistory.getOwner()) &&
+              ObjectsCompat.equals(getFeedingPointId(), feedingHistory.getFeedingPointId()) &&
+              ObjectsCompat.equals(getStatus(), feedingHistory.getStatus()) &&
+              ObjectsCompat.equals(getReason(), feedingHistory.getReason());
       }
   }
   
@@ -137,14 +136,14 @@ public final class Feeding implements Model {
       .append(getId())
       .append(getUserId())
       .append(getImages())
-      .append(getStatus())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .append(getCreatedBy())
       .append(getUpdatedBy())
       .append(getOwner())
-      .append(getFeedingPoint())
-      .append(getExpireAt())
+      .append(getFeedingPointId())
+      .append(getStatus())
+      .append(getReason())
       .toString()
       .hashCode();
   }
@@ -152,18 +151,18 @@ public final class Feeding implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("Feeding {")
+      .append("FeedingHistory {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("userId=" + String.valueOf(getUserId()) + ", ")
       .append("images=" + String.valueOf(getImages()) + ", ")
-      .append("status=" + String.valueOf(getStatus()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
       .append("createdBy=" + String.valueOf(getCreatedBy()) + ", ")
       .append("updatedBy=" + String.valueOf(getUpdatedBy()) + ", ")
       .append("owner=" + String.valueOf(getOwner()) + ", ")
-      .append("feedingPoint=" + String.valueOf(getFeedingPoint()) + ", ")
-      .append("expireAt=" + String.valueOf(getExpireAt()))
+      .append("feedingPointId=" + String.valueOf(getFeedingPointId()) + ", ")
+      .append("status=" + String.valueOf(getStatus()) + ", ")
+      .append("reason=" + String.valueOf(getReason()))
       .append("}")
       .toString();
   }
@@ -180,8 +179,8 @@ public final class Feeding implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static Feeding justId(String id) {
-    return new Feeding(
+  public static FeedingHistory justId(String id) {
+    return new FeedingHistory(
       id,
       null,
       null,
@@ -200,14 +199,14 @@ public final class Feeding implements Model {
     return new CopyOfBuilder(id,
       userId,
       images,
-      status,
       createdAt,
       updatedAt,
       createdBy,
       updatedBy,
       owner,
-      feedingPoint,
-      expireAt);
+      feedingPointId,
+      status,
+      reason);
   }
   public interface UserIdStep {
     ImagesStep userId(String userId);
@@ -215,12 +214,7 @@ public final class Feeding implements Model {
   
 
   public interface ImagesStep {
-    StatusStep images(List<String> images);
-  }
-  
-
-  public interface StatusStep {
-    CreatedAtStep status(FeedingStatus status);
+    CreatedAtStep images(List<String> images);
   }
   
 
@@ -230,57 +224,54 @@ public final class Feeding implements Model {
   
 
   public interface UpdatedAtStep {
-    FeedingPointStep updatedAt(Temporal.DateTime updatedAt);
+    FeedingPointIdStep updatedAt(Temporal.DateTime updatedAt);
   }
   
 
-  public interface FeedingPointStep {
-    ExpireAtStep feedingPoint(FeedingPoint feedingPoint);
-  }
-  
-
-  public interface ExpireAtStep {
-    BuildStep expireAt(Temporal.Timestamp expireAt);
+  public interface FeedingPointIdStep {
+    BuildStep feedingPointId(String feedingPointId);
   }
   
 
   public interface BuildStep {
-    Feeding build();
+    FeedingHistory build();
     BuildStep id(String id);
     BuildStep createdBy(String createdBy);
     BuildStep updatedBy(String updatedBy);
     BuildStep owner(String owner);
+    BuildStep status(FeedingStatus status);
+    BuildStep reason(String reason);
   }
   
 
-  public static class Builder implements UserIdStep, ImagesStep, StatusStep, CreatedAtStep, UpdatedAtStep, FeedingPointStep, ExpireAtStep, BuildStep {
+  public static class Builder implements UserIdStep, ImagesStep, CreatedAtStep, UpdatedAtStep, FeedingPointIdStep, BuildStep {
     private String id;
     private String userId;
     private List<String> images;
-    private FeedingStatus status;
     private Temporal.DateTime createdAt;
     private Temporal.DateTime updatedAt;
-    private FeedingPoint feedingPoint;
-    private Temporal.Timestamp expireAt;
+    private String feedingPointId;
     private String createdBy;
     private String updatedBy;
     private String owner;
+    private FeedingStatus status;
+    private String reason;
     @Override
-     public Feeding build() {
+     public FeedingHistory build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new Feeding(
+        return new FeedingHistory(
           id,
           userId,
           images,
-          status,
           createdAt,
           updatedAt,
           createdBy,
           updatedBy,
           owner,
-          feedingPoint,
-          expireAt);
+          feedingPointId,
+          status,
+          reason);
     }
     
     @Override
@@ -291,16 +282,9 @@ public final class Feeding implements Model {
     }
     
     @Override
-     public StatusStep images(List<String> images) {
+     public CreatedAtStep images(List<String> images) {
         Objects.requireNonNull(images);
         this.images = images;
-        return this;
-    }
-    
-    @Override
-     public CreatedAtStep status(FeedingStatus status) {
-        Objects.requireNonNull(status);
-        this.status = status;
         return this;
     }
     
@@ -312,23 +296,16 @@ public final class Feeding implements Model {
     }
     
     @Override
-     public FeedingPointStep updatedAt(Temporal.DateTime updatedAt) {
+     public FeedingPointIdStep updatedAt(Temporal.DateTime updatedAt) {
         Objects.requireNonNull(updatedAt);
         this.updatedAt = updatedAt;
         return this;
     }
     
     @Override
-     public ExpireAtStep feedingPoint(FeedingPoint feedingPoint) {
-        Objects.requireNonNull(feedingPoint);
-        this.feedingPoint = feedingPoint;
-        return this;
-    }
-    
-    @Override
-     public BuildStep expireAt(Temporal.Timestamp expireAt) {
-        Objects.requireNonNull(expireAt);
-        this.expireAt = expireAt;
+     public BuildStep feedingPointId(String feedingPointId) {
+        Objects.requireNonNull(feedingPointId);
+        this.feedingPointId = feedingPointId;
         return this;
     }
     
@@ -350,6 +327,18 @@ public final class Feeding implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep status(FeedingStatus status) {
+        this.status = status;
+        return this;
+    }
+    
+    @Override
+     public BuildStep reason(String reason) {
+        this.reason = reason;
+        return this;
+    }
+    
     /**
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -362,18 +351,18 @@ public final class Feeding implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String userId, List<String> images, FeedingStatus status, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, FeedingPoint feedingPoint, Temporal.Timestamp expireAt) {
+    private CopyOfBuilder(String id, String userId, List<String> images, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String feedingPointId, FeedingStatus status, String reason) {
       super.id(id);
       super.userId(userId)
         .images(images)
-        .status(status)
         .createdAt(createdAt)
         .updatedAt(updatedAt)
-        .feedingPoint(feedingPoint)
-        .expireAt(expireAt)
+        .feedingPointId(feedingPointId)
         .createdBy(createdBy)
         .updatedBy(updatedBy)
-        .owner(owner);
+        .owner(owner)
+        .status(status)
+        .reason(reason);
     }
     
     @Override
@@ -387,11 +376,6 @@ public final class Feeding implements Model {
     }
     
     @Override
-     public CopyOfBuilder status(FeedingStatus status) {
-      return (CopyOfBuilder) super.status(status);
-    }
-    
-    @Override
      public CopyOfBuilder createdAt(Temporal.DateTime createdAt) {
       return (CopyOfBuilder) super.createdAt(createdAt);
     }
@@ -402,13 +386,8 @@ public final class Feeding implements Model {
     }
     
     @Override
-     public CopyOfBuilder feedingPoint(FeedingPoint feedingPoint) {
-      return (CopyOfBuilder) super.feedingPoint(feedingPoint);
-    }
-    
-    @Override
-     public CopyOfBuilder expireAt(Temporal.Timestamp expireAt) {
-      return (CopyOfBuilder) super.expireAt(expireAt);
+     public CopyOfBuilder feedingPointId(String feedingPointId) {
+      return (CopyOfBuilder) super.feedingPointId(feedingPointId);
     }
     
     @Override
@@ -424,6 +403,16 @@ public final class Feeding implements Model {
     @Override
      public CopyOfBuilder owner(String owner) {
       return (CopyOfBuilder) super.owner(owner);
+    }
+    
+    @Override
+     public CopyOfBuilder status(FeedingStatus status) {
+      return (CopyOfBuilder) super.status(status);
+    }
+    
+    @Override
+     public CopyOfBuilder reason(String reason) {
+      return (CopyOfBuilder) super.reason(reason);
     }
   }
   

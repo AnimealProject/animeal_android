@@ -5,6 +5,8 @@ import kotlinx.coroutines.CoroutineScope
 
 internal interface FeedingHandler {
 
+    suspend fun fetchCurrentFeeding()
+
     fun CoroutineScope.handleFeedingEvent(event: HomeScreenEvent.FeedingEvent)
 
     suspend fun cancelFeeding()

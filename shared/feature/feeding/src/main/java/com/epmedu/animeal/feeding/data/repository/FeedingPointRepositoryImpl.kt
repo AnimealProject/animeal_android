@@ -1,9 +1,7 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.api.feeding.FeedingPointApi
-import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.replaceElement
-import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
@@ -19,9 +17,9 @@ import kotlinx.coroutines.launch
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
-    private val feedingPointApi: FeedingPointApi,
-    favouriteRepository: FavouriteRepository,
-    dispatchers: Dispatchers
+    dispatchers: Dispatchers,
+    private val favouriteRepository: FavouriteRepository,
+    private val feedingPointApi: FeedingPointApi
 ) : FeedingPointRepository {
 
     private val coroutineScope = CoroutineScope(dispatchers.IO)
@@ -90,24 +88,5 @@ internal class FeedingPointRepositoryImpl(
 
     override fun getFeedingPointsBy(predicate: (DomainFeedingPoint) -> Boolean): Flow<List<DomainFeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
-    }
-
-    override suspend fun startFeeding(feedingPointId: String): ActionResult {
-        return feedingPointApi.startFeeding(feedingPointId).toActionResult(feedingPointId)
-    }
-
-    override suspend fun cancelFeeding(feedingPointId: String): ActionResult {
-        return feedingPointApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
-    }
-
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult {
-        return feedingPointApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
-    }
-
-    override suspend fun finishFeeding(
-        feedingPointId: String,
-        images: List<String>
-    ): ActionResult {
-        return feedingPointApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
     }
 }

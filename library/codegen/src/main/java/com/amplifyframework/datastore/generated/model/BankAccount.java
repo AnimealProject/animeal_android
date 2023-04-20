@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** This is an auto generated class representing the Category type in your schema. */
+/** This is an auto generated class representing the BankAccount type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Categories", authRules = {
+@ModelConfig(pluralName = "BankAccounts", authRules = {
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Administrator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Moderator" }, provider = "userPools", operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE }),
   @AuthRule(allow = AuthStrategy.GROUPS, groupClaim = "cognito:groups", groups = { "Volunteer" }, provider = "userPools", operations = { ModelOperation.READ }),
@@ -27,27 +27,29 @@ import java.util.UUID;
   @AuthRule(allow = AuthStrategy.PUBLIC, provider = "apiKey", operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ }),
   @AuthRule(allow = AuthStrategy.PRIVATE, operations = { ModelOperation.READ })
 })
-public final class Category implements Model {
-  public static final QueryField ID = field("Category", "id");
-  public static final QueryField NAME = field("Category", "name");
-  public static final QueryField ICON = field("Category", "icon");
-  public static final QueryField TAG = field("Category", "tag");
-  public static final QueryField I18N = field("Category", "i18n");
-  public static final QueryField CREATED_AT = field("Category", "createdAt");
-  public static final QueryField UPDATED_AT = field("Category", "updatedAt");
-  public static final QueryField CREATED_BY = field("Category", "createdBy");
-  public static final QueryField UPDATED_BY = field("Category", "updatedBy");
-  public static final QueryField OWNER = field("Category", "owner");
+public final class BankAccount implements Model {
+  public static final QueryField ID = field("BankAccount", "id");
+  public static final QueryField NAME = field("BankAccount", "name");
+  public static final QueryField VALUE = field("BankAccount", "value");
+  public static final QueryField COVER = field("BankAccount", "cover");
+  public static final QueryField IMAGES = field("BankAccount", "images");
+  public static final QueryField ENABLED = field("BankAccount", "enabled");
+  public static final QueryField CREATED_BY = field("BankAccount", "createdBy");
+  public static final QueryField UPDATED_BY = field("BankAccount", "updatedBy");
+  public static final QueryField OWNER = field("BankAccount", "owner");
+  public static final QueryField CREATED_AT = field("BankAccount", "createdAt");
+  public static final QueryField UPDATED_AT = field("BankAccount", "updatedAt");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String name;
-  private final @ModelField(targetType="String", isRequired = true) String icon;
-  private final @ModelField(targetType="CategoryTag", isRequired = true) CategoryTag tag;
-  private final @ModelField(targetType="CategoryI18n") List<CategoryI18n> i18n;
-  private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime createdAt;
-  private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime updatedAt;
+  private final @ModelField(targetType="String", isRequired = true) String value;
+  private final @ModelField(targetType="String", isRequired = true) String cover;
+  private final @ModelField(targetType="String") List<String> images;
+  private final @ModelField(targetType="Boolean", isRequired = true) Boolean enabled;
   private final @ModelField(targetType="String") String createdBy;
   private final @ModelField(targetType="String") String updatedBy;
   private final @ModelField(targetType="String") String owner;
+  private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime createdAt;
+  private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime updatedAt;
   public String getId() {
       return id;
   }
@@ -56,24 +58,20 @@ public final class Category implements Model {
       return name;
   }
   
-  public String getIcon() {
-      return icon;
+  public String getValue() {
+      return value;
   }
   
-  public CategoryTag getTag() {
-      return tag;
+  public String getCover() {
+      return cover;
   }
   
-  public List<CategoryI18n> getI18n() {
-      return i18n;
+  public List<String> getImages() {
+      return images;
   }
   
-  public Temporal.DateTime getCreatedAt() {
-      return createdAt;
-  }
-  
-  public Temporal.DateTime getUpdatedAt() {
-      return updatedAt;
+  public Boolean getEnabled() {
+      return enabled;
   }
   
   public String getCreatedBy() {
@@ -88,17 +86,26 @@ public final class Category implements Model {
       return owner;
   }
   
-  private Category(String id, String name, String icon, CategoryTag tag, List<CategoryI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
+  public Temporal.DateTime getCreatedAt() {
+      return createdAt;
+  }
+  
+  public Temporal.DateTime getUpdatedAt() {
+      return updatedAt;
+  }
+  
+  private BankAccount(String id, String name, String value, String cover, List<String> images, Boolean enabled, String createdBy, String updatedBy, String owner, Temporal.DateTime createdAt, Temporal.DateTime updatedAt) {
     this.id = id;
     this.name = name;
-    this.icon = icon;
-    this.tag = tag;
-    this.i18n = i18n;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.value = value;
+    this.cover = cover;
+    this.images = images;
+    this.enabled = enabled;
     this.createdBy = createdBy;
     this.updatedBy = updatedBy;
     this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
   
   @Override
@@ -108,17 +115,18 @@ public final class Category implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      Category category = (Category) obj;
-      return ObjectsCompat.equals(getId(), category.getId()) &&
-              ObjectsCompat.equals(getName(), category.getName()) &&
-              ObjectsCompat.equals(getIcon(), category.getIcon()) &&
-              ObjectsCompat.equals(getTag(), category.getTag()) &&
-              ObjectsCompat.equals(getI18n(), category.getI18n()) &&
-              ObjectsCompat.equals(getCreatedAt(), category.getCreatedAt()) &&
-              ObjectsCompat.equals(getUpdatedAt(), category.getUpdatedAt()) &&
-              ObjectsCompat.equals(getCreatedBy(), category.getCreatedBy()) &&
-              ObjectsCompat.equals(getUpdatedBy(), category.getUpdatedBy()) &&
-              ObjectsCompat.equals(getOwner(), category.getOwner());
+      BankAccount bankAccount = (BankAccount) obj;
+      return ObjectsCompat.equals(getId(), bankAccount.getId()) &&
+              ObjectsCompat.equals(getName(), bankAccount.getName()) &&
+              ObjectsCompat.equals(getValue(), bankAccount.getValue()) &&
+              ObjectsCompat.equals(getCover(), bankAccount.getCover()) &&
+              ObjectsCompat.equals(getImages(), bankAccount.getImages()) &&
+              ObjectsCompat.equals(getEnabled(), bankAccount.getEnabled()) &&
+              ObjectsCompat.equals(getCreatedBy(), bankAccount.getCreatedBy()) &&
+              ObjectsCompat.equals(getUpdatedBy(), bankAccount.getUpdatedBy()) &&
+              ObjectsCompat.equals(getOwner(), bankAccount.getOwner()) &&
+              ObjectsCompat.equals(getCreatedAt(), bankAccount.getCreatedAt()) &&
+              ObjectsCompat.equals(getUpdatedAt(), bankAccount.getUpdatedAt());
       }
   }
   
@@ -127,14 +135,15 @@ public final class Category implements Model {
     return new StringBuilder()
       .append(getId())
       .append(getName())
-      .append(getIcon())
-      .append(getTag())
-      .append(getI18n())
-      .append(getCreatedAt())
-      .append(getUpdatedAt())
+      .append(getValue())
+      .append(getCover())
+      .append(getImages())
+      .append(getEnabled())
       .append(getCreatedBy())
       .append(getUpdatedBy())
       .append(getOwner())
+      .append(getCreatedAt())
+      .append(getUpdatedAt())
       .toString()
       .hashCode();
   }
@@ -142,17 +151,18 @@ public final class Category implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("Category {")
+      .append("BankAccount {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("name=" + String.valueOf(getName()) + ", ")
-      .append("icon=" + String.valueOf(getIcon()) + ", ")
-      .append("tag=" + String.valueOf(getTag()) + ", ")
-      .append("i18n=" + String.valueOf(getI18n()) + ", ")
-      .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
-      .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
+      .append("value=" + String.valueOf(getValue()) + ", ")
+      .append("cover=" + String.valueOf(getCover()) + ", ")
+      .append("images=" + String.valueOf(getImages()) + ", ")
+      .append("enabled=" + String.valueOf(getEnabled()) + ", ")
       .append("createdBy=" + String.valueOf(getCreatedBy()) + ", ")
       .append("updatedBy=" + String.valueOf(getUpdatedBy()) + ", ")
-      .append("owner=" + String.valueOf(getOwner()))
+      .append("owner=" + String.valueOf(getOwner()) + ", ")
+      .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
+      .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
       .toString();
   }
@@ -169,9 +179,10 @@ public final class Category implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static Category justId(String id) {
-    return new Category(
+  public static BankAccount justId(String id) {
+    return new BankAccount(
       id,
+      null,
       null,
       null,
       null,
@@ -187,27 +198,33 @@ public final class Category implements Model {
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
       name,
-      icon,
-      tag,
-      i18n,
-      createdAt,
-      updatedAt,
+      value,
+      cover,
+      images,
+      enabled,
       createdBy,
       updatedBy,
-      owner);
+      owner,
+      createdAt,
+      updatedAt);
   }
   public interface NameStep {
-    IconStep name(String name);
+    ValueStep name(String name);
   }
   
 
-  public interface IconStep {
-    TagStep icon(String icon);
+  public interface ValueStep {
+    CoverStep value(String value);
   }
   
 
-  public interface TagStep {
-    CreatedAtStep tag(CategoryTag tag);
+  public interface CoverStep {
+    EnabledStep cover(String cover);
+  }
+  
+
+  public interface EnabledStep {
+    CreatedAtStep enabled(Boolean enabled);
   }
   
 
@@ -222,61 +239,70 @@ public final class Category implements Model {
   
 
   public interface BuildStep {
-    Category build();
+    BankAccount build();
     BuildStep id(String id);
-    BuildStep i18n(List<CategoryI18n> i18n);
+    BuildStep images(List<String> images);
     BuildStep createdBy(String createdBy);
     BuildStep updatedBy(String updatedBy);
     BuildStep owner(String owner);
   }
   
 
-  public static class Builder implements NameStep, IconStep, TagStep, CreatedAtStep, UpdatedAtStep, BuildStep {
+  public static class Builder implements NameStep, ValueStep, CoverStep, EnabledStep, CreatedAtStep, UpdatedAtStep, BuildStep {
     private String id;
     private String name;
-    private String icon;
-    private CategoryTag tag;
+    private String value;
+    private String cover;
+    private Boolean enabled;
     private Temporal.DateTime createdAt;
     private Temporal.DateTime updatedAt;
-    private List<CategoryI18n> i18n;
+    private List<String> images;
     private String createdBy;
     private String updatedBy;
     private String owner;
     @Override
-     public Category build() {
+     public BankAccount build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new Category(
+        return new BankAccount(
           id,
           name,
-          icon,
-          tag,
-          i18n,
-          createdAt,
-          updatedAt,
+          value,
+          cover,
+          images,
+          enabled,
           createdBy,
           updatedBy,
-          owner);
+          owner,
+          createdAt,
+          updatedAt);
     }
     
     @Override
-     public IconStep name(String name) {
+     public ValueStep name(String name) {
         Objects.requireNonNull(name);
         this.name = name;
         return this;
     }
     
     @Override
-     public TagStep icon(String icon) {
-        Objects.requireNonNull(icon);
-        this.icon = icon;
+     public CoverStep value(String value) {
+        Objects.requireNonNull(value);
+        this.value = value;
         return this;
     }
     
     @Override
-     public CreatedAtStep tag(CategoryTag tag) {
-        Objects.requireNonNull(tag);
-        this.tag = tag;
+     public EnabledStep cover(String cover) {
+        Objects.requireNonNull(cover);
+        this.cover = cover;
+        return this;
+    }
+    
+    @Override
+     public CreatedAtStep enabled(Boolean enabled) {
+        Objects.requireNonNull(enabled);
+        this.enabled = enabled;
         return this;
     }
     
@@ -295,8 +321,8 @@ public final class Category implements Model {
     }
     
     @Override
-     public BuildStep i18n(List<CategoryI18n> i18n) {
-        this.i18n = i18n;
+     public BuildStep images(List<String> images) {
+        this.images = images;
         return this;
     }
     
@@ -330,14 +356,15 @@ public final class Category implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String name, String icon, CategoryTag tag, List<CategoryI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
+    private CopyOfBuilder(String id, String name, String value, String cover, List<String> images, Boolean enabled, String createdBy, String updatedBy, String owner, Temporal.DateTime createdAt, Temporal.DateTime updatedAt) {
       super.id(id);
       super.name(name)
-        .icon(icon)
-        .tag(tag)
+        .value(value)
+        .cover(cover)
+        .enabled(enabled)
         .createdAt(createdAt)
         .updatedAt(updatedAt)
-        .i18n(i18n)
+        .images(images)
         .createdBy(createdBy)
         .updatedBy(updatedBy)
         .owner(owner);
@@ -349,13 +376,18 @@ public final class Category implements Model {
     }
     
     @Override
-     public CopyOfBuilder icon(String icon) {
-      return (CopyOfBuilder) super.icon(icon);
+     public CopyOfBuilder value(String value) {
+      return (CopyOfBuilder) super.value(value);
     }
     
     @Override
-     public CopyOfBuilder tag(CategoryTag tag) {
-      return (CopyOfBuilder) super.tag(tag);
+     public CopyOfBuilder cover(String cover) {
+      return (CopyOfBuilder) super.cover(cover);
+    }
+    
+    @Override
+     public CopyOfBuilder enabled(Boolean enabled) {
+      return (CopyOfBuilder) super.enabled(enabled);
     }
     
     @Override
@@ -369,8 +401,8 @@ public final class Category implements Model {
     }
     
     @Override
-     public CopyOfBuilder i18n(List<CategoryI18n> i18n) {
-      return (CopyOfBuilder) super.i18n(i18n);
+     public CopyOfBuilder images(List<String> images) {
+      return (CopyOfBuilder) super.images(images);
     }
     
     @Override

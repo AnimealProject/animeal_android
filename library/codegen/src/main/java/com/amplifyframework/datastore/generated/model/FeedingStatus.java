@@ -5,5 +5,6 @@ public enum FeedingStatus {
   approved,
   rejected,
   pending,
-  inProgress
+  inProgress,
+  outdated
 }
