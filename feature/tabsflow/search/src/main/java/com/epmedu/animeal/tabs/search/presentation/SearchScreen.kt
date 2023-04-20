@@ -34,7 +34,7 @@ fun SearchScreen() {
     }
     LaunchedEffect(Unit) {
         searchViewModel.events.collect {
-            when(it) {
+            when (it) {
                 is SearchEvent.ShowHomePage -> navigator.navigate(
                     TabsRoute.Home.withArg(
                         Arguments.FORCED_FEEDING_POINT_ID to it.feedingPointId,

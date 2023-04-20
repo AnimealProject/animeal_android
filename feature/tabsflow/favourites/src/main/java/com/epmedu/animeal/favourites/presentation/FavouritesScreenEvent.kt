@@ -14,5 +14,5 @@ internal sealed interface FavouritesScreenEvent {
 
     object ShowWillFeedDialog : FavouritesScreenEvent
     object DismissWillFeedDialog : FavouritesScreenEvent
-    class ShowOnMap(val feedingPointId: String, val animalType: AnimalType) : FavouritesScreenEvent
+    data class ShowOnMap(val feedingPointId: String, val animalType: AnimalType) : FavouritesScreenEvent
 }
