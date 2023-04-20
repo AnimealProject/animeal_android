@@ -18,6 +18,7 @@ fun FeedingSheet(
     onFavouriteChange: (Boolean) -> Unit,
     onDeletePhotoClick: (Uri) -> Unit,
     onTakePhotoClick: () -> Unit,
+    onShowOnMap: () -> Unit
 ) {
     when (feedingState) {
         is FeedingRouteState.Active -> {
@@ -33,7 +34,8 @@ fun FeedingSheet(
                 modifier = Modifier.wrapContentHeight(),
                 feedingPoint = feedingPoint,
                 contentAlpha = contentAlpha,
-                onFavouriteChange = onFavouriteChange
+                onFavouriteChange = onFavouriteChange,
+                onShowOnMap = onShowOnMap
             )
         }
     }

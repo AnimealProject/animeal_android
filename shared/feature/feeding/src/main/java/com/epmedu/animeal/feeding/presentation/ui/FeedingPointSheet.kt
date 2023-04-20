@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,7 +56,8 @@ fun FeedingPointSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier,
     isShowOnMapVisible: Boolean = false,
-    onFavouriteChange: (Boolean) -> Unit
+    onFavouriteChange: (Boolean) -> Unit,
+    onShowOnMap: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -89,7 +91,7 @@ fun FeedingPointSheetContent(
             scrimAlpha = contentAlpha
         )
         if (isShowOnMapVisible) {
-            ShowOnMapLink()
+            ShowOnMapLink(onClick = onShowOnMap)
         }
     }
 }
@@ -227,8 +229,9 @@ internal fun FeedingPointLastFeeder(
 }
 
 @Composable
-private fun ShowOnMapLink() {
+private fun ShowOnMapLink(onClick: () -> Unit) {
     Text(
+        modifier = Modifier.clickable { onClick() },
         text = stringResource(id = R.string.show_on_map),
         style = MaterialTheme.typography.subtitle1.copy(
             color = CustomColor.SeaSerpent,
@@ -269,7 +272,8 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
             contentAlpha = 1f,
             modifier = Modifier.fillMaxHeight(),
             isShowOnMapVisible = true,
-            onFavouriteChange = {}
+            onFavouriteChange = {},
+            onShowOnMap = {}
         )
     }
 }

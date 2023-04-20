@@ -114,7 +114,8 @@ internal fun HomeScreenUI(
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
                     onTakePhotoClick = {},
-                    onDeletePhotoClick = {}
+                    onDeletePhotoClick = {},
+                    onShowOnMap = {}
                 )
             }
         },
