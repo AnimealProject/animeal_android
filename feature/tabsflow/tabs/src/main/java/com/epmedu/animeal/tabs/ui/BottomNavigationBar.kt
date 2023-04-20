@@ -20,7 +20,7 @@ import com.epmedu.animeal.tabs.NavigationTab
 
 @Composable
 internal fun BottomNavigationBar(
-    currentRoute: String?,
+    currentRoute: TabsRoute?,
     onNavigate: (TabsRoute) -> Unit
 ) {
     val items = listOf(
@@ -48,7 +48,7 @@ internal fun BottomNavigationBar(
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.onSurface,
                     alwaysShowLabel = false,
-                    selected = currentRoute == item.route.name,
+                    selected = currentRoute == item.route,
                     onClick = {
                         onNavigate(item.route)
                     }
@@ -64,12 +64,12 @@ private fun BottomNavigationBarPreview() {
     AnimealTheme {
         Column {
             BottomNavigationBar(
-                currentRoute = NavigationTab.Search.route.name,
+                currentRoute = NavigationTab.Search.route,
                 onNavigate = {}
             )
             Divider()
             BottomNavigationBar(
-                currentRoute = NavigationTab.More.route.name,
+                currentRoute = NavigationTab.More.route,
                 onNavigate = {}
             )
         }
