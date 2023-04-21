@@ -10,10 +10,12 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -88,6 +90,7 @@ internal object HomePresentationModule {
         errorHandler: ErrorHandler,
         feedingPointHandler: FeedingPointHandler,
         timerHandler: TimerHandler,
+        fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
@@ -99,6 +102,7 @@ internal object HomePresentationModule {
         errorHandler,
         feedingPointHandler,
         timerHandler,
+        fetchCurrentFeedingPointUseCase,
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,
@@ -114,7 +118,8 @@ internal object HomePresentationModule {
         errorHandler: ErrorHandler,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
         addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+        updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
     ): FeedingPointHandler = DefaultFeedingPointHandler(
         stateDelegate,
         eventDelegate,
@@ -122,7 +127,8 @@ internal object HomePresentationModule {
         errorHandler,
         getAllFeedingPointsUseCase,
         addFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase
+        removeFeedingPointFromFavouritesUseCase,
+        updateAnimalTypeSettingsUseCase
     )
 
     @ViewModelScoped

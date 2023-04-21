@@ -66,6 +66,7 @@ mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "m
 amplify-aws-api = { module = "com.amplifyframework:aws-api", version.ref = "amplify" }
 amplify-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify" }
 amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
+amplify-storage = { module = "com.amplifyframework:aws-storage-s3", version.ref = "amplify" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }

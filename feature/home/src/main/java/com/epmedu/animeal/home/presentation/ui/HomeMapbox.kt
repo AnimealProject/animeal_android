@@ -18,6 +18,7 @@ import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.RouteResult
@@ -47,6 +48,7 @@ internal fun HomeMapbox(
     onRouteResult: (result: RouteResult) -> Unit,
     onCancelRouteClick: () -> Unit,
     onMapInteraction: () -> Unit,
+    onSelectTab: (AnimalType) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -68,7 +70,8 @@ internal fun HomeMapbox(
                         .statusBarsPadding()
                         .align(alignment = Alignment.TopCenter)
                         .padding(top = 24.dp),
-                    onSelectTab = {}
+                    onSelectTab = onSelectTab,
+                    defaultAnimalType = state.defaultAnimalType
                 )
             }
             is FeedingRouteState.Active -> {

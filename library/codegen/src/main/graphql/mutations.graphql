@@ -1191,27 +1191,6 @@ mutation CreateFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner
@@ -1225,27 +1204,6 @@ mutation UpdateFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner
@@ -1259,27 +1217,6 @@ mutation DeleteFavourite(
     id
     userId
     feedingPointId
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
-    }
     createdAt
     updatedAt
     owner

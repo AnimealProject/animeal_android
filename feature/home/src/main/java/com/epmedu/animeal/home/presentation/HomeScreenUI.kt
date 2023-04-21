@@ -114,7 +114,8 @@ internal fun HomeScreenUI(
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
                     onTakePhotoClick = {},
-                    onDeletePhotoClick = {}
+                    onDeletePhotoClick = {},
+                    onShowOnMap = {}
                 )
             }
         },
@@ -159,6 +160,9 @@ internal fun HomeScreenUI(
                 },
                 onGeolocationClick = { mapView ->
                     onGeoLocationClick(mapView, state, geolocationPermissionState)
+                },
+                onSelectTab = {
+                    onScreenEvent(FeedingPointEvent.AnimalTypeChange(it))
                 }
             )
         }

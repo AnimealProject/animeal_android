@@ -5,6 +5,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
@@ -30,6 +31,7 @@ internal class DefaultFeedingHandler @Inject constructor(
     errorHandler: ErrorHandler,
     feedingPointHandler: FeedingPointHandler,
     timerHandler: TimerHandler,
+    private val fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
@@ -41,6 +43,13 @@ internal class DefaultFeedingHandler @Inject constructor(
     RouteHandler by routeHandler,
     TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
+
+    override suspend fun fetchCurrentFeeding() {
+        fetchCurrentFeedingPointUseCase()?.let { feedingPoint ->
+            showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
+            startRoute()
+        }
+    }
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {

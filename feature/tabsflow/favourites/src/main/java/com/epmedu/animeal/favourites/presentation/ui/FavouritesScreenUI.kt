@@ -25,6 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.common.constants.Arguments
+import com.epmedu.animeal.common.route.TabsRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
@@ -50,6 +53,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -105,6 +109,7 @@ private fun ScreenScaffold(
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
+    val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
         skipHalfExpanded = true,
@@ -121,6 +126,14 @@ private fun ScreenScaffold(
                     isShowOnMapVisible = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
+                    },
+                    onShowOnMap = {
+                        navigator.navigate(
+                            TabsRoute.Home.withArg(
+                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                            )
+                        )
                     }
                 )
             }

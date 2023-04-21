@@ -1,13 +1,17 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
+import com.epmedu.animeal.geolocation.location.model.Location
 import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
@@ -21,6 +25,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
@@ -44,12 +49,14 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
     private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
     private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
+    private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
@@ -73,6 +80,7 @@ internal class HomeViewModel @Inject constructor(
         initialize()
         fetchLocationUpdates()
         viewModelScope.launch { fetchFeedingPoints() }
+        viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
     }
 
@@ -97,21 +105,26 @@ internal class HomeViewModel @Inject constructor(
             is ErrorShowed -> hideError()
             is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
             CameraPermissionAsked -> markCameraPermissionAsAsked()
+            ScreenDisplayed -> handleForcedFeedingPoint()
         }
     }
 
     private fun initialize() {
-        updateState {
-            copy(
-                mapBoxPublicKey = homeProviders.mapBoxPublicKey,
-                mapBoxStyleUri = mapBoxStyleURI,
-                isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
-                gpsSettingState = when {
-                    isGpsSettingsEnabled -> GpsSettingState.Enabled
-                    else -> GpsSettingState.Disabled
-                },
-                isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
-            )
+        viewModelScope.launch {
+            val defaultAnimalType = animalTypeUseCase()
+            updateState {
+                copy(
+                    mapBoxPublicKey = homeProviders.mapBoxPublicKey,
+                    mapBoxStyleUri = mapBoxStyleURI,
+                    isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
+                    gpsSettingState = when {
+                        isGpsSettingsEnabled -> GpsSettingState.Enabled
+                        else -> GpsSettingState.Disabled
+                    },
+                    defaultAnimalType = defaultAnimalType,
+                    isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
+                )
+            }
         }
     }
 
@@ -151,5 +164,18 @@ internal class HomeViewModel @Inject constructor(
 
     private fun changeCameraPermissionStatus(event: CameraPermissionStatusChanged) {
         updateState { copy(cameraPermissionStatus = event.status) }
+    }
+
+    private fun handleForcedFeedingPoint() {
+        viewModelScope.launch {
+            val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
+            if (forcedFeedingPointId != null) {
+                savedStateHandle[FORCED_FEEDING_POINT_ID] = null
+                showFeedingPoint(forcedFeedingPointId)
+                state.currentFeedingPoint?.coordinates
+                    ?.run { Location(latitude(), longitude()) }
+                    ?.let(::collectLocations)
+            }
+        }
     }
 }
