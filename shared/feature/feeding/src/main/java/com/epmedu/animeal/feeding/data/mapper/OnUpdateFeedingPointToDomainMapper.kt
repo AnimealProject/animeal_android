@@ -24,7 +24,5 @@ internal fun OnUpdateFeedingPoint.toDomainFeedingPoint() =
             latitude = location().lat(),
             longitude = location().lon()
         ),
-        images = with(images()) {
-            this?.toList() ?: emptyList()
-        }
+        images = images()?.toList() ?: emptyList()
     )
