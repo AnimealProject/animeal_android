@@ -1,10 +1,8 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -21,10 +19,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -32,11 +35,13 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 
 @OptIn(ExperimentalMaterialApi::class)
+@Suppress("LongMethod")
 @Composable
 fun FeedingPointItem(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
+    imageUrl: String,
     onFavouriteChange: (Boolean) -> Unit,
     onClick: () -> Unit
 ) {
@@ -57,14 +62,21 @@ fun FeedingPointItem(
                 .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
+            Card(
                 modifier = Modifier
                     .size(80.dp)
-                    .background(
-                        color = MaterialTheme.colors.secondaryVariant,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-            )
+                    .clip(RoundedCornerShape(16.dp)),
+                elevation = 8.dp
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = title,
+                )
+            }
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -98,6 +110,8 @@ fun FeedingPointItem(
 fun MoreScreenPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
+    val imgUrl = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
+        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
 
     AnimealTheme {
         Column {
@@ -105,12 +119,14 @@ fun MoreScreenPreview() {
                 longText,
                 FeedStatus.RED,
                 isFavourite = true,
+                imgUrl,
                 {}
             ) {}
             FeedingPointItem(
                 shortText,
                 FeedStatus.GREEN,
                 isFavourite = false,
+                imgUrl,
                 {}
             ) {}
         }

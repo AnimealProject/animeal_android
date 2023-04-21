@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
@@ -19,7 +20,8 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoin
 internal class FeedingPointRepositoryImpl(
     dispatchers: Dispatchers,
     private val favouriteRepository: FavouriteRepository,
-    private val feedingPointApi: FeedingPointApi
+    private val feedingPointApi: FeedingPointApi,
+    private val storageApi: StorageApi
 ) : FeedingPointRepository {
 
     private val coroutineScope = CoroutineScope(dispatchers.IO)
@@ -40,7 +42,8 @@ internal class FeedingPointRepositoryImpl(
             ) { feedingPointsList, favouriteIds ->
                 feedingPointsList.map { dataFeedingPoint ->
                     dataFeedingPoint.copy(
-                        isFavourite = favouriteIds.any { it == dataFeedingPoint.id }
+                        isFavourite = favouriteIds.any { it == dataFeedingPoint.id },
+                        images = listOf(storageApi.parseAmplifyUrl(dataFeedingPoint.images[0]))
                     )
                 }
             }.collect {
