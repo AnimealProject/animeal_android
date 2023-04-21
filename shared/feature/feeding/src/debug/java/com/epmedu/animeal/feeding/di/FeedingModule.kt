@@ -3,6 +3,7 @@ package com.epmedu.animeal.feeding.di
 import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.debugmenu.domain.DebugMenuRepository
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
@@ -33,6 +34,7 @@ object FeedingModule {
         favouriteRepository: FavouriteRepository,
         feedingPointApi: FeedingPointApi,
         debugMenuRepository: DebugMenuRepository,
+        storageApi: StorageApi,
     ): FeedingPointRepository {
         return when {
             debugMenuRepository.useMockedFeedingPoints -> {
@@ -46,6 +48,7 @@ object FeedingModule {
                     dispatchers = Dispatchers,
                     favouriteRepository = favouriteRepository,
                     feedingPointApi = feedingPointApi,
+                    storageApi = storageApi,
                 )
             }
         }
