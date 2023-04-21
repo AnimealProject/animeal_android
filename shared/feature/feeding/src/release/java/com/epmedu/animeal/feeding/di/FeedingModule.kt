@@ -3,6 +3,7 @@ package com.epmedu.animeal.feeding.di
 import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
@@ -28,10 +29,12 @@ object FeedingModule {
     fun providesFeedingPointRepository(
         feedingPointApi: FeedingPointApi,
         favouriteRepository: FavouriteRepository,
+        storageApi: StorageApi,
     ): FeedingPointRepository = FeedingPointRepositoryImpl(
         dispatchers = Dispatchers,
         favouriteRepository = favouriteRepository,
         feedingPointApi = feedingPointApi,
+        storageApi = storageApi,
     )
 
     @Singleton
