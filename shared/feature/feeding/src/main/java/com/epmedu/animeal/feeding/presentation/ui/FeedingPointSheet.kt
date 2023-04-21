@@ -87,7 +87,7 @@ fun FeedingPointSheetContent(
             title = feedingPoint.title,
             status = feedingPoint.feedStatus,
             isFavourite = feedingPoint.isFavourite,
-            imageUrl = feedingPoint.images[0],
+            imageUrl = feedingPoint.image,
             onFavouriteChange = onFavouriteChange
         )
         FeedingPointDetails(
