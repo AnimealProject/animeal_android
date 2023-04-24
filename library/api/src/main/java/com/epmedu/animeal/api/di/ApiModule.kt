@@ -1,5 +1,7 @@
 package com.epmedu.animeal.api.di
 
+import com.epmedu.animeal.api.donate.DonateApi
+import com.epmedu.animeal.api.donate.DonateApiImpl
 import com.epmedu.animeal.api.faq.FAQApi
 import com.epmedu.animeal.api.faq.FAQApiImpl
 import com.epmedu.animeal.api.favourite.FavouriteApi
@@ -39,4 +41,8 @@ internal object ApiModule {
     @Singleton
     @Provides
     fun providesStorageApi(): StorageApi = StorageApiImpl()
+
+    @Singleton
+    @Provides
+    fun providesDonateApi(): DonateApi = DonateApiImpl()
 }
