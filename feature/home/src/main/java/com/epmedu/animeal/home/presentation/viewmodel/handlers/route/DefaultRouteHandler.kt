@@ -13,6 +13,8 @@ internal class DefaultRouteHandler @Inject constructor(
 ) : RouteHandler,
     StateDelegate<HomeState> by stateDelegate {
 
+    private var showFullRoad: Boolean = false
+
     override fun handleRouteEvent(event: RouteEvent) {
         when (event) {
             is FeedingRouteUpdateRequest -> updateRoute(event)
@@ -21,7 +23,8 @@ internal class DefaultRouteHandler @Inject constructor(
     }
 
     override fun startRoute() {
-        updateState { copy(feedingRouteState = FeedingRouteState.Active(), isError = false) }
+        showFullRoad = true
+        updateState { copy(feedingRouteState = FeedingRouteState.Active(showFullRoad = showFullRoad), isError = false) }
     }
 
     override fun stopRoute() {
@@ -33,12 +36,14 @@ internal class DefaultRouteHandler @Inject constructor(
             updateState {
                 copy(
                     feedingRouteState = FeedingRouteState.Active(
+                        showFullRoad = showFullRoad,
                         event.result.distanceLeft,
                         state.feedingRouteState.timeLeft,
                         event.result.routeData
                     )
                 )
             }
+            showFullRoad = false
         }
     }
 
@@ -47,6 +52,7 @@ internal class DefaultRouteHandler @Inject constructor(
             updateState {
                 copy(
                     feedingRouteState = FeedingRouteState.Active(
+                        showFullRoad = showFullRoad,
                         state.feedingRouteState.distanceLeft,
                         event.timeLeft,
                         state.feedingRouteState.routeData
