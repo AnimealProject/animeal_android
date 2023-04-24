@@ -97,6 +97,7 @@ include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
 
+include(":shared:feature:camera")
 include(":shared:feature:debugmenu")
 include(":shared:feature:feedconfirmation")
 include(":shared:feature:feeding")

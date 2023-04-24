@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers
 
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
@@ -13,6 +14,7 @@ import javax.inject.Inject
 
 @Suppress("LongParameterList")
 internal class DefaultHomeHandler @Inject constructor(
+    private val cameraHandler: CameraHandler,
     private val feedingPointHandler: FeedingPointHandler,
     private val routeHandler: RouteHandler,
     private val willFeedHandler: WillFeedHandler,
@@ -22,7 +24,8 @@ internal class DefaultHomeHandler @Inject constructor(
     private val timerCancellationHandler: TimerCancellationHandler,
     private val gpsHandler: GpsHandler,
     private val errorHandler: ErrorHandler
-) : FeedingPointHandler by feedingPointHandler,
+) : CameraHandler by cameraHandler,
+    FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,
     WillFeedHandler by willFeedHandler,
     FeedingHandler by feedingHandler,
