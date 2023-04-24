@@ -2,6 +2,7 @@ package com.epmedu.animeal.camera.presentation
 
 import android.content.Context
 import android.net.Uri
+import android.util.Size
 import androidx.activity.compose.BackHandler
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -38,6 +39,9 @@ import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+private const val PHOTO_WIDTH = 720
+private const val PHOTO_HEIGHT = 1280
+
 @Composable
 fun CameraView(
     onImageCapture: (Uri) -> Unit,
@@ -56,7 +60,12 @@ fun CameraView(
 
     val preview = Preview.Builder().build()
     val previewView = remember { PreviewView(context) }
-    val imageCapture: ImageCapture = remember { ImageCapture.Builder().build() }
+    val imageCapture: ImageCapture = remember {
+        ImageCapture.Builder()
+            .setTargetResolution(
+                Size(PHOTO_WIDTH, PHOTO_HEIGHT)
+            ).build()
+    }
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)
         .build()
