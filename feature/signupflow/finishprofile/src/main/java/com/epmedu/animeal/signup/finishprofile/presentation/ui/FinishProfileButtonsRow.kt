@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
-import com.epmedu.animeal.foundation.button.AnimealSecondaryButton
+import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -22,7 +22,7 @@ internal fun FinishProfileButtonsRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AnimealSecondaryButton(
+        AnimealSecondaryButtonOutlined(
             modifier = Modifier.weight(1f),
             text = stringResource(id = R.string.cancel),
             onClick = onCancelClick,

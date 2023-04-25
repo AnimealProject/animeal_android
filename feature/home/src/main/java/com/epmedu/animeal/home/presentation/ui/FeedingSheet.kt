@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
+import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 
 @Suppress("LongParameterList")
@@ -14,6 +15,8 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 fun FeedingSheet(
     feedingState: FeedingRouteState,
     feedingPoint: FeedingPointModel,
+    feedingPhotos: List<Uri>,
+    cameraState: CameraState,
     contentAlpha: Float,
     onFavouriteChange: (Boolean) -> Unit,
     onDeletePhotoClick: (Uri) -> Unit,
@@ -24,6 +27,8 @@ fun FeedingSheet(
         is FeedingRouteState.Active -> {
             MarkFeedingDoneSheet(
                 modifier = Modifier.wrapContentHeight(),
+                photos = feedingPhotos,
+                isUploadingNextImage = cameraState == CameraState.LoadingImageToServer,
                 feedingPointTitle = feedingPoint.title,
                 onDeletePhotoClick = onDeletePhotoClick,
                 onTakePhotoClick = onTakePhotoClick

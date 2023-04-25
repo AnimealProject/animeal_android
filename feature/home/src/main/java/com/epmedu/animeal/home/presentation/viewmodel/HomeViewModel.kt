@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
@@ -17,6 +18,7 @@ import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequested
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
@@ -31,6 +33,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
@@ -49,6 +52,7 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val forcedArgumentsUseCase: ForcedArgumentsUseCase,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
@@ -61,8 +65,10 @@ internal class HomeViewModel @Inject constructor(
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler
 ) : ViewModel(),
+    ActionDelegate by actionDelegate,
     StateDelegate<HomeState> by stateDelegate,
     EventDelegate<HomeViewModelEvent> by eventDelegate,
+    CameraHandler by defaultHomeHandler,
     FeedingPointHandler by defaultHomeHandler,
     RouteHandler by defaultHomeHandler,
     WillFeedHandler by defaultHomeHandler,
@@ -106,6 +112,7 @@ internal class HomeViewModel @Inject constructor(
             is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
             CameraPermissionAsked -> markCameraPermissionAsAsked()
             ScreenDisplayed -> handleForcedFeedingPoint()
+            is CameraEvent -> viewModelScope.handleCameraEvent(event)
         }
     }
 

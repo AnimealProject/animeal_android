@@ -220,6 +220,7 @@ private fun FavouritesList(
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
+                    imageUrl = feedingPoint.images[0],
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
@@ -255,6 +256,7 @@ private fun FavouritesScreenPreview() {
             isFavourite = true,
             lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
+            images = emptyList(),
         ),
     )
     AnimealTheme {

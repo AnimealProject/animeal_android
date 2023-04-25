@@ -35,6 +35,7 @@ import com.epmedu.animeal.resources.R
 fun MarkFeedingDoneSheet(
     modifier: Modifier = Modifier,
     photos: List<Uri> = listOf(),
+    isUploadingNextImage: Boolean = false,
     feedingPointTitle: String,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (Uri) -> Unit
@@ -70,6 +71,7 @@ fun MarkFeedingDoneSheet(
 
         MarkFeedingDoneContent(
             photos = photos,
+            isUploadingNextImage = isUploadingNextImage,
             onTakePhotoClick = onTakePhotoClick,
             onDeletePhotoClick = onDeletePhotoClick
         )
@@ -108,6 +110,7 @@ private fun MarkFeedingDoneHeader(
 @Composable
 private fun MarkFeedingDoneContent(
     photos: List<Uri>,
+    isUploadingNextImage: Boolean,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (Uri) -> Unit,
 ) {
@@ -125,6 +128,7 @@ private fun MarkFeedingDoneContent(
         )
         MarkFeedingDonePhotoGallery(
             photos = photos,
+            isUploadingNextImage = isUploadingNextImage,
             onTakePhotoClick = onTakePhotoClick,
             onDeletePhotoClick = onDeletePhotoClick
         )

@@ -28,5 +28,6 @@ internal fun DataFeedingPoint.toDomainFeedingPoint(isFavourite: Boolean = false)
         location = MapLocation(
             latitude = location?.lat ?: 0.0,
             longitude = location?.lon ?: 0.0
-        )
+        ),
+        images = images
     )

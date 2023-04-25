@@ -26,6 +26,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
@@ -110,11 +111,13 @@ internal fun HomeScreenUI(
             state.currentFeedingPoint?.let { feedingPoint ->
                 FeedingSheet(
                     feedingState = state.feedingRouteState,
+                    cameraState = state.cameraState,
                     feedingPoint = feedingPoint,
+                    feedingPhotos = state.feedingPhotos,
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
-                    onTakePhotoClick = {},
-                    onDeletePhotoClick = {},
+                    onTakePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera) },
+                    onDeletePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.DeletePhoto(it)) },
                     onShowOnMap = {}
                 )
             }
@@ -125,7 +128,7 @@ internal fun HomeScreenUI(
                     is FeedingRouteState.Active -> {
                         MarkFeedingDoneActionButton(
                             alpha = buttonAlpha,
-                            enabled = state.feedingPhotos.isNotEmpty(),
+                            enabled = state.feedingPhotos.isNotEmpty() && state.cameraState == CameraState.Disabled,
                             onClick = {}
                         )
                     }

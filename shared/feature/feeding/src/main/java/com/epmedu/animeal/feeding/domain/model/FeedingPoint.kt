@@ -16,4 +16,5 @@ data class FeedingPoint(
     val lastFeeder: Feeder = Feeder(),
     val remoteness: Remoteness = Remoteness.ANY,
     val location: MapLocation,
+    val images: List<String>,
 )
