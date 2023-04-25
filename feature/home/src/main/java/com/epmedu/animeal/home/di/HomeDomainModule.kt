@@ -8,6 +8,7 @@ import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
@@ -105,7 +106,13 @@ object HomeDomainModule {
     @ViewModelScoped
     @Provides
     fun providesGetAnimalTypeSettingsUseCase(
-        savedStateHandle: SavedStateHandle,
-        repository: ApplicationSettingsRepository
-    ): AnimalTypeUseCase = AnimalTypeUseCase(savedStateHandle, repository)
+        repository: ApplicationSettingsRepository,
+        forcedFeedingPoint: ForcedArgumentsUseCase
+    ): AnimalTypeUseCase = AnimalTypeUseCase(repository, forcedFeedingPoint)
+
+    @ViewModelScoped
+    @Provides
+    fun provideForcedFeedingPoint(
+        savedStateHandle: SavedStateHandle
+    ): ForcedArgumentsUseCase = ForcedArgumentsUseCase(savedStateHandle)
 }

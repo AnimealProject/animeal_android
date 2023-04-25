@@ -1,6 +1,5 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
@@ -12,6 +11,7 @@ import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
@@ -49,7 +49,7 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    private val forcedArgumentsUseCase: ForcedArgumentsUseCase,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
@@ -168,9 +168,11 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleForcedFeedingPoint() {
         viewModelScope.launch {
-            val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
+            val forcedFeedingPointId: String? = forcedArgumentsUseCase<String>(
+                FORCED_FEEDING_POINT_ID,
+                this@HomeViewModel.hashCode()
+            )
             if (forcedFeedingPointId != null) {
-                savedStateHandle[FORCED_FEEDING_POINT_ID] = null
                 showFeedingPoint(forcedFeedingPointId)
                 state.currentFeedingPoint?.coordinates
                     ?.run { Location(latitude(), longitude()) }
