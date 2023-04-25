@@ -1,15 +1,17 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.route
 
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingRouteUpdateRequest
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent.FeedingTimerUpdateRequest
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import javax.inject.Inject
 
-internal class DefaultRouteHandler @Inject constructor(
-    stateDelegate: StateDelegate<HomeState>
+internal class DefaultRouteHandler(
+    stateDelegate: StateDelegate<HomeState>,
+    private val forcedArgumentsUseCase: ForcedArgumentsUseCase
 ) : RouteHandler,
     StateDelegate<HomeState> by stateDelegate {
 
@@ -23,7 +25,9 @@ internal class DefaultRouteHandler @Inject constructor(
     }
 
     override fun startRoute() {
-        showFullRoad = true
+        if (forcedArgumentsUseCase<String>(FORCED_FEEDING_POINT_ID, hashCode()) == null) {
+            showFullRoad = true
+        }
         updateState { copy(feedingRouteState = FeedingRouteState.Active(showFullRoad = showFullRoad), isError = false) }
     }
 

@@ -12,6 +12,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
@@ -60,8 +61,9 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesRouteHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): RouteHandler = DefaultRouteHandler(stateDelegate)
+        stateDelegate: StateDelegate<HomeState>,
+        forcedFeedingPoint: ForcedArgumentsUseCase
+    ): RouteHandler = DefaultRouteHandler(stateDelegate, forcedFeedingPoint)
 
     @ViewModelScoped
     @Provides
@@ -95,6 +97,7 @@ internal object HomePresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
+        forcedArgumentsUseCase: ForcedArgumentsUseCase
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -106,7 +109,8 @@ internal object HomePresentationModule {
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,
-        finishFeedingUseCase
+        finishFeedingUseCase,
+        forcedArgumentsUseCase
     )
 
     @ViewModelScoped
