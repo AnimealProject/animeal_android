@@ -79,9 +79,14 @@ internal class DefaultFeedingPointHandler(
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {
         when (event) {
             is Select -> launch { selectFeedingPoint(event) }
+            FeedingPointEvent.Deselect -> launch { deselectFeedingPoint() }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
             is FeedingPointEvent.AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
         }
+    }
+
+    override fun deselectFeedingPoint() {
+        if (state.currentFeedingPoint != null) updateState { copy(currentFeedingPoint = null) }
     }
 
     private suspend fun selectFeedingPoint(event: Select) {

@@ -96,6 +96,12 @@ internal fun HomeScreenUI(
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
     }
 
+    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
+        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
+            onScreenEvent(FeedingPointEvent.Deselect)
+        }
+    }
+
     OnBackHandling(
         scope = scope,
         bottomSheetState = bottomSheetState,

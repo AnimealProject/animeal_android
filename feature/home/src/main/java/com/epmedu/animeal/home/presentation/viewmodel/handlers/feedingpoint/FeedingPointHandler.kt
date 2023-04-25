@@ -8,6 +8,8 @@ internal interface FeedingPointHandler {
 
     suspend fun fetchFeedingPoints()
 
+    fun deselectFeedingPoint()
+
     suspend fun showFeedingPoint(feedingPointId: String)
 
     fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel)

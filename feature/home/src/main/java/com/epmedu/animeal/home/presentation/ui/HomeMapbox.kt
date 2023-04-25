@@ -135,6 +135,14 @@ private fun MapboxMap(
         )
     }
 
+    LaunchedEffect(key1 = state.currentFeedingPoint) {
+        if (state.feedingRouteState is FeedingRouteState.Active) {
+            markerController.drawSelectedMarkerBackground(null)
+        } else {
+            markerController.drawSelectedMarkerBackground(state.currentFeedingPoint)
+        }
+    }
+
     LaunchedEffect(key1 = state.locationState) {
         if (state.locationState.isInitial || state.locationState.isUndefined) {
             mapboxMapView.setLocation(state.locationState.location)

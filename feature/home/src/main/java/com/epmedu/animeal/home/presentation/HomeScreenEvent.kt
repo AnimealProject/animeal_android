@@ -10,6 +10,7 @@ sealed interface HomeScreenEvent {
 
     sealed interface FeedingPointEvent : HomeScreenEvent {
         data class Select(val feedingPoint: FeedingPointModel) : FeedingPointEvent
+        object Deselect : FeedingPointEvent
         data class FavouriteChange(val isFavourite: Boolean) : FeedingPointEvent
         data class AnimalTypeChange(val type: AnimalType) : FeedingPointEvent
     }
