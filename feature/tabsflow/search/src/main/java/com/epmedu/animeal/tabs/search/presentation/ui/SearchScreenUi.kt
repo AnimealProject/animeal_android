@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout

@@ -10,10 +10,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.launchGpsSettings
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
@@ -25,12 +27,10 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Fa
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.WillFeedState
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
@@ -52,7 +52,8 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -100,7 +101,7 @@ internal fun HomeScreenUI(
         scope = scope,
         bottomSheetState = bottomSheetState,
         state = state,
-        onScreenEvent = onScreenEvent
+        onWillFeedEvent = onWillFeedEvent,
     )
 
     AnimealBottomSheetLayout(
@@ -136,7 +137,7 @@ internal fun HomeScreenUI(
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                            onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) }
                         )
                     }
                 }
@@ -171,7 +172,14 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)
+    WillFeedConfirmationDialog(
+        scope,
+        bottomSheetState,
+        state,
+        onScreenEvent,
+        onWillFeedEvent,
+        hideBottomSheet
+    )
 }
 
 @Composable
@@ -204,15 +212,16 @@ private fun WillFeedConfirmationDialog(
     bottomSheetState: AnimealBottomSheetState,
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
-    onHideBottomSheet: () -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onHideBottomSheet: () -> Unit,
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(onAgreeClick = {
-            onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
+            onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
             onScreenEvent(FeedingEvent.Start)
             onHideBottomSheet()
-        }, onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) })
+        }, onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) })
     }
 }
 
@@ -221,14 +230,14 @@ private fun OnBackHandling(
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     state: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     BackHandler(enabled = bottomSheetState.isVisible) {
         scope.launch { bottomSheetState.hide() }
     }
 
     BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
-        scope.launch { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
+        scope.launch { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     }
 }
 

@@ -17,7 +17,6 @@ dependencies {
     implementation(projects.feature.tabsflow.moreflow.host)
     implementation(projects.feature.tabsflow.search)
     implementation(projects.feature.tabsflow.favourites)
-    implementation(projects.shared.feature.feedconfirmation)
     implementation(projects.shared.feature.timer)
 
     implementation(projects.library.foundation)

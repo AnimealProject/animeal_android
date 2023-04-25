@@ -35,13 +35,13 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent

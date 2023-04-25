@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feedconfirmation.presentation
+package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
