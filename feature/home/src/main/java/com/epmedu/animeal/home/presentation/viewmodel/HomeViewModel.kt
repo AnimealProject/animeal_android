@@ -31,6 +31,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
@@ -113,6 +114,7 @@ internal class HomeViewModel @Inject constructor(
             CameraPermissionAsked -> markCameraPermissionAsAsked()
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
+            HomeScreenEvent.MapInteracted -> handleMapEvents()
         }
     }
 
@@ -184,6 +186,14 @@ internal class HomeViewModel @Inject constructor(
                 state.currentFeedingPoint?.coordinates
                     ?.run { Location(latitude(), longitude()) }
                     ?.let(::collectLocations)
+            }
+        }
+    }
+
+    private fun handleMapEvents() {
+        viewModelScope.launch {
+            if (state.feedingRouteState is FeedingRouteState.Disabled) {
+                sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
         }
     }

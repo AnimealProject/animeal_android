@@ -150,7 +150,7 @@ internal fun HomeScreenUI(
             HomeMapbox(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
-                onMapInteraction = { /* do nothing */ },
+                onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },
