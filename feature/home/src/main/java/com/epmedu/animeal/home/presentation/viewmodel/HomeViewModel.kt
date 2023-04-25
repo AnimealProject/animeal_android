@@ -144,6 +144,7 @@ internal class HomeViewModel @Inject constructor(
         updateState { copy(geolocationPermissionStatus = event.status) }
 
         if (event.status is PermissionStatus.Granted) {
+            fetchLocationUpdates()
             viewModelScope.launch {
                 fetchGpsSettingsUpdates().collect(::collectGpsSettings)
             }
@@ -161,7 +162,6 @@ internal class HomeViewModel @Inject constructor(
 
     private fun markCameraPermissionAsAsked() {
         if (!state.isCameraPermissionAsked) {
-            fetchLocationUpdates()
             viewModelScope.launch {
                 updateCameraPermissionRequestUseCase(true)
             }
