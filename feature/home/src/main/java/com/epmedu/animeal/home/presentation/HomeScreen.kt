@@ -14,6 +14,7 @@ import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
+import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
 import kotlinx.coroutines.launch
 
@@ -60,6 +61,11 @@ fun HomeScreen() {
                                 bottomSheetState.show()
                             }
                         }
+                    }
+                }
+                HomeViewModelEvent.MinimiseBottomSheet -> {
+                    if (bottomSheetState.isExpanding) {
+                        bottomSheetState.show()
                     }
                 }
             }

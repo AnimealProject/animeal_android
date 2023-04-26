@@ -151,11 +151,7 @@ internal fun HomeScreenUI(
             HomeMapbox(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
-                onMapInteraction = {
-                    if (bottomSheetState.isExpanding && state.feedingRouteState is FeedingRouteState.Disabled) {
-                        scope.launch { bottomSheetState.show() }
-                    }
-                },
+                onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },

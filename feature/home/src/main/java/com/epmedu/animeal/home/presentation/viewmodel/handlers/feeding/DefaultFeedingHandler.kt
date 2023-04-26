@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding
 
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
@@ -7,6 +8,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
@@ -21,10 +23,9 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandle
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Suppress("LongParameterList")
-internal class DefaultFeedingHandler @Inject constructor(
+internal class DefaultFeedingHandler(
     stateDelegate: StateDelegate<HomeState>,
     actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,
@@ -35,7 +36,8 @@ internal class DefaultFeedingHandler @Inject constructor(
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
-    private val finishFeedingUseCase: FinishFeedingUseCase
+    private val finishFeedingUseCase: FinishFeedingUseCase,
+    private val forcedArgumentsUseCase: ForcedArgumentsUseCase
 ) : FeedingHandler,
     StateDelegate<HomeState> by stateDelegate,
     ActionDelegate by actionDelegate,
@@ -45,6 +47,9 @@ internal class DefaultFeedingHandler @Inject constructor(
     ErrorHandler by errorHandler {
 
     override suspend fun fetchCurrentFeeding() {
+        val forcedFeedingPointId = forcedArgumentsUseCase<String>(FORCED_FEEDING_POINT_ID, hashCode())
+        if (forcedFeedingPointId != null) return
+
         fetchCurrentFeedingPointUseCase()?.let { feedingPoint ->
             showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
             startRoute()
