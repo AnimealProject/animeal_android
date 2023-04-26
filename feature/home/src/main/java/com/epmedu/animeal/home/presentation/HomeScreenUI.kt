@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
-import com.epmedu.animeal.extensions.launchGpsSettings
+import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "ComplexMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
@@ -94,6 +94,12 @@ internal fun HomeScreenUI(
 
     LaunchedEffect(state.currentFeedingPoint) {
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
+    }
+
+    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
+        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
+            onScreenEvent(FeedingPointEvent.Deselect)
+        }
     }
 
     OnBackHandling(
@@ -151,6 +157,7 @@ internal fun HomeScreenUI(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
                 onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
+                onInitialLocationDisplay = { onScreenEvent(HomeScreenEvent.InitialLocationWasDisplayed) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },
@@ -238,7 +245,7 @@ private fun onGeoLocationClick(
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {
-            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }

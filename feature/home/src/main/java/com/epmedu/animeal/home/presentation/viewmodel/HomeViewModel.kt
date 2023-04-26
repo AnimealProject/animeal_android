@@ -85,7 +85,6 @@ internal class HomeViewModel @Inject constructor(
 
     init {
         initialize()
-        fetchLocationUpdates()
         viewModelScope.launch { fetchFeedingPoints() }
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
@@ -99,6 +98,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    @Suppress("ComplexMethod")
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
             is FeedingPointEvent -> viewModelScope.handleFeedingPointEvent(event)
@@ -115,6 +115,7 @@ internal class HomeViewModel @Inject constructor(
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapEvents()
+            HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
         }
     }
 
@@ -144,13 +145,22 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private fun changeGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
-        updateState { copy(geolocationPermissionStatus = event.status) }
-
-        if (event.status is PermissionStatus.Granted) {
+        if (event.status is PermissionStatus.Granted && state.geolocationPermissionStatus != PermissionStatus.Granted) {
+            fetchLocationUpdates()
+            updateState {
+                copy(
+                    gpsSettingState = when {
+                        isGpsSettingsEnabled -> GpsSettingState.Enabled
+                        else -> GpsSettingState.Disabled
+                    }
+                )
+            }
             viewModelScope.launch {
                 fetchGpsSettingsUpdates().collect(::collectGpsSettings)
             }
         }
+
+        updateState { copy(geolocationPermissionStatus = event.status) }
     }
 
     private fun markGeolocationPermissionAsAsked() {
