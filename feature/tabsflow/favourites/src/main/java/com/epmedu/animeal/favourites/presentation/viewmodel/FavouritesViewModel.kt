@@ -44,8 +44,6 @@ internal class FavouritesViewModel @Inject constructor(
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
-            /*is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
-            is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }*/
         }
     }
 
