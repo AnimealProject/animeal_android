@@ -21,7 +21,9 @@ fun FavouritesScreen() {
         initialValue = AnimealBottomSheetValue.Hidden,
     )
 
-    FavouritesScreenUI(state, bottomSheetState,
+    FavouritesScreenUI(
+        state,
+        bottomSheetState,
         onEvent = viewModel::handleEvents,
         onWillFeedEvent = viewModel::handleWillFeedEvent,
     )
