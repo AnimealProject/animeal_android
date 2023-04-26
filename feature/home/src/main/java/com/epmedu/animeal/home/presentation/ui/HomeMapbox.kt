@@ -41,10 +41,12 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
 
 @Composable
+@Suppress("LongParameterList")
 internal fun HomeMapbox(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
     onGeolocationClick: (MapView) -> Unit,
+    onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onCancelRouteClick: () -> Unit,
     onMapInteraction: () -> Unit,
@@ -59,6 +61,7 @@ internal fun HomeMapbox(
             mapboxMapView = mapboxMapView,
             state = state,
             onFeedingPointClick = onFeedingPointSelect,
+            onInitialLocationDisplay = onInitialLocationDisplay,
             onRouteResult = onRouteResult,
             onMapInteraction = onMapInteraction,
         )
@@ -108,6 +111,7 @@ private fun MapboxMap(
     mapboxMapView: MapView,
     state: HomeState,
     onFeedingPointClick: (point: FeedingPointModel) -> Unit,
+    onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onMapInteraction: () -> Unit,
 ) {
@@ -144,8 +148,12 @@ private fun MapboxMap(
     }
 
     LaunchedEffect(key1 = state.locationState) {
-        if (state.locationState.isInitial || state.locationState.isUndefined) {
-            mapboxMapView.setLocation(state.locationState.location)
+        when {
+            state.locationState.isUndefined -> mapboxMapView.setLocation(state.locationState.location)
+            state.locationState.isInitial -> {
+                mapboxMapView.setLocation(state.locationState.location)
+                onInitialLocationDisplay()
+            }
         }
     }
 

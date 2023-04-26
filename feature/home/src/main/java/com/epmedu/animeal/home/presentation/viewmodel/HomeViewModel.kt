@@ -98,6 +98,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    @Suppress("ComplexMethod")
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
             is FeedingPointEvent -> viewModelScope.handleFeedingPointEvent(event)
@@ -114,6 +115,7 @@ internal class HomeViewModel @Inject constructor(
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapEvents()
+            HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
         }
     }
 

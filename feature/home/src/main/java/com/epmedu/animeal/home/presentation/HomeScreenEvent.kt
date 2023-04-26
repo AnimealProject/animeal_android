@@ -57,4 +57,5 @@ sealed interface HomeScreenEvent {
     object ErrorShowed : HomeScreenEvent
     object ScreenDisplayed : HomeScreenEvent
     object MapInteracted : HomeScreenEvent
+    object InitialLocationWasDisplayed : HomeScreenEvent
 }
