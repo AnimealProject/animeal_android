@@ -145,14 +145,22 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private fun changeGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
-        updateState { copy(geolocationPermissionStatus = event.status) }
-
-        if (event.status is PermissionStatus.Granted) {
+        if (event.status is PermissionStatus.Granted && state.geolocationPermissionStatus != PermissionStatus.Granted) {
             fetchLocationUpdates()
+            updateState {
+                copy(
+                    gpsSettingState = when {
+                        isGpsSettingsEnabled -> GpsSettingState.Enabled
+                        else -> GpsSettingState.Disabled
+                    }
+                )
+            }
             viewModelScope.launch {
                 fetchGpsSettingsUpdates().collect(::collectGpsSettings)
             }
         }
+
+        updateState { copy(geolocationPermissionStatus = event.status) }
     }
 
     private fun markGeolocationPermissionAsAsked() {
