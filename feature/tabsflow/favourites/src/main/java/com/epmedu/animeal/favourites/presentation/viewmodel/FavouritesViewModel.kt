@@ -7,14 +7,13 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.favourites.domain.GetFavouriteFeedingPointsUseCase
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
-import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
-import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWillFeedDialog
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -25,8 +24,10 @@ internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val willFeedHandler: WillFeedHandler,
 ) : ViewModel(),
+    WillFeedHandler by willFeedHandler,
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
     ActionDelegate by actionDelegate {
 
@@ -43,8 +44,8 @@ internal class FavouritesViewModel @Inject constructor(
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
-            is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
-            is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
+            /*is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
+            is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }*/
         }
     }
 

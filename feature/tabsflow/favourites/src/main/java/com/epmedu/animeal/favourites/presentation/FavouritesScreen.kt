@@ -21,9 +21,10 @@ fun FavouritesScreen() {
         initialValue = AnimealBottomSheetValue.Hidden,
     )
 
-    FavouritesScreenUI(state, bottomSheetState, onEvent = {
-        viewModel.handleEvents(it)
-    })
+    FavouritesScreenUI(state, bottomSheetState,
+        onEvent = viewModel::handleEvents,
+        onWillFeedEvent = viewModel::handleWillFeedEvent,
+    )
     if (state.showingFeedingPoint != null) {
         LaunchedEffect(Unit) { bottomSheetState.expand() }
     }
