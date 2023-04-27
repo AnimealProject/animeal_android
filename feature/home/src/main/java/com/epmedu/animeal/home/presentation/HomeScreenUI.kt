@@ -12,9 +12,9 @@ import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
-import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
