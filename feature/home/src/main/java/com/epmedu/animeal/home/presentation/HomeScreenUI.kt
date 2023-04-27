@@ -152,6 +152,7 @@ internal fun HomeScreenUI(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
                 onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
+                onInitialLocationDisplay = { onScreenEvent(HomeScreenEvent.InitialLocationWasDisplayed) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },
@@ -174,7 +175,7 @@ internal fun HomeScreenUI(
         state,
         onScreenEvent,
         onWillFeedEvent,
-        hideBottomSheet
+        hideBottomSheet,
     )
 }
 
@@ -209,7 +210,7 @@ private fun WillFeedConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
-    onHideBottomSheet: () -> Unit,
+    onHideBottomSheet: () -> Unit
 ) {
     if (state.willFeedState is WillFeedState.Showing) {
         FeedConfirmationDialog(onAgreeClick = {
