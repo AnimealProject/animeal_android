@@ -1,3 +1,5 @@
+@file:Suppress("ComplexMethod")
+
 package com.epmedu.animeal.home.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -38,6 +40,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHand
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
