@@ -10,6 +10,9 @@ internal class CameraRepositoryImpl(private val storageApi: StorageApi) : Camera
     override suspend fun uploadPhoto(fileName: String, fileUri: Uri): ActionResult {
         return storageApi.uploadFile(fileName, fileUri).toActionResult()
     }
+
+    override suspend fun deletePhoto(fileName: String): ActionResult =
+        storageApi.deleteFile(fileName).toActionResult()
 }
 
 private fun ApiResult<Unit>.toActionResult(): ActionResult {

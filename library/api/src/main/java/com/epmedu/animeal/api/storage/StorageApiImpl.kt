@@ -34,4 +34,13 @@ internal class StorageApiImpl : StorageApi {
                 { resumeWithException(it) }
             )
         }
+
+    override suspend fun deleteFile(fileName: String): ApiResult<Unit> =
+        suspendCancellableCoroutine {
+            Amplify.Storage.remove(
+                fileName,
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
+            )
+        }
 }
