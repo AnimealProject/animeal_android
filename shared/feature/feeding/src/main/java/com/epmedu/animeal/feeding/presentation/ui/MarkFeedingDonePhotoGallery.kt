@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -37,10 +36,10 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun MarkFeedingDonePhotoGallery(
-    photos: List<Uri>,
+    photos: List<FeedingPhotoItem>,
     isUploadingNextImage: Boolean,
     onTakePhotoClick: () -> Unit,
-    onDeletePhotoClick: (Uri) -> Unit,
+    onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
@@ -51,11 +50,11 @@ fun MarkFeedingDonePhotoGallery(
             TakePhotoItem(onClick = onTakePhotoClick)
         }
 
-        items(items = photos) { photoUri ->
+        items(items = photos) { item ->
             PhotoItem(
-                uri = photoUri,
+                uri = item.uri,
                 onDeleteClick = {
-                    onDeletePhotoClick(photoUri)
+                    onDeletePhotoClick(item)
                 }
             )
         }
@@ -134,7 +133,7 @@ private fun PhotoItem(
 private fun MarkFeedingDonePhotoGalleryPreview() {
     AnimealTheme {
         MarkFeedingDonePhotoGallery(
-            photos = listOf("http://example.com".toUri(), "http://example.com".toUri()),
+            photos = listOf(FeedingPhotoItem.empty, FeedingPhotoItem.empty),
             isUploadingNextImage = true,
             onTakePhotoClick = {},
             onDeletePhotoClick = {}

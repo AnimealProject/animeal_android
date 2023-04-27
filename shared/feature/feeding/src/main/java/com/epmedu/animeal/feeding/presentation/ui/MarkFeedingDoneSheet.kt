@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,11 +33,11 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun MarkFeedingDoneSheet(
     modifier: Modifier = Modifier,
-    photos: List<Uri> = listOf(),
+    photos: List<FeedingPhotoItem> = listOf(),
     isUploadingNextImage: Boolean = false,
     feedingPointTitle: String,
     onTakePhotoClick: () -> Unit,
-    onDeletePhotoClick: (Uri) -> Unit
+    onDeletePhotoClick: (FeedingPhotoItem) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -109,10 +108,10 @@ private fun MarkFeedingDoneHeader(
 
 @Composable
 private fun MarkFeedingDoneContent(
-    photos: List<Uri>,
+    photos: List<FeedingPhotoItem>,
     isUploadingNextImage: Boolean,
     onTakePhotoClick: () -> Unit,
-    onDeletePhotoClick: (Uri) -> Unit,
+    onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),

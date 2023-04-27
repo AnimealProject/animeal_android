@@ -64,7 +64,8 @@ internal class HomeViewModel @Inject constructor(
     private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
-    defaultHomeHandler: DefaultHomeHandler
+    defaultHomeHandler: DefaultHomeHandler,
+    photoGalleryHandler: FeedingPhotoGalleryHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<HomeState> by stateDelegate,
@@ -81,7 +82,8 @@ internal class HomeViewModel @Inject constructor(
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
-    BuildConfigProvider by homeProviders {
+    BuildConfigProvider by homeProviders,
+    FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
         initialize()
@@ -115,6 +117,7 @@ internal class HomeViewModel @Inject constructor(
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapEvents()
+            is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
         }
     }
 

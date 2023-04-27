@@ -1,10 +1,10 @@
 package com.epmedu.animeal.home.presentation.ui
 
-import android.net.Uri
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
 import com.epmedu.animeal.home.presentation.model.CameraState
@@ -15,11 +15,11 @@ import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 fun FeedingSheet(
     feedingState: FeedingRouteState,
     feedingPoint: FeedingPointModel,
-    feedingPhotos: List<Uri>,
+    feedingPhotos: List<FeedingPhotoItem>,
     cameraState: CameraState,
     contentAlpha: Float,
     onFavouriteChange: (Boolean) -> Unit,
-    onDeletePhotoClick: (Uri) -> Unit,
+    onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
     onTakePhotoClick: () -> Unit,
     onShowOnMap: () -> Unit
 ) {

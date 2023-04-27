@@ -4,6 +4,7 @@ import android.net.Uri
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPhotoItem
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -25,7 +26,6 @@ internal class DefaultCameraHandler @Inject constructor(
             HomeScreenEvent.CameraEvent.OpenCamera -> openCamera()
             HomeScreenEvent.CameraEvent.CloseCamera -> closeCamera()
             is HomeScreenEvent.CameraEvent.TakeNewPhoto -> launch { uploadFeedingPhoto(event.uri) }
-            is HomeScreenEvent.CameraEvent.DeletePhoto -> deleteFeedingPhoto(event.uri)
         }
     }
 
@@ -41,15 +41,15 @@ internal class DefaultCameraHandler @Inject constructor(
 
     override suspend fun uploadFeedingPhoto(uri: Uri) {
         updateState { copy(cameraState = CameraState.LoadingImageToServer) }
+        val newPhoto = FeedingPhotoItem(uri, "${state.currentFeedingPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg")
         performAction(
             action = {
-                val photoName = "${state.currentFeedingPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg"
-                uploadPhotoUseCase(photoName, uri)
+                uploadPhotoUseCase(newPhoto.name, newPhoto.uri)
             },
             onSuccess = {
                 updateState {
                     copy(
-                        feedingPhotos = feedingPhotos + uri,
+                        feedingPhotos = feedingPhotos + newPhoto,
                         cameraState = CameraState.Disabled
                     )
                 }
@@ -58,14 +58,5 @@ internal class DefaultCameraHandler @Inject constructor(
                 updateState { copy(cameraState = CameraState.Disabled) }
             }
         )
-    }
-
-    override fun deleteFeedingPhoto(uri: Uri) {
-        updateState {
-            copy(
-                feedingPhotos = feedingPhotos - uri,
-                cameraState = CameraState.Disabled
-            )
-        }
     }
 }
