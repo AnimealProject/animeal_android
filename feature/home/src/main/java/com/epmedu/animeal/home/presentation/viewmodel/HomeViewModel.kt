@@ -87,6 +87,11 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch { fetchFeedingPoints() }
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
+        viewModelScope.registerWillFeedState {
+            updateState {
+                copy(willFeedState = it)
+            }
+        }
     }
 
     private suspend fun getTimerState() {

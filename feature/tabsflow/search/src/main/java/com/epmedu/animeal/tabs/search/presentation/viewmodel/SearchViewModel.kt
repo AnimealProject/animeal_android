@@ -55,6 +55,11 @@ class SearchViewModel @Inject constructor(
                 }.collect()
             }
         }
+        viewModelScope.registerWillFeedState {
+            updateState {
+                copy(willFeedState = it)
+            }
+        }
     }
 
     fun handleEvents(event: SearchScreenEvent) {

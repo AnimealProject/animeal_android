@@ -37,6 +37,11 @@ internal class FavouritesViewModel @Inject constructor(
                 updateState { copy(favourites = feedingPoints.toImmutableList()) }
             }
         }
+        viewModelScope.registerWillFeedState {
+            updateState {
+                copy(willFeedState = it)
+            }
+        }
     }
 
     fun handleEvents(event: FavouritesScreenEvent) {
