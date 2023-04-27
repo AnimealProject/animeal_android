@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.epmedu.animeal.extensions
 
 import android.app.Activity
@@ -21,8 +23,17 @@ import com.epmedu.animeal.common.constants.Links.FACEBOOK_WEB_LINK
 import com.epmedu.animeal.common.constants.Links.INSTAGRAM_WEB_LINK
 import com.epmedu.animeal.common.constants.Links.LINKEDIN_WEB_LINK
 import com.epmedu.animeal.resources.R
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 
 private const val URI_SCHEME = "package"
+
+private const val ONE_SECOND_INTERVAL = 1000L
+
+private const val ENABLE_LOCATION_REQUEST_CODE = 500
 
 fun Context.launchAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -37,6 +48,36 @@ fun Context.launchGpsSettings() {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
     startActivity(intent)
+}
+
+/** Workaround method to request GPS location using dialog provided by Google */
+fun Context.requestGpsByDialog() {
+    getActivity()?.let { activity ->
+        val locationRequest = LocationRequest.create().apply {
+            interval = ONE_SECOND_INTERVAL
+            fastestInterval = ONE_SECOND_INTERVAL
+            priority = Priority.PRIORITY_HIGH_ACCURACY
+        }
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        /** Locations service is expected to fail. Exception of onFailureMethod returns
+         * Service which provides logic for calling "Enable Location" dialog */
+        LocationServices
+            .getSettingsClient(this)
+            .checkLocationSettings(builder.build())
+            .addOnFailureListener { exception ->
+
+                if (exception is ResolvableApiException) {
+                    // Show the "Enable Location" dialog by calling startResolutionForResult()
+                    exception.startResolutionForResult(
+                        activity,
+                        ENABLE_LOCATION_REQUEST_CODE
+                    )
+                }
+            }
+    }
 }
 
 fun Context.drawableCompat(id: Int) = requireNotNull(AppCompatResources.getDrawable(this, id)) {

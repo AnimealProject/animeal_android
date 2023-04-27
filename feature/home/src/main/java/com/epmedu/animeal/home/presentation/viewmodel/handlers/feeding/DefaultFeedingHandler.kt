@@ -80,6 +80,7 @@ internal class DefaultFeedingHandler(
         performFeedingAction(
             action = cancelFeedingUseCase::invoke,
             onSuccess = {
+                deselectFeedingPoint()
                 stopRoute()
                 disableTimer()
                 fetchFeedingPoints()
@@ -95,6 +96,7 @@ internal class DefaultFeedingHandler(
                 rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
             },
             onSuccess = {
+                deselectFeedingPoint()
                 fetchFeedingPoints()
             }
         )
@@ -106,6 +108,7 @@ internal class DefaultFeedingHandler(
                 finishFeedingUseCase(feedingPointId, listOf(""))
             },
             onSuccess = {
+                deselectFeedingPoint()
                 stopRoute()
                 fetchFeedingPoints()
             }
