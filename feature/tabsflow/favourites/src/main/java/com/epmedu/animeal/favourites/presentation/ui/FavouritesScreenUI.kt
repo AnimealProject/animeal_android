@@ -164,7 +164,7 @@ private fun ScreenScaffold(
         }
     }
 
-    WillFeedConfirmationDialog(state, onWillFeedEvent)
+    WillFeedConfirmationDialog(state.willFeedState, onWillFeedEvent)
 }
 
 @Composable
@@ -233,15 +233,14 @@ private fun FavouritesList(
 
 @Composable
 internal fun WillFeedConfirmationDialog(
-    state: FavouritesState,
+    willFeedState: WillFeedState,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
-    if (state.willFeedState == WillFeedState.Showing) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
-            onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-        )
-    }
+    FeedConfirmationDialog(
+        willFeedState,
+        onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
+        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
+    )
 }
 
 @AnimealPreview
