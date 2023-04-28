@@ -169,15 +169,14 @@ internal fun HomeScreenUI(
         }
     }
 
-    if (state.willFeedState is WillFeedState.Showing) {
-        WillFeedConfirmationDialog(
-            scope,
-            bottomSheetState,
-            onScreenEvent,
-            onWillFeedEvent,
-            hideBottomSheet,
-        )
-    }
+    WillFeedConfirmationDialog(
+        state.willFeedState is WillFeedState.Showing,
+        scope,
+        bottomSheetState,
+        onScreenEvent,
+        onWillFeedEvent,
+        hideBottomSheet,
+    )
 }
 
 @Composable
@@ -206,18 +205,23 @@ private fun OnState(
 
 @Composable
 private fun WillFeedConfirmationDialog(
+    showDialog: Boolean,
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
     onHideBottomSheet: () -> Unit
 ) {
-    FeedConfirmationDialog(onAgreeClick = {
-        onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
-        scope.launch { bottomSheetState.hide() }
-        onScreenEvent(FeedingEvent.Start)
-        onHideBottomSheet()
-    }, onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) })
+    FeedConfirmationDialog(
+        showDialog,
+        onAgreeClick = {
+            onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
+            scope.launch { bottomSheetState.hide() }
+            onScreenEvent(FeedingEvent.Start)
+            onHideBottomSheet()
+        },
+        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
+    )
 }
 
 @Composable
