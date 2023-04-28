@@ -12,6 +12,7 @@ import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.launchGpsSettings
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
@@ -22,6 +23,7 @@ import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
@@ -118,7 +120,7 @@ internal fun HomeScreenUI(
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
                     onTakePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera) },
-                    onDeletePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.DeletePhoto(it)) },
+                    onDeletePhotoClick = { onScreenEvent(FeedingGalleryEvent.DeletePhoto(it)) },
                     onShowOnMap = {}
                 )
             }
@@ -186,17 +188,31 @@ private fun OnState(
 ) {
     when {
         state.timerState is TimerState.Expired &&
-            state.cancellationRequestState == CancellationRequestState.Dismissed -> FeedingExpiredDialog(
-            onConfirm = {
-                onScreenEvent(TimerEvent.Disable)
+            state.cancellationRequestState == CancellationRequestState.Dismissed -> {
+            FeedingExpiredDialog(
+                onConfirm = {
+                    onScreenEvent(TimerEvent.Disable)
+                }
+            )
+            if (state.deletePhotoItem != null) {
+                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
             }
-        )
+        }
         state.cancellationRequestState is CancellationRequestState.Showing -> FeedingCancellationRequestDialog(
             onConfirm = {
                 onScreenEvent(TimerCancellationEvent.CancellationAccepted)
             },
             onDismiss = {
                 onScreenEvent(TimerCancellationEvent.CancellationDismissed)
+            }
+        )
+        state.deletePhotoItem != null -> DeletePhotoDialog(
+            state.deletePhotoItem,
+            onConfirm = {
+                onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
+            },
+            onDismiss = {
+                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
             }
         )
         else -> Unit

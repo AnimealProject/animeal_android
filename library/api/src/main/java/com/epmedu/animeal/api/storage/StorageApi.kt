@@ -8,4 +8,6 @@ interface StorageApi {
     suspend fun uploadFile(fileName: String, uri: Uri): ApiResult<Unit>
 
     suspend fun parseAmplifyUrl(imageId: String): String
+
+    suspend fun deleteFile(fileName: String): ApiResult<Unit>
 }

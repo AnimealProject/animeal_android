@@ -1,6 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
-import android.net.Uri
+import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
@@ -19,7 +19,7 @@ data class HomeState(
     val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
-    val feedingPhotos: List<Uri> = emptyList(),
+    val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val willFeedState: WillFeedState = WillFeedState.Dismissed,
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
@@ -37,6 +37,8 @@ data class HomeState(
     val isCameraPermissionAsked: Boolean = false,
 
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,
+
+    val deletePhotoItem: FeedingPhotoItem? = null,
 
     val cameraState: CameraState = CameraState.Disabled,
 
