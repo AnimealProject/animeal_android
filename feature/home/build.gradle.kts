@@ -20,7 +20,6 @@ dependencies {
     implementation(projects.library.resources)
     implementation(projects.shared.feature.camera)
     implementation(projects.shared.feature.feeding)
-    implementation(projects.shared.feature.feedconfirmation)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.timer)
 

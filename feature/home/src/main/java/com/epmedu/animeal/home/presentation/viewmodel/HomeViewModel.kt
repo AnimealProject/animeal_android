@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
@@ -7,12 +8,12 @@ import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
-import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
@@ -30,7 +31,6 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -44,7 +44,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.Location
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,7 +54,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
-    private val forcedArgumentsUseCase: ForcedArgumentsUseCase,
+    private val savedStateHandle: SavedStateHandle,
     private val homeProviders: HomeProviders,
     private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
     private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
@@ -91,6 +90,11 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch { fetchFeedingPoints() }
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
+        viewModelScope.registerWillFeedState {
+            updateState {
+                copy(willFeedState = it)
+            }
+        }
     }
 
     private suspend fun getTimerState() {
@@ -107,7 +111,6 @@ internal class HomeViewModel @Inject constructor(
             is FeedingPointEvent -> viewModelScope.handleFeedingPointEvent(event)
             is FeedingEvent -> viewModelScope.handleFeedingEvent(event)
             is RouteEvent -> handleRouteEvent(event = event)
-            is WillFeedEvent -> handleWillFeedEvent(event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
             GeolocationPermissionAsked -> markGeolocationPermissionAsAsked()
             is TimerEvent -> viewModelScope.handleTimerEvent(event)
@@ -191,11 +194,9 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleForcedFeedingPoint() {
         viewModelScope.launch {
-            val forcedFeedingPointId: String? = forcedArgumentsUseCase<String>(
-                FORCED_FEEDING_POINT_ID,
-                this@HomeViewModel.hashCode()
-            )
+            val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
             if (forcedFeedingPointId != null) {
+                savedStateHandle[FORCED_FEEDING_POINT_ID] = null
                 showFeedingPoint(forcedFeedingPointId)
                 state.currentFeedingPoint?.coordinates
                     ?.run { Location(latitude(), longitude()) }

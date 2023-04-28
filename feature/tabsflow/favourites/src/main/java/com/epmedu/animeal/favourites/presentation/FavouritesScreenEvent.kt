@@ -10,7 +10,4 @@ internal sealed interface FavouritesScreenEvent {
         val isFavourite: Boolean,
         val feedingPoint: FeedingPoint
     ) : FavouritesScreenEvent
-
-    object ShowWillFeedDialog : FavouritesScreenEvent
-    object DismissWillFeedDialog : FavouritesScreenEvent
 }

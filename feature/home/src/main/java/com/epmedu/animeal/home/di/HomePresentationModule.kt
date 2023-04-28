@@ -11,6 +11,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
@@ -42,8 +43,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTime
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.DefaultTimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
@@ -70,12 +69,6 @@ internal object HomePresentationModule {
         stateDelegate: StateDelegate<HomeState>,
         forcedFeedingPoint: ForcedArgumentsUseCase
     ): RouteHandler = DefaultRouteHandler(stateDelegate, forcedFeedingPoint)
-
-    @ViewModelScoped
-    @Provides
-    fun providesWillFeedHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): WillFeedHandler = DefaultWillFeedHandler(stateDelegate)
 
     @ViewModelScoped
     @Provides

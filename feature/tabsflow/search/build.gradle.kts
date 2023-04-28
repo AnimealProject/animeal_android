@@ -20,7 +20,6 @@ dependencies {
     implementation(projects.library.extensions)
 
     implementation(projects.shared.feature.feeding)
-    implementation(projects.shared.feature.feedconfirmation)
 
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)

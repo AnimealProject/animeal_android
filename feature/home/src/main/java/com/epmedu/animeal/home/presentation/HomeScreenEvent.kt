@@ -28,11 +28,6 @@ sealed interface HomeScreenEvent {
         data class FeedingTimerUpdateRequest(val timeLeft: Long) : RouteEvent
     }
 
-    sealed interface WillFeedEvent : HomeScreenEvent {
-        object ShowWillFeedDialog : WillFeedEvent
-        object DismissWillFeedDialog : WillFeedEvent
-    }
-
     sealed interface TimerEvent : HomeScreenEvent {
         object Disable : TimerEvent
     }

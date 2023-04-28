@@ -44,7 +44,8 @@ fun HomeScreen() {
         HomeScreenUI(
             state = state,
             bottomSheetState = bottomSheetState,
-            onScreenEvent = viewModel::handleEvents
+            onScreenEvent = viewModel::handleEvents,
+            onWillFeedEvent = viewModel::handleWillFeedEvent
         )
     }
 
