@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feeding.presentation.ui
+package com.epmedu.animeal.feeding.presentation.model
 
 import android.net.Uri
 import androidx.core.net.toUri

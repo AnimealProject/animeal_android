@@ -4,7 +4,7 @@ import android.net.Uri
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.presentation.ui.FeedingPhotoItem
+import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState

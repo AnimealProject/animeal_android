@@ -1,8 +1,8 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
+import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.ui.FeedingPhotoItem
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
