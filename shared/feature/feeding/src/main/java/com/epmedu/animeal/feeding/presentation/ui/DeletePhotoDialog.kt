@@ -30,7 +30,7 @@ fun DeletePhotoDialog(
         dismissText = stringResource(id = R.string.no),
         acceptText = stringResource(id = R.string.yes),
         onDismiss = onDismiss,
-        onConfirm = { onConfirm() },
+        onConfirm = onConfirm,
         content = {
             Box(
                 modifier = Modifier.fillMaxWidth(),
