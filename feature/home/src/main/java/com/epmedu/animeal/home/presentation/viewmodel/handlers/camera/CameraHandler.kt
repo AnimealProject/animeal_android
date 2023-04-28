@@ -8,6 +8,4 @@ internal interface CameraHandler {
     fun CoroutineScope.handleCameraEvent(event: HomeScreenEvent.CameraEvent)
 
     suspend fun uploadFeedingPhoto(uri: Uri)
-
-    fun deleteFeedingPhoto(uri: Uri)
 }

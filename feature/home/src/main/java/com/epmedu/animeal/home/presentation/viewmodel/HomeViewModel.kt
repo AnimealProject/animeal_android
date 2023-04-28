@@ -38,6 +38,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHand
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
@@ -64,7 +65,8 @@ internal class HomeViewModel @Inject constructor(
     private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
-    defaultHomeHandler: DefaultHomeHandler
+    defaultHomeHandler: DefaultHomeHandler,
+    photoGalleryHandler: FeedingPhotoGalleryHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<HomeState> by stateDelegate,
@@ -81,7 +83,8 @@ internal class HomeViewModel @Inject constructor(
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
-    BuildConfigProvider by homeProviders {
+    BuildConfigProvider by homeProviders,
+    FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
         initialize()
@@ -116,6 +119,7 @@ internal class HomeViewModel @Inject constructor(
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapEvents()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
+            is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
         }
     }
 

@@ -3,6 +3,7 @@ package com.epmedu.animeal.camera.di
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.camera.data.repository.CameraRepositoryImpl
 import com.epmedu.animeal.camera.domain.repository.CameraRepository
+import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,8 @@ object CameraModule {
     @ViewModelScoped
     @Provides
     fun provideUploadPhotoUseCase(repository: CameraRepository): UploadPhotoUseCase = UploadPhotoUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideDeletePhotoUseCase(repository: CameraRepository) = DeletePhotoUseCase(repository)
 }

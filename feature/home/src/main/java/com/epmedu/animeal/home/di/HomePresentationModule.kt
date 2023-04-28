@@ -2,6 +2,7 @@
 
 package com.epmedu.animeal.home.di
 
+import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
@@ -29,6 +30,8 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFe
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.DefaultFeedingPhotoGalleryHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
@@ -211,4 +214,17 @@ internal object HomePresentationModule {
         gpsHandler,
         errorHandler
     )
+
+    @ViewModelScoped
+    @Provides
+    fun providePhotoGalleryHandler(
+        deletePhotoUseCase: DeletePhotoUseCase,
+        stateDelegate: StateDelegate<HomeState>,
+        actionDelegate: ActionDelegate
+    ): FeedingPhotoGalleryHandler =
+        DefaultFeedingPhotoGalleryHandler(
+            deletePhotoUseCase,
+            stateDelegate,
+            actionDelegate
+        )
 }
