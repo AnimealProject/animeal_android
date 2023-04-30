@@ -9,8 +9,10 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
@@ -43,6 +45,7 @@ fun AnimealSecondaryButtonOutlined(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         color = MaterialTheme.colors.primary,
+        style = TextStyle(letterSpacing = 1.sp)
     )
 }
 
