@@ -60,10 +60,10 @@ internal fun HomeScreenUI(
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
 
-    if (state.isError) {
+    if (state.errorMessage != null) {
         Toast.makeText(
             context,
-            context.getString(R.string.something_went_wrong),
+            state.errorMessage.ifEmpty { context.getString(R.string.something_went_wrong) },
             Toast.LENGTH_SHORT
         ).show()
         onScreenEvent(ErrorShowed)

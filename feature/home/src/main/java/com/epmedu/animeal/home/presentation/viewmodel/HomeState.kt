@@ -44,7 +44,7 @@ data class HomeState(
 
     val timerState: TimerState? = null,
 
-    val isError: Boolean = false
+    val errorMessage: String? = null
 )
 
 sealed interface LocationState {
