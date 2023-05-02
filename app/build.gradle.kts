@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.aws.auth.cognito)
     implementation(libs.amplify.core)
+    implementation(libs.amplify.storage)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

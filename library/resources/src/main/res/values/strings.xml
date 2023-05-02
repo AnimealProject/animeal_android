@@ -88,7 +88,11 @@
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
     <string name="feeding_point_expired_accept">Choose another location</string>
     <string name="feeding_point_expired_description">Sorry, another volunteer has booked this location for feeding</string>
+
+    <string name="are_you_sure_you_want_delete_photo">Are you sure you want to delete this photo?</string>
+
     <string name="feeding_take_pictures">Please take pictures where pet and food is detected</string>
+    <string name="feeding_sheet_mock_text"><![CDATA[Ordered list : <ol> <li>first item</li> <li>second item</li> <li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3> <h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph </p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and <a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined text </u> unordered list: <ul> <li>first item</li> <li>second item</li> <li>third item</li> </ul> Text outside markup tags]]> </string>
 
     <string name="done">Done</string>
     <string name="ok">OK</string>

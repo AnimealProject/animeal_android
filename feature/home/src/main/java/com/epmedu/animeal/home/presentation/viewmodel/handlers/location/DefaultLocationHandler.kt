@@ -14,9 +14,13 @@ class DefaultLocationHandler(
         val mapLocation = MapLocation(currentLocation)
 
         val locationState = when (state.locationState) {
-            is LocationState.UndefinedLocation -> LocationState.InitialLocation(mapLocation)
-            else -> LocationState.ExactLocation(mapLocation)
+            is LocationState.ExactLocation -> LocationState.ExactLocation(mapLocation)
+            else -> LocationState.InitialLocation(mapLocation)
         }
         updateState { copy(locationState = locationState) }
+    }
+
+    override fun confirmInitialLocationWasDisplayed() {
+        updateState { copy(locationState = LocationState.ExactLocation(state.locationState.location)) }
     }
 }

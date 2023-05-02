@@ -60,6 +60,12 @@ internal class DefaultFeedingPointHandler(
         }
     }
 
+    override suspend fun showFeedingPoint(feedingPointId: String) {
+        val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
+            ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
+        selectFeedingPoint(Select(forcedPoint))
+    }
+
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
         val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
         updateState {
@@ -73,9 +79,14 @@ internal class DefaultFeedingPointHandler(
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {
         when (event) {
             is Select -> launch { selectFeedingPoint(event) }
+            FeedingPointEvent.Deselect -> launch { deselectFeedingPoint() }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
             is FeedingPointEvent.AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
         }
+    }
+
+    override fun deselectFeedingPoint() {
+        if (state.currentFeedingPoint != null) updateState { copy(currentFeedingPoint = null) }
     }
 
     private suspend fun selectFeedingPoint(event: Select) {

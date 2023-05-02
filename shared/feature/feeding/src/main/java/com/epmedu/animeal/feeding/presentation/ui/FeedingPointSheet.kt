@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
@@ -24,6 +26,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +36,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
@@ -55,7 +61,8 @@ fun FeedingPointSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier,
     isShowOnMapVisible: Boolean = false,
-    onFavouriteChange: (Boolean) -> Unit
+    onFavouriteChange: (Boolean) -> Unit,
+    onShowOnMap: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -80,6 +87,7 @@ fun FeedingPointSheetContent(
             title = feedingPoint.title,
             status = feedingPoint.feedStatus,
             isFavourite = feedingPoint.isFavourite,
+            imageUrl = feedingPoint.image,
             onFavouriteChange = onFavouriteChange
         )
         FeedingPointDetails(
@@ -89,7 +97,7 @@ fun FeedingPointSheetContent(
             scrimAlpha = contentAlpha
         )
         if (isShowOnMapVisible) {
-            ShowOnMapLink()
+            ShowOnMapLink(onClick = onShowOnMap)
         }
     }
 }
@@ -99,6 +107,7 @@ internal fun FeedingPointHeader(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
+    imageUrl: String,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -108,12 +117,21 @@ internal fun FeedingPointHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
+        Card(
             modifier = Modifier
                 .size(80.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colors.secondaryVariant)
-        )
+                .clip(RoundedCornerShape(16.dp)),
+            elevation = 8.dp
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentScale = ContentScale.Crop,
+                contentDescription = title,
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -227,8 +245,9 @@ internal fun FeedingPointLastFeeder(
 }
 
 @Composable
-private fun ShowOnMapLink() {
+private fun ShowOnMapLink(onClick: () -> Unit) {
     Text(
+        modifier = Modifier.clickable { onClick() },
         text = stringResource(id = R.string.show_on_map),
         style = MaterialTheme.typography.subtitle1.copy(
             color = CustomColor.SeaSerpent,
@@ -247,14 +266,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 id = "",
                 title = text.take(30),
                 feedStatus = FeedStatus.RED,
-                description = "Ordered list : <ol> <li>first item</li> <li>second item</li> " +
-                    "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +
-                    "<h4> Header4 </h4> <h5> Header5 </h5> <h6> Header6 </h6> Text <br> separated by" +
-                    " <br> breaklines. <b> Bold text </b> <i> Italic text </i> <p> Text in paragraph " +
-                    "</p> <s> Strikethrough text </s> <mark> Highlighted text </mark> and " +
-                    "<a href=\"https://www.google.com/\"> text with link </a> and just <u> Underlined" +
-                    " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
-                    " <li>third item</li> </ul> Text outside markup tags",
+                description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
                 lastFeeder = Feeder(
@@ -269,7 +281,8 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
             contentAlpha = 1f,
             modifier = Modifier.fillMaxHeight(),
             isShowOnMapVisible = true,
-            onFavouriteChange = {}
+            onFavouriteChange = {},
+            onShowOnMap = {}
         )
     }
 }

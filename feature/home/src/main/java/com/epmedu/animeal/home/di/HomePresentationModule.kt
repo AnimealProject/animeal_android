@@ -2,6 +2,8 @@
 
 package com.epmedu.animeal.home.di
 
+import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase
+import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
@@ -9,9 +11,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
@@ -19,12 +23,16 @@ import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.DefaultCameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.DefaultErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.DefaultFeedingPhotoGalleryHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
@@ -35,8 +43,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTime
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.DefaultTimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.DefaultWillFeedHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
@@ -60,14 +66,9 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesRouteHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): RouteHandler = DefaultRouteHandler(stateDelegate)
-
-    @ViewModelScoped
-    @Provides
-    fun providesWillFeedHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): WillFeedHandler = DefaultWillFeedHandler(stateDelegate)
+        stateDelegate: StateDelegate<HomeState>,
+        forcedFeedingPoint: ForcedArgumentsUseCase
+    ): RouteHandler = DefaultRouteHandler(stateDelegate, forcedFeedingPoint)
 
     @ViewModelScoped
     @Provides
@@ -83,6 +84,18 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
+    fun providesCameraHandler(
+        stateDelegate: StateDelegate<HomeState>,
+        actionDelegate: ActionDelegate,
+        uploadPhotoUseCase: UploadPhotoUseCase
+    ): CameraHandler = DefaultCameraHandler(
+        stateDelegate,
+        actionDelegate,
+        uploadPhotoUseCase
+    )
+
+    @ViewModelScoped
+    @Provides
     fun providesFeedingHandler(
         stateDelegate: StateDelegate<HomeState>,
         actionDelegate: ActionDelegate,
@@ -95,6 +108,7 @@ internal object HomePresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
+        forcedArgumentsUseCase: ForcedArgumentsUseCase
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -106,7 +120,8 @@ internal object HomePresentationModule {
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,
-        finishFeedingUseCase
+        finishFeedingUseCase,
+        forcedArgumentsUseCase
     )
 
     @ViewModelScoped
@@ -170,6 +185,7 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesHomeHandler(
+        cameraHandler: DefaultCameraHandler,
         feedingPointHandler: FeedingPointHandler,
         routeHandler: RouteHandler,
         willFeedHandler: WillFeedHandler,
@@ -180,6 +196,7 @@ internal object HomePresentationModule {
         gpsHandler: GpsHandler,
         errorHandler: ErrorHandler
     ) = DefaultHomeHandler(
+        cameraHandler,
         feedingPointHandler,
         routeHandler,
         willFeedHandler,
@@ -190,4 +207,17 @@ internal object HomePresentationModule {
         gpsHandler,
         errorHandler
     )
+
+    @ViewModelScoped
+    @Provides
+    fun providePhotoGalleryHandler(
+        deletePhotoUseCase: DeletePhotoUseCase,
+        stateDelegate: StateDelegate<HomeState>,
+        actionDelegate: ActionDelegate
+    ): FeedingPhotoGalleryHandler =
+        DefaultFeedingPhotoGalleryHandler(
+            deletePhotoUseCase,
+            stateDelegate,
+            actionDelegate
+        )
 }

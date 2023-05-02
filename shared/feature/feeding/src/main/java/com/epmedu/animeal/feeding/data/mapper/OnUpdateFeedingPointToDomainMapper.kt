@@ -23,5 +23,6 @@ internal fun OnUpdateFeedingPoint.toDomainFeedingPoint() =
         location = MapLocation(
             latitude = location().lat(),
             longitude = location().lon()
-        )
+        ),
+        images = images()?.toList() ?: emptyList()
     )

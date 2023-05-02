@@ -12,12 +12,16 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(projects.library.api)
+    implementation(projects.library.codegen)
+    implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
-    implementation(projects.library.common)
 
+    implementation(libs.amplify.core)
+    implementation(libs.coil)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(libs.compose.material)

@@ -1,13 +1,15 @@
 package com.epmedu.animeal.home.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
+import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
 import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
+import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.home.domain.usecases.GetAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
@@ -104,6 +106,13 @@ object HomeDomainModule {
     @ViewModelScoped
     @Provides
     fun providesGetAnimalTypeSettingsUseCase(
-        repository: ApplicationSettingsRepository
-    ): GetAnimalTypeSettingsUseCase = GetAnimalTypeSettingsUseCase(repository)
+        repository: ApplicationSettingsRepository,
+        forcedFeedingPoint: ForcedArgumentsUseCase
+    ): AnimalTypeUseCase = AnimalTypeUseCase(repository, forcedFeedingPoint)
+
+    @ViewModelScoped
+    @Provides
+    fun provideForcedFeedingPoint(
+        savedStateHandle: SavedStateHandle
+    ): ForcedArgumentsUseCase = ForcedArgumentsUseCase(savedStateHandle)
 }
