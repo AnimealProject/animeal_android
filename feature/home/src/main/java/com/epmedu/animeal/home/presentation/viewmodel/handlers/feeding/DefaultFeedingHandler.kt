@@ -62,6 +62,7 @@ internal class DefaultFeedingHandler(
             Cancel -> launch { cancelFeeding() }
             Expired -> launch { expireFeeding() }
             Finish -> launch { finishFeeding() }
+            FeedingEvent.StartWithoutRouting -> showError("Feeding without Location Permission Not implemented yet")
         }
     }
 
