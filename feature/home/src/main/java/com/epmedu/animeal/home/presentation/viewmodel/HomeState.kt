@@ -8,6 +8,7 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
+import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.timer.data.model.TimerState
@@ -21,6 +22,7 @@ data class HomeState(
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val willFeedState: WillFeedState = WillFeedState.Dismissed,
+    val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
     val defaultAnimalType: AnimalType = AnimalType.Dogs,
