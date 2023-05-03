@@ -186,7 +186,6 @@ internal fun HomeScreenUI(
         bottomSheetState,
         onScreenEvent,
         onWillFeedEvent,
-        hideBottomSheet,
     )
     ThankYouConfirmationDialog(state, onScreenEvent)
 }
@@ -236,7 +235,6 @@ private fun WillFeedConfirmationDialog(
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
-    onHideBottomSheet: () -> Unit
 ) {
     FeedConfirmationDialog(
         willFeedState,
