@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.viewmodel.handlers
 
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
@@ -9,7 +10,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.Location
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.willfeed.WillFeedHandler
 import javax.inject.Inject
 
 @Suppress("LongParameterList")

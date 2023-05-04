@@ -99,7 +99,6 @@ include(":library:resources")
 
 include(":shared:feature:camera")
 include(":shared:feature:debugmenu")
-include(":shared:feature:feedconfirmation")
 include(":shared:feature:feeding")
 include(":shared:feature:networkuser")
 include(":shared:feature:profile")
