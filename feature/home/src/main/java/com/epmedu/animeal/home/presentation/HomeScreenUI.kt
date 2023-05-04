@@ -29,7 +29,6 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.Fa
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.MotivateUseGpsEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
@@ -175,7 +174,7 @@ internal fun HomeScreenUI(
     }
 
     WillFeedConfirmationDialog(
-        state.willFeedState,
+        state,
         scope,
         bottomSheetState,
         onScreenEvent,
@@ -231,7 +230,7 @@ private fun OnState(
 
 @Composable
 private fun WillFeedConfirmationDialog(
-    willFeedState: WillFeedState,
+    state: HomeState,
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
@@ -239,7 +238,7 @@ private fun WillFeedConfirmationDialog(
     onHideBottomSheet: () -> Unit
 ) {
     FeedConfirmationDialog(
-        willFeedState,
+        state.willFeedState,
         onAgreeClick = {
             onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
