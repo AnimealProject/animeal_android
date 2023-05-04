@@ -40,6 +40,8 @@ data class HomeState(
 
     val deletePhotoItem: FeedingPhotoItem? = null,
 
+    val showMotivateUseGpsDialog: Boolean = false,
+
     val cameraState: CameraState = CameraState.Disabled,
 
     val timerState: TimerState? = null,

@@ -61,6 +61,13 @@ sealed interface HomeScreenEvent {
         object CloseDeletePhotoDialog : FeedingGalleryEvent
     }
 
+    sealed interface MotivateUseGpsEvent : HomeScreenEvent {
+        object AskUseGps : MotivateUseGpsEvent
+        object ShowMotivateDialog : MotivateUseGpsEvent
+        object DeclineUseGps : MotivateUseGpsEvent
+        object PermissionsSuccessfullyGets : MotivateUseGpsEvent
+    }
+
     object ErrorShowed : HomeScreenEvent
     object ScreenDisplayed : HomeScreenEvent
     object MapInteracted : HomeScreenEvent

@@ -36,6 +36,8 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHan
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.motivate.DefaultMotivateUseGpsHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.motivate.MotivateUseGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTimerHandler
@@ -227,4 +229,10 @@ internal object HomePresentationModule {
             stateDelegate,
             actionDelegate
         )
+
+    @ViewModelScoped
+    @Provides
+    fun provideLocationPermissionHandler(
+        stateDelegate: StateDelegate<HomeState>
+    ): MotivateUseGpsHandler = DefaultMotivateUseGpsHandler(stateDelegate)
 }

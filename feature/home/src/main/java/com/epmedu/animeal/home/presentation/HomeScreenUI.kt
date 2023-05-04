@@ -28,6 +28,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.MotivateUseGpsEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
@@ -38,6 +39,7 @@ import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.HomePermissions
+import com.epmedu.animeal.home.presentation.ui.MotivateUseGpsDialog
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
@@ -99,7 +101,11 @@ internal fun HomeScreenUI(
     }
 
     LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
-        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
+        if (
+            bottomSheetState.isHidden
+            && state.feedingRouteState is FeedingRouteState.Disabled
+            && !state.showMotivateUseGpsDialog
+        ) {
             onScreenEvent(FeedingPointEvent.Deselect)
         }
     }
@@ -213,6 +219,13 @@ private fun OnState(
                 onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
             }
         )
+        state.showMotivateUseGpsDialog -> MotivateUseGpsDialog(
+            onConfirm = { onScreenEvent(MotivateUseGpsEvent.AskUseGps) },
+            onDismiss = {
+                onScreenEvent(MotivateUseGpsEvent.DeclineUseGps)
+                onScreenEvent(FeedingEvent.StartWithoutRouting)
+            }
+        )
         else -> Unit
     }
 }
@@ -229,7 +242,11 @@ private fun WillFeedConfirmationDialog(
         FeedConfirmationDialog(onAgreeClick = {
             onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
-            onScreenEvent(FeedingEvent.Start)
+            when (state.geolocationPermissionStatus) {
+                PermissionStatus.Granted -> onScreenEvent(FeedingEvent.Start)
+                PermissionStatus.Denied -> onScreenEvent(FeedingEvent.StartWithoutRouting)
+                PermissionStatus.Restricted -> onScreenEvent(MotivateUseGpsEvent.ShowMotivateDialog)
+            }
             onHideBottomSheet()
         }, onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) })
     }

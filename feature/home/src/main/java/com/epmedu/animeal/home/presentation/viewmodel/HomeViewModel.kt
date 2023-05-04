@@ -41,6 +41,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.Feed
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.motivate.MotivateUseGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
@@ -66,7 +67,8 @@ internal class HomeViewModel @Inject constructor(
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler,
-    photoGalleryHandler: FeedingPhotoGalleryHandler
+    photoGalleryHandler: FeedingPhotoGalleryHandler,
+    useGpsMotivationHandler: MotivateUseGpsHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<HomeState> by stateDelegate,
@@ -84,7 +86,8 @@ internal class HomeViewModel @Inject constructor(
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
     BuildConfigProvider by homeProviders,
-    FeedingPhotoGalleryHandler by photoGalleryHandler {
+    FeedingPhotoGalleryHandler by photoGalleryHandler,
+    MotivateUseGpsHandler by useGpsMotivationHandler {
 
     init {
         initialize()
@@ -120,6 +123,7 @@ internal class HomeViewModel @Inject constructor(
             HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
+            is HomeScreenEvent.MotivateUseGpsEvent -> handleMotivationEvents(event)
         }
     }
 
@@ -209,6 +213,10 @@ internal class HomeViewModel @Inject constructor(
             if (state.feedingRouteState is FeedingRouteState.Disabled) {
                 sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
+        }
+        if (motivateUseGps) {
+            handleMotivationEvents(HomeScreenEvent.MotivateUseGpsEvent.PermissionsSuccessfullyGets)
+            handleEvents(FeedingEvent.Start)
         }
     }
 }
