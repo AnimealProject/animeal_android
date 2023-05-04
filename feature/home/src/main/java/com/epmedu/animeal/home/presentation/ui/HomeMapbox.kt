@@ -61,7 +61,7 @@ internal fun HomeMapbox(
         val mapboxMapView = rememberMapboxMapView(homeState = state)
 
         /** Show user location after successful feeding operation */
-        if (state.feedingConfirmationState is FeedingConfirmationState.Showing) {
+        if (state.feedingConfirmationState == FeedingConfirmationState.Showing) {
             showUserCurrentLocation(state, mapboxMapView)
         }
 
