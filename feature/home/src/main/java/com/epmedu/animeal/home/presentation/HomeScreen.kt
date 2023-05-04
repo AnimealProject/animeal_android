@@ -12,7 +12,7 @@ import com.epmedu.animeal.camera.presentation.CameraView
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 import com.epmedu.animeal.home.presentation.model.CameraState
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
@@ -55,7 +55,7 @@ fun HomeScreen() {
                 is ShowCurrentFeedingPoint -> {
                     launch {
                         if (bottomSheetState.isHidden) {
-                            if (state.feedingRouteState is FeedingRouteState.Active) {
+                            if (state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Active) {
                                 bottomSheetState.expand()
                             } else {
                                 bottomSheetState.show()

@@ -3,8 +3,8 @@ package com.epmedu.animeal.feeding.di
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.DefaultWillFeedHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.DefaultWillFeedHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

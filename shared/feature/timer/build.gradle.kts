@@ -18,8 +18,10 @@ dependencies {
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
-    debugImplementation(libs.compose.ui.tooling)
+    implementation(projects.shared.feature.router)
+    //implementation(projects.shared.feature.feeding)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    debugImplementation(libs.compose.ui.tooling)
 }

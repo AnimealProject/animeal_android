@@ -8,12 +8,12 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
 import com.epmedu.animeal.home.presentation.model.CameraState
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 
 @Suppress("LongParameterList")
 @Composable
 fun FeedingSheet(
-    feedingState: FeedingRouteState,
+    feedingState: com.epmedu.animeal.router.presentation.FeedingRouteState,
     feedingPoint: FeedingPointModel,
     feedingPhotos: List<FeedingPhotoItem>,
     cameraState: CameraState,
@@ -24,7 +24,7 @@ fun FeedingSheet(
     onShowOnMap: () -> Unit
 ) {
     when (feedingState) {
-        is FeedingRouteState.Active -> {
+        is com.epmedu.animeal.router.presentation.FeedingRouteState.Active -> {
             MarkFeedingDoneSheet(
                 modifier = Modifier.wrapContentHeight(),
                 photos = feedingPhotos,

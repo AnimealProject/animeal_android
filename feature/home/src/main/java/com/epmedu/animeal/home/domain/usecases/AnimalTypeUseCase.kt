@@ -1,8 +1,9 @@
 package com.epmedu.animeal.home.domain.usecases
 
 import com.epmedu.animeal.common.constants.Arguments.ANIMAL_TYPE
+import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
+import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
 import kotlinx.coroutines.flow.first
 
 class AnimalTypeUseCase(

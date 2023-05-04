@@ -4,9 +4,9 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import com.epmedu.animeal.timer.data.model.TimerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

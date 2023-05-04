@@ -11,38 +11,41 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
-import com.epmedu.animeal.home.domain.usecases.CancelFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.FetchCurrentFeedingPointUseCase
-import com.epmedu.animeal.home.domain.usecases.FinishFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.ForcedArgumentsUseCase
-import com.epmedu.animeal.home.domain.usecases.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.home.domain.usecases.RejectFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.StartFeedingUseCase
-import com.epmedu.animeal.home.domain.usecases.UpdateAnimalTypeSettingsUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
+import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
+import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
+import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.DefaultCameraHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.DefaultErrorHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.DefaultFeedingHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.DefaultFeedingPointHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultErrorHandler
+import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.DefaultFeedingHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.DefaultFeedingPointHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.DefaultFeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.DefaultRouteHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.DefaultTimerHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
+import com.epmedu.animeal.router.presentation.DefaultRouteHandler
+import com.epmedu.animeal.router.presentation.RouteHandler
+import com.epmedu.animeal.timer.presentation.handler.DefaultTimerHandler
+import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.DefaultTimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.domain.usecase.DisableTimerUseCase
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
@@ -66,9 +69,12 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesRouteHandler(
-        stateDelegate: StateDelegate<HomeState>,
+        stateDelegate: StateDelegate<FeedingRouteState>,
         forcedFeedingPoint: ForcedArgumentsUseCase
-    ): RouteHandler = DefaultRouteHandler(stateDelegate, forcedFeedingPoint)
+    ): RouteHandler = DefaultRouteHandler(
+            stateDelegate,
+            forcedFeedingPoint
+        )
 
     @ViewModelScoped
     @Provides
@@ -97,7 +103,7 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesFeedingHandler(
-        stateDelegate: StateDelegate<HomeState>,
+        stateDelegate: StateDelegate<FeedState>,
         actionDelegate: ActionDelegate,
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
@@ -127,8 +133,8 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesFeedingPointHandler(
-        stateDelegate: StateDelegate<HomeState>,
-        eventDelegate: EventDelegate<HomeViewModelEvent>,
+        stateDelegate: StateDelegate<FeedingPointState>,
+        //eventDelegate: EventDelegate<HomeViewModelEvent>,
         actionDelegate: ActionDelegate,
         errorHandler: ErrorHandler,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
@@ -137,7 +143,7 @@ internal object HomePresentationModule {
         updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
     ): FeedingPointHandler = DefaultFeedingPointHandler(
         stateDelegate,
-        eventDelegate,
+        //eventDelegate,
         actionDelegate,
         errorHandler,
         getAllFeedingPointsUseCase,
@@ -149,15 +155,15 @@ internal object HomePresentationModule {
     @ViewModelScoped
     @Provides
     fun providesTimerHandler(
-        stateDelegate: StateDelegate<HomeState>,
+        //stateDelegate: StateDelegate<HomeState>,
         routeHandler: RouteHandler,
         feedingPointHandler: FeedingPointHandler,
         startTimerUseCase: StartTimerUseCase,
         disableTimerUseCase: DisableTimerUseCase
     ): TimerHandler = DefaultTimerHandler(
-        stateDelegate,
+        //stateDelegate,
         routeHandler,
-        feedingPointHandler,
+        //feedingPointHandler,
         startTimerUseCase,
         disableTimerUseCase
     )

@@ -8,7 +8,7 @@ import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
@@ -23,29 +23,28 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionAsked
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feeding.FeedingHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.route.RouteHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.timer.TimerHandler
+import com.epmedu.animeal.router.presentation.RouteHandler
+import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
+import com.epmedu.animeal.router.presentation.RouteEvent
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
+import com.epmedu.animeal.timer.presentation.handler.TimerEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -207,7 +206,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleMapEvents() {
         viewModelScope.launch {
-            if (state.feedingRouteState is FeedingRouteState.Disabled) {
+            if (state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled) {
                 sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
         }

@@ -5,10 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
-import com.epmedu.animeal.home.presentation.model.RouteResult
+import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
@@ -21,7 +21,7 @@ import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 internal fun RouteView(
     mapView: MapView,
     state: HomeState,
-    onRouteResult: (result: RouteResult) -> Unit
+    onRouteResult: (result: com.epmedu.animeal.router.model.RouteResult) -> Unit
 ) {
     val mapBoxRouteInitOptions = rememberMapRouteInitOptions(
         mapView = mapView,
@@ -45,10 +45,10 @@ internal fun RouteView(
                     state.currentFeedingPoint,
                 )
             }
-            state.feedingRouteState is FeedingRouteState.Disabled -> {
+            state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled -> {
                 mapView.removeRoute(mapBoxRouteInitOptions)
             }
-            state.feedingRouteState is FeedingRouteState.Active &&
+            state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Active &&
                 state.timerState is TimerState.Active -> {
                 if (state.feedingRouteState.routeData != null) {
                     drawRoute(
@@ -102,7 +102,7 @@ private fun fetchRoute(
     mapView: MapView,
     mapBoxRouteInitOptions: MapBoxRouteInitOptions,
     mapboxNavigation: MapboxNavigation,
-    onRouteResult: (result: RouteResult) -> Unit
+    onRouteResult: (result: com.epmedu.animeal.router.model.RouteResult) -> Unit
 ) {
     state.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
         mapView.fetchRoute(
