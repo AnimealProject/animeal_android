@@ -7,8 +7,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 internal class DefaultMotivateUseGpsHandler(
     stateDelegate: StateDelegate<HomeState>
 ) : MotivateUseGpsHandler,
-    StateDelegate<HomeState> by stateDelegate
-{
+    StateDelegate<HomeState> by stateDelegate {
 
     private var _motivateUseGps = false
 
