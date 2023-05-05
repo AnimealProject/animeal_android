@@ -16,6 +16,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Cancel
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Expired
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Finish
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent.Start
+import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.feedingpoint.FeedingPointHandler
@@ -103,21 +104,30 @@ internal class DefaultFeedingHandler(
     }
 
     private suspend fun finishFeeding() {
+        updateState { copy(feedingConfirmationState = FeedingConfirmationState.Loading) }
         performFeedingAction(
             action = { feedingPointId ->
-                finishFeedingUseCase(feedingPointId, listOf(""))
+                finishFeedingUseCase(feedingPointId, state.feedingPhotos.map { it.name })
             },
             onSuccess = {
-                deselectFeedingPoint()
+                displayThankYouDialog()
                 stopRoute()
                 fetchFeedingPoints()
+            },
+            onError = {
+                updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
             }
         )
     }
 
+    private fun displayThankYouDialog() {
+        updateState { copy(feedingConfirmationState = FeedingConfirmationState.Showing) }
+    }
+
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult,
-        onSuccess: suspend (FeedingPointModel) -> Unit
+        onSuccess: suspend (FeedingPointModel) -> Unit,
+        onError: () -> Unit = {}
     ) {
         state.currentFeedingPoint?.let { currentFeedingPoint ->
             performAction(
@@ -125,7 +135,10 @@ internal class DefaultFeedingHandler(
                 onSuccess = { onSuccess(currentFeedingPoint) },
                 onError = ::showError
             )
-        } ?: showError()
+        } ?: run {
+            onError()
+            showError()
+        }
     }
 
     companion object {
