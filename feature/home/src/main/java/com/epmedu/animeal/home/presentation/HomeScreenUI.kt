@@ -174,7 +174,8 @@ internal fun HomeScreenUI(
     }
 
     WillFeedConfirmationDialog(
-        state,
+        state.willFeedState,
+        state.geolocationPermissionStatus,
         scope,
         bottomSheetState,
         onScreenEvent,
@@ -230,7 +231,8 @@ private fun OnState(
 
 @Composable
 private fun WillFeedConfirmationDialog(
-    state: HomeState,
+    willFeedState: WillFeedState,
+    geolocationPermissionStatus: PermissionStatus,
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
@@ -238,11 +240,11 @@ private fun WillFeedConfirmationDialog(
     onHideBottomSheet: () -> Unit
 ) {
     FeedConfirmationDialog(
-        state.willFeedState,
+        willFeedState,
         onAgreeClick = {
             onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
-            when (state.geolocationPermissionStatus) {
+            when (geolocationPermissionStatus) {
                 PermissionStatus.Granted -> onScreenEvent(FeedingEvent.Start)
                 PermissionStatus.Denied -> onScreenEvent(FeedingEvent.StartWithoutRouting)
                 PermissionStatus.Restricted -> onScreenEvent(MotivateUseGpsEvent.ShowMotivateDialog)
