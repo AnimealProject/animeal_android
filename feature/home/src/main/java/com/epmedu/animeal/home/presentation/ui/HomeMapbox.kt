@@ -20,8 +20,6 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.router.presentation.FeedingRouteState
-import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
@@ -35,6 +33,8 @@ import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.map.setLocationOnRoute
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.router.model.RouteResult
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -66,7 +66,7 @@ internal fun HomeMapbox(
             onMapInteraction = onMapInteraction,
         )
 
-        when (state.feedingRouteState) {
+        when (state.feedingPointState.feedingRouteState) {
             is FeedingRouteState.Disabled -> {
                 AnimealSwitch(
                     modifier = Modifier
@@ -74,7 +74,7 @@ internal fun HomeMapbox(
                         .align(alignment = Alignment.TopCenter)
                         .padding(top = 24.dp),
                     onSelectTab = onSelectTab,
-                    defaultAnimalType = state.defaultAnimalType
+                    defaultAnimalType = state.feedingPointState.defaultAnimalType
                 )
             }
             is FeedingRouteState.Active -> {
@@ -83,9 +83,11 @@ internal fun HomeMapbox(
                         .statusBarsPadding()
                         .padding(top = 16.dp)
                         .padding(horizontal = 20.dp),
-                    timeLeft = context.formatNumberToHourMin(state.feedingRouteState.timeLeft)
+                    timeLeft = context.formatNumberToHourMin(
+                        (state.feedingPointState.feedingRouteState as FeedingRouteState.Active).timeLeft
+                    )
                         ?: stringResource(R.string.calculating_route),
-                    distanceLeft = state.feedingRouteState.distanceLeft?.run {
+                    distanceLeft = (state.feedingPointState.feedingRouteState as FeedingRouteState.Active).distanceLeft?.run {
                         " • ${context.formatMetersToKilometers(this)}"
                     } ?: "",
                     onCancelClick = onCancelRouteClick
@@ -112,7 +114,7 @@ private fun MapboxMap(
     state: HomeState,
     onFeedingPointClick: (point: FeedingPointModel) -> Unit,
     onInitialLocationDisplay: () -> Unit,
-    onRouteResult: (result: com.epmedu.animeal.router.model.RouteResult) -> Unit,
+    onRouteResult: (result: RouteResult) -> Unit,
     onMapInteraction: () -> Unit,
 ) {
     val markerController = remember(mapboxMapView) {
@@ -126,24 +128,24 @@ private fun MapboxMap(
     // so we have to make sure the map is loaded before setting location
     val onStyleLoadedListener = OnStyleLoadedListener { event ->
         event.end?.run {
-            when (state.feedingRouteState) {
-                is com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
-                is com.epmedu.animeal.router.presentation.FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
+            when (state.feedingPointState.feedingRouteState) {
+                is FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
+                is FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
             }
         }
     }
 
-    LaunchedEffect(key1 = state.feedingPoints) {
+    LaunchedEffect(key1 = state.feedingPointState.feedingPoints) {
         markerController.drawMarkers(
-            feedingPoints = state.feedingPoints
+            feedingPoints = state.feedingPointState.feedingPoints
         )
     }
 
-    LaunchedEffect(key1 = state.currentFeedingPoint) {
-        if (state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Active) {
+    LaunchedEffect(key1 = state.feedingPointState.currentFeedingPoint) {
+        if (state.feedingPointState.feedingRouteState is FeedingRouteState.Active) {
             markerController.drawSelectedMarkerBackground(null)
         } else {
-            markerController.drawSelectedMarkerBackground(state.currentFeedingPoint)
+            markerController.drawSelectedMarkerBackground(state.feedingPointState.currentFeedingPoint)
         }
     }
 

@@ -1,7 +1,6 @@
-package com.epmedu.animeal.home.presentation.viewmodel
+package com.epmedu.animeal.common.presentation.viewmodel
 
-internal sealed interface HomeViewModelEvent {
+sealed interface HomeViewModelEvent {
     object ShowCurrentFeedingPoint : HomeViewModelEvent
-
     object MinimiseBottomSheet : HomeViewModelEvent
 }

@@ -1,6 +1,8 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint
 
+import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
@@ -16,12 +18,14 @@ import com.epmedu.animeal.router.presentation.FeedingRouteState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 class DefaultFeedingPointHandler(
     stateDelegate: StateDelegate<FeedingPointState>,
-    //eventDelegate: EventDelegate<HomeViewModelEvent>,
+    eventDelegate: EventDelegate<HomeViewModelEvent>,
     actionDelegate: ActionDelegate,
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
@@ -30,9 +34,16 @@ class DefaultFeedingPointHandler(
     private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
 ) : FeedingPointHandler,
     StateDelegate<FeedingPointState> by stateDelegate,
-    //EventDelegate<HomeViewModelEvent> by eventDelegate,
+    EventDelegate<HomeViewModelEvent> by eventDelegate,
     ActionDelegate by actionDelegate,
     ErrorHandler by errorHandler {
+
+    override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
+    override fun CoroutineScope.registerFeedingPointState(updateCall: (FeedingPointState) -> Unit) {
+        launch {
+            feedingPointStateFlow.collectLatest { updateCall(it) }
+        }
+    }
 
     override suspend fun fetchFeedingPoints() {
         getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
@@ -87,7 +98,7 @@ class DefaultFeedingPointHandler(
 
     private suspend fun selectFeedingPoint(event: FeedingPointEvent.Select) {
         updateState { copy(currentFeedingPoint = event.feedingPoint) }
-        // sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint) //TODO: antipattern, fix
+        sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
     }
 
     private suspend fun handleAnimalTypeChange(type: AnimalType) {

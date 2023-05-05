@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding
 
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
+import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
@@ -8,21 +9,20 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandl
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
-import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 class DefaultFeedingHandler(
-    stateDelegate: StateDelegate<FeedState>,
+    stateDelegate: StateDelegate<FeedingPointState>,
     actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
@@ -35,7 +35,7 @@ class DefaultFeedingHandler(
     private val finishFeedingUseCase: FinishFeedingUseCase,
     private val forcedArgumentsUseCase: ForcedArgumentsUseCase
 ) : FeedingHandler,
-    StateDelegate<FeedState> by stateDelegate,
+    StateDelegate<FeedingPointState> by stateDelegate,
     ActionDelegate by actionDelegate,
     FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,

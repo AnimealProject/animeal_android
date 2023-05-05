@@ -2,8 +2,6 @@ package com.epmedu.animeal.home.presentation
 
 import android.net.Uri
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
-import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 
 sealed interface HomeScreenEvent {

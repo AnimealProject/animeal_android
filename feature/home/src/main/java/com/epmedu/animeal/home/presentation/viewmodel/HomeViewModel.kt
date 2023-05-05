@@ -5,9 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
+import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
@@ -30,26 +36,22 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEve
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
-import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
-import com.epmedu.animeal.router.presentation.RouteHandler
-import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
+import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import com.epmedu.animeal.timer.presentation.handler.TimerEvent
+import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
@@ -94,6 +96,12 @@ internal class HomeViewModel @Inject constructor(
                 copy(willFeedState = it)
             }
         }
+        viewModelScope.registerFeedingPointState {
+            updateState { copy(feedingPointState = it) }
+        }
+        viewModelScope.registerRouteState {
+            updateState { copy(feedingPointState = feedingPointState.copy(feedingRouteState = it)) }
+        }
     }
 
     private suspend fun getTimerState() {
@@ -107,12 +115,9 @@ internal class HomeViewModel @Inject constructor(
     @Suppress("ComplexMethod")
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
-            is FeedingPointEvent -> viewModelScope.handleFeedingPointEvent(event)
-            is FeedingEvent -> viewModelScope.handleFeedingEvent(event)
             is RouteEvent -> handleRouteEvent(event = event)
             is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
             GeolocationPermissionAsked -> markGeolocationPermissionAsAsked()
-            is TimerEvent -> viewModelScope.handleTimerEvent(event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
             is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
@@ -123,6 +128,18 @@ internal class HomeViewModel @Inject constructor(
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
         }
+    }
+
+    fun handleFeedingEvent(event: FeedingEvent) {
+        viewModelScope.handleFeedingEvent(event)
+    }
+
+    fun handleFeedingPointEvent(event: FeedingPointEvent) {
+        viewModelScope.handleFeedingPointEvent(event)
+    }
+
+    fun handleTimerEvent(event: TimerEvent) {
+        viewModelScope.handleTimerEvent(event)
     }
 
     private fun initialize() {
@@ -137,7 +154,7 @@ internal class HomeViewModel @Inject constructor(
                         isGpsSettingsEnabled -> GpsSettingState.Enabled
                         else -> GpsSettingState.Disabled
                     },
-                    defaultAnimalType = defaultAnimalType,
+                    feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType),
                     isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
                 )
             }
@@ -197,7 +214,7 @@ internal class HomeViewModel @Inject constructor(
             if (forcedFeedingPointId != null) {
                 savedStateHandle[FORCED_FEEDING_POINT_ID] = null
                 showFeedingPoint(forcedFeedingPointId)
-                state.currentFeedingPoint?.coordinates
+                state.feedingPointState.currentFeedingPoint?.coordinates
                     ?.run { Location(latitude(), longitude()) }
                     ?.let(::collectLocations)
             }
@@ -206,7 +223,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleMapEvents() {
         viewModelScope.launch {
-            if (state.feedingRouteState is com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled) {
+            if (state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled) {
                 sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
         }

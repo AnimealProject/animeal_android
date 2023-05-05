@@ -11,13 +11,13 @@ import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.MapPath
-import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_START_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_TOP_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_ZOOM
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.router.model.RouteResult
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
@@ -106,7 +106,7 @@ fun MapView.fetchRoute(
     mapBoxRouteInitOptions: MapBoxRouteInitOptions,
     navigation: MapboxNavigation,
     path: MapPath,
-    onRouteResult: (result: com.epmedu.animeal.router.model.RouteResult) -> Unit
+    onRouteResult: (result: RouteResult) -> Unit
 ) {
     val routeOptions = RouteOptions.builder()
         .applyDefaultNavigationOptions()
@@ -185,7 +185,7 @@ fun MapView.GesturesListener(onMapInteraction: () -> Unit) {
 private fun MapView.requestRoutes(
     navigation: MapboxNavigation,
     routeOptions: RouteOptions,
-    onRouteResult: (result: com.epmedu.animeal.router.model.RouteResult) -> Unit
+    onRouteResult: (result: RouteResult) -> Unit
 ) {
     navigation.requestRoutes(
         routeOptions,
@@ -194,7 +194,7 @@ private fun MapView.requestRoutes(
                 // Mapbox always considers the first route the better one
                 routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
                     onRouteResult(
-                        com.epmedu.animeal.router.model.RouteResult(
+                        RouteResult(
                             true,
                             distanceLeft = distance().toLong(),
                             timeLeft = duration().toLong(),
@@ -205,7 +205,7 @@ private fun MapView.requestRoutes(
                 }
 
                 onRouteResult(
-                    com.epmedu.animeal.router.model.RouteResult(
+                    RouteResult(
                         false,
                         errorMessage = context.getString(R.string.routes_not_found)
                     )
@@ -214,7 +214,7 @@ private fun MapView.requestRoutes(
 
             override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
                 onRouteResult(
-                    com.epmedu.animeal.router.model.RouteResult(
+                    RouteResult(
                         false,
                         errorMessage = context.getString(R.string.routes_failed)
                     )
@@ -223,7 +223,7 @@ private fun MapView.requestRoutes(
 
             override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
                 onRouteResult(
-                    com.epmedu.animeal.router.model.RouteResult(
+                    RouteResult(
                         false,
                         errorMessage = context.getString(R.string.routes_cancelled)
                     )
