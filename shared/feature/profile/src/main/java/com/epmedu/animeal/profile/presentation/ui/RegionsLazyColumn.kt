@@ -35,7 +35,11 @@ fun RegionsLazyColumn(
     LazyColumn(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
-        items(Region.values()) { region ->
+        items(
+            items = Region.values().apply {
+                sortBy { region -> region.countryName() }
+            }
+        ) { region ->
             ListItem(
                 modifier = Modifier.clickable {
                     scope.launch { bottomSheetState.hide() }
