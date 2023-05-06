@@ -6,6 +6,7 @@
 
 package com.epmedu.animeal.profile.domain.model
 
+import androidx.emoji2.text.EmojiCompat
 import com.epmedu.animeal.extensions.toIntArray
 import java.util.*
 
@@ -225,4 +226,13 @@ fun Region.getFormat(): String {
         val digits = phoneNumberDigitsCount.last()
         (1..digits).joinToString("") { "x" }
     }
+}
+
+fun Region.codesListText(): String {
+    val emojiCompat = EmojiCompat.get()
+    val flag = when (emojiCompat.loadState) {
+        EmojiCompat.LOAD_STATE_SUCCEEDED -> emojiCompat.process(flagEmoji())
+        else -> flagEmoji()
+    }
+    return "$flag $phoneNumberCode ${countryName()}"
 }
