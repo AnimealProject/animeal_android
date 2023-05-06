@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.emoji2.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat.LOAD_STATE_SUCCEEDED
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.profile.domain.model.Region
@@ -63,5 +64,10 @@ fun RegionsLazyColumnPreview() {
 }
 
 private fun Region.codesListText(): String {
-    return "${EmojiCompat.get().process(flagEmoji())} $phoneNumberCode ${countryName()}"
+    val emojiCompat = EmojiCompat.get()
+    val flag = when (emojiCompat.loadState) {
+        LOAD_STATE_SUCCEEDED -> emojiCompat.process(flagEmoji())
+        else -> flagEmoji()
+    }
+    return "$flag $phoneNumberCode ${countryName()}"
 }
