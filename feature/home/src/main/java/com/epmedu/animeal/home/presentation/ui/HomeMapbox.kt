@@ -17,9 +17,12 @@ import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
+import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
@@ -56,6 +59,11 @@ internal fun HomeMapbox(
 
     Box(modifier = Modifier.fillMaxSize()) {
         val mapboxMapView = rememberMapboxMapView(homeState = state)
+
+        /** Show user location after successful feeding operation */
+        if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Showing) {
+            ShowUserCurrentLocation(state, mapboxMapView)
+        }
 
         MapboxMap(
             mapboxMapView = mapboxMapView,
@@ -105,6 +113,18 @@ internal fun HomeMapbox(
                 .align(alignment = Alignment.BottomEnd),
             onClick = { onGeolocationClick(mapboxMapView) }
         )
+    }
+}
+
+@Composable
+private fun ShowUserCurrentLocation(
+    state: HomeState,
+    mapboxMapView: MapView
+) {
+    LaunchedEffect(key1 = state.geolocationPermissionStatus, key2 = state.gpsSettingState) {
+        if (state.geolocationPermissionStatus == PermissionStatus.Granted &&
+            state.gpsSettingState == GpsSettingState.Enabled
+        ) mapboxMapView.showCurrentLocation(state.locationState.location)
     }
 }
 

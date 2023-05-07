@@ -12,6 +12,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
@@ -127,6 +128,18 @@ internal class HomeViewModel @Inject constructor(
             HomeScreenEvent.MapInteracted -> handleMapEvents()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
+            HomeScreenEvent.DismissThankYouEvent -> dismissThankYouDialog()
+        }
+    }
+
+    private fun dismissThankYouDialog() {
+        deselectFeedingPoint()
+        updateState {
+            copy(
+                feedingPointState = feedingPointState.copy(
+                    feedingConfirmationState = FeedingConfirmationState.Dismissed
+                )
+            )
         }
     }
 
@@ -155,6 +168,7 @@ internal class HomeViewModel @Inject constructor(
                         else -> GpsSettingState.Disabled
                     },
                     feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType),
+                    defaultAnimalType = defaultAnimalType,
                     isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
                 )
             }

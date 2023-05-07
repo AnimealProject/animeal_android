@@ -4,6 +4,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
@@ -19,6 +20,7 @@ data class HomeState(
 
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
+    val defaultAnimalType: AnimalType = AnimalType.Dogs,
 
     /** Current state of gms service */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,

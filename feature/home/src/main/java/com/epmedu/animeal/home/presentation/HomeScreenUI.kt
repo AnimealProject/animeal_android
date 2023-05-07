@@ -2,14 +2,17 @@ package com.epmedu.animeal.home.presentation
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
-import com.epmedu.animeal.extensions.launchGpsSettings
+import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
@@ -18,6 +21,7 @@ import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
@@ -29,6 +33,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEve
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.home.presentation.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
@@ -102,6 +107,12 @@ internal fun HomeScreenUI(
         if (state.feedingPointState.currentFeedingPoint == null) bottomSheetState.hide()
     }
 
+    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingPointState.feedingRouteState) {
+        if (bottomSheetState.isHidden && state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled) {
+            onFeedingPointEvent(FeedingPointEvent.Deselect)
+        }
+    }
+
     OnBackHandling(
         scope = scope,
         bottomSheetState = bottomSheetState,
@@ -138,11 +149,15 @@ internal fun HomeScreenUI(
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
                 when (state.feedingPointState.feedingRouteState) {
                     is FeedingRouteState.Active -> {
-                        MarkFeedingDoneActionButton(
-                            alpha = buttonAlpha,
-                            enabled = state.feedingPhotos.isNotEmpty() && state.cameraState == CameraState.Disabled,
-                            onClick = {}
-                        )
+                        if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Loading) {
+                            CircularProgressIndicator(Modifier.padding(24.dp))
+                        } else {
+                            MarkFeedingDoneActionButton(
+                                alpha = buttonAlpha,
+                                enabled = state.feedingPhotos.isNotEmpty() && state.cameraState == CameraState.Disabled,
+                                onClick = { onFeedingEvent(FeedingEvent.Finish(state.feedingPhotos)) }
+                            )
+                        }
                     }
                     else -> {
                         FeedingPointActionButton(
@@ -186,8 +201,8 @@ internal fun HomeScreenUI(
         bottomSheetState,
         onFeedingEvent,
         onWillFeedEvent,
-        hideBottomSheet,
     )
+    ThankYouConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -236,7 +251,6 @@ private fun WillFeedConfirmationDialog(
     bottomSheetState: AnimealBottomSheetState,
     onFeedingEvent: (FeedingEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
-    onHideBottomSheet: () -> Unit
 ) {
     FeedConfirmationDialog(
         willFeedState,
@@ -244,10 +258,21 @@ private fun WillFeedConfirmationDialog(
             onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
             onFeedingEvent(FeedingEvent.Start)
-            onHideBottomSheet()
         },
         onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     )
+}
+
+@Composable
+private fun ThankYouConfirmationDialog(
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+) {
+    if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Showing) {
+        ThankYouDialog(onDismiss = {
+            onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
+        })
+    }
 }
 
 @Composable
@@ -276,7 +301,7 @@ private fun onGeoLocationClick(
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {
-            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }

@@ -10,5 +10,6 @@ data class FeedingPointState(
     val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
+    val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
     val defaultAnimalType: AnimalType = AnimalType.Dogs,
 )

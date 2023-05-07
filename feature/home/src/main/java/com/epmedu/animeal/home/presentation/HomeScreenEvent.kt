@@ -16,6 +16,8 @@ sealed interface HomeScreenEvent {
         object CancellationDismissed : TimerCancellationEvent
     }
 
+    object DismissThankYouEvent : HomeScreenEvent
+
     sealed interface CameraEvent : HomeScreenEvent {
         object OpenCamera : CameraEvent
         data class TakeNewPhoto(val uri: Uri) : CameraEvent

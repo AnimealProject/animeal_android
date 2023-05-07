@@ -12,7 +12,9 @@ import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
@@ -57,7 +59,7 @@ class DefaultFeedingHandler(
             FeedingEvent.Start -> launch { startFeeding() }
             FeedingEvent.Cancel -> launch { cancelFeeding() }
             FeedingEvent.Expired -> launch { expireFeeding() }
-            FeedingEvent.Finish -> launch { finishFeeding() }
+            is FeedingEvent.Finish -> launch { finishFeeding(event.feedingPhotos) }
         }
     }
 
@@ -98,22 +100,31 @@ class DefaultFeedingHandler(
         )
     }
 
-    private suspend fun finishFeeding() {
+    private suspend fun finishFeeding(feedingPhotos: List<FeedingPhotoItem>) {
+        updateState { copy(feedingConfirmationState = FeedingConfirmationState.Loading) }
         performFeedingAction(
             action = { feedingPointId ->
-                finishFeedingUseCase(feedingPointId, listOf(""))
+                finishFeedingUseCase(feedingPointId, feedingPhotos.map { it.name })
             },
             onSuccess = {
-                deselectFeedingPoint()
+                displayThankYouDialog()
                 stopRoute()
                 fetchFeedingPoints()
+            },
+            onError = {
+                updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
             }
         )
     }
 
+    private fun displayThankYouDialog() {
+        updateState { copy(feedingConfirmationState = FeedingConfirmationState.Showing) }
+    }
+
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult,
-        onSuccess: suspend (FeedingPointModel) -> Unit
+        onSuccess: suspend (FeedingPointModel) -> Unit,
+        onError: () -> Unit = {}
     ) {
         state.currentFeedingPoint?.let { currentFeedingPoint ->
             performAction(
@@ -121,7 +132,10 @@ class DefaultFeedingHandler(
                 onSuccess = { onSuccess(currentFeedingPoint) },
                 onError = ::showError
             )
-        } ?: showError()
+        } ?: run {
+            onError()
+            showError()
+        }
     }
 
     companion object {
