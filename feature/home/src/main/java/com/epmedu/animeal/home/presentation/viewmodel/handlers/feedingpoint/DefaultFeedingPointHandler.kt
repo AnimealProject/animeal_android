@@ -86,7 +86,14 @@ internal class DefaultFeedingPointHandler(
     }
 
     override fun deselectFeedingPoint() {
-        if (state.currentFeedingPoint != null) updateState { copy(currentFeedingPoint = null) }
+        if (state.currentFeedingPoint != null) {
+            updateState {
+                copy(
+                    currentFeedingPoint = null,
+                    feedingPhotos = emptyList()
+                )
+            }
+        }
     }
 
     private suspend fun selectFeedingPoint(event: Select) {

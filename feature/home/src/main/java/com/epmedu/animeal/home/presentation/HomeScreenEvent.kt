@@ -29,6 +29,8 @@ sealed interface HomeScreenEvent {
         data class FeedingTimerUpdateRequest(val timeLeft: Long) : RouteEvent
     }
 
+    object DismissThankYouEvent : HomeScreenEvent
+
     sealed interface TimerEvent : HomeScreenEvent {
         object Disable : TimerEvent
     }

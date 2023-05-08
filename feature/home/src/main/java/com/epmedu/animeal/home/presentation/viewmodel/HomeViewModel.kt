@@ -31,6 +31,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
+import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -51,7 +52,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
@@ -126,8 +127,14 @@ internal class HomeViewModel @Inject constructor(
             HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
+            HomeScreenEvent.DismissThankYouEvent -> dismissThankYouDialog()
             is HomeScreenEvent.MotivateUseGpsEvent -> handleMotivationEvents(event)
         }
+    }
+
+    private fun dismissThankYouDialog() {
+        deselectFeedingPoint()
+        updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
     }
 
     private fun initialize() {
