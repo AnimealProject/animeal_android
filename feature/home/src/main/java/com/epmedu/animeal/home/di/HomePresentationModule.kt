@@ -13,19 +13,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
-import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
-import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
-import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
-import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
-import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.DefaultFeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
@@ -115,58 +104,6 @@ internal object HomePresentationModule {
         stateDelegate,
         actionDelegate,
         uploadPhotoUseCase
-    )
-
-    @ViewModelScoped
-    @Provides
-    fun providesFeedingHandler(
-        stateDelegate: StateDelegate<FeedingPointState>,
-        actionDelegate: ActionDelegate,
-        routeHandler: RouteHandler,
-        errorHandler: ErrorHandler,
-        feedingPointHandler: FeedingPointHandler,
-        timerHandler: TimerHandler,
-        fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
-        startFeedingUseCase: StartFeedingUseCase,
-        cancelFeedingUseCase: CancelFeedingUseCase,
-        rejectFeedingUseCase: RejectFeedingUseCase,
-        finishFeedingUseCase: FinishFeedingUseCase,
-        forcedArgumentsUseCase: ForcedArgumentsUseCase
-    ): FeedingHandler = DefaultFeedingHandler(
-        stateDelegate,
-        actionDelegate,
-        routeHandler,
-        errorHandler,
-        feedingPointHandler,
-        timerHandler,
-        fetchCurrentFeedingPointUseCase,
-        startFeedingUseCase,
-        cancelFeedingUseCase,
-        rejectFeedingUseCase,
-        finishFeedingUseCase,
-        forcedArgumentsUseCase
-    )
-
-    @ViewModelScoped
-    @Provides
-    fun providesFeedingPointHandler(
-        stateDelegate: StateDelegate<FeedingPointState>,
-        eventDelegate: EventDelegate<HomeViewModelEvent>,
-        actionDelegate: ActionDelegate,
-        errorHandler: ErrorHandler,
-        getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
-        addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
-        updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
-    ): FeedingPointHandler = DefaultFeedingPointHandler(
-        stateDelegate,
-        eventDelegate,
-        actionDelegate,
-        errorHandler,
-        getAllFeedingPointsUseCase,
-        addFeedingPointToFavouritesUseCase,
-        removeFeedingPointFromFavouritesUseCase,
-        updateAnimalTypeSettingsUseCase
     )
 
     @ViewModelScoped
