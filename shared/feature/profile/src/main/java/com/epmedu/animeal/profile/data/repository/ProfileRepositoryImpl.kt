@@ -2,27 +2,10 @@ package com.epmedu.animeal.profile.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
-import com.epmedu.animeal.common.constants.birthDate
-import com.epmedu.animeal.common.constants.clearBirthDate
-import com.epmedu.animeal.common.constants.clearEmail
-import com.epmedu.animeal.common.constants.clearName
-import com.epmedu.animeal.common.constants.email
-import com.epmedu.animeal.common.constants.name
-import com.epmedu.animeal.common.constants.phoneNumber
-import com.epmedu.animeal.common.constants.surname
-import com.epmedu.animeal.common.constants.clearPhoneNumber
-import com.epmedu.animeal.common.constants.clearSurname
-import com.epmedu.animeal.common.constants.updateBirthDate
-import com.epmedu.animeal.common.constants.updateEmail
-import com.epmedu.animeal.common.constants.updateName
-import com.epmedu.animeal.common.constants.updatePhoneNumber
-import com.epmedu.animeal.common.constants.updateSurname
+import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.model.Profile
-import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -40,7 +23,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
             Profile(
                 name = preferences.name,
                 surname = preferences.surname,
-                phoneNumberRegion = Region.valueOf(preferences[phoneNumberRegionKey] ?: Region.GE.name),
+                phoneNumberRegion = preferences.phoneNumberRegion,
                 phoneNumber = preferences.phoneNumber,
                 email = preferences.email,
                 birthDate = preferences.birthDate,
@@ -50,13 +33,13 @@ internal class ProfileRepositoryImpl @Inject constructor(
 
     override fun saveProfile(profile: Profile): Flow<Unit> {
         return flowOf(Unit).map {
-            dataStore.edit { preference ->
-                preference[phoneNumberRegionKey] = profile.phoneNumberRegion.name
-                preference.updatePhoneNumber(profile.phoneNumber)
-                preference.updateName(profile.name)
-                preference.updateSurname(profile.surname)
-                preference.updateEmail(profile.email)
-                preference.updateBirthDate(profile.birthDate)
+            dataStore.edit {
+                updatePhoneNumberRegion(profile.phoneNumberRegion)
+                updatePhoneNumber(profile.phoneNumber)
+                updateName(profile.name)
+                updateSurname(profile.surname)
+                updateEmail(profile.email)
+                updateBirthDate(profile.birthDate)
             }
         }
     }
@@ -69,11 +52,11 @@ internal class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearProfile() {
         dataStore.edit {
-            it.clearName()
-            it.clearSurname()
-            it.clearPhoneNumber()
-            it.clearEmail()
-            it.clearBirthDate()
+            clearName()
+            clearSurname()
+            clearPhoneNumber()
+            clearEmail()
+            clearBirthDate()
         }
     }
 

@@ -2,11 +2,11 @@ package com.epmedu.animeal.signup.enterphone.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
-import com.epmedu.animeal.common.constants.updatePhoneNumber
+import com.epmedu.animeal.extensions.edit
+import com.epmedu.animeal.profile.data.repository.updatePhoneNumber
+import com.epmedu.animeal.profile.data.repository.updatePhoneNumberRegion
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.enterphone.domain.EnterPhoneRepository
 import javax.inject.Inject
@@ -20,9 +20,9 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
         region: Region,
         phoneNumber: String
     ) {
-        dataStore.edit { preferences ->
-            preferences[phoneNumberRegionKey] = region.name
-            preferences.updatePhoneNumber(phoneNumber)
+        dataStore.edit {
+            updatePhoneNumberRegion(region)
+            updatePhoneNumber(phoneNumber)
         }
     }
 

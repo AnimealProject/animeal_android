@@ -1,18 +1,11 @@
 package com.epmedu.animeal.component
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope
-import com.epmedu.animeal.common.constants.animalType
-import com.epmedu.animeal.common.constants.initialCameraPermission
-import com.epmedu.animeal.common.constants.initialGeolocationPermission
-import com.epmedu.animeal.common.constants.updateAnimalType
-import com.epmedu.animeal.common.constants.updateInitialCameraPermission
-import com.epmedu.animeal.common.constants.updateInitialGeolocationPermission
+import com.epmedu.animeal.extensions.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -25,44 +18,20 @@ internal class AppSettingsProviderImpl(
     }
 
     override suspend fun updateAppSettings(action: AppSettingsUpdateScope.() -> Unit) {
-        dataStore.edit { preferences ->
-            val scope = AppSettingsUpdateScopeImpl(preferences.toAppSettings()).apply(action)
+        dataStore.edit {
+            val scope = AppSettingsUpdateScopeImpl(toAppSettings()).apply(action)
             val settings = scope.toAppSettings()
-            preferences.setInitialGeolocationPermissionRequest(settings.isInitialGeolocationPermissionRequested)
-            preferences.setCameraPermissionRequested(settings.isCameraPermissionRequested)
-            preferences.setAnimalType(settings.animalType)
+            updateInitialGeolocationPermission(settings.isInitialGeolocationPermissionRequested)
+            updateInitialCameraPermission(settings.isCameraPermissionRequested)
+            updateAnimalType(settings.animalType)
         }
     }
 
     private fun Preferences.toAppSettings() = AppSettings(
-        isInitialGeolocationPermissionRequested = getInitialGeolocationPermissionRequest(),
-        isCameraPermissionRequested = getCameraPermissionRequested(),
-        animalType = getAnimalType()
+        isInitialGeolocationPermissionRequested = initialGeolocationPermission,
+        isCameraPermissionRequested = initialCameraPermission,
+        animalType = animalType
     )
-
-    private fun Preferences.getInitialGeolocationPermissionRequest(): Boolean {
-        return initialGeolocationPermission
-    }
-
-    private fun Preferences.getAnimalType(): String {
-        return animalType
-    }
-
-    private fun MutablePreferences.setInitialGeolocationPermissionRequest(value: Boolean) {
-        updateInitialGeolocationPermission(value)
-    }
-
-    private fun Preferences.getCameraPermissionRequested(): Boolean {
-        return initialCameraPermission
-    }
-
-    private fun MutablePreferences.setCameraPermissionRequested(value: Boolean) {
-        updateInitialCameraPermission(value)
-    }
-
-    private fun MutablePreferences.setAnimalType(value: String) {
-        updateAnimalType(value)
-    }
 }
 
 private class AppSettingsUpdateScopeImpl(
