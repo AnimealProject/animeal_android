@@ -4,10 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
 import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
-import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
+import com.epmedu.animeal.common.constants.phoneNumber
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.entercode.domain.EnterCodeRepository
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +22,7 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
     override val phoneNumberWithPrefix: Flow<String> = dataStore.data
         .map { preferences ->
             val region = preferences[phoneNumberRegionKey]
-            val phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING
+            val phoneNumber = preferences.phoneNumber
             val prefix = if (region == null) {
                 PHONE_NUMBER_PREFIX
             } else {

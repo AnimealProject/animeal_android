@@ -7,9 +7,12 @@ import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.common.component.AppSettings
 import com.epmedu.animeal.common.component.AppSettingsProvider
 import com.epmedu.animeal.common.component.AppSettingsUpdateScope
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.animalType
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialCameraPermissionKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.initialGeolocationPermissionKey
+import com.epmedu.animeal.common.constants.animalType
+import com.epmedu.animeal.common.constants.initialCameraPermission
+import com.epmedu.animeal.common.constants.initialGeolocationPermission
+import com.epmedu.animeal.common.constants.updateAnimalType
+import com.epmedu.animeal.common.constants.updateInitialCameraPermission
+import com.epmedu.animeal.common.constants.updateInitialGeolocationPermission
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -38,27 +41,27 @@ internal class AppSettingsProviderImpl(
     )
 
     private fun Preferences.getInitialGeolocationPermissionRequest(): Boolean {
-        return get(initialGeolocationPermissionKey) ?: false
+        return initialGeolocationPermission
     }
 
     private fun Preferences.getAnimalType(): String {
-        return get(animalType).orEmpty()
+        return animalType
     }
 
     private fun MutablePreferences.setInitialGeolocationPermissionRequest(value: Boolean) {
-        set(initialGeolocationPermissionKey, value)
+        updateInitialGeolocationPermission(value)
     }
 
     private fun Preferences.getCameraPermissionRequested(): Boolean {
-        return get(initialCameraPermissionKey) ?: false
+        return initialCameraPermission
     }
 
     private fun MutablePreferences.setCameraPermissionRequested(value: Boolean) {
-        set(initialCameraPermissionKey, value)
+        updateInitialCameraPermission(value)
     }
 
     private fun MutablePreferences.setAnimalType(value: String) {
-        set(animalType, value)
+        updateAnimalType(value)
     }
 }
 
