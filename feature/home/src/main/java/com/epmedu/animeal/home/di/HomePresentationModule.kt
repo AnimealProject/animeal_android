@@ -4,6 +4,7 @@ package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
@@ -59,7 +60,14 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
-    fun providesStateDelegate(): StateDelegate<HomeState> = DefaultStateDelegate(HomeState())
+    fun providesStateDelegate(
+        buildConfigProvider: BuildConfigProvider
+    ): StateDelegate<HomeState> = DefaultStateDelegate(
+        initialState = HomeState(
+            mapBoxPublicKey = buildConfigProvider.mapBoxPublicKey,
+            mapBoxStyleUri = buildConfigProvider.mapBoxStyleURI
+        )
+    )
 
     @ViewModelScoped
     @Provides

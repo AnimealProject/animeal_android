@@ -4,23 +4,20 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
-import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.timer.data.model.TimerState
-import com.mapbox.maps.Style
 
 data class HomeState(
+    val mapBoxPublicKey: String,
+    val mapBoxStyleUri: String,
+
     val feedingPointState: FeedingPointState = FeedingPointState(),
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
     val willFeedState: WillFeedState = WillFeedState.Dismissed,
-
-    val mapBoxPublicKey: String = "",
-    val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
-    val defaultAnimalType: AnimalType = AnimalType.Dogs,
 
     /** Current state of gms service */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
