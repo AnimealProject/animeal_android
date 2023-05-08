@@ -97,8 +97,6 @@ include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
 
-include(":shared:appsettings")
-
 include(":shared:feature:camera")
 include(":shared:feature:debugmenu")
 include(":shared:feature:feeding")
