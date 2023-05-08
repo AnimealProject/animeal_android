@@ -18,8 +18,12 @@ import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
+import com.epmedu.animeal.home.domain.PermissionStatus
+import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
@@ -40,23 +44,32 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
 
 @Composable
+@Suppress("LongParameterList")
 internal fun HomeMapbox(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
     onGeolocationClick: (MapView) -> Unit,
+    onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onCancelRouteClick: () -> Unit,
     onMapInteraction: () -> Unit,
+    onSelectTab: (AnimalType) -> Unit
 ) {
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         val mapboxMapView = rememberMapboxMapView(homeState = state)
 
+        /** Show user location after successful feeding operation */
+        if (state.feedingConfirmationState == FeedingConfirmationState.Showing) {
+            showUserCurrentLocation(state, mapboxMapView)
+        }
+
         MapboxMap(
             mapboxMapView = mapboxMapView,
             state = state,
             onFeedingPointClick = onFeedingPointSelect,
+            onInitialLocationDisplay = onInitialLocationDisplay,
             onRouteResult = onRouteResult,
             onMapInteraction = onMapInteraction,
         )
@@ -68,7 +81,8 @@ internal fun HomeMapbox(
                         .statusBarsPadding()
                         .align(alignment = Alignment.TopCenter)
                         .padding(top = 24.dp),
-                    onSelectTab = {}
+                    onSelectTab = onSelectTab,
+                    defaultAnimalType = state.defaultAnimalType
                 )
             }
             is FeedingRouteState.Active -> {
@@ -101,10 +115,23 @@ internal fun HomeMapbox(
 }
 
 @Composable
+private fun showUserCurrentLocation(
+    state: HomeState,
+    mapboxMapView: MapView
+) {
+    LaunchedEffect(key1 = state.geolocationPermissionStatus, key2 = state.gpsSettingState) {
+        if (state.geolocationPermissionStatus == PermissionStatus.Granted &&
+            state.gpsSettingState == GpsSettingState.Enabled
+        ) mapboxMapView.showCurrentLocation(state.locationState.location)
+    }
+}
+
+@Composable
 private fun MapboxMap(
     mapboxMapView: MapView,
     state: HomeState,
     onFeedingPointClick: (point: FeedingPointModel) -> Unit,
+    onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onMapInteraction: () -> Unit,
 ) {
@@ -132,9 +159,21 @@ private fun MapboxMap(
         )
     }
 
+    LaunchedEffect(key1 = state.currentFeedingPoint) {
+        if (state.feedingRouteState is FeedingRouteState.Active) {
+            markerController.drawSelectedMarkerBackground(null)
+        } else {
+            markerController.drawSelectedMarkerBackground(state.currentFeedingPoint)
+        }
+    }
+
     LaunchedEffect(key1 = state.locationState) {
-        if (state.locationState.isInitial || state.locationState.isUndefined) {
-            mapboxMapView.setLocation(state.locationState.location)
+        when {
+            state.locationState.isUndefined -> mapboxMapView.setLocation(state.locationState.location)
+            state.locationState.isInitial -> {
+                mapboxMapView.setLocation(state.locationState.location)
+                onInitialLocationDisplay()
+            }
         }
     }
 

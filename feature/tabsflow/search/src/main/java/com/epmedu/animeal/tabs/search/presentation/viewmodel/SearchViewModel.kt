@@ -8,15 +8,14 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.domain.SearchFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
-import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.Search
-import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.ShowWillFeedDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
@@ -31,8 +30,10 @@ class SearchViewModel @Inject constructor(
     private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val searchDogsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val willFeedHandler: WillFeedHandler,
 ) : ViewModel(),
+    WillFeedHandler by willFeedHandler,
     StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
     ActionDelegate by actionDelegate {
 
@@ -53,6 +54,11 @@ class SearchViewModel @Inject constructor(
                 }.collect()
             }
         }
+        viewModelScope.registerWillFeedState {
+            updateState {
+                copy(willFeedState = it)
+            }
+        }
     }
 
     fun handleEvents(event: SearchScreenEvent) {
@@ -60,8 +66,6 @@ class SearchViewModel @Inject constructor(
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
-            is ShowWillFeedDialog -> updateState { copy(showingWillFeedDialog = true) }
-            is DismissWillFeedDialog -> updateState { copy(showingWillFeedDialog = false) }
             is Search -> handleSearch(event)
         }
     }

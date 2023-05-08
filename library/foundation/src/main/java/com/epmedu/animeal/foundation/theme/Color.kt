@@ -27,6 +27,7 @@ object CustomColor {
     val DarkestGrey = Color(0xFF262626)
     val Error = Color(0xFFF04E45)
     val HitGrey = Color(0xFF99A8B0)
+    val CarminePink = Color(0xFFF04E45)
 
     val Porcelain = Color(0xFFF2F2F2)
 
@@ -35,6 +36,6 @@ object CustomColor {
     val StatusRed = Color(0xFFF64E53)
     val SeaSerpent = AnimealColor.Light.SeaSerpent
 
-    val DarkGrey = Color(0xFFA3A3A3)
+    val TextGrey = Color(0xFF898A8D)
     val TrolleyGrey = Color(0xFF818181)
 }

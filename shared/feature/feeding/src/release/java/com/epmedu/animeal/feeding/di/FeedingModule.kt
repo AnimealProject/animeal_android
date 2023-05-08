@@ -1,20 +1,24 @@
 package com.epmedu.animeal.feeding.di
 
 import com.epmedu.animeal.api.favourite.FavouriteApi
+import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
+import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,13 +27,30 @@ object FeedingModule {
     @Singleton
     @Provides
     fun providesFeedingPointRepository(
+        feedingPointApi: FeedingPointApi,
         favouriteRepository: FavouriteRepository,
-        feedingPointApi: FeedingPointApi
+        storageApi: StorageApi,
     ): FeedingPointRepository = FeedingPointRepositoryImpl(
-        feedingPointApi = feedingPointApi,
+        dispatchers = Dispatchers,
         favouriteRepository = favouriteRepository,
-        dispatchers = Dispatchers
+        feedingPointApi = feedingPointApi,
+        storageApi = storageApi,
     )
+
+    @Singleton
+    @Provides
+    fun providesFeedingRepository(
+        authApi: AuthAPI,
+        feedingAPI: FeedingApi,
+        favouriteRepository: FavouriteRepository
+    ): FeedingRepository {
+        return FeedingRepositoryImpl(
+            dispatchers = Dispatchers,
+            authApi = authApi,
+            feedingApi = feedingAPI,
+            favouriteRepository = favouriteRepository
+        )
+    }
 
     @Singleton
     @Provides

@@ -2,39 +2,47 @@ package com.epmedu.animeal.home.presentation
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
-import com.epmedu.animeal.extensions.launchGpsSettings
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
+import com.epmedu.animeal.extensions.requestGpsByDialog
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
+import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.WillFeedEvent
+import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
+import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.WillFeedState
+import com.epmedu.animeal.home.presentation.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
-import com.epmedu.animeal.home.presentation.ui.HomeGeolocationPermission
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
+import com.epmedu.animeal.home.presentation.ui.HomePermissions
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
@@ -51,7 +59,8 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -95,11 +104,17 @@ internal fun HomeScreenUI(
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
     }
 
+    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
+        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
+            onScreenEvent(FeedingPointEvent.Deselect)
+        }
+    }
+
     OnBackHandling(
         scope = scope,
         bottomSheetState = bottomSheetState,
         state = state,
-        onScreenEvent = onScreenEvent
+        onWillFeedEvent = onWillFeedEvent,
     )
 
     AnimealBottomSheetLayout(
@@ -110,11 +125,14 @@ internal fun HomeScreenUI(
             state.currentFeedingPoint?.let { feedingPoint ->
                 FeedingSheet(
                     feedingState = state.feedingRouteState,
+                    cameraState = state.cameraState,
                     feedingPoint = feedingPoint,
+                    feedingPhotos = state.feedingPhotos,
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
-                    onTakePhotoClick = {},
-                    onDeletePhotoClick = {}
+                    onTakePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera) },
+                    onDeletePhotoClick = { onScreenEvent(FeedingGalleryEvent.DeletePhoto(it)) },
+                    onShowOnMap = {}
                 )
             }
         },
@@ -122,35 +140,36 @@ internal fun HomeScreenUI(
             state.currentFeedingPoint?.let { feedingPoint ->
                 when (state.feedingRouteState) {
                     is FeedingRouteState.Active -> {
-                        MarkFeedingDoneActionButton(
-                            alpha = buttonAlpha,
-                            enabled = state.feedingPhotos.isNotEmpty(),
-                            onClick = {}
-                        )
+                        if (state.feedingConfirmationState == FeedingConfirmationState.Loading) {
+                            CircularProgressIndicator(Modifier.padding(24.dp))
+                        } else {
+                            MarkFeedingDoneActionButton(
+                                alpha = buttonAlpha,
+                                enabled = state.feedingPhotos.isNotEmpty() && state.cameraState == CameraState.Disabled,
+                                onClick = { onScreenEvent(FeedingEvent.Finish) }
+                            )
+                        }
                     }
                     else -> {
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = { onScreenEvent(WillFeedEvent.ShowWillFeedDialog) }
+                            onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) }
                         )
                     }
                 }
             }
         }
     ) {
-        HomeGeolocationPermission(
+        HomePermissions(
             homeState = state,
             onScreenEvent = onScreenEvent,
         ) { geolocationPermissionState ->
             HomeMapbox(
                 state = state,
                 onFeedingPointSelect = { onScreenEvent(FeedingPointEvent.Select(it)) },
-                onMapInteraction = {
-                    if (bottomSheetState.isExpanding && state.feedingRouteState is FeedingRouteState.Disabled) {
-                        scope.launch { bottomSheetState.show() }
-                    }
-                },
+                onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
+                onInitialLocationDisplay = { onScreenEvent(HomeScreenEvent.InitialLocationWasDisplayed) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)
                 },
@@ -159,12 +178,22 @@ internal fun HomeScreenUI(
                 },
                 onGeolocationClick = { mapView ->
                     onGeoLocationClick(mapView, state, geolocationPermissionState)
+                },
+                onSelectTab = {
+                    onScreenEvent(FeedingPointEvent.AnimalTypeChange(it))
                 }
             )
         }
     }
 
-    WillFeedConfirmationDialog(scope, bottomSheetState, state, onScreenEvent, hideBottomSheet)
+    WillFeedConfirmationDialog(
+        state.willFeedState,
+        scope,
+        bottomSheetState,
+        onScreenEvent,
+        onWillFeedEvent,
+    )
+    ThankYouConfirmationDialog(state, onScreenEvent)
 }
 
 @Composable
@@ -174,11 +203,16 @@ private fun OnState(
 ) {
     when {
         state.timerState is TimerState.Expired &&
-            state.cancellationRequestState == CancellationRequestState.Dismissed -> FeedingExpiredDialog(
-            onConfirm = {
-                onScreenEvent(TimerEvent.Disable)
+            state.cancellationRequestState == CancellationRequestState.Dismissed -> {
+            FeedingExpiredDialog(
+                onConfirm = {
+                    onScreenEvent(TimerEvent.Disable)
+                }
+            )
+            if (state.deletePhotoItem != null) {
+                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
             }
-        )
+        }
         state.cancellationRequestState is CancellationRequestState.Showing -> FeedingCancellationRequestDialog(
             onConfirm = {
                 onScreenEvent(TimerCancellationEvent.CancellationAccepted)
@@ -187,28 +221,47 @@ private fun OnState(
                 onScreenEvent(TimerCancellationEvent.CancellationDismissed)
             }
         )
+        state.deletePhotoItem != null -> DeletePhotoDialog(
+            state.deletePhotoItem,
+            onConfirm = {
+                onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
+            },
+            onDismiss = {
+                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
+            }
+        )
         else -> Unit
     }
 }
 
 @Composable
 private fun WillFeedConfirmationDialog(
+    willFeedState: WillFeedState,
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
+) {
+    FeedConfirmationDialog(
+        willFeedState,
+        onAgreeClick = {
+            onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
+            scope.launch { bottomSheetState.hide() }
+            onScreenEvent(FeedingEvent.Start)
+        },
+        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
+    )
+}
+
+@Composable
+private fun ThankYouConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
-    onHideBottomSheet: () -> Unit
 ) {
-    if (state.willFeedState is WillFeedState.Showing) {
-        FeedConfirmationDialog(
-            onAgreeClick = {
-                onScreenEvent(WillFeedEvent.DismissWillFeedDialog)
-                scope.launch { bottomSheetState.hide() }
-                onScreenEvent(FeedingEvent.Start)
-                onHideBottomSheet()
-            },
-            onCancelClick = { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
-        )
+    if (state.feedingConfirmationState == FeedingConfirmationState.Showing) {
+        ThankYouDialog(onDismiss = {
+            onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
+        })
     }
 }
 
@@ -217,14 +270,14 @@ private fun OnBackHandling(
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     state: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     BackHandler(enabled = bottomSheetState.isVisible) {
         scope.launch { bottomSheetState.hide() }
     }
 
     BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
-        scope.launch { onScreenEvent(WillFeedEvent.DismissWillFeedDialog) }
+        scope.launch { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     }
 }
 
@@ -238,7 +291,7 @@ private fun onGeoLocationClick(
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {
-            GpsSettingState.Disabled -> mapView.context.launchGpsSettings()
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }

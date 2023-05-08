@@ -26,13 +26,13 @@ internal fun ThankYouContent() {
     Text(
         text = stringResource(R.string.thank_you),
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.h3,
+        style = MaterialTheme.typography.h4,
         color = MaterialTheme.colors.primary,
         fontWeight = FontWeight.Bold
     )
     Text(
         text = stringResource(R.string.animals_fed),
-        style = MaterialTheme.typography.body2,
+        style = MaterialTheme.typography.body1,
     )
 }
 

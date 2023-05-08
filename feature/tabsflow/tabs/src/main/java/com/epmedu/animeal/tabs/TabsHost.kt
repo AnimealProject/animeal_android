@@ -12,8 +12,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.epmedu.animeal.common.constants.Arguments.ANIMAL_TYPE
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.favourites.presentation.FavouritesScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
@@ -38,7 +42,7 @@ fun TabsHost() {
 
     val navigationController = rememberNavController()
     val navBackStackEntry by navigationController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute: TabsRoute? = TabsRoute.fromRoutePath(navBackStackEntry?.destination?.route)
     var bottomBarVisibility by rememberSaveable { mutableStateOf(SHOWN) }
     val onChangeBottomBarVisibility = { visibility: BottomBarVisibilityState ->
         bottomBarVisibility = visibility
@@ -94,11 +98,23 @@ private fun NavigationTabs(
 ) {
     ScreenNavHost(
         navController = navigationController,
-        startDestination = NavigationTab.Home.route.name
+        startDestination = TabsRoute.Home.format(FORCED_FEEDING_POINT_ID, ANIMAL_TYPE)
     ) {
         screen(TabsRoute.Search.name) { SearchScreen() }
         screen(TabsRoute.Favourites.name) { FavouritesScreen() }
-        screen(TabsRoute.Home.name) { HomeScreen() }
+        screen(
+            route = TabsRoute.Home.format(FORCED_FEEDING_POINT_ID, ANIMAL_TYPE),
+            arguments = listOf(
+                navArgument(FORCED_FEEDING_POINT_ID) {
+                    type = NavType.StringType
+                    nullable = true
+                },
+                navArgument(ANIMAL_TYPE) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) { HomeScreen() }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
     }

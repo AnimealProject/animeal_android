@@ -25,23 +25,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.common.constants.Arguments
+import com.epmedu.animeal.common.route.TabsRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
-import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.DismissWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
-import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.ShowWillFeedDialog
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
-import com.epmedu.animeal.feedconfirmation.presentation.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
+import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -50,6 +53,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -61,7 +65,8 @@ import kotlinx.coroutines.launch
 internal fun FavouritesScreenUI(
     state: FavouritesState,
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    onEvent: (FavouritesScreenEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -78,14 +83,15 @@ internal fun FavouritesScreenUI(
         state,
         contentAlpha,
         buttonAlpha,
-        onEvent
+        onEvent,
+        onWillFeedEvent,
     )
 }
 
 @Composable
 private fun HandleFeedingPointSheetHiddenState(
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    onEvent: (FavouritesScreenEvent) -> Unit,
 ) {
     LaunchedEffect(bottomSheetState) {
         snapshotFlow { bottomSheetState.isHidden }
@@ -103,8 +109,10 @@ private fun ScreenScaffold(
     state: FavouritesState,
     contentAlpha: Float,
     buttonAlpha: Float,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    onEvent: (FavouritesScreenEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
+    val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
         skipHalfExpanded = true,
@@ -121,6 +129,14 @@ private fun ScreenScaffold(
                     isShowOnMapVisible = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
+                    },
+                    onShowOnMap = {
+                        navigator.navigate(
+                            TabsRoute.Home.withArg(
+                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                            )
+                        )
                     }
                 )
             }
@@ -129,7 +145,7 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onEvent(ShowWillFeedDialog) },
+                onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) },
             )
         }
     ) {
@@ -148,7 +164,7 @@ private fun ScreenScaffold(
         }
     }
 
-    WillFeedConfirmationDialog(state, onEvent)
+    WillFeedConfirmationDialog(state.willFeedState, onWillFeedEvent)
 }
 
 @Composable
@@ -207,6 +223,7 @@ private fun FavouritesList(
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
+                    imageUrl = feedingPoint.images[0],
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
@@ -216,15 +233,14 @@ private fun FavouritesList(
 
 @Composable
 internal fun WillFeedConfirmationDialog(
-    state: FavouritesState,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    willFeedState: WillFeedState,
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
-    if (state.showingWillFeedDialog) {
-        FeedConfirmationDialog(
-            onAgreeClick = { onEvent(DismissWillFeedDialog) },
-            onCancelClick = { onEvent(DismissWillFeedDialog) }
-        )
-    }
+    FeedConfirmationDialog(
+        willFeedState,
+        onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
+        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
+    )
 }
 
 @AnimealPreview
@@ -242,6 +258,7 @@ private fun FavouritesScreenPreview() {
             isFavourite = true,
             lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
+            images = emptyList(),
         ),
     )
     AnimealTheme {
@@ -250,6 +267,7 @@ private fun FavouritesScreenPreview() {
                 favourites = favourites.toImmutableList(),
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {}
         ) {}
     }
 }
@@ -263,6 +281,7 @@ private fun FavouritesScreenEmptyPreview() {
                 persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {}
         ) {}
     }
 }

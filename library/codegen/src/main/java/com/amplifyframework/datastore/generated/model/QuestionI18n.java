@@ -4,7 +4,6 @@ package com.amplifyframework.datastore.generated.model;
 import androidx.core.util.ObjectsCompat;
 
 import java.util.Objects;
-import java.util.List;
 
 /** This is an auto generated class representing the QuestionI18n type in your schema. */
 public final class QuestionI18n {

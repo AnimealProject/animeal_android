@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
@@ -48,6 +47,11 @@ internal class FeedingPointRepositoryMock(
                 id = index.toString(),
                 name = "$index - Giorgi Abutidze",
                 time = "${Random.nextInt(0..24)} hours ago"
+            ),
+            images = listOf(
+                "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI",
+                "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U",
+                "https://fastly.picsum.photos/id/719/200/200.jpg?hmac=WkMnZveCKylVzw33Ui-BNFbah8IQWImYq68wVKznlEo",
             )
         )
     }
@@ -74,24 +78,5 @@ internal class FeedingPointRepositoryMock(
 
     override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
-    }
-
-    override suspend fun startFeeding(feedingPointId: String): ActionResult {
-        return ActionResult.Success
-    }
-
-    override suspend fun cancelFeeding(feedingPointId: String): ActionResult {
-        return ActionResult.Success
-    }
-
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult {
-        return ActionResult.Success
-    }
-
-    override suspend fun finishFeeding(
-        feedingPointId: String,
-        images: List<String>
-    ): ActionResult {
-        return ActionResult.Success
     }
 }

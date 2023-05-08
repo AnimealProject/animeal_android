@@ -19,7 +19,8 @@ data class FeedingPointModel(
     val isFavourite: Boolean = false,
     val lastFeeder: Feeder,
     val remoteness: Remoteness = Remoteness.ANY,
-    val coordinates: Point
+    val coordinates: Point,
+    val image: String = ""
 ) {
 
     constructor(feedingPoint: FeedingPoint) : this(
@@ -32,7 +33,8 @@ data class FeedingPointModel(
         feedingPoint.isFavourite,
         feedingPoint.lastFeeder,
         feedingPoint.remoteness,
-        Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude)
+        Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude),
+        feedingPoint.images[0]
     )
 
     fun getDrawableRes(): Int =

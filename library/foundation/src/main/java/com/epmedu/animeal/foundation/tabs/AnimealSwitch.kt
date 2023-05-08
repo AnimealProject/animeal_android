@@ -49,9 +49,10 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 @Composable
 fun AnimealSwitch(
     modifier: Modifier = Modifier,
+    defaultAnimalType: AnimalType,
     onSelectTab: (animalType: AnimalType) -> Unit
 ) {
-    var currentAnimalType by remember { mutableStateOf(AnimalType.Cats) }
+    var currentAnimalType by remember { mutableStateOf(defaultAnimalType) }
 
     TabRow(
         selectedTabIndex = currentAnimalType.ordinal,
@@ -162,6 +163,6 @@ private fun AnimealSwitchTab(
 @Composable
 private fun AnimealSwitchPreview() {
     AnimealTheme {
-        AnimealSwitch(onSelectTab = { })
+        AnimealSwitch(onSelectTab = { }, defaultAnimalType = AnimalType.Cats)
     }
 }

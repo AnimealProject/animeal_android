@@ -1,10 +1,6 @@
 package com.amplifyframework.datastore.generated.model;
 
-import com.amplifyframework.core.model.temporal.Temporal;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.Objects;
+import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
 import androidx.core.util.ObjectsCompat;
 
@@ -15,8 +11,11 @@ import com.amplifyframework.core.model.annotations.AuthRule;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
+import com.amplifyframework.core.model.temporal.Temporal;
 
-import static com.amplifyframework.core.model.query.predicate.QueryField.field;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /** This is an auto generated class representing the Category type in your schema. */
 @SuppressWarnings("all")

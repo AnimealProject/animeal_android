@@ -1,5 +1,7 @@
 package com.epmedu.animeal.tabs.more.donate.di
 
+import com.epmedu.animeal.api.donate.DonateApi
+import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.tabs.more.donate.data.DonateRepositoryImpl
 import com.epmedu.animeal.tabs.more.donate.domain.repository.DonateRepository
 import dagger.Module
@@ -14,5 +16,8 @@ object DonateModule {
 
     @ViewModelScoped
     @Provides
-    fun provideDonateRepository(): DonateRepository = DonateRepositoryImpl()
+    fun provideDonateRepository(
+        donateApi: DonateApi,
+        storageApi: StorageApi
+    ): DonateRepository = DonateRepositoryImpl(donateApi, storageApi)
 }
