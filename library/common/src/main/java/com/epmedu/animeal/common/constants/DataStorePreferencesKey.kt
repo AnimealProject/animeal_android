@@ -15,4 +15,5 @@ object DataStorePreferencesKey {
         booleanPreferencesKey("InitialGeolocationPermissionOnHomeScreen")
     val initialCameraPermissionKey = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
     val animalType = stringPreferencesKey("AnimalType")
+    val initialMotivateUseGps = booleanPreferencesKey("InitialMotivateUseGpsKey")
 }
