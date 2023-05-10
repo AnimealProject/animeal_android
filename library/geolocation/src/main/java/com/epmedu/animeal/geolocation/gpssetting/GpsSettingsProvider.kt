@@ -7,7 +7,11 @@ interface GpsSettingsProvider {
 
     val isGpsSettingsEnabled: Boolean
 
+    val isGpsPermissionGranted: Boolean
+
     fun fetchGpsSettingsUpdates(): Flow<GpsSettingState>
+
+    fun setGpsPermissionGranted(isGranted: Boolean)
 
     sealed interface GpsSettingState {
 

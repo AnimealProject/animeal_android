@@ -179,6 +179,7 @@ internal class HomeViewModel @Inject constructor(
         }
 
         updateState { copy(geolocationPermissionStatus = event.status) }
+        setGpsPermissionGranted(event.status == PermissionStatus.Granted)
     }
 
     private fun markGeolocationPermissionAsAsked() {

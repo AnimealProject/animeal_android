@@ -12,9 +12,13 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
 
     private val locationManager = context.locationManager
 
+    private var _isGpsPermissionGranted = false
+
     override val isGpsSettingsEnabled: Boolean
         get() = LocationManagerCompat.isLocationEnabled(locationManager)
 
+    override val isGpsPermissionGranted: Boolean
+        get() = _isGpsPermissionGranted
     override fun fetchGpsSettingsUpdates() = callbackFlow {
         val gnssStatusCompat = GnssStatusCompat(
             locationManager = locationManager,
@@ -29,5 +33,9 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
         gnssStatusCompat.registerCallback()
 
         awaitClose { gnssStatusCompat.unregisterCallback() }
+    }
+
+    override fun setGpsPermissionGranted(isGranted: Boolean) {
+        _isGpsPermissionGranted = isGranted
     }
 }
