@@ -10,15 +10,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DefaultTimerHandler @Inject constructor(
-    // stateDelegate: StateDelegate<HomeState>,
     routeHandler: RouteHandler,
-    // feedingPointHandler: FeedingPointHandler,
     private val startTimerUseCase: StartTimerUseCase,
     private val disableTimerUseCase: DisableTimerUseCase
 ) : TimerHandler,
-    // FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler {
-    // StateDelegate<HomeState> by stateDelegate {
 
     override fun CoroutineScope.handleTimerEvent(event: TimerEvent) {
         when (event) {

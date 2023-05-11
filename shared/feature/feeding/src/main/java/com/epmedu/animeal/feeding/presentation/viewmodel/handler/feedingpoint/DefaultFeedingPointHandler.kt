@@ -10,6 +10,10 @@ import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.FavouriteChange
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.AnimalTypeChange
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
@@ -38,6 +42,13 @@ class DefaultFeedingPointHandler(
     ErrorHandler by errorHandler {
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
+    override fun updateAnimalType(animalType: AnimalType) {
+        updateState {
+            copy(
+                defaultAnimalType = animalType
+            )
+        }
+    }
 
     override suspend fun fetchFeedingPoints() {
         getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
@@ -61,10 +72,11 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    override suspend fun showFeedingPoint(feedingPointId: String) {
+    override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
-        selectFeedingPoint(FeedingPointEvent.Select(forcedPoint))
+        selectFeedingPoint(Select(forcedPoint))
+        return forcedPoint
     }
 
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
@@ -79,10 +91,10 @@ class DefaultFeedingPointHandler(
 
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {
         when (event) {
-            is FeedingPointEvent.Select -> launch { selectFeedingPoint(event) }
-            FeedingPointEvent.Deselect -> launch { deselectFeedingPoint() }
-            is FeedingPointEvent.FavouriteChange -> launch { handleFavouriteChange(event) }
-            is FeedingPointEvent.AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
+            is Select -> launch { selectFeedingPoint(event) }
+            Deselect -> launch { deselectFeedingPoint() }
+            is FavouriteChange -> launch { handleFavouriteChange(event) }
+            is AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
         }
     }
 
@@ -91,13 +103,12 @@ class DefaultFeedingPointHandler(
             updateState {
                 copy(
                     currentFeedingPoint = null,
-                    // feedingPhotos = emptyList()
                 )
             }
         }
     }
 
-    private suspend fun selectFeedingPoint(event: FeedingPointEvent.Select) {
+    private suspend fun selectFeedingPoint(event: Select) {
         updateState { copy(currentFeedingPoint = event.feedingPoint) }
         sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
     }
@@ -110,7 +121,7 @@ class DefaultFeedingPointHandler(
         fetchFeedingPoints()
     }
 
-    private suspend fun handleFavouriteChange(event: FeedingPointEvent.FavouriteChange) {
+    private suspend fun handleFavouriteChange(event: FavouriteChange) {
         state.currentFeedingPoint?.let { feedingPoint ->
             changeFavouriteState(event.isFavourite, feedingPoint)
             tryModifyingFavourites(event.isFavourite, feedingPoint)

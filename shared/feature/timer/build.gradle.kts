@@ -19,7 +19,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     implementation(projects.shared.feature.router)
-    //implementation(projects.shared.feature.feeding)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

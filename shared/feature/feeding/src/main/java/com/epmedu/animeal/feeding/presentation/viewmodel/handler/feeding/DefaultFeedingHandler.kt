@@ -11,6 +11,10 @@ import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -59,10 +63,10 @@ class DefaultFeedingHandler(
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
-            FeedingEvent.Start -> launch { startFeeding() }
-            FeedingEvent.Cancel -> launch { cancelFeeding() }
-            FeedingEvent.Expired -> launch { expireFeeding() }
-            is FeedingEvent.Finish -> launch { finishFeeding(event.feedingPhotos) }
+            Start -> launch { startFeeding() }
+            Cancel -> launch { cancelFeeding() }
+            Expired -> launch { expireFeeding() }
+            is Finish -> launch { finishFeeding(event.feedingPhotos) }
         }
     }
 
