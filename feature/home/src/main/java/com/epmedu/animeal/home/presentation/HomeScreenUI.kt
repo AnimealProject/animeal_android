@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation
 
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
@@ -37,13 +38,14 @@ import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.thankyou.ThankYouDialog
+import com.epmedu.animeal.home.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.HomePermissions
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
+import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.timer.data.model.TimerState
@@ -130,7 +132,7 @@ internal fun HomeScreenUI(
                     feedingPhotos = state.feedingPhotos,
                     contentAlpha = contentAlpha,
                     onFavouriteChange = { onScreenEvent(FavouriteChange(isFavourite = it)) },
-                    onTakePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera) },
+                    onTakePhotoClick = { openCamera(state, onScreenEvent, context) },
                     onDeletePhotoClick = { onScreenEvent(FeedingGalleryEvent.DeletePhoto(it)) },
                     onShowOnMap = {}
                 )
@@ -154,7 +156,7 @@ internal fun HomeScreenUI(
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) }
+                            onClick = { onFeedingClick(state, onWillFeedEvent) }
                         )
                     }
                 }
@@ -194,6 +196,27 @@ internal fun HomeScreenUI(
         onWillFeedEvent,
     )
     ThankYouConfirmationDialog(state, onScreenEvent)
+    if (state.willFeedState == WillFeedState.RequestingCameraPermission) {
+        CameraPermissionRequestDialog(
+            onConfirm = {
+                context.launchAppSettings()
+                onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
+            },
+            onDismiss = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
+        )
+    }
+}
+
+private fun openCamera(
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    context: Context
+) {
+    if (state.cameraPermissionStatus is PermissionStatus.Granted) {
+        onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera)
+    } else {
+        context.launchAppSettings()
+    }
 }
 
 @Composable
@@ -294,5 +317,16 @@ private fun onGeoLocationClick(
             GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
+    }
+}
+
+private fun onFeedingClick(
+    state: HomeState,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
+) {
+    when (state.cameraPermissionStatus) {
+        PermissionStatus.Restricted -> onWillFeedEvent(WillFeedEvent.AskCameraPermission)
+        PermissionStatus.Denied -> onWillFeedEvent(WillFeedEvent.AskCameraPermission)
+        PermissionStatus.Granted -> onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog)
     }
 }

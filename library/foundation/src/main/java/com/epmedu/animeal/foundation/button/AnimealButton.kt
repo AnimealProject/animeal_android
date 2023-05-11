@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
+import com.epmedu.animeal.foundation.text.AutoSizeText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.DisabledButtonColor
 import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
@@ -40,8 +42,9 @@ fun AnimealButton(
         enabled = enabled,
         onClick = onClick
     ) {
-        Text(
+        AutoSizeText(
             text = text,
+            textSize = 16.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )

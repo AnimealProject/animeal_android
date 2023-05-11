@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.thankyou
+package com.epmedu.animeal.home.presentation.ui.thankyou
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.home.presentation.thankyou.ui.ThankYouContent
 import com.epmedu.animeal.resources.R
 
 @Composable

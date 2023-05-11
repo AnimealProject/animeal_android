@@ -13,6 +13,8 @@ interface WillFeedHandler {
 
     fun handleWillFeedEvent(event: WillFeedEvent)
 
+    fun askCameraPermission()
+
     fun showWillFeedDialog()
 
     fun dismissWillFeedDialog()

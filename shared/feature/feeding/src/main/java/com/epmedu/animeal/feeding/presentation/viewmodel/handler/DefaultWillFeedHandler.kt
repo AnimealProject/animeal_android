@@ -22,8 +22,13 @@ class DefaultWillFeedHandler(
     override fun handleWillFeedEvent(event: WillFeedEvent) {
         when (event) {
             WillFeedEvent.DismissWillFeedDialog -> dismissWillFeedDialog()
+            WillFeedEvent.AskCameraPermission -> askCameraPermission()
             WillFeedEvent.ShowWillFeedDialog -> showWillFeedDialog()
         }
+    }
+
+    override fun askCameraPermission() {
+        updateState { WillFeedState.RequestingCameraPermission }
     }
 
     override fun showWillFeedDialog() {
