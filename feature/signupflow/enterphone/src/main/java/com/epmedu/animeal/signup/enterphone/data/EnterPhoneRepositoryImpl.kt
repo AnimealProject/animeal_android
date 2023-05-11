@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.extensions.edit
-import com.epmedu.animeal.profile.data.repository.updatePhoneNumber
-import com.epmedu.animeal.profile.data.repository.updatePhoneNumberRegion
+import com.epmedu.animeal.profile.data.util.updatePhoneNumber
+import com.epmedu.animeal.profile.data.util.updatePhoneNumberRegion
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.enterphone.domain.EnterPhoneRepository
 import javax.inject.Inject

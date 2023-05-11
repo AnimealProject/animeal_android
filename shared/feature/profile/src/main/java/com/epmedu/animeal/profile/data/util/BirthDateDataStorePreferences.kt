@@ -1,4 +1,4 @@
-package com.epmedu.animeal.profile.data.repository
+package com.epmedu.animeal.profile.data.util
 
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences

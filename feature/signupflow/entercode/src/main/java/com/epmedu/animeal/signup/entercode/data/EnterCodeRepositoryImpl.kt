@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
-import com.epmedu.animeal.profile.data.repository.phoneNumber
-import com.epmedu.animeal.profile.data.repository.phoneNumberRegion
+import com.epmedu.animeal.profile.data.util.phoneNumber
+import com.epmedu.animeal.profile.data.util.phoneNumberRegion
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.entercode.domain.EnterCodeRepository
 import kotlinx.coroutines.flow.Flow
