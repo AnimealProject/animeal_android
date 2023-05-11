@@ -38,6 +38,13 @@ class DefaultFeedingPointHandler(
     ErrorHandler by errorHandler {
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
+    override fun updateAnimalType(animalType: AnimalType) {
+        updateState {
+            copy(
+                defaultAnimalType = animalType
+            )
+        }
+    }
 
     override suspend fun fetchFeedingPoints() {
         getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
@@ -61,10 +68,11 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    override suspend fun showFeedingPoint(feedingPointId: String) {
+    override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
         selectFeedingPoint(FeedingPointEvent.Select(forcedPoint))
+        return forcedPoint
     }
 
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {

@@ -107,6 +107,10 @@ internal class HomeViewModel @Inject constructor(
                             feedingRouteState = feedingRouteUpdate
                         ),
                         willFeedState = willFeedUpdate,
+                        gpsSettingState = when {
+                            isGpsSettingsEnabled -> GpsSettingState.Enabled
+                            else -> GpsSettingState.Disabled
+                        },
                     )
                 }
             }.collect()
@@ -166,6 +170,7 @@ internal class HomeViewModel @Inject constructor(
     private fun initialize() {
         viewModelScope.launch {
             val defaultAnimalType = animalTypeUseCase()
+            updateAnimalType(defaultAnimalType)
             updateState {
                 copy(
                     isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
@@ -232,10 +237,9 @@ internal class HomeViewModel @Inject constructor(
             val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
             if (forcedFeedingPointId != null) {
                 savedStateHandle[FORCED_FEEDING_POINT_ID] = null
-                showFeedingPoint(forcedFeedingPointId)
-                state.feedingPointState.currentFeedingPoint?.coordinates
-                    ?.run { Location(latitude(), longitude()) }
-                    ?.let(::collectLocations)
+                showFeedingPoint(forcedFeedingPointId).coordinates.let {
+                    collectLocations(Location(it.latitude(), it.longitude()))
+                }
             }
         }
     }
