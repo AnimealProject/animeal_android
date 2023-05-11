@@ -19,7 +19,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -39,11 +38,6 @@ class DefaultFeedingPointHandler(
     ErrorHandler by errorHandler {
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
-    override fun CoroutineScope.registerFeedingPointState(updateCall: (FeedingPointState) -> Unit) {
-        launch {
-            feedingPointStateFlow.collectLatest { updateCall(it) }
-        }
-    }
 
     override suspend fun fetchFeedingPoints() {
         getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->

@@ -48,6 +48,8 @@ import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import com.epmedu.animeal.timer.presentation.handler.TimerEvent
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -90,16 +92,24 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch { fetchFeedingPoints() }
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
-        viewModelScope.registerWillFeedState {
-            updateState {
-                copy(willFeedState = it)
-            }
-        }
-        viewModelScope.registerFeedingPointState {
-            updateState { copy(feedingPointState = it) }
-        }
-        viewModelScope.registerRouteState {
-            updateState { copy(feedingPointState = feedingPointState.copy(feedingRouteState = it)) }
+        viewModelScope.launch {
+            combine(
+                feedingPointStateFlow,
+                feedingRouteStateFlow,
+                feedingStateFlow,
+                willFeedStateFlow
+            ) { feedingPointUpdate, feedingRouteUpdate, feedingUpdate, willFeedUpdate ->
+                updateState {
+                    copy(
+                        feedingPointState = feedingPointUpdate.copy(
+                            currentFeedingPoint = feedingUpdate.currentFeedingPoint,
+                            feedingConfirmationState = feedingUpdate.feedingConfirmationState,
+                            feedingRouteState = feedingRouteUpdate
+                        ),
+                        willFeedState = willFeedUpdate,
+                    )
+                }
+            }.collect()
         }
     }
 

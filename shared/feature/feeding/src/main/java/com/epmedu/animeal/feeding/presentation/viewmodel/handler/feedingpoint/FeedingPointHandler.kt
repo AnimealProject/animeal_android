@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface FeedingPointHandler {
 
     var feedingPointStateFlow: StateFlow<FeedingPointState>
-    fun CoroutineScope.registerFeedingPointState(updateCall: (FeedingPointState) -> Unit)
 
     suspend fun fetchFeedingPoints()
 

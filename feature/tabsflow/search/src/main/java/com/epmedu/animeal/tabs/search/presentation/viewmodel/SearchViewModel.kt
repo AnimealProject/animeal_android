@@ -43,21 +43,18 @@ class SearchViewModel @Inject constructor(
             stateFlow.collectLatest { state ->
                 combine(
                     searchDogsFeedingPointsUseCase(state.dogsQuery),
-                    searchCatsFeedingPointsUseCase(state.catsQuery)
-                ) { dogs, cats ->
+                    searchCatsFeedingPointsUseCase(state.catsQuery),
+                    willFeedStateFlow
+                ) { dogs, cats, willFeedUpdate ->
                     updateState {
                         copy(
                             catsFeedingPoints = cats.toImmutableList(),
                             dogsFeedingPoints = dogs.toImmutableList(),
-                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList()
+                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList(),
+                            willFeedState = willFeedUpdate
                         )
                     }
                 }.collect()
-            }
-        }
-        viewModelScope.registerWillFeedState {
-            updateState {
-                copy(willFeedState = it)
             }
         }
     }

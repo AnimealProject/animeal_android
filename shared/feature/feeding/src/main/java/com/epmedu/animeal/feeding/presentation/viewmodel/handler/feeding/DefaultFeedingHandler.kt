@@ -20,6 +20,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.Fe
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -43,6 +44,8 @@ class DefaultFeedingHandler(
     RouteHandler by routeHandler,
     TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
+
+    override var feedingStateFlow: StateFlow<FeedingPointState> = stateFlow
 
     override suspend fun fetchCurrentFeeding() {
         val forcedFeedingPointId = forcedArgumentsUseCase<String>(FORCED_FEEDING_POINT_ID, hashCode())
