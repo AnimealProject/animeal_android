@@ -11,11 +11,11 @@ import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState

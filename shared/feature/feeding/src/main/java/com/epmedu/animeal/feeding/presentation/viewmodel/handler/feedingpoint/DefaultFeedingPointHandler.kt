@@ -10,10 +10,10 @@ import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
-import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.AnimalTypeChange
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.FavouriteChange
-import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.AnimalTypeChange
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
@@ -75,7 +75,7 @@ class DefaultFeedingPointHandler(
     override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
-        selectFeedingPoint(Select(forcedPoint))
+        selectFeedingPoint(FeedingPointEvent.Select(forcedPoint))
         return forcedPoint
     }
 
