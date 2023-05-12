@@ -15,4 +15,5 @@ interface FeedingHandler {
     suspend fun cancelFeeding()
 
     suspend fun expireFeeding()
+    fun dismissThankYouDialog()
 }

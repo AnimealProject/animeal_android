@@ -119,13 +119,21 @@ class DefaultFeedingHandler(
                 fetchFeedingPoints()
             },
             onError = {
-                updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
+                dismissThankYouDialog()
             }
         )
     }
 
     private fun displayThankYouDialog() {
         updateState { copy(feedingConfirmationState = FeedingConfirmationState.Showing) }
+    }
+
+    override fun dismissThankYouDialog() {
+        updateState {
+            copy(
+                feedingConfirmationState = FeedingConfirmationState.Dismissed
+            )
+        }
     }
 
     private suspend fun performFeedingAction(
