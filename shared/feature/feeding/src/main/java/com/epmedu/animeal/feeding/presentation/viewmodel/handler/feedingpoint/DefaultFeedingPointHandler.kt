@@ -75,7 +75,7 @@ class DefaultFeedingPointHandler(
     override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
-        selectFeedingPoint(Select(forcedPoint))
+        selectFeedingPoint(FeedingPointEvent.Select(forcedPoint))
         return forcedPoint
     }
 
