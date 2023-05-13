@@ -60,9 +60,9 @@ internal class DefaultFeedingHandler(
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
             Start -> launch { startFeeding() }
-            Cancel -> launch { cancelFeeding() }
-            Expired -> launch { expireFeeding() }
-            Finish -> launch { finishFeeding() }
+            Cancel -> cancelFeeding()
+            Expired -> expireFeeding()
+            Finish -> finishFeeding()
         }
     }
 
@@ -77,47 +77,53 @@ internal class DefaultFeedingHandler(
         )
     }
 
-    override suspend fun cancelFeeding() {
-        performFeedingAction(
-            action = cancelFeedingUseCase::invoke,
-            onSuccess = {
-                deselectFeedingPoint()
-                stopRoute()
-                disableTimer()
-                fetchFeedingPoints()
-            }
-        )
+    override fun CoroutineScope.cancelFeeding() {
+        launch {
+            performFeedingAction(
+                action = cancelFeedingUseCase::invoke,
+                onSuccess = {
+                    deselectFeedingPoint()
+                    stopRoute()
+                    disableTimer()
+                    fetchFeedingPoints()
+                }
+            )
+        }
     }
 
-    override suspend fun expireFeeding() {
+    override fun CoroutineScope.expireFeeding() {
         /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
         stopRoute()
-        performFeedingAction(
-            action = { feedingPointId ->
-                rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
-            },
-            onSuccess = {
-                deselectFeedingPoint()
-                fetchFeedingPoints()
-            }
-        )
+        launch {
+            performFeedingAction(
+                action = { feedingPointId ->
+                    rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
+                },
+                onSuccess = {
+                    deselectFeedingPoint()
+                    fetchFeedingPoints()
+                }
+            )
+        }
     }
 
-    private suspend fun finishFeeding() {
+    private fun CoroutineScope.finishFeeding() {
         updateState { copy(feedingConfirmationState = FeedingConfirmationState.Loading) }
-        performFeedingAction(
-            action = { feedingPointId ->
-                finishFeedingUseCase(feedingPointId, state.feedingPhotos.map { it.name })
-            },
-            onSuccess = {
-                displayThankYouDialog()
-                stopRoute()
-                fetchFeedingPoints()
-            },
-            onError = {
-                updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
-            }
-        )
+        launch {
+            performFeedingAction(
+                action = { feedingPointId ->
+                    finishFeedingUseCase(feedingPointId, state.feedingPhotos.map { it.name })
+                },
+                onSuccess = {
+                    displayThankYouDialog()
+                    stopRoute()
+                    fetchFeedingPoints()
+                },
+                onError = {
+                    updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
+                }
+            )
+        }
     }
 
     private fun displayThankYouDialog() {

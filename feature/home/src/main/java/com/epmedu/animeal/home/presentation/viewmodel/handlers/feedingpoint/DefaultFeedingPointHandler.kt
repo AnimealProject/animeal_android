@@ -20,6 +20,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.error.ErrorHandle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
@@ -38,24 +39,30 @@ internal class DefaultFeedingPointHandler(
     ActionDelegate by actionDelegate,
     ErrorHandler by errorHandler {
 
-    override suspend fun fetchFeedingPoints() {
-        getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
-            val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
-                FeedingPointModel(domainFeedingPoint)
-            }
-            val currentFeedingPoint =
-                feedingPoints.find { it.id == state.currentFeedingPoint?.id }
-            val feedingPointsToShow = when {
-                state.feedingRouteState is FeedingRouteState.Active &&
-                    currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
-                else -> feedingPoints.toImmutableList()
-            }
+    private var job: Job? = null
 
-            updateState {
-                copy(
-                    currentFeedingPoint = currentFeedingPoint,
-                    feedingPoints = feedingPointsToShow
-                )
+    override fun CoroutineScope.fetchFeedingPoints() {
+        job?.cancel()
+        job = launch {
+            getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
+                val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
+                    FeedingPointModel(domainFeedingPoint)
+                }
+                val currentFeedingPoint =
+                    feedingPoints.find { it.id == state.currentFeedingPoint?.id }
+                val feedingPointsToShow = when {
+                    state.feedingRouteState is FeedingRouteState.Active &&
+                        currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
+
+                    else -> feedingPoints.toImmutableList()
+                }
+
+                updateState {
+                    copy(
+                        currentFeedingPoint = currentFeedingPoint,
+                        feedingPoints = feedingPointsToShow
+                    )
+                }
             }
         }
     }
@@ -81,7 +88,7 @@ internal class DefaultFeedingPointHandler(
             is Select -> launch { selectFeedingPoint(event) }
             FeedingPointEvent.Deselect -> launch { deselectFeedingPoint() }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
-            is FeedingPointEvent.AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
+            is FeedingPointEvent.AnimalTypeChange -> handleAnimalTypeChange(event.type)
         }
     }
 
@@ -101,12 +108,12 @@ internal class DefaultFeedingPointHandler(
         sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
     }
 
-    private suspend fun handleAnimalTypeChange(type: AnimalType) {
-        updateState {
-            copy(defaultAnimalType = type)
+    private fun CoroutineScope.handleAnimalTypeChange(type: AnimalType) {
+        updateState { copy(defaultAnimalType = type) }
+        launch {
+            updateAnimalTypeSettingsUseCase(type)
+            fetchFeedingPoints()
         }
-        updateAnimalTypeSettingsUseCase(type)
-        fetchFeedingPoints()
     }
 
     private suspend fun handleFavouriteChange(event: FavouriteChange) {

@@ -11,6 +11,8 @@ import kotlin.coroutines.resumeWithException
 
 internal class StorageApiImpl : StorageApi {
 
+    private val cachedImageUrls = mutableMapOf<String, String>()
+
     override suspend fun uploadFile(fileName: String, uri: Uri): ApiResult<Unit> {
         return suspendCancellableCoroutine {
             val file = uri.toFile()
@@ -24,16 +26,22 @@ internal class StorageApiImpl : StorageApi {
         }
     }
 
-    override suspend fun parseAmplifyUrl(imageId: String): String =
-        suspendCancellableCoroutine {
-            val options = StorageGetUrlOptions.builder().build()
-            Amplify.Storage.getUrl(
-                imageId,
-                options,
-                { resume(it.url.toString()) },
-                { resumeWithException(it) }
-            )
-        }
+    override suspend fun parseAmplifyUrl(imageId: String): String {
+        return cachedImageUrls[imageId]
+            ?: suspendCancellableCoroutine {
+                val options = StorageGetUrlOptions.builder().build()
+                Amplify.Storage.getUrl(
+                    imageId,
+                    options,
+                    { result ->
+                        resume(
+                            result.url.toString().also { cachedImageUrls[imageId] = it }
+                        )
+                    },
+                    { resumeWithException(it) }
+                )
+            }
+    }
 
     override suspend fun deleteFile(fileName: String): ApiResult<Unit> =
         suspendCancellableCoroutine {
