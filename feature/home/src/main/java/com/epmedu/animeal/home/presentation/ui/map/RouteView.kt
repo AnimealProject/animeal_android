@@ -38,34 +38,35 @@ internal fun RouteView(
         )
     }
 
-    LaunchedEffect(key1 = state.feedingPointState.feedingRouteState) {
-        when {
-            state.gpsSettingState is GpsSettingState.Disabled && state.feedingPointState.currentFeedingPoint != null -> {
-                state.feedingPointState.currentFeedingPoint?.let { mapView.focusOnFeedingPoint(it) }
-            }
-            state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled -> {
-                mapView.removeRoute(mapBoxRouteInitOptions)
-            }
-            state.feedingPointState.feedingRouteState is FeedingRouteState.Active &&
-                state.timerState is TimerState.Active -> {
-                val activeState = state.feedingPointState.feedingRouteState.let {
-                    it as FeedingRouteState.Active
+    with(state) {
+        val feedingRouteState = feedingPointState.feedingRouteState
+        val currentFeedingPoint = feedingPointState.currentFeedingPoint
+        LaunchedEffect(key1 = feedingRouteState) {
+            when {
+                gpsSettingState is GpsSettingState.Disabled && currentFeedingPoint != null -> {
+                    currentFeedingPoint.let { mapView.focusOnFeedingPoint(it) }
                 }
-                if (activeState.routeData != null) {
-                    activeState.routeData?.let { data ->
-                        drawRoute(data, mapView, mapBoxRouteInitOptions)
+                feedingRouteState is FeedingRouteState.Disabled -> {
+                    mapView.removeRoute(mapBoxRouteInitOptions)
+                }
+                feedingRouteState is FeedingRouteState.Active &&
+                    timerState is TimerState.Active -> {
+                    if (feedingRouteState.routeData != null) {
+                        feedingRouteState.routeData?.let { data ->
+                            drawRoute(data, mapView, mapBoxRouteInitOptions)
+                        }
+                        if (feedingRouteState.showFullRoad) {
+                            setLocationOnRoute(mapView, state)
+                        }
+                    } else {
+                        fetchRoute(
+                            state,
+                            mapView,
+                            mapBoxRouteInitOptions,
+                            mapboxNavigation,
+                            onRouteResult
+                        )
                     }
-                    if (activeState.showFullRoad) {
-                        setLocationOnRoute(mapView, state)
-                    }
-                } else {
-                    fetchRoute(
-                        state,
-                        mapView,
-                        mapBoxRouteInitOptions,
-                        mapboxNavigation,
-                        onRouteResult
-                    )
                 }
             }
         }

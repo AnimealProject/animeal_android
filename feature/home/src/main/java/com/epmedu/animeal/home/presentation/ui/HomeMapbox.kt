@@ -74,7 +74,7 @@ internal fun HomeMapbox(
             onMapInteraction = onMapInteraction,
         )
 
-        when (state.feedingPointState.feedingRouteState) {
+        when (val feedingRouteState = state.feedingPointState.feedingRouteState) {
             is FeedingRouteState.Disabled -> {
                 AnimealSwitch(
                     modifier = Modifier
@@ -92,10 +92,10 @@ internal fun HomeMapbox(
                         .padding(top = 16.dp)
                         .padding(horizontal = 20.dp),
                     timeLeft = context.formatNumberToHourMin(
-                        (state.feedingPointState.feedingRouteState as FeedingRouteState.Active).timeLeft
+                        feedingRouteState.timeLeft
                     )
                         ?: stringResource(R.string.calculating_route),
-                    distanceLeft = (state.feedingPointState.feedingRouteState as FeedingRouteState.Active).distanceLeft?.run {
+                    distanceLeft = feedingRouteState.distanceLeft?.run {
                         " • ${context.formatMetersToKilometers(this)}"
                     } ?: "",
                     onCancelClick = onCancelRouteClick
