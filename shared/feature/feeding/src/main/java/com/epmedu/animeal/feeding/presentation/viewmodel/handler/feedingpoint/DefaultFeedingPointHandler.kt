@@ -18,7 +18,6 @@ import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.router.presentation.FeedingRouteState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -57,16 +56,11 @@ class DefaultFeedingPointHandler(
             }
             val currentFeedingPoint =
                 feedingPoints.find { it.id == state.currentFeedingPoint?.id }
-            val feedingPointsToShow = when {
-                state.feedingRouteState is FeedingRouteState.Active &&
-                    currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
-                else -> feedingPoints.toImmutableList()
-            }
 
             updateState {
                 copy(
                     currentFeedingPoint = currentFeedingPoint,
-                    feedingPoints = feedingPointsToShow
+                    feedingPoints = feedingPoints.toImmutableList()
                 )
             }
         }
@@ -75,7 +69,7 @@ class DefaultFeedingPointHandler(
     override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
-        selectFeedingPoint(FeedingPointEvent.Select(forcedPoint))
+        selectFeedingPoint(Select(forcedPoint))
         return forcedPoint
     }
 
