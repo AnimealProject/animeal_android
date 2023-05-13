@@ -164,15 +164,13 @@ private fun MapboxMap(
     }
 
     LaunchedEffect(key1 = state.feedingPointState.currentFeedingPoint) {
-        state.feedingPointState.currentFeedingPoint?.let {
-            if (state.feedingPointState.feedingRouteState is FeedingRouteState.Active) {
-                markerController.drawMarkers(
-                    feedingPoints = listOf(it)
-                )
-                markerController.drawSelectedMarkerBackground(null)
-            } else {
-                markerController.drawSelectedMarkerBackground(it)
-            }
+        if (state.feedingPointState.feedingRouteState is FeedingRouteState.Active) {
+            markerController.drawMarkers(
+                feedingPoints = listOf(checkNotNull(state.feedingPointState.currentFeedingPoint))
+            )
+            markerController.drawSelectedMarkerBackground(null)
+        } else {
+            markerController.drawSelectedMarkerBackground(state.feedingPointState.currentFeedingPoint)
         }
     }
 
