@@ -11,6 +11,8 @@ interface GpsSettingsProvider {
 
     fun fetchGpsSettingsUpdates(): Flow<GpsSettingState>
 
+    fun fetchGpsPermissionGranted(): Flow<Boolean>
+
     fun setGpsPermissionGranted(isGranted: Boolean)
 
     sealed interface GpsSettingState {
