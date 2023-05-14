@@ -67,6 +67,9 @@ internal fun HomeScreenUI(
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
+    val locationEmbeddedDialogLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+        onWillFeedEvent(WillFeedEvent.EmbeddedDialogClosed)
+    }
 
     if (state.errorMessage != null) {
         Toast.makeText(
@@ -179,7 +182,9 @@ internal fun HomeScreenUI(
                     onScreenEvent(RouteEvent.FeedingRouteUpdateRequest(result))
                 },
                 onGeolocationClick = { mapView ->
-                    onGeoLocationClick(mapView, state, geolocationPermissionState)
+                    onGeoLocationClick(mapView, state, geolocationPermissionState) {
+                        locationEmbeddedDialogLauncher.launch(IntentSenderRequest.Builder(it).build())
+                    }
                 },
                 onSelectTab = {
                     onScreenEvent(FeedingPointEvent.AnimalTypeChange(it))
@@ -300,13 +305,14 @@ private fun OnBackHandling(
 private fun onGeoLocationClick(
     mapView: MapView,
     state: HomeState,
-    geolocationPermission: PermissionState
+    geolocationPermission: PermissionState,
+    showEmbeddedDialog: (PendingIntent) -> Unit
 ) {
     when (state.geolocationPermissionStatus) {
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {
-            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog(showEmbeddedDialog)
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }
