@@ -12,8 +12,8 @@ interface FeedingHandler {
 
     fun CoroutineScope.handleFeedingEvent(event: FeedingEvent)
 
-    suspend fun cancelFeeding()
+    fun CoroutineScope.cancelFeeding()
 
-    suspend fun expireFeeding()
+    fun CoroutineScope.expireFeeding()
     fun dismissThankYouDialog()
 }

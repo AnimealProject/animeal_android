@@ -13,7 +13,7 @@ interface FeedingPointHandler {
 
     fun updateAnimalType(animalType: AnimalType)
 
-    suspend fun fetchFeedingPoints()
+    fun CoroutineScope.fetchFeedingPoints()
 
     fun deselectFeedingPoint()
 

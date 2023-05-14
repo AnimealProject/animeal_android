@@ -21,6 +21,7 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,8 @@ class DefaultFeedingPointHandler(
     ActionDelegate by actionDelegate,
     ErrorHandler by errorHandler {
 
+    private var job: Job? = null
+
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
     override fun updateAnimalType(animalType: AnimalType) {
         updateState {
@@ -49,19 +52,22 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    override suspend fun fetchFeedingPoints() {
-        getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
-            val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
-                FeedingPointModel(domainFeedingPoint)
-            }
-            val currentFeedingPoint =
-                feedingPoints.find { it.id == state.currentFeedingPoint?.id }
+    override fun CoroutineScope.fetchFeedingPoints(){
+        job?.cancel()
+        job = launch {
+            getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
+                val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
+                    FeedingPointModel(domainFeedingPoint)
+                }
+                val currentFeedingPoint =
+                    feedingPoints.find { it.id == state.currentFeedingPoint?.id }
 
-            updateState {
-                copy(
-                    currentFeedingPoint = currentFeedingPoint,
-                    feedingPoints = feedingPoints.toImmutableList()
-                )
+                updateState {
+                    copy(
+                        currentFeedingPoint = currentFeedingPoint,
+                        feedingPoints = feedingPoints.toImmutableList()
+                    )
+                }
             }
         }
     }
@@ -88,7 +94,7 @@ class DefaultFeedingPointHandler(
             is Select -> launch { selectFeedingPoint(event) }
             Deselect -> launch { deselectFeedingPoint() }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
-            is AnimalTypeChange -> launch { handleAnimalTypeChange(event.type) }
+            is AnimalTypeChange -> handleAnimalTypeChange(event.type)
         }
     }
 
@@ -97,6 +103,7 @@ class DefaultFeedingPointHandler(
             updateState {
                 copy(
                     currentFeedingPoint = null,
+                    //feedingPhotos = emptyList()
                 )
             }
         }
@@ -107,12 +114,14 @@ class DefaultFeedingPointHandler(
         sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
     }
 
-    private suspend fun handleAnimalTypeChange(type: AnimalType) {
+    private fun CoroutineScope.handleAnimalTypeChange(type: AnimalType) {
         updateState {
             copy(defaultAnimalType = type)
         }
-        updateAnimalTypeSettingsUseCase(type)
-        fetchFeedingPoints()
+        launch {
+            updateAnimalTypeSettingsUseCase(type)
+            fetchFeedingPoints()
+        }
     }
 
     private suspend fun handleFavouriteChange(event: FavouriteChange) {

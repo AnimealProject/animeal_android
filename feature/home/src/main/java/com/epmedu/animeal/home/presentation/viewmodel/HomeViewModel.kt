@@ -88,7 +88,7 @@ internal class HomeViewModel @Inject constructor(
 
     init {
         initialize()
-        viewModelScope.launch { fetchFeedingPoints() }
+        viewModelScope.fetchFeedingPoints()
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
         viewModelScope.launch {
