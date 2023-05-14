@@ -52,7 +52,7 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    override fun CoroutineScope.fetchFeedingPoints(){
+    override fun CoroutineScope.fetchFeedingPoints() {
         job?.cancel()
         job = launch {
             getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
@@ -103,7 +103,6 @@ class DefaultFeedingPointHandler(
             updateState {
                 copy(
                     currentFeedingPoint = null,
-                    //feedingPhotos = emptyList()
                 )
             }
         }

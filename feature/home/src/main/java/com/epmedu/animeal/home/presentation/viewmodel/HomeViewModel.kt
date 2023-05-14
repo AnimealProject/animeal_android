@@ -146,6 +146,7 @@ internal class HomeViewModel @Inject constructor(
     private fun finishFeedingProcess() {
         deselectFeedingPoint()
         dismissThankYouDialog()
+        updateState { copy(feedingPhotos = emptyList()) }
     }
 
     fun handleFeedingEvent(event: FeedingEvent) {

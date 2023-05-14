@@ -124,8 +124,7 @@ class DefaultFeedingHandler(
                     fetchFeedingPoints()
                 },
                 onError = {
-                    //dismissThankYouDialog()
-                    updateState { copy(feedingConfirmationState = FeedingConfirmationState.Dismissed) }
+                    dismissThankYouDialog()
                 }
             )
         }
