@@ -3,7 +3,6 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -83,12 +82,11 @@ internal class HomeViewModel @Inject constructor(
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
-    BuildConfigProvider by homeProviders,
     FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
         initialize()
-        viewModelScope.launch { fetchFeedingPoints() }
+        viewModelScope.fetchFeedingPoints()
         viewModelScope.launch { fetchCurrentFeeding() }
         viewModelScope.launch { getTimerState() }
         viewModelScope.registerWillFeedState {
@@ -138,8 +136,6 @@ internal class HomeViewModel @Inject constructor(
             val defaultAnimalType = animalTypeUseCase()
             updateState {
                 copy(
-                    mapBoxPublicKey = homeProviders.mapBoxPublicKey,
-                    mapBoxStyleUri = mapBoxStyleURI,
                     isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
                     gpsSettingState = when {
                         isGpsSettingsEnabled -> GpsSettingState.Enabled

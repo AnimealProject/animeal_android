@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 
 internal interface FeedingPointHandler {
 
-    suspend fun fetchFeedingPoints()
+    fun CoroutineScope.fetchFeedingPoints()
 
     fun deselectFeedingPoint()
 

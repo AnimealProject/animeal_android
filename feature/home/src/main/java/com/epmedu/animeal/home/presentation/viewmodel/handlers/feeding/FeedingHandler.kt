@@ -9,7 +9,7 @@ internal interface FeedingHandler {
 
     fun CoroutineScope.handleFeedingEvent(event: HomeScreenEvent.FeedingEvent)
 
-    suspend fun cancelFeeding()
+    fun CoroutineScope.cancelFeeding()
 
-    suspend fun expireFeeding()
+    fun CoroutineScope.expireFeeding()
 }

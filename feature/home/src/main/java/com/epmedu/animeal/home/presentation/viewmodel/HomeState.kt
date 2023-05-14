@@ -12,19 +12,19 @@ import com.epmedu.animeal.home.presentation.model.FeedingConfirmationState
 import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.timer.data.model.TimerState
-import com.mapbox.maps.Style
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
+    val mapBoxPublicKey: String,
+    val mapBoxStyleUri: String,
+
     val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val willFeedState: WillFeedState = WillFeedState(),
     val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
-    val mapBoxPublicKey: String = "",
-    val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
     val defaultAnimalType: AnimalType = AnimalType.Dogs,
 
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
