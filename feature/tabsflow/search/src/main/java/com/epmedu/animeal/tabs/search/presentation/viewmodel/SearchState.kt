@@ -13,7 +13,7 @@ data class SearchState(
     val dogsQuery: String = "",
     val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
     val showingFeedingPoint: FeedingPoint? = null,
-    val willFeedState: WillFeedState = WillFeedState.Dismissed,
+    val willFeedState: WillFeedState = WillFeedState(),
 ) {
     fun getQueryBy(animalType: AnimalType) = when (animalType) {
         AnimalType.Dogs -> dogsQuery

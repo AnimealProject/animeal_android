@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.ui
+package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

@@ -151,7 +151,7 @@ internal fun WillFeedConfirmationDialog(
     onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     FeedConfirmationDialog(
-        willFeedState,
+        willFeedState.feedConfirmationDialog,
         onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
         onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     )

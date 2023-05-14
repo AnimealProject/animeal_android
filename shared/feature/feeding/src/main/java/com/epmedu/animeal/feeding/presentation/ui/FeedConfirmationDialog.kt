@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedConfirmationDialogState
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -32,11 +32,11 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun FeedConfirmationDialog(
-    state: WillFeedState,
+    state: FeedConfirmationDialogState,
     onAgreeClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
-    if (state is WillFeedState.Showing) {
+    if (state is FeedConfirmationDialogState.Showing) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,6 +94,6 @@ fun FeedConfirmationDialog(
 @Composable
 private fun FeedConfirmationPreview() {
     AnimealTheme {
-        FeedConfirmationDialog(WillFeedState.Showing, {}, {})
+        FeedConfirmationDialog(FeedConfirmationDialogState.Showing, {}, {})
     }
 }

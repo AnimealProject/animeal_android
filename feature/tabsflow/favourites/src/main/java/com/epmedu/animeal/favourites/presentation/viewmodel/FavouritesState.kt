@@ -8,5 +8,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class FavouritesState(
     val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
     val showingFeedingPoint: FeedingPoint? = null,
-    val willFeedState: WillFeedState = WillFeedState.Dismissed,
+    val willFeedState: WillFeedState = WillFeedState(),
 )

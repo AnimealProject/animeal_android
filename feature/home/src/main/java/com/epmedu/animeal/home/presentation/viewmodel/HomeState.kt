@@ -21,7 +21,7 @@ data class HomeState(
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
-    val willFeedState: WillFeedState = WillFeedState.Dismissed,
+    val willFeedState: WillFeedState = WillFeedState(),
     val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
     val mapBoxPublicKey: String = "",
     val mapBoxStyleUri: String = Style.MAPBOX_STREETS,
@@ -41,8 +41,6 @@ data class HomeState(
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,
 
     val deletePhotoItem: FeedingPhotoItem? = null,
-
-    val showMotivateUseGpsDialog: Boolean = false,
 
     val cameraState: CameraState = CameraState.Disabled,
 

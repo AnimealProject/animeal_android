@@ -1,7 +1,11 @@
 package com.epmedu.animeal.home.presentation
 
+import android.app.PendingIntent
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
@@ -19,6 +23,7 @@ import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedConfirmationDialogState
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
@@ -29,7 +34,6 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingPointEvent.FavouriteChange
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.MotivateUseGpsEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.RouteEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerEvent
@@ -44,7 +48,7 @@ import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.HomePermissions
-import com.epmedu.animeal.home.presentation.ui.MotivateUseGpsDialog
+import com.epmedu.animeal.feeding.presentation.ui.OnFeedingState
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
@@ -104,6 +108,9 @@ internal fun HomeScreenUI(
     }
 
     OnState(state, onScreenEvent)
+    OnFeedingState(state.willFeedState, onWillFeedEvent) {
+        locationEmbeddedDialogLauncher.launch(IntentSenderRequest.Builder(it).build())
+    }
 
     LaunchedEffect(state.currentFeedingPoint) {
         if (state.currentFeedingPoint == null) bottomSheetState.hide()
@@ -195,7 +202,6 @@ internal fun HomeScreenUI(
 
     WillFeedConfirmationDialog(
         state.willFeedState,
-        state.geolocationPermissionStatus,
         scope,
         bottomSheetState,
         onScreenEvent,
@@ -238,13 +244,6 @@ private fun OnState(
                 onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
             }
         )
-        state.showMotivateUseGpsDialog -> MotivateUseGpsDialog(
-            onConfirm = { onScreenEvent(MotivateUseGpsEvent.AskUseGps) },
-            onDismiss = {
-                onScreenEvent(MotivateUseGpsEvent.DeclineUseGps)
-                onScreenEvent(FeedingEvent.StartWithoutRouting)
-            }
-        )
         else -> Unit
     }
 }
@@ -252,22 +251,17 @@ private fun OnState(
 @Composable
 private fun WillFeedConfirmationDialog(
     willFeedState: WillFeedState,
-    geolocationPermissionStatus: PermissionStatus,
     scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
 ) {
     FeedConfirmationDialog(
-        willFeedState,
+        willFeedState.feedConfirmationDialog,
         onAgreeClick = {
             onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
             scope.launch { bottomSheetState.hide() }
-            when (geolocationPermissionStatus) {
-                PermissionStatus.Granted -> onScreenEvent(FeedingEvent.Start)
-                PermissionStatus.Denied -> onScreenEvent(FeedingEvent.StartWithoutRouting)
-                PermissionStatus.Restricted -> onScreenEvent(MotivateUseGpsEvent.ShowMotivateDialog)
-            }
+            onScreenEvent(FeedingEvent.Start)
         },
         onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     )
@@ -296,7 +290,7 @@ private fun OnBackHandling(
         scope.launch { bottomSheetState.hide() }
     }
 
-    BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
+    BackHandler(enabled = state.willFeedState.feedConfirmationDialog is FeedConfirmationDialogState.Showing) {
         scope.launch { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     }
 }
