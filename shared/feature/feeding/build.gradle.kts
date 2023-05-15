@@ -25,6 +25,8 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.timer)
+    implementation(projects.shared.feature.router)
 
     debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.profile)
@@ -32,6 +34,7 @@ dependencies {
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.core)
     implementation(libs.appsync)
+    implementation(libs.immutable.collections)
 
     implementation(libs.coil)
     implementation(libs.compose.material)
