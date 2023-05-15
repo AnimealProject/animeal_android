@@ -123,11 +123,11 @@ class DefaultWillFeedHandler(
         }
     }
 
-    private fun showWillFeedDialog() {
+    override fun showWillFeedDialog() {
         updateState { copy(feedConfirmationDialog = FeedConfirmationDialogState.Showing) }
     }
 
-    private fun dismissWillFeedDialog() {
+    override fun dismissWillFeedDialog() {
         updateState { copy(feedConfirmationDialog = FeedConfirmationDialogState.Dismissed) }
     }
 }

@@ -12,4 +12,8 @@ interface WillFeedHandler {
     fun CoroutineScope.registerWillFeedState(updateCall: (WillFeedState) -> Unit)
 
     fun handleWillFeedEvent(event: WillFeedEvent)
+
+    fun showWillFeedDialog()
+
+    fun dismissWillFeedDialog()
 }
