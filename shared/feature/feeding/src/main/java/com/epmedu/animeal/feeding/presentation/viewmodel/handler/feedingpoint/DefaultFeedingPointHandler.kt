@@ -18,6 +18,8 @@ import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import com.epmedu.animeal.router.presentation.FeedingRouteState
+import com.epmedu.animeal.router.presentation.RouteHandler
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +32,7 @@ class DefaultFeedingPointHandler(
     stateDelegate: StateDelegate<FeedingPointState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     actionDelegate: ActionDelegate,
+    routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
@@ -39,6 +42,7 @@ class DefaultFeedingPointHandler(
     StateDelegate<FeedingPointState> by stateDelegate,
     EventDelegate<HomeViewModelEvent> by eventDelegate,
     ActionDelegate by actionDelegate,
+    RouteHandler by routeHandler,
     ErrorHandler by errorHandler {
 
     private var job: Job? = null
@@ -61,11 +65,16 @@ class DefaultFeedingPointHandler(
                 }
                 val currentFeedingPoint =
                     feedingPoints.find { it.id == state.currentFeedingPoint?.id }
+                val feedingPointsToShow = when {
+                    feedingRouteStateFlow.value is FeedingRouteState.Active &&
+                        currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
 
+                    else -> feedingPoints.toImmutableList()
+                }
                 updateState {
                     copy(
                         currentFeedingPoint = currentFeedingPoint,
-                        feedingPoints = feedingPoints.toImmutableList()
+                        feedingPoints = feedingPointsToShow
                     )
                 }
             }

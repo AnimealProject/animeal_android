@@ -99,9 +99,8 @@ internal class HomeViewModel @Inject constructor(
             ) { feedingPointUpdate, feedingRouteUpdate, willFeedUpdate ->
                 updateState {
                     copy(
-                        feedingPointState = feedingPointUpdate.copy(
-                            feedingRouteState = feedingRouteUpdate
-                        ),
+                        feedingPointState = feedingPointUpdate,
+                        feedingRouteState = feedingRouteUpdate,
                         willFeedState = willFeedUpdate,
                         gpsSettingState = when {
                             isGpsSettingsEnabled -> GpsSettingState.Enabled
@@ -237,7 +236,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleMapEvents() {
         viewModelScope.launch {
-            if (state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled) {
+            if (state.feedingRouteState is FeedingRouteState.Disabled) {
                 sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
         }

@@ -39,7 +39,7 @@ internal fun RouteView(
     }
 
     with(state) {
-        val feedingRouteState = feedingPointState.feedingRouteState
+        val feedingRouteState = feedingRouteState
         val currentFeedingPoint = feedingPointState.currentFeedingPoint
         LaunchedEffect(key1 = feedingRouteState) {
             when {

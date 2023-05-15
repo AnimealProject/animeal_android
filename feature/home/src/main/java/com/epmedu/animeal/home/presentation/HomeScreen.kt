@@ -59,7 +59,7 @@ fun HomeScreen() {
                 is ShowCurrentFeedingPoint -> {
                     launch {
                         if (bottomSheetState.isHidden) {
-                            if (state.feedingPointState.feedingRouteState is FeedingRouteState.Active) {
+                            if (state.feedingRouteState is FeedingRouteState.Active) {
                                 bottomSheetState.expand()
                             } else {
                                 bottomSheetState.show()

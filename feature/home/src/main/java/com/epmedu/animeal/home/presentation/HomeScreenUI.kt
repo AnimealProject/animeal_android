@@ -107,8 +107,8 @@ internal fun HomeScreenUI(
         if (state.feedingPointState.currentFeedingPoint == null) bottomSheetState.hide()
     }
 
-    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingPointState.feedingRouteState) {
-        if (bottomSheetState.isHidden && state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled) {
+    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
+        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
             onFeedingPointEvent(FeedingPointEvent.Deselect)
         }
     }
@@ -121,13 +121,13 @@ internal fun HomeScreenUI(
     )
 
     AnimealBottomSheetLayout(
-        skipHalfExpanded = state.feedingPointState.feedingRouteState is FeedingRouteState.Active,
+        skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
                 FeedingSheet(
-                    feedingState = state.feedingPointState.feedingRouteState,
+                    feedingState = state.feedingRouteState,
                     cameraState = state.cameraState,
                     feedingPoint = feedingPoint,
                     feedingPhotos = state.feedingPhotos,
@@ -147,7 +147,7 @@ internal fun HomeScreenUI(
         },
         sheetControls = {
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
-                when (state.feedingPointState.feedingRouteState) {
+                when (state.feedingRouteState) {
                     is FeedingRouteState.Active -> {
                         if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Loading) {
                             CircularProgressIndicator(Modifier.padding(24.dp))

@@ -8,6 +8,7 @@ import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
 
 data class HomeState(
@@ -15,6 +16,7 @@ data class HomeState(
     val mapBoxStyleUri: String,
 
     val feedingPointState: FeedingPointState = FeedingPointState(),
+    val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
     val willFeedState: WillFeedState = WillFeedState.Dismissed,

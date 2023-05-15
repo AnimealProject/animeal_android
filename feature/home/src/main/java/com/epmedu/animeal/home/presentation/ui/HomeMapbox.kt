@@ -74,7 +74,7 @@ internal fun HomeMapbox(
             onMapInteraction = onMapInteraction,
         )
 
-        when (val feedingRouteState = state.feedingPointState.feedingRouteState) {
+        when (val feedingRouteState = state.feedingRouteState) {
             is FeedingRouteState.Disabled -> {
                 AnimealSwitch(
                     modifier = Modifier
@@ -85,6 +85,7 @@ internal fun HomeMapbox(
                     defaultAnimalType = state.feedingPointState.defaultAnimalType
                 )
             }
+
             is FeedingRouteState.Active -> {
                 RouteTopBar(
                     modifier = Modifier
@@ -148,7 +149,7 @@ private fun MapboxMap(
     // so we have to make sure the map is loaded before setting location
     val onStyleLoadedListener = OnStyleLoadedListener { event ->
         event.end?.run {
-            when (state.feedingPointState.feedingRouteState) {
+            when (state.feedingRouteState) {
                 is FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
                 is FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
             }
@@ -156,23 +157,16 @@ private fun MapboxMap(
     }
 
     LaunchedEffect(key1 = state.feedingPointState.feedingPoints) {
-        if (state.feedingPointState.feedingRouteState is FeedingRouteState.Disabled) {
-            markerController.drawMarkers(
-                feedingPoints = state.feedingPointState.feedingPoints
-            )
-        }
+        markerController.drawMarkers(
+            feedingPoints = state.feedingPointState.feedingPoints
+        )
     }
 
     LaunchedEffect(key1 = state.feedingPointState.currentFeedingPoint) {
-        state.feedingPointState.currentFeedingPoint?.let {
-            if (state.feedingPointState.feedingRouteState is FeedingRouteState.Active) {
-                markerController.drawMarkers(
-                    feedingPoints = listOf(it)
-                )
-                markerController.drawSelectedMarkerBackground(null)
-            } else {
-                markerController.drawSelectedMarkerBackground(it)
-            }
+        if (state.feedingRouteState is FeedingRouteState.Active) {
+            markerController.drawSelectedMarkerBackground(null)
+        } else {
+            markerController.drawSelectedMarkerBackground(state.feedingPointState.currentFeedingPoint)
         }
     }
 
