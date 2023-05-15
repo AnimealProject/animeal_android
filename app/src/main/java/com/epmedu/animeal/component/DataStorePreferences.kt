@@ -26,3 +26,11 @@ val Preferences.initialCameraPermission: Boolean
 fun MutablePreferences.updateInitialCameraPermission(value: Boolean) {
     this[INITIAL_CAMERA_PERMISSION] = value
 }
+
+private val MOTIVATED_USE_GPS = booleanPreferencesKey("motivatedUseGps")
+val Preferences.motivatedUseGps: Boolean
+    get() = this[MOTIVATED_USE_GPS] ?: false
+
+fun MutablePreferences.updateMotivatedUseGps(value: Boolean) {
+    this[MOTIVATED_USE_GPS] = value
+}

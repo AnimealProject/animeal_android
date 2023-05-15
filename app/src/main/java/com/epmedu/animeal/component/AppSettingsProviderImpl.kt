@@ -24,13 +24,15 @@ internal class AppSettingsProviderImpl(
             updateInitialGeolocationPermission(settings.isInitialGeolocationPermissionRequested)
             updateInitialCameraPermission(settings.isCameraPermissionRequested)
             updateAnimalType(settings.animalType)
+            updateInitialCameraPermission(settings.isMotivatedUseGps)
         }
     }
 
     private fun Preferences.toAppSettings() = AppSettings(
         isInitialGeolocationPermissionRequested = initialGeolocationPermission,
         isCameraPermissionRequested = initialCameraPermission,
-        animalType = animalType
+        animalType = animalType,
+        isMotivatedUseGps = motivatedUseGps
     )
 }
 
