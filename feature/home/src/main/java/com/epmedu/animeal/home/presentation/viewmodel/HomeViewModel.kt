@@ -95,14 +95,11 @@ internal class HomeViewModel @Inject constructor(
             combine(
                 feedingPointStateFlow,
                 feedingRouteStateFlow,
-                feedingStateFlow,
                 willFeedStateFlow
-            ) { feedingPointUpdate, feedingRouteUpdate, feedingUpdate, willFeedUpdate ->
+            ) { feedingPointUpdate, feedingRouteUpdate, willFeedUpdate ->
                 updateState {
                     copy(
                         feedingPointState = feedingPointUpdate.copy(
-                            currentFeedingPoint = feedingUpdate.currentFeedingPoint,
-                            feedingConfirmationState = feedingUpdate.feedingConfirmationState,
                             feedingRouteState = feedingRouteUpdate
                         ),
                         willFeedState = willFeedUpdate,
