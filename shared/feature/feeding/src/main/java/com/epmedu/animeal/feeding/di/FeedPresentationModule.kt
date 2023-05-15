@@ -3,7 +3,6 @@ package com.epmedu.animeal.feeding.di
 import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
@@ -17,13 +16,10 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.DefaultFeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.DefaultWillFeedHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.Module
@@ -36,17 +32,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 @Suppress("LongParameterList", "DEPRECATION")
 internal object FeedPresentationModule {
-    @ViewModelScoped
-    @Provides
-    fun providesWillFeedStateDelegate(): StateDelegate<WillFeedState> = DefaultStateDelegate(
-        WillFeedState.Dismissed
-    )
-
-    @ViewModelScoped
-    @Provides
-    fun providesWillFeedHandler(
-        stateDelegate: StateDelegate<WillFeedState>
-    ): WillFeedHandler = DefaultWillFeedHandler(stateDelegate)
 
     @ViewModelScoped
     @Provides

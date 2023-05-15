@@ -13,7 +13,6 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
@@ -75,7 +74,6 @@ internal class HomeViewModel @Inject constructor(
     CameraHandler by defaultHomeHandler,
     FeedingPointHandler by defaultHomeHandler,
     RouteHandler by defaultHomeHandler,
-    WillFeedHandler by defaultHomeHandler,
     FeedingHandler by defaultHomeHandler,
     LocationHandler by defaultHomeHandler,
     TimerHandler by defaultHomeHandler,
@@ -94,14 +92,12 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 feedingPointStateFlow,
-                feedingRouteStateFlow,
-                willFeedStateFlow
-            ) { feedingPointUpdate, feedingRouteUpdate, willFeedUpdate ->
+                feedingRouteStateFlow
+            ) { feedingPointUpdate, feedingRouteUpdate ->
                 updateState {
                     copy(
                         feedingPointState = feedingPointUpdate,
                         feedingRouteState = feedingRouteUpdate,
-                        willFeedState = willFeedUpdate,
                         gpsSettingState = when {
                             isGpsSettingsEnabled -> GpsSettingState.Enabled
                             else -> GpsSettingState.Disabled

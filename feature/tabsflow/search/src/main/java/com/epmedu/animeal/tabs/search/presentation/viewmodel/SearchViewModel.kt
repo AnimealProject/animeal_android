@@ -8,7 +8,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
@@ -32,9 +31,7 @@ class SearchViewModel @Inject constructor(
     private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
-    private val willFeedHandler: WillFeedHandler,
 ) : ViewModel(),
-    WillFeedHandler by willFeedHandler,
     StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
     ActionDelegate by actionDelegate {
 
@@ -43,15 +40,13 @@ class SearchViewModel @Inject constructor(
             stateFlow.collectLatest { state ->
                 combine(
                     searchDogsFeedingPointsUseCase(state.dogsQuery),
-                    searchCatsFeedingPointsUseCase(state.catsQuery),
-                    willFeedStateFlow
-                ) { dogs, cats, willFeedUpdate ->
+                    searchCatsFeedingPointsUseCase(state.catsQuery)
+                ) { dogs, cats ->
                     updateState {
                         copy(
                             catsFeedingPoints = cats.toImmutableList(),
                             dogsFeedingPoints = dogs.toImmutableList(),
-                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList(),
-                            willFeedState = willFeedUpdate
+                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList()
                         )
                     }
                 }.collect()

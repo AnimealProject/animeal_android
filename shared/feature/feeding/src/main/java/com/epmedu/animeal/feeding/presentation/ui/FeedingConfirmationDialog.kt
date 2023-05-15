@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -23,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -31,12 +34,13 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
-fun FeedConfirmationDialog(
-    state: WillFeedState,
-    onAgreeClick: () -> Unit,
-    onCancelClick: () -> Unit
+fun FeedingConfirmationDialog(
+    isShowing: MutableState<Boolean>,
+    onAgreeClick: () -> Unit
 ) {
-    if (state is WillFeedState.Showing) {
+    BackHandler(enabled = isShowing.value) { isShowing.value = false }
+
+    if (isShowing.value) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,12 +81,15 @@ fun FeedConfirmationDialog(
                     AnimealSecondaryButtonOutlined(
                         modifier = Modifier.weight(1F),
                         text = stringResource(id = R.string.cancel),
-                        onClick = onCancelClick
+                        onClick = { isShowing.value = false }
                     )
                     AnimealButton(
                         modifier = Modifier.weight(1F),
                         text = stringResource(id = R.string.agree),
-                        onClick = onAgreeClick
+                        onClick = {
+                            isShowing.value = false
+                            onAgreeClick()
+                        }
                     )
                 }
             }
@@ -93,7 +100,9 @@ fun FeedConfirmationDialog(
 @AnimealPreview
 @Composable
 private fun FeedConfirmationPreview() {
+    val isShowing = remember { mutableStateOf(true) }
+
     AnimealTheme {
-        FeedConfirmationDialog(WillFeedState.Showing, {}, {})
+        FeedingConfirmationDialog(isShowing = isShowing, onAgreeClick = {})
     }
 }
