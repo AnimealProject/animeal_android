@@ -16,7 +16,7 @@ internal class IntentGpsSettingsProvider(@ApplicationContext private val context
 
     private val locationManager = context.locationManager
 
-    private var _isGpsPermissionGranted  = MutableStateFlow(false)
+    private var _isGpsPermissionGranted = MutableStateFlow(false)
 
     override val isGpsSettingsEnabled: Boolean
         get() = LocationManagerCompat.isLocationEnabled(locationManager)

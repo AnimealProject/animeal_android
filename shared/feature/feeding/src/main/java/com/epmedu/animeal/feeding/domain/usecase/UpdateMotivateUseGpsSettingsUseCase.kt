@@ -7,7 +7,7 @@ import javax.inject.Singleton
 @Singleton
 class UpdateMotivateUseGpsSettingsUseCase @Inject constructor(
     private val appSettingsProvider: AppSettingsProvider,
-){
+) {
     suspend operator fun invoke(isAsked: Boolean) {
         appSettingsProvider.updateAppSettings {
             isMotivatedUseGps = isAsked

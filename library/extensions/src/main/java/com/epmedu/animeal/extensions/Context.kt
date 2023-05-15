@@ -34,8 +34,6 @@ private const val URI_SCHEME = "package"
 
 private const val ONE_SECOND_INTERVAL = 1000L
 
-private const val ENABLE_LOCATION_REQUEST_CODE = 500
-
 fun Context.launchAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.fromParts(URI_SCHEME, packageName, null)

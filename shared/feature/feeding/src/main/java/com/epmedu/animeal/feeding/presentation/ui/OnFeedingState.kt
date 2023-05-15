@@ -9,7 +9,7 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 
 @Composable
-fun OnFeedingState(state: WillFeedState, onEvent: (WillFeedEvent) -> Unit, showEmbeddedDialog: (PendingIntent) -> Unit) {
+fun OnFeedingState(state: WillFeedState, onEvent: (WillFeedEvent) -> Unit, onShowEmbeddedDialog: (PendingIntent) -> Unit) {
     val context = LocalContext.current
     when {
         state.showMotivateUseGpsDialog -> MotivateUseGpsDialog(
@@ -17,7 +17,7 @@ fun OnFeedingState(state: WillFeedState, onEvent: (WillFeedEvent) -> Unit, showE
             onDismiss = { onEvent(WillFeedEvent.DeclineUseGps) }
         )
         state.showLocationSettingsEmbeddedDialog -> {
-            context.requestGpsByDialog(showEmbeddedDialog)
+            context.requestGpsByDialog(onShowEmbeddedDialog)
         }
         state.openGpsSettings -> {
             context.launchGpsSettings()
