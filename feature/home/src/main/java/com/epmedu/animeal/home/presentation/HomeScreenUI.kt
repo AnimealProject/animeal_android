@@ -75,10 +75,10 @@ internal fun HomeScreenUI(
         onWillFeedEvent(WillFeedEvent.EmbeddedDialogClosed)
     }
 
-    if (state.errorMessage != null) {
+    if (state.isError) {
         Toast.makeText(
             context,
-            state.errorMessage.ifEmpty { context.getString(R.string.something_went_wrong) },
+            context.getString(R.string.something_went_wrong),
             Toast.LENGTH_SHORT
         ).show()
         onScreenEvent(ErrorShowed)

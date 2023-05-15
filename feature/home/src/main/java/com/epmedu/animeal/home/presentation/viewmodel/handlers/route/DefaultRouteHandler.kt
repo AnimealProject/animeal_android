@@ -28,7 +28,7 @@ internal class DefaultRouteHandler(
         if (forcedArgumentsUseCase<String>(FORCED_FEEDING_POINT_ID, hashCode()) == null) {
             showFullRoad = true
         }
-        updateState { copy(feedingRouteState = FeedingRouteState.Active(showFullRoad = showFullRoad), errorMessage = null) }
+        updateState { copy(feedingRouteState = FeedingRouteState.Active(showFullRoad = showFullRoad), isError = false) }
     }
 
     override fun stopRoute() {

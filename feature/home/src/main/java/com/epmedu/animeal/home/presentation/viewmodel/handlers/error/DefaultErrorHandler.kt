@@ -8,11 +8,11 @@ internal class DefaultErrorHandler(
 ) : ErrorHandler,
     StateDelegate<HomeState> by stateDelegate {
 
-    override fun showError(message: String) {
-        updateState { copy(errorMessage = message) }
+    override fun showError() {
+        updateState { copy(isError = true) }
     }
 
     override fun hideError() {
-        updateState { copy(errorMessage = null) }
+        updateState { copy(isError = false) }
     }
 }
