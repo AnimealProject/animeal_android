@@ -8,7 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
@@ -43,21 +43,18 @@ class SearchViewModel @Inject constructor(
             stateFlow.collectLatest { state ->
                 combine(
                     searchDogsFeedingPointsUseCase(state.dogsQuery),
-                    searchCatsFeedingPointsUseCase(state.catsQuery)
-                ) { dogs, cats ->
+                    searchCatsFeedingPointsUseCase(state.catsQuery),
+                    willFeedStateFlow
+                ) { dogs, cats, willFeedUpdate ->
                     updateState {
                         copy(
                             catsFeedingPoints = cats.toImmutableList(),
                             dogsFeedingPoints = dogs.toImmutableList(),
-                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList()
+                            favourites = (cats + dogs).filter { it.isFavourite }.toImmutableList(),
+                            willFeedState = willFeedUpdate
                         )
                     }
                 }.collect()
-            }
-        }
-        viewModelScope.registerWillFeedState {
-            updateState {
-                copy(willFeedState = it)
             }
         }
     }
