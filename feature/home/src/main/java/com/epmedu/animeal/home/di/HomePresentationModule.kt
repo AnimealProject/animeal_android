@@ -16,7 +16,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandl
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultErrorHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -144,7 +143,6 @@ internal object HomePresentationModule {
         cameraHandler: DefaultCameraHandler,
         feedingPointHandler: FeedingPointHandler,
         routeHandler: RouteHandler,
-        willFeedHandler: WillFeedHandler,
         feedingHandler: FeedingHandler,
         locationHandler: LocationHandler,
         timerHandler: TimerHandler,
@@ -155,7 +153,6 @@ internal object HomePresentationModule {
         cameraHandler,
         feedingPointHandler,
         routeHandler,
-        willFeedHandler,
         feedingHandler,
         locationHandler,
         timerHandler,

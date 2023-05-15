@@ -18,7 +18,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,15 +38,13 @@ import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
-import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
-import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
+import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -65,8 +65,7 @@ import kotlinx.coroutines.launch
 internal fun FavouritesScreenUI(
     state: FavouritesState,
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (FavouritesScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -83,8 +82,7 @@ internal fun FavouritesScreenUI(
         state,
         contentAlpha,
         buttonAlpha,
-        onEvent,
-        onWillFeedEvent,
+        onEvent
     )
 }
 
@@ -109,9 +107,9 @@ private fun ScreenScaffold(
     state: FavouritesState,
     contentAlpha: Float,
     buttonAlpha: Float,
-    onEvent: (FavouritesScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onEvent: (FavouritesScreenEvent) -> Unit
 ) {
+    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
@@ -145,7 +143,7 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) },
+                onClick = { isFeedingDialogShowing.value = true },
             )
         }
     ) {
@@ -164,7 +162,7 @@ private fun ScreenScaffold(
         }
     }
 
-    WillFeedConfirmationDialog(state.willFeedState, onWillFeedEvent)
+    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {})
 }
 
 @Composable
@@ -231,18 +229,6 @@ private fun FavouritesList(
     }
 }
 
-@Composable
-internal fun WillFeedConfirmationDialog(
-    willFeedState: WillFeedState,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
-) {
-    FeedConfirmationDialog(
-        willFeedState,
-        onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
-        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-    )
-}
-
 @AnimealPreview
 @Composable
 private fun FavouritesScreenPreview() {
@@ -266,8 +252,7 @@ private fun FavouritesScreenPreview() {
             FavouritesState(
                 favourites = favourites.toImmutableList(),
             ),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
-            {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}
     }
 }
@@ -280,8 +265,7 @@ private fun FavouritesScreenEmptyPreview() {
             FavouritesState(
                 persistentListOf()
             ),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
-            {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}
     }
 }

@@ -36,6 +36,8 @@ dependencies {
     implementation(libs.appsync)
     implementation(libs.immutable.collections)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
     implementation(libs.coil)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
@@ -46,5 +48,4 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(libs.mapbox.android)
-
 }

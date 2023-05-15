@@ -13,10 +13,8 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,10 +23,8 @@ internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
-    private val willFeedHandler: WillFeedHandler,
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
 ) : ViewModel(),
-    WillFeedHandler by willFeedHandler,
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
     ActionDelegate by actionDelegate {
 
@@ -36,15 +32,6 @@ internal class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             getFavouriteFeedingPointsUseCase().collect { feedingPoints ->
                 updateState { copy(favourites = feedingPoints.toImmutableList()) }
-            }
-        }
-        viewModelScope.launch {
-            willFeedStateFlow.collectLatest {
-                updateState {
-                    copy(
-                        willFeedState = it
-                    )
-                }
             }
         }
     }

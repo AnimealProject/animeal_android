@@ -3,7 +3,6 @@ package com.epmedu.animeal.home.presentation.viewmodel.handlers
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.willfeed.WillFeedHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
@@ -17,7 +16,6 @@ internal class DefaultHomeHandler @Inject constructor(
     private val cameraHandler: CameraHandler,
     private val feedingPointHandler: FeedingPointHandler,
     private val routeHandler: RouteHandler,
-    private val willFeedHandler: WillFeedHandler,
     private val feedingHandler: FeedingHandler,
     private val locationHandler: LocationHandler,
     private val timerHandler: TimerHandler,
@@ -27,7 +25,6 @@ internal class DefaultHomeHandler @Inject constructor(
 ) : CameraHandler by cameraHandler,
     FeedingPointHandler by feedingPointHandler,
     RouteHandler by routeHandler,
-    WillFeedHandler by willFeedHandler,
     FeedingHandler by feedingHandler,
     LocationHandler by locationHandler,
     TimerHandler by timerHandler,

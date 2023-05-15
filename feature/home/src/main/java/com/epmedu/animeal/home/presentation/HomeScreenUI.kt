@@ -8,7 +8,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -16,14 +18,12 @@ import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
-import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
-import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
+import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
@@ -61,7 +61,6 @@ internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
     onRouteEvent: (RouteEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
     onFeedingPointEvent: (FeedingPointEvent) -> Unit,
@@ -70,6 +69,8 @@ internal fun HomeScreenUI(
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
+    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
 
     if (state.isError) {
         Toast.makeText(
@@ -115,12 +116,7 @@ internal fun HomeScreenUI(
         }
     }
 
-    OnBackHandling(
-        scope = scope,
-        bottomSheetState = bottomSheetState,
-        state = state,
-        onWillFeedEvent = onWillFeedEvent,
-    )
+    OnBackHandling(scope = scope, bottomSheetState = bottomSheetState)
 
     AnimealBottomSheetLayout(
         skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
@@ -165,7 +161,12 @@ internal fun HomeScreenUI(
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = { onFeedingClick(state, onWillFeedEvent) }
+                            onClick = {
+                                when (state.cameraPermissionStatus) {
+                                    PermissionStatus.Granted -> isFeedingDialogShowing.value = true
+                                    else -> isCameraPermissionDialogShowing.value = true
+                                }
+                            }
                         )
                     }
                 }
@@ -197,23 +198,15 @@ internal fun HomeScreenUI(
         }
     }
 
-    WillFeedConfirmationDialog(
-        state.willFeedState,
-        scope,
-        bottomSheetState,
-        onFeedingEvent,
-        onWillFeedEvent,
+    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
+    FeedingConfirmationDialog(
+        isShowing = isFeedingDialogShowing,
+        onAgreeClick = {
+            scope.launch { bottomSheetState.hide() }
+            onFeedingEvent(FeedingEvent.Start)
+        }
     )
     ThankYouConfirmationDialog(state, onScreenEvent)
-    if (state.willFeedState == WillFeedState.RequestingCameraPermission) {
-        CameraPermissionRequestDialog(
-            onConfirm = {
-                context.launchAppSettings()
-                onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
-            },
-            onDismiss = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-        )
-    }
 }
 
 private fun openCamera(
@@ -268,25 +261,6 @@ private fun OnState(
 }
 
 @Composable
-private fun WillFeedConfirmationDialog(
-    willFeedState: WillFeedState,
-    scope: CoroutineScope,
-    bottomSheetState: AnimealBottomSheetState,
-    onFeedingEvent: (FeedingEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
-) {
-    FeedConfirmationDialog(
-        willFeedState,
-        onAgreeClick = {
-            onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog)
-            scope.launch { bottomSheetState.hide() }
-            onFeedingEvent(FeedingEvent.Start)
-        },
-        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-    )
-}
-
-@Composable
 private fun ThankYouConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
@@ -301,16 +275,10 @@ private fun ThankYouConfirmationDialog(
 @Composable
 private fun OnBackHandling(
     scope: CoroutineScope,
-    bottomSheetState: AnimealBottomSheetState,
-    state: HomeState,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    bottomSheetState: AnimealBottomSheetState
 ) {
     BackHandler(enabled = bottomSheetState.isVisible) {
         scope.launch { bottomSheetState.hide() }
-    }
-
-    BackHandler(enabled = state.willFeedState is WillFeedState.Showing) {
-        scope.launch { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
     }
 }
 
@@ -327,16 +295,5 @@ private fun onGeoLocationClick(
             GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
-    }
-}
-
-private fun onFeedingClick(
-    state: HomeState,
-    onWillFeedEvent: (WillFeedEvent) -> Unit
-) {
-    when (state.cameraPermissionStatus) {
-        PermissionStatus.Restricted -> onWillFeedEvent(WillFeedEvent.AskCameraPermission)
-        PermissionStatus.Denied -> onWillFeedEvent(WillFeedEvent.AskCameraPermission)
-        PermissionStatus.Granted -> onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog)
     }
 }

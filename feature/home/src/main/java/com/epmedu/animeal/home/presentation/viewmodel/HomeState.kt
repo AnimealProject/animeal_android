@@ -3,7 +3,6 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
@@ -19,7 +18,6 @@ data class HomeState(
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
-    val willFeedState: WillFeedState = WillFeedState.Dismissed,
 
     /** Current state of gms service */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,

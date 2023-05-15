@@ -14,7 +14,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,12 +24,10 @@ import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
-import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
+import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -47,8 +47,7 @@ import kotlinx.coroutines.launch
 internal fun SearchScreenUi(
     state: SearchState,
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (SearchScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onEvent: (SearchScreenEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -66,8 +65,7 @@ internal fun SearchScreenUi(
         contentAlpha,
         buttonAlpha,
         scope,
-        onEvent,
-        onWillFeedEvent,
+        onEvent
     )
 }
 
@@ -79,9 +77,10 @@ private fun ScreenScaffold(
     contentAlpha: Float,
     buttonAlpha: Float,
     scope: CoroutineScope,
-    onEvent: (SearchScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onEvent: (SearchScreenEvent) -> Unit
 ) {
+    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier
@@ -117,7 +116,7 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) },
+                onClick = { isFeedingDialogShowing.value = true },
             )
         }
     ) {
@@ -130,7 +129,7 @@ private fun ScreenScaffold(
         }
     }
 
-    WillFeedConfirmationDialog(state.willFeedState, onWillFeedEvent)
+    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = { })
 }
 
 @Composable
@@ -143,18 +142,6 @@ private fun HandleFeedingPointSheetHiddenState(
             onEvent(SearchScreenEvent.FeedingPointHidden)
         }
     }
-}
-
-@Composable
-internal fun WillFeedConfirmationDialog(
-    willFeedState: WillFeedState,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
-) {
-    FeedConfirmationDialog(
-        willFeedState,
-        onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
-        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-    )
 }
 
 @Composable
@@ -195,8 +182,7 @@ private fun SearchScreenUiPreview() {
     AnimealTheme {
         SearchScreenUi(
             SearchState(),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
-            {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
         ) {}
     }
 }
