@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
@@ -26,7 +27,6 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationStat
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
-import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
@@ -38,9 +38,11 @@ import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
-import com.epmedu.animeal.home.presentation.ui.HomePermissions
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.permissions.presentation.AnimealPermissions
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
@@ -59,6 +61,7 @@ internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
+    onPermissionsEvent: (PermissionsEvent) -> Unit,
     onRouteEvent: (RouteEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
     onFeedingPointEvent: (FeedingPointEvent) -> Unit,
@@ -165,9 +168,10 @@ internal fun HomeScreenUI(
             }
         }
     ) {
-        HomePermissions(
-            homeState = state,
-            onScreenEvent = onScreenEvent,
+        AnimealPermissions(
+            permissionsState = state.permissionsState,
+            lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
+            onEvent = onPermissionsEvent,
         ) { geolocationPermissionState ->
             HomeMapbox(
                 state = state,
@@ -267,7 +271,7 @@ private fun onGeoLocationClick(
     state: HomeState,
     geolocationPermission: PermissionState
 ) {
-    when (state.geolocationPermissionStatus) {
+    when (state.permissionsState.geolocationPermissionStatus) {
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         PermissionStatus.Granted -> when (state.gpsSettingState) {

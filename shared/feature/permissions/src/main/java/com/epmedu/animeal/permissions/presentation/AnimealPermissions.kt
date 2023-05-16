@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.ui
+package com.epmedu.animeal.permissions.presentation
 
 import android.Manifest
 import androidx.compose.runtime.Composable
@@ -7,11 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
-import com.epmedu.animeal.home.domain.PermissionStatus
-import com.epmedu.animeal.home.presentation.HomeScreenEvent
-import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import androidx.lifecycle.Lifecycle.State.RESUMED
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionAsked
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionStatusChanged
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionAsked
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionStatusChanged
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -20,40 +21,40 @@ import com.google.accompanist.permissions.shouldShowRationale
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-internal fun HomePermissions(
-    homeState: HomeState,
-    onScreenEvent: (HomeScreenEvent) -> Unit,
+fun AnimealPermissions(
+    permissionsState: PermissionsState,
+    lifecycleState: Lifecycle.State,
+    onEvent: (PermissionsEvent) -> Unit,
     content: @Composable (PermissionState) -> Unit,
 ) {
-    val geolocationPermissionState = GeoLocationPermission(
-        onPermissionResponse = {
-            onScreenEvent(HomeScreenEvent.GeolocationPermissionStatusChanged(it))
-        },
-        onPermissionRequest = {
-            onScreenEvent(HomeScreenEvent.GeolocationPermissionAsked)
-        }
-    )
-    val cameraPermissionState = CameraPermission(
+    val geolocationPermissionState = getGeolocationPermissionState(
         onPermissionResponse = { permissionStatus ->
-            onScreenEvent(HomeScreenEvent.CameraPermissionStatusChanged(permissionStatus))
+            onEvent(GeolocationPermissionStatusChanged(permissionStatus))
         },
         onPermissionRequest = {
-            onScreenEvent(HomeScreenEvent.CameraPermissionAsked)
+            onEvent(GeolocationPermissionAsked)
         }
     )
-    val lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState
+    val cameraPermissionState = getCameraPermissionState(
+        onPermissionResponse = { permissionStatus ->
+            onEvent(CameraPermissionStatusChanged(permissionStatus))
+        },
+        onPermissionRequest = {
+            onEvent(CameraPermissionAsked)
+        }
+    )
 
-    LaunchedEffect(
-        key1 = homeState.isInitialGeolocationPermissionAsked,
-        key2 = homeState.isCameraPermissionAsked,
-        key3 = lifecycleState
-    ) {
-        when {
-            !homeState.isInitialGeolocationPermissionAsked && lifecycleState.isAtLeast(Lifecycle.State.RESUMED) -> {
-                geolocationPermissionState.launchPermissionRequest()
-            }
-            !homeState.isCameraPermissionAsked && lifecycleState.isAtLeast(Lifecycle.State.RESUMED) -> {
-                cameraPermissionState.launchPermissionRequest()
+    with(permissionsState) {
+        LaunchedEffect(
+            key1 = isGeolocationPermissionAsked,
+            key2 = isCameraPermissionAsked,
+            key3 = lifecycleState
+        ) {
+            if (lifecycleState.isAtLeast(RESUMED)) {
+                when {
+                    !isGeolocationPermissionAsked -> geolocationPermissionState.launchPermissionRequest()
+                    !isCameraPermissionAsked -> cameraPermissionState.launchPermissionRequest()
+                }
             }
         }
     }
@@ -62,7 +63,7 @@ internal fun HomePermissions(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun GeoLocationPermission(
+private fun getGeolocationPermissionState(
     onPermissionResponse: (PermissionStatus) -> Unit = {},
     onPermissionRequest: () -> Unit,
     onGrant: () -> Unit = {},
@@ -85,6 +86,7 @@ private fun GeoLocationPermission(
             onPermissionResponse(PermissionStatus.Granted)
             onGrant()
         }
+
         isPermissionRequested -> {
             return permissionState
         }
@@ -105,7 +107,7 @@ private fun GeoLocationPermission(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun CameraPermission(
+private fun getCameraPermissionState(
     onPermissionResponse: (PermissionStatus) -> Unit = {},
     onPermissionRequest: () -> Unit,
     onGrant: () -> Unit = {},
@@ -128,6 +130,7 @@ private fun CameraPermission(
             onPermissionResponse(PermissionStatus.Granted)
             onGrant()
         }
+
         isPermissionRequested -> {
             return permissionState
         }

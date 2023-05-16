@@ -45,6 +45,7 @@ fun HomeScreen() {
             state = state,
             bottomSheetState = bottomSheetState,
             onScreenEvent = viewModel::handleEvents,
+            onPermissionsEvent = viewModel::handlePermissionsEvent,
             onRouteEvent = viewModel::handleRouteEvent,
             onFeedingEvent = viewModel::handleFeedingEvent,
             onFeedingPointEvent = viewModel::handleFeedingPointEvent,

@@ -16,19 +16,10 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.Fe
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
-import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
-import com.epmedu.animeal.home.domain.usecases.GetCameraPermissionRequestedUseCase
-import com.epmedu.animeal.home.domain.usecases.GetGeolocationPermissionRequestedSettingUseCase
-import com.epmedu.animeal.home.domain.usecases.UpdateCameraPermissionRequestUseCase
-import com.epmedu.animeal.home.domain.usecases.UpdateGeolocationPermissionRequestedSettingUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionAsked
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionAsked
-import com.epmedu.animeal.home.presentation.HomeScreenEvent.GeolocationPermissionStatusChanged
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
@@ -39,6 +30,9 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
 import com.epmedu.animeal.router.presentation.RouteHandler
@@ -57,15 +51,12 @@ internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
     private val savedStateHandle: SavedStateHandle,
     private val homeProviders: HomeProviders,
-    private val getGeolocationPermissionRequestedSettingUseCase: GetGeolocationPermissionRequestedSettingUseCase,
-    private val updateGeolocationPermissionRequestedSettingUseCase: UpdateGeolocationPermissionRequestedSettingUseCase,
-    private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
-    private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler,
+    permissionsHandler: PermissionsHandler,
     photoGalleryHandler: FeedingPhotoGalleryHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
@@ -79,12 +70,14 @@ internal class HomeViewModel @Inject constructor(
     TimerHandler by defaultHomeHandler,
     TimerCancellationHandler by defaultHomeHandler,
     GpsHandler by defaultHomeHandler,
+    PermissionsHandler by permissionsHandler,
     ErrorHandler by defaultHomeHandler,
     LocationProvider by homeProviders,
     GpsSettingsProvider by homeProviders,
     FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
+        viewModelScope.launch { collectPermissionsState() }
         initialize()
         viewModelScope.fetchFeedingPoints()
         viewModelScope.launch { fetchCurrentFeeding() }
@@ -120,12 +113,8 @@ internal class HomeViewModel @Inject constructor(
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
             is RouteEvent -> handleRouteEvent(event = event)
-            is GeolocationPermissionStatusChanged -> changeGeolocationPermissionStatus(event)
-            GeolocationPermissionAsked -> markGeolocationPermissionAsAsked()
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            is CameraPermissionStatusChanged -> changeCameraPermissionStatus(event)
-            CameraPermissionAsked -> markCameraPermissionAsAsked()
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapEvents()
@@ -139,6 +128,10 @@ internal class HomeViewModel @Inject constructor(
         deselectFeedingPoint()
         dismissThankYouDialog()
         updateState { copy(feedingPhotos = emptyList()) }
+    }
+
+    fun handlePermissionsEvent(event: PermissionsEvent) {
+        viewModelScope.handlePermissionEvent(event)
     }
 
     fun handleFeedingEvent(event: FeedingEvent) {
@@ -159,13 +152,11 @@ internal class HomeViewModel @Inject constructor(
             updateAnimalType(defaultAnimalType)
             updateState {
                 copy(
-                    isInitialGeolocationPermissionAsked = getGeolocationPermissionRequestedSettingUseCase(),
                     gpsSettingState = when {
                         isGpsSettingsEnabled -> GpsSettingState.Enabled
                         else -> GpsSettingState.Disabled
                     },
-                    feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType),
-                    isCameraPermissionAsked = getCameraPermissionRequestedUseCase(),
+                    feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType)
                 )
             }
         }
@@ -177,45 +168,27 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun changeGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
-        if (event.status is PermissionStatus.Granted && state.geolocationPermissionStatus != PermissionStatus.Granted) {
-            fetchLocationUpdates()
-            updateState {
-                copy(
-                    gpsSettingState = when {
-                        isGpsSettingsEnabled -> GpsSettingState.Enabled
-                        else -> GpsSettingState.Disabled
-                    }
-                )
+    private suspend fun collectPermissionsState() {
+        permissionsStateFlow.collect { permissionsState ->
+            if (permissionsState.geolocationPermissionStatus is PermissionStatus.Granted &&
+                state.permissionsState.geolocationPermissionStatus !is PermissionStatus.Granted
+            ) {
+                fetchLocationUpdates()
+                updateState {
+                    copy(
+                        gpsSettingState = when {
+                            isGpsSettingsEnabled -> GpsSettingState.Enabled
+                            else -> GpsSettingState.Disabled
+                        }
+                    )
+                }
+                viewModelScope.launch {
+                    fetchGpsSettingsUpdates().collect(::collectGpsSettings)
+                }
             }
-            viewModelScope.launch {
-                fetchGpsSettingsUpdates().collect(::collectGpsSettings)
-            }
+
+            updateState { copy(permissionsState = permissionsState) }
         }
-
-        updateState { copy(geolocationPermissionStatus = event.status) }
-    }
-
-    private fun markGeolocationPermissionAsAsked() {
-        if (!state.isInitialGeolocationPermissionAsked) {
-            viewModelScope.launch {
-                updateGeolocationPermissionRequestedSettingUseCase(true)
-            }
-            updateState { copy(isInitialGeolocationPermissionAsked = true) }
-        }
-    }
-
-    private fun markCameraPermissionAsAsked() {
-        if (!state.isCameraPermissionAsked) {
-            viewModelScope.launch {
-                updateCameraPermissionRequestUseCase(true)
-            }
-            updateState { copy(isCameraPermissionAsked = true) }
-        }
-    }
-
-    private fun changeCameraPermissionStatus(event: CameraPermissionStatusChanged) {
-        updateState { copy(cameraPermissionStatus = event.status) }
     }
 
     private fun handleForcedFeedingPoint() {

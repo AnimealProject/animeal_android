@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.domain
+package com.epmedu.animeal.permissions.presentation
 
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
