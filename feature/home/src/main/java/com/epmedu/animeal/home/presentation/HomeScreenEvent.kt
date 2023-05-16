@@ -2,13 +2,8 @@ package com.epmedu.animeal.home.presentation
 
 import android.net.Uri
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
-import com.epmedu.animeal.home.domain.PermissionStatus
 
 sealed interface HomeScreenEvent {
-    data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
-    object GeolocationPermissionAsked : HomeScreenEvent
-    data class CameraPermissionStatusChanged(val status: PermissionStatus) : HomeScreenEvent
-    object CameraPermissionAsked : HomeScreenEvent
 
     sealed interface TimerCancellationEvent : HomeScreenEvent {
         object CancellationAttempt : TimerCancellationEvent
