@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun AutoSizeText(
@@ -19,6 +20,7 @@ fun AutoSizeText(
     text: String,
     textStyle: TextStyle = LocalTextStyle.current,
     textSize: TextUnit = textStyle.fontSize,
+    minTextSize: TextUnit = 10.sp,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     maxLines: Int = 1,
 ) {
@@ -34,7 +36,7 @@ fun AutoSizeText(
         onTextLayout = { textLayoutResult: TextLayoutResult ->
             val maxCurrentLineIndex: Int = textLayoutResult.lineCount - 1
 
-            if (textLayoutResult.isLineEllipsized(maxCurrentLineIndex)) {
+            if (textLayoutResult.isLineEllipsized(maxCurrentLineIndex) && fontSize > minTextSize) {
                 fontSize *= 0.9f
             }
         },
