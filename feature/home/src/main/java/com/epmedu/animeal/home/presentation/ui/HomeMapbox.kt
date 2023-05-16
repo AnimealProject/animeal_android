@@ -21,7 +21,6 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationStat
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
@@ -35,6 +34,7 @@ import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
 import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.map.setLocationOnRoute
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
@@ -122,8 +122,11 @@ private fun ShowUserCurrentLocation(
     state: HomeState,
     mapboxMapView: MapView
 ) {
-    LaunchedEffect(key1 = state.geolocationPermissionStatus, key2 = state.gpsSettingState) {
-        if (state.geolocationPermissionStatus == PermissionStatus.Granted &&
+    LaunchedEffect(
+        key1 = state.permissionsState.geolocationPermissionStatus,
+        key2 = state.gpsSettingState
+    ) {
+        if (state.permissionsState.geolocationPermissionStatus == PermissionStatus.Granted &&
             state.gpsSettingState == GpsSettingState.Enabled
         ) mapboxMapView.showCurrentLocation(state.locationState.location)
     }

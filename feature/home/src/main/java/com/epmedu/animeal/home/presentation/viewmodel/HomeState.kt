@@ -3,16 +3,18 @@ package com.epmedu.animeal.home.presentation.viewmodel
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
-import com.epmedu.animeal.home.domain.PermissionStatus
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.permissions.presentation.PermissionsState
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
 
 data class HomeState(
     val mapBoxPublicKey: String,
     val mapBoxStyleUri: String,
+
+    val permissionsState: PermissionsState = PermissionsState(),
 
     val feedingPointState: FeedingPointState = FeedingPointState(),
     val feedingRouteState: FeedingRouteState = FeedingRouteState.Disabled,
@@ -21,12 +23,6 @@ data class HomeState(
 
     /** Current state of gms service */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
-    val geolocationPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
-
-    val cameraPermissionStatus: PermissionStatus = PermissionStatus.Restricted,
-
-    val isInitialGeolocationPermissionAsked: Boolean = false,
-    val isCameraPermissionAsked: Boolean = false,
 
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,
 

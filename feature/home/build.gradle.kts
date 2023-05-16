@@ -18,8 +18,10 @@ dependencies {
     implementation(projects.library.geolocation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
+
     implementation(projects.shared.feature.camera)
     implementation(projects.shared.feature.feeding)
+    implementation(projects.shared.feature.permissions)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.router)
     implementation(projects.shared.feature.timer)
