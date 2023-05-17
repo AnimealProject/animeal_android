@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.ui
+package com.epmedu.animeal.permissions.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -9,7 +9,7 @@ import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun CameraPermissionRequestDialog(isShowing: MutableState<Boolean>) {
+fun CameraPermissionRequestDialog(isShowing: MutableState<Boolean>) {
     val context = LocalContext.current
 
     if (isShowing.value) {

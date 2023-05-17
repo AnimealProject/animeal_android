@@ -11,7 +11,10 @@ android {
 
 dependencies {
     implementation(projects.library.common)
+    implementation(projects.library.extensions)
     implementation(projects.library.navigation)
+    implementation(projects.library.foundation)
+    implementation(projects.library.resources)
 
     implementation(libs.accompanist.permissions)
 
