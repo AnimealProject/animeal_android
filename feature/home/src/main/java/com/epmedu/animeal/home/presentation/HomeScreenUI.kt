@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation
 
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
@@ -33,16 +34,17 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEve
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
+import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
@@ -56,7 +58,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongMethod", "LongParameterList", "ComplexMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
@@ -71,6 +73,7 @@ internal fun HomeScreenUI(
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
 
     if (state.isError) {
         Toast.makeText(
@@ -137,7 +140,7 @@ internal fun HomeScreenUI(
                             )
                         )
                     },
-                    onTakePhotoClick = { onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera) },
+                    onTakePhotoClick = { openCamera(state, onScreenEvent, context) },
                     onDeletePhotoClick = { onScreenEvent(FeedingGalleryEvent.DeletePhoto(it)) },
                     onShowOnMap = {}
                 )
@@ -161,7 +164,12 @@ internal fun HomeScreenUI(
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = { isFeedingDialogShowing.value = true }
+                            onClick = {
+                                when (state.permissionsState.cameraPermissionStatus) {
+                                    PermissionStatus.Granted -> isFeedingDialogShowing.value = true
+                                    else -> isCameraPermissionDialogShowing.value = true
+                                }
+                            }
                         )
                     }
                 }
@@ -194,6 +202,7 @@ internal fun HomeScreenUI(
         }
     }
 
+    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
     FeedingConfirmationDialog(
         isShowing = isFeedingDialogShowing,
         onAgreeClick = {
@@ -202,6 +211,18 @@ internal fun HomeScreenUI(
         }
     )
     ThankYouConfirmationDialog(state, onScreenEvent)
+}
+
+private fun openCamera(
+    state: HomeState,
+    onScreenEvent: (HomeScreenEvent) -> Unit,
+    context: Context
+) {
+    if (state.permissionsState.cameraPermissionStatus is PermissionStatus.Granted) {
+        onScreenEvent(HomeScreenEvent.CameraEvent.OpenCamera)
+    } else {
+        context.launchAppSettings()
+    }
 }
 
 @Composable

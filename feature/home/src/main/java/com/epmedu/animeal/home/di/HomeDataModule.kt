@@ -6,14 +6,14 @@ import com.epmedu.animeal.common.domain.ApplicationSettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object HomeDataModule {
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun providesApplicationSettingsRepository(
         appSettingsProvider: AppSettingsProvider,

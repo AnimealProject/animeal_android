@@ -83,6 +83,7 @@
     <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>
     <string name="onboarding_facebook_sign_in_error">Error during Facebook sign-in occurred, please check network connection and try again</string>
 
+    <string name="camera_permission_request">To continue please grant the permission to use the "Camera"</string>
     <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
     <string name="feeding_timer_suspended">Do you really want to cancel feeding?</string>
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
@@ -134,4 +135,5 @@
     <string name="search_hint">Search here</string>
     <string name="search_no_items">There are no feeding points matching\n ‘%s’</string>
 
+    <string name="open_settings">Open settings</string>
 </resources>

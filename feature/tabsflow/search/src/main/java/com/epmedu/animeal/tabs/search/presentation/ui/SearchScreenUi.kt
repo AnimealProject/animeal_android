@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
@@ -36,18 +37,25 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.permissions.presentation.AnimealPermissions
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun SearchScreenUi(
     state: SearchState,
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (SearchScreenEvent) -> Unit
+    onEvent: (SearchScreenEvent) -> Unit,
+    onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -59,14 +67,20 @@ internal fun SearchScreenUi(
         scope.launch { bottomSheetState.hide() }
     }
 
-    ScreenScaffold(
-        bottomSheetState,
-        state,
-        contentAlpha,
-        buttonAlpha,
-        scope,
-        onEvent
-    )
+    AnimealPermissions(
+        permissionsState = state.permissionsState,
+        lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
+        onEvent = onPermissionsEvent
+    ) { _ ->
+        ScreenScaffold(
+            bottomSheetState,
+            state,
+            contentAlpha,
+            buttonAlpha,
+            scope,
+            onEvent
+        )
+    }
 }
 
 @Composable
@@ -80,6 +94,7 @@ private fun ScreenScaffold(
     onEvent: (SearchScreenEvent) -> Unit
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
 
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
@@ -116,7 +131,12 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { isFeedingDialogShowing.value = true },
+                onClick = {
+                    when (state.permissionsState.cameraPermissionStatus) {
+                        PermissionStatus.Granted -> isFeedingDialogShowing.value = true
+                        else -> isCameraPermissionDialogShowing.value = true
+                    }
+                },
             )
         }
     ) {
@@ -129,6 +149,7 @@ private fun ScreenScaffold(
         }
     }
 
+    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
     FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = { })
 }
 
@@ -182,7 +203,9 @@ private fun SearchScreenUiPreview() {
     AnimealTheme {
         SearchScreenUi(
             SearchState(),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
-        ) {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
+            {}
+        )
     }
 }

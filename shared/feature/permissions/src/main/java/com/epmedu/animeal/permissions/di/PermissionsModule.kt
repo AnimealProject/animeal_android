@@ -10,42 +10,42 @@ import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandlerImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object PermissionsModule {
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun providesGetGeolocationPermissionRequestedUseCase(
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): GetGeolocationPermissionRequestedUseCase =
         GetGeolocationPermissionRequestedUseCase(applicationSettingsRepository)
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun providesUpdateGeolocationPermissionRequestedUseCase(
         applicationSettingsRepository: ApplicationSettingsRepository,
     ): UpdateGeolocationPermissionRequestedUseCase =
         UpdateGeolocationPermissionRequestedUseCase(applicationSettingsRepository)
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun provideGetCameraPermissionRequestedUseCase(
         applicationSettingsRepository: ApplicationSettingsRepository
     ): GetCameraPermissionRequestedUseCase =
         GetCameraPermissionRequestedUseCase(applicationSettingsRepository)
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun provideUpdateCameraPermissionRequestUseCase(
         applicationSettingsRepository: ApplicationSettingsRepository
     ): UpdateCameraPermissionRequestUseCase =
         UpdateCameraPermissionRequestUseCase(applicationSettingsRepository)
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun providesPermissionsHandler(
         getGeolocationPermissionRequestedUseCase: GetGeolocationPermissionRequestedUseCase,

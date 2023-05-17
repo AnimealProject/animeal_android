@@ -1,4 +1,4 @@
-package com.epmedu.animeal.home.presentation.thankyou.ui
+package com.epmedu.animeal.home.presentation.ui.thankyou
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
