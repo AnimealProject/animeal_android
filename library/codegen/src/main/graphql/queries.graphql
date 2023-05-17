@@ -47,6 +47,49 @@ query SearchByBounds(
     nextToken
   }
 }
+query SearchFeedingHistories(
+  $filter: SearchableFeedingHistoryFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFeedingHistories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      userId
+      images
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      feedingPointId
+      status
+      reason
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
 query GetPet($id: ID!) {
   getPet(id: $id) {
     id

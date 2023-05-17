@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedersUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -15,6 +16,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.model.Feeder
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -35,6 +37,7 @@ class DefaultFeedingPointHandler(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+    private val getFeedersUseCase: GetFeedersUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
@@ -45,7 +48,8 @@ class DefaultFeedingPointHandler(
     RouteHandler by routeHandler,
     ErrorHandler by errorHandler {
 
-    private var job: Job? = null
+    private var fetchFeedingPointsJob: Job? = null
+    private var fetchFeedersJob: Job? = null
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
     override fun updateAnimalType(animalType: AnimalType) {
@@ -57,8 +61,8 @@ class DefaultFeedingPointHandler(
     }
 
     override fun CoroutineScope.fetchFeedingPoints() {
-        job?.cancel()
-        job = launch {
+        fetchFeedingPointsJob?.cancel()
+        fetchFeedingPointsJob = launch {
             getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
                 val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
                     FeedingPointModel(domainFeedingPoint)
@@ -81,7 +85,7 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
+    override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
             ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
         selectFeedingPoint(Select(forcedPoint))
@@ -117,9 +121,27 @@ class DefaultFeedingPointHandler(
         }
     }
 
-    private suspend fun selectFeedingPoint(event: Select) {
+    private fun CoroutineScope.selectFeedingPoint(event: Select) {
         updateState { copy(currentFeedingPoint = event.feedingPoint) }
-        sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint)
+        launch { sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint) }
+        fetchFeeders(event.feedingPoint.id)
+    }
+
+    private fun CoroutineScope.fetchFeeders(feedingPointId: String) {
+        fetchFeedersJob?.cancel()
+        fetchFeedersJob = launch {
+            getFeedersUseCase(feedingPointId).collect { feeders ->
+                updateState {
+                    copy(
+                        currentFeedingPoint = currentFeedingPoint?.copy(
+                            feeders = feeders.firstOrNull()?.let { lastFeeder ->
+                                listOf(Feeder(lastFeeder))
+                            } ?: emptyList()
+                        )
+                    )
+                }
+            }
+        }
     }
 
     private fun CoroutineScope.handleAnimalTypeChange(type: AnimalType) {

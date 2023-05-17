@@ -6,13 +6,14 @@ import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
+import com.epmedu.animeal.feeding.data.repository.FeederRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
+import com.epmedu.animeal.feeding.domain.repository.FeederRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
-import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.users.domain.UsersRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FeedingModule {
+object FeedDataModule {
 
     @Singleton
     @Provides
@@ -65,13 +66,14 @@ object FeedingModule {
 
     @Singleton
     @Provides
-    fun providesAddFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = AddFeedingPointToFavouritesUseCase(repo)
-
-    @Singleton
-    @Provides
-    fun providesDeleteFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = RemoveFeedingPointFromFavouritesUseCase(repo)
+    fun providesFeederRepository(
+        feedingRepository: FeedingRepository,
+        usersRepository: UsersRepository
+    ): FeederRepository {
+        return FeederRepositoryImpl(
+            Dispatchers,
+            feedingRepository,
+            usersRepository
+        )
+    }
 }
