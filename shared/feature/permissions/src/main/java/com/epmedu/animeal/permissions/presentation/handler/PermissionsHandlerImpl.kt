@@ -4,8 +4,10 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.permissions.domain.GetCameraPermissionRequestedUseCase
 import com.epmedu.animeal.permissions.domain.GetGeolocationPermissionRequestedUseCase
+import com.epmedu.animeal.permissions.domain.GetIsGeolocationPermissionRequestedAgainUseCase
 import com.epmedu.animeal.permissions.domain.UpdateCameraPermissionRequestUseCase
 import com.epmedu.animeal.permissions.domain.UpdateGeolocationPermissionRequestedUseCase
+import com.epmedu.animeal.permissions.domain.UpdateIsGeolocationPermissionRequestedAgainUseCase
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionAsked
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionStatusChanged
@@ -19,6 +21,8 @@ import kotlinx.coroutines.launch
 internal class PermissionsHandlerImpl(
     private val getGeolocationPermissionRequestedUseCase: GetGeolocationPermissionRequestedUseCase,
     private val updateGeolocationPermissionRequestedUseCase: UpdateGeolocationPermissionRequestedUseCase,
+    private val getIsGeolocationPermissionRequestedAgainUseCase: GetIsGeolocationPermissionRequestedAgainUseCase,
+    private val updateIsGeolocationPermissionRequestedAgainUseCase: UpdateIsGeolocationPermissionRequestedAgainUseCase,
     private val getCameraPermissionRequestedUseCase: GetCameraPermissionRequestedUseCase,
     private val updateCameraPermissionRequestUseCase: UpdateCameraPermissionRequestUseCase,
 ) : PermissionsHandler,
@@ -30,6 +34,7 @@ internal class PermissionsHandlerImpl(
         updateState {
             copy(
                 isGeolocationPermissionAsked = getGeolocationPermissionRequestedUseCase(),
+                isGeolocationPermissionRequestedAgain = getIsGeolocationPermissionRequestedAgainUseCase(),
                 isCameraPermissionAsked = getCameraPermissionRequestedUseCase()
             )
         }
@@ -45,9 +50,15 @@ internal class PermissionsHandlerImpl(
     }
 
     private fun CoroutineScope.markGeolocationPermissionAsAsked() {
-        if (!state.isGeolocationPermissionAsked) {
-            launch { updateGeolocationPermissionRequestedUseCase(true) }
-            updateState { copy(isGeolocationPermissionAsked = true) }
+        when {
+            !state.isGeolocationPermissionAsked -> {
+                launch { updateGeolocationPermissionRequestedUseCase(true) }
+                updateState { copy(isGeolocationPermissionAsked = true) }
+            }
+            !state.isGeolocationPermissionRequestedAgain -> {
+                launch { updateIsGeolocationPermissionRequestedAgainUseCase(true) }
+                updateState { copy(isGeolocationPermissionRequestedAgain = true) }
+            }
         }
     }
 
