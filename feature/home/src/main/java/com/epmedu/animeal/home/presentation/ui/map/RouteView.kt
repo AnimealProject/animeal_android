@@ -5,11 +5,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
 import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
-import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.router.model.RouteResult
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
 import com.mapbox.navigation.base.options.NavigationOptions
@@ -38,35 +38,35 @@ internal fun RouteView(
         )
     }
 
-    LaunchedEffect(key1 = state.feedingRouteState) {
-        when {
-            state.gpsSettingState is GpsSettingState.Disabled && state.currentFeedingPoint != null -> {
-                mapView.focusOnFeedingPoint(
-                    state.currentFeedingPoint,
-                )
-            }
-            state.feedingRouteState is FeedingRouteState.Disabled -> {
-                mapView.removeRoute(mapBoxRouteInitOptions)
-            }
-            state.feedingRouteState is FeedingRouteState.Active &&
-                state.timerState is TimerState.Active -> {
-                if (state.feedingRouteState.routeData != null) {
-                    drawRoute(
-                        state.feedingRouteState.routeData,
-                        mapView,
-                        mapBoxRouteInitOptions
-                    )
-                    if (state.feedingRouteState.showFullRoad) {
-                        setLocationOnRoute(mapView, state)
+    with(state) {
+        val feedingRouteState = feedingRouteState
+        val currentFeedingPoint = feedingPointState.currentFeedingPoint
+        LaunchedEffect(key1 = feedingRouteState) {
+            when {
+                gpsSettingState is GpsSettingState.Disabled && currentFeedingPoint != null -> {
+                    currentFeedingPoint.let { mapView.focusOnFeedingPoint(it) }
+                }
+                feedingRouteState is FeedingRouteState.Disabled -> {
+                    mapView.removeRoute(mapBoxRouteInitOptions)
+                }
+                feedingRouteState is FeedingRouteState.Active &&
+                    timerState is TimerState.Active -> {
+                    if (feedingRouteState.routeData != null) {
+                        feedingRouteState.routeData?.let { data ->
+                            drawRoute(data, mapView, mapBoxRouteInitOptions)
+                        }
+                        if (feedingRouteState.showFullRoad) {
+                            setLocationOnRoute(mapView, state)
+                        }
+                    } else {
+                        fetchRoute(
+                            state,
+                            mapView,
+                            mapBoxRouteInitOptions,
+                            mapboxNavigation,
+                            onRouteResult
+                        )
                     }
-                } else {
-                    fetchRoute(
-                        state,
-                        mapView,
-                        mapBoxRouteInitOptions,
-                        mapboxNavigation,
-                        onRouteResult
-                    )
                 }
             }
         }
@@ -79,7 +79,7 @@ internal fun RouteView(
 }
 
 internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
-    state.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
+    state.feedingPointState.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
         mapView.setLocation(
             points = listOf(
                 state.locationState.location.toPoint(),
@@ -104,7 +104,7 @@ private fun fetchRoute(
     mapboxNavigation: MapboxNavigation,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
-    state.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
+    state.feedingPointState.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
         mapView.fetchRoute(
             mapBoxRouteInitOptions = mapBoxRouteInitOptions,
             navigation = mapboxNavigation,

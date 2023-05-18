@@ -1,21 +1,22 @@
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.common.component.AppSettingsProvider
-import com.epmedu.animeal.home.data.ApplicationSettingsRepositoryImpl
-import com.epmedu.animeal.home.domain.ApplicationSettingsRepository
+import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
+import com.epmedu.animeal.common.domain.ApplicationSettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object HomeDataModule {
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     fun providesApplicationSettingsRepository(
         appSettingsProvider: AppSettingsProvider,
-    ): ApplicationSettingsRepository = ApplicationSettingsRepositoryImpl(appSettingsProvider)
+    ): ApplicationSettingsRepository =
+        ApplicationSettingsRepositoryImpl(appSettingsProvider)
 }

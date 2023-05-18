@@ -34,6 +34,8 @@ private const val URI_SCHEME = "package"
 
 private const val ONE_SECOND_INTERVAL = 1000L
 
+private const val ENABLE_LOCATION_REQUEST_CODE = 500
+
 fun Context.launchAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.fromParts(URI_SCHEME, packageName, null)
@@ -50,7 +52,7 @@ fun Context.launchGpsSettings() {
 }
 
 /** Workaround method to request GPS location using dialog provided by Google */
-fun Context.requestGpsByDialog(showDialog: (PendingIntent) -> Unit) {
+fun Context.requestGpsByDialog(showDialog: ((PendingIntent) -> Unit)? = null) {
     val locationRequest = LocationRequest.create().apply {
         interval = ONE_SECOND_INTERVAL
         fastestInterval = ONE_SECOND_INTERVAL
@@ -67,7 +69,13 @@ fun Context.requestGpsByDialog(showDialog: (PendingIntent) -> Unit) {
         .checkLocationSettings(builder.build())
         .addOnFailureListener { exception ->
             if (exception is ResolvableApiException) {
-                showDialog(exception.resolution)
+                showDialog?.let { showDialog(exception.resolution) }
+                    ?: getActivity()?.let { activity ->
+                        exception.startResolutionForResult(
+                            activity,
+                            ENABLE_LOCATION_REQUEST_CODE
+                        )
+                    }
             }
         }
 }

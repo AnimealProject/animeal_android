@@ -13,12 +13,12 @@ interface AppSettingsUpdateScope {
     var isInitialGeolocationPermissionRequested: Boolean
     var isCameraPermissionRequested: Boolean
     var animalType: String
-    var isMotivatedUseGps: Boolean
+    var isGeolocationPermissionRequestedAgain: Boolean
 }
 
 data class AppSettings(
     val isInitialGeolocationPermissionRequested: Boolean,
     val isCameraPermissionRequested: Boolean,
     val animalType: String,
-    val isMotivatedUseGps: Boolean
+    val isGeolocationPermissionRequestedAgain: Boolean
 )

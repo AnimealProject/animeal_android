@@ -24,7 +24,7 @@ internal class AppSettingsProviderImpl(
             updateInitialGeolocationPermission(settings.isInitialGeolocationPermissionRequested)
             updateInitialCameraPermission(settings.isCameraPermissionRequested)
             updateAnimalType(settings.animalType)
-            updateInitialCameraPermission(settings.isMotivatedUseGps)
+            updateIsGeolocationPermissionRequestedAgain(settings.isGeolocationPermissionRequestedAgain)
         }
     }
 
@@ -32,7 +32,7 @@ internal class AppSettingsProviderImpl(
         isInitialGeolocationPermissionRequested = initialGeolocationPermission,
         isCameraPermissionRequested = initialCameraPermission,
         animalType = animalType,
-        isMotivatedUseGps = motivatedUseGps
+        isGeolocationPermissionRequestedAgain = isGeolocationPermissionRequestedAgain
     )
 }
 
@@ -40,20 +40,20 @@ private class AppSettingsUpdateScopeImpl(
     override var isInitialGeolocationPermissionRequested: Boolean,
     override var isCameraPermissionRequested: Boolean,
     override var animalType: String,
-    override var isMotivatedUseGps: Boolean,
+    override var isGeolocationPermissionRequestedAgain: Boolean,
 ) : AppSettingsUpdateScope {
 
     constructor(settings: AppSettings) : this(
         settings.isInitialGeolocationPermissionRequested,
         settings.isCameraPermissionRequested,
         settings.animalType,
-        settings.isMotivatedUseGps
+        settings.isGeolocationPermissionRequestedAgain
     )
 
     fun toAppSettings() = AppSettings(
         isInitialGeolocationPermissionRequested = isInitialGeolocationPermissionRequested,
         isCameraPermissionRequested = isCameraPermissionRequested,
         animalType = animalType,
-        isMotivatedUseGps = isMotivatedUseGps
+        isGeolocationPermissionRequestedAgain = isGeolocationPermissionRequestedAgain
     )
 }
