@@ -203,13 +203,15 @@ internal fun HomeScreenUI(
     }
 
     CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    FeedingConfirmationDialog(
-        isShowing = isFeedingDialogShowing,
-        onAgreeClick = {
-            scope.launch { bottomSheetState.hide() }
-            onFeedingEvent(FeedingEvent.Start)
-        }
-    )
+    state.feedingPointState.currentFeedingPoint?.let {
+        FeedingConfirmationDialog(
+            isShowing = isFeedingDialogShowing,
+            onAgreeClick = {
+                scope.launch { bottomSheetState.hide() }
+                onFeedingEvent(FeedingEvent.Start(it.id))
+            }
+        )
+    }
     ThankYouConfirmationDialog(state, onScreenEvent)
 }
 

@@ -4,6 +4,7 @@ import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import kotlinx.coroutines.CoroutineScope
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
@@ -58,6 +61,12 @@ internal class FeedingPointRepositoryImpl(
                 dataFeedingPoint.toDomainFeedingPoint()
             }
         }
+    }
+
+    override suspend fun getFeedingPointById(id: String): FeedingPoint {
+        return feedingPointApi.getAllFeedingPoints().map { feedingPoints ->
+            feedingPoints.filter { it.id == id }[0].toDomainFeedingPoint()
+        }.first()
     }
 
     private fun subscribeToFeedingPointsCreation(): Flow<List<DomainFeedingPoint>> {

@@ -13,13 +13,17 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("TooManyFunctions")
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
@@ -27,9 +31,11 @@ internal class FavouritesViewModel @Inject constructor(
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val permissionsHandler: PermissionsHandler,
+    private val feedingHandler: FeedingHandler,
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
     PermissionsHandler by permissionsHandler,
+    FeedingHandler by feedingHandler,
     ActionDelegate by actionDelegate {
 
     init {
@@ -39,6 +45,15 @@ internal class FavouritesViewModel @Inject constructor(
             }
         }
         viewModelScope.launch { collectPermissionsState() }
+        viewModelScope.launch {
+            feedingStateFlow.collectLatest { feedingState ->
+                updateState {
+                    copy(
+                        feedingPointState = feedingState
+                    )
+                }
+            }
+        }
     }
 
     fun handleEvents(event: FavouritesScreenEvent) {
@@ -64,6 +79,10 @@ internal class FavouritesViewModel @Inject constructor(
             event.isFavourite -> addFeedingPointToFavourites(event.feedingPoint)
             else -> removeFeedingPointFromFavourites(event.feedingPoint)
         }
+    }
+
+    fun handleFeedingEvent(event: FeedingEvent) {
+        viewModelScope.handleFeedingEvent(event)
     }
 
     private fun addFeedingPointToFavourites(feedingPoint: FeedingPoint) {

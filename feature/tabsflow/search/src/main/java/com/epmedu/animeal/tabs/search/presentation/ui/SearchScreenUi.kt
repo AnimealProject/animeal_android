@@ -25,10 +25,12 @@ import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -55,6 +57,7 @@ internal fun SearchScreenUi(
     state: SearchState,
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (SearchScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit,
     onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
@@ -78,20 +81,23 @@ internal fun SearchScreenUi(
             contentAlpha,
             buttonAlpha,
             scope,
-            onEvent
+            onEvent,
+            onFeedingEvent,
         )
     }
 }
 
 @Composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Suppress("LongMethod", "TooManyFunctions")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: SearchState,
     contentAlpha: Float,
     buttonAlpha: Float,
     scope: CoroutineScope,
-    onEvent: (SearchScreenEvent) -> Unit
+    onEvent: (SearchScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit,
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
     val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
@@ -150,7 +156,20 @@ private fun ScreenScaffold(
     }
 
     CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = { })
+    state.showingFeedingPoint?.let {
+        FeedingConfirmationDialog(
+            isShowing = isFeedingDialogShowing,
+            onAgreeClick = {
+                scope.launch { bottomSheetState.hide() }
+                onFeedingEvent(FeedingEvent.Start(it.id))
+            }
+        )
+    }
+    if (state.feedingPointState.feedingConfirmationState
+        == FeedingConfirmationState.FeedingStarted
+    ) {
+        navigator.navigate(TabsRoute.Home.name)
+    }
 }
 
 @Composable
@@ -205,7 +224,8 @@ private fun SearchScreenUiPreview() {
             SearchState(),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
             {},
-            {}
+            {},
+            {},
         )
     }
 }

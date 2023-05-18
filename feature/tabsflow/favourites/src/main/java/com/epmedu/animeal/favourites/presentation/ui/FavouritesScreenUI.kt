@@ -39,6 +39,7 @@ import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
@@ -46,6 +47,8 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -63,6 +66,7 @@ import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -73,6 +77,7 @@ internal fun FavouritesScreenUI(
     state: FavouritesState,
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit,
     onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
@@ -91,11 +96,13 @@ internal fun FavouritesScreenUI(
         onEvent = onPermissionsEvent
     ) { _ ->
         ScreenScaffold(
+            scope,
             bottomSheetState,
             state,
             contentAlpha,
             buttonAlpha,
-            onEvent
+            onEvent,
+            onFeedingEvent,
         )
     }
 }
@@ -118,11 +125,13 @@ private fun HandleFeedingPointSheetHiddenState(
 @Composable
 @Suppress("LongMethod")
 private fun ScreenScaffold(
+    scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     state: FavouritesState,
     contentAlpha: Float,
     buttonAlpha: Float,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    onEvent: (FavouritesScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
     val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
@@ -184,7 +193,15 @@ private fun ScreenScaffold(
     }
 
     CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {})
+    state.showingFeedingPoint?.let {
+        FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {
+            scope.launch { bottomSheetState.hide() }
+            onFeedingEvent(FeedingEvent.Start(it.id))
+        })
+    }
+    if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.FeedingStarted) {
+        navigator.navigate(TabsRoute.Home.name)
+    }
 }
 
 @Composable
@@ -276,7 +293,8 @@ private fun FavouritesScreenPreview() {
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
             {},
-            {}
+            {},
+            {},
         )
     }
 }
@@ -287,9 +305,11 @@ private fun FavouritesScreenEmptyPreview() {
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
+                feedingPointState = FeedingPointState(),
                 persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {},
             {}
         )

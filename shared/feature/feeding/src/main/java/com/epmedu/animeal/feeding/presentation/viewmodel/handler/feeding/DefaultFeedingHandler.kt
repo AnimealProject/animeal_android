@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
+import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
@@ -24,6 +25,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.Fe
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -35,6 +37,7 @@ class DefaultFeedingHandler(
     feedingPointHandler: FeedingPointHandler,
     timerHandler: TimerHandler,
     private val fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
+    private val fetchFeedingPointByIdUseCase: FetchFeedingPointByIdUseCase,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
@@ -48,6 +51,8 @@ class DefaultFeedingHandler(
     TimerHandler by timerHandler,
     ErrorHandler by errorHandler {
 
+    override var feedingStateFlow: StateFlow<FeedingPointState> = stateFlow
+
     override suspend fun fetchCurrentFeeding() {
         val forcedFeedingPointId = forcedArgumentsUseCase<String>(FORCED_FEEDING_POINT_ID, hashCode())
         if (forcedFeedingPointId != null) return
@@ -60,20 +65,31 @@ class DefaultFeedingHandler(
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
-            Start -> launch { startFeeding() }
+            is Start -> launch { startFeeding(event.id) }
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
         }
     }
 
-    private suspend fun startFeeding() {
+    private suspend fun startFeeding(id: String) {
+        val feedingPoint = fetchFeedingPointByIdUseCase(id)
+        updateState {
+            copy(
+                currentFeedingPoint = FeedingPointModel(feedingPoint)
+            )
+        }
         performFeedingAction(
             action = startFeedingUseCase::invoke,
             onSuccess = { currentFeedingPoint ->
                 showSingleReservedFeedingPoint(currentFeedingPoint)
                 startRoute()
                 startTimer()
+                updateState {
+                    copy(
+                        feedingConfirmationState = FeedingConfirmationState.FeedingStarted
+                    )
+                }
             }
         )
     }

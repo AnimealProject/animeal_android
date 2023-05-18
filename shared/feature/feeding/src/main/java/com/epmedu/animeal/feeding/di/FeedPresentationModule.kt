@@ -6,9 +6,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
+import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
@@ -35,6 +37,12 @@ internal object FeedPresentationModule {
 
     @ViewModelScoped
     @Provides
+    fun providesFetchFeedingPointByIdUseCase(
+        feedingPointRepository: FeedingPointRepository
+    ): FetchFeedingPointByIdUseCase = FetchFeedingPointByIdUseCase(feedingPointRepository)
+
+    @ViewModelScoped
+    @Provides
     fun providesFeedingHandler(
         stateDelegate: StateDelegate<FeedingPointState>,
         actionDelegate: ActionDelegate,
@@ -43,6 +51,7 @@ internal object FeedPresentationModule {
         feedingPointHandler: FeedingPointHandler,
         timerHandler: TimerHandler,
         fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
+        fetchFeedingPointByIdUseCase: FetchFeedingPointByIdUseCase,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
@@ -56,6 +65,7 @@ internal object FeedPresentationModule {
         feedingPointHandler,
         timerHandler,
         fetchCurrentFeedingPointUseCase,
+        fetchFeedingPointByIdUseCase,
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,

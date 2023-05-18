@@ -79,4 +79,8 @@ internal class FeedingPointRepositoryMock(
     override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
     }
+
+    override suspend fun getFeedingPointById(id: String): FeedingPoint {
+        TODO("Not yet implemented")
+    }
 }
