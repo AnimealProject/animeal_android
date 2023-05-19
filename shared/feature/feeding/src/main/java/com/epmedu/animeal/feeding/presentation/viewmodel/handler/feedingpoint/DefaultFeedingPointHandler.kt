@@ -75,6 +75,7 @@ class DefaultFeedingPointHandler(
 
                     else -> feedingPoints.toImmutableList()
                 }
+                state.currentFeedingPoint?.let { fetchFeedings(it.id) }
                 updateState {
                     copy(
                         currentFeedingPoint = currentFeedingPoint,
