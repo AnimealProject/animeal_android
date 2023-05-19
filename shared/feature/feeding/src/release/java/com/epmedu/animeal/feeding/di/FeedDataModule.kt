@@ -6,11 +6,9 @@ import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
-import com.epmedu.animeal.feeding.data.repository.FeederRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
-import com.epmedu.animeal.feeding.domain.repository.FeederRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.users.domain.UsersRepository
@@ -43,13 +41,15 @@ object FeedDataModule {
     fun providesFeedingRepository(
         authApi: AuthAPI,
         feedingAPI: FeedingApi,
-        favouriteRepository: FavouriteRepository
+        favouriteRepository: FavouriteRepository,
+        usersRepository: UsersRepository
     ): FeedingRepository {
         return FeedingRepositoryImpl(
             dispatchers = Dispatchers,
             authApi = authApi,
             feedingApi = feedingAPI,
-            favouriteRepository = favouriteRepository
+            favouriteRepository = favouriteRepository,
+            usersRepository = usersRepository
         )
     }
 
@@ -63,17 +63,4 @@ object FeedDataModule {
         authApi = authApi,
         favouriteApi = favouriteApi
     )
-
-    @Singleton
-    @Provides
-    fun providesFeederRepository(
-        feedingRepository: FeedingRepository,
-        usersRepository: UsersRepository
-    ): FeederRepository {
-        return FeederRepositoryImpl(
-            Dispatchers,
-            feedingRepository,
-            usersRepository
-        )
-    }
 }

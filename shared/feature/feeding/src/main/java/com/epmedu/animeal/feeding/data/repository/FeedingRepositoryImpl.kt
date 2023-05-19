@@ -1,30 +1,36 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.amplifyframework.datastore.generated.model.FeedingHistory
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomain
 import com.epmedu.animeal.feeding.data.mapper.toFeedingHistory
-import com.epmedu.animeal.feeding.domain.model.Feeding
+import com.epmedu.animeal.feeding.domain.model.FeedingHistory
+import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.users.domain.UsersRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 internal class FeedingRepositoryImpl(
     private val dispatchers: Dispatchers,
     private val authApi: AuthAPI,
     private val feedingApi: FeedingApi,
-    private val favouriteRepository: FavouriteRepository
+    private val favouriteRepository: FavouriteRepository,
+    private val usersRepository: UsersRepository
 ) : FeedingRepository {
 
-    override suspend fun getUserFeedings(): List<Feeding> {
+    override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
             favouriteRepository.getFavouriteFeedingPointIds()
@@ -37,7 +43,8 @@ internal class FeedingRepositoryImpl(
             .first()
     }
 
-    override fun getApprovedFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>> {
         return flow {
             emit(
                 feedingApi.getApprovedFeedingHistories(feedingPointId)
@@ -45,7 +52,28 @@ internal class FeedingRepositoryImpl(
                         item.toFeedingHistory()
                     } ?: emptyList()
             )
-        }
+        }.flatMapLatest { feedings ->
+            if (feedings.isEmpty()) {
+                flowOf(emptyList())
+            } else {
+                val feedingsUserIds = feedings.map { it.userId }.toSet()
+
+                usersRepository.getUsersById(feedingsUserIds).map { users ->
+                    val usersMap = users.associateBy { it.id }
+
+                    feedings.map { feeding ->
+                        val user = usersMap[feeding.userId]
+
+                        FeedingHistory(
+                            id = feeding.userId,
+                            name = user?.name.orEmpty(),
+                            surname = user?.surname.orEmpty(),
+                            date = feeding.createdAt.toDate()
+                        )
+                    }
+                }
+            }
+        }.flowOn(dispatchers.IO)
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult {

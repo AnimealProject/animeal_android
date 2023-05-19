@@ -3,14 +3,13 @@ package com.epmedu.animeal.home.di
 import androidx.lifecycle.SavedStateHandle
 import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
 import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
-import com.epmedu.animeal.feeding.domain.repository.FeederRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedersUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
@@ -41,9 +40,9 @@ object HomeDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGetFeedersUseCase(
-        feederRepository: FeederRepository
-    ): GetFeedersUseCase = GetFeedersUseCase(feederRepository)
+    fun providesGetFeedingHistoriesUseCase(
+        feedingRepository: FeedingRepository
+    ): GetFeedingHistoriesUseCase = GetFeedingHistoriesUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides

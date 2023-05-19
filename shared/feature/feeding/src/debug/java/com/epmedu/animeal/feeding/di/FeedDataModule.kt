@@ -8,14 +8,11 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.debugmenu.domain.DebugMenuRepository
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryMock
-import com.epmedu.animeal.feeding.data.repository.FeederRepositoryImpl
-import com.epmedu.animeal.feeding.data.repository.FeederRepositoryMock
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryMock
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryMock
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
-import com.epmedu.animeal.feeding.domain.repository.FeederRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.users.domain.UsersRepository
@@ -62,6 +59,7 @@ object FeedDataModule {
         authApi: AuthAPI,
         feedingAPI: FeedingApi,
         favouriteRepository: FavouriteRepository,
+        usersRepository: UsersRepository,
         debugMenuRepository: DebugMenuRepository,
     ): FeedingRepository {
         return when {
@@ -73,28 +71,8 @@ object FeedDataModule {
                     dispatchers = Dispatchers,
                     authApi = authApi,
                     feedingApi = feedingAPI,
-                    favouriteRepository = favouriteRepository
-                )
-            }
-        }
-    }
-
-    @Singleton
-    @Provides
-    fun providesFeederRepository(
-        feedingRepository: FeedingRepository,
-        usersRepository: UsersRepository,
-        debugMenuRepository: DebugMenuRepository,
-    ): FeederRepository {
-        return when {
-            debugMenuRepository.useMockedFeedingPoints -> {
-                FeederRepositoryMock()
-            }
-            else -> {
-                FeederRepositoryImpl(
-                    Dispatchers,
-                    feedingRepository,
-                    usersRepository
+                    favouriteRepository = favouriteRepository,
+                    usersRepository = usersRepository
                 )
             }
         }

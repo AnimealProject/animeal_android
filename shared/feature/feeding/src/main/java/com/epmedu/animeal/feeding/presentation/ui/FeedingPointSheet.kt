@@ -40,7 +40,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
-import com.epmedu.animeal.feeding.presentation.model.Feeder
+import com.epmedu.animeal.feeding.presentation.model.FeedingHistory
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.loading.ShimmerLoading
@@ -95,7 +95,7 @@ fun FeedingPointSheetContent(
             )
             FeedingPointDetails(
                 description = description,
-                feeders = feeders,
+                feedingHistories = feedingHistories,
                 scrimAlpha = contentAlpha
             )
         }
@@ -165,7 +165,7 @@ internal fun FeedingPointHeader(
 internal fun FeedingPointDetails(
     scrimAlpha: Float,
     description: String,
-    feeders: List<Feeder>?,
+    feedingHistories: List<FeedingHistory>?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -182,13 +182,13 @@ internal fun FeedingPointDetails(
                 overflow = TextOverflow.Ellipsis,
                 alpha = scrimAlpha
             )
-            FeedingPointFeeders(feeders = feeders)
+            FeedingPointFeedings(feedingHistories = feedingHistories)
         }
     }
 }
 
 @Composable
-private fun FeedingPointFeeders(feeders: List<Feeder>?) {
+private fun FeedingPointFeedings(feedingHistories: List<FeedingHistory>?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -200,15 +200,15 @@ private fun FeedingPointFeeders(feeders: List<Feeder>?) {
             fontWeight = FontWeight.Bold,
         )
         Column {
-            feeders?.forEach { feeder ->
-                Feeder(feeder = feeder)
-            } ?: FeedersLoading()
+            feedingHistories?.forEach { feedingHistory ->
+                Feeding(feedingHistory = feedingHistory)
+            } ?: FeedingsLoading()
         }
     }
 }
 
 @Composable
-private fun Feeder(feeder: Feeder) {
+private fun Feeding(feedingHistory: FeedingHistory) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -234,7 +234,7 @@ private fun Feeder(feeder: Feeder) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = feeder.name.ifBlank { stringResource(id = R.string.unknown_user) },
+                text = feedingHistory.feederName.ifBlank { stringResource(id = R.string.unknown_user) },
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Medium,
                 overflow = TextOverflow.Ellipsis,
@@ -242,7 +242,7 @@ private fun Feeder(feeder: Feeder) {
                 maxLines = 1,
             )
             Text(
-                text = feeder.elapsedTime,
+                text = feedingHistory.elapsedTime,
                 style = MaterialTheme.typography.caption,
                 overflow = TextOverflow.Ellipsis,
                 color = CustomColor.DarkerGrey.withLocalAlpha(),
@@ -253,7 +253,7 @@ private fun Feeder(feeder: Feeder) {
 }
 
 @Composable
-private fun FeedersLoading() {
+private fun FeedingsLoading() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -304,7 +304,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
-                feeders = null,
+                feedingHistories = null,
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)
@@ -330,10 +330,10 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
-                feeders = listOf(
-                    Feeder(
+                feedingHistories = listOf(
+                    FeedingHistory(
                         id = "-1",
-                        name = text.take(20),
+                        feederName = text.take(20),
                         elapsedTime = "14 hours ago"
                     )
                 ),

@@ -11,7 +11,7 @@ import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedersUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
@@ -73,7 +73,7 @@ internal object FeedPresentationModule {
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
-        getFeedersUseCase: GetFeedersUseCase,
+        getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
         addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
         removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
         updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
@@ -84,7 +84,7 @@ internal object FeedPresentationModule {
         routeHandler,
         errorHandler,
         getAllFeedingPointsUseCase,
-        getFeedersUseCase,
+        getFeedingHistoriesUseCase,
         addFeedingPointToFavouritesUseCase,
         removeFeedingPointFromFavouritesUseCase,
         updateAnimalTypeSettingsUseCase
