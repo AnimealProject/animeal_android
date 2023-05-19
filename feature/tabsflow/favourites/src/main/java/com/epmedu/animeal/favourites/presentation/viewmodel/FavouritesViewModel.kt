@@ -13,6 +13,8 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -23,9 +25,11 @@ internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
-    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase
+    private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val permissionsHandler: PermissionsHandler,
 ) : ViewModel(),
     StateDelegate<FavouritesState> by DefaultStateDelegate(initialState = FavouritesState()),
+    PermissionsHandler by permissionsHandler,
     ActionDelegate by actionDelegate {
 
     init {
@@ -34,6 +38,7 @@ internal class FavouritesViewModel @Inject constructor(
                 updateState { copy(favourites = feedingPoints.toImmutableList()) }
             }
         }
+        viewModelScope.launch { collectPermissionsState() }
     }
 
     fun handleEvents(event: FavouritesScreenEvent) {
@@ -41,6 +46,16 @@ internal class FavouritesViewModel @Inject constructor(
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
+        }
+    }
+
+    fun handlePermissionsEvent(event: PermissionsEvent) {
+        viewModelScope.handlePermissionEvent(event)
+    }
+
+    private suspend fun collectPermissionsState() {
+        permissionsStateFlow.collect { permissionsState ->
+            updateState { copy(permissionsState = permissionsState) }
         }
     }
 

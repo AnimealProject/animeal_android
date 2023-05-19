@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -53,18 +54,25 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.permissions.presentation.AnimealPermissions
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun FavouritesScreenUI(
     state: FavouritesState,
     bottomSheetState: AnimealBottomSheetState,
-    onEvent: (FavouritesScreenEvent) -> Unit
+    onEvent: (FavouritesScreenEvent) -> Unit,
+    onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -76,13 +84,19 @@ internal fun FavouritesScreenUI(
         scope.launch { bottomSheetState.hide() }
     }
 
-    ScreenScaffold(
-        bottomSheetState,
-        state,
-        contentAlpha,
-        buttonAlpha,
-        onEvent
-    )
+    AnimealPermissions(
+        permissionsState = state.permissionsState,
+        lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
+        onEvent = onPermissionsEvent
+    ) { _ ->
+        ScreenScaffold(
+            bottomSheetState,
+            state,
+            contentAlpha,
+            buttonAlpha,
+            onEvent
+        )
+    }
 }
 
 @Composable
@@ -101,6 +115,7 @@ private fun HandleFeedingPointSheetHiddenState(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: FavouritesState,
@@ -109,6 +124,7 @@ private fun ScreenScaffold(
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
@@ -142,7 +158,12 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { isFeedingDialogShowing.value = true },
+                onClick = {
+                    when (state.permissionsState.cameraPermissionStatus) {
+                        PermissionStatus.Granted -> isFeedingDialogShowing.value = true
+                        else -> isCameraPermissionDialogShowing.value = true
+                    }
+                },
             )
         }
     ) {
@@ -161,6 +182,7 @@ private fun ScreenScaffold(
         }
     }
 
+    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
     FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {})
 }
 
@@ -250,8 +272,10 @@ private fun FavouritesScreenPreview() {
             FavouritesState(
                 favourites = favourites.toImmutableList(),
             ),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
-        ) {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
+            {}
+        )
     }
 }
 
@@ -263,7 +287,9 @@ private fun FavouritesScreenEmptyPreview() {
             FavouritesState(
                 persistentListOf()
             ),
-            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
-        ) {}
+            AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
+            {}
+        )
     }
 }

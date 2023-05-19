@@ -22,7 +22,8 @@ fun SearchScreen() {
     SearchScreenUi(
         state = searchState,
         bottomSheetState = bottomSheetState,
-        onEvent = searchViewModel::handleEvents
+        onEvent = searchViewModel::handleEvents,
+        onPermissionsEvent = searchViewModel::handlePermissionsEvent
     )
 
     if (searchState.showingFeedingPoint != null) {
