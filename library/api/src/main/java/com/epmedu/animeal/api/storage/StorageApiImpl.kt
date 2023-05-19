@@ -1,6 +1,7 @@
 package com.epmedu.animeal.api.storage
 
 import android.net.Uri
+import android.webkit.URLUtil
 import androidx.core.net.toFile
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.storage.options.StorageGetUrlOptions
@@ -27,8 +28,11 @@ internal class StorageApiImpl : StorageApi {
     }
 
     override suspend fun parseAmplifyUrl(imageId: String): String {
-        return cachedImageUrls[imageId]
-            ?: suspendCancellableCoroutine {
+        val cachedUrl = cachedImageUrls[imageId]
+        return when {
+            cachedUrl != null -> cachedUrl
+            URLUtil.isValidUrl(imageId) -> imageId
+            else -> suspendCancellableCoroutine {
                 val options = StorageGetUrlOptions.builder().build()
                 Amplify.Storage.getUrl(
                     imageId,
@@ -41,6 +45,7 @@ internal class StorageApiImpl : StorageApi {
                     { resumeWithException(it) }
                 )
             }
+        }
     }
 
     override suspend fun deleteFile(fileName: String): ApiResult<Unit> =
