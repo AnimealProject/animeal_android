@@ -1,11 +1,11 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import com.amplifyframework.core.model.temporal.Temporal
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomain
-import com.epmedu.animeal.feeding.data.mapper.toFeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
@@ -47,28 +47,26 @@ internal class FeedingRepositoryImpl(
     override fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>> {
         return flow {
             emit(
-                feedingApi.getApprovedFeedingHistories(feedingPointId)
-                    .data?.searchFeedingHistories()?.items()?.map { item ->
-                        item.toFeedingHistory()
-                    } ?: emptyList()
+                feedingApi.getApprovedFeedingHistories(feedingPointId).data?.searchFeedingHistories()
+                    ?.items()
             )
-        }.flatMapLatest { feedings ->
-            if (feedings.isEmpty()) {
+        }.flatMapLatest { feedingsHistories ->
+            if (feedingsHistories.isNullOrEmpty()) {
                 flowOf(emptyList())
             } else {
-                val feedingsUserIds = feedings.map { it.userId }.toSet()
+                val userIds = feedingsHistories.map { it.userId() }.toSet()
 
-                usersRepository.getUsersById(feedingsUserIds).map { users ->
+                usersRepository.getUsersById(userIds).map { users ->
                     val usersMap = users.associateBy { it.id }
 
-                    feedings.map { feeding ->
-                        val user = usersMap[feeding.userId]
+                    feedingsHistories.map { feeding ->
+                        val user = usersMap[feeding.userId()]
 
                         FeedingHistory(
-                            id = feeding.userId,
+                            id = feeding.userId(),
                             name = user?.name.orEmpty(),
                             surname = user?.surname.orEmpty(),
-                            date = feeding.createdAt.toDate()
+                            date = Temporal.DateTime(feeding.createdAt()).toDate()
                         )
                     }
                 }
