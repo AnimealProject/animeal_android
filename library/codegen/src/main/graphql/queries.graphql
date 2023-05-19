@@ -348,6 +348,49 @@ query ListFeedings(
     nextToken
   }
 }
+query SearchFeedings(
+  $filter: SearchableFeedingFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFeedings(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      userId
+      images
+      status
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      expireAt
+      feedingPointFeedingsId
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
 query GetFeedingHistory($id: ID!) {
   getFeedingHistory(id: $id) {
     id

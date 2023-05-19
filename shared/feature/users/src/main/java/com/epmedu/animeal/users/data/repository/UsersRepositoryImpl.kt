@@ -14,6 +14,14 @@ internal class UsersRepositoryImpl(
     private val usersApi: UsersApi
 ) : UsersRepository {
 
+    override fun getUserById(id: String): Flow<User?> {
+        return flow {
+            emit(
+                usersApi.getUserById(id).data?.toDomain()
+            )
+        }
+    }
+
     override fun getUsersById(ids: Set<String>): Flow<List<User>> {
         return flow {
             coroutineScope {

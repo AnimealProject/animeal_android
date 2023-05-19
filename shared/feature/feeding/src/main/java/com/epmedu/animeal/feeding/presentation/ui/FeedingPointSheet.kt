@@ -38,9 +38,10 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
-import com.epmedu.animeal.feeding.presentation.model.FeedingHistory
+import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.loading.ShimmerLoading
@@ -95,7 +96,7 @@ fun FeedingPointSheetContent(
             )
             FeedingPointDetails(
                 description = description,
-                feedingHistories = feedingHistories,
+                feedings = feedings,
                 scrimAlpha = contentAlpha
             )
         }
@@ -165,7 +166,7 @@ internal fun FeedingPointHeader(
 internal fun FeedingPointDetails(
     scrimAlpha: Float,
     description: String,
-    feedingHistories: List<FeedingHistory>?,
+    feedings: List<Feeding>?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -182,13 +183,13 @@ internal fun FeedingPointDetails(
                 overflow = TextOverflow.Ellipsis,
                 alpha = scrimAlpha
             )
-            FeedingPointFeedings(feedingHistories = feedingHistories)
+            FeedingPointFeedings(feedings = feedings)
         }
     }
 }
 
 @Composable
-private fun FeedingPointFeedings(feedingHistories: List<FeedingHistory>?) {
+private fun FeedingPointFeedings(feedings: List<Feeding>?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -200,15 +201,15 @@ private fun FeedingPointFeedings(feedingHistories: List<FeedingHistory>?) {
             fontWeight = FontWeight.Bold,
         )
         Column {
-            feedingHistories?.forEach { feedingHistory ->
-                Feeding(feedingHistory = feedingHistory)
+            feedings?.forEach { feeding ->
+                Feeding(feeding = feeding)
             } ?: FeedingsLoading()
         }
     }
 }
 
 @Composable
-private fun Feeding(feedingHistory: FeedingHistory) {
+private fun Feeding(feeding: Feeding) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -234,7 +235,7 @@ private fun Feeding(feedingHistory: FeedingHistory) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = feedingHistory.feederName.ifBlank { stringResource(id = R.string.unknown_user) },
+                text = feeding.feederName.ifBlank { stringResource(id = R.string.unknown_user) },
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Medium,
                 overflow = TextOverflow.Ellipsis,
@@ -242,7 +243,19 @@ private fun Feeding(feedingHistory: FeedingHistory) {
                 maxLines = 1,
             )
             Text(
-                text = feedingHistory.elapsedTime,
+                text = when (feeding) {
+                    is Feeding.InProgress -> {
+                        stringResource(
+                            id = R.string.feeding_in_progress,
+                            LocalContext.current.formatNumberToHourMin(feeding.timeLeft)
+                                ?: stringResource(id = R.string.unknown_time)
+                        )
+                    }
+
+                    is Feeding.History -> {
+                        feeding.elapsedTime
+                    }
+                },
                 style = MaterialTheme.typography.caption,
                 overflow = TextOverflow.Ellipsis,
                 color = CustomColor.DarkerGrey.withLocalAlpha(),
@@ -304,7 +317,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
-                feedingHistories = null,
+                feedings = null,
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)
@@ -330,8 +343,8 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
-                feedingHistories = listOf(
-                    FeedingHistory(
+                feedings = listOf(
+                    Feeding.History(
                         id = "-1",
                         feederName = text.take(20),
                         elapsedTime = "14 hours ago"
