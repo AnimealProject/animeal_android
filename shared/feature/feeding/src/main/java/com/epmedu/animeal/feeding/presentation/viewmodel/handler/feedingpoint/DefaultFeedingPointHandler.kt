@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -35,6 +36,7 @@ class DefaultFeedingPointHandler(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
@@ -82,8 +84,7 @@ class DefaultFeedingPointHandler(
     }
 
     override suspend fun showFeedingPoint(feedingPointId: String): FeedingPointModel {
-        val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
-            ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
+        val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
         selectFeedingPoint(Select(forcedPoint))
         return forcedPoint
     }

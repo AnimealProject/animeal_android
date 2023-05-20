@@ -6,47 +6,48 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 
-class FavouriteRepositoryImpl(
-    dispatchers: Dispatchers,
+internal class FavouriteRepositoryImpl(
+    private val dispatchers: Dispatchers,
     private val authApi: AuthAPI,
     private val favouriteApi: FavouriteApi,
 ) : FavouriteRepository {
-
-    private val coroutineScope = CoroutineScope(dispatchers.IO)
 
     private val favouritesFlow = MutableStateFlow(emptyList<Favourite>())
     private val favourites
         get() = favouritesFlow.value
 
-    init {
-        coroutineScope.launch {
-            merge(
-                getFavourites(),
-                subscribeToFavouritesCreations(),
-                subscribeToFavouritesDeletions()
-            ).collect {
-                favouritesFlow.value = it
-            }
-        }
-    }
-
     override fun getFavouriteFeedingPointIds(): Flow<List<String>> {
-        return favouritesFlow.map { favourites ->
+        return merge(favouritesFlow, fetchFavourites()).map { favourites ->
             favourites.map { it.feedingPointId }
         }
+            .distinctUntilChanged()
+            .flowOn(dispatchers.IO)
     }
 
-    private suspend fun getFavourites(): Flow<List<Favourite>> {
-        return favouriteApi.getFavouriteList(authApi.getCurrentUserId())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun fetchFavourites(): Flow<List<Favourite>> {
+        return flow { emit(authApi.getCurrentUserId()) }.flatMapLatest { userId ->
+            merge(
+                favouriteApi.getFavouriteList(userId),
+                subscribeToFavouritesCreations(),
+                subscribeToFavouritesDeletions()
+            )
+        }.onEach {
+            favouritesFlow.value = it
+        }
     }
 
     private fun subscribeToFavouritesCreations(): Flow<List<Favourite>> {
