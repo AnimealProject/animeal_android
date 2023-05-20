@@ -75,10 +75,20 @@ class DefaultFeedingPointHandler(
 
                     else -> feedingPoints.toImmutableList()
                 }
-                state.currentFeedingPoint?.let { fetchFeedings(it.id) }
+                val currentFeedingPointToShow = when (currentFeedingPoint?.feedStatus) {
+                    state.currentFeedingPoint?.feedStatus -> {
+                        currentFeedingPoint?.copy(
+                            feedingHistories = state.currentFeedingPoint?.feedingHistories
+                        )
+                    }
+                    else -> {
+                        currentFeedingPoint?.let { fetchFeedings(currentFeedingPoint.id) }
+                        currentFeedingPoint
+                    }
+                }
                 updateState {
                     copy(
-                        currentFeedingPoint = currentFeedingPoint,
+                        currentFeedingPoint = currentFeedingPointToShow,
                         feedingPoints = feedingPointsToShow
                     )
                 }
