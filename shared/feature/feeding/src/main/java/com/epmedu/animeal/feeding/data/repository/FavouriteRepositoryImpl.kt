@@ -29,10 +29,13 @@ internal class FavouriteRepositoryImpl(
     private val favourites
         get() = favouritesFlow.value
 
-    override fun getFavouriteFeedingPointIds(): Flow<List<String>> {
-        return merge(favouritesFlow, fetchFavourites()).map { favourites ->
-            favourites.map { it.feedingPointId }
+    override fun getFavouriteFeedingPointIds(shouldFetch: Boolean): Flow<List<String>> {
+        val flow = when {
+            shouldFetch -> merge(favouritesFlow, fetchFavourites())
+            else -> favouritesFlow
         }
+        return flow
+            .map { favourites -> favourites.map { it.feedingPointId } }
             .distinctUntilChanged()
             .flowOn(dispatchers.IO)
     }

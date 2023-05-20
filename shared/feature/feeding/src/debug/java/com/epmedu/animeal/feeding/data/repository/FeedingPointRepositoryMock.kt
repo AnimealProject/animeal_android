@@ -72,11 +72,14 @@ internal class FeedingPointRepositoryMock(
         }
     }
 
-    override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> {
+    override fun getAllFeedingPoints(shouldFetch: Boolean): Flow<List<FeedingPoint>> {
         return feedingPointsFlow.asStateFlow()
     }
 
-    override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
+    override fun getFeedingPointsBy(
+        shouldFetch: Boolean,
+        predicate: (FeedingPoint) -> Boolean
+    ): Flow<List<FeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
     }
 

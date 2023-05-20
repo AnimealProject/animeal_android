@@ -29,14 +29,23 @@ internal class FeedingPointRepositoryImpl(
     private val feedingPoints
         get() = feedingPointsFlow.value
 
-    override fun getAllFeedingPoints(): Flow<List<DomainFeedingPoint>> {
-        return merge(feedingPointsFlow, fetchFeedingPoints())
+    override fun getAllFeedingPoints(shouldFetch: Boolean): Flow<List<DomainFeedingPoint>> {
+        val flow = when {
+            shouldFetch -> merge(feedingPointsFlow, fetchFeedingPoints())
+            else -> feedingPointsFlow
+        }
+        return flow
             .distinctUntilChanged()
             .flowOn(dispatchers.IO)
     }
 
-    override fun getFeedingPointsBy(predicate: (DomainFeedingPoint) -> Boolean): Flow<List<DomainFeedingPoint>> {
-        return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
+    override fun getFeedingPointsBy(
+        shouldFetch: Boolean,
+        predicate: (DomainFeedingPoint) -> Boolean
+    ): Flow<List<DomainFeedingPoint>> {
+        return getAllFeedingPoints(shouldFetch).map { feedingPoints ->
+            feedingPoints.filter(predicate)
+        }
     }
 
     override fun getFeedingPointById(id: String): FeedingPoint {
