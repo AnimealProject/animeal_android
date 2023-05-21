@@ -48,10 +48,13 @@ fun FeedingConfirmationDialog(
         ) { padding ->
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .statusBarsPadding()
-                    .padding(horizontal = 24.dp, vertical = 40.dp),
+                    .padding(padding)
+                    .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.weight(0.22f))
                 Image(
                     modifier = Modifier
                         .height(100.dp)
@@ -59,41 +62,54 @@ fun FeedingConfirmationDialog(
                     painter = painterResource(id = R.drawable.ic_attention),
                     contentDescription = null
                 )
+                Spacer(modifier = Modifier.weight(0.22f))
                 Text(
-                    modifier = Modifier.padding(top = 36.dp),
                     text = stringResource(id = R.string.willfeed_timeleft_msg),
                     style = MaterialTheme.typography.subtitle1,
                     fontWeight = FontWeight.Bold
                 )
+                Spacer(modifier = Modifier.weight(0.36f))
                 Image(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 44.dp),
+                        .fillMaxWidth(),
                     painter = painterResource(id = R.drawable.ic_will_feed_dialog),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    AnimealSecondaryButtonOutlined(
-                        modifier = Modifier.weight(1F),
-                        text = stringResource(id = R.string.cancel),
-                        onClick = { isShowing.value = false }
-                    )
-                    AnimealButton(
-                        modifier = Modifier.weight(1F),
-                        text = stringResource(id = R.string.agree),
-                        onClick = {
-                            isShowing.value = false
-                            onAgreeClick()
-                        }
-                    )
-                }
+                FeedingConfirmationButtons(
+                    onCancelClick = { isShowing.value = false },
+                    onAgreeClick = {
+                        isShowing.value = false
+                        onAgreeClick()
+                    }
+                )
+                Spacer(modifier = Modifier.weight(0.22f))
             }
         }
+    }
+}
+
+@Composable
+private fun FeedingConfirmationButtons(
+    onCancelClick: () -> Unit,
+    onAgreeClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        AnimealSecondaryButtonOutlined(
+            modifier = Modifier.weight(1F),
+            text = stringResource(id = R.string.cancel),
+            onClick = onCancelClick
+        )
+        AnimealButton(
+            modifier = Modifier.weight(1F),
+            text = stringResource(id = R.string.agree),
+            onClick = onAgreeClick
+        )
     }
 }
 
