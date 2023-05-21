@@ -8,13 +8,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class SearchCatsFeedingPointsUseCase @Inject constructor(private val feedingPointRepository: FeedingPointRepository) {
-    operator fun invoke(query: String = DefaultConstants.EMPTY_STRING): Flow<List<FeedingPoint>> =
-        feedingPointRepository.getFeedingPointsBy { it.animalType == AnimalType.Cats }
+class SearchFeedingPointsUseCase @Inject constructor(private val feedingPointRepository: FeedingPointRepository) {
+    operator fun invoke(
+        query: String = DefaultConstants.EMPTY_STRING,
+        animalType: AnimalType
+    ): Flow<List<FeedingPoint>> =
+        feedingPointRepository.getFeedingPointsBy { point -> point.animalType == animalType }
             .map { points ->
                 points.filter { point ->
-                    point.title.startsWith(
-                        prefix = query,
+                    point.title.contains(
+                        other = query,
                         ignoreCase = true
                     )
                 }
