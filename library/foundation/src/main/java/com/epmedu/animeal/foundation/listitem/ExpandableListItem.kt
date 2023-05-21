@@ -63,15 +63,20 @@ fun ExpandableListItem(
  * Contains default item remember logic, retained to configurations changes.
  *
  * @see[ExpandableListItem]
+ *
+ * @param key key to switch state to initial.
+ * @param isExpandedByDefault initial state.
  */
 @Composable
 fun ExpandableListItem(
-    modifier: Modifier = Modifier,
+    key: Any?,
     title: String,
+    modifier: Modifier = Modifier,
+    isExpandedByDefault: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    var isExpanded by rememberSaveable {
-        mutableStateOf(true)
+    var isExpanded by rememberSaveable(key) {
+        mutableStateOf(isExpandedByDefault)
     }
 
     ExpandableListItem(
