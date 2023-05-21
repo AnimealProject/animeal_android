@@ -57,7 +57,7 @@ fun SearchFeedingPointsUi(
 
         when {
             isSearchResultsEmpty -> renderEmptyListState(query)
-            else -> renderGroupedFeedingPoints(groupedPoints, onEvent)
+            else -> renderGroupedFeedingPoints(query, groupedPoints, onEvent)
         }
     }
 }
@@ -81,12 +81,16 @@ private fun LazyListScope.renderSearchView(
 }
 
 private fun LazyListScope.renderGroupedFeedingPoints(
+    query: String,
     groupedPoints: List<GroupFeedingPointsModel>,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
     items(groupedPoints, key = { group -> group.title }) { group ->
 
-        ExpandableListItem(title = group.title) {
+        ExpandableListItem(
+            key = query,
+            title = group.title
+        ) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 30.dp)

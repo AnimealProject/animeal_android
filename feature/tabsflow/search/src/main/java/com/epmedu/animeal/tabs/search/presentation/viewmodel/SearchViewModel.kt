@@ -11,8 +11,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
-import com.epmedu.animeal.tabs.search.domain.SearchCatsFeedingPointsUseCase
-import com.epmedu.animeal.tabs.search.domain.SearchDogsFeedingPointsUseCase
+import com.epmedu.animeal.tabs.search.domain.SearchFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointHidden
@@ -30,8 +29,8 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
-    private val searchCatsFeedingPointsUseCase: SearchCatsFeedingPointsUseCase,
-    private val searchDogsFeedingPointsUseCase: SearchDogsFeedingPointsUseCase,
+    private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,
+    private val searchDogsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val permissionsHandler: PermissionsHandler,
@@ -44,8 +43,8 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             stateFlow.collectLatest { state ->
                 combine(
-                    searchDogsFeedingPointsUseCase(state.dogsQuery),
-                    searchCatsFeedingPointsUseCase(state.catsQuery)
+                    searchDogsFeedingPointsUseCase(state.dogsQuery, AnimalType.Dogs),
+                    searchCatsFeedingPointsUseCase(state.catsQuery, AnimalType.Cats)
                 ) { dogs, cats ->
                     updateState {
                         copy(
