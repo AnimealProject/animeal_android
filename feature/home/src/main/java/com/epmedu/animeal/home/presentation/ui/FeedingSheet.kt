@@ -8,7 +8,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
 import com.epmedu.animeal.home.presentation.model.CameraState
-import com.epmedu.animeal.home.presentation.model.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 
 @Suppress("LongParameterList")
 @Composable

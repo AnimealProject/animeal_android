@@ -8,8 +8,9 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
-import com.epmedu.animeal.feeding.presentation.viewmodel.handler.WillFeedHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import com.epmedu.animeal.tabs.search.domain.SearchFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
@@ -25,16 +26,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("TooManyFunctions")
 class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val searchDogsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
-    private val willFeedHandler: WillFeedHandler,
+    private val permissionsHandler: PermissionsHandler,
 ) : ViewModel(),
-    WillFeedHandler by willFeedHandler,
     StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
+    PermissionsHandler by permissionsHandler,
     ActionDelegate by actionDelegate {
 
     init {
@@ -54,11 +56,7 @@ class SearchViewModel @Inject constructor(
                 }.collect()
             }
         }
-        viewModelScope.registerWillFeedState {
-            updateState {
-                copy(willFeedState = it)
-            }
-        }
+        viewModelScope.launch { collectPermissionsState() }
     }
 
     fun handleEvents(event: SearchScreenEvent) {
@@ -67,6 +65,16 @@ class SearchViewModel @Inject constructor(
             is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is Search -> handleSearch(event)
+        }
+    }
+
+    fun handlePermissionsEvent(event: PermissionsEvent) {
+        viewModelScope.handlePermissionEvent(event)
+    }
+
+    private suspend fun collectPermissionsState() {
+        permissionsStateFlow.collect { permissionsState ->
+            updateState { copy(permissionsState = permissionsState) }
         }
     }
 

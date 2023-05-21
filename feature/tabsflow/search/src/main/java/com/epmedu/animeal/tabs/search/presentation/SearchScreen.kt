@@ -20,10 +20,10 @@ fun SearchScreen() {
     val bottomSheetState = rememberAnimealBottomSheetState(AnimealBottomSheetValue.Hidden)
 
     SearchScreenUi(
-        searchState,
-        bottomSheetState,
+        state = searchState,
+        bottomSheetState = bottomSheetState,
         onEvent = searchViewModel::handleEvents,
-        onWillFeedEvent = searchViewModel::handleWillFeedEvent,
+        onPermissionsEvent = searchViewModel::handlePermissionsEvent
     )
 
     if (searchState.showingFeedingPoint != null) {

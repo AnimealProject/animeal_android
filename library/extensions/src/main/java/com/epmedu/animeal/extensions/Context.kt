@@ -3,6 +3,7 @@
 package com.epmedu.animeal.extensions
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -51,33 +52,32 @@ fun Context.launchGpsSettings() {
 }
 
 /** Workaround method to request GPS location using dialog provided by Google */
-fun Context.requestGpsByDialog() {
-    getActivity()?.let { activity ->
-        val locationRequest = LocationRequest.create().apply {
-            interval = ONE_SECOND_INTERVAL
-            fastestInterval = ONE_SECOND_INTERVAL
-            priority = Priority.PRIORITY_HIGH_ACCURACY
-        }
-
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
-
-        /** Locations service is expected to fail. Exception of onFailureMethod returns
-         * Service which provides logic for calling "Enable Location" dialog */
-        LocationServices
-            .getSettingsClient(this)
-            .checkLocationSettings(builder.build())
-            .addOnFailureListener { exception ->
-
-                if (exception is ResolvableApiException) {
-                    // Show the "Enable Location" dialog by calling startResolutionForResult()
-                    exception.startResolutionForResult(
-                        activity,
-                        ENABLE_LOCATION_REQUEST_CODE
-                    )
-                }
-            }
+fun Context.requestGpsByDialog(showDialog: ((PendingIntent) -> Unit)? = null) {
+    val locationRequest = LocationRequest.create().apply {
+        interval = ONE_SECOND_INTERVAL
+        fastestInterval = ONE_SECOND_INTERVAL
+        priority = Priority.PRIORITY_HIGH_ACCURACY
     }
+
+    val builder = LocationSettingsRequest.Builder()
+        .addLocationRequest(locationRequest)
+
+    /** Locations service is expected to fail. Exception of onFailureMethod returns
+     * Service which provides logic for calling "Enable Location" dialog */
+    LocationServices
+        .getSettingsClient(this)
+        .checkLocationSettings(builder.build())
+        .addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                showDialog?.let { showDialog(exception.resolution) }
+                    ?: getActivity()?.let { activity ->
+                        exception.startResolutionForResult(
+                            activity,
+                            ENABLE_LOCATION_REQUEST_CODE
+                        )
+                    }
+            }
+        }
 }
 
 fun Context.drawableCompat(id: Int) = requireNotNull(AppCompatResources.getDrawable(this, id)) {

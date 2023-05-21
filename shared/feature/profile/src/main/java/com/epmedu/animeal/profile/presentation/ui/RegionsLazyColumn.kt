@@ -16,12 +16,11 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.emoji2.text.EmojiCompat
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.domain.model.codesListText
 import com.epmedu.animeal.profile.domain.model.countryName
-import com.epmedu.animeal.profile.domain.model.flagEmoji
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -34,7 +33,11 @@ fun RegionsLazyColumn(
     LazyColumn(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
-        items(Region.values()) { region ->
+        items(
+            items = Region.values().apply {
+                sortBy { region -> region.countryName() }
+            }
+        ) { region ->
             ListItem(
                 modifier = Modifier.clickable {
                     scope.launch { bottomSheetState.hide() }
@@ -60,8 +63,4 @@ fun RegionsLazyColumnPreview() {
             onRegionClick = {}
         )
     }
-}
-
-private fun Region.codesListText(): String {
-    return "${EmojiCompat.get().process(flagEmoji())} $phoneNumberCode ${countryName()}"
 }
