@@ -1,5 +1,6 @@
 package com.epmedu.animeal.tabs.more.donate.presentation.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -16,8 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -29,16 +33,18 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
-import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreenEvent
-import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreenEvent.DonateNumberClicked
 import com.epmedu.animeal.tabs.more.donate.util.tbcBankInformation
 
 @Composable
 internal fun DonateListItem(
     donateInformation: DonateInformation,
     modifier: Modifier = Modifier,
-    onEvent: (event: DonateScreenEvent) -> Unit,
 ) {
+    val context = LocalContext.current
+    val clipboardManager: androidx.compose.ui.platform.ClipboardManager =
+        LocalClipboardManager.current
+    val displayText = stringResource(id = R.string.donation_copy_toast)
+
     Column(modifier = modifier) {
         Text(
             text = donateInformation.title,
@@ -51,7 +57,11 @@ internal fun DonateListItem(
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = backgroundColor())
                 .clickable {
-                    onEvent(DonateNumberClicked(donateInformation.paymentCredentials))
+                    val text = donateInformation.paymentCredentials
+                    clipboardManager.setText(AnnotatedString((text)))
+                    Toast
+                        .makeText(context, displayText, Toast.LENGTH_SHORT)
+                        .show()
                 }
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -77,7 +87,6 @@ internal fun DonateListItem(
         }
     }
 }
-
 @Composable
 private fun backgroundColor(): Color {
     return if (isSystemInDarkTheme()) CustomColor.DarkestGrey else CustomColor.LynxWhite
@@ -89,7 +98,6 @@ private fun DonateListItemPreview() {
     AnimealTheme {
         DonateListItem(
             donateInformation = tbcBankInformation,
-            onEvent = {}
         )
     }
 }
