@@ -58,7 +58,7 @@ internal fun DonateListItem(
                 .background(color = backgroundColor())
                 .clickable {
                     val text = donateInformation.paymentCredentials
-                    clipboardManager.setText(AnnotatedString((text)))
+                    clipboardManager.setText(AnnotatedString(text))
                     Toast
                         .makeText(context, displayText, Toast.LENGTH_SHORT)
                         .show()
@@ -87,6 +87,7 @@ internal fun DonateListItem(
         }
     }
 }
+
 @Composable
 private fun backgroundColor(): Color {
     return if (isSystemInDarkTheme()) CustomColor.DarkestGrey else CustomColor.LynxWhite
