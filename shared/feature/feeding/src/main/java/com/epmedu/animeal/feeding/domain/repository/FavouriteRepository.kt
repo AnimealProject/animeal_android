@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavouriteRepository {
 
-    fun getFavouriteFeedingPointIds(): Flow<List<String>>
+    fun getFavouriteFeedingPointIds(shouldFetch: Boolean = true): Flow<List<String>>
 
     suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult
 

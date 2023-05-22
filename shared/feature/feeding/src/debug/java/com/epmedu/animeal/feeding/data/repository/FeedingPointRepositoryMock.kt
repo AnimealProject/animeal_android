@@ -72,11 +72,19 @@ internal class FeedingPointRepositoryMock(
         }
     }
 
-    override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> {
+    override fun getAllFeedingPoints(shouldFetch: Boolean): Flow<List<FeedingPoint>> {
         return feedingPointsFlow.asStateFlow()
     }
 
-    override fun getFeedingPointsBy(predicate: (FeedingPoint) -> Boolean): Flow<List<FeedingPoint>> {
+    override fun getFeedingPointsBy(
+        shouldFetch: Boolean,
+        predicate: (FeedingPoint) -> Boolean
+    ): Flow<List<FeedingPoint>> {
         return getAllFeedingPoints().map { feedingPoints -> feedingPoints.filter(predicate) }
+    }
+
+    override fun getFeedingPointById(id: String): FeedingPoint {
+        return feedingPointsFlow.value.find { it.id == id }
+            ?: throw IllegalArgumentException("No feeding point with id: $id")
     }
 }
