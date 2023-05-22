@@ -49,7 +49,7 @@ internal class FavouritesViewModel @Inject constructor(
             feedingStateFlow.collectLatest { feedingState ->
                 updateState {
                     copy(
-                        feedingPointState = feedingState
+                        feedState = feedingState
                     )
                 }
             }

@@ -3,6 +3,8 @@ package com.epmedu.animeal.feeding.data.repository
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 internal class FeedingRepositoryMock : FeedingRepository {
 
@@ -28,4 +30,6 @@ internal class FeedingRepositoryMock : FeedingRepository {
     ): ActionResult {
         return ActionResult.Success
     }
+
+    override fun getFeedStateFlow(): MutableSharedFlow<FeedState> = MutableSharedFlow()
 }

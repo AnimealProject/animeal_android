@@ -85,11 +85,13 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 feedingPointStateFlow,
+                feedingStateFlow,
                 feedingRouteStateFlow
-            ) { feedingPointUpdate, feedingRouteUpdate ->
+            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate ->
                 updateState {
                     copy(
                         feedingPointState = feedingPointUpdate,
+                        feedState = feedingUpdate,
                         feedingRouteState = feedingRouteUpdate,
                         gpsSettingState = when {
                             isGpsSettingsEnabled -> GpsSettingState.Enabled

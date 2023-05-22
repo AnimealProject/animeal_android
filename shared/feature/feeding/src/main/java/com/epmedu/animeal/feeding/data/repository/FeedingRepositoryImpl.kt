@@ -8,7 +8,9 @@ import com.epmedu.animeal.feeding.data.mapper.toDomain
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -19,7 +21,7 @@ internal class FeedingRepositoryImpl(
     private val feedingApi: FeedingApi,
     private val favouriteRepository: FavouriteRepository
 ) : FeedingRepository {
-
+    override fun getFeedStateFlow() = MutableSharedFlow<FeedState>()
     override suspend fun getUserFeedings(): List<Feeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),

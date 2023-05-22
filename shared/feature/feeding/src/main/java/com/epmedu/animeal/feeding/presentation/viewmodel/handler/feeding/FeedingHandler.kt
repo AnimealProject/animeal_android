@@ -1,15 +1,15 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding
 
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 interface FeedingHandler {
 
-    var feedingStateFlow: StateFlow<FeedingPointState>
+    var feedingStateFlow: StateFlow<FeedState>
 
-    suspend fun fetchCurrentFeeding()
+    fun CoroutineScope.fetchCurrentFeeding()
 
     fun CoroutineScope.handleFeedingEvent(event: FeedingEvent)
 

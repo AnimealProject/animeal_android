@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.di
 
-import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -13,10 +12,12 @@ import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.DefaultFeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
@@ -44,7 +45,7 @@ internal object FeedPresentationModule {
     @ViewModelScoped
     @Provides
     fun providesFeedingHandler(
-        stateDelegate: StateDelegate<FeedingPointState>,
+        stateDelegate: StateDelegate<FeedState>,
         actionDelegate: ActionDelegate,
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
@@ -52,11 +53,11 @@ internal object FeedPresentationModule {
         timerHandler: TimerHandler,
         fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
         fetchFeedingPointByIdUseCase: FetchFeedingPointByIdUseCase,
+        getFeedStateUseCase: GetFeedStateUseCase,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
-        forcedArgumentsUseCase: ForcedArgumentsUseCase
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -66,11 +67,11 @@ internal object FeedPresentationModule {
         timerHandler,
         fetchCurrentFeedingPointUseCase,
         fetchFeedingPointByIdUseCase,
+        getFeedStateUseCase,
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,
         finishFeedingUseCase,
-        forcedArgumentsUseCase
     )
 
     @ViewModelScoped

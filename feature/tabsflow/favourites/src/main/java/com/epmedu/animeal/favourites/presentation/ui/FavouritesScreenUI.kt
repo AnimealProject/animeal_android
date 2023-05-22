@@ -47,8 +47,8 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -199,8 +199,8 @@ private fun ScreenScaffold(
             onFeedingEvent(FeedingEvent.Start(it.id))
         })
     }
-    if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.FeedingStarted) {
-        navigator.navigate(TabsRoute.Home.name)
+    if (state.feedState.feedingConfirmationState == FeedingConfirmationState.FeedingStarted) {
+        navigator.popBackStackOrNavigate(TabsRoute.Home.name)
     }
 }
 
@@ -305,8 +305,8 @@ private fun FavouritesScreenEmptyPreview() {
     AnimealTheme {
         FavouritesScreenUI(
             FavouritesState(
-                feedingPointState = FeedingPointState(),
-                persistentListOf()
+                feedState = FeedState(),
+                favourites = persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
             {},

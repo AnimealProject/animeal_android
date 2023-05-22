@@ -1,7 +1,7 @@
 package com.epmedu.animeal.tabs.search.presentation.viewmodel
 
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.permissions.presentation.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
@@ -15,7 +15,7 @@ data class SearchState(
     val favourites: ImmutableList<FeedingPoint> = persistentListOf(),
     val showingFeedingPoint: FeedingPoint? = null,
     val permissionsState: PermissionsState = PermissionsState(),
-    val feedingPointState: FeedingPointState = FeedingPointState(),
+    val feedState: FeedState = FeedState(),
 ) {
     fun getQueryBy(animalType: AnimalType) = when (animalType) {
         AnimalType.Dogs -> dogsQuery

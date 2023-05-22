@@ -150,7 +150,7 @@ internal fun HomeScreenUI(
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
                 when (state.feedingRouteState) {
                     is FeedingRouteState.Active -> {
-                        if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Loading) {
+                        if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Loading) {
                             CircularProgressIndicator(Modifier.padding(24.dp))
                         } else {
                             MarkFeedingDoneActionButton(
@@ -271,7 +271,7 @@ private fun ThankYouConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
-    if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Showing) {
+    if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Showing) {
         ThankYouDialog(onDismiss = {
             onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
         })

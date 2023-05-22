@@ -165,10 +165,10 @@ private fun ScreenScaffold(
             }
         )
     }
-    if (state.feedingPointState.feedingConfirmationState
+    if (state.feedState.feedingConfirmationState
         == FeedingConfirmationState.FeedingStarted
     ) {
-        navigator.navigate(TabsRoute.Home.name)
+        navigator.popBackStackOrNavigate(TabsRoute.Home.name)
     }
 }
 

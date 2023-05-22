@@ -5,6 +5,8 @@ import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.debugmenu.domain.DebugMenuRepository
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryMock
@@ -17,6 +19,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,6 +79,10 @@ object FeedingModule {
             }
         }
     }
+    @Singleton
+    @Provides
+    fun providesFeedingPointStateDelegate(): StateDelegate<FeedState> =
+        DefaultStateDelegate(FeedState())
 
     @Singleton
     @Provides
