@@ -119,7 +119,7 @@ internal class HomeViewModel @Inject constructor(
             is ErrorShowed -> hideError()
             ScreenDisplayed -> handleForcedFeedingPoint()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
-            HomeScreenEvent.MapInteracted -> handleMapEvents()
+            HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
             HomeScreenEvent.DismissThankYouEvent -> finishFeedingProcess()
@@ -205,7 +205,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun handleMapEvents() {
+    private fun handleMapInteraction() {
         viewModelScope.launch {
             if (state.feedingRouteState is FeedingRouteState.Disabled) {
                 sendEvent(HomeViewModelEvent.MinimiseBottomSheet)

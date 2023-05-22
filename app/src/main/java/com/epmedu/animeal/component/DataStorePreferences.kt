@@ -26,3 +26,11 @@ val Preferences.initialCameraPermission: Boolean
 fun MutablePreferences.updateInitialCameraPermission(value: Boolean) {
     this[INITIAL_CAMERA_PERMISSION] = value
 }
+
+private val GEOLOCATION_PERMISSION_AGAIN = booleanPreferencesKey("GeolocationPermissionRequestedAgain")
+val Preferences.isGeolocationPermissionRequestedAgain: Boolean
+    get() = this[GEOLOCATION_PERMISSION_AGAIN] ?: false
+
+fun MutablePreferences.updateIsGeolocationPermissionRequestedAgain(value: Boolean) {
+    this[GEOLOCATION_PERMISSION_AGAIN] = value
+}
