@@ -200,7 +200,8 @@ private fun ScreenScaffold(
         })
     }
     if (state.feedState.feedingConfirmationState == FeedingConfirmationState.FeedingStarted) {
-        navigator.popBackStackOrNavigate(TabsRoute.Home.name)
+        //navigator.popBackStackOrNavigate(TabsRoute.Home.name) // creates a new instance
+        navigator.popBackStack() // sets white screen
     }
 }
 
