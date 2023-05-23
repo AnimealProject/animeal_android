@@ -19,7 +19,7 @@ data class FeedingPointModel(
     val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point,
     val image: String = "",
-    val feedingHistories: List<FeedingHistory>? = null
+    val feedings: List<Feeding>? = null
 ) {
 
     constructor(feedingPoint: FeedingPoint) : this(

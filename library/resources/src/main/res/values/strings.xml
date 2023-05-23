@@ -78,6 +78,8 @@
     <string name="feed_status_red">There is no food</string>
 
     <string name="unknown_user">Unknown user</string>
+    <string name="feeding_in_progress">Feeding in progress, %s left</string>
+    <string name="unknown_time">unknown time</string>
 
     <string name="account_delete">Delete Account</string>
 

@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomain
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
+import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
@@ -41,6 +42,30 @@ internal class FeedingRepositoryImpl(
         }
             .flowOn(dispatchers.IO)
             .first()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?> {
+        return flow {
+            emit(
+                feedingApi.getFeedingsInProgress(feedingPointId).data?.searchFeedings()?.items()
+            )
+        }.flatMapLatest { feedings ->
+            if (feedings.isNullOrEmpty()) {
+                flowOf(null)
+            } else {
+                val feeding = feedings.first()
+
+                usersRepository.getUserById(feeding.userId()).map { user ->
+                    FeedingInProgress(
+                        id = feeding.userId(),
+                        name = user?.name.orEmpty(),
+                        surname = user?.surname.orEmpty(),
+                        startDate = Temporal.DateTime(feeding.createdAt()).toDate()
+                    )
+                }
+            }
+        }.flowOn(dispatchers.IO)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

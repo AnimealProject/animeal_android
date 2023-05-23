@@ -9,6 +9,8 @@ interface FeedingApi {
 
     fun getUserFeedings(userId: String): Flow<List<Feeding>>
 
+    suspend fun getFeedingsInProgress(feedingPointId: String): ApiResult<SearchFeedingsQuery.Data>
+
     suspend fun getApprovedFeedingHistories(feedingPointId: String): ApiResult<SearchFeedingHistoriesQuery.Data>
 
     suspend fun startFeeding(feedingPointId: String): ApiResult<String>

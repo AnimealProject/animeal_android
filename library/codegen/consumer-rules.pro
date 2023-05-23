@@ -12,3 +12,10 @@
     final java.util.List items;
  }
 -keepclassmembers class SearchFeedingHistoriesQuery$Item { *; }
+-keepclassmembers class SearchFeedingsQuery$Data {
+    final SearchFeedingsQuery$SearchFeedings searchFeedings;
+}
+-keepclassmembers class SearchFeedingsQuery$SearchFeedings {
+    final java.util.List items;
+ }
+-keepclassmembers class SearchFeedingsQuery$Item { *; }

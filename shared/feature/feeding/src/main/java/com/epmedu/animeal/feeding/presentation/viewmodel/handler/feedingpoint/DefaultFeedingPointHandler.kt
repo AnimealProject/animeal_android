@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandl
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
@@ -17,7 +18,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.FavouriteChange
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
-import com.epmedu.animeal.feeding.presentation.model.FeedingHistory
+import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -28,6 +29,8 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -40,6 +43,7 @@ class DefaultFeedingPointHandler(
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
+    private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
@@ -80,7 +84,7 @@ class DefaultFeedingPointHandler(
                 val currentFeedingPointToShow = when (currentFeedingPoint?.feedStatus) {
                     state.currentFeedingPoint?.feedStatus -> {
                         currentFeedingPoint?.copy(
-                            feedingHistories = state.currentFeedingPoint?.feedingHistories
+                            feedings = state.currentFeedingPoint?.feedings
                         )
                     }
                     else -> {
@@ -142,17 +146,21 @@ class DefaultFeedingPointHandler(
     private fun CoroutineScope.fetchFeedings(feedingPointId: String) {
         fetchFeedingsJob?.cancel()
         fetchFeedingsJob = launch {
-            getFeedingHistoriesUseCase(feedingPointId).collect { feedingHistories ->
+            getFeedingInProgressUseCase(feedingPointId).combine(
+                getFeedingHistoriesUseCase(feedingPointId)
+            ) { feedingInProgress, feedingHistories ->
                 updateState {
                     copy(
                         currentFeedingPoint = currentFeedingPoint?.copy(
-                            feedingHistories = feedingHistories.firstOrNull()?.let { lastFeeder ->
-                                listOf(FeedingHistory(lastFeeder))
+                            feedings = feedingInProgress?.let {
+                                listOf(Feeding.InProgress(feedingInProgress))
+                            } ?: feedingHistories.firstOrNull()?.let { lastFeeder ->
+                                listOf(Feeding.History(lastFeeder))
                             } ?: emptyList()
                         )
                     )
                 }
-            }
+            }.collect()
         }
     }
 

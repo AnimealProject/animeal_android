@@ -2,6 +2,7 @@ package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
+import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,10 @@ internal class FeedingRepositoryMock : FeedingRepository {
 
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return emptyList()
+    }
+
+    override fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?> {
+        return flowOf(null)
     }
 
     override fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>> {
