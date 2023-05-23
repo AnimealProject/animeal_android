@@ -81,6 +81,10 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
                 ModelQuery.list(GraphQLModel::class.java, it)
             } ?: ModelQuery.list(GraphQLModel::class.java),
             { response ->
+                Log.i(
+                    LOG_TAG,
+                    "Model query for ${GraphQLModel::class.simpleName} received response $response"
+                )
                 val itemsList = response.data?.items?.filterNotNull()
 
                 if (itemsList != null && itemsList.isNotEmpty()) {
@@ -88,6 +92,10 @@ internal inline fun <reified GraphQLModel : Model> getModelList(
                 }
             },
             { exception ->
+                Log.i(
+                    LOG_TAG,
+                    "Model query for ${GraphQLModel::class.simpleName} failed with $exception"
+                )
                 cancel(CancellationException(exception.message))
             }
         )

@@ -14,7 +14,7 @@ internal class FavouriteRepositoryMock : FavouriteRepository {
     private val favourites
         get() = favouritesFlow.value
 
-    override fun getFavouriteFeedingPointIds(): Flow<List<String>> {
+    override fun getFavouriteFeedingPointIds(shouldFetch: Boolean): Flow<List<String>> {
         return favouritesFlow.map { favourites ->
             favourites.map { it.feedingPointId }
         }

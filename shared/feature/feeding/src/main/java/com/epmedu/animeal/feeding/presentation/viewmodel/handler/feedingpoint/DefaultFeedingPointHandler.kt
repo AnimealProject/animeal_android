@@ -9,6 +9,7 @@ import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseC
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -40,6 +41,7 @@ class DefaultFeedingPointHandler(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
@@ -101,8 +103,7 @@ class DefaultFeedingPointHandler(
     }
 
     override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
-        val forcedPoint = state.feedingPoints.find { it.id == feedingPointId }
-            ?: throw IllegalArgumentException("No feeding point with id: $feedingPointId")
+        val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
         selectFeedingPoint(Select(forcedPoint))
         return forcedPoint
     }
