@@ -36,7 +36,6 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.Favourit
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
-import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -264,7 +263,6 @@ private fun FavouritesScreenPreview() {
             animalStatus = AnimalState.RED,
             animalType = AnimalType.Dogs,
             isFavourite = true,
-            lastFeeder = Feeder(id = "0", "Fred", "12:00"),
             location = MapLocation.Tbilisi,
             images = emptyList(),
         ),
