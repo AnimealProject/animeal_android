@@ -1,13 +1,19 @@
 package com.epmedu.animeal.common.timer
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.channelFlow
+import android.os.CountDownTimer
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 
-suspend fun tickerFlow(millisInFuture: Long, countDownInterval: Long) = channelFlow {
-    var timeLeft = millisInFuture
-    while (timeLeft > 0) {
-        trySend(timeLeft)
-        timeLeft -= countDownInterval
-        delay(countDownInterval)
+suspend fun tickerFlow(millisInFuture: Long, countDownInterval: Long) = callbackFlow {
+    val timer = object : CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onTick(millisUntilFinished: Long) {
+            trySend(millisUntilFinished)
+        }
+
+        override fun onFinish() {
+            close()
+        }
     }
+    timer.start()
+    awaitClose { timer.cancel() }
 }
