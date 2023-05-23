@@ -12,6 +12,7 @@ import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
@@ -32,7 +33,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 @Suppress("LongParameterList", "DEPRECATION")
-internal object FeedPresentationModule {
+internal object FeedingPresentationModule {
 
     @ViewModelScoped
     @Provides
@@ -73,6 +74,7 @@ internal object FeedPresentationModule {
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+        getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
         addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
         removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
@@ -84,6 +86,7 @@ internal object FeedPresentationModule {
         routeHandler,
         errorHandler,
         getAllFeedingPointsUseCase,
+        getFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase,
         addFeedingPointToFavouritesUseCase,
         removeFeedingPointFromFavouritesUseCase,

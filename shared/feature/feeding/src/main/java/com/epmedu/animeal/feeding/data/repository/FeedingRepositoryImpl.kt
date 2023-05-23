@@ -33,7 +33,7 @@ internal class FeedingRepositoryImpl(
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
-            favouriteRepository.getFavouriteFeedingPointIds()
+            favouriteRepository.getFavouriteFeedingPointIds(shouldFetch = false)
         ) { feedings, favouriteIds ->
             feedings.map { feeding ->
                 feeding.toDomain(isFavourite = favouriteIds.any { it == feeding.feedingPoint.id })
