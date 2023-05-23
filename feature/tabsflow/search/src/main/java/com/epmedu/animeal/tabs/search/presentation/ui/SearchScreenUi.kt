@@ -168,7 +168,7 @@ private fun ScreenScaffold(
     if (state.feedState.feedingConfirmationState
         == FeedingConfirmationState.FeedingStarted
     ) {
-        navigator.popBackStackOrNavigate(TabsRoute.Home.name)
+        navigator.navigateTo(TabsRoute.Home.name)
     }
 }
 

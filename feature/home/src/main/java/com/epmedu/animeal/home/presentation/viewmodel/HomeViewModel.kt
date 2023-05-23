@@ -79,28 +79,6 @@ internal class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch { collectPermissionsState() }
         initialize()
-        viewModelScope.fetchFeedingPoints()
-        viewModelScope.launch { fetchCurrentFeeding() }
-        viewModelScope.launch { getTimerState() }
-        viewModelScope.launch {
-            combine(
-                feedingPointStateFlow,
-                feedingStateFlow,
-                feedingRouteStateFlow
-            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate ->
-                updateState {
-                    copy(
-                        feedingPointState = feedingPointUpdate,
-                        feedState = feedingUpdate,
-                        feedingRouteState = feedingRouteUpdate,
-                        gpsSettingState = when {
-                            isGpsSettingsEnabled -> GpsSettingState.Enabled
-                            else -> GpsSettingState.Disabled
-                        },
-                    )
-                }
-            }.collect()
-        }
     }
 
     private suspend fun getTimerState() {
@@ -117,7 +95,10 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            ScreenDisplayed -> handleForcedFeedingPoint()
+            ScreenDisplayed -> {
+                handleForcedFeedingPoint()
+                initialize()
+            }
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
@@ -161,6 +142,28 @@ internal class HomeViewModel @Inject constructor(
                     feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType)
                 )
             }
+        }
+        viewModelScope.fetchFeedingPoints()
+        viewModelScope.launch { fetchCurrentFeeding() }
+        viewModelScope.launch { getTimerState() }
+        viewModelScope.launch {
+            combine(
+                feedingPointStateFlow,
+                feedingStateFlow,
+                feedingRouteStateFlow
+            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate ->
+                updateState {
+                    copy(
+                        feedingPointState = feedingPointUpdate,
+                        feedState = feedingUpdate,
+                        feedingRouteState = feedingRouteUpdate,
+                        gpsSettingState = when {
+                            isGpsSettingsEnabled -> GpsSettingState.Enabled
+                            else -> GpsSettingState.Disabled
+                        },
+                    )
+                }
+            }.collect()
         }
     }
 
