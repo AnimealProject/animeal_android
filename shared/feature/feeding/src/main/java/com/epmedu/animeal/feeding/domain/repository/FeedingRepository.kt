@@ -1,13 +1,20 @@
 package com.epmedu.animeal.feeding.domain.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
-import com.epmedu.animeal.feeding.domain.model.Feeding
+import com.epmedu.animeal.feeding.domain.model.FeedingHistory
+import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
+import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 interface FeedingRepository {
 
-    suspend fun getUserFeedings(): List<Feeding>
+    suspend fun getUserFeedings(): List<UserFeeding>
+
+    fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?>
+
+    fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>>
 
     suspend fun startFeeding(feedingPointId: String): ActionResult
 

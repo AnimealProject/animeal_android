@@ -17,6 +17,7 @@ import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryMock
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.users.domain.UsersRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
@@ -29,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FeedingModule {
+object FeedDataModule {
 
     @Singleton
     @Provides
@@ -63,6 +64,7 @@ object FeedingModule {
         authApi: AuthAPI,
         feedingAPI: FeedingApi,
         favouriteRepository: FavouriteRepository,
+        usersRepository: UsersRepository,
         debugMenuRepository: DebugMenuRepository,
     ): FeedingRepository {
         return when {
@@ -74,7 +76,8 @@ object FeedingModule {
                     dispatchers = Dispatchers,
                     authApi = authApi,
                     feedingApi = feedingAPI,
-                    favouriteRepository = favouriteRepository
+                    favouriteRepository = favouriteRepository,
+                    usersRepository = usersRepository
                 )
             }
         }
@@ -104,16 +107,4 @@ object FeedingModule {
             }
         }
     }
-
-    @Singleton
-    @Provides
-    fun providesAddFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = AddFeedingPointToFavouritesUseCase(repo)
-
-    @Singleton
-    @Provides
-    fun providesDeleteFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = RemoveFeedingPointFromFavouritesUseCase(repo)
 }

@@ -30,6 +30,7 @@ dependencies {
 
     debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.users)
 
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.core)

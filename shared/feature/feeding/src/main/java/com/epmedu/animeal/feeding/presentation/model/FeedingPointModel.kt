@@ -1,7 +1,6 @@
 package com.epmedu.animeal.feeding.presentation.model
 
 import androidx.compose.runtime.Stable
-import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -17,10 +16,10 @@ data class FeedingPointModel(
     val feedStatus: FeedStatus,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
-    val lastFeeder: Feeder,
     val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point,
-    val image: String = ""
+    val image: String = "",
+    val feedings: List<Feeding>? = null
 ) {
 
     constructor(feedingPoint: FeedingPoint) : this(
@@ -31,7 +30,6 @@ data class FeedingPointModel(
         feedingPoint.animalStatus.toFeedStatus(),
         feedingPoint.animalType,
         feedingPoint.isFavourite,
-        feedingPoint.lastFeeder,
         feedingPoint.remoteness,
         Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude),
         feedingPoint.images[0]

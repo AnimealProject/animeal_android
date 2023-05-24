@@ -5,14 +5,16 @@ import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
-import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import com.epmedu.animeal.users.domain.UsersRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +24,12 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FeedingModule {
+object FeedDataModule {
+
+    @Singleton
+    @Provides
+    fun providesFeedingPointStateDelegate(): StateDelegate<FeedState> =
+        DefaultStateDelegate(FeedState())
 
     @Singleton
     @Provides
@@ -42,13 +49,15 @@ object FeedingModule {
     fun providesFeedingRepository(
         authApi: AuthAPI,
         feedingAPI: FeedingApi,
-        favouriteRepository: FavouriteRepository
+        favouriteRepository: FavouriteRepository,
+        usersRepository: UsersRepository
     ): FeedingRepository {
         return FeedingRepositoryImpl(
             dispatchers = Dispatchers,
             authApi = authApi,
             feedingApi = feedingAPI,
-            favouriteRepository = favouriteRepository
+            favouriteRepository = favouriteRepository,
+            usersRepository = usersRepository
         )
     }
 
@@ -62,16 +71,4 @@ object FeedingModule {
         authApi = authApi,
         favouriteApi = favouriteApi
     )
-
-    @Singleton
-    @Provides
-    fun providesAddFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = AddFeedingPointToFavouritesUseCase(repo)
-
-    @Singleton
-    @Provides
-    fun providesDeleteFavouriteFeedingPointUseCase(
-        repo: FavouriteRepository
-    ) = RemoveFeedingPointFromFavouritesUseCase(repo)
 }

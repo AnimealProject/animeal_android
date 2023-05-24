@@ -2,8 +2,8 @@ package com.epmedu.animeal.feeding.domain.usecase
 
 import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.MINUTE_IN_MILLIS
-import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 
@@ -20,8 +20,8 @@ class FetchCurrentFeedingPointUseCase(
         }
     }
 
-    private fun fetchFeedingPoint(feedings: List<Feeding>): FeedingPoint? {
-        val latestFeeding = feedings.maxBy { it.createdAt }
+    private fun fetchFeedingPoint(userFeedings: List<UserFeeding>): FeedingPoint? {
+        val latestFeeding = userFeedings.maxBy { it.createdAt }
         val millisPassed = System.currentTimeMillis() - latestFeeding.createdAt.time
 
         return when {
