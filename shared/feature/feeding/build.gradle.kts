@@ -25,14 +25,20 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
+    implementation(projects.shared.feature.timer)
+    implementation(projects.shared.feature.router)
 
     debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.users)
 
     implementation(libs.amplify.aws.api)
     implementation(libs.amplify.core)
     implementation(libs.appsync)
+    implementation(libs.immutable.collections)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
     implementation(libs.coil)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
@@ -42,6 +48,5 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.mapbox.android)
-
+    api(libs.mapbox.android)
 }

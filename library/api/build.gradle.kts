@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.amplify.core)
     implementation(libs.androidx.lifecycle)
     implementation(libs.appsync)
+    implementation(libs.gson)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

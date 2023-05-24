@@ -11,13 +11,13 @@ import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.home.presentation.model.MapPath
-import com.epmedu.animeal.home.presentation.model.RouteResult
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_START_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_TOP_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_ZOOM
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.router.model.RouteResult
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point

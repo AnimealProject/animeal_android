@@ -19,6 +19,10 @@ dependencies {
     implementation(projects.library.resources)
     implementation(projects.shared.feature.feeding)
 
+    implementation(projects.shared.feature.permissions)
+
+    implementation(libs.accompanist.permissions)
+
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
 

@@ -2,18 +2,27 @@ package com.epmedu.animeal.profile.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.birthDateKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.emailKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.nameKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.phoneNumberRegionKey
-import com.epmedu.animeal.common.constants.DataStorePreferencesKey.surnameKey
-import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.model.Profile
-import com.epmedu.animeal.profile.domain.model.Region
+import com.epmedu.animeal.profile.data.util.birthDate
+import com.epmedu.animeal.profile.data.util.clearBirthDate
+import com.epmedu.animeal.profile.data.util.clearEmail
+import com.epmedu.animeal.profile.data.util.clearName
+import com.epmedu.animeal.profile.data.util.clearPhoneNumber
+import com.epmedu.animeal.profile.data.util.clearSurname
+import com.epmedu.animeal.profile.data.util.email
+import com.epmedu.animeal.profile.data.util.name
+import com.epmedu.animeal.profile.data.util.phoneNumber
+import com.epmedu.animeal.profile.data.util.phoneNumberRegion
+import com.epmedu.animeal.profile.data.util.surname
+import com.epmedu.animeal.profile.data.util.updateBirthDate
+import com.epmedu.animeal.profile.data.util.updateEmail
+import com.epmedu.animeal.profile.data.util.updateName
+import com.epmedu.animeal.profile.data.util.updatePhoneNumber
+import com.epmedu.animeal.profile.data.util.updatePhoneNumberRegion
+import com.epmedu.animeal.profile.data.util.updateSurname
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -29,26 +38,25 @@ internal class ProfileRepositoryImpl @Inject constructor(
     override fun getProfile(): Flow<Profile> {
         return dataStore.data.map { preferences ->
             Profile(
-                name = preferences[nameKey] ?: EMPTY_STRING,
-                surname = preferences[surnameKey] ?: EMPTY_STRING,
-                phoneNumberRegion = Region.valueOf(preferences[phoneNumberRegionKey] ?: Region.GE.name),
-                phoneNumber = preferences[phoneNumberKey] ?: EMPTY_STRING,
-                email = preferences[emailKey] ?: EMPTY_STRING,
-                birthDate = preferences[birthDateKey] ?: EMPTY_STRING,
+                name = preferences.name,
+                surname = preferences.surname,
+                phoneNumberRegion = preferences.phoneNumberRegion,
+                phoneNumber = preferences.phoneNumber,
+                email = preferences.email,
+                birthDate = preferences.birthDate,
             )
         }
     }
 
     override fun saveProfile(profile: Profile): Flow<Unit> {
         return flowOf(Unit).map {
-            dataStore.edit { preference ->
-                preference[nameKey] = profile.name
-                preference[surnameKey] = profile.surname
-                preference[phoneNumberRegionKey] = profile.phoneNumberRegion.name
-                preference[phoneNumberKey] = profile.phoneNumber
-                preference[phoneNumberRegionKey] = profile.phoneNumberRegion.name
-                preference[emailKey] = profile.email
-                preference[birthDateKey] = profile.birthDate
+            dataStore.edit {
+                updatePhoneNumberRegion(profile.phoneNumberRegion)
+                updatePhoneNumber(profile.phoneNumber)
+                updateName(profile.name)
+                updateSurname(profile.surname)
+                updateEmail(profile.email)
+                updateBirthDate(profile.birthDate)
             }
         }
     }
@@ -61,11 +69,11 @@ internal class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearProfile() {
         dataStore.edit {
-            it.remove(nameKey)
-            it.remove(surnameKey)
-            it.remove(phoneNumberKey)
-            it.remove(emailKey)
-            it.remove(birthDateKey)
+            clearName()
+            clearSurname()
+            clearPhoneNumber()
+            clearEmail()
+            clearBirthDate()
         }
     }
 

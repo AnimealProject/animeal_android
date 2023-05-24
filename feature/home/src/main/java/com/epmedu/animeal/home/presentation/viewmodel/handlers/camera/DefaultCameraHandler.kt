@@ -41,7 +41,10 @@ internal class DefaultCameraHandler @Inject constructor(
 
     override suspend fun uploadFeedingPhoto(uri: Uri) {
         updateState { copy(cameraState = CameraState.LoadingImageToServer) }
-        val newPhoto = FeedingPhotoItem(uri, "${state.currentFeedingPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg")
+        val newPhoto = FeedingPhotoItem(
+            uri,
+            "${state.feedingPointState.currentFeedingPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg"
+        )
         performAction(
             action = {
                 uploadPhotoUseCase(newPhoto.name, newPhoto.uri)

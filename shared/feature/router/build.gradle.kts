@@ -15,6 +15,8 @@ animealPlugin {
 
 dependencies {
     implementation(projects.library.common)
+    implementation(libs.mapbox.android)
+    implementation(libs.mapbox.navigation)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

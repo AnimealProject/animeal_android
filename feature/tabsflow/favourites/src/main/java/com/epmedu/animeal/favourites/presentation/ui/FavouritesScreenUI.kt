@@ -18,10 +18,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,18 +36,15 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.Favourit
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
-import com.epmedu.animeal.feeding.domain.model.Feeder
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
-import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
-import com.epmedu.animeal.feeding.presentation.ui.FeedConfirmationDialog
+import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -54,19 +54,25 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.permissions.presentation.AnimealPermissions
+import com.epmedu.animeal.permissions.presentation.PermissionStatus
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent
+import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun FavouritesScreenUI(
     state: FavouritesState,
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -78,14 +84,19 @@ internal fun FavouritesScreenUI(
         scope.launch { bottomSheetState.hide() }
     }
 
-    ScreenScaffold(
-        bottomSheetState,
-        state,
-        contentAlpha,
-        buttonAlpha,
-        onEvent,
-        onWillFeedEvent,
-    )
+    AnimealPermissions(
+        permissionsState = state.permissionsState,
+        lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
+        onEvent = onPermissionsEvent
+    ) { _ ->
+        ScreenScaffold(
+            bottomSheetState,
+            state,
+            contentAlpha,
+            buttonAlpha,
+            onEvent
+        )
+    }
 }
 
 @Composable
@@ -104,14 +115,16 @@ private fun HandleFeedingPointSheetHiddenState(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: FavouritesState,
     contentAlpha: Float,
     buttonAlpha: Float,
-    onEvent: (FavouritesScreenEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onEvent: (FavouritesScreenEvent) -> Unit
 ) {
+    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
@@ -121,9 +134,7 @@ private fun ScreenScaffold(
         sheetContent = {
             state.showingFeedingPoint?.let { feedingPoint ->
                 FeedingPointSheetContent(
-                    feedingPoint = FeedingPointModel(
-                        feedingPoint
-                    ),
+                    feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
@@ -144,8 +155,13 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
-                onClick = { onWillFeedEvent(WillFeedEvent.ShowWillFeedDialog) },
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED,
+                onClick = {
+                    when (state.permissionsState.cameraPermissionStatus) {
+                        PermissionStatus.Granted -> isFeedingDialogShowing.value = true
+                        else -> isCameraPermissionDialogShowing.value = true
+                    }
+                },
             )
         }
     ) {
@@ -164,7 +180,8 @@ private fun ScreenScaffold(
         }
     }
 
-    WillFeedConfirmationDialog(state.willFeedState, onWillFeedEvent)
+    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
+    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {})
 }
 
 @Composable
@@ -177,6 +194,7 @@ private fun ScreenContent(
         state.favourites.isEmpty() -> {
             EmptyState(padding)
         }
+
         else -> {
             FavouritesList(padding, state.favourites, onEvent)
         }
@@ -202,7 +220,7 @@ private fun EmptyState(padding: PaddingValues) {
 @Composable
 private fun FavouritesList(
     padding: PaddingValues,
-    favourites: List<FeedingPoint>,
+    favourites: List<FeedingPointModel>,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Column(
@@ -218,12 +236,12 @@ private fun FavouritesList(
             items(favourites) { feedingPoint ->
                 FeedingPointItem(
                     title = feedingPoint.title,
-                    status = feedingPoint.animalStatus.toFeedStatus(),
+                    status = feedingPoint.feedStatus,
                     isFavourite = feedingPoint.isFavourite,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
-                    imageUrl = feedingPoint.images[0],
+                    imageUrl = feedingPoint.image,
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
@@ -231,34 +249,23 @@ private fun FavouritesList(
     }
 }
 
-@Composable
-internal fun WillFeedConfirmationDialog(
-    willFeedState: WillFeedState,
-    onWillFeedEvent: (WillFeedEvent) -> Unit,
-) {
-    FeedConfirmationDialog(
-        willFeedState,
-        onAgreeClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) },
-        onCancelClick = { onWillFeedEvent(WillFeedEvent.DismissWillFeedDialog) }
-    )
-}
-
 @AnimealPreview
 @Composable
 private fun FavouritesScreenPreview() {
     val title = "FeedSpot"
     val favourites = listOf(
-        FeedingPoint(
-            id = "0",
-            title = title,
-            description = "Hungry dog",
-            city = "Minsk",
-            animalStatus = AnimalState.RED,
-            animalType = AnimalType.Dogs,
-            isFavourite = true,
-            lastFeeder = Feeder(id = "0", "Fred", "12:00"),
-            location = MapLocation.Tbilisi,
-            images = emptyList(),
+        FeedingPointModel(
+            FeedingPoint(
+                id = "0",
+                title = title,
+                description = "Hungry dog",
+                city = "Minsk",
+                animalStatus = AnimalState.RED,
+                animalType = AnimalType.Dogs,
+                isFavourite = true,
+                location = MapLocation.Tbilisi,
+                images = emptyList(),
+            )
         ),
     )
     AnimealTheme {
@@ -267,8 +274,9 @@ private fun FavouritesScreenPreview() {
                 favourites = favourites.toImmutableList(),
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {}
-        ) {}
+        )
     }
 }
 
@@ -281,7 +289,8 @@ private fun FavouritesScreenEmptyPreview() {
                 persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {}
-        ) {}
+        )
     }
 }

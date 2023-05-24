@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -38,16 +40,19 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.epmedu.animeal.feeding.domain.model.Feeder
+import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
+import com.epmedu.animeal.foundation.loading.ShimmerLoading
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.text.MarkupText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.foundation.util.withLocalAlpha
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
@@ -83,19 +88,20 @@ fun FeedingPointSheetContent(
                 .clip(RoundedCornerShape(2.dp)),
             thickness = 4.dp,
         )
-        FeedingPointHeader(
-            title = feedingPoint.title,
-            status = feedingPoint.feedStatus,
-            isFavourite = feedingPoint.isFavourite,
-            imageUrl = feedingPoint.image,
-            onFavouriteChange = onFavouriteChange
-        )
-        FeedingPointDetails(
-            description = feedingPoint.description,
-            lastFeederName = feedingPoint.lastFeeder.name,
-            lastFeedTime = feedingPoint.lastFeeder.time,
-            scrimAlpha = contentAlpha
-        )
+        with(feedingPoint) {
+            FeedingPointHeader(
+                title = title,
+                status = feedStatus,
+                isFavourite = isFavourite,
+                imageUrl = image,
+                onFavouriteChange = onFavouriteChange
+            )
+            FeedingPointDetails(
+                description = description,
+                feedings = feedings,
+                scrimAlpha = contentAlpha
+            )
+        }
         if (isShowOnMapVisible) {
             ShowOnMapLink(onClick = onShowOnMap)
         }
@@ -162,8 +168,7 @@ internal fun FeedingPointHeader(
 internal fun FeedingPointDetails(
     scrimAlpha: Float,
     description: String,
-    lastFeederName: String,
-    lastFeedTime: String,
+    feedings: List<Feeding>?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -180,19 +185,13 @@ internal fun FeedingPointDetails(
                 overflow = TextOverflow.Ellipsis,
                 alpha = scrimAlpha
             )
-            FeedingPointLastFeeder(
-                name = lastFeederName,
-                time = lastFeedTime,
-            )
+            FeedingPointFeedings(feedings = feedings)
         }
     }
 }
 
 @Composable
-internal fun FeedingPointLastFeeder(
-    name: String,
-    time: String,
-) {
+private fun FeedingPointFeedings(feedings: List<Feeding>?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -203,43 +202,100 @@ internal fun FeedingPointLastFeeder(
             style = MaterialTheme.typography.body1,
             fontWeight = FontWeight.Bold,
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(CustomColor.LynxWhite),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_person),
-                    tint = CustomColor.Orange,
-                    contentDescription = null
-                )
+            feedings?.let {
+                items(feedings.take(4)) { feeding ->
+                    Feeding(feeding = feeding)
+                }
+            } ?: item {
+                FeedingsLoading()
             }
-            Column(
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.subtitle1,
-                    fontWeight = FontWeight.Medium,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colors.onSurface,
-                    maxLines = 1,
-                )
-                Text(
-                    text = time,
-                    style = MaterialTheme.typography.caption,
-                    overflow = TextOverflow.Ellipsis,
-                    color = CustomColor.DarkerGrey,
-                    maxLines = 1,
-                )
-            }
+        }
+    }
+}
+
+@Composable
+private fun Feeding(feeding: Feeding) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(CustomColor.LynxWhite.withLocalAlpha()),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_person),
+                tint = CustomColor.Orange.withLocalAlpha(),
+                contentDescription = null
+            )
+        }
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text(
+                text = feeding.feederName.ifBlank { stringResource(id = R.string.unknown_user) },
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Medium,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onSurface.withLocalAlpha(),
+                maxLines = 1,
+            )
+            Text(
+                text = when (feeding) {
+                    is Feeding.InProgress -> {
+                        stringResource(
+                            id = R.string.feeding_in_progress,
+                            LocalContext.current.formatNumberToHourMin(feeding.timeLeft)
+                                ?: stringResource(id = R.string.unknown_time)
+                        )
+                    }
+
+                    is Feeding.History -> {
+                        feeding.elapsedTime
+                    }
+                },
+                style = MaterialTheme.typography.caption,
+                overflow = TextOverflow.Ellipsis,
+                color = CustomColor.DarkerGrey.withLocalAlpha(),
+                maxLines = 1,
+            )
+        }
+    }
+}
+
+@Composable
+private fun FeedingsLoading() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        ShimmerLoading(
+            modifier = Modifier.size(56.dp),
+            alpha = LocalContentAlpha.current
+        )
+        Column(
+            modifier = Modifier.height(56.dp),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            ShimmerLoading(
+                modifier = Modifier.size(height = 14.dp, width = 160.dp),
+                alpha = LocalContentAlpha.current
+            )
+            ShimmerLoading(
+                modifier = Modifier.size(height = 12.dp, width = 96.dp),
+                alpha = LocalContentAlpha.current
+            )
         }
     }
 }
@@ -259,6 +315,32 @@ private fun ShowOnMapLink(onClick: () -> Unit) {
 
 @AnimealPreview
 @Composable
+private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class) text: String) {
+    AnimealTheme {
+        FeedingPointSheetContent(
+            feedingPoint = FeedingPointModel(
+                id = "",
+                title = text.take(30),
+                feedStatus = FeedStatus.RED,
+                description = stringResource(id = R.string.feeding_sheet_mock_text),
+                city = "Minsk",
+                isFavourite = true,
+                feedings = null,
+                animalType = AnimalType.Dogs,
+                remoteness = Remoteness.ANY,
+                coordinates = Point.fromLngLat(0.0, 0.0)
+            ),
+            contentAlpha = 1f,
+            modifier = Modifier.fillMaxHeight(),
+            isShowOnMapVisible = true,
+            onFavouriteChange = {},
+            onShowOnMap = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
 private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: String) {
     AnimealTheme {
         FeedingPointSheetContent(
@@ -269,10 +351,12 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
-                lastFeeder = Feeder(
-                    id = "-1",
-                    name = text.take(20),
-                    time = "14 hours ago"
+                feedings = listOf(
+                    Feeding.History(
+                        id = "-1",
+                        feederName = text.take(20),
+                        elapsedTime = "14 hours ago"
+                    )
                 ),
                 animalType = AnimalType.Dogs,
                 remoteness = Remoteness.ANY,

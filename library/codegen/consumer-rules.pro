@@ -5,3 +5,17 @@
 -keepclassmembers class type.DeleteFavouriteInput {
     private java.lang.String id;
 }
+-keepclassmembers class SearchFeedingHistoriesQuery$Data {
+    final SearchFeedingHistoriesQuery$SearchFeedingHistories searchFeedingHistories;
+}
+-keepclassmembers class SearchFeedingHistoriesQuery$SearchFeedingHistories {
+    final java.util.List items;
+ }
+-keepclassmembers class SearchFeedingHistoriesQuery$Item { *; }
+-keepclassmembers class SearchFeedingsQuery$Data {
+    final SearchFeedingsQuery$SearchFeedings searchFeedings;
+}
+-keepclassmembers class SearchFeedingsQuery$SearchFeedings {
+    final java.util.List items;
+ }
+-keepclassmembers class SearchFeedingsQuery$Item { *; }
