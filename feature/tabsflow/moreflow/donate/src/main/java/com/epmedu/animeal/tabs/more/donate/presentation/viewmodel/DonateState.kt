@@ -5,6 +5,5 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class DonateState(
-    val donationInformation: ImmutableList<DonateInformation> = persistentListOf(),
-    val donationNumberToCopy: String? = null,
+    val donationInformation: ImmutableList<DonateInformation> = persistentListOf()
 )
