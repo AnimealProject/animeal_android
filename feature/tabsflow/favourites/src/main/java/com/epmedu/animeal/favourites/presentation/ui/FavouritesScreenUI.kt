@@ -63,6 +63,7 @@ import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -185,7 +186,7 @@ private fun ScreenScaffold(
                 )
             }
         ) { padding ->
-            ScreenContent(state, padding, onEvent)
+            ScreenContent(state.favourites, padding, onEvent)
         }
     }
 
@@ -203,17 +204,17 @@ private fun ScreenScaffold(
 
 @Composable
 private fun ScreenContent(
-    state: FavouritesState,
+    favourites: ImmutableList<FeedingPointModel>,
     padding: PaddingValues,
     onEvent: (FavouritesScreenEvent) -> Unit,
 ) {
     when {
-        state.favourites.isEmpty() -> {
+        favourites.isEmpty() -> {
             EmptyState(padding)
         }
 
         else -> {
-            FavouritesList(padding, state.favourites, onEvent)
+            FavouritesList(padding, favourites, onEvent)
         }
     }
 }

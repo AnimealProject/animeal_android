@@ -8,6 +8,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class FeedingPointState(
     val currentFeedingPoint: FeedingPointModel? = null,
     val feedingPoints: ImmutableList<FeedingPointModel> = persistentListOf(),
-    // val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
     val defaultAnimalType: AnimalType = AnimalType.Dogs,
 )
