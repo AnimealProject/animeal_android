@@ -1,13 +1,13 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.feeding.domain.model.DomainFeedState
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 internal class FeedingRepositoryMock : FeedingRepository {
@@ -43,5 +43,5 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return ActionResult.Success
     }
 
-    override fun getFeedStateFlow(): MutableSharedFlow<FeedState> = MutableSharedFlow()
+    override fun getFeedStateFlow(): MutableSharedFlow<DomainFeedState> = MutableSharedFlow()
 }

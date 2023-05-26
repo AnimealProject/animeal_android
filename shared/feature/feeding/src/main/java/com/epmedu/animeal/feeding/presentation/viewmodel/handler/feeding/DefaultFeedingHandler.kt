@@ -4,6 +4,7 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.data.mapper.toDomainFeedState
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
@@ -74,7 +75,7 @@ class DefaultFeedingHandler(
         }
         stateFlow.onEach {
             // updates state flow at repository
-            getFeedStateUseCase().emit(it)
+            getFeedStateUseCase().emit(it.toDomainFeedState())
         }.launchIn(this)
     }
 
