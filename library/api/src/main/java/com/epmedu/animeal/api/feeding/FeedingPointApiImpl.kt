@@ -2,25 +2,26 @@ package com.epmedu.animeal.api.feeding
 
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.datastore.generated.model.FeedingPoint
-import com.epmedu.animeal.api.extensions.getModelList
-import com.epmedu.animeal.api.extensions.subscribe
+import com.epmedu.animeal.api.AnimealApi
 import kotlinx.coroutines.flow.Flow
 
-internal class FeedingPointApiImpl : FeedingPointApi {
+internal class FeedingPointApiImpl(
+    private val animealApi: AnimealApi
+) : FeedingPointApi {
 
     override fun getAllFeedingPoints(): Flow<List<FeedingPoint>> {
-        return getModelList()
+        return animealApi.getModelList(FeedingPoint::class.java)
     }
 
     override fun subscribeToFeedingPointsUpdates(): Flow<FeedingPoint> {
-        return subscribe(SubscriptionType.ON_UPDATE)
+        return animealApi.subscribe(SubscriptionType.ON_UPDATE, FeedingPoint::class.java)
     }
 
     override fun subscribeToFeedingPointsCreation(): Flow<FeedingPoint> {
-        return subscribe(SubscriptionType.ON_CREATE)
+        return animealApi.subscribe(SubscriptionType.ON_CREATE, FeedingPoint::class.java)
     }
 
     override fun subscribeToFeedingPointsDeletion(): Flow<FeedingPoint> {
-        return subscribe(SubscriptionType.ON_DELETE)
+        return animealApi.subscribe(SubscriptionType.ON_DELETE, FeedingPoint::class.java)
     }
 }
