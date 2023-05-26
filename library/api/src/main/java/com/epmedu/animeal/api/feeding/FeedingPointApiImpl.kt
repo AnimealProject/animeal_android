@@ -14,14 +14,14 @@ internal class FeedingPointApiImpl(
     }
 
     override fun subscribeToFeedingPointsUpdates(): Flow<FeedingPoint> {
-        return animealApi.subscribe(SubscriptionType.ON_UPDATE, FeedingPoint::class.java)
+        return animealApi.launchSubscription(SubscriptionType.ON_UPDATE, FeedingPoint::class.java)
     }
 
     override fun subscribeToFeedingPointsCreation(): Flow<FeedingPoint> {
-        return animealApi.subscribe(SubscriptionType.ON_CREATE, FeedingPoint::class.java)
+        return animealApi.launchSubscription(SubscriptionType.ON_CREATE, FeedingPoint::class.java)
     }
 
     override fun subscribeToFeedingPointsDeletion(): Flow<FeedingPoint> {
-        return animealApi.subscribe(SubscriptionType.ON_DELETE, FeedingPoint::class.java)
+        return animealApi.launchSubscription(SubscriptionType.ON_DELETE, FeedingPoint::class.java)
     }
 }

@@ -14,6 +14,6 @@ internal class UsersApiImpl(
             .addPath("/getUser")
             .addQueryParameters(mapOf("username" to id))
             .build()
-        return animealApi.get(restOptions = restOptions, responseClass = User::class.java)
+        return animealApi.launchGetRequest(restOptions = restOptions, responseClass = User::class.java)
     }
 }

@@ -12,6 +12,9 @@ import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Common interface for making different types of requests
+ */
 interface AnimealApi {
 
     /**
@@ -19,7 +22,7 @@ interface AnimealApi {
      * On successful response and deserialization, returns [ApiResult.Success],
      * otherwise returns [ApiResult.Failure] with corresponding exception.
      */
-    suspend fun <R : Any> get(
+    suspend fun <R : Any> launchGetRequest(
         restOptions: RestOptions,
         responseClass: Class<R>
     ): ApiResult<R>
@@ -66,7 +69,7 @@ interface AnimealApi {
      * @param subscriptionType Type of subscription.
      * @param GraphQLModel Type of model to return.
      */
-    fun <GraphQLModel : Model> subscribe(
+    fun <GraphQLModel : Model> launchSubscription(
         subscriptionType: SubscriptionType,
         modelClass: Class<GraphQLModel>
     ): Flow<GraphQLModel>

@@ -36,7 +36,7 @@ internal class AnimealApiImpl : AnimealApi {
      * On successful response and deserialization, returns [ApiResult.Success],
      * otherwise returns [ApiResult.Failure] with corresponding exception.
      */
-    override suspend fun <R : Any> get(
+    override suspend fun <R : Any> launchGetRequest(
         restOptions: RestOptions,
         responseClass: Class<R>
     ): ApiResult<R> = suspendCancellableCoroutine {
@@ -176,7 +176,7 @@ internal class AnimealApiImpl : AnimealApi {
      * @param subscriptionType Type of subscription.
      * @param GraphQLModel Type of model to return.
      */
-    override fun <GraphQLModel : Model> subscribe(
+    override fun <GraphQLModel : Model> launchSubscription(
         subscriptionType: SubscriptionType,
         modelClass: Class<GraphQLModel>
     ): Flow<GraphQLModel> {

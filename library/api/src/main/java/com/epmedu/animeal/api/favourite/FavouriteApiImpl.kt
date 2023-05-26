@@ -22,14 +22,14 @@ internal class FavouriteApiImpl(
     }
 
     override fun subscribeToFavouriteCreation(): Flow<Favourite> {
-        return animealApi.subscribe(
+        return animealApi.launchSubscription(
             subscriptionType = SubscriptionType.ON_CREATE,
             modelClass = Favourite::class.java
         )
     }
 
     override fun subscribeToFavouriteDeletion(): Flow<Favourite> {
-        return animealApi.subscribe(
+        return animealApi.launchSubscription(
             subscriptionType = SubscriptionType.ON_DELETE,
             modelClass = Favourite::class.java
         )
