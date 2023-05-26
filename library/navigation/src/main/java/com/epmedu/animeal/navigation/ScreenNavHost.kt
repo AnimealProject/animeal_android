@@ -26,12 +26,12 @@ import com.epmedu.animeal.navigation.navigator.Navigator
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
-@Suppress("ReusedModifierInstance")
+@Suppress("ReusedModifierInstance", "ComposableParametersOrdering", "ModifierParameterPosition")
 @Composable
 fun ScreenNavHost(
+    startDestination: String,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String,
     route: String? = null,
     builder: NavBuilder.Default.() -> Unit
 ) {
@@ -49,7 +49,7 @@ fun ScreenNavHost(
     }
 }
 
-@Suppress("LongParameterList", "ReusedModifierInstance")
+@Suppress("ReusedModifierInstance", "ComposableParametersOrdering", "ModifierParameterPosition")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedScreenNavHost(

@@ -12,7 +12,6 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongParameterList")
 @Composable
 internal fun EmailInput(
     value: String,

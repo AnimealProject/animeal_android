@@ -35,14 +35,13 @@ import com.epmedu.animeal.foundation.theme.CustomColor.DarkerGrey
 import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
 import com.epmedu.animeal.foundation.theme.interFontFamily
 
-@Suppress("LongParameterList")
 @Composable
 fun TextInputField(
-    modifier: Modifier = Modifier,
     title: String,
     hint: String,
     onValueChange: (String) -> Unit,
     value: String,
+    modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     errorText: String = "",
     onClearFocus: () -> Unit = {},
@@ -98,7 +97,6 @@ fun TextInputField(
     }
 }
 
-@Suppress("LongParameterList")
 @Composable
 private fun TextInputFieldBox(
     value: String,

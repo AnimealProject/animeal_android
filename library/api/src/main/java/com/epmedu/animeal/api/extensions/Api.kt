@@ -70,6 +70,7 @@ suspend inline fun <reified R : Any> RestOptions.get(): ApiResult<R> = suspendCa
  * Creates a query for list of models of type [GraphQLModel] with provided [predicate]
  * and on successful responses returns flow with the list of the models.
  * On failure flow closes.
+ * @param GraphQLModel Type of model to return.
  * @param predicate predicate for filtering. By default `null`
  */
 internal inline fun <reified GraphQLModel : Model> getModelList(
@@ -173,8 +174,8 @@ internal suspend inline fun <reified R, D : Operation.Data, T, V : Operation.Var
 
 /**
  * Launches a GraphQL subscription.
- * @param subscriptionType Type of subscription.
  * @param GraphQLModel Type of model to return.
+ * @param subscriptionType Type of subscription.
  */
 internal inline fun <reified GraphQLModel : Model> subscribe(
     subscriptionType: SubscriptionType

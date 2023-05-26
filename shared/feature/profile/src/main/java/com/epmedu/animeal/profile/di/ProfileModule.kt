@@ -25,7 +25,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-@Suppress("TooManyFunctions")
 internal object ProfileModule {
 
     @ViewModelScoped

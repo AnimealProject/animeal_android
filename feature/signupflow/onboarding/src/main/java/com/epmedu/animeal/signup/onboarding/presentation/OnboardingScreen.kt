@@ -47,7 +47,9 @@ private fun OnState(
 ) {
     state.authenticationType?.let {
         when (it) {
-            AuthenticationType.Mobile -> navigator.navigate(SignUpRoute.EnterPhone.name)
+            AuthenticationType.Mobile -> {
+                navigator.navigate(SignUpRoute.EnterPhone.name)
+            }
             is AuthenticationType.Facebook -> {
                 if (it.isPhoneNumberVerified) {
                     navigator.navigateToTabs()

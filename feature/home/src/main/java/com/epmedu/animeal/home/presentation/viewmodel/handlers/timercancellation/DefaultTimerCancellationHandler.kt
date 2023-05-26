@@ -28,12 +28,14 @@ internal class DefaultTimerCancellationHandler(
             HomeScreenEvent.TimerCancellationEvent.CancellationAccepted -> launch {
                 dismissCancellation()
                 when (state.timerState) {
-                    is TimerState.Active -> cancelFeeding()
+                    is TimerState.Active -> {
+                        cancelFeeding()
+                    }
                     is TimerState.Expired -> {
                         fetchFeedingPoints()
                         disableTimer()
                     }
-                    else -> Unit
+                    else -> {}
                 }
             }
             HomeScreenEvent.TimerCancellationEvent.CancellationDismissed -> dismissCancellation()

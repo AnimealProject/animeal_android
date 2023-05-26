@@ -23,8 +23,8 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 fun FeedStatusItem(
+    status: FeedStatus,
     modifier: Modifier = Modifier,
-    status: FeedStatus
 ) {
     Row(
         modifier = modifier,

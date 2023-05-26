@@ -12,6 +12,8 @@ internal fun ApiResult<String>.toActionResult(feedingPointId: String): ActionRes
                 else -> ActionResult.Failure(WrongResponseError())
             }
         }
-        is ApiResult.Failure -> ActionResult.Failure(error)
+        is ApiResult.Failure -> {
+            ActionResult.Failure(error)
+        }
     }
 }

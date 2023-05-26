@@ -62,7 +62,7 @@ fun ProfileInputForm(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 onDone = { focusManager.clearFocus() }
             )
-            PhoneInput(onEvent, onCountryClick, focusManager)
+            PhoneInput(onEvent, focusManager, onCountryClick)
             BirthDateInput(
                 value = profile.birthDate,
                 onValueChange = { onEvent(BirthDateChanged(it)) },
@@ -76,8 +76,8 @@ fun ProfileInputForm(
 @Composable
 private fun ProfileState.PhoneInput(
     onEvent: (ProfileInputFormEvent) -> Unit,
+    focusManager: FocusManager,
     onCountryClick: (() -> Unit)? = null,
-    focusManager: FocusManager
 ) {
     PhoneNumberInput(
         value = phoneNumber,

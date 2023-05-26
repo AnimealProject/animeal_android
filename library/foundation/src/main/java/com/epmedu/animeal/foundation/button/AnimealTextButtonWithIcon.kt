@@ -1,5 +1,3 @@
-@file: Suppress("LongParameterList")
-
 package com.epmedu.animeal.foundation.button
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,11 +25,11 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 fun AnimealTextButtonWithIcon(
     icon: Painter,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     color: Color = Color.Unspecified,
     contentDescription: String? = null,
-    onClick: () -> Unit,
 ) = AnimealTextButtonWithIcon(
     modifier = modifier,
     icon = {
@@ -51,11 +49,11 @@ fun AnimealTextButtonWithIcon(
 fun AnimealTextButtonWithIcon(
     icon: ImageVector,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     color: Color = Color.Unspecified,
     contentDescription: String? = null,
-    onClick: () -> Unit,
 ) = AnimealTextButtonWithIcon(
     modifier = modifier,
     icon = {

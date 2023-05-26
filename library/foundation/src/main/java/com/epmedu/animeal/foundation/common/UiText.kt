@@ -11,13 +11,13 @@ sealed interface UiText {
     @Suppress("UseDataClass")
     class StringResource(@StringRes val resId: Int, vararg val args: Any) : UiText
 
-    @Suppress("SpreadOperator", "TopLevelComposableFunctions")
+    @Suppress("TopLevelComposableFunctions")
     @Composable
     fun asString(): String {
         return when (this) {
             is Empty -> ""
             is RawString -> value
-            is StringResource -> stringResource(resId, *args)
+            is StringResource -> stringResource(resId, args)
         }
     }
 }
