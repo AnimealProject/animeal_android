@@ -7,7 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
-/** Allows to enable/disable gps settings via intent call to the system */
+/** Allows to enable/disable gps settings via intent call to the system. */
 internal class IntentGpsSettingsProvider(@ApplicationContext private val context: Context) : GpsSettingsProvider {
 
     private val locationManager = context.locationManager

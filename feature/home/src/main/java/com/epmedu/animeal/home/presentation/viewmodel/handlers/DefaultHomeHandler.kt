@@ -11,7 +11,6 @@ import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
 internal class DefaultHomeHandler @Inject constructor(
     private val cameraHandler: CameraHandler,
     private val feedingPointHandler: FeedingPointHandler,

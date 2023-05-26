@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-@Suppress("TooManyFunctions")
 class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,

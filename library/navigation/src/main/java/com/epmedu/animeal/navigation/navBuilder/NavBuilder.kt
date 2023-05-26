@@ -24,7 +24,6 @@ sealed interface NavBuilder {
 
     interface Animated : NavBuilder {
 
-        @Suppress("LongParameterList")
         @OptIn(ExperimentalAnimationApi::class)
         fun NavBuilder.screen(
             route: String,

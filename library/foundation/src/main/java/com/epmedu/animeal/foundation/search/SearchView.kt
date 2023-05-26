@@ -39,9 +39,9 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun SearchView(
-    modifier: Modifier = Modifier,
     initialValue: String,
-    onValueChange: (TextFieldValue) -> Unit
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
 

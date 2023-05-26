@@ -21,7 +21,7 @@ data class HomeState(
     val feedingPhotos: List<FeedingPhotoItem> = emptyList(),
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
 
-    /** Current state of gms service */
+    /** Current state of gms service. */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
 
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,

@@ -30,7 +30,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
@@ -97,7 +96,9 @@ internal class FinishProfileViewModel @Inject constructor(
         event: FinishProfileScreenEvent,
     ) {
         when (event) {
-            Submit -> submitProfile()
+            Submit -> {
+                submitProfile()
+            }
             Cancel -> {
                 when (authenticationType) {
                     AuthenticationType.Mobile -> logout()

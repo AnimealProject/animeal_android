@@ -11,9 +11,9 @@ import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
 
 @Composable
 internal fun OnboardingScreenUI(
-    modifier: Modifier = Modifier,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
