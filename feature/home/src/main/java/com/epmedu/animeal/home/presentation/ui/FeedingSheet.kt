@@ -10,7 +10,6 @@ import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneSheet
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 
-@Suppress("LongParameterList")
 @Composable
 fun FeedingSheet(
     feedingState: FeedingRouteState,

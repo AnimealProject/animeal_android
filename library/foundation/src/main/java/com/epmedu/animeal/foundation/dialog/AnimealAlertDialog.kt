@@ -15,10 +15,10 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 
 @Composable
 fun AnimealAlertDialog(
-    modifier: Modifier = Modifier,
     title: String,
     acceptText: String,
     onConfirm: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(

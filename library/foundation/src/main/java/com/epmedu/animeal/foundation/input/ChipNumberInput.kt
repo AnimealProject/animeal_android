@@ -31,10 +31,10 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 
 @Composable
 fun ChipNumberInput(
-    modifier: Modifier = Modifier,
     title: String,
     onValueChange: (String) -> Unit,
     value: String,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     errorText: String? = null
 ) {
@@ -108,22 +108,25 @@ internal object ChipNumberFormatTransformation : VisualTransformation {
             CHIP_NUMBER_FORMAT.takeLast(CHIP_NUMBER_FORMAT.length - length)
             toAnnotatedString()
         }
-        @Suppress("ReturnCount")
         return TransformedText(
             text = annotatedString,
             offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
-                    if (offset <= 2) return offset
-                    if (offset <= 5) return offset + 1
-                    if (offset <= 9) return offset + 2
-                    return 11
+                    return when {
+                        offset <= 2 -> offset
+                        offset <= 5 -> offset + 1
+                        offset <= 9 -> offset + 2
+                        else -> 11
+                    }
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    if (offset <= 2) return offset
-                    if (offset <= 5) return offset - 1
-                    if (offset <= 9) return offset - 2
-                    return 9
+                    return when {
+                        offset <= 2 -> offset
+                        offset <= 5 -> offset - 1
+                        offset <= 9 -> offset - 2
+                        else -> 9
+                    }
                 }
             }
         )

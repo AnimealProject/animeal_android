@@ -30,11 +30,11 @@ import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 
 @Composable
 fun SearchFeedingPointsUi(
-    modifier: Modifier = Modifier,
     feedingPoints: List<FeedingPoint>,
     query: String,
     animalType: AnimalType,
     onEvent: (SearchScreenEvent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val groupedPoints = remember(feedingPoints) {
         feedingPoints.groupBy { it.city }.map { entry ->
@@ -73,10 +73,11 @@ private fun LazyListScope.renderSearchView(
                 horizontal = 30.dp,
                 vertical = 14.dp
             ),
-            initialValue = query
-        ) { textFieldValue ->
-            onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))
-        }
+            initialValue = query,
+            onValueChange = { textFieldValue ->
+                onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))
+            }
+        )
     }
 }
 

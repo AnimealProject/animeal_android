@@ -33,7 +33,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-@Suppress("LongParameterList", "DEPRECATION")
 internal object FeedingPresentationModule {
 
     @ViewModelScoped

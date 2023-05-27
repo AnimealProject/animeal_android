@@ -13,7 +13,7 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Common interface for making different types of requests
+ * Common interface for making different types of requests.
  */
 interface AnimealApi {
 
@@ -31,7 +31,9 @@ interface AnimealApi {
      * Creates a query for list of models of type [GraphQLModel] with provided [predicate]
      * and on successful responses returns flow with the list of the models.
      * On failure flow closes.
-     * @param predicate predicate for filtering. By default `null`
+     * @param GraphQLModel Type of model to return.
+     * @param modelClass Class of model to return.
+     * @param predicate predicate for filtering. By default `null`.
      */
     fun <GraphQLModel : Model> getModelList(
         modelClass: Class<GraphQLModel>,
@@ -66,8 +68,9 @@ interface AnimealApi {
 
     /**
      * Launches a GraphQL subscription.
-     * @param subscriptionType Type of subscription.
      * @param GraphQLModel Type of model to return.
+     * @param subscriptionType Type of subscription.
+     * @param modelClass Class of the model.
      */
     fun <GraphQLModel : Model> launchSubscription(
         subscriptionType: SubscriptionType,

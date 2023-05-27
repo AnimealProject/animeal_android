@@ -85,7 +85,7 @@ class AnimealBottomSheetState(
     suspend fun hide() = animateTo(Hidden)
 
     companion object {
-        fun Saver(
+        fun getSaver(
             animationSpec: AnimationSpec<Float>,
             confirmStateChange: (AnimealBottomSheetValue) -> Boolean
         ): Saver<AnimealBottomSheetState, *> = Saver(
@@ -118,7 +118,7 @@ fun rememberAnimealBottomSheetState(
         initialValue,
         animationSpec,
         confirmStateChange,
-        saver = AnimealBottomSheetState.Saver(
+        saver = AnimealBottomSheetState.getSaver(
             animationSpec = animationSpec,
             confirmStateChange = confirmStateChange
         )
@@ -131,7 +131,7 @@ fun rememberAnimealBottomSheetState(
     }
 }
 
-@Suppress("LongParameterList", "LongMethod")
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AnimealBottomSheetLayout(

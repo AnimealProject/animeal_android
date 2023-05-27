@@ -17,9 +17,9 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ButtonsBlock(
-    modifier: Modifier = Modifier,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

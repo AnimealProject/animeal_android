@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-@Suppress("TooManyFunctions", "LongParameterList")
 internal class EnterCodeViewModel @Inject constructor(
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val sendCodeUseCase: SendCodeUseCase,

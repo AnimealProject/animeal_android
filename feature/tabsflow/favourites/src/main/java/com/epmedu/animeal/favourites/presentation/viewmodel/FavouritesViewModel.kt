@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,

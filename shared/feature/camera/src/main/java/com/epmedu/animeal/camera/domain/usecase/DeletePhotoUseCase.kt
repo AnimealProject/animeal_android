@@ -12,7 +12,10 @@ class DeletePhotoUseCase(private val cameraRepository: CameraRepository) {
             deleteLocalFile(uri)
         }
 
-    private suspend fun deleteRemoteFile(fileName: String, success: () -> ActionResult): ActionResult =
+    private suspend fun deleteRemoteFile(
+        fileName: String,
+        success: () -> ActionResult
+    ): ActionResult =
         when (val result = cameraRepository.deletePhoto(fileName)) {
             is ActionResult.Failure -> result
             ActionResult.Success -> success()
@@ -25,5 +28,6 @@ class DeletePhotoUseCase(private val cameraRepository: CameraRepository) {
             ?.run {
                 delete()
                 ActionResult.Success
-            } ?: ActionResult.Failure(IllegalStateException("Can't delete the file by path ${uri.path}"))
+            }
+            ?: ActionResult.Failure(IllegalStateException("Can't delete the file by path ${uri.path}"))
 }

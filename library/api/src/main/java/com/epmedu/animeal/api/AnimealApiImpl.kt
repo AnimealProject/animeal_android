@@ -1,7 +1,6 @@
 package com.epmedu.animeal.api
 
 import android.util.Log
-import com.amplifyframework.api.ApiException
 import com.amplifyframework.api.aws.GsonVariablesSerializer
 import com.amplifyframework.api.graphql.GraphQLRequest
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest
@@ -31,11 +30,6 @@ import kotlin.coroutines.resume
 
 internal class AnimealApiImpl : AnimealApi {
 
-    /**
-     * Invokes GET Http request and deserializes response to given [responseClass].
-     * On successful response and deserialization, returns [ApiResult.Success],
-     * otherwise returns [ApiResult.Failure] with corresponding exception.
-     */
     override suspend fun <R : Any> launchGetRequest(
         restOptions: RestOptions,
         responseClass: Class<R>
@@ -73,12 +67,6 @@ internal class AnimealApiImpl : AnimealApi {
         )
     }
 
-    /**
-     * Creates a query for list of models of type [modelClass] with provided [predicate]
-     * and on successful responses returns flow with the list of the models.
-     * On failure flow closes.
-     * @param predicate predicate for filtering. By default `null`
-     */
     override fun <GraphQLModel : Model> getModelList(
         modelClass: Class<GraphQLModel>,
         predicate: QueryPredicate?
@@ -111,14 +99,6 @@ internal class AnimealApiImpl : AnimealApi {
         }
     }
 
-    /**
-     * Launches a GraphQL query.
-     *
-     * On success, returns [ApiResult.Success] if the response data is not null,
-     * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
-     *
-     * On failure, returns [ApiResult.Failure] with [ApiException].
-     */
     override suspend fun <D : Operation.Data, T, V : Operation.Variables> launchQuery(
         query: Query<D, T, V>,
         responseClass: Class<D>
@@ -140,14 +120,6 @@ internal class AnimealApiImpl : AnimealApi {
         }
     }
 
-    /**
-     * Performs a GraphQL mutation.
-     *
-     * On success, returns [ApiResult.Success] if the response data is not null,
-     * otherwise - [ApiResult.Failure] with [ResponseError] with a list of response errors.
-     *
-     * On failure, returns [ApiResult.Failure] with [ApiException].
-     */
     override suspend fun <R, D : Operation.Data, T, V : Operation.Variables> launchMutation(
         mutation: Mutation<D, T, V>,
         responseClass: Class<R>
@@ -171,11 +143,6 @@ internal class AnimealApiImpl : AnimealApi {
         }
     }
 
-    /**
-     * Launches a GraphQL subscription.
-     * @param subscriptionType Type of subscription.
-     * @param GraphQLModel Type of model to return.
-     */
     override fun <GraphQLModel : Model> launchSubscription(
         subscriptionType: SubscriptionType,
         modelClass: Class<GraphQLModel>

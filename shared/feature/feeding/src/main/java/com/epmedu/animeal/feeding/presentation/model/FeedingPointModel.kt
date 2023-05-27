@@ -52,11 +52,12 @@ data class FeedingPointModel(
                 }
             }
             // animalType == AnimalType.Cats
-            else ->
+            else -> {
                 when (feedStatus) {
                     FeedStatus.RED -> R.drawable.ic_catsstate_cathungry_high
                     FeedStatus.YELLOW -> R.drawable.ic_catsstate_cathungry_in_process
                     FeedStatus.GREEN -> R.drawable.ic_catsstate_cathungry_low
                 }
+            }
         }
 }
