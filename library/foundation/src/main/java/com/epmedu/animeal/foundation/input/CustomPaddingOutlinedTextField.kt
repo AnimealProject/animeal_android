@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@Suppress("LongParameterList")
 @Composable
 fun CustomPaddingOutlinedTextField(
     value: String,

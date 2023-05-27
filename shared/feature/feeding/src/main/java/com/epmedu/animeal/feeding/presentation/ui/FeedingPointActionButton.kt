@@ -15,8 +15,8 @@ import com.epmedu.animeal.resources.R
 @Composable
 fun FeedingPointActionButton(
     alpha: Float,
-    enabled: Boolean = true,
     onClick: () -> Unit,
+    enabled: Boolean = true,
 ) {
     AnimealButton(
         modifier = Modifier
@@ -33,6 +33,6 @@ fun FeedingPointActionButton(
 @AnimealPreview
 fun FeedingPointActionButtonPreview() {
     AnimealTheme {
-        FeedingPointActionButton(1.0f) {}
+        FeedingPointActionButton(alpha = 1.0f, onClick = {})
     }
 }

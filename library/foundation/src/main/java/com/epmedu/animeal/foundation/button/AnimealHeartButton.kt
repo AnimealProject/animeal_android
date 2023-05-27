@@ -18,10 +18,10 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AnimealHeartButton(
-    modifier: Modifier = Modifier,
     selected: Boolean,
     onChange: (Boolean) -> Unit,
-    elevation: Dp = 0.dp
+    modifier: Modifier = Modifier,
+    elevation: Dp = 0.dp,
 ) {
     val iconColor = if (selected) {
         MaterialTheme.colors.error

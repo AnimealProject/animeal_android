@@ -57,8 +57,13 @@ import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
 /**
+ * @param feedingPoint feeding point to be presented.
+ * @param contentAlpha alpha of the content.
  * @param modifier Modifier.fillMaxHeight() to make the dialog full screen,
- * Modifier.wrapContentHeight() to make the dialog cover a part of the screen
+ * Modifier.wrapContentHeight() to make the dialog cover a part of the screen.
+ * @param isShowOnMapVisible configures "Show on Map" button visibility.
+ * @param onFavouriteChange callback to be invoked on tapping on the heart button.
+ * @param onShowOnMap callback to be invoked on tapping "Show on Map" button.
  */
 @Composable
 fun FeedingPointSheetContent(
@@ -66,8 +71,8 @@ fun FeedingPointSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier,
     isShowOnMapVisible: Boolean = false,
-    onFavouriteChange: (Boolean) -> Unit,
-    onShowOnMap: () -> Unit
+    onFavouriteChange: (Boolean) -> Unit = {},
+    onShowOnMap: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -364,9 +369,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
             ),
             contentAlpha = 1f,
             modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = true,
-            onFavouriteChange = {},
-            onShowOnMap = {}
+            isShowOnMapVisible = true
         )
     }
 }

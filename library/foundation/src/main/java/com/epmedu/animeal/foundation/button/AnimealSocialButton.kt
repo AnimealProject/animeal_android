@@ -18,10 +18,10 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun AnimealSocialButton(
-    modifier: Modifier = Modifier,
+    iconResource: Int,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.surface,
-    iconResource: Int
 ) {
     FloatingActionButton(
         modifier = modifier.size(62.dp),

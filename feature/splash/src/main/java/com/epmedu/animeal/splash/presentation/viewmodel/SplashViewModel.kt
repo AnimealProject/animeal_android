@@ -21,7 +21,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList")
 @HiltViewModel
 internal class SplashViewModel @Inject constructor(
     private val getIsSignedInUseCase: GetIsSignedInUseCase,

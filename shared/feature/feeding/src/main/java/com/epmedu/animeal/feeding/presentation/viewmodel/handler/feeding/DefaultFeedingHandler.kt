@@ -25,9 +25,9 @@ import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-@Suppress("LongParameterList", "TooManyFunctions")
-class DefaultFeedingHandler(
+class DefaultFeedingHandler @Inject constructor(
     stateDelegate: StateDelegate<FeedingPointState>,
     actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,

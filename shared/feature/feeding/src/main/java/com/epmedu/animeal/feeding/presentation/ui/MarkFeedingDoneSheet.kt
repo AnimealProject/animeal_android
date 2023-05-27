@@ -33,12 +33,12 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun MarkFeedingDoneSheet(
-    modifier: Modifier = Modifier,
-    photos: List<FeedingPhotoItem> = listOf(),
-    isUploadingNextImage: Boolean = false,
     feedingPointTitle: String,
     onTakePhotoClick: () -> Unit,
-    onDeletePhotoClick: (FeedingPhotoItem) -> Unit
+    onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
+    modifier: Modifier = Modifier,
+    photos: List<FeedingPhotoItem> = emptyList(),
+    isUploadingNextImage: Boolean = false,
 ) {
     Column(
         modifier = modifier

@@ -38,9 +38,9 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
@@ -134,9 +134,7 @@ private fun ScreenScaffold(
         sheetContent = {
             state.showingFeedingPoint?.let { feedingPoint ->
                 FeedingPointSheetContent(
-                    feedingPoint = FeedingPointModel(
-                        feedingPoint
-                    ),
+                    feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
@@ -157,7 +155,7 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED,
                 onClick = {
                     when (state.permissionsState.cameraPermissionStatus) {
                         PermissionStatus.Granted -> isFeedingDialogShowing.value = true
@@ -196,6 +194,7 @@ private fun ScreenContent(
         state.favourites.isEmpty() -> {
             EmptyState(padding)
         }
+
         else -> {
             FavouritesList(padding, state.favourites, onEvent)
         }
@@ -221,7 +220,7 @@ private fun EmptyState(padding: PaddingValues) {
 @Composable
 private fun FavouritesList(
     padding: PaddingValues,
-    favourites: List<FeedingPoint>,
+    favourites: List<FeedingPointModel>,
     onEvent: (FavouritesScreenEvent) -> Unit
 ) {
     Column(
@@ -237,12 +236,12 @@ private fun FavouritesList(
             items(favourites) { feedingPoint ->
                 FeedingPointItem(
                     title = feedingPoint.title,
-                    status = feedingPoint.animalStatus.toFeedStatus(),
+                    status = feedingPoint.feedStatus,
                     isFavourite = feedingPoint.isFavourite,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
-                    imageUrl = feedingPoint.images[0],
+                    imageUrl = feedingPoint.image,
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
@@ -255,16 +254,18 @@ private fun FavouritesList(
 private fun FavouritesScreenPreview() {
     val title = "FeedSpot"
     val favourites = listOf(
-        FeedingPoint(
-            id = "0",
-            title = title,
-            description = "Hungry dog",
-            city = "Minsk",
-            animalStatus = AnimalState.RED,
-            animalType = AnimalType.Dogs,
-            isFavourite = true,
-            location = MapLocation.Tbilisi,
-            images = emptyList(),
+        FeedingPointModel(
+            FeedingPoint(
+                id = "0",
+                title = title,
+                description = "Hungry dog",
+                city = "Minsk",
+                animalStatus = AnimalState.RED,
+                animalType = AnimalType.Dogs,
+                isFavourite = true,
+                location = MapLocation.Tbilisi,
+                images = emptyList(),
+            )
         ),
     )
     AnimealTheme {

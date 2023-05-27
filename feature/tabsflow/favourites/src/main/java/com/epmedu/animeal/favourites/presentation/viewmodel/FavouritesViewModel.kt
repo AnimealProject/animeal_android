@@ -10,13 +10,19 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FavouriteChange
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.model.Feeding
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +30,8 @@ import javax.inject.Inject
 internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
+    private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
+    private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val permissionsHandler: PermissionsHandler,
@@ -32,20 +40,70 @@ internal class FavouritesViewModel @Inject constructor(
     PermissionsHandler by permissionsHandler,
     ActionDelegate by actionDelegate {
 
+    private var fetchFeedingsJob: Job? = null
+
     init {
-        viewModelScope.launch {
-            getFavouriteFeedingPointsUseCase().collect { feedingPoints ->
-                updateState { copy(favourites = feedingPoints.toImmutableList()) }
+        viewModelScope.launch { collectFeedingPoints() }
+        viewModelScope.launch { collectPermissionsState() }
+    }
+
+    private suspend fun collectFeedingPoints() {
+        getFavouriteFeedingPointsUseCase().collect { domainFeedingPoints ->
+            val feedingPoints = domainFeedingPoints.map { FeedingPointModel(it) }.toImmutableList()
+            val showingFeedingPoint = feedingPoints.find { it.id == state.showingFeedingPoint?.id }
+
+            val feedingPointToShow = when (showingFeedingPoint?.feedStatus) {
+                state.showingFeedingPoint?.feedStatus -> {
+                    showingFeedingPoint?.copy(
+                        feedings = state.showingFeedingPoint?.feedings
+                    )
+                }
+                else -> {
+                    showingFeedingPoint?.let { fetchFeedings(showingFeedingPoint.id) }
+                    showingFeedingPoint
+                }
+            }
+            showingFeedingPoint?.let { fetchFeedings(showingFeedingPoint.id) }
+            updateState {
+                copy(
+                    favourites = feedingPoints,
+                    showingFeedingPoint = feedingPointToShow
+                )
             }
         }
-        viewModelScope.launch { collectPermissionsState() }
     }
 
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
             is FavouriteChange -> handleFavouriteChange(event)
-            is FeedingPointSelected -> updateState { copy(showingFeedingPoint = event.feedingPoint) }
+            is FeedingPointSelected -> handleFeedingPointSelected(event)
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
+        }
+    }
+
+    private fun handleFeedingPointSelected(event: FeedingPointSelected) {
+        updateState { copy(showingFeedingPoint = event.feedingPoint) }
+        fetchFeedings(event.feedingPoint.id)
+    }
+
+    private fun fetchFeedings(feedingPointId: String) {
+        fetchFeedingsJob?.cancel()
+        fetchFeedingsJob = viewModelScope.launch {
+            getFeedingInProgressUseCase(feedingPointId).combine(
+                getFeedingHistoriesUseCase(feedingPointId)
+            ) { feedingInProgress, feedingHistories ->
+                val feedings = listOf(
+                    feedingInProgress?.let { Feeding.InProgress(feedingInProgress) }
+                ) + feedingHistories.map { Feeding.History(it) }
+
+                updateState {
+                    copy(
+                        showingFeedingPoint = showingFeedingPoint?.copy(
+                            feedings = feedings.filterNotNull()
+                        )
+                    )
+                }
+            }.collect()
         }
     }
 
@@ -66,17 +124,17 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun addFeedingPointToFavourites(feedingPoint: FeedingPoint) {
+    private fun addFeedingPointToFavourites(feedingPoint: FeedingPointModel) {
         markFeedingPointAsFavourite(feedingPoint)
         tryAddingFeedingPointToFavourites(feedingPoint)
     }
 
-    private fun removeFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+    private fun removeFeedingPointFromFavourites(feedingPoint: FeedingPointModel) {
         unmarkFeedingPointFromFavourites(feedingPoint)
         tryRemovingFeedingPointFromFavourites(feedingPoint)
     }
 
-    private fun markFeedingPointAsFavourite(feedingPoint: FeedingPoint) {
+    private fun markFeedingPointAsFavourite(feedingPoint: FeedingPointModel) {
         updateState {
             copy(
                 favourites = (favourites + feedingPoint).toImmutableList(),
@@ -88,7 +146,7 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun unmarkFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+    private fun unmarkFeedingPointFromFavourites(feedingPoint: FeedingPointModel) {
         updateState {
             copy(
                 favourites = (favourites - feedingPoint).toImmutableList(),
@@ -100,7 +158,7 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun tryAddingFeedingPointToFavourites(feedingPoint: FeedingPoint) {
+    private fun tryAddingFeedingPointToFavourites(feedingPoint: FeedingPointModel) {
         viewModelScope.launch {
             performAction(
                 action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
@@ -109,7 +167,7 @@ internal class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun tryRemovingFeedingPointFromFavourites(feedingPoint: FeedingPoint) {
+    private fun tryRemovingFeedingPointFromFavourites(feedingPoint: FeedingPointModel) {
         viewModelScope.launch {
             performAction(
                 action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },

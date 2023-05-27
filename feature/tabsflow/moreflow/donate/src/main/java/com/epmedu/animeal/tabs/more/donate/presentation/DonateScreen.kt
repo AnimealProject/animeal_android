@@ -22,7 +22,6 @@ fun DonateScreen() {
 
     DonateScreenUI(
         state = state,
-        onEvent = viewModel::handleEvent,
         onBack = navigator::popBackStack,
     )
 }

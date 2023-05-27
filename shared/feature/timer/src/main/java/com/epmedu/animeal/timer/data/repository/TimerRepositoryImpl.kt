@@ -19,7 +19,7 @@ internal class TimerRepositoryImpl : TimerRepository {
 
     private val timerFlow = MutableStateFlow(timerState)
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     private var job: Job? = null
 
@@ -35,7 +35,7 @@ internal class TimerRepositoryImpl : TimerRepository {
     override fun getTimerState() = timerFlow.asStateFlow()
 
     override suspend fun disableTimer() {
-        job?.run { cancel() }
+        job?.cancel()
         timerState = TimerState.Disabled
         timerFlow.emit(timerState)
     }

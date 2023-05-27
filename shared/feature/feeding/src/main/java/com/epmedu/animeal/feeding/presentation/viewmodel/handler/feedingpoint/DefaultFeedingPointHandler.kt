@@ -32,9 +32,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-@Suppress("LongParameterList", "TooManyFunctions")
-class DefaultFeedingPointHandler(
+class DefaultFeedingPointHandler @Inject constructor(
     stateDelegate: StateDelegate<FeedingPointState>,
     eventDelegate: EventDelegate<HomeViewModelEvent>,
     actionDelegate: ActionDelegate,

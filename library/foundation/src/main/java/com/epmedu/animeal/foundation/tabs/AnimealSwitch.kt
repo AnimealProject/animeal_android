@@ -43,14 +43,15 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 /**
  * Shows the bar that holds 2 tabs.
  *
+ * @param defaultAnimalType default animal type.
  * @param onSelectTab Called when the tab is switched.
  * @param modifier The [Modifier].
  */
 @Composable
 fun AnimealSwitch(
-    modifier: Modifier = Modifier,
     defaultAnimalType: AnimalType,
-    onSelectTab: (animalType: AnimalType) -> Unit
+    onSelectTab: (animalType: AnimalType) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var currentAnimalType by remember { mutableStateOf(defaultAnimalType) }
 
@@ -130,17 +131,17 @@ private fun TabIndicator(
 /**
  * Shows a tab.
  *
- * @param titleResId current Tab string resource id
- * @param selected current tab selected state
+ * @param titleResId current Tab string resource id.
+ * @param selected current tab selected state.
  * @param onClick Called when this tab is clicked.
  * @param modifier The [Modifier].
  */
 @Composable
 private fun AnimealSwitchTab(
-    modifier: Modifier = Modifier,
     @StringRes titleResId: Int,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

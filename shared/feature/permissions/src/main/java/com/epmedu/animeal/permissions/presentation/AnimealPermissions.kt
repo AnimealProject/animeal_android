@@ -64,7 +64,7 @@ fun AnimealPermissions(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun getGeolocationPermissionState(
-    onPermissionResponse: (PermissionStatus) -> Unit = {},
+    onPermissionResponse: (PermissionStatus) -> Unit,
     onPermissionRequest: () -> Unit,
     onGrant: () -> Unit = {},
     onDeny: () -> Unit = {},
@@ -108,7 +108,7 @@ private fun getGeolocationPermissionState(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun getCameraPermissionState(
-    onPermissionResponse: (PermissionStatus) -> Unit = {},
+    onPermissionResponse: (PermissionStatus) -> Unit,
     onPermissionRequest: () -> Unit,
     onGrant: () -> Unit = {},
     onDeny: () -> Unit = {},

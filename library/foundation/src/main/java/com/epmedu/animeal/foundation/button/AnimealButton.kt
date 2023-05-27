@@ -29,12 +29,12 @@ import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealButton(
-    modifier: Modifier = Modifier,
     text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
     enabled: Boolean = true,
-    onClick: () -> Unit,
 ) {
     AnimealButton(
         modifier = modifier,
@@ -89,30 +89,31 @@ fun AnimealButton(
 @AnimealPreview
 @Composable
 private fun AnimealButtonPreview() {
+    val text = "Hello World!"
     AnimealTheme {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             AnimealButton(
                 onClick = { },
-                text = "Hello World!",
+                text = text,
             )
             AnimealButton(
                 enabled = false,
                 onClick = { },
-                text = "Hello World!",
+                text = text,
             )
 
             HeightSpacer(height = 8.dp)
 
             AnimealButton(onClick = { }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                Text(text = "Hello World!")
+                Text(text = text)
             }
             AnimealButton(
                 enabled = false,
                 onClick = { },
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                Text(text = "Hello World!")
+                Text(text = text)
             }
         }
     }

@@ -65,7 +65,7 @@ fun tryParseDate(rawDate: String?): LocalDate? {
 }
 
 /**
- * Consider number in milliseconds
+ * Consider number in milliseconds.
  */
 fun Context.formatNumberToHourMin(time: Long?): String? {
     if (time == null || time < 0) return null

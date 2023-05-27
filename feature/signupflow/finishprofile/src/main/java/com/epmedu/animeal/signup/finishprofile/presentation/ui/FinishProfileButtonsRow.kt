@@ -14,9 +14,9 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FinishProfileButtonsRow(
-    modifier: Modifier = Modifier,
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
