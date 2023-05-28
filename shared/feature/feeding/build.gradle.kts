@@ -3,6 +3,7 @@ plugins {
     id("com.android.library")
     id("com.amazonaws.appsync")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
 }
 

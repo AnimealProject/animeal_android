@@ -1,5 +1,6 @@
 package com.epmedu.animeal.favourites.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
@@ -17,6 +18,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.util.Keys
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
@@ -32,6 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class FavouritesViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
+    private val savedStateHandle: SavedStateHandle,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -48,10 +51,16 @@ internal class FavouritesViewModel @Inject constructor(
     private var fetchFeedingsJob: Job? = null
 
     init {
+        restoreSavedFeedingPoint()
         viewModelScope.launch { collectFeedingPoints() }
         viewModelScope.launch { collectPermissionsState() }
         viewModelScope.launch { collectFeedState() }
         viewModelScope.launch { fetchCurrentFeeding() }
+    }
+
+    private fun restoreSavedFeedingPoint() {
+        val savedFeedingPoint: FeedingPointModel? = savedStateHandle[Keys.SAVED_FEEDING_POINT_KEY]
+        savedFeedingPoint?.let { selectFeedingPoint(savedFeedingPoint) }
     }
 
     private suspend fun collectFeedState() {
@@ -93,14 +102,15 @@ internal class FavouritesViewModel @Inject constructor(
     fun handleEvents(event: FavouritesScreenEvent) {
         when (event) {
             is FavouriteChange -> handleFavouriteChange(event)
-            is FeedingPointSelected -> handleFeedingPointSelected(event)
+            is FeedingPointSelected -> selectFeedingPoint(event.feedingPoint)
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
         }
     }
 
-    private fun handleFeedingPointSelected(event: FeedingPointSelected) {
-        updateState { copy(showingFeedingPoint = event.feedingPoint) }
-        fetchFeedings(event.feedingPoint.id)
+    private fun selectFeedingPoint(feedingPoint: FeedingPointModel) {
+        savedStateHandle[Keys.SAVED_FEEDING_POINT_KEY] = feedingPoint
+        updateState { copy(showingFeedingPoint = feedingPoint) }
+        fetchFeedings(feedingPoint.id)
     }
 
     private fun fetchFeedings(feedingPointId: String) {

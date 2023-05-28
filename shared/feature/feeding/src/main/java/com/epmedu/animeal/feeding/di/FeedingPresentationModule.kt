@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feeding.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
@@ -81,6 +82,7 @@ internal object FeedingPresentationModule {
         actionDelegate: ActionDelegate,
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
+        savedStateHandle: SavedStateHandle,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
         getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -94,6 +96,7 @@ internal object FeedingPresentationModule {
         actionDelegate,
         routeHandler,
         errorHandler,
+        savedStateHandle,
         getAllFeedingPointsUseCase,
         getFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase,
