@@ -126,8 +126,7 @@ internal class FinishProfileViewModel @Inject constructor(
                 onSuccess = {
                     clearProfileUseCase()
                     navigateBack()
-                },
-                onError = {}
+                }
             )
         }
     }

@@ -24,9 +24,6 @@ internal class AccountViewModel @Inject constructor(
                 onSuccess = {
                     clearProfileUseCase()
                     viewModelScope.launch { sendEvent(NavigateToOnboarding) }
-                },
-                onError = {
-                    // TODO clarify how to handle it
                 }
             )
         }

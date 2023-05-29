@@ -54,17 +54,7 @@ internal class AuthAPIImpl : AuthAPI {
                     when (session) {
                         is AWSCognitoAuthSession -> {
                             if (session.isExpired) {
-                                signOut(
-                                    object : AuthRequestHandler {
-                                        override fun onSuccess(result: Any?) {
-                                            resume(false)
-                                        }
-
-                                        override fun onError(exception: Exception) {
-                                            resume(false)
-                                        }
-                                    }
-                                )
+                                signOut { resume(false) }
                             } else {
                                 resume(session.isSignedInWithoutErrors)
                             }
@@ -154,13 +144,12 @@ internal class AuthAPIImpl : AuthAPI {
     }
 
     override fun signOut(
-        handler: AuthRequestHandler
+        onSuccess: () -> Unit,
     ) {
-        Amplify.Auth.signOut(
-            handler::onSuccess
-        )
+        Amplify.Auth.signOut {
+            onSuccess()
+        }
     }
-
     private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
         Amplify.Auth.resendUserAttributeConfirmationCode(
             AuthUserAttributeKey.phoneNumber(),

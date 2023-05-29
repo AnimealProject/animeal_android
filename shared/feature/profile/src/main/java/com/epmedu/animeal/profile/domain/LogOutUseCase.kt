@@ -11,19 +11,10 @@ class LogOutUseCase(
 
     suspend operator fun invoke(
         onSuccess: () -> Unit,
-        onError: (exception: Exception) -> Unit
     ) {
-        val requestHandler = object : AuthRequestHandler {
-            override fun onSuccess(result: Any?) {
-                routerRepository.setOnboardingAsSignUpStartDestination()
-                onSuccess()
-            }
-
-            override fun onError(exception: Exception) {
-                onError(exception)
-            }
+        profileRepository.logOut {
+            routerRepository.setOnboardingAsSignUpStartDestination()
+            onSuccess()
         }
-
-        profileRepository.logOut(requestHandler)
     }
 }
