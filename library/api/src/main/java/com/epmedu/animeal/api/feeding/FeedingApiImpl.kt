@@ -7,8 +7,7 @@ import SearchFeedingHistoriesQuery
 import SearchFeedingsQuery
 import StartFeedingMutation
 import com.amplifyframework.datastore.generated.model.Feeding
-import com.epmedu.animeal.api.extensions.getModelList
-import com.epmedu.animeal.api.extensions.launch
+import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 import type.SearchableFeedingFilterInput
@@ -16,14 +15,19 @@ import type.SearchableFeedingHistoryFilterInput
 import type.SearchableIDFilterInput
 import type.SearchableStringFilterInput
 
-internal class FeedingApiImpl : FeedingApi {
+internal class FeedingApiImpl(
+    private val animealApi: AnimealApi
+) : FeedingApi {
 
     override fun getUserFeedings(userId: String): Flow<List<Feeding>> {
-        return getModelList(predicate = Feeding.USER_ID.eq(userId))
+        return animealApi.getModelList(
+            predicate = Feeding.USER_ID.eq(userId),
+            modelClass = Feeding::class.java
+        )
     }
 
     override suspend fun getFeedingsInProgress(feedingPointId: String): ApiResult<SearchFeedingsQuery.Data> {
-        return SearchFeedingsQuery.builder()
+        val query = SearchFeedingsQuery.builder()
             .filter(
                 SearchableFeedingFilterInput.builder()
                     .feedingPointFeedingsId(
@@ -34,11 +38,14 @@ internal class FeedingApiImpl : FeedingApi {
                     .build()
             )
             .build()
-            .launch()
+        return animealApi.launchQuery(
+            query = query,
+            responseClass = SearchFeedingsQuery.Data::class.java
+        )
     }
 
     override suspend fun getApprovedFeedingHistories(feedingPointId: String): ApiResult<SearchFeedingHistoriesQuery.Data> {
-        return SearchFeedingHistoriesQuery.builder()
+        val query = SearchFeedingHistoriesQuery.builder()
             .filter(
                 SearchableFeedingHistoryFilterInput.builder()
                     .status(
@@ -54,33 +61,41 @@ internal class FeedingApiImpl : FeedingApi {
                     .build()
             )
             .build()
-            .launch()
+        return animealApi.launchQuery(
+            query = query,
+            responseClass = SearchFeedingHistoriesQuery.Data::class.java
+        )
     }
 
     override suspend fun startFeeding(feedingPointId: String): ApiResult<String> {
-        return StartFeedingMutation(feedingPointId).launch()
+        return animealApi.launchMutation(
+            mutation = StartFeedingMutation(feedingPointId),
+            responseClass = String::class.java
+        )
     }
 
     override suspend fun cancelFeeding(feedingPointId: String): ApiResult<String> {
-        return CancelFeedingMutation(
-            feedingPointId,
-            CANCEL_FEEDING_REASON
-        ).launch()
+        return animealApi.launchMutation(
+            mutation = CancelFeedingMutation(feedingPointId, CANCEL_FEEDING_REASON),
+            responseClass = String::class.java
+        )
     }
 
     override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
-        return RejectFeedingMutation(
-            feedingPointId,
-            reason,
-            null
-        ).launch()
+        return animealApi.launchMutation(
+            mutation = RejectFeedingMutation(feedingPointId, reason, null),
+            responseClass = String::class.java
+        )
     }
 
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>
     ): ApiResult<String> {
-        return FinishFeedingMutation(feedingPointId, images).launch()
+        return animealApi.launchMutation(
+            mutation = FinishFeedingMutation(feedingPointId, images),
+            responseClass = String::class.java
+        )
     }
 
     private companion object {
