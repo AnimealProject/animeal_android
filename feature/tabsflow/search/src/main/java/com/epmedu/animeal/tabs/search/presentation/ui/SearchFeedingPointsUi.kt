@@ -18,8 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.presentation.model.toFeedStatus
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.search.SearchView
@@ -30,7 +29,7 @@ import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 
 @Composable
 fun SearchFeedingPointsUi(
-    feedingPoints: List<FeedingPoint>,
+    feedingPoints: List<FeedingPointModel>,
     query: String,
     animalType: AnimalType,
     onEvent: (SearchScreenEvent) -> Unit,
@@ -101,7 +100,7 @@ private fun LazyListScope.renderGroupedFeedingPoints(
                 group.points.forEach { feedingPoint ->
                     FeedingPointItem(
                         title = feedingPoint.title,
-                        status = feedingPoint.animalStatus.toFeedStatus(),
+                        status = feedingPoint.feedStatus,
                         isFavourite = feedingPoint.isFavourite,
                         onFavouriteChange = { isFavourite ->
                             onEvent(
@@ -111,7 +110,7 @@ private fun LazyListScope.renderGroupedFeedingPoints(
                                 )
                             )
                         },
-                        imageUrl = feedingPoint.images[0],
+                        imageUrl = feedingPoint.image,
                         onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) }
                     )
                 }
