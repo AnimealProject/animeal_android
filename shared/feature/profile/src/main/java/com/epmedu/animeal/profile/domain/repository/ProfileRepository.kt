@@ -9,7 +9,7 @@ interface ProfileRepository {
 
     fun saveProfile(profile: Profile): Flow<Unit>
 
-    suspend fun logOut(onSuccess: () -> Unit)
+    suspend fun logOut()
 
     suspend fun clearProfile()
 

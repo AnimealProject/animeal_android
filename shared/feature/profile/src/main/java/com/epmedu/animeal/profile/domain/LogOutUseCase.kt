@@ -8,12 +8,8 @@ class LogOutUseCase(
     private val routerRepository: RouterRepository
 ) {
 
-    suspend operator fun invoke(
-        onSuccess: () -> Unit,
-    ) {
-        profileRepository.logOut {
-            routerRepository.setOnboardingAsSignUpStartDestination()
-            onSuccess()
-        }
+    suspend operator fun invoke() {
+        profileRepository.logOut()
+        routerRepository.setOnboardingAsSignUpStartDestination()
     }
 }

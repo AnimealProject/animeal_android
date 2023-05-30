@@ -10,8 +10,14 @@ import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 internal class AuthAPIImpl : AuthAPI {
 
@@ -48,13 +54,17 @@ internal class AuthAPIImpl : AuthAPI {
      * Wherever this method is used for Facebook flow, verify that next steps will be ready to handle
      * NotAuthorizedException due to possible refresh token expiration */
     override suspend fun isSignedIn(): Boolean {
+        val scope = CoroutineScope(coroutineContext)
         return suspendCancellableCoroutine {
             Amplify.Auth.fetchAuthSession(
                 { session ->
                     when (session) {
                         is AWSCognitoAuthSession -> {
                             if (session.isExpired) {
-                                signOut { resume(false) }
+                                scope.launch {
+                                    signOut()
+                                    resume(false)
+                                }
                             } else {
                                 resume(session.isSignedInWithoutErrors)
                             }
@@ -143,11 +153,9 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    override fun signOut(
-        onSuccess: () -> Unit,
-    ) {
+    override suspend fun signOut() = suspendCancellableCoroutine {
         Amplify.Auth.signOut {
-            onSuccess()
+            resume(Unit)
         }
     }
     private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {

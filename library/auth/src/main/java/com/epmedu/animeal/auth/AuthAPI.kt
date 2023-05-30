@@ -28,5 +28,5 @@ interface AuthAPI {
         phoneNumber: String,
         handler: AuthRequestHandler,
     )
-    fun signOut(onSuccess: () -> Unit)
+    suspend fun signOut()
 }

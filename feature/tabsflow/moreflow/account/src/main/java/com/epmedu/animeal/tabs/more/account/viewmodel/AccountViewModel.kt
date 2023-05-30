@@ -20,12 +20,9 @@ internal class AccountViewModel @Inject constructor(
 
     internal fun logout() {
         viewModelScope.launch {
-            logOutUseCase(
-                onSuccess = {
-                    clearProfileUseCase()
-                    viewModelScope.launch { sendEvent(NavigateToOnboarding) }
-                }
-            )
+            logOutUseCase()
+            clearProfileUseCase()
+            viewModelScope.launch { sendEvent(NavigateToOnboarding) }
         }
     }
 }

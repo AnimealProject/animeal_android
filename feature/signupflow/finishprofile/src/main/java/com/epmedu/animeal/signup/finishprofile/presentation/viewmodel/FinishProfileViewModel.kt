@@ -122,12 +122,9 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun logout() {
         viewModelScope.launch {
-            logOutUseCase(
-                onSuccess = {
-                    clearProfileUseCase()
-                    navigateBack()
-                }
-            )
+            logOutUseCase()
+            clearProfileUseCase()
+            navigateBack()
         }
     }
 

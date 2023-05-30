@@ -60,10 +60,8 @@ internal class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logOut(
-        onSuccess: () -> Unit,
-    ) {
-        authAPI.signOut(onSuccess)
+    override suspend fun logOut() {
+        authAPI.signOut()
     }
 
     override suspend fun clearProfile() {
