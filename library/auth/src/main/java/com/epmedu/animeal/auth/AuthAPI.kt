@@ -1,7 +1,5 @@
 package com.epmedu.animeal.auth
 
-import com.amplifyframework.auth.result.AuthSignInResult
-import com.amplifyframework.auth.result.AuthSignUpResult
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 
 interface AuthAPI {

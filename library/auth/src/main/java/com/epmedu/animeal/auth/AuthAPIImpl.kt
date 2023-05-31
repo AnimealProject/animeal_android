@@ -8,19 +8,14 @@ import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
-import com.amplifyframework.auth.result.AuthSignInResult
-import com.amplifyframework.auth.result.AuthSignUpResult
 import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 internal class AuthAPIImpl : AuthAPI {
 
@@ -87,7 +82,7 @@ internal class AuthAPIImpl : AuthAPI {
     override suspend fun signUp(
         phone: String,
         password: String
-    ) : ApiResult<Unit> {
+    ): ApiResult<Unit> {
         val attrs = mapOf(
             AuthUserAttributeKey.phoneNumber() to phone,
         )
@@ -112,7 +107,7 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun signIn(
         phoneNumber: String
-    ) : ApiResult<Unit> {
+    ): ApiResult<Unit> {
         val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
             .authFlowType(AuthFlowType.CUSTOM_AUTH)
             .build()
@@ -169,6 +164,7 @@ internal class AuthAPIImpl : AuthAPI {
             resume(Unit)
         }
     }
+
     private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
         Amplify.Auth.resendUserAttributeConfirmationCode(
             AuthUserAttributeKey.phoneNumber(),
