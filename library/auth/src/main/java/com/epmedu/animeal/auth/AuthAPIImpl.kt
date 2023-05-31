@@ -8,7 +8,10 @@ import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
+import com.amplifyframework.auth.result.AuthSignInResult
+import com.amplifyframework.auth.result.AuthSignUpResult
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
@@ -81,11 +84,10 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    override fun signUp(
+    override suspend fun signUp(
         phone: String,
-        password: String,
-        handler: AuthRequestHandler,
-    ) {
+        password: String
+    ) : ApiResult<Unit> {
         val attrs = mapOf(
             AuthUserAttributeKey.phoneNumber() to phone,
         )
@@ -93,31 +95,40 @@ internal class AuthAPIImpl : AuthAPI {
         val options = AuthSignUpOptions.builder()
             .userAttributes(attrs.map { AuthUserAttribute(it.key, it.value) })
             .build()
-
-        Amplify.Auth.signUp(
-            phone,
-            password,
-            options,
-            handler::onSuccess,
-            handler::onError,
-        )
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signUp(
+                phone,
+                password,
+                options,
+                {
+                    resume(ApiResult.Success(Unit))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 
-    override fun signIn(
-        phoneNumber: String,
-        handler: AuthRequestHandler,
-    ) {
+    override suspend fun signIn(
+        phoneNumber: String
+    ) : ApiResult<Unit> {
         val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
             .authFlowType(AuthFlowType.CUSTOM_AUTH)
             .build()
-
-        Amplify.Auth.signIn(
-            phoneNumber,
-            "",
-            authSignInOptions,
-            handler::onSuccess,
-            handler::onError,
-        )
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signIn(
+                phoneNumber,
+                "",
+                authSignInOptions,
+                {
+                    resume(ApiResult.Success(Unit))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 
     override fun confirmSignIn(
@@ -143,12 +154,12 @@ internal class AuthAPIImpl : AuthAPI {
         )
     }
 
-    override fun sendCode(
+    override suspend fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     ) {
         when (authenticationType) {
-            AuthenticationType.Mobile -> signIn(phoneNumber, handler)
+            AuthenticationType.Mobile -> signIn(phoneNumber)
             is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
         }
     }

@@ -1,47 +1,41 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
 import com.amplifyframework.auth.cognito.exceptions.service.UsernameExistsException
-import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 
 class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
-    operator fun invoke(
+    suspend operator fun invoke(
         phone: String,
         password: String,
         onSuccess: () -> Unit,
         onError: () -> Unit,
     ) {
-        val requestHandler = object : AuthRequestHandler {
-            override fun onSuccess(result: Any?) {
+        when (val result = repository.signUp(phone, password)) {
+            is ApiResult.Success -> {
                 signIn(phone, onSuccess, onError)
             }
-
-            override fun onError(exception: Exception) {
-                if (exception is UsernameExistsException) {
+            is ApiResult.Failure -> {
+                if (result.error is UsernameExistsException) {
                     signIn(phone, onSuccess, onError)
                 } else {
                     onError()
                 }
             }
         }
-
-        repository.signUp(phone, password, requestHandler)
     }
 
-    private fun signIn(
+    private suspend fun signIn(
         phone: String,
         onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
-        val signInResult = object : AuthRequestHandler {
-            override fun onSuccess(result: Any?) {
+        when (repository.signIn(phone)) {
+            is ApiResult.Success -> {
                 onSuccess()
             }
-
-            override fun onError(exception: Exception) {
+            is ApiResult.Failure -> {
                 onError()
             }
         }
-
-        repository.signIn(phone, signInResult)
     }
 }

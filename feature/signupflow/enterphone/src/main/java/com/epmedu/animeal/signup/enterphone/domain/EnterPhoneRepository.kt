@@ -1,6 +1,6 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
-import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.profile.domain.model.Region
 
 interface EnterPhoneRepository {
@@ -10,14 +10,12 @@ interface EnterPhoneRepository {
         phoneNumber: String
     )
 
-    fun signUp(
+    suspend fun signUp(
         phone: String,
-        password: String,
-        requestHandler: AuthRequestHandler,
-    )
+        password: String
+    ): ApiResult<Unit>
 
-    fun signIn(
-        phoneNumber: String,
-        requestHandler: AuthRequestHandler,
-    )
+    suspend fun signIn(
+        phoneNumber: String
+    ): ApiResult<Unit>
 }

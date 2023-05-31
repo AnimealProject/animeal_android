@@ -1,21 +1,23 @@
 package com.epmedu.animeal.auth
 
+import com.amplifyframework.auth.result.AuthSignInResult
+import com.amplifyframework.auth.result.AuthSignUpResult
+import com.epmedu.animeal.common.data.wrapper.ApiResult
+
 interface AuthAPI {
 
     var authenticationType: AuthenticationType
 
     suspend fun getCurrentUserId(): String
     suspend fun isSignedIn(): Boolean
-    fun signUp(
+    suspend fun signUp(
         phone: String,
-        password: String,
-        handler: AuthRequestHandler,
-    )
+        password: String
+    ): ApiResult<Unit>
 
-    fun signIn(
-        phoneNumber: String,
-        handler: AuthRequestHandler,
-    )
+    suspend fun signIn(
+        phoneNumber: String
+    ): ApiResult<Unit>
     fun confirmSignIn(
         code: String,
         handler: AuthRequestHandler
@@ -24,7 +26,7 @@ interface AuthAPI {
         code: String,
         handler: AuthRequestHandler
     )
-    fun sendCode(
+    suspend fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     )
