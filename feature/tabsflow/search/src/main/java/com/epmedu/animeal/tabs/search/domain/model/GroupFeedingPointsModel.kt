@@ -1,8 +1,8 @@
 package com.epmedu.animeal.tabs.search.domain.model
 
-import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 
 data class GroupFeedingPointsModel(
     val title: String,
-    val points: List<FeedingPoint>
+    val points: List<FeedingPointModel>
 )

@@ -45,7 +45,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
@@ -89,7 +88,6 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    @Suppress("ComplexMethod")
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
             is RouteEvent -> handleRouteEvent(event = event)

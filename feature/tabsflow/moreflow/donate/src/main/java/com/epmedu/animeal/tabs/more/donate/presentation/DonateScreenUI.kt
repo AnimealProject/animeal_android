@@ -9,10 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.extensions.copyText
 import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
@@ -26,17 +24,8 @@ import com.epmedu.animeal.tabs.more.donate.util.donateInformationStubList
 @Composable
 internal fun DonateScreenUI(
     state: DonateState,
-    onEvent: (event: DonateScreenEvent) -> Unit,
     onBack: () -> Unit,
 ) {
-    state.donationNumberToCopy?.let { number ->
-        LocalContext.current.copyText(
-            text = number,
-            toastText = R.string.donation_copy_toast
-        )
-        onEvent(DonateScreenEvent.NumberIsCopied)
-    }
-
     LazyColumn(
         verticalArrangement = Arrangement.LastElementBottom,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,7 +38,6 @@ internal fun DonateScreenUI(
             DonateListItem(
                 modifier = Modifier.padding(horizontal = 26.dp),
                 donateInformation = donateInformation,
-                onEvent = onEvent,
             )
             HeightSpacer(height = 32.dp)
         }
@@ -68,7 +56,6 @@ internal fun DonateScreenUI(
 private fun DonateScreenPreview() {
     AnimealTheme {
         DonateScreenUI(
-            onEvent = {},
             onBack = {},
             state = DonateState(donationInformation = donateInformationStubList)
         )

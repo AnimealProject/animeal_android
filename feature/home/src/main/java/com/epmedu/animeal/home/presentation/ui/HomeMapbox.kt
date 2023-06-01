@@ -44,7 +44,6 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
 
 @Composable
-@Suppress("LongParameterList")
 internal fun HomeMapbox(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
@@ -128,7 +127,9 @@ private fun ShowUserCurrentLocation(
     ) {
         if (state.permissionsState.geolocationPermissionStatus == PermissionStatus.Granted &&
             state.gpsSettingState == GpsSettingState.Enabled
-        ) mapboxMapView.showCurrentLocation(state.locationState.location)
+        ) {
+            mapboxMapView.showCurrentLocation(state.locationState.location)
+        }
     }
 }
 
@@ -175,7 +176,9 @@ private fun MapboxMap(
 
     LaunchedEffect(key1 = state.locationState) {
         when {
-            state.locationState.isUndefined -> mapboxMapView.setLocation(state.locationState.location)
+            state.locationState.isUndefined -> {
+                mapboxMapView.setLocation(state.locationState.location)
+            }
             state.locationState.isInitial -> {
                 mapboxMapView.setLocation(state.locationState.location)
                 onInitialLocationDisplay()

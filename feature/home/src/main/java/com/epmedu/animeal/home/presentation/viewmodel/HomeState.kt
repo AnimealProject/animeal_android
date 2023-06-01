@@ -23,7 +23,7 @@ data class HomeState(
     val locationState: LocationState = LocationState.UndefinedLocation(MapLocation.Tbilisi),
     val feedState: FeedState = FeedState(),
 
-    /** Current state of gms service */
+    /** Current state of gms service. */
     val gpsSettingState: GpsSettingState = GpsSettingState.Disabled,
 
     val cancellationRequestState: CancellationRequestState = CancellationRequestState.Dismissed,

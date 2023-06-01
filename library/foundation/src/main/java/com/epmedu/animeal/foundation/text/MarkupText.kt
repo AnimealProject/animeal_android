@@ -16,7 +16,6 @@ import com.epmedu.animeal.foundation.text.parser.UnorderedListParser
 import com.ireward.htmlcompose.HtmlText
 
 @Composable
-@Suppress("LongParameterList")
 fun MarkupText(
     text: String,
     modifier: Modifier = Modifier,
@@ -32,7 +31,7 @@ fun MarkupText(
         textDecoration = TextDecoration.Underline
     )
 ) {
-    /** HtmlText doesn't add dots and numbers for list items, so that should be done manually */
+    /** HtmlText doesn't add dots and numbers for list items, so that should be done manually. */
     var content = UnorderedListParser.parse(text)
     content = OrderedListParser.parse(content)
 

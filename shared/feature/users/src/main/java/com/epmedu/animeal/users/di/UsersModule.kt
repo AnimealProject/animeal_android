@@ -1,5 +1,6 @@
 package com.epmedu.animeal.users.di
 
+import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.users.data.api.UsersApi
 import com.epmedu.animeal.users.data.api.UsersApiImpl
 import com.epmedu.animeal.users.data.repository.UsersRepositoryImpl
@@ -22,5 +23,7 @@ class UsersModule {
 
     @Singleton
     @Provides
-    internal fun providesUsersApi(): UsersApi = UsersApiImpl()
+    internal fun providesUsersApi(
+        animealApi: AnimealApi
+    ): UsersApi = UsersApiImpl(animealApi)
 }

@@ -1,9 +1,3 @@
-@file:Suppress(
-    "ComplexMethod",
-    "LongMethod",
-    "ReturnCount"
-)
-
 package com.epmedu.animeal.profile.domain.model
 
 import androidx.emoji2.text.EmojiCompat

@@ -27,6 +27,7 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
@@ -113,9 +114,7 @@ private fun ScreenScaffold(
         sheetContent = {
             state.showingFeedingPoint?.let { feedingPoint ->
                 FeedingPointSheetContent(
-                    feedingPoint = FeedingPointModel(
-                        feedingPoint
-                    ),
+                    feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
                     isShowOnMapVisible = true,
@@ -136,7 +135,7 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.animalStatus == AnimalState.RED,
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED,
                 onClick = {
                     when (state.permissionsState.cameraPermissionStatus) {
                         PermissionStatus.Granted -> isFeedingDialogShowing.value = true

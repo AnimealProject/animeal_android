@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package com.epmedu.animeal.extensions
 
 import android.app.Activity
@@ -51,7 +49,7 @@ fun Context.launchGpsSettings() {
     startActivity(intent)
 }
 
-/** Workaround method to request GPS location using dialog provided by Google */
+/** Workaround method to request GPS location using dialog provided by Google. */
 fun Context.requestGpsByDialog(showDialog: ((PendingIntent) -> Unit)? = null) {
     val locationRequest = LocationRequest.create().apply {
         interval = ONE_SECOND_INTERVAL

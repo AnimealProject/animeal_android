@@ -31,7 +31,6 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
-@Suppress("LongParameterList")
 @Composable
 fun PhoneNumberInput(
     value: String,
@@ -82,12 +81,14 @@ fun PhoneNumberInput(
                 )
             }
         },
-        visualTransformation = if (useNumberFormatter)GePhoneFormatTransformation else VisualTransformation.None,
+        visualTransformation = if (useNumberFormatter) GePhoneFormatTransformation else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         keyboardActions = KeyboardActions(onDone = onDone)
     )
 }
+
 internal const val GE_PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
+
 object GePhoneFormatTransformation : VisualTransformation {
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -109,24 +110,27 @@ object GePhoneFormatTransformation : VisualTransformation {
             GE_PHONE_NUMBER_FORMAT.takeLast(GE_PHONE_NUMBER_FORMAT.length - length)
             toAnnotatedString()
         }
-        @Suppress("ReturnCount")
         return TransformedText(
             text = annotatedString,
             offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
-                    if (offset <= 2) return offset
-                    if (offset <= 4) return offset + 1
-                    if (offset <= 6) return offset + 2
-                    if (offset <= 9) return offset + 3
-                    return 12
+                    return when {
+                        offset <= 2 -> offset
+                        offset <= 4 -> offset + 1
+                        offset <= 6 -> offset + 2
+                        offset <= 9 -> offset + 3
+                        else -> 12
+                    }
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    if (offset <= 2) return offset
-                    if (offset <= 4) return offset - 1
-                    if (offset <= 8) return offset - 2
-                    if (offset <= 10) return offset - 3
-                    return 9
+                    return when {
+                        offset <= 2 -> offset
+                        offset <= 4 -> offset - 1
+                        offset <= 8 -> offset - 2
+                        offset <= 10 -> offset - 3
+                        else -> 9
+                    }
                 }
             }
         )

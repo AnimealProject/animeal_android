@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-@Suppress("LongMethod", "LongParameterList", "ComplexMethod")
+@Suppress("LongMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
@@ -123,7 +123,7 @@ internal fun HomeScreenUI(
                 onFeedingEvent(FeedingEvent.Expired)
             }
 
-            else -> Unit
+            else -> {}
         }
     }
 
@@ -304,26 +304,30 @@ private fun OnState(
             }
         }
 
-        state.cancellationRequestState is CancellationRequestState.Showing -> FeedingCancellationRequestDialog(
-            onConfirm = {
-                onScreenEvent(TimerCancellationEvent.CancellationAccepted)
-            },
-            onDismiss = {
-                onScreenEvent(TimerCancellationEvent.CancellationDismissed)
-            }
-        )
+        state.cancellationRequestState is CancellationRequestState.Showing -> {
+            FeedingCancellationRequestDialog(
+                onConfirm = {
+                    onScreenEvent(TimerCancellationEvent.CancellationAccepted)
+                },
+                onDismiss = {
+                    onScreenEvent(TimerCancellationEvent.CancellationDismissed)
+                }
+            )
+        }
 
-        state.deletePhotoItem != null -> DeletePhotoDialog(
-            state.deletePhotoItem,
-            onConfirm = {
-                onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
-            },
-            onDismiss = {
-                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
-            }
-        )
+        state.deletePhotoItem != null -> {
+            DeletePhotoDialog(
+                state.deletePhotoItem,
+                onConfirm = {
+                    onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
+                },
+                onDismiss = {
+                    onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
+                }
+            )
+        }
 
-        else -> Unit
+        else -> { }
     }
 }
 

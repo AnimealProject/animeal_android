@@ -10,8 +10,8 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun GeoLocationFloatingActionButton(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) = FloatingActionButton(
     modifier = modifier,
     onClick = onClick,

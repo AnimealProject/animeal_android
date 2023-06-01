@@ -11,10 +11,10 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 fun AnimealShortButton(
-    modifier: Modifier = Modifier,
     text: String,
-    enabled: Boolean = true,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     AnimealButton(
         modifier = modifier.width(208.dp),
