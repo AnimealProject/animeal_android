@@ -2,9 +2,11 @@ package com.epmedu.animeal.signup.entercode.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.profile.data.util.phoneNumber
 import com.epmedu.animeal.profile.data.util.phoneNumberRegion
 import com.epmedu.animeal.profile.domain.model.Region
@@ -35,11 +37,10 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
         authAPI.sendCode(phoneNumberWithPrefix.first(), requestHandler)
     }
 
-    override fun confirmSignIn(
-        code: List<Int?>,
-        requestHandler: AuthRequestHandler
-    ) {
-        authAPI.confirmSignIn(code.joinToString(""), requestHandler)
+    override suspend fun confirmSignIn(
+        code: List<Int?>
+    ): ApiResult<AuthSignInResult> {
+        return authAPI.confirmSignIn(code.joinToString(""))
     }
 
     override fun confirmResendCode(

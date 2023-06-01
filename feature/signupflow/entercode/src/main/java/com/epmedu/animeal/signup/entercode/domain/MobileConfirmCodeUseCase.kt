@@ -1,30 +1,27 @@
 package com.epmedu.animeal.signup.entercode.domain
 
-import com.amplifyframework.auth.result.AuthSignInResult
-import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 
 class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
 
-    operator fun invoke(
+    suspend operator fun invoke(
         code: List<Int?>,
         onSuccess: () -> Unit,
         onError: (exception: Exception) -> Unit,
     ) {
-        val requestHandler = object : AuthRequestHandler {
-            override fun onSuccess(result: Any?) {
-                val authResult = result as AuthSignInResult
+        when (val result = repository.confirmSignIn(code)) {
+            is ApiResult.Success -> {
+                val authResult = result.data
                 when {
                     authResult.isSignedIn -> onSuccess()
                     else -> onError(InvalidCodeError())
                 }
             }
 
-            override fun onError(exception: Exception) {
-                onError(exception)
+            is ApiResult.Failure -> {
+                onError(result.error as Exception)
             }
         }
-
-        repository.confirmSignIn(code, requestHandler)
     }
 }
 

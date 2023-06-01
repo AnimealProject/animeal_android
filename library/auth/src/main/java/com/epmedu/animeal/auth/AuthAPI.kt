@@ -1,5 +1,6 @@
 package com.epmedu.animeal.auth
 
+import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 
 interface AuthAPI {
@@ -16,17 +17,20 @@ interface AuthAPI {
     suspend fun signIn(
         phoneNumber: String
     ): ApiResult<Unit>
-    fun confirmSignIn(
-        code: String,
-        handler: AuthRequestHandler
-    )
+
+    suspend fun confirmSignIn(
+        code: String
+    ): ApiResult<AuthSignInResult>
+
     fun confirmResendCode(
         code: String,
         handler: AuthRequestHandler
     )
+
     suspend fun sendCode(
         phoneNumber: String,
         handler: AuthRequestHandler,
     )
+
     suspend fun signOut()
 }
