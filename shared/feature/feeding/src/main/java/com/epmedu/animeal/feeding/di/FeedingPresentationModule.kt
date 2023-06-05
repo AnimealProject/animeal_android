@@ -2,6 +2,7 @@ package com.epmedu.animeal.feeding.di
 
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
@@ -35,6 +36,10 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object FeedingPresentationModule {
+
+    @ViewModelScoped
+    @Provides
+    fun providesFeedStateDelegate(): StateDelegate<FeedState> = DefaultStateDelegate(FeedState())
 
     @ViewModelScoped
     @Provides

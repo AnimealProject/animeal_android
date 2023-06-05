@@ -5,15 +5,12 @@ import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.data.repository.FavouriteRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingPointRepositoryImpl
 import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.users.domain.UsersRepository
 import dagger.Module
 import dagger.Provides
@@ -25,11 +22,6 @@ import kotlinx.coroutines.Dispatchers
 @Module
 @InstallIn(SingletonComponent::class)
 object FeedDataModule {
-
-    @Singleton
-    @Provides
-    fun providesFeedingPointStateDelegate(): StateDelegate<FeedState> =
-        DefaultStateDelegate(FeedState())
 
     @Singleton
     @Provides
