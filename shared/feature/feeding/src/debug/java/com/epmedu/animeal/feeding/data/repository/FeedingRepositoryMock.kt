@@ -8,7 +8,6 @@ import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 internal class FeedingRepositoryMock : FeedingRepository {
 
@@ -43,5 +42,6 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return ActionResult.Success
     }
 
-    override fun getFeedStateFlow(): MutableSharedFlow<DomainFeedState> = MutableSharedFlow()
+    override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {}
+
 }

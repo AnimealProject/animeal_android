@@ -6,7 +6,6 @@ import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 interface FeedingRepository {
 
@@ -23,5 +22,5 @@ interface FeedingRepository {
     suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult
-    fun getFeedStateFlow(): MutableSharedFlow<DomainFeedState>
+    suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
 }

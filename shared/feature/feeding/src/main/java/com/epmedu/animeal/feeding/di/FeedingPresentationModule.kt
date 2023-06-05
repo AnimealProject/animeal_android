@@ -5,14 +5,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
-import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
-import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
@@ -20,6 +17,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.DefaultFeedingHandler
@@ -40,12 +38,6 @@ internal object FeedingPresentationModule {
 
     @ViewModelScoped
     @Provides
-    fun providesFetchFeedingPointByIdUseCase(
-        feedingPointRepository: FeedingPointRepository
-    ): FetchFeedingPointByIdUseCase = FetchFeedingPointByIdUseCase(feedingPointRepository)
-
-    @ViewModelScoped
-    @Provides
     fun providesFeedingHandler(
         stateDelegate: StateDelegate<FeedState>,
         actionDelegate: ActionDelegate,
@@ -54,8 +46,8 @@ internal object FeedingPresentationModule {
         feedingPointHandler: FeedingPointHandler,
         timerHandler: TimerHandler,
         fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
-        fetchFeedingPointByIdUseCase: FetchFeedingPointByIdUseCase,
-        getFeedStateUseCase: GetFeedStateUseCase,
+        getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
+        updateFeedStateUseCase: UpdateFeedStateUseCase,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
@@ -68,8 +60,8 @@ internal object FeedingPresentationModule {
         feedingPointHandler,
         timerHandler,
         fetchCurrentFeedingPointUseCase,
-        fetchFeedingPointByIdUseCase,
-        getFeedStateUseCase,
+        getFeedingPointByIdUseCase,
+        updateFeedStateUseCase,
         startFeedingUseCase,
         cancelFeedingUseCase,
         rejectFeedingUseCase,

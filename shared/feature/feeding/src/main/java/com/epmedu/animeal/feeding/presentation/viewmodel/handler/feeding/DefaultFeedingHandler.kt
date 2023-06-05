@@ -4,19 +4,19 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
-import com.epmedu.animeal.feeding.data.mapper.toDomainFeedState
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
-import com.epmedu.animeal.feeding.domain.usecase.FetchFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
+import com.epmedu.animeal.feeding.presentation.mapper.toDomainFeedState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Suppress("LongParameterList", "TooManyFunctions")
+@Suppress("LongParameterList")
 class DefaultFeedingHandler(
     stateDelegate: StateDelegate<FeedState>,
     actionDelegate: ActionDelegate,
@@ -39,8 +39,8 @@ class DefaultFeedingHandler(
     feedingPointHandler: FeedingPointHandler,
     timerHandler: TimerHandler,
     private val fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
-    private val fetchFeedingPointByIdUseCase: FetchFeedingPointByIdUseCase,
-    private var getFeedStateUseCase: GetFeedStateUseCase,
+    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
+    private var updateFeedStateUseCase: UpdateFeedStateUseCase,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
@@ -75,7 +75,7 @@ class DefaultFeedingHandler(
         }
         stateFlow.onEach {
             // updates state flow at repository
-            getFeedStateUseCase().emit(it.toDomainFeedState())
+            updateFeedStateUseCase(it.toDomainFeedState())
         }.launchIn(this)
     }
 
@@ -89,7 +89,7 @@ class DefaultFeedingHandler(
     }
 
     private suspend fun startFeeding(id: String) {
-        val feedingPoint = fetchFeedingPointByIdUseCase(id)
+        val feedingPoint = getFeedingPointByIdUseCase(id)
         updateState {
             copy(
                 feedPoint = FeedingPointModel(feedingPoint)

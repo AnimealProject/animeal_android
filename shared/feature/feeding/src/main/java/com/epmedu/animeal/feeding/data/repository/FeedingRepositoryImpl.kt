@@ -33,7 +33,10 @@ internal class FeedingRepositoryImpl(
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
 
-    override fun getFeedStateFlow() = MutableSharedFlow<DomainFeedState>()
+    private val _domainFeedState = MutableSharedFlow<DomainFeedState>()
+    override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
+        _domainFeedState.emit(newFeedState)
+    }
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),

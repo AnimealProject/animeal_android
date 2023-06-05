@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feeding.data.mapper
+package com.epmedu.animeal.feeding.presentation.mapper
 
 import com.epmedu.animeal.feeding.domain.model.DomainFeedState
 import com.epmedu.animeal.feeding.domain.model.DomainFeedingConfirmationState
