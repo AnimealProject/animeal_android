@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.feeding.domain.model.DomainFeedState
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
@@ -40,4 +41,7 @@ internal class FeedingRepositoryMock : FeedingRepository {
     ): ActionResult {
         return ActionResult.Success
     }
+
+    override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {}
+
 }

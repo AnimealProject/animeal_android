@@ -25,6 +25,7 @@ fun FavouritesScreen() {
         state = state,
         bottomSheetState = bottomSheetState,
         onEvent = viewModel::handleEvents,
+        onFeedingEvent = viewModel::handleFeedingEvent,
         onPermissionsEvent = viewModel::handlePermissionsEvent
     )
     if (state.showingFeedingPoint != null) {

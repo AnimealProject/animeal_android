@@ -9,8 +9,10 @@ import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseC
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
@@ -38,10 +40,12 @@ class SearchViewModel @Inject constructor(
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val feedingHandler: FeedingHandler,
     private val permissionsHandler: PermissionsHandler,
 ) : ViewModel(),
     StateDelegate<SearchState> by DefaultStateDelegate(initialState = SearchState()),
     PermissionsHandler by permissionsHandler,
+    FeedingHandler by feedingHandler,
     ActionDelegate by actionDelegate {
 
     private var fetchFeedingsJob: Job? = null
@@ -49,6 +53,15 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch { collectFeedingPoints() }
         viewModelScope.launch { collectPermissionsState() }
+        viewModelScope.launch {
+            feedingStateFlow.collectLatest { feedingState ->
+                updateState {
+                    copy(
+                        feedState = feedingState
+                    )
+                }
+            }
+        }
     }
 
     private suspend fun collectFeedingPoints() {
@@ -99,6 +112,10 @@ class SearchViewModel @Inject constructor(
 
     fun handlePermissionsEvent(event: PermissionsEvent) {
         viewModelScope.handlePermissionEvent(event)
+    }
+
+    fun handleFeedingEvent(event: FeedingEvent) {
+        viewModelScope.handleFeedingEvent(event)
     }
 
     private fun handleFeedingPointSelected(event: FeedingPointSelected) {

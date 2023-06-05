@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -36,6 +38,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
@@ -54,6 +57,7 @@ internal fun SearchScreenUi(
     state: SearchState,
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (SearchScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit,
     onPermissionsEvent: (PermissionsEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
@@ -77,20 +81,23 @@ internal fun SearchScreenUi(
             contentAlpha,
             buttonAlpha,
             scope,
-            onEvent
+            onEvent,
+            onFeedingEvent,
         )
     }
 }
 
 @Composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Suppress("LongMethod")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: SearchState,
     contentAlpha: Float,
     buttonAlpha: Float,
     scope: CoroutineScope,
-    onEvent: (SearchScreenEvent) -> Unit
+    onEvent: (SearchScreenEvent) -> Unit,
+    onFeedingEvent: (FeedingEvent) -> Unit,
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
     val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
@@ -104,25 +111,7 @@ private fun ScreenScaffold(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         skipHalfExpanded = true,
         sheetContent = {
-            state.showingFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(
-                    feedingPoint = feedingPoint,
-                    contentAlpha = contentAlpha,
-                    modifier = Modifier.fillMaxHeight(),
-                    isShowOnMapVisible = true,
-                    onFavouriteChange = { isFavourite ->
-                        onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
-                    },
-                    onShowOnMap = {
-                        navigator.navigate(
-                            TabsRoute.Home.withArg(
-                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
-                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
-                            )
-                        )
-                    }
-                )
-            }
+            SearchSheetContent(navigator, state, contentAlpha, onEvent)
         },
         sheetControls = {
             FeedingPointActionButton(
@@ -147,7 +136,48 @@ private fun ScreenScaffold(
     }
 
     CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = { })
+    state.showingFeedingPoint?.let {
+        FeedingConfirmationDialog(
+            isShowing = isFeedingDialogShowing,
+            onAgreeClick = {
+                scope.launch { bottomSheetState.hide() }
+                onFeedingEvent(FeedingEvent.Start(it.id))
+            }
+        )
+    }
+    if (state.feedState.feedingConfirmationState
+        == FeedingConfirmationState.FeedingStarted
+    ) {
+        navigator.navigateTo(TabsRoute.Home.name)
+    }
+}
+
+@Composable
+private fun SearchSheetContent(
+    navigator: Navigator,
+    state: SearchState,
+    contentAlpha: Float,
+    onEvent: (SearchScreenEvent) -> Unit
+) {
+    state.showingFeedingPoint?.let { feedingPoint ->
+        FeedingPointSheetContent(
+            feedingPoint = feedingPoint,
+            contentAlpha = contentAlpha,
+            modifier = Modifier.fillMaxHeight(),
+            isShowOnMapVisible = true,
+            onFavouriteChange = { isFavourite ->
+                onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
+            },
+            onShowOnMap = {
+                navigator.navigate(
+                    TabsRoute.Home.withArg(
+                        Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                        Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                    )
+                )
+            }
+        )
+    }
 }
 
 @Composable
@@ -202,7 +232,8 @@ private fun SearchScreenUiPreview() {
             SearchState(),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
             {},
-            {}
+            {},
+            {},
         )
     }
 }

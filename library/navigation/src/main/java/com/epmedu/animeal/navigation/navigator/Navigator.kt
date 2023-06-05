@@ -28,4 +28,6 @@ interface Navigator {
         inclusive: Boolean = false,
         saveState: Boolean = false
     )
+
+    fun navigateTo(route: String)
 }
