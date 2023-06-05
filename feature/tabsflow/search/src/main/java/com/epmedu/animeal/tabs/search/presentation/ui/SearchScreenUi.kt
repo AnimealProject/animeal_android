@@ -24,9 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
-import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
@@ -40,6 +38,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
@@ -90,7 +89,7 @@ internal fun SearchScreenUi(
 
 @Composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Suppress("LongMethod", "TooManyFunctions")
+@Suppress("LongMethod")
 private fun ScreenScaffold(
     bottomSheetState: AnimealBottomSheetState,
     state: SearchState,
@@ -112,25 +111,7 @@ private fun ScreenScaffold(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         skipHalfExpanded = true,
         sheetContent = {
-            state.showingFeedingPoint?.let { feedingPoint ->
-                FeedingPointSheetContent(
-                    feedingPoint = feedingPoint,
-                    contentAlpha = contentAlpha,
-                    modifier = Modifier.fillMaxHeight(),
-                    isShowOnMapVisible = true,
-                    onFavouriteChange = { isFavourite ->
-                        onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
-                    },
-                    onShowOnMap = {
-                        navigator.navigate(
-                            TabsRoute.Home.withArg(
-                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
-                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
-                            )
-                        )
-                    }
-                )
-            }
+            SearchSheetContent(navigator, state, contentAlpha, onEvent)
         },
         sheetControls = {
             FeedingPointActionButton(
@@ -168,6 +149,34 @@ private fun ScreenScaffold(
         == FeedingConfirmationState.FeedingStarted
     ) {
         navigator.navigateTo(TabsRoute.Home.name)
+    }
+}
+
+@Composable
+private fun SearchSheetContent(
+    navigator: Navigator,
+    state: SearchState,
+    contentAlpha: Float,
+    onEvent: (SearchScreenEvent) -> Unit
+) {
+    state.showingFeedingPoint?.let { feedingPoint ->
+        FeedingPointSheetContent(
+            feedingPoint = feedingPoint,
+            contentAlpha = contentAlpha,
+            modifier = Modifier.fillMaxHeight(),
+            isShowOnMapVisible = true,
+            onFavouriteChange = { isFavourite ->
+                onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
+            },
+            onShowOnMap = {
+                navigator.navigate(
+                    TabsRoute.Home.withArg(
+                        Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                        Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                    )
+                )
+            }
+        )
     }
 }
 

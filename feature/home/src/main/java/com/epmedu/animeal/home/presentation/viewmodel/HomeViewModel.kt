@@ -93,16 +93,18 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            ScreenDisplayed -> {
-                handleForcedFeedingPoint()
-                initialize()
-            }
+            ScreenDisplayed -> onScreenDisplayed()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
             HomeScreenEvent.DismissThankYouEvent -> finishFeedingProcess()
         }
+    }
+
+    private fun onScreenDisplayed() {
+        handleForcedFeedingPoint()
+        initialize()
     }
 
     private fun finishFeedingProcess() {
