@@ -603,7 +603,7 @@ style:
         value: 'kotlin.io.println'
   ForbiddenSuppress:
     active: true
-    rules: ['LongParameterList', 'ComplexMethod', 'TooManyFunctions', 'ReturnCount']
+    rules: ['ComplexMethod', 'TooManyFunctions', 'ReturnCount']
   ForbiddenVoid:
     active: true
     ignoreOverridden: false
