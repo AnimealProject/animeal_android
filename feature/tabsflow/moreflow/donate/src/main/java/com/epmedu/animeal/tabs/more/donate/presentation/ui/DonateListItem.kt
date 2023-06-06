@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.epmedu.animeal.extensions.copyText
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.spacer.WidthSpacer
@@ -29,16 +30,15 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
-import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreenEvent
-import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreenEvent.DonateNumberClicked
 import com.epmedu.animeal.tabs.more.donate.util.tbcBankInformation
 
 @Composable
 internal fun DonateListItem(
     donateInformation: DonateInformation,
     modifier: Modifier = Modifier,
-    onEvent: (event: DonateScreenEvent) -> Unit,
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier) {
         Text(
             text = donateInformation.title,
@@ -51,7 +51,10 @@ internal fun DonateListItem(
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = backgroundColor())
                 .clickable {
-                    onEvent(DonateNumberClicked(donateInformation.paymentCredentials))
+                    context.copyText(
+                        text = donateInformation.paymentCredentials,
+                        toastText = R.string.donation_copy_toast
+                    )
                 }
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -89,7 +92,6 @@ private fun DonateListItemPreview() {
     AnimealTheme {
         DonateListItem(
             donateInformation = tbcBankInformation,
-            onEvent = {}
         )
     }
 }

@@ -65,7 +65,10 @@ fun ExpandableListItem(
  * @see[ExpandableListItem]
  *
  * @param key key to switch state to initial.
+ * @param title title of the list item.
+ * @param modifier the [Modifier] to be applied.
  * @param isExpandedByDefault initial state.
+ * @param content content of the expanded list item.
  */
 @Composable
 fun ExpandableListItem(

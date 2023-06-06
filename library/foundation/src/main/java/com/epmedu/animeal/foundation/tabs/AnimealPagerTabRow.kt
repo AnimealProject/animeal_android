@@ -37,17 +37,18 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
  *
  *  - default [backgroundColor] is [Color.Transparent]
  *
+ * @param pagerState state of the pager.
  * @param onSwitchTab Called when the tab is switched.
- * @param backgroundColor background color.
  * @param modifier The [Modifier].
+ * @param backgroundColor background color.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun AnimealPagerTabRow(
+    pagerState: PagerState,
+    onSwitchTab: (index: Int) -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Transparent,
-    pagerState: PagerState,
-    onSwitchTab: (index: Int) -> Unit
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,

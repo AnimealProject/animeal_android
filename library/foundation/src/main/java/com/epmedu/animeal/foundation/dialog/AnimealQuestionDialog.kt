@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,8 +20,6 @@ import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Suppress("LongParameterList")
 @Composable
 fun AnimealQuestionDialog(
     title: String,

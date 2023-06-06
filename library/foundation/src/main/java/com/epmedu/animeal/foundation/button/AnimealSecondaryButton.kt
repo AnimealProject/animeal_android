@@ -17,10 +17,10 @@ import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealSecondaryButton(
-    modifier: Modifier = Modifier,
     text: String,
-    enabled: Boolean = true,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Button(
         modifier = modifier

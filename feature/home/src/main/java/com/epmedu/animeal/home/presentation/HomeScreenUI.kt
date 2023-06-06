@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-@Suppress("LongMethod", "LongParameterList", "ComplexMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
@@ -123,7 +123,7 @@ internal fun HomeScreenUI(
                 onFeedingEvent(FeedingEvent.Expired)
             }
 
-            else -> Unit
+            else -> {}
         }
     }
 
@@ -169,7 +169,7 @@ internal fun HomeScreenUI(
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
                 when (state.feedingRouteState) {
                     is FeedingRouteState.Active -> {
-                        if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Loading) {
+                        if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Loading) {
                             CircularProgressIndicator(Modifier.padding(24.dp))
                         } else {
                             MarkFeedingDoneActionButton(
@@ -242,13 +242,15 @@ internal fun HomeScreenUI(
 
     CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
     GeolocationPermissionRequestDialog(isShowing = isGeolocationPermissionDialogShowing)
-    FeedingConfirmationDialog(
-        isShowing = isFeedingDialogShowing,
-        onAgreeClick = {
-            scope.launch { bottomSheetState.hide() }
-            onFeedingEvent(FeedingEvent.Start)
-        }
-    )
+    state.feedingPointState.currentFeedingPoint?.let {
+        FeedingConfirmationDialog(
+            isShowing = isFeedingDialogShowing,
+            onAgreeClick = {
+                scope.launch { bottomSheetState.hide() }
+                onFeedingEvent(FeedingEvent.Start(it.id))
+            }
+        )
+    }
     ThankYouConfirmationDialog(state, onScreenEvent)
 }
 
@@ -302,26 +304,30 @@ private fun OnState(
             }
         }
 
-        state.cancellationRequestState is CancellationRequestState.Showing -> FeedingCancellationRequestDialog(
-            onConfirm = {
-                onScreenEvent(TimerCancellationEvent.CancellationAccepted)
-            },
-            onDismiss = {
-                onScreenEvent(TimerCancellationEvent.CancellationDismissed)
-            }
-        )
+        state.cancellationRequestState is CancellationRequestState.Showing -> {
+            FeedingCancellationRequestDialog(
+                onConfirm = {
+                    onScreenEvent(TimerCancellationEvent.CancellationAccepted)
+                },
+                onDismiss = {
+                    onScreenEvent(TimerCancellationEvent.CancellationDismissed)
+                }
+            )
+        }
 
-        state.deletePhotoItem != null -> DeletePhotoDialog(
-            state.deletePhotoItem,
-            onConfirm = {
-                onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
-            },
-            onDismiss = {
-                onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
-            }
-        )
+        state.deletePhotoItem != null -> {
+            DeletePhotoDialog(
+                state.deletePhotoItem,
+                onConfirm = {
+                    onScreenEvent(FeedingGalleryEvent.ConfirmDeletePhoto(state.deletePhotoItem))
+                },
+                onDismiss = {
+                    onScreenEvent(FeedingGalleryEvent.CloseDeletePhotoDialog)
+                }
+            )
+        }
 
-        else -> Unit
+        else -> { }
     }
 }
 
@@ -330,7 +336,7 @@ private fun ThankYouConfirmationDialog(
     state: HomeState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
-    if (state.feedingPointState.feedingConfirmationState == FeedingConfirmationState.Showing) {
+    if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Showing) {
         ThankYouDialog(onDismiss = {
             onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
         })

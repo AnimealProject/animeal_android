@@ -20,9 +20,9 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MoreOption(
-    modifier: Modifier = Modifier,
     title: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ListItem(
         modifier = modifier
@@ -47,6 +47,6 @@ internal fun MoreOption(
 @Composable
 private fun MoreOptionPreview() {
     AnimealTheme {
-        MoreOption(title = "Profile Page") {}
+        MoreOption(title = "Profile Page", onClick = {})
     }
 }

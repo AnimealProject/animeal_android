@@ -27,7 +27,9 @@ internal class EnterPhoneViewModel @Inject constructor(
     private val validator: ProfileValidator,
     private val buildConfigProvider: BuildConfigProvider,
 ) : ViewModel(),
-    StateDelegate<EnterPhoneState> by DefaultStateDelegate(initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)),
+    StateDelegate<EnterPhoneState> by DefaultStateDelegate(
+        initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)
+    ),
     EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
 
     fun handleEvents(event: EnterPhoneScreenEvent) {

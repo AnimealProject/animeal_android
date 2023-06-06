@@ -19,10 +19,10 @@ import com.epmedu.animeal.foundation.theme.DisabledButtonContentColor
 
 @Composable
 fun AnimealSecondaryButtonOutlined(
-    modifier: Modifier = Modifier,
     text: String,
-    enabled: Boolean = true,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) = OutlinedButton(
     modifier = modifier.heightIn(min = 60.dp).fillMaxWidth(),
     border = BorderStroke(1.dp, MaterialTheme.colors.primary),

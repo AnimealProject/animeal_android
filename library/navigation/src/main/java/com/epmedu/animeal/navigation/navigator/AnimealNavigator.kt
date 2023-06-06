@@ -38,4 +38,14 @@ internal class AnimealNavigator(
             }
         }
     }
+
+    override fun navigateTo(route: String) {
+        navController.navigate(route) {
+            navController.graph.startDestinationRoute?.let {
+                popUpTo(it) { saveState = true }
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 }

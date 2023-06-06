@@ -6,13 +6,13 @@ import com.google.accompanist.permissions.isGranted
 
 sealed interface PermissionStatus {
 
-    /** Permission was granted */
+    /** Permission was granted. */
     object Granted : PermissionStatus
 
-    /** Permission was denied */
+    /** Permission was denied. */
     object Denied : PermissionStatus
 
-    /** Permission was denied and will not being asked again */
+    /** Permission was denied and will not being asked again. */
     object Restricted : PermissionStatus
 }
 

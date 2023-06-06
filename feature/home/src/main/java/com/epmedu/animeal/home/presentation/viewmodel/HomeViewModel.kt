@@ -45,7 +45,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
@@ -79,26 +78,6 @@ internal class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch { collectPermissionsState() }
         initialize()
-        viewModelScope.fetchFeedingPoints()
-        viewModelScope.launch { fetchCurrentFeeding() }
-        viewModelScope.launch { getTimerState() }
-        viewModelScope.launch {
-            combine(
-                feedingPointStateFlow,
-                feedingRouteStateFlow
-            ) { feedingPointUpdate, feedingRouteUpdate ->
-                updateState {
-                    copy(
-                        feedingPointState = feedingPointUpdate,
-                        feedingRouteState = feedingRouteUpdate,
-                        gpsSettingState = when {
-                            isGpsSettingsEnabled -> GpsSettingState.Enabled
-                            else -> GpsSettingState.Disabled
-                        },
-                    )
-                }
-            }.collect()
-        }
     }
 
     private suspend fun getTimerState() {
@@ -109,19 +88,23 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    @Suppress("ComplexMethod")
     fun handleEvents(event: HomeScreenEvent) {
         when (event) {
             is RouteEvent -> handleRouteEvent(event = event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            ScreenDisplayed -> handleForcedFeedingPoint()
+            ScreenDisplayed -> onScreenDisplayed()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
             HomeScreenEvent.DismissThankYouEvent -> finishFeedingProcess()
         }
+    }
+
+    private fun onScreenDisplayed() {
+        handleForcedFeedingPoint()
+        initialize()
     }
 
     private fun finishFeedingProcess() {
@@ -159,6 +142,28 @@ internal class HomeViewModel @Inject constructor(
                     feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType)
                 )
             }
+        }
+        viewModelScope.fetchFeedingPoints()
+        viewModelScope.launch { fetchCurrentFeeding() }
+        viewModelScope.launch { getTimerState() }
+        viewModelScope.launch {
+            combine(
+                feedingPointStateFlow,
+                feedingStateFlow,
+                feedingRouteStateFlow
+            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate ->
+                updateState {
+                    copy(
+                        feedingPointState = feedingPointUpdate,
+                        feedState = feedingUpdate,
+                        feedingRouteState = feedingRouteUpdate,
+                        gpsSettingState = when {
+                            isGpsSettingsEnabled -> GpsSettingState.Enabled
+                            else -> GpsSettingState.Disabled
+                        },
+                    )
+                }
+            }.collect()
         }
     }
 

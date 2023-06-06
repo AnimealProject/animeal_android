@@ -1,5 +1,3 @@
-@file:Suppress("LongParameterList", "TooManyFunctions")
-
 package com.epmedu.animeal.home.di
 
 import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase

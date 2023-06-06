@@ -64,7 +64,8 @@ fun CameraView(
         ImageCapture.Builder()
             .setTargetResolution(
                 Size(PHOTO_WIDTH, PHOTO_HEIGHT)
-            ).build()
+            )
+            .build()
     }
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)

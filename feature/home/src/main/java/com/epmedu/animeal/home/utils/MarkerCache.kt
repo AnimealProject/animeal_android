@@ -18,7 +18,9 @@ class MarkerCache(private val context: Context) {
                 lruCache.put(id, bitmap)
                 lruCache.get(id)
             }
-            else -> cachedBitmap
+            else -> {
+                cachedBitmap
+            }
         }
     }
 }

@@ -27,8 +27,8 @@ import com.epmedu.animeal.tabs.NavigationTab
 @Composable
 internal fun BottomAppBarFab(
     currentRoute: TabsRoute?,
+    onNavigate: (TabsRoute) -> Unit,
     associatedScreen: NavigationTab = NavigationTab.Home,
-    onNavigate: (TabsRoute) -> Unit
 ) {
     val route = associatedScreen.route
 

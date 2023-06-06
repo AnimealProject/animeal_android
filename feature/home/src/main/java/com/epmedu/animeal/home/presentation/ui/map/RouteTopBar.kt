@@ -26,10 +26,10 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun RouteTopBar(
-    modifier: Modifier = Modifier,
     timeLeft: String,
     distanceLeft: String,
-    onCancelClick: () -> Unit
+    onCancelClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier

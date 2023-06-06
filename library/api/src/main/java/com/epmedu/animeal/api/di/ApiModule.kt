@@ -1,5 +1,7 @@
 package com.epmedu.animeal.api.di
 
+import com.epmedu.animeal.api.AnimealApi
+import com.epmedu.animeal.api.AnimealApiImpl
 import com.epmedu.animeal.api.donate.DonateApi
 import com.epmedu.animeal.api.donate.DonateApiImpl
 import com.epmedu.animeal.api.faq.FAQApi
@@ -24,19 +26,31 @@ internal object ApiModule {
 
     @Singleton
     @Provides
-    fun providesFeedingPointApi(): FeedingPointApi = FeedingPointApiImpl()
+    fun providesAnimealApi(): AnimealApi = AnimealApiImpl()
 
     @Singleton
     @Provides
-    fun providesFeedingApi(): FeedingApi = FeedingApiImpl()
+    fun providesFeedingPointApi(
+        animealApi: AnimealApi
+    ): FeedingPointApi = FeedingPointApiImpl(animealApi)
 
     @Singleton
     @Provides
-    fun providesFavouriteApi(): FavouriteApi = FavouriteApiImpl()
+    fun providesFeedingApi(
+        animealApi: AnimealApi
+    ): FeedingApi = FeedingApiImpl(animealApi)
 
     @Singleton
     @Provides
-    fun providesFAQApi(): FAQApi = FAQApiImpl()
+    fun providesFavouriteApi(
+        animealApi: AnimealApi
+    ): FavouriteApi = FavouriteApiImpl(animealApi)
+
+    @Singleton
+    @Provides
+    fun providesFAQApi(
+        animealApi: AnimealApi
+    ): FAQApi = FAQApiImpl(animealApi)
 
     @Singleton
     @Provides
@@ -44,5 +58,7 @@ internal object ApiModule {
 
     @Singleton
     @Provides
-    fun providesDonateApi(): DonateApi = DonateApiImpl()
+    fun providesDonateApi(
+        animealApi: AnimealApi
+    ): DonateApi = DonateApiImpl(animealApi)
 }
