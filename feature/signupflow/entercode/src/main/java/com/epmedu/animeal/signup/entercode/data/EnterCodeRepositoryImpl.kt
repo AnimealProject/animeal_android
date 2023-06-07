@@ -7,6 +7,7 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.common.domain.wrapper.ActionResultData
 import com.epmedu.animeal.profile.data.util.phoneNumber
 import com.epmedu.animeal.profile.data.util.phoneNumberRegion
 import com.epmedu.animeal.profile.domain.model.Region
@@ -39,8 +40,16 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
 
     override suspend fun confirmSignIn(
         code: List<Int?>
-    ): ApiResult<AuthSignInResult> {
-        return authAPI.confirmSignIn(code.joinToString(""))
+    ): ActionResultData<AuthSignInResult> {
+        return when (val result = authAPI.confirmSignIn(code.joinToString(""))) {
+            is ApiResult.Success -> {
+                ActionResultData.Success(result.data)
+            }
+
+            is ApiResult.Failure -> {
+                ActionResultData.Failure(result.error)
+            }
+        }
     }
 
     override fun confirmResendCode(
