@@ -15,6 +15,8 @@ animealPlugin {
 
 dependencies {
     implementation(projects.library.common)
+    implementation(projects.library.token)
+
     implementation(libs.mapbox.android)
     implementation(libs.mapbox.navigation)
 

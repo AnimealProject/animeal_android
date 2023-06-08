@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.epmedu.animeal.api"
+    namespace = "com.epmedu.animeal.token"
 }
 
 configure<NodeExtension> {
@@ -26,9 +26,8 @@ dependencies {
     implementation(projects.library.codegen)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
-    implementation(projects.library.token)
 
-    implementation(libs.amplify.aws.api)
+    implementation(libs.amplify.aws.auth.cognito)
     implementation(libs.amplify.core)
     implementation(libs.androidx.lifecycle)
     implementation(libs.appsync)

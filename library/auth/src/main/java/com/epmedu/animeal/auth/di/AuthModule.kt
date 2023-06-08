@@ -3,6 +3,8 @@ package com.epmedu.animeal.auth.di
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.AuthAPIImpl
 import com.epmedu.animeal.auth.UserAttributesAPI
+import com.epmedu.animeal.auth.UserAttributesAPIImpl
+import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +17,13 @@ object AuthModule {
 
     @Singleton
     @Provides
-    fun providesAuthApi(): AuthAPI = AuthAPIImpl()
+    fun providesAuthApi(
+        tokenExpirationHandler: TokenExpirationHandler
+    ): AuthAPI = AuthAPIImpl(tokenExpirationHandler)
 
     @Singleton
     @Provides
-    fun providesUserAttributesApi() = UserAttributesAPI()
+    fun providesUserAttributesApi(
+        tokenExpirationHandler: TokenExpirationHandler
+    ): UserAttributesAPI = UserAttributesAPIImpl(tokenExpirationHandler)
 }

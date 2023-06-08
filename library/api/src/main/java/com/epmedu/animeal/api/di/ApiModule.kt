@@ -14,6 +14,7 @@ import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.feeding.FeedingPointApiImpl
 import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.api.storage.StorageApiImpl
+import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,9 @@ internal object ApiModule {
 
     @Singleton
     @Provides
-    fun providesAnimealApi(): AnimealApi = AnimealApiImpl()
+    fun providesAnimealApi(
+        tokenExpirationHandler: TokenExpirationHandler
+    ): AnimealApi = AnimealApiImpl(tokenExpirationHandler)
 
     @Singleton
     @Provides
@@ -54,7 +57,9 @@ internal object ApiModule {
 
     @Singleton
     @Provides
-    fun providesStorageApi(): StorageApi = StorageApiImpl()
+    fun providesStorageApi(
+        tokenExpirationHandler: TokenExpirationHandler
+    ): StorageApi = StorageApiImpl(tokenExpirationHandler)
 
     @Singleton
     @Provides

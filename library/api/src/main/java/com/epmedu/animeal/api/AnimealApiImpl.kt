@@ -18,6 +18,7 @@ import com.apollographql.apollo.internal.json.SortedInputFieldMapWriter
 import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.CancellationException
@@ -28,7 +29,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 
-internal class AnimealApiImpl : AnimealApi {
+internal class AnimealApiImpl(
+    private val errorHandler: TokenExpirationHandler
+) : AnimealApi,
+    TokenExpirationHandler by errorHandler {
 
     override suspend fun <R : Any> launchGetRequest(
         restOptions: RestOptions,
@@ -62,7 +66,11 @@ internal class AnimealApiImpl : AnimealApi {
             },
             { apiException ->
                 Log.e(LOG_TAG, "Query $path failed with $apiException")
-                resume(ApiResult.Failure(apiException))
+                if (isRefreshTokenHasExpiredException(apiException)) {
+                    handleRefreshTokenExpiration()
+                } else {
+                    resume(ApiResult.Failure(apiException))
+                }
             }
         )
     }
@@ -92,6 +100,9 @@ internal class AnimealApiImpl : AnimealApi {
                         LOG_TAG,
                         "Model query for ${modelClass.simpleName} failed with $exception"
                     )
+                    if (isRefreshTokenHasExpiredException(exception)) {
+                        handleRefreshTokenExpiration()
+                    }
                     cancel(CancellationException(exception.message))
                 }
             )
@@ -114,7 +125,11 @@ internal class AnimealApiImpl : AnimealApi {
                 },
                 { apiException ->
                     Log.e(LOG_TAG, "Query $query failed with $apiException")
-                    resume(ApiResult.Failure(apiException))
+                    if (isRefreshTokenHasExpiredException(apiException)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        if (isActive) resume(ApiResult.Failure(apiException))
+                    }
                 }
             )
         }
@@ -137,7 +152,11 @@ internal class AnimealApiImpl : AnimealApi {
                 },
                 { apiException ->
                     Log.e(LOG_TAG, "Mutation $mutation failed with $apiException")
-                    resume(ApiResult.Failure(apiException))
+                    if (isRefreshTokenHasExpiredException(apiException)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        if (isActive) resume(ApiResult.Failure(apiException))
+                    }
                 }
             )
         }
@@ -168,6 +187,9 @@ internal class AnimealApiImpl : AnimealApi {
                 },
                 { apiException ->
                     Log.i(LOG_TAG, "Subscription $subscriptionId terminates with $apiException")
+                    if (isRefreshTokenHasExpiredException(apiException)) {
+                        handleRefreshTokenExpiration()
+                    }
                     cancel(CancellationException(apiException.message, apiException))
                 },
                 {

@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)
+    implementation(projects.library.token)
 
     implementation(platform(libs.androidx.compose.bom))
 

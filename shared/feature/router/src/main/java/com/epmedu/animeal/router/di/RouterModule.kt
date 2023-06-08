@@ -2,6 +2,7 @@ package com.epmedu.animeal.router.di
 
 import com.epmedu.animeal.router.data.RouterRepositoryImpl
 import com.epmedu.animeal.router.domain.RouterRepository
+import com.epmedu.animeal.token.refreshtoken.RefreshTokenApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +15,7 @@ object RouterModule {
 
     @Singleton
     @Provides
-    fun provideRouterRepository(): RouterRepository = RouterRepositoryImpl()
+    fun provideRouterRepository(
+        tokenApi: RefreshTokenApi
+    ): RouterRepository = RouterRepositoryImpl(tokenApi)
 }
