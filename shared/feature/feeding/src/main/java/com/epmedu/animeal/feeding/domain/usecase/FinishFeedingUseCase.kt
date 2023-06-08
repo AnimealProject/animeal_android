@@ -9,7 +9,7 @@ class FinishFeedingUseCase @Inject constructor(private val repository: FeedingRe
     suspend operator fun invoke(
         feedingPointId: String,
         images: List<String>
-    ): ActionResult {
+    ): ActionResult<Unit> {
         return repository.finishFeeding(feedingPointId, images)
     }
 }

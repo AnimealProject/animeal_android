@@ -20,22 +20,22 @@ internal class FavouriteRepositoryMock : FavouriteRepository {
         }
     }
 
-    override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult {
+    override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult<Unit> {
         favouritesFlow.update { favourites ->
             favourites + Favourite.builder()
                 .userId("")
                 .feedingPointId(feedingPointId)
                 .build()
         }
-        return ActionResult.Success
+        return ActionResult.Success(Unit)
     }
 
-    override suspend fun removeFeedingPointFromFavourites(feedingPointId: String): ActionResult {
+    override suspend fun removeFeedingPointFromFavourites(feedingPointId: String): ActionResult<Unit> {
         val favouriteToRemove = favourites.find { it.feedingPointId == feedingPointId }
 
         return favouriteToRemove?.let {
             favouritesFlow.value = favourites - favouriteToRemove
-            ActionResult.Success
+            ActionResult.Success(Unit)
         } ?: ActionResult.Failure(Throwable())
     }
 }

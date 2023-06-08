@@ -1,8 +1,8 @@
 package com.epmedu.animeal.common.domain.wrapper
 
-sealed interface ActionResult {
+sealed interface ActionResult<out T> {
 
-    object Success : ActionResult
+    data class Success<out T : Any>(val result: T) : ActionResult<T>
 
-    data class Failure(val error: Throwable) : ActionResult
+    data class Failure(val error: Throwable) : ActionResult<Nothing>
 }

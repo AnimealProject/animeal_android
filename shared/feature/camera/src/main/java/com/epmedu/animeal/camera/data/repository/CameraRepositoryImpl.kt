@@ -7,17 +7,17 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 internal class CameraRepositoryImpl(private val storageApi: StorageApi) : CameraRepository {
-    override suspend fun uploadPhoto(fileName: String, fileUri: Uri): ActionResult {
+    override suspend fun uploadPhoto(fileName: String, fileUri: Uri): ActionResult<Unit> {
         return storageApi.uploadFile(fileName, fileUri).toActionResult()
     }
 
-    override suspend fun deletePhoto(fileName: String): ActionResult =
+    override suspend fun deletePhoto(fileName: String): ActionResult<Unit> =
         storageApi.deleteFile(fileName).toActionResult()
 }
 
-private fun ApiResult<Unit>.toActionResult(): ActionResult {
+private fun ApiResult<Unit>.toActionResult(): ActionResult<Unit> {
     return when (this) {
-        is ApiResult.Success -> ActionResult.Success
+        is ApiResult.Success -> ActionResult.Success(Unit)
         is ApiResult.Failure -> ActionResult.Failure(error)
     }
 }

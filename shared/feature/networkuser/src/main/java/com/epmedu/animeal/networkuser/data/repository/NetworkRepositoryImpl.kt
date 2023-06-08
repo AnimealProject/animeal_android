@@ -2,6 +2,7 @@ package com.epmedu.animeal.networkuser.data.repository
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.exceptions.NotAuthorizedException
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.auth.UserAttributesAPI
 import com.epmedu.animeal.auth.constants.UserAttributesKey
@@ -20,9 +21,13 @@ class NetworkRepositoryImpl @Inject constructor(
     private val profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
 ) : NetworkRepository {
 
-    override suspend fun isPhoneNumberVerified(): Boolean {
+    override suspend fun isPhoneNumberVerified(): ActionResult<Boolean> {
         val result = userAttributesAPI.fetchUserAttributes()
-        return result is ApiResult.Success && result.data.isVerified()
+        /** NotAuthorizedException is the backend token-expiration exception */
+        if (result is ApiResult.Failure && result.error is NotAuthorizedException) {
+            return ActionResult.Failure(result.error)
+        }
+        return ActionResult.Success(result is ApiResult.Success && result.data.isVerified())
     }
 
     private fun List<AuthUserAttribute>.isVerified() = find {
@@ -39,18 +44,18 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult {
+    override suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult<Unit> {
         return userAttributesAPI.updateUserAttributes(profileToAuthUserMapper.map(profile)).toActionResult()
     }
 
-    override suspend fun deleteNetworkUser(): ActionResult {
+    override suspend fun deleteNetworkUser(): ActionResult<Unit> {
         return userAttributesAPI.deleteUser().toActionResult()
     }
 }
 
-private fun ApiResult<Unit>.toActionResult(): ActionResult {
+private fun ApiResult<Unit>.toActionResult(): ActionResult<Unit> {
     return when (this) {
-        is ApiResult.Success -> ActionResult.Success
+        is ApiResult.Success -> ActionResult.Success(Unit)
         is ApiResult.Failure -> ActionResult.Failure(error)
     }
 }

@@ -105,22 +105,22 @@ internal class FeedingRepositoryImpl(
         }.flowOn(dispatchers.IO)
     }
 
-    override suspend fun startFeeding(feedingPointId: String): ActionResult {
+    override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {
         return feedingApi.startFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
-    override suspend fun cancelFeeding(feedingPointId: String): ActionResult {
+    override suspend fun cancelFeeding(feedingPointId: String): ActionResult<Unit> {
         return feedingApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult {
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit> {
         return feedingApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
     }
 
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>
-    ): ActionResult {
+    ): ActionResult<Unit> {
         return feedingApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
     }
 }

@@ -5,11 +5,11 @@ import com.epmedu.animeal.profile.data.model.Profile
 
 interface NetworkRepository {
 
-    suspend fun isPhoneNumberVerified(): Boolean
+    suspend fun isPhoneNumberVerified(): ActionResult<Boolean>
 
     suspend fun getNetworkProfile(): Profile?
 
-    suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult
+    suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult<Unit>
 
-    suspend fun deleteNetworkUser(): ActionResult
+    suspend fun deleteNetworkUser(): ActionResult<Unit>
 }
