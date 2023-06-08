@@ -44,6 +44,9 @@ internal class AuthAPIImpl : AuthAPI {
         )
     }
 
+    /** Keep in mind: verification of session expiration (session.isExpired) works only for Mobile authorization flow.
+     * Wherever this method is used for Facebook flow, verify that next steps will be ready to handle
+     * NotAuthorizedException due to possible refresh token expiration */
     override suspend fun isSignedIn(): Boolean {
         return suspendCancellableCoroutine {
             Amplify.Auth.fetchAuthSession(

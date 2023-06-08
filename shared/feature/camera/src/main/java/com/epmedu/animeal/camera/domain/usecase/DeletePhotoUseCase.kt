@@ -7,27 +7,27 @@ import java.io.File
 
 class DeletePhotoUseCase(private val cameraRepository: CameraRepository) {
 
-    suspend operator fun invoke(uri: Uri, fileName: String): ActionResult =
+    suspend operator fun invoke(uri: Uri, fileName: String): ActionResult<Unit> =
         deleteRemoteFile(fileName) {
             deleteLocalFile(uri)
         }
 
     private suspend fun deleteRemoteFile(
         fileName: String,
-        success: () -> ActionResult
-    ): ActionResult =
+        success: () -> ActionResult<Unit>
+    ): ActionResult<Unit> =
         when (val result = cameraRepository.deletePhoto(fileName)) {
             is ActionResult.Failure -> result
-            ActionResult.Success -> success()
+            is ActionResult.Success<*> -> success()
         }
 
-    private fun deleteLocalFile(uri: Uri): ActionResult =
+    private fun deleteLocalFile(uri: Uri): ActionResult<Unit> =
         uri.path
             ?.let(::File)
             ?.takeIf { it.exists() }
             ?.run {
                 delete()
-                ActionResult.Success
+                ActionResult.Success(Unit)
             }
             ?: ActionResult.Failure(IllegalStateException("Can't delete the file by path ${uri.path}"))
 }

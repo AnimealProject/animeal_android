@@ -11,14 +11,32 @@ class DefaultActionDelegate(
 ) : ActionDelegate {
 
     override suspend fun performAction(
-        action: suspend () -> ActionResult,
+        action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit,
         onError: () -> Unit
     ) {
         coroutineScope {
             when (val result = withContext(dispatchers.IO) { action() }) {
-                is ActionResult.Success -> {
+                is ActionResult.Success<*> -> {
                     onSuccess()
+                }
+                is ActionResult.Failure -> {
+                    onError()
+                    Log.e(LOG_TAG, result.error.toString())
+                }
+            }
+        }
+    }
+
+    override suspend fun <T> performAction(
+        action: suspend () -> ActionResult<T>,
+        onSuccess: suspend (T) -> Unit,
+        onError: () -> Unit
+    ) {
+        coroutineScope {
+            when (val result = withContext(dispatchers.IO) { action() }) {
+                is ActionResult.Success<*> -> {
+                    onSuccess(result.result as T)
                 }
                 is ActionResult.Failure -> {
                     onError()

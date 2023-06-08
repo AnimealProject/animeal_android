@@ -67,14 +67,14 @@ internal class FavouriteRepositoryImpl(
             }
     }
 
-    override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult {
+    override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult<Unit> {
         return favouriteApi.addFavourite(
             feedingPointId = feedingPointId,
             userId = authApi.getCurrentUserId()
         ).toActionResult()
     }
 
-    override suspend fun removeFeedingPointFromFavourites(feedingPointId: String): ActionResult {
+    override suspend fun removeFeedingPointFromFavourites(feedingPointId: String): ActionResult<Unit> {
         return favourites.find { it.feedingPointId == feedingPointId }?.let { favourite ->
             favouriteApi.deleteFavourite(favourite.id)
         }.toActionResult()

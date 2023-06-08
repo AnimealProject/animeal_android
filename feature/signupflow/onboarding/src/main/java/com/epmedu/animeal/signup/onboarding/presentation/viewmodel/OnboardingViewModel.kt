@@ -42,11 +42,16 @@ internal class OnboardingViewModel @Inject constructor(
 
     private fun saveAuthenticationTypeAndProfile() {
         viewModelScope.launch {
-            val isPhoneNumberVerified = performAction { getIsPhoneNumberVerifiedUseCase() }
-            changeAuthenticationTypeToFacebook(isPhoneNumberVerified)
-            performAction { getNetworkProfileUseCase() }?.let { profile ->
-                saveLocalProfile(profile, isPhoneNumberVerified)
-            }
+            performAction<Boolean>(
+                action = { getIsPhoneNumberVerifiedUseCase() },
+                onSuccess = { result ->
+                    changeAuthenticationTypeToFacebook(result)
+                    performAction { getNetworkProfileUseCase() }?.let { profile ->
+                        saveLocalProfile(profile, result)
+                    }
+                },
+                onError = {}
+            )
         }
     }
 

@@ -166,7 +166,7 @@ class DefaultFeedingHandler(
     }
 
     private suspend fun performFeedingAction(
-        action: suspend (String) -> ActionResult,
+        action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit,
         onError: () -> Unit = {}
     ) {
@@ -174,7 +174,10 @@ class DefaultFeedingHandler(
             performAction(
                 action = { action(currentFeedingPoint.id) },
                 onSuccess = { onSuccess(currentFeedingPoint) },
-                onError = ::showError
+                onError = {
+                    onError()
+                    showError()
+                }
             )
         } ?: run {
             onError()
