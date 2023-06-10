@@ -3,6 +3,8 @@ package com.epmedu.animeal.profile.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.data.util.birthDate
@@ -60,8 +62,11 @@ internal class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logOut() {
-        authAPI.signOut()
+    override suspend fun logOut(): ActionResult<Unit> {
+        return when (val result = authAPI.signOut()) {
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
+        }
     }
 
     override suspend fun clearProfile() {
