@@ -2,6 +2,7 @@ package com.epmedu.animeal.tabs.more.account.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
@@ -20,9 +21,16 @@ internal class AccountViewModel @Inject constructor(
 
     internal fun logout() {
         viewModelScope.launch {
-            logOutUseCase()
-            clearProfileUseCase()
-            viewModelScope.launch { sendEvent(NavigateToOnboarding) }
+            when (logOutUseCase()) {
+                is ActionResult.Success -> {
+                    clearProfileUseCase()
+                    viewModelScope.launch { sendEvent(NavigateToOnboarding) }
+                }
+
+                is ActionResult.Failure -> {
+                    // TODO clarify how to handle it
+                }
+            }
         }
     }
 }

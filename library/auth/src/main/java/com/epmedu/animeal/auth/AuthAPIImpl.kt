@@ -41,12 +41,8 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
-            { user ->
-                resume(user.username)
-            },
-            { authException ->
-                resumeWithException(authException)
-            }
+            { user -> resume(user.username) },
+            { authException -> resumeWithException(authException) }
         )
     }
 
@@ -97,12 +93,8 @@ internal class AuthAPIImpl : AuthAPI {
                 phone,
                 password,
                 options,
-                {
-                    resume(ApiResult.Success(Unit))
-                },
-                {
-                    resume(ApiResult.Failure(it))
-                }
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
             )
         }
     }
@@ -118,12 +110,8 @@ internal class AuthAPIImpl : AuthAPI {
                 phoneNumber,
                 "",
                 authSignInOptions,
-                {
-                    resume(ApiResult.Success(it))
-                },
-                {
-                    resume(ApiResult.Failure(it))
-                }
+                { resume(ApiResult.Success(it)) },
+                { resume(ApiResult.Failure(it)) }
             )
         }
     }
@@ -134,12 +122,8 @@ internal class AuthAPIImpl : AuthAPI {
         return suspendCancellableCoroutine {
             Amplify.Auth.confirmSignIn(
                 code,
-                {
-                    resume(ApiResult.Success(it))
-                },
-                {
-                    resume(ApiResult.Failure(it))
-                }
+                { resume(ApiResult.Success(it)) },
+                { resume(ApiResult.Failure(it)) }
             )
         }
     }
@@ -178,12 +162,8 @@ internal class AuthAPIImpl : AuthAPI {
         return suspendCancellableCoroutine {
             Amplify.Auth.resendUserAttributeConfirmationCode(
                 AuthUserAttributeKey.phoneNumber(),
-                {
-                    resume(ApiResult.Success(it))
-                },
-                {
-                    resume(ApiResult.Failure(it))
-                }
+                { resume(ApiResult.Success(it)) },
+                { resume(ApiResult.Failure(it)) }
             )
         }
     }

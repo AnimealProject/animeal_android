@@ -2,6 +2,7 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -122,9 +123,14 @@ internal class FinishProfileViewModel @Inject constructor(
 
     private fun logout() {
         viewModelScope.launch {
-            logOutUseCase()
-            clearProfileUseCase()
-            navigateBack()
+            when (logOutUseCase()) {
+                is ActionResult.Success -> {
+                    clearProfileUseCase()
+                    navigateBack()
+                }
+
+                is ActionResult.Failure -> {}
+            }
         }
     }
 
