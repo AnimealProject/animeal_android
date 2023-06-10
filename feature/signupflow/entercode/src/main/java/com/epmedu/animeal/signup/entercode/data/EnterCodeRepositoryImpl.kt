@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
@@ -50,10 +49,13 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun confirmResendCode(
-        code: List<Int?>,
-        requestHandler: AuthRequestHandler
-    ) {
-        authAPI.confirmResendCode(code.joinToString(""), requestHandler)
+    override suspend fun confirmResendCode(
+        code: List<Int?>
+    ): ActionResult<Unit> {
+        return when (val result = authAPI.confirmResendCode(code.joinToString(""))) {
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
+        }
+
     }
 }

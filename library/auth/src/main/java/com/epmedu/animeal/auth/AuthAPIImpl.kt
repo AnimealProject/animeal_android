@@ -144,28 +144,29 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    override fun confirmResendCode(
-        code: String,
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.confirmUserAttribute(
-            AuthUserAttributeKey.phoneNumber(),
-            code,
-            handler::onSuccess,
-            handler::onError
-        )
+    override suspend fun confirmResendCode(
+        code: String
+    ): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.confirmUserAttribute(
+                AuthUserAttributeKey.phoneNumber(),
+                code,
+                { resume(ApiResult.Success<Unit>(Unit)) },
+                { resume(ApiResult.Failure<Unit>(it)) },
+            )
+        }
     }
 
     override suspend fun sendCode(
         phoneNumber: String,
-    ) : ApiResult<Any> {
+    ): ApiResult<Any> {
         return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
             is AuthenticationType.Facebook -> sendPhoneCodeByResend()
         }
     }
 
-    override suspend fun signOut() : ApiResult<Unit> {
+    override suspend fun signOut(): ApiResult<Unit> {
         return suspendCancellableCoroutine {
             Amplify.Auth.signOut {
                 resume(ApiResult.Success<Unit>(Unit))
@@ -173,7 +174,7 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    suspend private fun sendPhoneCodeByResend() : ApiResult<AuthCodeDeliveryDetails> {
+    private suspend fun sendPhoneCodeByResend(): ApiResult<AuthCodeDeliveryDetails> {
         return suspendCancellableCoroutine {
             Amplify.Auth.resendUserAttributeConfirmationCode(
                 AuthUserAttributeKey.phoneNumber(),

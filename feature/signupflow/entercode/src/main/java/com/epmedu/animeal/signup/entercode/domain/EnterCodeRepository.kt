@@ -1,7 +1,6 @@
 package com.epmedu.animeal.signup.entercode.domain
 
 import com.amplifyframework.auth.result.AuthSignInResult
-import com.epmedu.animeal.auth.AuthRequestHandler
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import kotlinx.coroutines.flow.Flow
 
@@ -10,6 +9,5 @@ interface EnterCodeRepository {
 
     suspend fun sendCode(): ActionResult<Any>
     suspend fun confirmSignIn(code: List<Int?>): ActionResult<AuthSignInResult>
-
-    fun confirmResendCode(code: List<Int?>, requestHandler: AuthRequestHandler)
+    suspend fun confirmResendCode(code: List<Int?>): ActionResult<Unit>
 }

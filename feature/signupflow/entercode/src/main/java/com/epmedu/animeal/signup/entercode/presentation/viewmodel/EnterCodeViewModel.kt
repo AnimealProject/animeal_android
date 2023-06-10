@@ -5,6 +5,7 @@ import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -135,19 +136,19 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmResendCode() {
         viewModelScope.launch {
-            facebookConfirmCodeUseCase(
-                code = state.code,
-                onSuccess = {
+            when (facebookConfirmCodeUseCase(code = state.code)) {
+                is ActionResult.Success -> {
                     updateState { copy(isError = false) }
                     viewModelScope.launch {
                         setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified = true)
                     }
                     viewModelScope.launch { sendEvent(NavigateToHomeScreen) }
-                },
-                onError = {
+                }
+
+                is ActionResult.Failure -> {
                     updateState { copy(isError = true) }
-                },
-            )
+                }
+            }
         }
     }
 
