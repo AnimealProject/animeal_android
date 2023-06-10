@@ -1,6 +1,6 @@
 package com.epmedu.animeal.signup.entercode.domain
 
-import com.epmedu.animeal.common.domain.wrapper.ActionResultData
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
 
@@ -10,15 +10,15 @@ class MobileConfirmCodeUseCase(private val repository: EnterCodeRepository) {
         onError: (exception: Exception) -> Unit,
     ) {
         when (val result = repository.confirmSignIn(code)) {
-            is ActionResultData.Success -> {
-                val authResult = result.data
+            is ActionResult.Success -> {
+                val authResult = result.result
                 when {
                     authResult.isSignedIn -> onSuccess()
                     else -> onError(InvalidCodeError())
                 }
             }
 
-            is ActionResultData.Failure -> {
+            is ActionResult.Failure -> {
                 onError(result.error as Exception)
             }
         }

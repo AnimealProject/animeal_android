@@ -32,5 +32,5 @@ interface AuthAPI {
         handler: AuthRequestHandler,
     )
 
-    suspend fun signOut()
+    suspend fun signOut() : ApiResult<Unit>
 }

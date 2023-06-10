@@ -2,6 +2,7 @@ package com.epmedu.animeal.splash.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
@@ -79,14 +80,14 @@ internal class SplashViewModel @Inject constructor(
     }
 
     private suspend fun logOut() {
-        logOutUseCase(
-            onSuccess = {
+        when(val result = logOutUseCase()) {
+            is ActionResult.Success -> {
                 navigateToNextDirection(SignUp)
-            },
-            onError = {
+            }
+            is ActionResult.Failure -> {
                 updateState { copy(isError = true) }
             }
-        )
+        }
     }
 
     private fun navigateToNextDirection(destination: SplashNextDestination) {

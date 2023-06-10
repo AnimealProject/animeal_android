@@ -165,9 +165,11 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    override suspend fun signOut() = suspendCancellableCoroutine {
-        Amplify.Auth.signOut {
-            resume(Unit)
+    override suspend fun signOut() : ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signOut {
+                resume(ApiResult.Success<Unit>(Unit))
+            }
         }
     }
 
