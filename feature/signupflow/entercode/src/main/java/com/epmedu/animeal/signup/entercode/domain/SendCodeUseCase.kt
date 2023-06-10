@@ -4,8 +4,7 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 class SendCodeUseCase(private val repository: EnterCodeRepository) {
 
-    suspend operator fun invoke(
-    ): ActionResult<Any> {
+    suspend operator fun invoke(): ActionResult<Any> {
         return repository.sendCode()
     }
 }

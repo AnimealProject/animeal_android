@@ -56,6 +56,5 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
             is ApiResult.Success -> ActionResult.Success(result.data)
             is ApiResult.Failure -> ActionResult.Failure(result.error)
         }
-
     }
 }
