@@ -33,8 +33,8 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
         password: String,
     ): ActionResult<Unit> {
         return when (val result = authAPI.signUp(phone, password)) {
-            is ApiResult.Success -> return ActionResult.Success(result.data)
-            is ApiResult.Failure -> return ActionResult.Failure(result.error)
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
         }
     }
 
@@ -42,8 +42,8 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
         phoneNumber: String
     ): ActionResult<AuthSignInResult> {
         return when (val result = authAPI.signIn(phoneNumber)) {
-            is ApiResult.Success -> return ActionResult.Success(result.data)
-            is ApiResult.Failure -> return ActionResult.Failure(result.error)
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
         }
     }
 }

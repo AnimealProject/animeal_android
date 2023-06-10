@@ -1,7 +1,6 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
 import com.amplifyframework.auth.cognito.exceptions.service.UsernameExistsException
-import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
