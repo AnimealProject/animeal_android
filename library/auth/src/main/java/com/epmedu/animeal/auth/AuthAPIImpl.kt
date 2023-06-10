@@ -1,5 +1,6 @@
 package com.epmedu.animeal.auth
 
+import com.amplifyframework.auth.AuthCodeDeliveryDetails
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
@@ -108,7 +109,7 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun signIn(
         phoneNumber: String
-    ): ApiResult<Unit> {
+    ): ApiResult<AuthSignInResult> {
         val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
             .authFlowType(AuthFlowType.CUSTOM_AUTH)
             .build()
@@ -118,7 +119,7 @@ internal class AuthAPIImpl : AuthAPI {
                 "",
                 authSignInOptions,
                 {
-                    resume(ApiResult.Success(Unit))
+                    resume(ApiResult.Success(it))
                 },
                 {
                     resume(ApiResult.Failure(it))
@@ -157,11 +158,10 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun sendCode(
         phoneNumber: String,
-        handler: AuthRequestHandler,
-    ) {
-        when (authenticationType) {
+    ) : ApiResult<Any> {
+        return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
-            is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
+            is AuthenticationType.Facebook -> sendPhoneCodeByResend()
         }
     }
 
@@ -173,11 +173,17 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
-        Amplify.Auth.resendUserAttributeConfirmationCode(
-            AuthUserAttributeKey.phoneNumber(),
-            handler::onSuccess,
-            handler::onError
-        )
+    suspend private fun sendPhoneCodeByResend() : ApiResult<AuthCodeDeliveryDetails> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.resendUserAttributeConfirmationCode(
+                AuthUserAttributeKey.phoneNumber(),
+                {
+                    resume(ApiResult.Success(it))
+                },
+                {
+                    resume(ApiResult.Failure(it))
+                }
+            )
+        }
     }
 }

@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface EnterCodeRepository {
     val phoneNumberWithPrefix: Flow<String>
 
-    suspend fun sendCode(requestHandler: AuthRequestHandler)
-
+    suspend fun sendCode(): ActionResult<Any>
     suspend fun confirmSignIn(code: List<Int?>): ActionResult<AuthSignInResult>
 
     fun confirmResendCode(code: List<Int?>, requestHandler: AuthRequestHandler)

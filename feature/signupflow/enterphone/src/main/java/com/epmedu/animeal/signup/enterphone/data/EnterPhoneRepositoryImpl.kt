@@ -2,8 +2,10 @@ package com.epmedu.animeal.signup.enterphone.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.util.updatePhoneNumber
 import com.epmedu.animeal.profile.data.util.updatePhoneNumberRegion
@@ -29,13 +31,19 @@ internal class EnterPhoneRepositoryImpl @Inject constructor(
     override suspend fun signUp(
         phone: String,
         password: String,
-    ): ApiResult<Unit> {
-        return authAPI.signUp(phone, password)
+    ): ActionResult<Unit> {
+        return when (val result = authAPI.signUp(phone, password)) {
+            is ApiResult.Success -> return ActionResult.Success(result.data)
+            is ApiResult.Failure -> return ActionResult.Failure(result.error)
+        }
     }
 
     override suspend fun signIn(
         phoneNumber: String
-    ): ApiResult<Unit> {
-        return authAPI.signIn(phoneNumber)
+    ): ActionResult<AuthSignInResult> {
+        return when (val result = authAPI.signIn(phoneNumber)) {
+            is ApiResult.Success -> return ActionResult.Success(result.data)
+            is ApiResult.Failure -> return ActionResult.Failure(result.error)
+        }
     }
 }

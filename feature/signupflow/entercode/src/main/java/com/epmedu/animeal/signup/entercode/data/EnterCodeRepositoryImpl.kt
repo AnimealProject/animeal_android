@@ -34,21 +34,19 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
             prefix + phoneNumber
         }
 
-    override suspend fun sendCode(requestHandler: AuthRequestHandler) {
-        authAPI.sendCode(phoneNumberWithPrefix.first(), requestHandler)
+    override suspend fun sendCode(): ActionResult<Any> {
+        return when (val result = authAPI.sendCode(phoneNumberWithPrefix.first())) {
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
+        }
     }
 
     override suspend fun confirmSignIn(
         code: List<Int?>
     ): ActionResult<AuthSignInResult> {
         return when (val result = authAPI.confirmSignIn(code.joinToString(""))) {
-            is ApiResult.Success -> {
-                ActionResult.Success(result.data)
-            }
-
-            is ApiResult.Failure -> {
-                ActionResult.Failure(result.error)
-            }
+            is ApiResult.Success -> ActionResult.Success(result.data)
+            is ApiResult.Failure -> ActionResult.Failure(result.error)
         }
     }
 

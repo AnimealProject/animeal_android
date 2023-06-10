@@ -16,7 +16,7 @@ interface AuthAPI {
 
     suspend fun signIn(
         phoneNumber: String
-    ): ApiResult<Unit>
+    ): ApiResult<AuthSignInResult>
 
     suspend fun confirmSignIn(
         code: String
@@ -29,8 +29,7 @@ interface AuthAPI {
 
     suspend fun sendCode(
         phoneNumber: String,
-        handler: AuthRequestHandler,
-    )
+    ): ApiResult<Any>
 
     suspend fun signOut() : ApiResult<Unit>
 }

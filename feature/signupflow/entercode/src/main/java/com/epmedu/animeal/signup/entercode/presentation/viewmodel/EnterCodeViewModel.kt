@@ -56,7 +56,7 @@ internal class EnterCodeViewModel @Inject constructor(
     fun resendCode() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
         viewModelScope.launch { launchResendTimer() }
-        viewModelScope.launch { sendCodeUseCase({}, {}) }
+        viewModelScope.launch { sendCodeUseCase() }
     }
 
     fun changeDigit(

@@ -2,6 +2,7 @@ package com.epmedu.animeal.signup.enterphone.domain
 
 import com.amplifyframework.auth.cognito.exceptions.service.UsernameExistsException
 import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
     suspend operator fun invoke(
@@ -11,10 +12,10 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
         onError: () -> Unit,
     ) {
         when (val result = repository.signUp(phone, password)) {
-            is ApiResult.Success -> {
+            is ActionResult.Success -> {
                 signIn(phone, onSuccess, onError)
             }
-            is ApiResult.Failure -> {
+            is ActionResult.Failure -> {
                 if (result.error is UsernameExistsException) {
                     signIn(phone, onSuccess, onError)
                 } else {
@@ -30,10 +31,10 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
         onError: () -> Unit
     ) {
         when (repository.signIn(phone)) {
-            is ApiResult.Success -> {
+            is ActionResult.Success -> {
                 onSuccess()
             }
-            is ApiResult.Failure -> {
+            is ActionResult.Failure -> {
                 onError()
             }
         }
