@@ -23,8 +23,8 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 fun AnimealQuestionDialog(
     title: String,
-    dismissText: String? = null,
-    acceptText: String? = null,
+    dismissText: String,
+    acceptText: String,
     onDismissRequest: () -> Unit = {},
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
@@ -51,24 +51,20 @@ fun AnimealQuestionDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                dismissText?.let {
-                    AnimealSecondaryButtonOutlined(
-                        modifier = Modifier.weight(1f),
-                        text = it,
-                        onClick = {
-                            onDismiss()
-                        },
-                    )
-                }
-                acceptText?.let {
-                    AnimealButton(
-                        modifier = Modifier.weight(1f),
-                        text = acceptText,
-                        onClick = {
-                            onConfirm()
-                        },
-                    )
-                }
+                AnimealSecondaryButtonOutlined(
+                    modifier = Modifier.weight(1f),
+                    text = dismissText,
+                    onClick = {
+                        onDismiss()
+                    },
+                )
+                AnimealButton(
+                    modifier = Modifier.weight(1f),
+                    text = acceptText,
+                    onClick = {
+                        onConfirm()
+                    },
+                )
             }
         },
         properties = DialogProperties(
@@ -99,7 +95,8 @@ private fun AnimealAlertQuestionSingleOptionPreview() {
     AnimealTheme {
         AnimealQuestionDialog(
             title = "One Option",
-            dismissText = "Accept",
+            dismissText = "Dismiss",
+            acceptText = "Accept",
             onDismiss = {},
             onConfirm = {}
         )

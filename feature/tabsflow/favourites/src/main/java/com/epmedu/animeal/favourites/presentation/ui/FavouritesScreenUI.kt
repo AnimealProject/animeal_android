@@ -47,11 +47,14 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Companion.REQUEST_CANCELLED
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Dismissed
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -134,6 +137,7 @@ private fun ScreenScaffold(
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
     val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val feedingWarningDialogHasShown = rememberSaveable { mutableStateOf(false) }
     val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
     val navigator = LocalNavigator.currentOrThrow
     AnimealBottomSheetLayout(
@@ -197,8 +201,22 @@ private fun ScreenScaffold(
             onFeedingEvent(FeedingEvent.Start(it.id))
         })
     }
-    if (state.feedState.feedingConfirmationState == FeedingConfirmationState.FeedingStarted) {
-        navigator.navigateTo(TabsRoute.Home.name)
+    when (val confirmationState = state.feedState.feedingConfirmationState) {
+        FeedingStarted -> { navigator.navigateTo(TabsRoute.Home.name) }
+        is Dismissed -> {
+            val showWarningDialog =
+                confirmationState.reason == REQUEST_CANCELLED
+            if (showWarningDialog && !feedingWarningDialogHasShown.value) {
+                AnimealAlertDialog(
+                    title = stringResource(id = R.string.feeding_point_expired_description),
+                    acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+                    onConfirm = {
+                        feedingWarningDialogHasShown.value = true
+                    }
+                )
+            }
+        }
+        else -> {}
     }
 }
 

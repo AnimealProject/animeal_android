@@ -37,8 +37,8 @@ internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
 
 internal fun FeedingConfirmationState.toDomainFeedingConfirmationState(): DomainFeedingConfirmationState =
     when (this) {
-        FeedingConfirmationState.Dismissed -> DomainFeedingConfirmationState.Dismissed
         FeedingConfirmationState.Loading -> DomainFeedingConfirmationState.Loading
         FeedingConfirmationState.Showing -> DomainFeedingConfirmationState.Showing
         FeedingConfirmationState.FeedingStarted -> DomainFeedingConfirmationState.FeedingStarted
+        else -> DomainFeedingConfirmationState.Dismissed
     }

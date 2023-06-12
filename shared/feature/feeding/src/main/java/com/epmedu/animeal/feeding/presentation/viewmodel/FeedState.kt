@@ -4,5 +4,5 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 
 data class FeedState(
     val feedPoint: FeedingPointModel? = null,
-    val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed,
+    val feedingConfirmationState: FeedingConfirmationState = FeedingConfirmationState.Dismissed(),
 )

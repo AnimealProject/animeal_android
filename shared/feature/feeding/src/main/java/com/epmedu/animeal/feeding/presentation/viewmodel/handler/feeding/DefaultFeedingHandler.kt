@@ -21,6 +21,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Companion.REQUEST_CANCELLED
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
@@ -68,7 +69,7 @@ class DefaultFeedingHandler(
             } ?: run {
                 updateState {
                     copy(
-                        feedingConfirmationState = FeedingConfirmationState.Dismissed
+                        feedingConfirmationState = FeedingConfirmationState.Dismissed()
                     )
                 }
             }
@@ -102,6 +103,9 @@ class DefaultFeedingHandler(
                 startRoute()
                 startTimer()
                 updateFeedingState(FeedingConfirmationState.FeedingStarted)
+            },
+            onError = {
+                updateFeedingState(FeedingConfirmationState.Dismissed(REQUEST_CANCELLED))
             }
         )
     }
@@ -115,7 +119,7 @@ class DefaultFeedingHandler(
                     stopRoute()
                     disableTimer()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed)
+                    updateFeedingState(FeedingConfirmationState.Dismissed())
                 }
             )
         }
@@ -132,7 +136,7 @@ class DefaultFeedingHandler(
                 onSuccess = {
                     deselectFeedingPoint()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed)
+                    updateFeedingState(FeedingConfirmationState.Dismissed())
                 }
             )
         }
@@ -162,19 +166,19 @@ class DefaultFeedingHandler(
     }
 
     override fun dismissThankYouDialog() {
-        updateFeedingState(FeedingConfirmationState.Dismissed)
+        updateFeedingState(FeedingConfirmationState.Dismissed())
     }
 
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult,
         onSuccess: suspend (FeedingPointModel) -> Unit,
-        onError: () -> Unit = {}
+        onError: () -> Unit = { showError() },
     ) {
         state.feedPoint?.let { currentFeedingPoint ->
             performAction(
                 action = { action(currentFeedingPoint.id) },
                 onSuccess = { onSuccess(currentFeedingPoint) },
-                onError = ::showError
+                onError = onError,
             )
         } ?: run {
             onError()
