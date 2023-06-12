@@ -170,7 +170,7 @@ class DefaultFeedingHandler(
     }
 
     private suspend fun performFeedingAction(
-        action: suspend (String) -> ActionResult,
+        action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit,
         onError: () -> Unit = { showError() },
     ) {

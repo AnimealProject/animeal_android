@@ -7,7 +7,7 @@ class AddFeedingPointToFavouritesUseCase(
     private val repository: FavouriteRepository
 ) {
 
-    suspend operator fun invoke(feedingPointId: String): ActionResult {
+    suspend operator fun invoke(feedingPointId: String): ActionResult<Unit> {
         return repository.addFeedingPointToFavourites(feedingPointId)
     }
 }

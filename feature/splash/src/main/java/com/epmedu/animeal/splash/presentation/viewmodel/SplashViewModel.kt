@@ -2,6 +2,7 @@ package com.epmedu.animeal.splash.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
@@ -17,7 +18,6 @@ import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.Ho
 import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.SignUp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,11 +40,9 @@ internal class SplashViewModel @Inject constructor(
     private fun checkIfUserIsSignedIn() {
         viewModelScope.launch {
             if (getIsSignedInUseCase()) {
-                val (isPhoneNumberVerified, isProfileSaved) = awaitAll(
-                    async { getIsPhoneNumberVerifiedUseCase() },
-                    async { getIsProfileSavedUseCase() }
-                )
-                selectNextDirection(isPhoneNumberVerified, isProfileSaved)
+                val isPhoneNumberVerified = async { getIsPhoneNumberVerifiedUseCase() }
+                val isProfileSaved = async { getIsProfileSavedUseCase() }
+                selectNextDirection(isPhoneNumberVerified.await(), isProfileSaved.await())
             } else {
                 navigateToNextDirection(SignUp)
             }
@@ -52,34 +50,43 @@ internal class SplashViewModel @Inject constructor(
     }
 
     private suspend fun selectNextDirection(
-        isPhoneNumberVerified: Boolean,
+        isPhoneNumberVerifiedResult: ActionResult<Boolean>,
         isProfileSaved: Boolean
     ) {
-        when {
-            isPhoneNumberVerified && isProfileSaved -> {
-                navigateToNextDirection(Home)
+        if (isPhoneNumberVerifiedResult is ActionResult.Success) {
+            val isPhoneNumberVerified = isPhoneNumberVerifiedResult.result
+            when {
+                isPhoneNumberVerified && isProfileSaved -> {
+                    navigateToNextDirection(Home)
+                }
+                isPhoneNumberVerified -> {
+                    setMobileAuthenticationTypeUseCase()
+                    setFinishProfileAsStartDestinationUseCase()
+                    navigateToNextDirection(SignUp)
+                }
+                isProfileSaved -> {
+                    setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = false)
+                    setFinishProfileAsStartDestinationUseCase()
+                    navigateToNextDirection(SignUp)
+                }
+                else -> {
+                    logOut()
+                }
             }
-            isPhoneNumberVerified -> {
-                setMobileAuthenticationTypeUseCase()
-                setFinishProfileAsStartDestinationUseCase()
-                navigateToNextDirection(SignUp)
-            }
-            isProfileSaved -> {
-                setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = false)
-                setFinishProfileAsStartDestinationUseCase()
-                navigateToNextDirection(SignUp)
-            }
-            else -> {
-                logOutUseCase(
-                    onSuccess = {
-                        navigateToNextDirection(SignUp)
-                    },
-                    onError = {
-                        updateState { copy(isError = true) }
-                    }
-                )
-            }
+        } else {
+            logOut()
         }
+    }
+
+    private suspend fun logOut() {
+        logOutUseCase(
+            onSuccess = {
+                navigateToNextDirection(SignUp)
+            },
+            onError = {
+                updateState { copy(isError = true) }
+            }
+        )
     }
 
     private fun navigateToNextDirection(destination: SplashNextDestination) {
