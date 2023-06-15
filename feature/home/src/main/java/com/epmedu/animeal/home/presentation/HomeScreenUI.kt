@@ -254,7 +254,7 @@ internal fun HomeScreenUI(
         )
     }
     ThankYouConfirmationDialog(state, onScreenEvent)
-    OnFeedingConfirmationStateChange(state.feedState.feedingConfirmationState)
+    OnFeedingConfirmationStateChange(onFeedingEvent, state.feedState.feedingConfirmationState)
 }
 
 private fun checkPermissionsAndGps(
@@ -348,24 +348,17 @@ private fun ThankYouConfirmationDialog(
 
 @Composable
 fun OnFeedingConfirmationStateChange(
+    onFeedingEvent: (FeedingEvent) -> Unit,
     feedingConfirmationState: FeedingConfirmationState,
 ) {
-    val feedingWarningDialogHasShown = rememberSaveable { mutableStateOf(false) }
-    when (feedingConfirmationState) {
-        is FeedingConfirmationState.Dismissed -> {
-            val showWarningDialog =
-                feedingConfirmationState.reason == FeedingConfirmationState.REQUEST_CANCELLED
-            if (showWarningDialog && !feedingWarningDialogHasShown.value) {
-                AnimealAlertDialog(
-                    title = stringResource(id = R.string.feeding_point_expired_description),
-                    acceptText = stringResource(id = R.string.feeding_point_expired_accept),
-                    onConfirm = {
-                        feedingWarningDialogHasShown.value = true
-                    }
-                )
+    if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
+        AnimealAlertDialog(
+            title = stringResource(id = R.string.feeding_point_expired_description),
+            acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+            onConfirm = {
+                onFeedingEvent(FeedingEvent.Reset)
             }
-        }
-        else -> {}
+        )
     }
 }
 

@@ -21,7 +21,6 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Companion.REQUEST_CANCELLED
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
@@ -69,7 +68,7 @@ class DefaultFeedingHandler(
             } ?: run {
                 updateState {
                     copy(
-                        feedingConfirmationState = FeedingConfirmationState.Dismissed()
+                        feedingConfirmationState = FeedingConfirmationState.Dismissed
                     )
                 }
             }
@@ -86,6 +85,16 @@ class DefaultFeedingHandler(
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
+            else -> restartFeedingState()
+        }
+    }
+
+    private fun restartFeedingState() {
+        updateState {
+            copy(
+                feedPoint = null,
+                feedingConfirmationState = FeedingConfirmationState.Dismissed
+            )
         }
     }
 
@@ -105,7 +114,7 @@ class DefaultFeedingHandler(
                 updateFeedingState(FeedingConfirmationState.FeedingStarted)
             },
             onError = {
-                updateFeedingState(FeedingConfirmationState.Dismissed(REQUEST_CANCELLED))
+                updateFeedingState(FeedingConfirmationState.FeedingWasAlreadyBooked)
             }
         )
     }
@@ -119,7 +128,7 @@ class DefaultFeedingHandler(
                     stopRoute()
                     disableTimer()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed())
+                    updateFeedingState(FeedingConfirmationState.Dismissed)
                 }
             )
         }
@@ -136,7 +145,7 @@ class DefaultFeedingHandler(
                 onSuccess = {
                     deselectFeedingPoint()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed())
+                    updateFeedingState(FeedingConfirmationState.Dismissed)
                 }
             )
         }
@@ -166,7 +175,7 @@ class DefaultFeedingHandler(
     }
 
     override fun dismissThankYouDialog() {
-        updateFeedingState(FeedingConfirmationState.Dismissed())
+        updateFeedingState(FeedingConfirmationState.Dismissed)
     }
 
     private suspend fun performFeedingAction(

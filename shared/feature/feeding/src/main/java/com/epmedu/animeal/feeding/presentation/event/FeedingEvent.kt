@@ -7,4 +7,5 @@ sealed interface FeedingEvent {
     object Cancel : FeedingEvent
     data class Finish(val feedingPhotos: List<FeedingPhotoItem>) : FeedingEvent
     object Expired : FeedingEvent
+    object Reset : FeedingEvent
 }
