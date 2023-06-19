@@ -66,7 +66,10 @@ internal class EnterPhoneViewModel @Inject constructor(
 
         viewModelScope.launch {
             when (signUpAndSignInUseCase(phoneNumber, AMPLIFY_PASSWORD)) {
-                is ActionResult.Success -> savePhoneNumberAndPrefixAndNavigateNext()
+                is ActionResult.Success -> {
+                    savePhoneNumberAndPrefixAndNavigateNext()
+                }
+
                 is ActionResult.Failure -> {
                     updateNextEnabled()
                     updateError(true)
