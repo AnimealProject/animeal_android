@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.DefaultConstants
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -64,17 +65,13 @@ internal class EnterPhoneViewModel @Inject constructor(
         val phoneNumber = state.prefix + state.phoneNumber
 
         viewModelScope.launch {
-            signUpAndSignInUseCase(
-                phoneNumber,
-                AMPLIFY_PASSWORD,
-                {
-                    savePhoneNumberAndPrefixAndNavigateNext()
-                },
-                {
+            when (signUpAndSignInUseCase(phoneNumber, AMPLIFY_PASSWORD)) {
+                is ActionResult.Success -> savePhoneNumberAndPrefixAndNavigateNext()
+                is ActionResult.Failure -> {
                     updateNextEnabled()
                     updateError(true)
                 }
-            )
+            }
         }
     }
 

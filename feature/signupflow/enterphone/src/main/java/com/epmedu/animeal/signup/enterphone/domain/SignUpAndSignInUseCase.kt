@@ -7,18 +7,17 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
     suspend operator fun invoke(
         phone: String,
         password: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit,
-    ) {
-        when (val result = repository.signUp(phone, password)) {
+    ): ActionResult<Unit> {
+        return when (val result = repository.signUp(phone, password)) {
             is ActionResult.Success -> {
-                signIn(phone, onSuccess, onError)
+                signIn(phone)
             }
+
             is ActionResult.Failure -> {
                 if (result.error is UsernameExistsException) {
-                    signIn(phone, onSuccess, onError)
+                    signIn(phone)
                 } else {
-                    onError()
+                    ActionResult.Failure(result.error)
                 }
             }
         }
@@ -26,15 +25,14 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
 
     private suspend fun signIn(
         phone: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit
-    ) {
-        when (repository.signIn(phone)) {
+    ): ActionResult<Unit> {
+        return when (val result = repository.signIn(phone)) {
             is ActionResult.Success -> {
-                onSuccess()
+                ActionResult.Success(Unit)
             }
+
             is ActionResult.Failure -> {
-                onError()
+                ActionResult.Failure(result.error)
             }
         }
     }

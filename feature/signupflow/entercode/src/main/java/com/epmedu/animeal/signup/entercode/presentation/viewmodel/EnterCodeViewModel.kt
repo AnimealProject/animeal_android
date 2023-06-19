@@ -106,16 +106,16 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmSignIn() {
         viewModelScope.launch {
-            mobileConfirmCodeUseCase(
-                code = state.code,
-                onSuccess = {
+            when (mobileConfirmCodeUseCase(code = state.code)) {
+                is ActionResult.Success -> {
                     updateState { copy(isError = false) }
                     fetchNetworkProfile()
-                },
-                onError = {
+                }
+
+                is ActionResult.Failure -> {
                     updateState { copy(isError = true) }
-                },
-            )
+                }
+            }
         }
     }
 
