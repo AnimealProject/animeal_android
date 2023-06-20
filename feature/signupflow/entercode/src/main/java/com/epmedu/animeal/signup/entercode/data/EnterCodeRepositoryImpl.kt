@@ -2,7 +2,6 @@ package com.epmedu.animeal.signup.entercode.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.amplifyframework.auth.result.AuthSignInResult
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.constants.DefaultConstants.PHONE_NUMBER_PREFIX
 import com.epmedu.animeal.common.data.wrapper.ApiResult
@@ -42,7 +41,7 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
 
     override suspend fun confirmSignIn(
         code: List<Int?>
-    ): ActionResult<AuthSignInResult> {
+    ): ActionResult<Unit> {
         return when (val result = authAPI.confirmSignIn(code.joinToString(""))) {
             is ApiResult.Success -> ActionResult.Success(result.data)
             is ApiResult.Failure -> ActionResult.Failure(result.error)

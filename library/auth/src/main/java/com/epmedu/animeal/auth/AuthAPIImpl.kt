@@ -1,6 +1,5 @@
 package com.epmedu.animeal.auth
 
-import com.amplifyframework.auth.AuthCodeDeliveryDetails
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
@@ -9,7 +8,6 @@ import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
-import com.amplifyframework.auth.result.AuthSignInResult
 import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
@@ -101,7 +99,7 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun signIn(
         phoneNumber: String
-    ): ApiResult<AuthSignInResult> {
+    ): ApiResult<Unit> {
         val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
             .authFlowType(AuthFlowType.CUSTOM_AUTH)
             .build()
@@ -110,7 +108,8 @@ internal class AuthAPIImpl : AuthAPI {
                 phoneNumber,
                 "",
                 authSignInOptions,
-                { resume(ApiResult.Success(it)) },
+                /* Actual return type of onSuccess function here is AuthSignInResult, but currently it's unused */
+                { resume(ApiResult.Success(Unit)) },
                 { resume(ApiResult.Failure(it)) }
             )
         }
@@ -118,11 +117,11 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun confirmSignIn(
         code: String
-    ): ApiResult<AuthSignInResult> {
+    ): ApiResult<Unit> {
         return suspendCancellableCoroutine {
             Amplify.Auth.confirmSignIn(
                 code,
-                { resume(ApiResult.Success(it)) },
+                { resume(ApiResult.Success(Unit)) },
                 { resume(ApiResult.Failure(it)) }
             )
         }
@@ -143,7 +142,7 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun sendCode(
         phoneNumber: String,
-    ): ApiResult<Any> {
+    ): ApiResult<Unit> {
         return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
             is AuthenticationType.Facebook -> sendPhoneCodeByResend()
@@ -158,11 +157,11 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    private suspend fun sendPhoneCodeByResend(): ApiResult<AuthCodeDeliveryDetails> {
+    private suspend fun sendPhoneCodeByResend(): ApiResult<Unit> {
         return suspendCancellableCoroutine {
             Amplify.Auth.resendUserAttributeConfirmationCode(
                 AuthUserAttributeKey.phoneNumber(),
-                { resume(ApiResult.Success(it)) },
+                { resume(ApiResult.Success(Unit)) },
                 { resume(ApiResult.Failure(it)) }
             )
         }
