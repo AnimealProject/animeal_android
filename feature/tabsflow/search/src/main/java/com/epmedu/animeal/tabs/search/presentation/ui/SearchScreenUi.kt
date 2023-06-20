@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
@@ -30,10 +31,13 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
@@ -43,6 +47,7 @@ import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -145,10 +150,31 @@ private fun ScreenScaffold(
             }
         )
     }
-    if (state.feedState.feedingConfirmationState
-        == FeedingConfirmationState.FeedingStarted
-    ) {
-        navigator.navigateTo(TabsRoute.Home.name)
+    OnFeedingConfirmationState(
+        state.feedState.feedingConfirmationState,
+        navigator,
+        onFeedingEvent
+    )
+}
+
+@Composable
+private fun OnFeedingConfirmationState(
+    feedingConfirmationState: FeedingConfirmationState,
+    navigator: Navigator,
+    onFeedingEvent: (FeedingEvent) -> Unit
+) {
+    when (feedingConfirmationState) {
+        FeedingStarted -> { navigator.navigateTo(TabsRoute.Home.name) }
+        FeedingWasAlreadyBooked -> {
+            AnimealAlertDialog(
+                title = stringResource(id = R.string.feeding_point_expired_description),
+                acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+                onConfirm = {
+                    onFeedingEvent(FeedingEvent.Reset)
+                }
+            )
+        }
+        else -> {}
     }
 }
 

@@ -15,6 +15,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Reset
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.mapper.toDomainFeedState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
@@ -85,6 +86,16 @@ class DefaultFeedingHandler(
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
+            Reset -> restartFeedingState()
+        }
+    }
+
+    private fun restartFeedingState() {
+        updateState {
+            copy(
+                feedPoint = null,
+                feedingConfirmationState = FeedingConfirmationState.Dismissed
+            )
         }
     }
 
@@ -102,6 +113,9 @@ class DefaultFeedingHandler(
                 startRoute()
                 startTimer()
                 updateFeedingState(FeedingConfirmationState.FeedingStarted)
+            },
+            onError = {
+                updateFeedingState(FeedingConfirmationState.FeedingWasAlreadyBooked)
             }
         )
     }
@@ -168,16 +182,13 @@ class DefaultFeedingHandler(
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit,
-        onError: () -> Unit = {}
+        onError: () -> Unit = { showError() },
     ) {
         state.feedPoint?.let { currentFeedingPoint ->
             performAction(
                 action = { action(currentFeedingPoint.id) },
                 onSuccess = { onSuccess(currentFeedingPoint) },
-                onError = {
-                    onError()
-                    showError()
-                }
+                onError = onError,
             )
         } ?: run {
             onError()

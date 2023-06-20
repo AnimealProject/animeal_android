@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
@@ -33,6 +34,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationStat
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
@@ -252,6 +254,7 @@ internal fun HomeScreenUI(
         )
     }
     ThankYouConfirmationDialog(state, onScreenEvent)
+    OnFeedingConfirmationState(state.feedState.feedingConfirmationState, onFeedingEvent)
 }
 
 private fun checkPermissionsAndGps(
@@ -340,6 +343,22 @@ private fun ThankYouConfirmationDialog(
         ThankYouDialog(onDismiss = {
             onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
         })
+    }
+}
+
+@Composable
+fun OnFeedingConfirmationState(
+    feedingConfirmationState: FeedingConfirmationState,
+    onFeedingEvent: (FeedingEvent) -> Unit
+) {
+    if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
+        AnimealAlertDialog(
+            title = stringResource(id = R.string.feeding_point_expired_description),
+            acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+            onConfirm = {
+                onFeedingEvent(FeedingEvent.Reset)
+            }
+        )
     }
 }
 
