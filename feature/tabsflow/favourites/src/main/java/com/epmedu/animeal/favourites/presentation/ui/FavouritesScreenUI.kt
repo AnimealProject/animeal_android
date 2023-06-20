@@ -47,6 +47,7 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
@@ -59,6 +60,7 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
@@ -199,8 +201,19 @@ private fun ScreenScaffold(
             onFeedingEvent(FeedingEvent.Start(it.id))
         })
     }
-    when (state.feedState.feedingConfirmationState) {
-        FeedingStarted -> { navigator.navigateTo(TabsRoute.Home.name) }
+    OnFeedingConfirmationState(state.feedState.feedingConfirmationState, navigator, onFeedingEvent)
+}
+
+@Composable
+private fun OnFeedingConfirmationState(
+    feedingConfirmationState: FeedingConfirmationState,
+    navigator: Navigator,
+    onFeedingEvent: (FeedingEvent) -> Unit
+) {
+    when (feedingConfirmationState) {
+        FeedingStarted -> {
+            navigator.navigateTo(TabsRoute.Home.name)
+        }
         FeedingWasAlreadyBooked -> {
             AnimealAlertDialog(
                 title = stringResource(id = R.string.feeding_point_expired_description),

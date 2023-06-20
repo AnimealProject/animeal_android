@@ -88,17 +88,3 @@ private fun AnimealAlertQuestionPreview() {
         )
     }
 }
-
-@AnimealPreview
-@Composable
-private fun AnimealAlertQuestionSingleOptionPreview() {
-    AnimealTheme {
-        AnimealQuestionDialog(
-            title = "One Option",
-            dismissText = "Dismiss",
-            acceptText = "Accept",
-            onDismiss = {},
-            onConfirm = {}
-        )
-    }
-}

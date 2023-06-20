@@ -254,7 +254,7 @@ internal fun HomeScreenUI(
         )
     }
     ThankYouConfirmationDialog(state, onScreenEvent)
-    OnFeedingConfirmationStateChange(onFeedingEvent, state.feedState.feedingConfirmationState)
+    OnFeedingConfirmationState(state.feedState.feedingConfirmationState, onFeedingEvent)
 }
 
 private fun checkPermissionsAndGps(
@@ -347,9 +347,9 @@ private fun ThankYouConfirmationDialog(
 }
 
 @Composable
-fun OnFeedingConfirmationStateChange(
-    onFeedingEvent: (FeedingEvent) -> Unit,
+fun OnFeedingConfirmationState(
     feedingConfirmationState: FeedingConfirmationState,
+    onFeedingEvent: (FeedingEvent) -> Unit
 ) {
     if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
         AnimealAlertDialog(

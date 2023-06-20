@@ -150,18 +150,18 @@ private fun ScreenScaffold(
             }
         )
     }
-    OnFeedingConfirmationStateChange(
+    OnFeedingConfirmationState(
+        state.feedState.feedingConfirmationState,
         navigator,
-        onFeedingEvent,
-        state.feedState.feedingConfirmationState
+        onFeedingEvent
     )
 }
 
 @Composable
-fun OnFeedingConfirmationStateChange(
-    navigator: Navigator,
-    onFeedingEvent: (FeedingEvent) -> Unit,
+private fun OnFeedingConfirmationState(
     feedingConfirmationState: FeedingConfirmationState,
+    navigator: Navigator,
+    onFeedingEvent: (FeedingEvent) -> Unit
 ) {
     when (feedingConfirmationState) {
         FeedingStarted -> { navigator.navigateTo(TabsRoute.Home.name) }

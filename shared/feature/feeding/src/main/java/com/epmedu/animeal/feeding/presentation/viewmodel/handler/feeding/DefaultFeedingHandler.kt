@@ -15,6 +15,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Reset
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.mapper.toDomainFeedState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
@@ -85,7 +86,7 @@ class DefaultFeedingHandler(
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
-            else -> restartFeedingState()
+            Reset -> restartFeedingState()
         }
     }
 
