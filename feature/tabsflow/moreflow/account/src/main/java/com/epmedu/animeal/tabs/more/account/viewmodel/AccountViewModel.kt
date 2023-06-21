@@ -2,7 +2,7 @@ package com.epmedu.animeal.tabs.more.account.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
@@ -14,23 +14,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class AccountViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val logOutUseCase: LogOutUseCase,
     private val clearProfileUseCase: ClearProfileUseCase
 ) : ViewModel(),
+    ActionDelegate by actionDelegate,
     EventDelegate<AccountEvent> by DefaultEventDelegate() {
 
     internal fun logout() {
         viewModelScope.launch {
-            when (logOutUseCase()) {
-                is ActionResult.Success -> {
+            performAction(
+                action = {
+                    logOutUseCase()
+                },
+                onSuccess = {
                     clearProfileUseCase()
                     viewModelScope.launch { sendEvent(NavigateToOnboarding) }
-                }
-
-                is ActionResult.Failure -> {
-                    // TODO clarify how to handle it
-                }
-            }
+                },
+                onError = {} // TODO clarify how to handle it
+            )
         }
     }
 }
