@@ -26,14 +26,6 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
     private suspend fun signIn(
         phone: String,
     ): ActionResult<Unit> {
-        return when (val result = repository.signIn(phone)) {
-            is ActionResult.Success -> {
-                ActionResult.Success(Unit)
-            }
-
-            is ActionResult.Failure -> {
-                ActionResult.Failure(result.error)
-            }
-        }
+        return repository.signIn(phone)
     }
 }

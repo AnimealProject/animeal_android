@@ -161,6 +161,7 @@ internal class AuthAPIImpl : AuthAPI {
         return suspendCancellableCoroutine {
             Amplify.Auth.resendUserAttributeConfirmationCode(
                 AuthUserAttributeKey.phoneNumber(),
+                // Actual return type of onSuccess function here is AuthCodeDeliveryDetails, but currently it's unused
                 { resume(ApiResult.Success(Unit)) },
                 { resume(ApiResult.Failure(it)) }
             )

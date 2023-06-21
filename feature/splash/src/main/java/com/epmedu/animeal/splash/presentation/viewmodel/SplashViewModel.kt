@@ -3,6 +3,7 @@ package com.epmedu.animeal.splash.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SplashViewModel @Inject constructor(
+    actionDelegate: ActionDelegate,
     private val getIsSignedInUseCase: GetIsSignedInUseCase,
     private val getIsProfileSavedUseCase: GetIsProfileSavedUseCase,
     private val getIsPhoneNumberVerifiedUseCase: GetIsPhoneNumberVerifiedUseCase,
@@ -31,7 +33,8 @@ internal class SplashViewModel @Inject constructor(
     private val setFinishProfileAsStartDestinationUseCase: SetFinishProfileAsStartDestinationUseCase,
     private val logOutUseCase: LogOutUseCase
 ) : ViewModel(),
-    StateDelegate<SplashState> by DefaultStateDelegate(SplashState()) {
+    StateDelegate<SplashState> by DefaultStateDelegate(SplashState()),
+    ActionDelegate by actionDelegate {
 
     init {
         checkIfUserIsSignedIn()
@@ -79,14 +82,17 @@ internal class SplashViewModel @Inject constructor(
     }
 
     private suspend fun logOut() {
-        when (val result = logOutUseCase()) {
-            is ActionResult.Success -> {
+        performAction(
+            action = {
+                logOutUseCase()
+            },
+            onSuccess = {
                 navigateToNextDirection(SignUp)
-            }
-            is ActionResult.Failure -> {
+            },
+            onError = {
                 updateState { copy(isError = true) }
             }
-        }
+        )
     }
 
     private fun navigateToNextDirection(destination: SplashNextDestination) {
