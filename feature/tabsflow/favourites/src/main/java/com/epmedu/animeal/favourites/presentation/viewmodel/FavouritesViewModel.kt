@@ -50,13 +50,16 @@ internal class FavouritesViewModel @Inject constructor(
     init {
         viewModelScope.launch { collectFeedingPoints() }
         viewModelScope.launch { collectPermissionsState() }
-        viewModelScope.launch {
-            feedingStateFlow.collectLatest { feedingState ->
-                updateState {
-                    copy(
-                        feedState = feedingState
-                    )
-                }
+        viewModelScope.launch { collectFeedState() }
+        viewModelScope.launch { fetchCurrentFeeding() }
+    }
+
+    private suspend fun collectFeedState() {
+        feedingStateFlow.collectLatest { feedingState ->
+            updateState {
+                copy(
+                    feedState = feedingState
+                )
             }
         }
     }

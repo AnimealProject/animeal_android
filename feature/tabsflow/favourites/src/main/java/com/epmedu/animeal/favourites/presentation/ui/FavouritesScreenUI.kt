@@ -151,7 +151,7 @@ private fun ScreenScaffold(
                     feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
-                    isShowOnMapVisible = true,
+                    isShowOnMapVisible = state.feedState.feedPoint == null,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },

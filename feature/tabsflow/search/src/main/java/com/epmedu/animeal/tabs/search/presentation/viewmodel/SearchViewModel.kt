@@ -53,13 +53,16 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch { collectFeedingPoints() }
         viewModelScope.launch { collectPermissionsState() }
-        viewModelScope.launch {
-            feedingStateFlow.collectLatest { feedingState ->
-                updateState {
-                    copy(
-                        feedState = feedingState
-                    )
-                }
+        viewModelScope.launch { collectFeedState() }
+        viewModelScope.launch { fetchCurrentFeeding() }
+    }
+
+    private suspend fun collectFeedState() {
+        feedingStateFlow.collectLatest { feedingState ->
+            updateState {
+                copy(
+                    feedState = feedingState
+                )
             }
         }
     }
@@ -121,6 +124,7 @@ class SearchViewModel @Inject constructor(
     private fun handleFeedingPointSelected(event: FeedingPointSelected) {
         updateState { copy(showingFeedingPoint = event.feedingPoint) }
         fetchFeedings(event.feedingPoint.id)
+        viewModelScope.launch { collectFeedState() }
     }
 
     private fun fetchFeedings(feedingPointId: String) {
