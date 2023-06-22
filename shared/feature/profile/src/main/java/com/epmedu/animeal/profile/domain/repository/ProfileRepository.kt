@@ -1,6 +1,6 @@
 package com.epmedu.animeal.profile.domain.repository
 
-import com.epmedu.animeal.auth.AuthRequestHandler
+import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.profile.data.model.Profile
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +10,7 @@ interface ProfileRepository {
 
     fun saveProfile(profile: Profile): Flow<Unit>
 
-    suspend fun logOut(authRequestHandler: AuthRequestHandler)
+    suspend fun logOut(): ActionResult<Unit>
 
     suspend fun clearProfile()
 

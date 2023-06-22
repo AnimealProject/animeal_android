@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.DefaultConstants
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -22,11 +23,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterPhoneViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val signUpAndSignInUseCase: SignUpAndSignInUseCase,
     private val savePhoneNumberInfoUseCase: SavePhoneNumberInfoUseCase,
     private val validator: ProfileValidator,
     private val buildConfigProvider: BuildConfigProvider,
 ) : ViewModel(),
+    ActionDelegate by actionDelegate,
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(
         initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)
     ),
@@ -62,15 +65,15 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun sendCodeAndSavePhoneNumberAndPrefix() {
         val phoneNumber = state.prefix + state.phoneNumber
-
         viewModelScope.launch {
-            signUpAndSignInUseCase(
-                phoneNumber,
-                AMPLIFY_PASSWORD,
-                {
+            performAction(
+                action = {
+                    signUpAndSignInUseCase(phoneNumber, AMPLIFY_PASSWORD)
+                },
+                onSuccess = {
                     savePhoneNumberAndPrefixAndNavigateNext()
                 },
-                {
+                onError = {
                     updateNextEnabled()
                     updateError(true)
                 }

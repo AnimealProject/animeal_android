@@ -5,6 +5,7 @@ import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -30,6 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EnterCodeViewModel @Inject constructor(
+    private val actionDelegate: ActionDelegate,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     private val mobileConfirmCodeUseCase: MobileConfirmCodeUseCase,
@@ -39,6 +41,7 @@ internal class EnterCodeViewModel @Inject constructor(
     private val saveProfileUseCase: SaveProfileUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
 ) : ViewModel(),
+    ActionDelegate by actionDelegate,
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
     EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
 
@@ -56,7 +59,7 @@ internal class EnterCodeViewModel @Inject constructor(
     fun resendCode() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
         viewModelScope.launch { launchResendTimer() }
-        viewModelScope.launch { sendCodeUseCase({}, {}) }
+        viewModelScope.launch { sendCodeUseCase() }
     }
 
     fun changeDigit(
@@ -105,15 +108,17 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmSignIn() {
         viewModelScope.launch {
-            mobileConfirmCodeUseCase(
-                code = state.code,
+            performAction(
+                action = {
+                    mobileConfirmCodeUseCase(code = state.code)
+                },
                 onSuccess = {
                     updateState { copy(isError = false) }
                     fetchNetworkProfile()
                 },
                 onError = {
                     updateState { copy(isError = true) }
-                },
+                }
             )
         }
     }
@@ -135,8 +140,10 @@ internal class EnterCodeViewModel @Inject constructor(
 
     private fun confirmResendCode() {
         viewModelScope.launch {
-            facebookConfirmCodeUseCase(
-                code = state.code,
+            performAction(
+                action = {
+                    facebookConfirmCodeUseCase(code = state.code)
+                },
                 onSuccess = {
                     updateState { copy(isError = false) }
                     viewModelScope.launch {
@@ -146,7 +153,7 @@ internal class EnterCodeViewModel @Inject constructor(
                 },
                 onError = {
                     updateState { copy(isError = true) }
-                },
+                }
             )
         }
     }

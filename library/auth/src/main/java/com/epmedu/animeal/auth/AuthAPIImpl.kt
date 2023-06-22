@@ -9,7 +9,11 @@ import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -35,12 +39,8 @@ internal class AuthAPIImpl : AuthAPI {
 
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
-            { user ->
-                resume(user.username)
-            },
-            { authException ->
-                resumeWithException(authException)
-            }
+            { user -> resume(user.username) },
+            { authException -> resumeWithException(authException) }
         )
     }
 
@@ -48,23 +48,17 @@ internal class AuthAPIImpl : AuthAPI {
      * Wherever this method is used for Facebook flow, verify that next steps will be ready to handle
      * NotAuthorizedException due to possible refresh token expiration */
     override suspend fun isSignedIn(): Boolean {
+        val scope = CoroutineScope(coroutineContext)
         return suspendCancellableCoroutine {
             Amplify.Auth.fetchAuthSession(
                 { session ->
                     when (session) {
                         is AWSCognitoAuthSession -> {
                             if (session.isExpired) {
-                                signOut(
-                                    object : AuthRequestHandler {
-                                        override fun onSuccess(result: Any?) {
-                                            resume(false)
-                                        }
-
-                                        override fun onError(exception: Exception) {
-                                            resume(false)
-                                        }
-                                    }
-                                )
+                                scope.launch {
+                                    signOut()
+                                    resume(false)
+                                }
                             } else {
                                 resume(session.isSignedInWithoutErrors)
                             }
@@ -81,11 +75,10 @@ internal class AuthAPIImpl : AuthAPI {
         }
     }
 
-    override fun signUp(
+    override suspend fun signUp(
         phone: String,
-        password: String,
-        handler: AuthRequestHandler,
-    ) {
+        password: String
+    ): ApiResult<Unit> {
         val attrs = mapOf(
             AuthUserAttributeKey.phoneNumber() to phone,
         )
@@ -93,79 +86,85 @@ internal class AuthAPIImpl : AuthAPI {
         val options = AuthSignUpOptions.builder()
             .userAttributes(attrs.map { AuthUserAttribute(it.key, it.value) })
             .build()
-
-        Amplify.Auth.signUp(
-            phone,
-            password,
-            options,
-            handler::onSuccess,
-            handler::onError,
-        )
-    }
-
-    override fun signIn(
-        phoneNumber: String,
-        handler: AuthRequestHandler,
-    ) {
-        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
-            .authFlowType(AuthFlowType.CUSTOM_AUTH)
-            .build()
-
-        Amplify.Auth.signIn(
-            phoneNumber,
-            "",
-            authSignInOptions,
-            handler::onSuccess,
-            handler::onError,
-        )
-    }
-
-    override fun confirmSignIn(
-        code: String,
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.confirmSignIn(
-            code,
-            handler::onSuccess,
-            handler::onError,
-        )
-    }
-
-    override fun confirmResendCode(
-        code: String,
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.confirmUserAttribute(
-            AuthUserAttributeKey.phoneNumber(),
-            code,
-            handler::onSuccess,
-            handler::onError
-        )
-    }
-
-    override fun sendCode(
-        phoneNumber: String,
-        handler: AuthRequestHandler,
-    ) {
-        when (authenticationType) {
-            AuthenticationType.Mobile -> signIn(phoneNumber, handler)
-            is AuthenticationType.Facebook -> sendPhoneCodeByResend(handler)
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signUp(
+                phone,
+                password,
+                options,
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
+            )
         }
     }
 
-    override fun signOut(
-        handler: AuthRequestHandler
-    ) {
-        Amplify.Auth.signOut(
-            handler::onSuccess
-        )
+    override suspend fun signIn(
+        phoneNumber: String
+    ): ApiResult<Unit> {
+        val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
+            .authFlowType(AuthFlowType.CUSTOM_AUTH)
+            .build()
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signIn(
+                phoneNumber,
+                "",
+                authSignInOptions,
+                /* Actual return type of onSuccess function here is AuthSignInResult, but currently it's unused */
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
+            )
+        }
     }
 
-    private fun sendPhoneCodeByResend(handler: AuthRequestHandler) {
-        Amplify.Auth.resendUserAttributeConfirmationCode(
-            AuthUserAttributeKey.phoneNumber(),
-            handler::onSuccess,
-            handler::onError
-        )
+    override suspend fun confirmSignIn(
+        code: String
+    ): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.confirmSignIn(
+                code,
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
+            )
+        }
+    }
+
+    override suspend fun confirmResendCode(
+        code: String
+    ): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.confirmUserAttribute(
+                AuthUserAttributeKey.phoneNumber(),
+                code,
+                { resume(ApiResult.Success<Unit>(Unit)) },
+                { resume(ApiResult.Failure<Unit>(it)) },
+            )
+        }
+    }
+
+    override suspend fun sendCode(
+        phoneNumber: String,
+    ): ApiResult<Unit> {
+        return when (authenticationType) {
+            AuthenticationType.Mobile -> signIn(phoneNumber)
+            is AuthenticationType.Facebook -> sendPhoneCodeByResend()
+        }
+    }
+
+    override suspend fun signOut(): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.signOut {
+                resume(ApiResult.Success<Unit>(Unit))
+            }
+        }
+    }
+
+    private suspend fun sendPhoneCodeByResend(): ApiResult<Unit> {
+        return suspendCancellableCoroutine {
+            Amplify.Auth.resendUserAttributeConfirmationCode(
+                AuthUserAttributeKey.phoneNumber(),
+                // Actual return type of onSuccess function here is AuthCodeDeliveryDetails, but currently it's unused
+                { resume(ApiResult.Success(Unit)) },
+                { resume(ApiResult.Failure(it)) }
+            )
+        }
     }
 }
