@@ -20,7 +20,6 @@ fun FeedingSheet(
     onFavouriteChange: (Boolean) -> Unit,
     onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
     onTakePhotoClick: () -> Unit,
-    onShowOnMap: () -> Unit
 ) {
     when (feedingState) {
         is FeedingRouteState.Active -> {
@@ -39,7 +38,6 @@ fun FeedingSheet(
                 feedingPoint = feedingPoint,
                 contentAlpha = contentAlpha,
                 onFavouriteChange = onFavouriteChange,
-                onShowOnMap = onShowOnMap
             )
         }
     }
