@@ -32,7 +32,7 @@ internal class EnterCodeRepositoryImpl @Inject constructor(
             prefix + phoneNumber
         }
 
-    override suspend fun sendCode(): ActionResult<Any> {
+    override suspend fun sendCode(): ActionResult<Unit> {
         return when (val result = authAPI.sendCode(phoneNumberWithPrefix.first())) {
             is ApiResult.Success -> ActionResult.Success(result.data)
             is ApiResult.Failure -> ActionResult.Failure(result.error)
