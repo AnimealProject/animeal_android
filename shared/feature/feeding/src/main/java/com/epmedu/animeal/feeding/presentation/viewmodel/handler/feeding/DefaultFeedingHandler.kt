@@ -61,7 +61,7 @@ class DefaultFeedingHandler(
                 updateState {
                     copy(
                         feedPoint = FeedingPointModel(feedingPoint),
-                        feedingConfirmationState = FeedingConfirmationState.FeedingStarted
+                        feedingConfirmationState = FeedingConfirmationState.Dismissed
                     )
                 }
                 showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
