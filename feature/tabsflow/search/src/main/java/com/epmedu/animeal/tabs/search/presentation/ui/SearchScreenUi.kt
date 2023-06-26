@@ -190,7 +190,7 @@ private fun SearchSheetContent(
             feedingPoint = feedingPoint,
             contentAlpha = contentAlpha,
             modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = true,
+            isShowOnMapVisible = state.feedState.feedPoint == null,
             onFavouriteChange = { isFavourite ->
                 onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
             },

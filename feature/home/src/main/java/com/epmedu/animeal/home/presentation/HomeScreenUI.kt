@@ -163,7 +163,6 @@ internal fun HomeScreenUI(
                     },
                     onTakePhotoClick = { openCamera(state, onScreenEvent, context) },
                     onDeletePhotoClick = { onScreenEvent(FeedingGalleryEvent.DeletePhoto(it)) },
-                    onShowOnMap = {}
                 )
             }
         },
