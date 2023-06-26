@@ -1,12 +1,21 @@
+import com.moowork.gradle.node.NodeExtension
+
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("com.amazonaws.appsync")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.epmedu.animeal.tabs.more.faq"
+}
+
+configure<NodeExtension> {
+    distBaseUrl = null
+    download = true
+    version = "19.6.0"
 }
 
 dependencies {
@@ -21,6 +30,7 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(libs.amplify.core)
+    implementation(libs.appsync)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
