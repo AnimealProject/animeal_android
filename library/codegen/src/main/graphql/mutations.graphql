@@ -1,10 +1,13 @@
 # this is an auto generated file. This will be overwritten
+
 mutation StartFeeding($feedingPointId: String!) {
   startFeeding(feedingPointId: $feedingPointId)
 }
+
 mutation FinishFeeding($feedingId: String!, $images: [String!]!) {
   finishFeeding(feedingId: $feedingId, images: $images)
 }
+
 mutation RejectFeeding(
   $feedingId: String!
   $reason: String!
@@ -12,6 +15,7 @@ mutation RejectFeeding(
 ) {
   rejectFeeding(feedingId: $feedingId, reason: $reason, feeding: $feeding)
 }
+
 mutation ApproveFeeding(
   $feedingId: String!
   $reason: String!
@@ -19,9 +23,11 @@ mutation ApproveFeeding(
 ) {
   approveFeeding(feedingId: $feedingId, reason: $reason, feeding: $feeding)
 }
+
 mutation CancelFeeding($feedingId: String!, $reason: String!) {
   cancelFeeding(feedingId: $feedingId, reason: $reason)
 }
+
 mutation CreatePet(
   $input: CreatePetInput!
   $condition: ModelPetConditionInput
@@ -39,12 +45,14 @@ mutation CreatePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -53,6 +61,7 @@ mutation CreatePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -64,17 +73,22 @@ mutation CreatePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 mutation UpdatePet(
   $input: UpdatePetInput!
   $condition: ModelPetConditionInput
@@ -92,12 +106,14 @@ mutation UpdatePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -106,6 +122,7 @@ mutation UpdatePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -117,17 +134,22 @@ mutation UpdatePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 mutation DeletePet(
   $input: DeletePetInput!
   $condition: ModelPetConditionInput
@@ -145,12 +167,14 @@ mutation DeletePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -159,6 +183,7 @@ mutation DeletePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -170,17 +195,22 @@ mutation DeletePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 mutation CreateCategory(
   $input: CreateCategoryInput!
   $condition: ModelCategoryConditionInput
@@ -193,14 +223,17 @@ mutation CreateCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation UpdateCategory(
   $input: UpdateCategoryInput!
   $condition: ModelCategoryConditionInput
@@ -213,14 +246,17 @@ mutation UpdateCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation DeleteCategory(
   $input: DeleteCategoryInput!
   $condition: ModelCategoryConditionInput
@@ -233,14 +269,17 @@ mutation DeleteCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation CreateFeedingPoint(
   $input: CreateFeedingPointInput!
   $condition: ModelFeedingPointConditionInput
@@ -256,10 +295,12 @@ mutation CreateFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -274,6 +315,7 @@ mutation CreateFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -283,6 +325,7 @@ mutation CreateFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -294,17 +337,22 @@ mutation CreateFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 mutation UpdateFeedingPoint(
   $input: UpdateFeedingPointInput!
   $condition: ModelFeedingPointConditionInput
@@ -320,10 +368,12 @@ mutation UpdateFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -338,6 +388,7 @@ mutation UpdateFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -347,6 +398,7 @@ mutation UpdateFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -358,17 +410,22 @@ mutation UpdateFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 mutation DeleteFeedingPoint(
   $input: DeleteFeedingPointInput!
   $condition: ModelFeedingPointConditionInput
@@ -384,10 +441,12 @@ mutation DeleteFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -402,6 +461,7 @@ mutation DeleteFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -411,6 +471,7 @@ mutation DeleteFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -422,17 +483,22 @@ mutation DeleteFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 mutation CreateFeeding(
   $input: CreateFeedingInput!
   $condition: ModelFeedingConditionInput
@@ -467,11 +533,14 @@ mutation CreateFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 mutation UpdateFeeding(
   $input: UpdateFeedingInput!
   $condition: ModelFeedingConditionInput
@@ -506,11 +575,14 @@ mutation UpdateFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 mutation DeleteFeeding(
   $input: DeleteFeedingInput!
   $condition: ModelFeedingConditionInput
@@ -545,11 +617,14 @@ mutation DeleteFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 mutation CreateFeedingHistory(
   $input: CreateFeedingHistoryInput!
   $condition: ModelFeedingHistoryConditionInput
@@ -566,8 +641,10 @@ mutation CreateFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 mutation UpdateFeedingHistory(
   $input: UpdateFeedingHistoryInput!
   $condition: ModelFeedingHistoryConditionInput
@@ -584,8 +661,10 @@ mutation UpdateFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 mutation DeleteFeedingHistory(
   $input: DeleteFeedingHistoryInput!
   $condition: ModelFeedingHistoryConditionInput
@@ -602,8 +681,10 @@ mutation DeleteFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 mutation CreateRelationPetFeedingPoint(
   $input: CreateRelationPetFeedingPointInput!
   $condition: ModelRelationPetFeedingPointConditionInput
@@ -628,6 +709,7 @@ mutation CreateRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -649,12 +731,15 @@ mutation CreateRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateRelationPetFeedingPoint(
   $input: UpdateRelationPetFeedingPointInput!
   $condition: ModelRelationPetFeedingPointConditionInput
@@ -679,6 +764,7 @@ mutation UpdateRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -700,12 +786,15 @@ mutation UpdateRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteRelationPetFeedingPoint(
   $input: DeleteRelationPetFeedingPointInput!
   $condition: ModelRelationPetFeedingPointConditionInput
@@ -730,6 +819,7 @@ mutation DeleteRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -751,12 +841,15 @@ mutation DeleteRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateRelationUserFeedingPoint(
   $input: CreateRelationUserFeedingPointInput!
   $condition: ModelRelationUserFeedingPointConditionInput
@@ -785,12 +878,15 @@ mutation CreateRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateRelationUserFeedingPoint(
   $input: UpdateRelationUserFeedingPointInput!
   $condition: ModelRelationUserFeedingPointConditionInput
@@ -819,12 +915,15 @@ mutation UpdateRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteRelationUserFeedingPoint(
   $input: DeleteRelationUserFeedingPointInput!
   $condition: ModelRelationUserFeedingPointConditionInput
@@ -853,12 +952,15 @@ mutation DeleteRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateRelationUserPet(
   $input: CreateRelationUserPetInput!
   $condition: ModelRelationUserPetConditionInput
@@ -883,12 +985,15 @@ mutation CreateRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateRelationUserPet(
   $input: UpdateRelationUserPetInput!
   $condition: ModelRelationUserPetConditionInput
@@ -913,12 +1018,15 @@ mutation UpdateRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteRelationUserPet(
   $input: DeleteRelationUserPetInput!
   $condition: ModelRelationUserPetConditionInput
@@ -943,12 +1051,15 @@ mutation DeleteRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateMedication(
   $input: CreateMedicationInput!
   $condition: ModelMedicationConditionInput
@@ -973,16 +1084,20 @@ mutation CreateMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateMedication(
   $input: UpdateMedicationInput!
   $condition: ModelMedicationConditionInput
@@ -1007,16 +1122,20 @@ mutation UpdateMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteMedication(
   $input: DeleteMedicationInput!
   $condition: ModelMedicationConditionInput
@@ -1041,16 +1160,20 @@ mutation DeleteMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateSettings(
   $input: CreateSettingsInput!
   $condition: ModelSettingsConditionInput
@@ -1062,8 +1185,10 @@ mutation CreateSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateSettings(
   $input: UpdateSettingsInput!
   $condition: ModelSettingsConditionInput
@@ -1075,8 +1200,10 @@ mutation UpdateSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteSettings(
   $input: DeleteSettingsInput!
   $condition: ModelSettingsConditionInput
@@ -1088,8 +1215,10 @@ mutation DeleteSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateLanguage(
   $input: CreateLanguageInput!
   $condition: ModelLanguageConditionInput
@@ -1104,8 +1233,10 @@ mutation CreateLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 mutation UpdateLanguage(
   $input: UpdateLanguageInput!
   $condition: ModelLanguageConditionInput
@@ -1120,8 +1251,10 @@ mutation UpdateLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 mutation DeleteLanguage(
   $input: DeleteLanguageInput!
   $condition: ModelLanguageConditionInput
@@ -1136,8 +1269,10 @@ mutation DeleteLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 mutation CreateLanguagesSetting(
   $input: CreateLanguagesSettingInput!
   $condition: ModelLanguagesSettingConditionInput
@@ -1151,8 +1286,10 @@ mutation CreateLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation UpdateLanguagesSetting(
   $input: UpdateLanguagesSettingInput!
   $condition: ModelLanguagesSettingConditionInput
@@ -1166,8 +1303,10 @@ mutation UpdateLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation DeleteLanguagesSetting(
   $input: DeleteLanguagesSettingInput!
   $condition: ModelLanguagesSettingConditionInput
@@ -1181,8 +1320,10 @@ mutation DeleteLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation CreateFavourite(
   $input: CreateFavouriteInput!
   $condition: ModelFavouriteConditionInput
@@ -1190,12 +1331,15 @@ mutation CreateFavourite(
   createFavourite(input: $input, condition: $condition) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation UpdateFavourite(
   $input: UpdateFavouriteInput!
   $condition: ModelFavouriteConditionInput
@@ -1203,12 +1347,15 @@ mutation UpdateFavourite(
   updateFavourite(input: $input, condition: $condition) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation DeleteFavourite(
   $input: DeleteFavouriteInput!
   $condition: ModelFavouriteConditionInput
@@ -1216,12 +1363,15 @@ mutation DeleteFavourite(
   deleteFavourite(input: $input, condition: $condition) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 mutation CreateQuestion(
   $input: CreateQuestionInput!
   $condition: ModelQuestionConditionInput
@@ -1234,14 +1384,17 @@ mutation CreateQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation UpdateQuestion(
   $input: UpdateQuestionInput!
   $condition: ModelQuestionConditionInput
@@ -1254,14 +1407,17 @@ mutation UpdateQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation DeleteQuestion(
   $input: DeleteQuestionInput!
   $condition: ModelQuestionConditionInput
@@ -1274,14 +1430,17 @@ mutation DeleteQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 mutation CreateBankAccount(
   $input: CreateBankAccountInput!
   $condition: ModelBankAccountConditionInput
@@ -1298,8 +1457,10 @@ mutation CreateBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
+
 mutation UpdateBankAccount(
   $input: UpdateBankAccountInput!
   $condition: ModelBankAccountConditionInput
@@ -1316,8 +1477,10 @@ mutation UpdateBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
+
 mutation DeleteBankAccount(
   $input: DeleteBankAccountInput!
   $condition: ModelBankAccountConditionInput
@@ -1334,5 +1497,6 @@ mutation DeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
