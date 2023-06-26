@@ -28,13 +28,16 @@ import java.util.UUID;
   @AuthRule(allow = AuthStrategy.PRIVATE, operations = { ModelOperation.CREATE, ModelOperation.READ, ModelOperation.UPDATE, ModelOperation.DELETE })
 })
 @Index(name = "byUserId", fields = {"userId","feedingPointId"})
+@Index(name = "bySubId", fields = {"sub","feedingPointId"})
 @Index(name = "byFeedingPointId", fields = {"feedingPointId","userId"})
 public final class Favourite implements Model {
   public static final QueryField ID = field("Favourite", "id");
   public static final QueryField USER_ID = field("Favourite", "userId");
+  public static final QueryField SUB = field("Favourite", "sub");
   public static final QueryField FEEDING_POINT_ID = field("Favourite", "feedingPointId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="ID", isRequired = true) String userId;
+  private final @ModelField(targetType="ID") String sub;
   private final @ModelField(targetType="ID", isRequired = true) String feedingPointId;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
@@ -44,6 +47,10 @@ public final class Favourite implements Model {
   
   public String getUserId() {
       return userId;
+  }
+  
+  public String getSub() {
+      return sub;
   }
   
   public String getFeedingPointId() {
@@ -58,9 +65,10 @@ public final class Favourite implements Model {
       return updatedAt;
   }
   
-  private Favourite(String id, String userId, String feedingPointId) {
+  private Favourite(String id, String userId, String sub, String feedingPointId) {
     this.id = id;
     this.userId = userId;
+    this.sub = sub;
     this.feedingPointId = feedingPointId;
   }
   
@@ -74,6 +82,7 @@ public final class Favourite implements Model {
       Favourite favourite = (Favourite) obj;
       return ObjectsCompat.equals(getId(), favourite.getId()) &&
               ObjectsCompat.equals(getUserId(), favourite.getUserId()) &&
+              ObjectsCompat.equals(getSub(), favourite.getSub()) &&
               ObjectsCompat.equals(getFeedingPointId(), favourite.getFeedingPointId()) &&
               ObjectsCompat.equals(getCreatedAt(), favourite.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), favourite.getUpdatedAt());
@@ -85,6 +94,7 @@ public final class Favourite implements Model {
     return new StringBuilder()
       .append(getId())
       .append(getUserId())
+      .append(getSub())
       .append(getFeedingPointId())
       .append(getCreatedAt())
       .append(getUpdatedAt())
@@ -98,6 +108,7 @@ public final class Favourite implements Model {
       .append("Favourite {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("userId=" + String.valueOf(getUserId()) + ", ")
+      .append("sub=" + String.valueOf(getSub()) + ", ")
       .append("feedingPointId=" + String.valueOf(getFeedingPointId()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
@@ -121,6 +132,7 @@ public final class Favourite implements Model {
     return new Favourite(
       id,
       null,
+      null,
       null
     );
   }
@@ -128,6 +140,7 @@ public final class Favourite implements Model {
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
       userId,
+      sub,
       feedingPointId);
   }
   public interface UserIdStep {
@@ -143,6 +156,7 @@ public final class Favourite implements Model {
   public interface BuildStep {
     Favourite build();
     BuildStep id(String id);
+    BuildStep sub(String sub);
   }
   
 
@@ -150,6 +164,7 @@ public final class Favourite implements Model {
     private String id;
     private String userId;
     private String feedingPointId;
+    private String sub;
     @Override
      public Favourite build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -157,6 +172,7 @@ public final class Favourite implements Model {
         return new Favourite(
           id,
           userId,
+          sub,
           feedingPointId);
     }
     
@@ -174,6 +190,12 @@ public final class Favourite implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep sub(String sub) {
+        this.sub = sub;
+        return this;
+    }
+    
     /**
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -186,10 +208,11 @@ public final class Favourite implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String userId, String feedingPointId) {
+    private CopyOfBuilder(String id, String userId, String sub, String feedingPointId) {
       super.id(id);
       super.userId(userId)
-        .feedingPointId(feedingPointId);
+        .feedingPointId(feedingPointId)
+        .sub(sub);
     }
     
     @Override
@@ -200,6 +223,11 @@ public final class Favourite implements Model {
     @Override
      public CopyOfBuilder feedingPointId(String feedingPointId) {
       return (CopyOfBuilder) super.feedingPointId(feedingPointId);
+    }
+    
+    @Override
+     public CopyOfBuilder sub(String sub) {
+      return (CopyOfBuilder) super.sub(sub);
     }
   }
   

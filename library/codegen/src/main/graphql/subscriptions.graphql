@@ -1,4 +1,5 @@
 # this is an auto generated file. This will be overwritten
+
 subscription OnCreatePet(
   $filter: ModelSubscriptionPetFilterInput
   $owner: String
@@ -16,12 +17,14 @@ subscription OnCreatePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -30,6 +33,7 @@ subscription OnCreatePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -41,17 +45,22 @@ subscription OnCreatePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 subscription OnUpdatePet(
   $filter: ModelSubscriptionPetFilterInput
   $owner: String
@@ -69,12 +78,14 @@ subscription OnUpdatePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -83,6 +94,7 @@ subscription OnUpdatePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -94,17 +106,22 @@ subscription OnUpdatePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 subscription OnDeletePet(
   $filter: ModelSubscriptionPetFilterInput
   $owner: String
@@ -122,12 +139,14 @@ subscription OnDeletePet(
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -136,6 +155,7 @@ subscription OnDeletePet(
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -147,17 +167,22 @@ subscription OnDeletePet(
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 subscription OnCreateCategory(
   $filter: ModelSubscriptionCategoryFilterInput
   $owner: String
@@ -170,14 +195,17 @@ subscription OnCreateCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnUpdateCategory(
   $filter: ModelSubscriptionCategoryFilterInput
   $owner: String
@@ -190,14 +218,17 @@ subscription OnUpdateCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnDeleteCategory(
   $filter: ModelSubscriptionCategoryFilterInput
   $owner: String
@@ -210,14 +241,17 @@ subscription OnDeleteCategory(
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnCreateFeedingPoint(
   $filter: ModelSubscriptionFeedingPointFilterInput
   $owner: String
@@ -233,10 +267,12 @@ subscription OnCreateFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -251,6 +287,7 @@ subscription OnCreateFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -260,6 +297,7 @@ subscription OnCreateFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -271,17 +309,22 @@ subscription OnCreateFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 subscription OnUpdateFeedingPoint(
   $filter: ModelSubscriptionFeedingPointFilterInput
   $owner: String
@@ -297,10 +340,12 @@ subscription OnUpdateFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -315,6 +360,7 @@ subscription OnUpdateFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -324,6 +370,7 @@ subscription OnUpdateFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -335,17 +382,22 @@ subscription OnUpdateFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 subscription OnDeleteFeedingPoint(
   $filter: ModelSubscriptionFeedingPointFilterInput
   $owner: String
@@ -361,10 +413,12 @@ subscription OnDeleteFeedingPoint(
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -379,6 +433,7 @@ subscription OnDeleteFeedingPoint(
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -388,6 +443,7 @@ subscription OnDeleteFeedingPoint(
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -399,17 +455,22 @@ subscription OnDeleteFeedingPoint(
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 subscription OnCreateFeeding(
   $filter: ModelSubscriptionFeedingFilterInput
   $owner: String
@@ -444,11 +505,14 @@ subscription OnCreateFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 subscription OnUpdateFeeding(
   $filter: ModelSubscriptionFeedingFilterInput
   $owner: String
@@ -483,11 +547,14 @@ subscription OnUpdateFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 subscription OnDeleteFeeding(
   $filter: ModelSubscriptionFeedingFilterInput
   $owner: String
@@ -522,11 +589,14 @@ subscription OnDeleteFeeding(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 subscription OnCreateFeedingHistory(
   $filter: ModelSubscriptionFeedingHistoryFilterInput
   $owner: String
@@ -543,8 +613,10 @@ subscription OnCreateFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 subscription OnUpdateFeedingHistory(
   $filter: ModelSubscriptionFeedingHistoryFilterInput
   $owner: String
@@ -561,8 +633,10 @@ subscription OnUpdateFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 subscription OnDeleteFeedingHistory(
   $filter: ModelSubscriptionFeedingHistoryFilterInput
   $owner: String
@@ -579,8 +653,10 @@ subscription OnDeleteFeedingHistory(
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 subscription OnCreateRelationPetFeedingPoint(
   $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
   $owner: String
@@ -605,6 +681,7 @@ subscription OnCreateRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -626,12 +703,15 @@ subscription OnCreateRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateRelationPetFeedingPoint(
   $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
   $owner: String
@@ -656,6 +736,7 @@ subscription OnUpdateRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -677,12 +758,15 @@ subscription OnUpdateRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteRelationPetFeedingPoint(
   $filter: ModelSubscriptionRelationPetFeedingPointFilterInput
   $owner: String
@@ -707,6 +791,7 @@ subscription OnDeleteRelationPetFeedingPoint(
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -728,12 +813,15 @@ subscription OnDeleteRelationPetFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateRelationUserFeedingPoint(
   $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
   $owner: String
@@ -762,12 +850,15 @@ subscription OnCreateRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateRelationUserFeedingPoint(
   $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
   $owner: String
@@ -796,12 +887,15 @@ subscription OnUpdateRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteRelationUserFeedingPoint(
   $filter: ModelSubscriptionRelationUserFeedingPointFilterInput
   $owner: String
@@ -830,12 +924,15 @@ subscription OnDeleteRelationUserFeedingPoint(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateRelationUserPet(
   $filter: ModelSubscriptionRelationUserPetFilterInput
   $owner: String
@@ -860,12 +957,15 @@ subscription OnCreateRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateRelationUserPet(
   $filter: ModelSubscriptionRelationUserPetFilterInput
   $owner: String
@@ -890,12 +990,15 @@ subscription OnUpdateRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteRelationUserPet(
   $filter: ModelSubscriptionRelationUserPetFilterInput
   $owner: String
@@ -920,12 +1023,15 @@ subscription OnDeleteRelationUserPet(
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateMedication(
   $filter: ModelSubscriptionMedicationFilterInput
   $owner: String
@@ -950,16 +1056,20 @@ subscription OnCreateMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateMedication(
   $filter: ModelSubscriptionMedicationFilterInput
   $owner: String
@@ -984,16 +1094,20 @@ subscription OnUpdateMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteMedication(
   $filter: ModelSubscriptionMedicationFilterInput
   $owner: String
@@ -1018,16 +1132,20 @@ subscription OnDeleteMedication(
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateSettings(
   $filter: ModelSubscriptionSettingsFilterInput
   $owner: String
@@ -1039,8 +1157,10 @@ subscription OnCreateSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateSettings(
   $filter: ModelSubscriptionSettingsFilterInput
   $owner: String
@@ -1052,8 +1172,10 @@ subscription OnUpdateSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteSettings(
   $filter: ModelSubscriptionSettingsFilterInput
   $owner: String
@@ -1065,8 +1187,10 @@ subscription OnDeleteSettings(
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateLanguage(
   $filter: ModelSubscriptionLanguageFilterInput
   $owner: String
@@ -1081,8 +1205,10 @@ subscription OnCreateLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 subscription OnUpdateLanguage(
   $filter: ModelSubscriptionLanguageFilterInput
   $owner: String
@@ -1097,8 +1223,10 @@ subscription OnUpdateLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 subscription OnDeleteLanguage(
   $filter: ModelSubscriptionLanguageFilterInput
   $owner: String
@@ -1113,8 +1241,10 @@ subscription OnDeleteLanguage(
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 subscription OnCreateLanguagesSetting(
   $filter: ModelSubscriptionLanguagesSettingFilterInput
   $owner: String
@@ -1128,8 +1258,10 @@ subscription OnCreateLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnUpdateLanguagesSetting(
   $filter: ModelSubscriptionLanguagesSettingFilterInput
   $owner: String
@@ -1143,8 +1275,10 @@ subscription OnUpdateLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnDeleteLanguagesSetting(
   $filter: ModelSubscriptionLanguagesSettingFilterInput
   $owner: String
@@ -1158,8 +1292,10 @@ subscription OnDeleteLanguagesSetting(
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnCreateFavourite(
   $filter: ModelSubscriptionFavouriteFilterInput
   $owner: String
@@ -1167,12 +1303,15 @@ subscription OnCreateFavourite(
   onCreateFavourite(filter: $filter, owner: $owner) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnUpdateFavourite(
   $filter: ModelSubscriptionFavouriteFilterInput
   $owner: String
@@ -1180,12 +1319,15 @@ subscription OnUpdateFavourite(
   onUpdateFavourite(filter: $filter, owner: $owner) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnDeleteFavourite(
   $filter: ModelSubscriptionFavouriteFilterInput
   $owner: String
@@ -1193,12 +1335,15 @@ subscription OnDeleteFavourite(
   onDeleteFavourite(filter: $filter, owner: $owner) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 subscription OnCreateQuestion(
   $filter: ModelSubscriptionQuestionFilterInput
   $owner: String
@@ -1211,14 +1356,17 @@ subscription OnCreateQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnUpdateQuestion(
   $filter: ModelSubscriptionQuestionFilterInput
   $owner: String
@@ -1231,14 +1379,17 @@ subscription OnUpdateQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnDeleteQuestion(
   $filter: ModelSubscriptionQuestionFilterInput
   $owner: String
@@ -1251,14 +1402,17 @@ subscription OnDeleteQuestion(
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 subscription OnCreateBankAccount(
   $filter: ModelSubscriptionBankAccountFilterInput
   $owner: String
@@ -1275,8 +1429,10 @@ subscription OnCreateBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
+
 subscription OnUpdateBankAccount(
   $filter: ModelSubscriptionBankAccountFilterInput
   $owner: String
@@ -1293,8 +1449,10 @@ subscription OnUpdateBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
+
 subscription OnDeleteBankAccount(
   $filter: ModelSubscriptionBankAccountFilterInput
   $owner: String
@@ -1311,5 +1469,6 @@ subscription OnDeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
   }
 }

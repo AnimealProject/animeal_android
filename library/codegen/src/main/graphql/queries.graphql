@@ -1,13 +1,17 @@
 # this is an auto generated file. This will be overwritten
+
 query Translate($text: String!, $to: String!, $from: String) {
   translate(text: $text, to: $to, from: $from)
 }
+
 query GetSupportedLanguages {
   getSupportedLanguages {
     code
     name
+    __typename
   }
 }
+
 query SearchByBounds(
   $bounds: BoundsInput!
   $limit: Int
@@ -42,54 +46,14 @@ query SearchByBounds(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     total
     nextToken
+    __typename
   }
 }
-query SearchFeedingHistories(
-  $filter: SearchableFeedingHistoryFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFeedingHistories(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      userId
-      images
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      feedingPointId
-      status
-      reason
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-          }
-        }
-      }
-    }
-  }
-}
+
 query GetPet($id: ID!) {
   getPet(id: $id) {
     id
@@ -104,12 +68,14 @@ query GetPet($id: ID!) {
       fullName
       email
       phoneNumber
+      __typename
     }
     i18n {
       locale
       name
       breed
       color
+      __typename
     }
     createdAt
     updatedAt
@@ -118,6 +84,7 @@ query GetPet($id: ID!) {
     owner
     feedingPoints {
       nextToken
+      __typename
     }
     category {
       id
@@ -129,17 +96,22 @@ query GetPet($id: ID!) {
       createdBy
       updatedBy
       owner
+      __typename
     }
     medications {
       nextToken
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     cover
     petCategoryId
+    __typename
   }
 }
+
 query ListPets($filter: ModelPetFilterInput, $limit: Int, $nextToken: String) {
   listPets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
@@ -158,10 +130,65 @@ query ListPets($filter: ModelPetFilterInput, $limit: Int, $nextToken: String) {
       owner
       cover
       petCategoryId
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchPets(
+  $filter: SearchablePetFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchPets(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      name
+      images
+      breed
+      color
+      chipNumber
+      vaccinatedAt
+      yearOfBirth
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      petCategoryId
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetCategory($id: ID!) {
   getCategory(id: $id) {
     id
@@ -171,14 +198,17 @@ query GetCategory($id: ID!) {
     i18n {
       locale
       name
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 query ListCategories(
   $filter: ModelCategoryFilterInput
   $limit: Int
@@ -195,10 +225,59 @@ query ListCategories(
       createdBy
       updatedBy
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchCategories(
+  $filter: SearchableCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchCategories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetFeedingPoint($id: ID!) {
   getFeedingPoint(id: $id) {
     id
@@ -211,10 +290,12 @@ query GetFeedingPoint($id: ID!) {
     point {
       type
       coordinates
+      __typename
     }
     location {
       lat
       lon
+      __typename
     }
     region
     neighborhood
@@ -229,6 +310,7 @@ query GetFeedingPoint($id: ID!) {
       address
       region
       neighborhood
+      __typename
     }
     statusUpdatedAt
     createdAt
@@ -238,6 +320,7 @@ query GetFeedingPoint($id: ID!) {
     owner
     pets {
       nextToken
+      __typename
     }
     category {
       id
@@ -249,17 +332,22 @@ query GetFeedingPoint($id: ID!) {
       createdBy
       updatedBy
       owner
+      __typename
     }
     users {
       nextToken
+      __typename
     }
     feedings {
       nextToken
+      __typename
     }
     cover
     feedingPointCategoryId
+    __typename
   }
 }
+
 query ListFeedingPoints(
   $filter: ModelFeedingPointFilterInput
   $limit: Int
@@ -286,10 +374,69 @@ query ListFeedingPoints(
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchFeedingPoints(
+  $filter: SearchableFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFeedingPoints(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      feedingPointCategoryId
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetFeeding($id: ID!) {
   getFeeding(id: $id) {
     id
@@ -321,11 +468,14 @@ query GetFeeding($id: ID!) {
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     expireAt
     feedingPointFeedingsId
+    __typename
   }
 }
+
 query ListFeedings(
   $filter: ModelFeedingFilterInput
   $limit: Int
@@ -344,10 +494,13 @@ query ListFeedings(
       owner
       expireAt
       feedingPointFeedingsId
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query SearchFeedings(
   $filter: SearchableFeedingFilterInput
   $limit: Int
@@ -372,6 +525,7 @@ query SearchFeedings(
       owner
       expireAt
       feedingPointFeedingsId
+      __typename
     }
     nextToken
     total
@@ -385,12 +539,16 @@ query SearchFeedings(
           buckets {
             key
             doc_count
+            __typename
           }
         }
       }
+      __typename
     }
+    __typename
   }
 }
+
 query GetFeedingHistory($id: ID!) {
   getFeedingHistory(id: $id) {
     id
@@ -404,8 +562,10 @@ query GetFeedingHistory($id: ID!) {
     feedingPointId
     status
     reason
+    __typename
   }
 }
+
 query ListFeedingHistories(
   $filter: ModelFeedingHistoryFilterInput
   $limit: Int
@@ -424,10 +584,61 @@ query ListFeedingHistories(
       feedingPointId
       status
       reason
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchFeedingHistories(
+  $filter: SearchableFeedingHistoryFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFeedingHistories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      userId
+      images
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      feedingPointId
+      status
+      reason
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetRelationPetFeedingPoint($id: ID!) {
   getRelationPetFeedingPoint(id: $id) {
     id
@@ -449,6 +660,7 @@ query GetRelationPetFeedingPoint($id: ID!) {
       owner
       cover
       petCategoryId
+      __typename
     }
     feedingPoint {
       id
@@ -470,12 +682,15 @@ query GetRelationPetFeedingPoint($id: ID!) {
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListRelationPetFeedingPoints(
   $filter: ModelRelationPetFeedingPointFilterInput
   $limit: Int
@@ -493,10 +708,13 @@ query ListRelationPetFeedingPoints(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query RelationPetFeedingPointByPetId(
   $petId: ID!
   $feedingPointId: ModelIDKeyConditionInput
@@ -520,10 +738,13 @@ query RelationPetFeedingPointByPetId(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query RelationPetFeedingPointByFeedingPointId(
   $feedingPointId: ID!
   $petId: ModelIDKeyConditionInput
@@ -547,10 +768,13 @@ query RelationPetFeedingPointByFeedingPointId(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetRelationUserFeedingPoint($id: ID!) {
   getRelationUserFeedingPoint(id: $id) {
     id
@@ -576,12 +800,15 @@ query GetRelationUserFeedingPoint($id: ID!) {
       owner
       cover
       feedingPointCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListRelationUserFeedingPoints(
   $filter: ModelRelationUserFeedingPointFilterInput
   $limit: Int
@@ -599,10 +826,13 @@ query ListRelationUserFeedingPoints(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query RelationUserFeedingPointByUserId(
   $userId: String!
   $feedingPointId: ModelIDKeyConditionInput
@@ -626,10 +856,13 @@ query RelationUserFeedingPointByUserId(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query RelationUserFeedingPointByFeedingPointId(
   $feedingPointId: ID!
   $userId: ModelStringKeyConditionInput
@@ -653,10 +886,13 @@ query RelationUserFeedingPointByFeedingPointId(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetRelationUserPet($id: ID!) {
   getRelationUserPet(id: $id) {
     id
@@ -678,12 +914,15 @@ query GetRelationUserPet($id: ID!) {
       owner
       cover
       petCategoryId
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListRelationUserPets(
   $filter: ModelRelationUserPetFilterInput
   $limit: Int
@@ -697,10 +936,13 @@ query ListRelationUserPets(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetMedication($id: ID!) {
   getMedication(id: $id) {
     id
@@ -722,16 +964,20 @@ query GetMedication($id: ID!) {
       owner
       cover
       petCategoryId
+      __typename
     }
     date
     i18n {
       name
+      __typename
     }
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListMedications(
   $filter: ModelMedicationFilterInput
   $limit: Int
@@ -746,10 +992,57 @@ query ListMedications(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchMedications(
+  $filter: SearchableMedicationFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchMedications(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      name
+      petId
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetSettings($id: ID!) {
   getSettings(id: $id) {
     id
@@ -758,8 +1051,10 @@ query GetSettings($id: ID!) {
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListSettings(
   $filter: ModelSettingsFilterInput
   $limit: Int
@@ -773,10 +1068,13 @@ query ListSettings(
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetLanguage($id: ID!) {
   getLanguage(id: $id) {
     id
@@ -788,8 +1086,10 @@ query GetLanguage($id: ID!) {
     updatedBy
     direction
     owner
+    __typename
   }
 }
+
 query ListLanguages(
   $filter: ModelLanguageFilterInput
   $limit: Int
@@ -806,10 +1106,13 @@ query ListLanguages(
       updatedBy
       direction
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetLanguagesSetting($id: ID!) {
   getLanguagesSetting(id: $id) {
     id
@@ -820,8 +1123,10 @@ query GetLanguagesSetting($id: ID!) {
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 query ListLanguagesSettings(
   $filter: ModelLanguagesSettingFilterInput
   $limit: Int
@@ -837,20 +1142,26 @@ query ListLanguagesSettings(
       createdBy
       updatedBy
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query GetFavourite($id: ID!) {
   getFavourite(id: $id) {
     id
     userId
+    sub
     feedingPointId
     createdAt
     updatedAt
     owner
+    __typename
   }
 }
+
 query ListFavourites(
   $filter: ModelFavouriteFilterInput
   $limit: Int
@@ -860,14 +1171,18 @@ query ListFavourites(
     items {
       id
       userId
+      sub
       feedingPointId
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
 query FavouritesByUserId(
   $userId: ID!
   $feedingPointId: ModelIDKeyConditionInput
@@ -887,14 +1202,49 @@ query FavouritesByUserId(
     items {
       id
       userId
+      sub
       feedingPointId
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query FavouritesBySubId(
+  $sub: ID!
+  $feedingPointId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelFavouriteFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  favouritesBySubId(
+    sub: $sub
+    feedingPointId: $feedingPointId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      sub
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
 query FavouritesByFeedingPointId(
   $feedingPointId: ID!
   $userId: ModelIDKeyConditionInput
@@ -914,14 +1264,62 @@ query FavouritesByFeedingPointId(
     items {
       id
       userId
+      sub
       feedingPointId
       createdAt
       updatedAt
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchFavourites(
+  $filter: SearchableFavouriteFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFavourites(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      userId
+      sub
+      feedingPointId
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetQuestion($id: ID!) {
   getQuestion(id: $id) {
     id
@@ -931,14 +1329,17 @@ query GetQuestion($id: ID!) {
       locale
       value
       answer
+      __typename
     }
     createdAt
     updatedAt
     createdBy
     updatedBy
     owner
+    __typename
   }
 }
+
 query ListQuestions(
   $filter: ModelQuestionFilterInput
   $limit: Int
@@ -954,10 +1355,58 @@ query ListQuestions(
       createdBy
       updatedBy
       owner
+      __typename
     }
     nextToken
+    __typename
   }
 }
+
+query SearchQuestions(
+  $filter: SearchableQuestionFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchQuestions(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      value
+      answer
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
 query GetBankAccount($id: ID!) {
   getBankAccount(id: $id) {
     id
@@ -971,8 +1420,10 @@ query GetBankAccount($id: ID!) {
     owner
     createdAt
     updatedAt
+    __typename
   }
 }
+
 query ListBankAccounts(
   $filter: ModelBankAccountFilterInput
   $limit: Int
@@ -991,7 +1442,57 @@ query ListBankAccounts(
       owner
       createdAt
       updatedAt
+      __typename
     }
     nextToken
+    __typename
+  }
+}
+
+query SearchBankAccounts(
+  $filter: SearchableBankAccountFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchBankAccounts(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      name
+      value
+      cover
+      images
+      enabled
+      createdBy
+      updatedBy
+      owner
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
   }
 }
