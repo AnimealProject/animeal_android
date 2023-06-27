@@ -121,7 +121,8 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED,
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
+                    state.feedState.feedPoint == null,
                 onClick = {
                     when (state.permissionsState.cameraPermissionStatus) {
                         PermissionStatus.Granted -> isFeedingDialogShowing.value = true
