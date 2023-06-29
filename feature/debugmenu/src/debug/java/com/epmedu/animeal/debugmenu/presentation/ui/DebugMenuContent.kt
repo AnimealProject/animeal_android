@@ -1,5 +1,8 @@
 package com.epmedu.animeal.debugmenu.presentation.ui
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -11,9 +14,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent
+import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.ResetGeolocationPermissionRequestedAgain
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SetFinishProfileAsStartDestination
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SwitchUsingMockedFeedingPoints
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -26,6 +31,7 @@ internal fun DebugMenuContent(
     onEvent: (DebugMenuScreenEvent) -> Unit,
     content: @Composable () -> Unit
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = initialState)
 
@@ -54,6 +60,21 @@ internal fun DebugMenuContent(
         DebugMenuItem.Button(
             title = "Open TabsFlow",
             onClick = { onNavigate(MainRoute.Tabs) }
+        ),
+        DebugMenuItem.Button(
+            title = "Reset Geolocation Permission Requested Again",
+            onClick = { onEvent(ResetGeolocationPermissionRequestedAgain) }
+        ),
+        DebugMenuItem.Button(
+            title = "Restart App",
+            onClick = {
+                val packageManager: PackageManager = context.packageManager
+                val intent: Intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
+                val componentName: ComponentName = intent.component!!
+                val restartIntent: Intent = Intent.makeRestartActivityTask(componentName)
+                context.startActivity(restartIntent)
+                Runtime.getRuntime().exit(0)
+            }
         )
     )
 

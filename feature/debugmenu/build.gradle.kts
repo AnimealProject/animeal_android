@@ -18,6 +18,7 @@ dependencies {
     debugImplementation(projects.library.navigation)
 
     debugImplementation(projects.shared.feature.debugmenu)
+    debugImplementation(projects.shared.feature.permissions)
     debugImplementation(projects.shared.feature.router)
 
     debugImplementation(libs.compose.ui)
