@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +16,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,57 +31,50 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun FeedingConfirmationDialog(
-    isShowing: MutableState<Boolean>,
-    onAgreeClick: () -> Unit
+    onAgreeClick: () -> Unit,
+    onCancelClick: () -> Unit
 ) {
-    BackHandler(enabled = isShowing.value) { isShowing.value = false }
-
-    if (isShowing.value) {
-        Scaffold(
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.secondaryVariant)
+    ) { padding ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colors.secondaryVariant)
-        ) { padding ->
-            Column(
+                .statusBarsPadding()
+                .padding(padding)
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(0.22f))
+            Image(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .padding(padding)
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.weight(0.22f))
-                Image(
-                    modifier = Modifier
-                        .height(100.dp)
-                        .width(100.dp),
-                    painter = painterResource(id = R.drawable.ic_attention),
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.weight(0.22f))
-                Text(
-                    text = stringResource(id = R.string.willfeed_timeleft_msg),
-                    style = MaterialTheme.typography.subtitle1,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.weight(0.36f))
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    painter = painterResource(id = R.drawable.ic_will_feed_dialog),
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                FeedingConfirmationButtons(
-                    onCancelClick = { isShowing.value = false },
-                    onAgreeClick = {
-                        isShowing.value = false
-                        onAgreeClick()
-                    }
-                )
-                Spacer(modifier = Modifier.weight(0.22f))
-            }
+                    .height(100.dp)
+                    .width(100.dp),
+                painter = painterResource(id = R.drawable.ic_attention),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.weight(0.22f))
+            Text(
+                text = stringResource(id = R.string.willfeed_timeleft_msg),
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.weight(0.36f))
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                painter = painterResource(id = R.drawable.ic_will_feed_dialog),
+                contentScale = ContentScale.FillWidth,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            FeedingConfirmationButtons(
+                onCancelClick = onCancelClick,
+                onAgreeClick = onAgreeClick
+            )
+            Spacer(modifier = Modifier.weight(0.22f))
         }
     }
 }
@@ -116,9 +105,7 @@ private fun FeedingConfirmationButtons(
 @AnimealPreview
 @Composable
 private fun FeedConfirmationPreview() {
-    val isShowing = remember { mutableStateOf(true) }
-
     AnimealTheme {
-        FeedingConfirmationDialog(isShowing = isShowing, onAgreeClick = {})
+        FeedingConfirmationDialog(onAgreeClick = {}, onCancelClick = {})
     }
 }

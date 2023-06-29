@@ -21,7 +21,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationStat
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
+import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings

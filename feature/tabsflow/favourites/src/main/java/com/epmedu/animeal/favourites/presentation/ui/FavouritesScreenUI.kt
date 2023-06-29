@@ -18,9 +18,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,10 +40,10 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
@@ -62,15 +60,12 @@ import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
-import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
-import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -98,9 +93,8 @@ internal fun FavouritesScreenUI(
         permissionsState = state.permissionsState,
         lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
         onEvent = onPermissionsEvent
-    ) { _ ->
+    ) {
         ScreenScaffold(
-            scope,
             bottomSheetState,
             state,
             contentAlpha,
@@ -129,7 +123,6 @@ private fun HandleFeedingPointSheetHiddenState(
 @Composable
 @Suppress("LongMethod")
 private fun ScreenScaffold(
-    scope: CoroutineScope,
     bottomSheetState: AnimealBottomSheetState,
     state: FavouritesState,
     contentAlpha: Float,
@@ -137,9 +130,9 @@ private fun ScreenScaffold(
     onEvent: (FavouritesScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
-    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
-    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     val navigator = LocalNavigator.currentOrThrow
+
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
         skipHalfExpanded = true,
@@ -172,9 +165,8 @@ private fun ScreenScaffold(
                 enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
                     state.feedState.feedPoint == null,
                 onClick = {
-                    when (state.permissionsState.cameraPermissionStatus) {
-                        PermissionStatus.Granted -> isFeedingDialogShowing.value = true
-                        else -> isCameraPermissionDialogShowing.value = true
+                    state.showingFeedingPoint?.id?.let { feedingPointId ->
+                        onFeedingEvent(FeedingEvent.WillFeedClicked(feedingPointId))
                     }
                 },
             )
@@ -195,13 +187,11 @@ private fun ScreenScaffold(
         }
     }
 
-    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    state.showingFeedingPoint?.let {
-        FeedingConfirmationDialog(isShowing = isFeedingDialogShowing, onAgreeClick = {
-            scope.launch { bottomSheetState.hide() }
-            onFeedingEvent(FeedingEvent.Start(it.id))
-        })
-    }
+    WillFeedDialog(
+        state = state.feedState.willFeedState,
+        onEvent = onFeedingEvent,
+        onAgreeClick = { scope.launch { bottomSheetState.hide() } }
+    )
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, navigator, onFeedingEvent)
 }
 

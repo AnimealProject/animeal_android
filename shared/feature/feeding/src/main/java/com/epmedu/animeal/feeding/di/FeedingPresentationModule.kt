@@ -25,6 +25,8 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.Default
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
+import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.Module
@@ -50,6 +52,7 @@ internal object FeedingPresentationModule {
         errorHandler: ErrorHandler,
         feedingPointHandler: FeedingPointHandler,
         timerHandler: TimerHandler,
+        permissionsHandler: PermissionsHandler,
         fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
         getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
         updateFeedStateUseCase: UpdateFeedStateUseCase,
@@ -57,6 +60,7 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
+        gpsSettingsProvider: GpsSettingsProvider
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -64,6 +68,7 @@ internal object FeedingPresentationModule {
         errorHandler,
         feedingPointHandler,
         timerHandler,
+        permissionsHandler,
         fetchCurrentFeedingPointUseCase,
         getFeedingPointByIdUseCase,
         updateFeedStateUseCase,
@@ -71,6 +76,7 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase,
         rejectFeedingUseCase,
         finishFeedingUseCase,
+        gpsSettingsProvider
     )
 
     @ViewModelScoped

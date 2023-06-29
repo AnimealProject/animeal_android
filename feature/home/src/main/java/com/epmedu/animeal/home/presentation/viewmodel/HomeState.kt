@@ -4,9 +4,9 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
+import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.permissions.presentation.PermissionsState
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
