@@ -81,7 +81,10 @@
     <string name="feeding_in_progress">Feeding in progress, %s left</string>
     <string name="unknown_time">unknown time</string>
 
+    <string name="delete">Delete</string>
     <string name="account_delete">Delete Account</string>
+    <string name="account_delete_confirmation">Are you sure you want to delete your account?</string>
+    <string name="account_delete_success">You have successfully deleted your account</string>
 
     <string name="onboarding_image_title">Take care of pets</string>
     <string name="onboarding_image_msg">Some of them are homeless, they need your help</string>

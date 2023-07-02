@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.profile)
 
     implementation(libs.compose.material)
