@@ -5,14 +5,7 @@ import kotlinx.coroutines.flow.Flow
 /** Provides info about GPS setting. */
 interface GpsSettingsProvider {
 
-    val isGpsSettingsEnabled: Boolean
+    val gpsSettingState: GpsSettingState
 
     fun fetchGpsSettingsUpdates(): Flow<GpsSettingState>
-
-    sealed interface GpsSettingState {
-
-        object Enabled : GpsSettingState
-
-        object Disabled : GpsSettingState
-    }
 }

@@ -7,4 +7,5 @@ sealed interface DebugMenuScreenEvent {
     ) : DebugMenuScreenEvent
 
     object SetFinishProfileAsStartDestination : DebugMenuScreenEvent
+    object ResetGeolocationPermissionRequestedAgain : DebugMenuScreenEvent
 }

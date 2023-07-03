@@ -22,14 +22,11 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
-import com.epmedu.animeal.home.presentation.viewmodel.providers.HomeProviders
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
@@ -49,7 +46,8 @@ import javax.inject.Inject
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
     private val savedStateHandle: SavedStateHandle,
-    private val homeProviders: HomeProviders,
+    private val gpsSettingsProvider: GpsSettingsProvider,
+    private val locationProvider: LocationProvider,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
@@ -68,11 +66,8 @@ internal class HomeViewModel @Inject constructor(
     LocationHandler by defaultHomeHandler,
     TimerHandler by defaultHomeHandler,
     TimerCancellationHandler by defaultHomeHandler,
-    GpsHandler by defaultHomeHandler,
     PermissionsHandler by permissionsHandler,
     ErrorHandler by defaultHomeHandler,
-    LocationProvider by homeProviders,
-    GpsSettingsProvider by homeProviders,
     FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
@@ -135,10 +130,6 @@ internal class HomeViewModel @Inject constructor(
             updateAnimalType(defaultAnimalType)
             updateState {
                 copy(
-                    gpsSettingState = when {
-                        isGpsSettingsEnabled -> GpsSettingState.Enabled
-                        else -> GpsSettingState.Disabled
-                    },
                     feedingPointState = feedingPointState.copy(defaultAnimalType = defaultAnimalType)
                 )
             }
@@ -157,10 +148,6 @@ internal class HomeViewModel @Inject constructor(
                         feedingPointState = feedingPointUpdate,
                         feedState = feedingUpdate,
                         feedingRouteState = feedingRouteUpdate,
-                        gpsSettingState = when {
-                            isGpsSettingsEnabled -> GpsSettingState.Enabled
-                            else -> GpsSettingState.Disabled
-                        },
                     )
                 }
             }.collect()
@@ -169,7 +156,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun fetchLocationUpdates() {
         viewModelScope.launch {
-            fetchUpdates().collect(::collectLocations)
+            locationProvider.fetchUpdates().collect(::collectLocations)
         }
     }
 
@@ -179,20 +166,18 @@ internal class HomeViewModel @Inject constructor(
                 state.permissionsState.geolocationPermissionStatus !is PermissionStatus.Granted
             ) {
                 fetchLocationUpdates()
-                updateState {
-                    copy(
-                        gpsSettingState = when {
-                            isGpsSettingsEnabled -> GpsSettingState.Enabled
-                            else -> GpsSettingState.Disabled
-                        }
-                    )
-                }
-                viewModelScope.launch {
-                    fetchGpsSettingsUpdates().collect(::collectGpsSettings)
-                }
+                collectGpsSettingState()
             }
 
             updateState { copy(permissionsState = permissionsState) }
+        }
+    }
+
+    private fun collectGpsSettingState() {
+        viewModelScope.launch {
+            gpsSettingsProvider.fetchGpsSettingsUpdates().collect { gpsSettingState ->
+                updateState { copy(gpsSettingState = gpsSettingState) }
+            }
         }
     }
 

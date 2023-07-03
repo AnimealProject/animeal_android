@@ -21,8 +21,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHand
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.DefaultCameraHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.DefaultFeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.DefaultGpsHandler
-import com.epmedu.animeal.home.presentation.viewmodel.handlers.gps.GpsHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.DefaultLocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.DefaultTimerCancellationHandler
@@ -87,12 +85,6 @@ internal object HomePresentationModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGpsHandler(
-        stateDelegate: StateDelegate<HomeState>
-    ): GpsHandler = DefaultGpsHandler(stateDelegate)
-
-    @ViewModelScoped
-    @Provides
     fun providesCameraHandler(
         stateDelegate: StateDelegate<HomeState>,
         actionDelegate: ActionDelegate,
@@ -145,7 +137,6 @@ internal object HomePresentationModule {
         locationHandler: LocationHandler,
         timerHandler: TimerHandler,
         timerCancellationHandler: TimerCancellationHandler,
-        gpsHandler: GpsHandler,
         errorHandler: ErrorHandler
     ) = DefaultHomeHandler(
         cameraHandler,
@@ -155,7 +146,6 @@ internal object HomePresentationModule {
         locationHandler,
         timerHandler,
         timerCancellationHandler,
-        gpsHandler,
         errorHandler
     )
 

@@ -25,11 +25,12 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.geolocation)
     implementation(projects.library.resources)
-    implementation(projects.shared.feature.timer)
-    implementation(projects.shared.feature.router)
 
     debugImplementation(projects.shared.feature.debugmenu)
+    implementation(projects.shared.feature.permissions)
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.router)
+    implementation(projects.shared.feature.timer)
     implementation(projects.shared.feature.users)
 
     implementation(libs.amplify.aws.api)
@@ -39,6 +40,8 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose.hilt)
+    implementation(libs.androidx.viewmodel)
     implementation(libs.coil)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

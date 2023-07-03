@@ -14,9 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -26,10 +24,13 @@ import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
-import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
@@ -44,9 +45,7 @@ import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
-import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
-import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
@@ -63,7 +62,8 @@ internal fun SearchScreenUi(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (SearchScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
-    onPermissionsEvent: (PermissionsEvent) -> Unit
+    onPermissionsEvent: (PermissionsEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -88,6 +88,7 @@ internal fun SearchScreenUi(
             scope,
             onEvent,
             onFeedingEvent,
+            onWillFeedEvent
         )
     }
 }
@@ -103,11 +104,10 @@ private fun ScreenScaffold(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
-    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
-    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
-
     val navigator = LocalNavigator.currentOrThrow
+
     AnimealBottomSheetLayout(
         modifier = Modifier
             .statusBarsPadding()
@@ -124,9 +124,8 @@ private fun ScreenScaffold(
                 enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
                     state.feedState.feedPoint == null,
                 onClick = {
-                    when (state.permissionsState.cameraPermissionStatus) {
-                        PermissionStatus.Granted -> isFeedingDialogShowing.value = true
-                        else -> isCameraPermissionDialogShowing.value = true
+                    state.showingFeedingPoint?.id?.let { feedingPointId ->
+                        onWillFeedEvent(WillFeedClicked)
                     }
                 },
             )
@@ -141,16 +140,12 @@ private fun ScreenScaffold(
         }
     }
 
-    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    state.showingFeedingPoint?.let {
-        FeedingConfirmationDialog(
-            isShowing = isFeedingDialogShowing,
-            onAgreeClick = {
-                scope.launch { bottomSheetState.hide() }
-                onFeedingEvent(FeedingEvent.Start(it.id))
-            }
-        )
-    }
+    WillFeedDialog(
+        onAgreeClick = {
+            scope.launch { bottomSheetState.hide() }
+            state.showingFeedingPoint?.id?.let { onFeedingEvent(Start(it)) }
+        }
+    )
     OnFeedingConfirmationState(
         state.feedState.feedingConfirmationState,
         navigator,
@@ -165,7 +160,10 @@ private fun OnFeedingConfirmationState(
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
     when (feedingConfirmationState) {
-        FeedingStarted -> { navigator.navigateTo(TabsRoute.Home.name) }
+        FeedingStarted -> {
+            navigator.navigateTo(TabsRoute.Home.name)
+        }
+
         FeedingWasAlreadyBooked -> {
             AnimealAlertDialog(
                 title = stringResource(id = R.string.feeding_point_expired_description),
@@ -175,6 +173,7 @@ private fun OnFeedingConfirmationState(
                 }
             )
         }
+
         else -> {}
     }
 }
@@ -261,6 +260,7 @@ private fun SearchScreenUiPreview() {
             {},
             {},
             {},
+            {}
         )
     }
 }

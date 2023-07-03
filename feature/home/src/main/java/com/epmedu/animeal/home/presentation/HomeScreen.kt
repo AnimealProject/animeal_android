@@ -11,8 +11,10 @@ import androidx.lifecycle.whenCreated
 import com.epmedu.animeal.camera.presentation.CameraView
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.router.presentation.FeedingRouteState
@@ -22,39 +24,35 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen() {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val viewModel = hiltViewModel<HomeViewModel>()
-    val state by viewModel.stateFlow.collectAsState()
+    val homeViewModel = hiltViewModel<HomeViewModel>()
+    val willFeedViewModel = hiltViewModel<WillFeedViewModel>()
+    val state by homeViewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
         initialValue = AnimealBottomSheetValue.Hidden
     )
 
     if (state.cameraState is CameraState.Enabled) {
         CameraView(
-            onImageCapture = {
-                viewModel.handleEvents(HomeScreenEvent.CameraEvent.TakeNewPhoto(it))
-            },
-            onError = {
-                viewModel.handleEvents(HomeScreenEvent.CameraEvent.CloseCamera)
-            },
-            onBackPress = {
-                viewModel.handleEvents(HomeScreenEvent.CameraEvent.CloseCamera)
-            }
+            onImageCapture = { homeViewModel.handleEvents(CameraEvent.TakeNewPhoto(it)) },
+            onError = { homeViewModel.handleEvents(CameraEvent.CloseCamera) },
+            onBackPress = { homeViewModel.handleEvents(CameraEvent.CloseCamera) }
         )
     } else {
         HomeScreenUI(
             state = state,
             bottomSheetState = bottomSheetState,
-            onScreenEvent = viewModel::handleEvents,
-            onPermissionsEvent = viewModel::handlePermissionsEvent,
-            onRouteEvent = viewModel::handleRouteEvent,
-            onFeedingEvent = viewModel::handleFeedingEvent,
-            onFeedingPointEvent = viewModel::handleFeedingPointEvent,
-            onTimerEvent = viewModel::handleTimerEvent,
+            onScreenEvent = homeViewModel::handleEvents,
+            onPermissionsEvent = homeViewModel::handlePermissionsEvent,
+            onRouteEvent = homeViewModel::handleRouteEvent,
+            onFeedingEvent = homeViewModel::handleFeedingEvent,
+            onFeedingPointEvent = homeViewModel::handleFeedingPointEvent,
+            onTimerEvent = homeViewModel::handleTimerEvent,
+            onWillFeedEvent = willFeedViewModel::handleEvent
         )
     }
 
     LaunchedEffect(Unit) {
-        viewModel.events.collect {
+        homeViewModel.events.collect {
             when (it) {
                 is ShowCurrentFeedingPoint -> {
                     launch {
@@ -78,7 +76,7 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) {
         lifecycleOwner.whenCreated {
-            viewModel.handleEvents(HomeScreenEvent.ScreenDisplayed)
+            homeViewModel.handleEvents(HomeScreenEvent.ScreenDisplayed)
         }
     }
 }

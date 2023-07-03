@@ -3,19 +3,12 @@ package com.epmedu.animeal.home.presentation
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -24,25 +17,26 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
-import com.epmedu.animeal.feeding.presentation.ui.FeedingConfirmationDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
+import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
+import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
-import com.epmedu.animeal.home.presentation.model.GpsSettingState
-import com.epmedu.animeal.home.presentation.model.GpsSettingState.Disabled
-import com.epmedu.animeal.home.presentation.model.GpsSettingState.Enabled
 import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
@@ -54,10 +48,6 @@ import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionStatus.Granted
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
-import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionAsked
-import com.epmedu.animeal.permissions.presentation.PermissionsState
-import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
-import com.epmedu.animeal.permissions.presentation.ui.GeolocationPermissionRequestDialog
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
@@ -81,19 +71,11 @@ internal fun HomeScreenUI(
     onFeedingEvent: (FeedingEvent) -> Unit,
     onFeedingPointEvent: (FeedingPointEvent) -> Unit,
     onTimerEvent: (TimerEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
-    val isFeedingDialogShowing = rememberSaveable { mutableStateOf(false) }
-    val isCameraPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
-    val isGeolocationPermissionDialogShowing = rememberSaveable { mutableStateOf(false) }
-    var askedToEnableGps by rememberSaveable { mutableStateOf(false) }
-    val locationEmbeddedDialogLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-            askedToEnableGps = true
-            isFeedingDialogShowing.value = true
-        }
 
     if (state.isError) {
         Toast.makeText(
@@ -140,7 +122,10 @@ internal fun HomeScreenUI(
         }
     }
 
-    OnBackHandling(scope = scope, bottomSheetState = bottomSheetState)
+    OnBackHandling(
+        scope = scope,
+        bottomSheetState = bottomSheetState
+    )
 
     AnimealBottomSheetLayout(
         skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
@@ -185,30 +170,7 @@ internal fun HomeScreenUI(
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
                             enabled = feedingPoint.feedStatus == FeedStatus.RED,
-                            onClick = {
-                                checkPermissionsAndGps(
-                                    permissionsState = state.permissionsState,
-                                    gpsSettingState = state.gpsSettingState,
-                                    askedToEnableGps = askedToEnableGps,
-                                    requestCameraPermission = {
-                                        isCameraPermissionDialogShowing.value = true
-                                    },
-                                    requestGeolocationPermission = {
-                                        isGeolocationPermissionDialogShowing.value = true
-                                        onPermissionsEvent(GeolocationPermissionAsked)
-                                    },
-                                    requestGps = {
-                                        context.requestGpsByDialog {
-                                            locationEmbeddedDialogLauncher.launch(
-                                                IntentSenderRequest.Builder(it).build()
-                                            )
-                                        }
-                                    },
-                                    onSuccess = {
-                                        isFeedingDialogShowing.value = true
-                                    }
-                                )
-                            }
+                            onClick = { onWillFeedEvent(WillFeedClicked) }
                         )
                     }
                 }
@@ -240,39 +202,14 @@ internal fun HomeScreenUI(
             )
         }
     }
-
-    CameraPermissionRequestDialog(isShowing = isCameraPermissionDialogShowing)
-    GeolocationPermissionRequestDialog(isShowing = isGeolocationPermissionDialogShowing)
-    state.feedingPointState.currentFeedingPoint?.let {
-        FeedingConfirmationDialog(
-            isShowing = isFeedingDialogShowing,
-            onAgreeClick = {
-                scope.launch { bottomSheetState.hide() }
-                onFeedingEvent(FeedingEvent.Start(it.id))
-            }
-        )
-    }
+    WillFeedDialog(
+        onAgreeClick = {
+            state.feedingPointState.currentFeedingPoint?.id?.let { onFeedingEvent(Start(it)) }
+            hideBottomSheet()
+        }
+    )
     ThankYouConfirmationDialog(state, onScreenEvent)
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, onFeedingEvent)
-}
-
-private fun checkPermissionsAndGps(
-    permissionsState: PermissionsState,
-    gpsSettingState: GpsSettingState,
-    askedToEnableGps: Boolean,
-    requestCameraPermission: () -> Unit,
-    requestGeolocationPermission: () -> Unit,
-    requestGps: () -> Unit,
-    onSuccess: () -> Unit,
-) {
-    with(permissionsState) {
-        when {
-            cameraPermissionStatus !is Granted -> requestCameraPermission()
-            geolocationPermissionStatus !is Granted && !isGeolocationPermissionRequestedAgain -> requestGeolocationPermission()
-            gpsSettingState is Disabled && !askedToEnableGps -> requestGps()
-            else -> onSuccess()
-        }
-    }
 }
 
 private fun openCamera(
@@ -329,7 +266,7 @@ private fun OnState(
             )
         }
 
-        else -> { }
+        else -> {}
     }
 }
 
@@ -381,8 +318,8 @@ private fun onGeoLocationClick(
         PermissionStatus.Restricted -> mapView.context.launchAppSettings()
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         Granted -> when (state.gpsSettingState) {
-            Disabled -> mapView.context.requestGpsByDialog()
-            Enabled -> mapView.showCurrentLocation(state.locationState.location)
+            GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
+            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
     }
 }
