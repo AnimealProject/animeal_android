@@ -37,6 +37,8 @@ import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -77,7 +79,8 @@ internal fun FavouritesScreenUI(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (FavouritesScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
-    onPermissionsEvent: (PermissionsEvent) -> Unit
+    onPermissionsEvent: (PermissionsEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -101,6 +104,7 @@ internal fun FavouritesScreenUI(
             buttonAlpha,
             onEvent,
             onFeedingEvent,
+            onWillFeedEvent
         )
     }
 }
@@ -128,7 +132,8 @@ private fun ScreenScaffold(
     contentAlpha: Float,
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit,
-    onFeedingEvent: (FeedingEvent) -> Unit
+    onFeedingEvent: (FeedingEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val navigator = LocalNavigator.currentOrThrow
@@ -164,11 +169,7 @@ private fun ScreenScaffold(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
                     state.feedState.feedPoint == null,
-                onClick = {
-                    state.showingFeedingPoint?.id?.let { feedingPointId ->
-                        onFeedingEvent(FeedingEvent.WillFeedClicked(feedingPointId))
-                    }
-                },
+                onClick = { onWillFeedEvent(WillFeedClicked) },
             )
         }
     ) {
@@ -188,9 +189,10 @@ private fun ScreenScaffold(
     }
 
     WillFeedDialog(
-        state = state.feedState.willFeedState,
-        onEvent = onFeedingEvent,
-        onAgreeClick = { scope.launch { bottomSheetState.hide() } }
+        onAgreeClick = {
+            scope.launch { bottomSheetState.hide() }
+            state.showingFeedingPoint?.id?.let { onFeedingEvent(FeedingEvent.Start(it)) }
+        }
     )
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, navigator, onFeedingEvent)
 }
@@ -205,6 +207,7 @@ private fun OnFeedingConfirmationState(
         FeedingStarted -> {
             navigator.navigateTo(TabsRoute.Home.name)
         }
+
         FeedingWasAlreadyBooked -> {
             AnimealAlertDialog(
                 title = stringResource(id = R.string.feeding_point_expired_description),
@@ -214,6 +217,7 @@ private fun OnFeedingConfirmationState(
                 }
             )
         }
+
         else -> {}
     }
 }
@@ -311,6 +315,7 @@ private fun FavouritesScreenPreview() {
             {},
             {},
             {},
+            {}
         )
     }
 }
@@ -325,6 +330,7 @@ private fun FavouritesScreenEmptyPreview() {
                 favourites = persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {},
             {},
             {}

@@ -24,6 +24,9 @@ import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
@@ -59,7 +62,8 @@ internal fun SearchScreenUi(
     bottomSheetState: AnimealBottomSheetState,
     onEvent: (SearchScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
-    onPermissionsEvent: (PermissionsEvent) -> Unit
+    onPermissionsEvent: (PermissionsEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -84,6 +88,7 @@ internal fun SearchScreenUi(
             scope,
             onEvent,
             onFeedingEvent,
+            onWillFeedEvent
         )
     }
 }
@@ -99,6 +104,7 @@ private fun ScreenScaffold(
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
+    onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -119,7 +125,7 @@ private fun ScreenScaffold(
                     state.feedState.feedPoint == null,
                 onClick = {
                     state.showingFeedingPoint?.id?.let { feedingPointId ->
-                        onFeedingEvent(FeedingEvent.WillFeedClicked(feedingPointId))
+                        onWillFeedEvent(WillFeedClicked)
                     }
                 },
             )
@@ -135,9 +141,10 @@ private fun ScreenScaffold(
     }
 
     WillFeedDialog(
-        state = state.feedState.willFeedState,
-        onEvent = onFeedingEvent,
-        onAgreeClick = { scope.launch { bottomSheetState.hide() } }
+        onAgreeClick = {
+            scope.launch { bottomSheetState.hide() }
+            state.showingFeedingPoint?.id?.let { onFeedingEvent(Start(it)) }
+        }
     )
     OnFeedingConfirmationState(
         state.feedState.feedingConfirmationState,
@@ -253,6 +260,7 @@ private fun SearchScreenUiPreview() {
             {},
             {},
             {},
+            {}
         )
     }
 }

@@ -8,15 +8,17 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.favourites.presentation.ui.FavouritesScreenUI
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesViewModel
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavouritesScreen() {
-    val viewModel = hiltViewModel<FavouritesViewModel>()
+    val favouritesViewModel = hiltViewModel<FavouritesViewModel>()
+    val willFeedViewModel = hiltViewModel<WillFeedViewModel>()
 
-    val state by viewModel.stateFlow.collectAsState()
+    val state by favouritesViewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
         initialValue = AnimealBottomSheetValue.Hidden,
     )
@@ -24,9 +26,10 @@ fun FavouritesScreen() {
     FavouritesScreenUI(
         state = state,
         bottomSheetState = bottomSheetState,
-        onEvent = viewModel::handleEvents,
-        onFeedingEvent = viewModel::handleFeedingEvent,
-        onPermissionsEvent = viewModel::handlePermissionsEvent
+        onEvent = favouritesViewModel::handleEvents,
+        onFeedingEvent = favouritesViewModel::handleFeedingEvent,
+        onPermissionsEvent = favouritesViewModel::handlePermissionsEvent,
+        onWillFeedEvent = willFeedViewModel::handleEvent
     )
     if (state.showingFeedingPoint != null) {
         LaunchedEffect(Unit) { bottomSheetState.expand() }

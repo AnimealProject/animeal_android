@@ -40,6 +40,8 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose.hilt)
+    implementation(libs.androidx.viewmodel)
     implementation(libs.coil)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

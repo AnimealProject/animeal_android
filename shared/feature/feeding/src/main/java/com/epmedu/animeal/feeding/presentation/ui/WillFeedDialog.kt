@@ -1,43 +1,45 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.requestGpsByDialog
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.AgreeWillFeed
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.DismissWillFeed
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFeed
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GpsSettingRequested
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
 import com.epmedu.animeal.permissions.presentation.ui.GeolocationPermissionRequestDialog
 
 @Composable
-fun WillFeedDialog(
-    state: WillFeedState,
-    onEvent: (FeedingEvent) -> Unit,
-    onAgreeClick: () -> Unit
-) {
+fun WillFeedDialog(onAgreeClick: () -> Unit) {
+    val viewModel: WillFeedViewModel = hiltViewModel()
+    val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val locationEmbeddedDialogLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-            onEvent(DismissWillFeed)
+            viewModel.handleEvent(DismissWillFeed)
         }
+
+    BackHandler {}
 
     when (state) {
         CameraPermissionRequested -> {
-            CameraPermissionRequestDialog(onDismiss = { onEvent(DismissWillFeed) })
+            CameraPermissionRequestDialog(onDismiss = { viewModel.handleEvent(DismissWillFeed) })
         }
 
         GeolocationPermissionRequested -> {
             GeolocationPermissionRequestDialog(
-                onDismiss = { onEvent(DismissWillFeed) }
+                onDismiss = { viewModel.handleEvent(DismissWillFeed) }
             )
         }
 
@@ -55,9 +57,9 @@ fun WillFeedDialog(
             FeedingConfirmationDialog(
                 onAgreeClick = {
                     onAgreeClick()
-                    onEvent(AgreeWillFeed)
+                    viewModel.handleEvent(DismissWillFeed)
                 },
-                onCancelClick = { onEvent(DismissWillFeed) }
+                onCancelClick = { viewModel.handleEvent(DismissWillFeed) }
             )
         }
 
