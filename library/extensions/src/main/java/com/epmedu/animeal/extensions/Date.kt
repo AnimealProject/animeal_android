@@ -5,6 +5,7 @@ import com.epmedu.animeal.resources.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.ceil
 
 private const val DAY_MONTH_NAME_COMMA_YEAR_FORMATTER_PATTERN = "d MMM, yyyy"
 private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
@@ -70,8 +71,8 @@ fun tryParseDate(rawDate: String?): LocalDate? {
  */
 fun Context.formatNumberToHourMin(time: Long?): String? {
     if (time == null || time < 0) return null
-    var timeInMinutes = Math.ceil(time.toDouble() / MINUTE_IN_MILLIS).toLong()
-    var hours = timeInMinutes / HOUR_IN_MINUTES
-    var minutes = timeInMinutes % HOUR_IN_MINUTES
+    val timeInMinutes = ceil(time.toDouble() / MINUTE_IN_MILLIS).toLong()
+    val hours = timeInMinutes / HOUR_IN_MINUTES
+    val minutes = timeInMinutes % HOUR_IN_MINUTES
     return "${if (hours > 0) "$hours ${getString(R.string.hours)} " else ""}$minutes ${getString(R.string.minutes)}"
 }
