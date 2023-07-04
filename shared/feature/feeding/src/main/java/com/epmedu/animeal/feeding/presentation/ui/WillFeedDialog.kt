@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.requestGpsByDialog
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.ContinueWillFeed
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFeed
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
@@ -27,7 +28,7 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
     val context = LocalContext.current
     val locationEmbeddedDialogLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-            viewModel.handleEvent(DismissWillFeed)
+            viewModel.handleEvent(ContinueWillFeed)
         }
 
     BackHandler {}
@@ -39,7 +40,7 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
 
         GeolocationPermissionRequested -> {
             GeolocationPermissionRequestDialog(
-                onDismiss = { viewModel.handleEvent(DismissWillFeed) }
+                onDismiss = { viewModel.handleEvent(ContinueWillFeed) }
             )
         }
 

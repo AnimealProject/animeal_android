@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
+import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.ContinueWillFeed
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFeed
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
@@ -32,6 +33,7 @@ class WillFeedViewModel @Inject constructor(
     fun handleEvent(event: WillFeedEvent) {
         when (event) {
             WillFeedClicked -> checkPermissionsAndGps()
+            ContinueWillFeed -> checkPermissionsAndGps()
             DismissWillFeed -> dismissWillFeed()
         }
     }
