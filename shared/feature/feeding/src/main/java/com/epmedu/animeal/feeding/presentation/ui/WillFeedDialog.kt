@@ -15,6 +15,7 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.ContinueWillF
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFeed
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.Dismissed
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GpsSettingRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
@@ -31,7 +32,7 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
             viewModel.handleEvent(ContinueWillFeed)
         }
 
-    BackHandler {}
+    BackHandler(enabled = state != Dismissed) { /* Disable parent back handler */ }
 
     when (state) {
         CameraPermissionRequested -> {
@@ -65,6 +66,6 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
             )
         }
 
-        else -> {}
+        Dismissed -> {}
     }
 }
