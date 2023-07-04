@@ -7,7 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.whenCreated
+import androidx.lifecycle.withCreated
 import com.epmedu.animeal.camera.presentation.CameraView
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent.ShowCurrentFeedingPoint
@@ -75,7 +75,7 @@ fun HomeScreen() {
     }
 
     LaunchedEffect(Unit) {
-        lifecycleOwner.whenCreated {
+        lifecycleOwner.withCreated {
             homeViewModel.handleEvents(HomeScreenEvent.ScreenDisplayed)
         }
     }
