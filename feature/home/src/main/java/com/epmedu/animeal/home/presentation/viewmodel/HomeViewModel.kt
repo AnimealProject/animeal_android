@@ -99,7 +99,6 @@ internal class HomeViewModel @Inject constructor(
 
     private fun onScreenDisplayed() {
         handleForcedFeedingPoint()
-        initialize()
     }
 
     private fun finishFeedingProcess() {
