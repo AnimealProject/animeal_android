@@ -33,8 +33,7 @@ class WillFeedViewModel @Inject constructor(
 
     fun handleEvent(event: WillFeedEvent) {
         when (event) {
-            WillFeedClicked -> checkPermissionsAndGps()
-            ContinueWillFeed -> checkPermissionsAndGps()
+            WillFeedClicked, ContinueWillFeed -> checkPermissionsAndGps()
             DismissWillFeed -> dismissWillFeed()
         }
     }
