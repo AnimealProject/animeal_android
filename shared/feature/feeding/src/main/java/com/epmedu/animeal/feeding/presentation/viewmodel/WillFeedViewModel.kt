@@ -10,6 +10,7 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFe
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.DialogDismissed
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GpsSettingRequested
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
@@ -25,7 +26,7 @@ class WillFeedViewModel @Inject constructor(
     private val permissionsHandler: PermissionsHandler,
     private val gpsSettingsProvider: GpsSettingsProvider
 ) : ViewModel(),
-    StateDelegate<WillFeedState> by DefaultStateDelegate(WillFeedState.Dismissed),
+    StateDelegate<WillFeedState> by DefaultStateDelegate(DialogDismissed),
     PermissionsHandler by permissionsHandler {
 
     private var askedToEnableGps = false
@@ -63,6 +64,6 @@ class WillFeedViewModel @Inject constructor(
     }
 
     private fun dismissWillFeed() {
-        updateState { WillFeedState.Dismissed }
+        updateState { DialogDismissed }
     }
 }

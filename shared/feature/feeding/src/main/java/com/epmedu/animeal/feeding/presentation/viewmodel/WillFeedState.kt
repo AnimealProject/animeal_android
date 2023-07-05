@@ -5,5 +5,5 @@ enum class WillFeedState {
     GeolocationPermissionRequested,
     GpsSettingRequested,
     ConfirmationRequested,
-    Dismissed
+    DialogDismissed
 }
