@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint
 
+import androidx.lifecycle.SavedStateHandle
 import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -20,6 +21,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.util.Keys.SAVED_FEEDING_POINT_KEY
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.router.presentation.FeedingRouteState
@@ -40,6 +42,7 @@ class DefaultFeedingPointHandler @Inject constructor(
     actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
+    private val savedStateHandle: SavedStateHandle,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -58,6 +61,12 @@ class DefaultFeedingPointHandler @Inject constructor(
     private var fetchFeedingsJob: Job? = null
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
+
+    override fun CoroutineScope.restoreSavedFeedingPoint() {
+        val savedFeedingPoint: FeedingPointModel? = savedStateHandle[SAVED_FEEDING_POINT_KEY]
+        savedFeedingPoint?.let { selectFeedingPoint(savedFeedingPoint) }
+    }
+
     override fun updateAnimalType(animalType: AnimalType) {
         updateState {
             copy(
@@ -104,7 +113,7 @@ class DefaultFeedingPointHandler @Inject constructor(
 
     override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
-        selectFeedingPoint(Select(forcedPoint))
+        selectFeedingPoint(forcedPoint)
         return forcedPoint
     }
 
@@ -120,7 +129,7 @@ class DefaultFeedingPointHandler @Inject constructor(
 
     override fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent) {
         when (event) {
-            is Select -> launch { selectFeedingPoint(event) }
+            is Select -> launch { selectFeedingPoint(event.feedingPoint) }
             Deselect -> launch { deselectFeedingPoint() }
             is FavouriteChange -> launch { handleFavouriteChange(event) }
             is AnimalTypeChange -> handleAnimalTypeChange(event.type)
@@ -137,10 +146,11 @@ class DefaultFeedingPointHandler @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.selectFeedingPoint(event: Select) {
-        updateState { copy(currentFeedingPoint = event.feedingPoint) }
+    private fun CoroutineScope.selectFeedingPoint(feedingPoint: FeedingPointModel) {
+        savedStateHandle[SAVED_FEEDING_POINT_KEY] = feedingPoint
+        updateState { copy(currentFeedingPoint = feedingPoint) }
         launch { sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint) }
-        fetchFeedings(event.feedingPoint.id)
+        fetchFeedings(feedingPoint.id)
     }
 
     private fun CoroutineScope.fetchFeedings(feedingPointId: String) {

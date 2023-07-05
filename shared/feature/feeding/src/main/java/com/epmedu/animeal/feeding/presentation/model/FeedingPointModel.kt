@@ -1,13 +1,17 @@
 package com.epmedu.animeal.feeding.presentation.model
 
+import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Stable
+@Parcelize
 data class FeedingPointModel(
     val id: String,
     val title: String,
@@ -19,8 +23,8 @@ data class FeedingPointModel(
     val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point,
     val image: String = "",
-    val feedings: List<Feeding>? = null
-) {
+    val feedings: @RawValue List<Feeding>? = null
+) : Parcelable {
 
     constructor(feedingPoint: FeedingPoint) : this(
         feedingPoint.id,

@@ -1,5 +1,6 @@
 package com.epmedu.animeal.tabs.search.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
@@ -12,6 +13,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.util.Keys
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
@@ -34,6 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
+    private val savedStateHandle: SavedStateHandle,
     private val searchCatsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val searchDogsFeedingPointsUseCase: SearchFeedingPointsUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -51,10 +54,16 @@ class SearchViewModel @Inject constructor(
     private var fetchFeedingsJob: Job? = null
 
     init {
+        restoreSavedFeedingPoint()
         viewModelScope.launch { collectFeedingPoints() }
         viewModelScope.launch { collectPermissionsState() }
         viewModelScope.launch { collectFeedState() }
         viewModelScope.launch { fetchCurrentFeeding() }
+    }
+
+    private fun restoreSavedFeedingPoint() {
+        val savedFeedingPoint: FeedingPointModel? = savedStateHandle[Keys.SAVED_FEEDING_POINT_KEY]
+        savedFeedingPoint?.let { selectFeedingPoint(savedFeedingPoint) }
     }
 
     private suspend fun collectFeedState() {
@@ -107,7 +116,7 @@ class SearchViewModel @Inject constructor(
     fun handleEvents(event: SearchScreenEvent) {
         when (event) {
             is FavouriteChange -> handleFavouriteChange(event)
-            is FeedingPointSelected -> handleFeedingPointSelected(event)
+            is FeedingPointSelected -> selectFeedingPoint(event.feedingPoint)
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is Search -> handleSearch(event)
         }
@@ -121,9 +130,10 @@ class SearchViewModel @Inject constructor(
         viewModelScope.handleFeedingEvent(event)
     }
 
-    private fun handleFeedingPointSelected(event: FeedingPointSelected) {
-        updateState { copy(showingFeedingPoint = event.feedingPoint) }
-        fetchFeedings(event.feedingPoint.id)
+    private fun selectFeedingPoint(feedingPoint: FeedingPointModel) {
+        savedStateHandle[Keys.SAVED_FEEDING_POINT_KEY] = feedingPoint
+        updateState { copy(showingFeedingPoint = feedingPoint) }
+        fetchFeedings(feedingPoint.id)
         viewModelScope.launch { collectFeedState() }
     }
 

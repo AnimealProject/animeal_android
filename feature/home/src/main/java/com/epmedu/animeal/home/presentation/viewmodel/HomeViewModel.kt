@@ -71,6 +71,7 @@ internal class HomeViewModel @Inject constructor(
     FeedingPhotoGalleryHandler by photoGalleryHandler {
 
     init {
+        viewModelScope.restoreSavedFeedingPoint()
         viewModelScope.launch { collectPermissionsState() }
         initialize()
     }
