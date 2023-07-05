@@ -42,7 +42,7 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
         GeolocationPermissionRequested -> {
             GeolocationPermissionRequestDialog(
                 onDismiss = { viewModel.handleEvent(ContinueWillFeed) },
-                onAgree = { viewModel.handleEvent(DismissWillFeed) }
+                onConfirm = { viewModel.handleEvent(DismissWillFeed) }
             )
         }
 
