@@ -8,7 +8,10 @@ import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
 import com.epmedu.animeal.resources.R
 
 @Composable
-fun GeolocationPermissionRequestDialog(onDismiss: () -> Unit) {
+fun GeolocationPermissionRequestDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
     val context = LocalContext.current
 
     AnimealQuestionDialog(
@@ -18,7 +21,7 @@ fun GeolocationPermissionRequestDialog(onDismiss: () -> Unit) {
         onDismiss = onDismiss,
         onConfirm = {
             context.launchAppSettings()
-            onDismiss()
+            onConfirm()
         }
     )
 }
