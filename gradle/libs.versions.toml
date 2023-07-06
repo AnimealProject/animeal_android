@@ -39,6 +39,7 @@ navigationComposeHilt = "1.0.0"
 playServicesLocation = "21.0.1"
 mapbox = "10.13.0"
 mapboxNavigation = "2.13.0"
+mapboxTurfMeasurement = "6.12.0"
 versions = "0.42.0"
 
 [libraries]
@@ -64,6 +65,7 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 
 mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "mapboxNavigation" }
+mapbox-turf-measurement = { module = "com.mapbox.mapboxsdk:mapbox-sdk-turf", version.ref = "mapboxTurfMeasurement" }
 
 amplify-aws-api = { module = "com.amplifyframework:aws-api", version.ref = "amplify" }
 amplify-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify" }
