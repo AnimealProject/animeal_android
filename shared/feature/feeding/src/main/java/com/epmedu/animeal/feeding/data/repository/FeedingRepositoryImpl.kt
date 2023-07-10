@@ -15,8 +15,10 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.users.domain.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -33,10 +35,15 @@ internal class FeedingRepositoryImpl(
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
 
-    private val _domainFeedState = MutableSharedFlow<DomainFeedState>()
-    override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
-        _domainFeedState.emit(newFeedState)
+    private val _domainFeedState = MutableSharedFlow<DomainFeedState>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    override fun getFeedStateFlow(): Flow<DomainFeedState> {
+        return _domainFeedState.asSharedFlow()
     }
+
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
@@ -122,5 +129,9 @@ internal class FeedingRepositoryImpl(
         images: List<String>
     ): ActionResult<Unit> {
         return feedingApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
+    }
+
+    override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
+        _domainFeedState.emit(newFeedState)
     }
 }

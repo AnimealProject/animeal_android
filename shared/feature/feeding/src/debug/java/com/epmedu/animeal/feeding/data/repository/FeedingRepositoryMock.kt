@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.flowOf
 
 internal class FeedingRepositoryMock : FeedingRepository {
 
+    override fun getFeedStateFlow(): Flow<DomainFeedState> {
+        return flowOf(DomainFeedState(null))
+    }
+
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return emptyList()
     }
