@@ -31,6 +31,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.Fe
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,8 +63,11 @@ class DefaultFeedingHandler(
 
     override var feedingStateFlow: StateFlow<FeedState> = stateFlow
 
+    private var fetchCurrentFeedingJob: Job? = null
+
     override fun CoroutineScope.fetchCurrentFeeding() {
-        launch {
+        fetchCurrentFeedingJob?.cancel()
+        fetchCurrentFeedingJob = launch {
             fetchCurrentFeedingPointUseCase()?.let { feedingPoint ->
                 updateFeedingState(
                     feedingConfirmationState = Dismissed,
