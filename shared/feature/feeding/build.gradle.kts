@@ -53,5 +53,4 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     api(libs.mapbox.android)
-    implementation(libs.mapbox.turf.measurement)
 }

@@ -4,11 +4,9 @@ import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
-import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
-import com.mapbox.turf.TurfMeasurement
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -66,10 +64,4 @@ data class FeedingPointModel(
                 }
             }
         }
-
-    companion object {
-        private const val NEAREST_DISTANCE_KM = 10
-        fun FeedingPointModel.isNearTo(location: MapLocation): Boolean =
-            TurfMeasurement.distance(location.toPoint(), this.coordinates) < NEAREST_DISTANCE_KM
-    }
 }

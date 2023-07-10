@@ -22,8 +22,8 @@ object FeedingDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGetFeedingPointsByPriority() =
-        GetFeedingPointByPriorityUseCase()
+    fun providesGetFeedingPointsByPriority(getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase) =
+        GetFeedingPointByPriorityUseCase(getAllFeedingPointsUseCase)
 
     @ViewModelScoped
     @Provides

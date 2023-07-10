@@ -1,12 +1,17 @@
 package com.epmedu.animeal.feeding.domain.usecase
 
-import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel.Companion.isNearTo
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import kotlinx.collections.immutable.ImmutableList
+import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
+import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import com.epmedu.animeal.geolocation.location.distanceInKmTo
+import com.epmedu.animeal.geolocation.location.isNearTo
 
-class GetFeedingPointByPriorityUseCase {
+class GetFeedingPointByPriorityUseCase(
+    val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase
+) {
 
     /*
      * Filters iterable of FeedingPointModel by priority defined at EPMEDU-594:
@@ -14,17 +19,35 @@ class GetFeedingPointByPriorityUseCase {
      * - 2nd: Status = Red, is favorite
      * - 3rd: Status = Red, is not favorite but is near to user location
      */
-    operator fun invoke(
-        feedingPoints: ImmutableList<FeedingPointModel>,
-        userLocation: MapLocation
-    ): FeedingPointModel? {
-        val readyToFeed = feedingPoints.filter { it.feedStatus == FeedStatus.RED }
-        return if (readyToFeed.isNotEmpty()) {
-            readyToFeed.firstOrNull { it.isFavourite && it.isNearTo(userLocation) } ?: run {
-                readyToFeed.firstOrNull { it.isFavourite }
-            } ?: readyToFeed.firstOrNull { it.isNearTo(userLocation) }
-        } else {
-            null
+    suspend operator fun invoke(
+        type: AnimalType,
+        userLocation: MapLocation,
+        onFeedingPointFound: (FeedingPointModel) -> Unit,
+    ) {
+        getAllFeedingPointsUseCase(type = type).collect { domainFeedingPoints ->
+            val readyToFeed = domainFeedingPoints
+                .filter { it.animalStatus == AnimalState.RED }
+                .sortByNearestToLocation(userLocation)
+            if (readyToFeed.isNotEmpty()) {
+                val feedPointFound = readyToFeed
+                    .firstOrNull {
+                        it.isFavourite && it.location.toPoint().isNearTo(userLocation.toPoint())
+                    }
+                    ?: run { readyToFeed.firstOrNull { it.isFavourite } }
+                    ?: readyToFeed.firstOrNull()
+                feedPointFound?.let {
+                    onFeedingPointFound(FeedingPointModel(it))
+                }
+            }
         }
+    }
+    private fun Iterable<FeedingPoint>.sortByNearestToLocation(
+        userLocation: MapLocation
+    ): List<FeedingPoint> {
+        return sortedWith(
+            compareBy {
+                it.location.toPoint().distanceInKmTo(userLocation.toPoint())
+            }
+        )
     }
 }

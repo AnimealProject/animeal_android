@@ -115,9 +115,14 @@ class DefaultFeedingPointHandler @Inject constructor(
     }
 
     override fun CoroutineScope.fetchNearestFeedingPoint(userLocation: MapLocation) {
-        val nearestPoint = getFeedingPointByPriorityUseCase(state.feedingPoints, userLocation)
-        nearestPoint?.let {
-            handleFeedingPointEvent(Select(nearestPoint))
+        launch {
+            getFeedingPointByPriorityUseCase(
+                state.defaultAnimalType,
+                userLocation,
+                onFeedingPointFound = {
+                    selectFeedingPoint(it)
+                }
+            )
         }
     }
     override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
