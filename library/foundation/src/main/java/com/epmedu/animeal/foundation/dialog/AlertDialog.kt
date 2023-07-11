@@ -237,10 +237,10 @@ fun AlertDialog(
         properties = properties
     ) {
         AlertDialogContent(
-            buttons = buttons,
             modifier = modifier,
             title = title,
             text = text,
+            buttons = buttons,
             shape = shape,
             backgroundColor = backgroundColor,
             contentColor = contentColor
