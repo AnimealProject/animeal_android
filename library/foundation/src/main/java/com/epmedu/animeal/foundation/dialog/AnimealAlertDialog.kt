@@ -47,7 +47,6 @@ fun AnimealAlertDialog(
     )
 }
 
-
 @AnimealPreview
 @Composable
 private fun AnimealAlertDialogPreview() {

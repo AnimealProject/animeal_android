@@ -34,12 +34,13 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import kotlin.math.max
 
-private class AlertDialogBaselineCalculator (measurables: List<Measurable>,
-                                             constraints: Constraints,
-                                             titleBaselineDistanceFromTop: Int,
-                                             textBaselineDistanceFromTitle: Int,
-                                             textBaselineDistanceFromTop: Int,
-                                             buttonBaselineDistanceFromTop: Int
+private data class AlertDialogBaselineCalculator(
+    val measurables: List<Measurable>,
+    val constraints: Constraints,
+    val titleBaselineDistanceFromTop: Int,
+    val textBaselineDistanceFromTitle: Int,
+    val textBaselineDistanceFromTop: Int,
+    val buttonBaselineDistanceFromTop: Int
 ) {
     val titlePlaceable = measurables.firstOrNull { it.layoutId == "title" }?.measure(
         constraints.copy(minHeight = 0)
@@ -94,7 +95,7 @@ private class AlertDialogBaselineCalculator (measurables: List<Measurable>,
             titleHeightWithSpacing - firstTextBaseline + textOffset
         } else {
             // Otherwise place the text's baseline textOffset from the title's last baseline
-            (titlePositionY + lastTitleBaseline) - firstTextBaseline + textOffset
+            titlePositionY + lastTitleBaseline - firstTextBaseline + textOffset
         }
     }
 
@@ -104,7 +105,7 @@ private class AlertDialogBaselineCalculator (measurables: List<Measurable>,
             textPlaceable.height + textOffset - firstTextBaseline
         } else {
             textPlaceable.height + textOffset - firstTextBaseline -
-                    ((titlePlaceable?.height ?: 0) - lastTitleBaseline)
+                ((titlePlaceable?.height ?: 0) - lastTitleBaseline)
         }
     } ?: 0
 
