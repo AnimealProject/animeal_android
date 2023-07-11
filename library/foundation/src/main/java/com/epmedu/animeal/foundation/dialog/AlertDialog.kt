@@ -221,6 +221,7 @@ internal fun AlertDialogContent(
 }
 
 @Composable
+@Suppress("ReusedModifierInstance")
 fun AlertDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
