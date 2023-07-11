@@ -21,8 +21,10 @@ import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -31,6 +33,93 @@ import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import kotlin.math.max
+
+private class AlertDialogBaselineCalculator (measurables: List<Measurable>,
+                                             constraints: Constraints,
+                                             titleBaselineDistanceFromTop: Int,
+                                             textBaselineDistanceFromTitle: Int,
+                                             textBaselineDistanceFromTop: Int,
+                                             buttonBaselineDistanceFromTop: Int
+) {
+    val titlePlaceable = measurables.firstOrNull { it.layoutId == "title" }?.measure(
+        constraints.copy(minHeight = 0)
+    )
+    val textPlaceable = measurables.firstOrNull { it.layoutId == "text" }?.measure(
+        constraints.copy(minHeight = 0)
+    )
+
+    val buttonPlaceable = measurables.firstOrNull { it.layoutId == "buttons" }?.measure(
+        constraints.copy(minHeight = 0)
+    )
+
+    val layoutWidth = max(
+        buttonPlaceable?.width ?: 0,
+        max(titlePlaceable?.width ?: 0, textPlaceable?.width ?: 0)
+    )
+
+    private val firstTitleBaseline = titlePlaceable?.get(FirstBaseline)?.let { baseline ->
+        if (baseline == AlignmentLine.Unspecified) null else baseline
+    } ?: 0
+    private val lastTitleBaseline = titlePlaceable?.get(LastBaseline)?.let { baseline ->
+        if (baseline == AlignmentLine.Unspecified) null else baseline
+    } ?: 0
+
+    private val titleOffset = titleBaselineDistanceFromTop
+
+    // Place the title so that its first baseline is titleOffset from the top
+    val titlePositionY = titleOffset - firstTitleBaseline
+
+    private val firstTextBaseline = textPlaceable?.get(FirstBaseline)?.let { baseline ->
+        if (baseline == AlignmentLine.Unspecified) null else baseline
+    } ?: 0
+
+    private val textOffset = if (titlePlaceable == null) {
+        textBaselineDistanceFromTop
+    } else {
+        textBaselineDistanceFromTitle
+    }
+
+    // Combined height of title and spacing above
+    private val titleHeightWithSpacing = titlePlaceable?.let { it.height + titlePositionY } ?: 0
+
+    // Align the bottom baseline of the text with the bottom baseline of the title, and then
+    // add the offset
+    val textPositionY = if (titlePlaceable == null) {
+        // If there is no title, just place the text offset from the top of the dialog
+        textOffset - firstTextBaseline
+    } else {
+        if (lastTitleBaseline == 0) {
+            // If `title` has no baseline, just place the text's baseline textOffset from the
+            // bottom of the title
+            titleHeightWithSpacing - firstTextBaseline + textOffset
+        } else {
+            // Otherwise place the text's baseline textOffset from the title's last baseline
+            (titlePositionY + lastTitleBaseline) - firstTextBaseline + textOffset
+        }
+    }
+
+    // Combined height of text and spacing above
+    private val textHeightWithSpacing = textPlaceable?.let {
+        if (lastTitleBaseline == 0) {
+            textPlaceable.height + textOffset - firstTextBaseline
+        } else {
+            textPlaceable.height + textOffset - firstTextBaseline -
+                    ((titlePlaceable?.height ?: 0) - lastTitleBaseline)
+        }
+    } ?: 0
+
+    private val buttonOffset = buttonBaselineDistanceFromTop
+
+    // Align the bottom baseline of the button with the bottom baseline of the text, and then
+    // add the offset
+    val buttonPositionY = textPositionY + textHeightWithSpacing - textOffset + buttonOffset
+
+    private val buttonHeightWithSpacing = buttonPlaceable?.let {
+        buttonPlaceable.height + buttonOffset
+    } ?: 0
+
+    val layoutHeight = titleHeightWithSpacing + textHeightWithSpacing + buttonHeightWithSpacing
+}
 
 @Composable
 internal fun ColumnScope.AlertDialogBaselineLayout(
@@ -70,91 +159,20 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
         },
         Modifier.weight(1f, false)
     ) { measurables, constraints ->
-        // Measure with loose constraints for height as we don't want the text to take up more
-        // space than it needs
-        val titlePlaceable = measurables.firstOrNull { it.layoutId == "title" }?.measure(
-            constraints.copy(minHeight = 0)
-        )
-        val textPlaceable = measurables.firstOrNull { it.layoutId == "text" }?.measure(
-            constraints.copy(minHeight = 0)
-        )
 
-        val buttonPlaceable = measurables.firstOrNull { it.layoutId == "buttons" }?.measure(
-            constraints.copy(minHeight = 0)
+        val calculator = AlertDialogBaselineCalculator(
+            measurables,
+            constraints,
+            TitleBaselineDistanceFromTop.roundToPx(),
+            TextBaselineDistanceFromTitle.roundToPx(),
+            TextBaselineDistanceFromTop.roundToPx(),
+            ButtonBaselineDistanceFromTop.roundToPx()
         )
 
-        val layoutWidth = max(
-            buttonPlaceable?.width ?: 0,
-            max(titlePlaceable?.width ?: 0, textPlaceable?.width ?: 0)
-        )
-
-        val firstTitleBaseline = titlePlaceable?.get(FirstBaseline)?.let { baseline ->
-            if (baseline == AlignmentLine.Unspecified) null else baseline
-        } ?: 0
-        val lastTitleBaseline = titlePlaceable?.get(LastBaseline)?.let { baseline ->
-            if (baseline == AlignmentLine.Unspecified) null else baseline
-        } ?: 0
-
-        val titleOffset = TitleBaselineDistanceFromTop.roundToPx()
-
-        // Place the title so that its first baseline is titleOffset from the top
-        val titlePositionY = titleOffset - firstTitleBaseline
-
-        val firstTextBaseline = textPlaceable?.get(FirstBaseline)?.let { baseline ->
-            if (baseline == AlignmentLine.Unspecified) null else baseline
-        } ?: 0
-
-        val textOffset = if (titlePlaceable == null) {
-            TextBaselineDistanceFromTop.roundToPx()
-        } else {
-            TextBaselineDistanceFromTitle.roundToPx()
-        }
-
-        // Combined height of title and spacing above
-        val titleHeightWithSpacing = titlePlaceable?.let { it.height + titlePositionY } ?: 0
-
-        // Align the bottom baseline of the text with the bottom baseline of the title, and then
-        // add the offset
-        val textPositionY = if (titlePlaceable == null) {
-            // If there is no title, just place the text offset from the top of the dialog
-            textOffset - firstTextBaseline
-        } else {
-            if (lastTitleBaseline == 0) {
-                // If `title` has no baseline, just place the text's baseline textOffset from the
-                // bottom of the title
-                titleHeightWithSpacing - firstTextBaseline + textOffset
-            } else {
-                // Otherwise place the text's baseline textOffset from the title's last baseline
-                (titlePositionY + lastTitleBaseline) - firstTextBaseline + textOffset
-            }
-        }
-
-        // Combined height of text and spacing above
-        val textHeightWithSpacing = textPlaceable?.let {
-            if (lastTitleBaseline == 0) {
-                textPlaceable.height + textOffset - firstTextBaseline
-            } else {
-                textPlaceable.height + textOffset - firstTextBaseline -
-                        ((titlePlaceable?.height ?: 0) - lastTitleBaseline)
-            }
-        } ?: 0
-
-        val buttonOffset = ButtonBaselineDistanceFromTop.roundToPx()
-
-        // Align the bottom baseline of the button with the bottom baseline of the text, and then
-        // add the offset
-        val buttonPositionY = textPositionY + textHeightWithSpacing - textOffset + buttonOffset
-
-        val buttonHeightWithSpacing = buttonPlaceable?.let {
-            buttonPlaceable.height + buttonOffset
-        } ?: 0
-
-        val layoutHeight = titleHeightWithSpacing + textHeightWithSpacing + buttonHeightWithSpacing
-
-        layout(layoutWidth, layoutHeight) {
-            titlePlaceable?.place(0, titlePositionY)
-            textPlaceable?.place(0, textPositionY)
-            buttonPlaceable?.place(0, buttonPositionY)
+        layout(calculator.layoutWidth, calculator.layoutHeight) {
+            calculator.titlePlaceable?.place(0, calculator.titlePositionY)
+            calculator.textPlaceable?.place(0, calculator.textPositionY)
+            calculator.buttonPlaceable?.place(0, calculator.buttonPositionY)
         }
     }
 }
@@ -245,7 +263,6 @@ private val TextBaselineDistanceFromTop = 38.sp
 
 // Baseline distance from the button to the top
 private val ButtonBaselineDistanceFromTop = 20.sp
-
 
 @AnimealPreview
 @Composable
