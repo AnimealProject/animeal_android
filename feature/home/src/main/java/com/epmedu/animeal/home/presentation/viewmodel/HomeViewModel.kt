@@ -100,6 +100,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun onScreenDisplayed() {
         handleForcedFeedingPoint()
+        viewModelScope.launch { fetchCurrentFeeding() }
     }
 
     private fun finishFeedingProcess() {
