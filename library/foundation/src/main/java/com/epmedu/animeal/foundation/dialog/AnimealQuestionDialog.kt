@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -22,6 +23,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 fun AnimealQuestionDialog(
     title: String,
+    titleFontSize: TextUnit = 17.sp,
     dismissText: String,
     acceptText: String,
     onDismissRequest: () -> Unit = {},
@@ -38,7 +40,7 @@ fun AnimealQuestionDialog(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6,
-                fontSize = 18.sp
+                fontSize = titleFontSize
             )
         },
         text = content,

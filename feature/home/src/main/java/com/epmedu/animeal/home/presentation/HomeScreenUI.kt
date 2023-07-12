@@ -334,7 +334,7 @@ private fun OnFeedingConfirmationStatePreview() {
     AnimealTheme {
         OnFeedingConfirmationState(
             onFeedingEvent = {},
-            feedingConfirmationState =  FeedingConfirmationState.FeedingWasAlreadyBooked,
+            feedingConfirmationState = FeedingConfirmationState.FeedingWasAlreadyBooked,
         )
     }
 }
