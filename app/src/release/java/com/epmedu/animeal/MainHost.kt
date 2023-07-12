@@ -1,14 +1,21 @@
 package com.epmedu.animeal
 
+import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.presentation.SignUpFlow
 import com.epmedu.animeal.splash.presentation.SplashScreen
 import com.epmedu.animeal.tabs.TabsHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
