@@ -16,10 +16,10 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 fun AnimealAlertDialog(
     title: String,
-    titleFontSize: TextUnit = 18.sp,
     acceptText: String,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
+    titleFontSize: TextUnit = 18.sp,
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
