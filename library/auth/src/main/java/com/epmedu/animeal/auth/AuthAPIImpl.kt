@@ -11,13 +11,17 @@ import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class AuthAPIImpl : AuthAPI {
+internal class AuthAPIImpl(
+    private val errorHandler: TokenExpirationHandler
+) : AuthAPI,
+    TokenExpirationHandler by errorHandler {
 
     override var authenticationType: AuthenticationType = AuthenticationType.Mobile
 
@@ -40,7 +44,13 @@ internal class AuthAPIImpl : AuthAPI {
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
             { user -> resume(user.username) },
-            { authException -> resumeWithException(authException) }
+            { authException ->
+                if (isRefreshTokenHasExpiredException(authException)) {
+                    handleRefreshTokenExpiration()
+                } else {
+                    resumeWithException(authException)
+                }
+            }
         )
     }
 
@@ -69,7 +79,11 @@ internal class AuthAPIImpl : AuthAPI {
                     }
                 },
                 {
-                    resume(false)
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(false)
+                    }
                 }
             )
         }
@@ -92,7 +106,13 @@ internal class AuthAPIImpl : AuthAPI {
                 password,
                 options,
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
     }
@@ -110,7 +130,13 @@ internal class AuthAPIImpl : AuthAPI {
                 authSignInOptions,
                 /* Actual return type of onSuccess function here is AuthSignInResult, but currently it's unused */
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
     }
@@ -122,7 +148,13 @@ internal class AuthAPIImpl : AuthAPI {
             Amplify.Auth.confirmSignIn(
                 code,
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
     }
@@ -135,7 +167,13 @@ internal class AuthAPIImpl : AuthAPI {
                 AuthUserAttributeKey.phoneNumber(),
                 code,
                 { resume(ApiResult.Success<Unit>(Unit)) },
-                { resume(ApiResult.Failure<Unit>(it)) },
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure<Unit>(it))
+                    }
+                },
             )
         }
     }
@@ -163,7 +201,13 @@ internal class AuthAPIImpl : AuthAPI {
                 AuthUserAttributeKey.phoneNumber(),
                 // Actual return type of onSuccess function here is AuthCodeDeliveryDetails, but currently it's unused
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
     }

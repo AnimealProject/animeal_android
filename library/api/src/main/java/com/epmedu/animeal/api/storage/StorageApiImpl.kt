@@ -7,10 +7,14 @@ import com.amplifyframework.core.Amplify
 import com.amplifyframework.storage.options.StorageGetUrlOptions
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
+import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class StorageApiImpl : StorageApi {
+internal class StorageApiImpl(
+    private val errorHandler: TokenExpirationHandler
+) : StorageApi,
+    TokenExpirationHandler by errorHandler {
 
     private val cachedImageUrls = mutableMapOf<String, String>()
 
@@ -22,7 +26,13 @@ internal class StorageApiImpl : StorageApi {
                 fileName,
                 file,
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
     }
@@ -42,7 +52,13 @@ internal class StorageApiImpl : StorageApi {
                             result.url.toString().also { cachedImageUrls[imageId] = it }
                         )
                     },
-                    { resumeWithException(it) }
+                    {
+                        if (isRefreshTokenHasExpiredException(it)) {
+                            handleRefreshTokenExpiration()
+                        } else {
+                            resumeWithException(it)
+                        }
+                    }
                 )
             }
         }
@@ -53,7 +69,13 @@ internal class StorageApiImpl : StorageApi {
             Amplify.Storage.remove(
                 fileName,
                 { resume(ApiResult.Success(Unit)) },
-                { resume(ApiResult.Failure(it)) }
+                {
+                    if (isRefreshTokenHasExpiredException(it)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resume(ApiResult.Failure(it))
+                    }
+                }
             )
         }
 }

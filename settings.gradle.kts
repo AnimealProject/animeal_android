@@ -96,6 +96,7 @@ include(":library:foundation")
 include(":library:geolocation")
 include(":library:navigation")
 include(":library:resources")
+include(":library:token")
 
 include(":shared:feature:camera")
 include(":shared:feature:debugmenu")
