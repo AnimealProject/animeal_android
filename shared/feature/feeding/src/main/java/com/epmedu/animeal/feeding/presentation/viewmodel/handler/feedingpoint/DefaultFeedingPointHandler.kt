@@ -62,6 +62,7 @@ class DefaultFeedingPointHandler @Inject constructor(
 
     private var fetchFeedingPointsJob: Job? = null
     private var fetchFeedingsJob: Job? = null
+    private var fetchByPriorityJob: Job? = null
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
 
@@ -115,7 +116,8 @@ class DefaultFeedingPointHandler @Inject constructor(
     }
 
     override fun CoroutineScope.fetchNearestFeedingPoint(userLocation: MapLocation) {
-        launch {
+        fetchByPriorityJob?.cancel()
+        fetchByPriorityJob = launch {
             getFeedingPointByPriorityUseCase(state.defaultAnimalType, userLocation)
                 .collect { result ->
                     result?.let {

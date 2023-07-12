@@ -41,7 +41,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import java.lang.reflect.Array.set
 import javax.inject.Inject
 
 @HiltViewModel
@@ -158,7 +157,9 @@ internal class HomeViewModel @Inject constructor(
                         feedingRouteState = feedingRouteUpdate,
                     )
                 }
-                if (feedingPointUpdate.feedingPoints.isNotEmpty() && !homeStateFlow.locationState.isUndefined) {
+                if (feedingPointUpdate.feedingPoints.isNotEmpty() &&
+                    homeStateFlow.locationState !is LocationState.UndefinedLocation
+                ) {
                     nearestFeedingJob.start()
                 }
             }.collect()

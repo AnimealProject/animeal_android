@@ -39,20 +39,7 @@ data class HomeState(
 
 sealed interface LocationState {
     val location: MapLocation
-
-    val isUndefined: Boolean get() = false
-    val isInitial: Boolean get() = false
-    val isExact: Boolean get() = false
-
-    data class UndefinedLocation(override val location: MapLocation) : LocationState {
-        override val isUndefined: Boolean get() = true
-    }
-
-    data class InitialLocation(override val location: MapLocation) : LocationState {
-        override val isInitial: Boolean get() = true
-    }
-
-    data class ExactLocation(override val location: MapLocation) : LocationState {
-        override val isExact: Boolean get() = true
-    }
+    data class UndefinedLocation(override val location: MapLocation) : LocationState
+    data class InitialLocation(override val location: MapLocation) : LocationState
+    data class ExactLocation(override val location: MapLocation) : LocationState
 }
