@@ -3,6 +3,7 @@ package com.epmedu.animeal.tabs.more.faq.presentation.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -33,13 +34,15 @@ internal fun FAQListItem(
             shape = RoundedCornerShape(12.dp),
             elevation = 3.dp
         ) {
-            Text(
-                text = frequentlyAskedQuestion.answer,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .padding(start = 4.dp),
-                fontSize = 14.sp
-            )
+            SelectionContainer {
+                Text(
+                    text = frequentlyAskedQuestion.answer,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .padding(start = 4.dp),
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }
