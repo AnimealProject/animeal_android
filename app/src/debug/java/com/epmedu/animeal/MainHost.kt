@@ -39,7 +39,7 @@ fun MainHost() {
         }
     }
 
-    if (state.navigateToOnboarding) {
+    if (state.navigateToStartDestination) {
         Toast.makeText(
             context,
             context.getString(R.string.session_expired),

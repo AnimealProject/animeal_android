@@ -28,14 +28,15 @@ fun MainHost() {
 
     AnimatedScreenNavHost(
         startDestination = MainRoute.Splash.name,
-        modifier = Modifier.navigationBarsPadding()
+        modifier = Modifier.navigationBarsPadding(),
+        navController = navController
     ) {
         screen(MainRoute.Splash.name) { SplashScreen() }
         screen(MainRoute.SignUp.name) { SignUpFlow() }
         screen(MainRoute.Tabs.name) { TabsHost() }
     }
 
-    if (state.navigateToOnboarding) {
+    if (state.navigateToStartDestination) {
         Toast.makeText(
             context,
             context.getString(R.string.session_expired),

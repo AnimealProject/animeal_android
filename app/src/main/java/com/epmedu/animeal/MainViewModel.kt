@@ -27,7 +27,7 @@ internal class MainViewModel @Inject constructor(
     }
 
     fun confirmRefreshTokenExpirationWasHandled() {
-        updateState { copy(navigateToOnboarding = false) }
+        updateState { copy(navigateToStartDestination = false) }
         routerRepository.confirmRefreshTokenExpirationWasHandled()
     }
 
@@ -44,7 +44,7 @@ internal class MainViewModel @Inject constructor(
             action = { logOutUseCase() },
             onSuccess = {
                 clearProfileUseCase()
-                updateState { copy(navigateToOnboarding = true) }
+                updateState { copy(navigateToStartDestination = true) }
             }
         )
     }
