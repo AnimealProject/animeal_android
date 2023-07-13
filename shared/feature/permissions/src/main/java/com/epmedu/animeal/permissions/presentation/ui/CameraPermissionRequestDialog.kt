@@ -5,6 +5,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
+import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
@@ -21,4 +23,14 @@ fun CameraPermissionRequestDialog(onDismiss: () -> Unit) {
             onDismiss()
         },
     )
+}
+
+@AnimealPreview
+@Composable
+fun AnimealQuestionDialogPreview() {
+    AnimealTheme {
+        CameraPermissionRequestDialog(
+            onDismiss = {}
+        )
+    }
 }

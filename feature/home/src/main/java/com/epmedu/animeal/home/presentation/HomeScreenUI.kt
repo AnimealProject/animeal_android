@@ -292,7 +292,7 @@ fun OnFeedingConfirmationState(
 ) {
     if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
         AnimealAlertDialog(
-            titleFontSize = 17.sp,
+            titleFontSize = 16.sp,
             title = stringResource(id = R.string.feeding_point_expired_description),
             acceptText = stringResource(id = R.string.feeding_point_expired_accept),
             onConfirm = {

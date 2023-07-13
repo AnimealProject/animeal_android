@@ -23,17 +23,17 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 fun AnimealQuestionDialog(
     title: String,
-    titleFontSize: TextUnit = 17.sp,
     dismissText: String,
     acceptText: String,
+    modifier: Modifier = Modifier.padding(start=29.dp, end=29.dp, top=26.dp, bottom=26.dp),
+    titleFontSize: TextUnit = 18.sp,
     onDismissRequest: () -> Unit = {},
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
-        modifier = Modifier.padding(start=28.dp, end= 28.dp, top=26.dp, bottom=28.dp),
-        offset = 28.sp,
+        modifier = modifier,
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
@@ -47,8 +47,7 @@ fun AnimealQuestionDialog(
         text = content,
         buttons = {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -69,7 +68,7 @@ fun AnimealQuestionDialog(
             }
         },
         properties = DialogProperties(
-            usePlatformDefaultWidth = false,
+            usePlatformDefaultWidth = true,
             dismissOnBackPress = false,
             dismissOnClickOutside = false
         )
