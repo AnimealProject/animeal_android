@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -183,9 +182,9 @@ fun AlertDialog(
     }
 }
 
-private const val TitlePreviewData = "Title"
-private const val TextPreviewData = "Title"
-private const val ButtonPreviewData = "Button Text"
+private const val TITLE_PREVIEW_DATA = "Title"
+private const val TEXT_PREVIEW_DATA = "Title"
+private const val BUTTON_PREVIEW_DATA = "Button Text"
 
 @AnimealPreview
 @Composable
@@ -194,21 +193,21 @@ private fun AnimealAlertDialogFullPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = TitlePreviewData,
+                    text = TITLE_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             text = {
                 Text(
-                    text = TextPreviewData,
+                    text = TEXT_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = ButtonPreviewData,
+                    text = BUTTON_PREVIEW_DATA,
                     onClick = {}
                 )
             },
@@ -224,14 +223,14 @@ private fun AnimealAlertDialogTitleTextPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = TitlePreviewData,
+                    text = TITLE_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             text = {
                 Text(
-                    text = TextPreviewData,
+                    text = TEXT_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -248,14 +247,14 @@ private fun AnimealAlertDialogTitleButtonsPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = TitlePreviewData,
+                    text = TITLE_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = ButtonPreviewData,
+                    text = BUTTON_PREVIEW_DATA,
                     onClick = {}
                 )
             },
@@ -271,14 +270,14 @@ private fun AnimealAlertDialogTextButtonsPreview() {
         AlertDialog(
             text = {
                 Text(
-                    text = TextPreviewData,
+                    text = TEXT_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = ButtonPreviewData,
+                    text = BUTTON_PREVIEW_DATA,
                     onClick = {}
                 )
             },
@@ -294,7 +293,7 @@ private fun AnimealAlertDialogTitlePreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = TitlePreviewData,
+                    text = TITLE_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -311,7 +310,7 @@ private fun AnimealAlertDialogTextPreview() {
         AlertDialog(
             text = {
                 Text(
-                    text = TextPreviewData,
+                    text = TEXT_PREVIEW_DATA,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -328,7 +327,7 @@ private fun AnimealAlertDialogButtonsPreview() {
         AlertDialog(
             buttons = {
                 AnimealButton(
-                    text = ButtonPreviewData,
+                    text = BUTTON_PREVIEW_DATA,
                     onClick = {}
                 )
             },
