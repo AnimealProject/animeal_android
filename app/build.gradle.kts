@@ -60,6 +60,9 @@ dependencies {
     implementation(projects.feature.splash)
     implementation(projects.feature.tabsflow.tabs)
 
+    implementation(projects.shared.feature.router)
+    implementation(projects.shared.feature.profile)
+
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)

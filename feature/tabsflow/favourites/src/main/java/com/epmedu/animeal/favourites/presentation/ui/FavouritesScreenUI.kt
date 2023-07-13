@@ -206,8 +206,8 @@ private fun OnFeedingConfirmationState(
     when (feedingConfirmationState) {
         FeedingStarted -> {
             navigator.navigateTo(TabsRoute.Home.name)
+            onFeedingEvent(FeedingEvent.Reset)
         }
-
         FeedingWasAlreadyBooked -> {
             AnimealAlertDialog(
                 title = stringResource(id = R.string.feeding_point_expired_description),
@@ -217,7 +217,6 @@ private fun OnFeedingConfirmationState(
                 }
             )
         }
-
         else -> {}
     }
 }

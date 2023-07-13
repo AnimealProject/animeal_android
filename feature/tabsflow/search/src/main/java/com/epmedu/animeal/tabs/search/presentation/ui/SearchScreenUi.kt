@@ -162,6 +162,7 @@ private fun OnFeedingConfirmationState(
     when (feedingConfirmationState) {
         FeedingStarted -> {
             navigator.navigateTo(TabsRoute.Home.name)
+            onFeedingEvent(FeedingEvent.Reset)
         }
 
         FeedingWasAlreadyBooked -> {
