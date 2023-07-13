@@ -42,3 +42,11 @@ internal fun FeedingConfirmationState.toDomainFeedingConfirmationState(): Domain
         FeedingConfirmationState.FeedingStarted -> DomainFeedingConfirmationState.FeedingStarted
         else -> DomainFeedingConfirmationState.Dismissed
     }
+
+internal fun DomainFeedingConfirmationState.toPresentationFeedingConfirmationState(): FeedingConfirmationState =
+    when (this) {
+        DomainFeedingConfirmationState.Loading -> FeedingConfirmationState.Loading
+        DomainFeedingConfirmationState.Showing -> FeedingConfirmationState.Showing
+        DomainFeedingConfirmationState.FeedingStarted -> FeedingConfirmationState.FeedingStarted
+        else -> FeedingConfirmationState.Dismissed
+    }

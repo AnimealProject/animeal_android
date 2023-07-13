@@ -15,6 +15,8 @@ interface FeedingRepository {
 
     fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>>
 
+    fun getFeedStateFlow(): Flow<DomainFeedState>
+
     suspend fun startFeeding(feedingPointId: String): ActionResult<Unit>
 
     suspend fun cancelFeeding(feedingPointId: String): ActionResult<Unit>
@@ -22,5 +24,6 @@ interface FeedingRepository {
     suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit>
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult<Unit>
+
     suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
 }

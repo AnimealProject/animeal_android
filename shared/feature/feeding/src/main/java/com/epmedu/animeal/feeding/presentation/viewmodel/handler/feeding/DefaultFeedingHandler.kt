@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandl
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
@@ -18,14 +19,19 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Reset
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.mapper.toDomainFeedState
+import com.epmedu.animeal.feeding.presentation.mapper.toPresentationFeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Dismissed
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
+import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +47,8 @@ class DefaultFeedingHandler(
     timerHandler: TimerHandler,
     private val fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
-    private var updateFeedStateUseCase: UpdateFeedStateUseCase,
+    private val getFeedStateUseCase: GetFeedStateUseCase,
+    private val updateFeedStateUseCase: UpdateFeedStateUseCase,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
@@ -55,29 +62,37 @@ class DefaultFeedingHandler(
     ErrorHandler by errorHandler {
 
     override var feedingStateFlow: StateFlow<FeedState> = stateFlow
+
+    private var fetchCurrentFeedingJob: Job? = null
+
     override fun CoroutineScope.fetchCurrentFeeding() {
-        launch {
+        fetchCurrentFeedingJob?.cancel()
+        fetchCurrentFeedingJob = launch {
             fetchCurrentFeedingPointUseCase()?.let { feedingPoint ->
-                updateState {
-                    copy(
-                        feedPoint = FeedingPointModel(feedingPoint),
-                        feedingConfirmationState = FeedingConfirmationState.Dismissed
-                    )
-                }
+                updateFeedingState(
+                    feedingConfirmationState = Dismissed,
+                    feedPoint = FeedingPointModel(feedingPoint)
+                )
                 showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
                 startRoute()
             } ?: run {
-                updateState {
-                    copy(
-                        feedingConfirmationState = FeedingConfirmationState.Dismissed
-                    )
-                }
+                updateFeedingState(
+                    feedingConfirmationState = Dismissed
+                )
             }
         }
         stateFlow.onEach {
             // updates state flow at repository
             updateFeedStateUseCase(it.toDomainFeedState())
         }.launchIn(this)
+        launch {
+            getFeedStateUseCase().collect { feedState ->
+                updateFeedingState(
+                    feedingConfirmationState = feedState.feedingConfirmationState.toPresentationFeedingConfirmationState(),
+                    feedPoint = feedState.feedPoint?.let { FeedingPointModel(it) },
+                )
+            }
+        }
     }
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
@@ -91,11 +106,9 @@ class DefaultFeedingHandler(
     }
 
     private fun restartFeedingConfirmationState() {
-        updateState {
-            copy(
-                feedingConfirmationState = FeedingConfirmationState.Dismissed
-            )
-        }
+        updateFeedingState(
+            feedingConfirmationState = Dismissed
+        )
     }
 
     private suspend fun startFeeding(id: String) {
@@ -111,10 +124,13 @@ class DefaultFeedingHandler(
                 showSingleReservedFeedingPoint(currentFeedingPoint)
                 startRoute()
                 startTimer()
-                updateFeedingState(FeedingConfirmationState.FeedingStarted)
+                updateFeedingState(
+                    feedPoint = FeedingPointModel(feedingPoint),
+                    feedingConfirmationState = FeedingStarted
+                )
             },
             onError = {
-                updateFeedingState(FeedingConfirmationState.FeedingWasAlreadyBooked)
+                updateFeedingState(FeedingWasAlreadyBooked)
             }
         )
     }
@@ -128,7 +144,7 @@ class DefaultFeedingHandler(
                     stopRoute()
                     disableTimer()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed)
+                    updateFeedingState(Dismissed)
                 }
             )
         }
@@ -145,7 +161,7 @@ class DefaultFeedingHandler(
                 onSuccess = {
                     deselectFeedingPoint()
                     fetchFeedingPoints()
-                    updateFeedingState(FeedingConfirmationState.Dismissed)
+                    updateFeedingState(Dismissed)
                 }
             )
         }
@@ -175,7 +191,7 @@ class DefaultFeedingHandler(
     }
 
     override fun dismissThankYouDialog() {
-        updateFeedingState(FeedingConfirmationState.Dismissed)
+        updateFeedingState(Dismissed)
     }
 
     private suspend fun performFeedingAction(
@@ -195,10 +211,14 @@ class DefaultFeedingHandler(
         }
     }
 
-    private fun updateFeedingState(feedConfirmationState: FeedingConfirmationState) {
+    private fun updateFeedingState(
+        feedingConfirmationState: FeedingConfirmationState,
+        feedPoint: FeedingPointModel? = null
+    ) {
         updateState {
             copy(
-                feedingConfirmationState = feedConfirmationState
+                feedPoint = feedPoint,
+                feedingConfirmationState = feedingConfirmationState
             )
         }
     }

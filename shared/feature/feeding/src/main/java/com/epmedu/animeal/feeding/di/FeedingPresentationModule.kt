@@ -12,6 +12,7 @@ import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
@@ -53,6 +54,7 @@ internal object FeedingPresentationModule {
         timerHandler: TimerHandler,
         fetchCurrentFeedingPointUseCase: FetchCurrentFeedingPointUseCase,
         getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
+        getFeedStateUseCase: GetFeedStateUseCase,
         updateFeedStateUseCase: UpdateFeedStateUseCase,
         startFeedingUseCase: StartFeedingUseCase,
         cancelFeedingUseCase: CancelFeedingUseCase,
@@ -67,6 +69,7 @@ internal object FeedingPresentationModule {
         timerHandler,
         fetchCurrentFeedingPointUseCase,
         getFeedingPointByIdUseCase,
+        getFeedStateUseCase,
         updateFeedStateUseCase,
         startFeedingUseCase,
         cancelFeedingUseCase,
