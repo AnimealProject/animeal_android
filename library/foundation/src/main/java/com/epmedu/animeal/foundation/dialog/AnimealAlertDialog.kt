@@ -1,5 +1,6 @@
 package com.epmedu.animeal.foundation.dialog
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,7 +19,7 @@ fun AnimealAlertDialog(
     title: String,
     acceptText: String,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding(all=25.dp),
     titleFontSize: TextUnit = 18.sp,
     content: @Composable (() -> Unit)? = null,
 ) {

@@ -16,7 +16,6 @@ internal fun FeedingExpiredDialog(
     onConfirm: () -> Unit
 ) {
     AnimealAlertDialog(
-        modifier = Modifier.padding(8.dp).fillMaxWidth(),
         title = stringResource(id = R.string.feeding_timer_expired_dialog_msg),
         acceptText = stringResource(id = R.string.got_it),
         onConfirm = onConfirm

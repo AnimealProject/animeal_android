@@ -3,6 +3,7 @@ package com.epmedu.animeal.foundation.dialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
@@ -25,6 +26,8 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -37,10 +40,7 @@ import kotlin.math.max
 private data class AlertDialogBaselineCalculator(
     val measurables: List<Measurable>,
     val constraints: Constraints,
-    val titleBaselineDistanceFromTop: Int,
-    val textBaselineDistanceFromTitle: Int,
-    val textBaselineDistanceFromTop: Int,
-    val buttonBaselineDistanceFromTop: Int
+    val offset: Int
 ) {
     val titlePlaceable = measurables.firstOrNull { it.layoutId == "title" }?.measure(
         constraints.copy(minHeight = 0)
@@ -53,86 +53,40 @@ private data class AlertDialogBaselineCalculator(
         constraints.copy(minHeight = 0)
     )
 
+    private val titleHeightWithSpacing = titlePlaceable?.let {
+        titlePlaceable.height + if (textPlaceable == null && buttonPlaceable == null) 0 else offset
+    } ?: 0
+
+    private val textHeightWithSpacing = textPlaceable?.let {
+        textPlaceable.height + if (buttonPlaceable == null) 0 else offset
+    } ?: 0
+
+    private val buttonHeightWithSpacing = buttonPlaceable?.height ?: 0
+
+    val titlePositionY = 0
+    val textPositionY = titlePositionY + titleHeightWithSpacing
+    val buttonPositionY = textPositionY + textHeightWithSpacing
+    val layoutHeight = titleHeightWithSpacing + textHeightWithSpacing + buttonHeightWithSpacing
+
     val layoutWidth = max(
         buttonPlaceable?.width ?: 0,
         max(titlePlaceable?.width ?: 0, textPlaceable?.width ?: 0)
     )
-
-    private val firstTitleBaseline = titlePlaceable?.get(FirstBaseline)?.let { baseline ->
-        if (baseline == AlignmentLine.Unspecified) null else baseline
-    } ?: 0
-    private val lastTitleBaseline = titlePlaceable?.get(LastBaseline)?.let { baseline ->
-        if (baseline == AlignmentLine.Unspecified) null else baseline
-    } ?: 0
-
-    private val titleOffset = titleBaselineDistanceFromTop
-
-    // Place the title so that its first baseline is titleOffset from the top
-    val titlePositionY = titleOffset - firstTitleBaseline
-
-    private val firstTextBaseline = textPlaceable?.get(FirstBaseline)?.let { baseline ->
-        if (baseline == AlignmentLine.Unspecified) null else baseline
-    } ?: 0
-
-    private val textOffset = if (titlePlaceable == null) {
-        textBaselineDistanceFromTop
-    } else {
-        textBaselineDistanceFromTitle
-    }
-
-    // Combined height of title and spacing above
-    private val titleHeightWithSpacing = titlePlaceable?.let { it.height + titlePositionY } ?: 0
-
-    // Align the bottom baseline of the text with the bottom baseline of the title, and then
-    // add the offset
-    val textPositionY = if (titlePlaceable == null) {
-        // If there is no title, just place the text offset from the top of the dialog
-        textOffset - firstTextBaseline
-    } else {
-        if (lastTitleBaseline == 0) {
-            // If `title` has no baseline, just place the text's baseline textOffset from the
-            // bottom of the title
-            titleHeightWithSpacing - firstTextBaseline + textOffset
-        } else {
-            // Otherwise place the text's baseline textOffset from the title's last baseline
-            titlePositionY + lastTitleBaseline - firstTextBaseline + textOffset
-        }
-    }
-
-    // Combined height of text and spacing above
-    private val textHeightWithSpacing = textPlaceable?.let {
-        if (lastTitleBaseline == 0) {
-            textPlaceable.height + textOffset - firstTextBaseline
-        } else {
-            textPlaceable.height + textOffset - firstTextBaseline -
-                ((titlePlaceable?.height ?: 0) - lastTitleBaseline)
-        }
-    } ?: 0
-
-    private val buttonOffset = buttonBaselineDistanceFromTop
-
-    // Align the bottom baseline of the button with the bottom baseline of the text, and then
-    // add the offset
-    val buttonPositionY = textPositionY + textHeightWithSpacing - textOffset + buttonOffset
-
-    private val buttonHeightWithSpacing = buttonPlaceable?.let {
-        buttonPlaceable.height + buttonOffset
-    } ?: 0
-
-    val layoutHeight = titleHeightWithSpacing + textHeightWithSpacing + buttonHeightWithSpacing
 }
 
 @Composable
 internal fun ColumnScope.AlertDialogBaselineLayout(
+    modifier: Modifier = Modifier,
     title: @Composable (() -> Unit)?,
     text: @Composable (() -> Unit)?,
-    button: @Composable (() -> Unit)?
+    button: @Composable (() -> Unit)?,
+    offset: TextUnit
 ) {
     Layout(
         {
             title?.let { title ->
                 Box(
-                    TitlePadding
+                    Modifier
                         .layoutId("title")
                         .align(Alignment.Start)
                 ) {
@@ -141,7 +95,7 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
             }
             text?.let { text ->
                 Box(
-                    TextPadding
+                    Modifier
                         .layoutId("text")
                         .align(Alignment.Start)
                 ) {
@@ -150,7 +104,7 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
             }
             button?.let { button ->
                 Box(
-                    ButtonPadding
+                    Modifier
                         .layoutId("buttons")
                         .align(Alignment.Start)
                 ) {
@@ -158,18 +112,9 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
                 }
             }
         },
-        Modifier.weight(1f, false)
+        modifier.weight(1f, false)
     ) { measurables, constraints ->
-
-        val calculator = AlertDialogBaselineCalculator(
-            measurables,
-            constraints,
-            TitleBaselineDistanceFromTop.roundToPx(),
-            TextBaselineDistanceFromTitle.roundToPx(),
-            TextBaselineDistanceFromTop.roundToPx(),
-            ButtonBaselineDistanceFromTop.roundToPx()
-        )
-
+        val calculator = AlertDialogBaselineCalculator(measurables, constraints, offset.roundToPx())
         layout(calculator.layoutWidth, calculator.layoutHeight) {
             calculator.titlePlaceable?.place(0, calculator.titlePositionY)
             calculator.textPlaceable?.place(0, calculator.textPositionY)
@@ -184,18 +129,19 @@ internal fun AlertDialogContent(
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable (() -> Unit)? = null,
+    offset: TextUnit = 0.sp,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
 ) {
     Surface(
-        modifier = modifier,
         shape = shape,
         color = backgroundColor,
         contentColor = contentColor
     ) {
         Column {
             AlertDialogBaselineLayout(
+                modifier = modifier,
                 title = title?.let {
                     @Composable {
                         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
@@ -214,7 +160,8 @@ internal fun AlertDialogContent(
                         }
                     }
                 },
-                button = buttons
+                button = buttons,
+                offset = offset
             )
         }
     }
@@ -224,10 +171,11 @@ internal fun AlertDialogContent(
 @Suppress("ReusedModifierInstance")
 fun AlertDialog(
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding (all=25.dp),
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable (() -> Unit)? = null,
+    offset: TextUnit = 25.sp,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
@@ -242,6 +190,7 @@ fun AlertDialog(
             title = title,
             text = text,
             buttons = buttons,
+            offset = offset,
             shape = shape,
             backgroundColor = backgroundColor,
             contentColor = contentColor
@@ -249,26 +198,9 @@ fun AlertDialog(
     }
 }
 
-private val TitlePadding = Modifier.padding(start = 24.dp, end = 24.dp)
-private val TextPadding = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
-private val ButtonPadding = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
-
-// Baseline distance from the first line of the title to the top of the dialog
-private val TitleBaselineDistanceFromTop = 40.sp
-
-// Baseline distance from the first line of the text to the last line of the title
-private val TextBaselineDistanceFromTitle = 36.sp
-
-// For dialogs with no title, baseline distance from the first line of the text to the top of the
-// dialog
-private val TextBaselineDistanceFromTop = 38.sp
-
-// Baseline distance from the button to the top
-private val ButtonBaselineDistanceFromTop = 20.sp
-
 @AnimealPreview
 @Composable
-private fun AnimealAlertDialogPreview() {
+private fun AnimealAlertDialogFullPreview() {
     AnimealTheme {
         AlertDialog(
             title = {
@@ -285,6 +217,126 @@ private fun AnimealAlertDialogPreview() {
                     style = MaterialTheme.typography.h6,
                 )
             },
+            buttons = {
+                AnimealButton(
+                    text = "Button Text",
+                    onClick = {}
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogTitleTextPreview() {
+    AnimealTheme {
+        AlertDialog(
+            title = {
+                Text(
+                    text = "Title",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            text = {
+                Text(
+                    text = "Text",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogTitleButtonsPreview() {
+    AnimealTheme {
+        AlertDialog(
+            title = {
+                Text(
+                    text = "Title",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            buttons = {
+                AnimealButton(
+                    text = "Button Text",
+                    onClick = {}
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogTextButtonsPreview() {
+    AnimealTheme {
+        AlertDialog(
+            text = {
+                Text(
+                    text = "Text",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            buttons = {
+                AnimealButton(
+                    text = "Button Text",
+                    onClick = {}
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogTitlePreview() {
+    AnimealTheme {
+        AlertDialog(
+            title = {
+                Text(
+                    text = "Title",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogTextPreview() {
+    AnimealTheme {
+        AlertDialog(
+            text = {
+                Text(
+                    text = "Text",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                )
+            },
+            onDismissRequest = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun AnimealAlertDialogButtonsPreview() {
+    AnimealTheme {
+        AlertDialog(
             buttons = {
                 AnimealButton(
                     text = "Button Text",

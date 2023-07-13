@@ -32,7 +32,8 @@ fun AnimealQuestionDialog(
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
-        modifier = Modifier.padding(36.dp),
+        modifier = Modifier.padding(start=28.dp, end= 28.dp, top=26.dp, bottom=28.dp),
+        offset = 28.sp,
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
