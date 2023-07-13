@@ -86,14 +86,13 @@ class DefaultFeedingHandler(
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
-            Reset -> restartFeedingState()
+            Reset -> restartFeedingConfirmationState()
         }
     }
 
-    private fun restartFeedingState() {
+    private fun restartFeedingConfirmationState() {
         updateState {
             copy(
-                feedPoint = null,
                 feedingConfirmationState = FeedingConfirmationState.Dismissed
             )
         }

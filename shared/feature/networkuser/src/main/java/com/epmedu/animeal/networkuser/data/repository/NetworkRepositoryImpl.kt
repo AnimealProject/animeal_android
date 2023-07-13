@@ -23,7 +23,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun isPhoneNumberVerified(): ActionResult<Boolean> {
         val result = userAttributesAPI.fetchUserAttributes()
-        /** NotAuthorizedException is the backend token-expiration exception */
+        /** NotAuthorizedException is the backend refresh-token expiration exception */
         if (result is ApiResult.Failure && result.error is NotAuthorizedException) {
             return ActionResult.Failure(result.error)
         }
