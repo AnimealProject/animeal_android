@@ -157,9 +157,7 @@ internal class HomeViewModel @Inject constructor(
                         feedingRouteState = feedingRouteUpdate,
                     )
                 }
-                if (feedingPointUpdate.feedingPoints.isNotEmpty() &&
-                    homeStateFlow.locationState !is LocationState.UndefinedLocation
-                ) {
+                if (homeStateFlow.locationState !is LocationState.UndefinedLocation) {
                     nearestFeedingJob.start()
                 }
             }.collect()

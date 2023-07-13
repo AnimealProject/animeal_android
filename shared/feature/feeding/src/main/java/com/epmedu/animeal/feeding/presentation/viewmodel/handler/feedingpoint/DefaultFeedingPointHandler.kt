@@ -120,9 +120,7 @@ class DefaultFeedingPointHandler @Inject constructor(
         fetchByPriorityJob = launch {
             getFeedingPointByPriorityUseCase(state.defaultAnimalType, userLocation)
                 .collect { result ->
-                    result?.let {
-                        selectFeedingPoint(FeedingPointModel(it))
-                    }
+                    selectFeedingPoint(FeedingPointModel(result))
                 }
         }
     }
