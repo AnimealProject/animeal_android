@@ -25,15 +25,13 @@ fun AnimealQuestionDialog(
     title: String,
     dismissText: String,
     acceptText: String,
-    modifier: Modifier = Modifier.padding(start=29.dp, end=29.dp, top=26.dp, bottom=26.dp),
-    titleFontSize: TextUnit = 18.sp,
-    onDismissRequest: () -> Unit = {},
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
+    titleFontSize: TextUnit = 18.sp,
+    onDismissRequest: () -> Unit = {},
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
-        modifier = modifier,
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {

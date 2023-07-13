@@ -71,11 +71,9 @@ private data class AlertDialogBaselineCalculator(
 
 @Composable
 internal fun ColumnScope.AlertDialogBaselineLayout(
-    modifier: Modifier = Modifier,
     title: @Composable (() -> Unit)?,
     text: @Composable (() -> Unit)?,
     button: @Composable (() -> Unit)?,
-    offset: TextUnit
 ) {
     Layout(
         {
@@ -107,9 +105,9 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
                 }
             }
         },
-        modifier.weight(1f, false)
+        Modifier.padding(start = 29.dp, end = 29.dp, top = 26.dp, bottom = 26.dp).weight(1f, false)
     ) { measurables, constraints ->
-        val calculator = AlertDialogBaselineCalculator(measurables, constraints, offset.roundToPx())
+        val calculator = AlertDialogBaselineCalculator(measurables, constraints, 28.sp.roundToPx())
         layout(calculator.layoutWidth, calculator.layoutHeight) {
             calculator.titlePlaceable?.place(0, calculator.titlePositionY)
             calculator.textPlaceable?.place(0, calculator.textPositionY)
@@ -120,11 +118,9 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
 
 @Composable
 internal fun AlertDialogContent(
-    modifier: Modifier = Modifier,
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable (() -> Unit)? = null,
-    offset: TextUnit = 0.sp,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
@@ -136,7 +132,6 @@ internal fun AlertDialogContent(
     ) {
         Column {
             AlertDialogBaselineLayout(
-                modifier = modifier,
                 title = title?.let {
                     @Composable {
                         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
@@ -156,7 +151,6 @@ internal fun AlertDialogContent(
                     }
                 },
                 button = buttons,
-                offset = offset
             )
         }
     }
@@ -166,11 +160,9 @@ internal fun AlertDialogContent(
 @Suppress("ReusedModifierInstance")
 fun AlertDialog(
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier.padding (all=26.dp),
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable (() -> Unit)? = null,
-    offset: TextUnit = 28.sp,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
@@ -181,17 +173,19 @@ fun AlertDialog(
         properties = properties
     ) {
         AlertDialogContent(
-            modifier = modifier,
             title = title,
             text = text,
             buttons = buttons,
-            offset = offset,
             shape = shape,
             backgroundColor = backgroundColor,
             contentColor = contentColor
         )
     }
 }
+
+private const val TitlePreviewData = "Title"
+private const val TextPreviewData = "Title"
+private const val ButtonPreviewData = "Button Text"
 
 @AnimealPreview
 @Composable
@@ -200,21 +194,21 @@ private fun AnimealAlertDialogFullPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = "Title",
+                    text = TitlePreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             text = {
                 Text(
-                    text = "Text",
+                    text = TextPreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = "Button Text",
+                    text = ButtonPreviewData,
                     onClick = {}
                 )
             },
@@ -230,14 +224,14 @@ private fun AnimealAlertDialogTitleTextPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = "Title",
+                    text = TitlePreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             text = {
                 Text(
-                    text = "Text",
+                    text = TextPreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -254,14 +248,14 @@ private fun AnimealAlertDialogTitleButtonsPreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = "Title",
+                    text = TitlePreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = "Button Text",
+                    text = ButtonPreviewData,
                     onClick = {}
                 )
             },
@@ -277,14 +271,14 @@ private fun AnimealAlertDialogTextButtonsPreview() {
         AlertDialog(
             text = {
                 Text(
-                    text = "Text",
+                    text = TextPreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
             },
             buttons = {
                 AnimealButton(
-                    text = "Button Text",
+                    text = ButtonPreviewData,
                     onClick = {}
                 )
             },
@@ -300,7 +294,7 @@ private fun AnimealAlertDialogTitlePreview() {
         AlertDialog(
             title = {
                 Text(
-                    text = "Title",
+                    text = TitlePreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -317,7 +311,7 @@ private fun AnimealAlertDialogTextPreview() {
         AlertDialog(
             text = {
                 Text(
-                    text = "Text",
+                    text = TextPreviewData,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                 )
@@ -334,7 +328,7 @@ private fun AnimealAlertDialogButtonsPreview() {
         AlertDialog(
             buttons = {
                 AnimealButton(
-                    text = "Button Text",
+                    text = ButtonPreviewData,
                     onClick = {}
                 )
             },
