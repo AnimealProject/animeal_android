@@ -53,7 +53,11 @@ class GetFeedingPointByPriorityUseCase(
             override fun getPrioritisedFeedingPoints(userLocation: MapLocation): List<FeedingPoint> =
                 feedingPoints.filter {
                     it.location.toPoint().isNearTo(userLocation.toPoint())
-                }
+                }.sortedWith(
+                    compareBy {
+                        it.location.toPoint().distanceInKmTo(userLocation.toPoint())
+                    }
+                )
         }
     }
 
