@@ -9,6 +9,7 @@ import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.auth.error.WrongCodeError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
@@ -73,6 +74,7 @@ internal class AuthAPIImpl(
                                 resume(session.isSignedInWithoutErrors)
                             }
                         }
+
                         else -> {
                             resume(session.isSignedIn)
                         }
@@ -121,7 +123,7 @@ internal class AuthAPIImpl(
         phoneNumber: String
     ): ApiResult<Unit> {
         val authSignInOptions = AWSCognitoAuthSignInOptions.builder()
-            .authFlowType(AuthFlowType.CUSTOM_AUTH)
+            .authFlowType(AuthFlowType.CUSTOM_AUTH_WITHOUT_SRP)
             .build()
         return suspendCancellableCoroutine {
             Amplify.Auth.signIn(
@@ -147,7 +149,14 @@ internal class AuthAPIImpl(
         return suspendCancellableCoroutine {
             Amplify.Auth.confirmSignIn(
                 code,
-                { resume(ApiResult.Success(Unit)) },
+                {
+                    resume(
+                        when {
+                            it.isSignedIn -> ApiResult.Success(Unit)
+                            else -> ApiResult.Failure(WrongCodeError())
+                        }
+                    )
+                },
                 {
                     if (isRefreshTokenHasExpiredException(it)) {
                         handleRefreshTokenExpiration()
