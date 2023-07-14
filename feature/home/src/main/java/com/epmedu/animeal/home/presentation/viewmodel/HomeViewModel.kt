@@ -37,6 +37,7 @@ import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import com.epmedu.animeal.timer.presentation.handler.TimerEvent
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -70,6 +71,11 @@ internal class HomeViewModel @Inject constructor(
     ErrorHandler by defaultHomeHandler,
     FeedingPhotoGalleryHandler by photoGalleryHandler {
 
+    private val nearestFeedingJob: Job by lazy {
+        viewModelScope.launch {
+            fetchNearestFeedingPoint(state.locationState.location)
+        }
+    }
     init {
         viewModelScope.restoreSavedFeedingPoint()
         viewModelScope.launch { collectPermissionsState() }
@@ -142,14 +148,18 @@ internal class HomeViewModel @Inject constructor(
             combine(
                 feedingPointStateFlow,
                 feedingStateFlow,
-                feedingRouteStateFlow
-            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate ->
+                feedingRouteStateFlow,
+                stateFlow
+            ) { feedingPointUpdate, feedingUpdate, feedingRouteUpdate, homeStateFlow ->
                 updateState {
                     copy(
                         feedingPointState = feedingPointUpdate,
                         feedState = feedingUpdate,
                         feedingRouteState = feedingRouteUpdate,
                     )
+                }
+                if (homeStateFlow.locationState !is LocationState.UndefinedLocation) {
+                    nearestFeedingJob.start()
                 }
             }.collect()
         }

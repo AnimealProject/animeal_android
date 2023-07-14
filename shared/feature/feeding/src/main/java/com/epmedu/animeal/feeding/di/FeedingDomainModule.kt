@@ -9,6 +9,7 @@ import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import dagger.Module
@@ -20,6 +21,11 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 object FeedingDomainModule {
+
+    @ViewModelScoped
+    @Provides
+    fun providesGetFeedingPointsByPriority(feedingPointRepository: FeedingPointRepository) =
+        GetFeedingPointByPriorityUseCase(feedingPointRepository)
 
     @ViewModelScoped
     @Provides

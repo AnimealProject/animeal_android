@@ -2,6 +2,7 @@ package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint
 
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +17,8 @@ interface FeedingPointHandler {
     fun CoroutineScope.restoreSavedFeedingPoint()
 
     fun CoroutineScope.fetchFeedingPoints()
+
+    fun CoroutineScope.fetchNearestFeedingPoint(userLocation: MapLocation)
 
     fun deselectFeedingPoint()
 

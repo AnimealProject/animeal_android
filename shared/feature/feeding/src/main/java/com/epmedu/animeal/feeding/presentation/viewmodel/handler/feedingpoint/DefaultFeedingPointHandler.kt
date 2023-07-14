@@ -11,6 +11,7 @@ import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -21,6 +22,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Select
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.util.Keys.SAVED_FEEDING_POINT_KEY
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -43,6 +45,7 @@ class DefaultFeedingPointHandler @Inject constructor(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val savedStateHandle: SavedStateHandle,
+    private val getFeedingPointByPriorityUseCase: GetFeedingPointByPriorityUseCase,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -59,6 +62,7 @@ class DefaultFeedingPointHandler @Inject constructor(
 
     private var fetchFeedingPointsJob: Job? = null
     private var fetchFeedingsJob: Job? = null
+    private var fetchByPriorityJob: Job? = null
 
     override var feedingPointStateFlow: StateFlow<FeedingPointState> = stateFlow
 
@@ -111,6 +115,15 @@ class DefaultFeedingPointHandler @Inject constructor(
         }
     }
 
+    override fun CoroutineScope.fetchNearestFeedingPoint(userLocation: MapLocation) {
+        fetchByPriorityJob?.cancel()
+        fetchByPriorityJob = launch {
+            getFeedingPointByPriorityUseCase(state.defaultAnimalType, userLocation)
+                .collect { result ->
+                    selectFeedingPoint(FeedingPointModel(result))
+                }
+        }
+    }
     override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
         selectFeedingPoint(forcedPoint)

@@ -16,6 +16,7 @@ import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
@@ -86,6 +87,7 @@ internal object FeedingPresentationModule {
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
         savedStateHandle: SavedStateHandle,
+        getFeedingPointByPriorityUseCase: GetFeedingPointByPriorityUseCase,
         getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
         getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
@@ -100,6 +102,7 @@ internal object FeedingPresentationModule {
         routeHandler,
         errorHandler,
         savedStateHandle,
+        getFeedingPointByPriorityUseCase,
         getAllFeedingPointsUseCase,
         getFeedingPointByIdUseCase,
         getFeedingHistoriesUseCase,

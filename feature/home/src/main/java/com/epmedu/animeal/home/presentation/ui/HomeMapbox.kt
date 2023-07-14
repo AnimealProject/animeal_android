@@ -34,6 +34,7 @@ import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
 import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.map.setLocationOnRoute
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.LocationState
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
@@ -175,14 +176,15 @@ private fun MapboxMap(
     }
 
     LaunchedEffect(key1 = state.locationState) {
-        when {
-            state.locationState.isUndefined -> {
+        when (state.locationState) {
+            is LocationState.UndefinedLocation -> {
                 mapboxMapView.setLocation(state.locationState.location)
             }
-            state.locationState.isInitial -> {
+            is LocationState.InitialLocation -> {
                 mapboxMapView.setLocation(state.locationState.location)
                 onInitialLocationDisplay()
             }
+            else -> {}
         }
     }
 
