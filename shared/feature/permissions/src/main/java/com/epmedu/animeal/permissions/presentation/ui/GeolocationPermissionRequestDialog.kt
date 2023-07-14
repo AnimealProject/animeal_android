@@ -30,7 +30,7 @@ fun GeolocationPermissionRequestDialog(
 
 @AnimealPreview
 @Composable
-fun GeolocationPermissionRequestDialogPreview() {
+private fun GeolocationPermissionRequestDialogPreview() {
     AnimealTheme {
         GeolocationPermissionRequestDialog(
             onDismiss = {},
