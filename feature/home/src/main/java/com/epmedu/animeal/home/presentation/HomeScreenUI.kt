@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -31,6 +32,8 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
+import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
@@ -289,6 +292,7 @@ fun OnFeedingConfirmationState(
 ) {
     if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
         AnimealAlertDialog(
+            titleFontSize = 16.sp,
             title = stringResource(id = R.string.feeding_point_expired_description),
             acceptText = stringResource(id = R.string.feeding_point_expired_accept),
             onConfirm = {
@@ -321,5 +325,16 @@ private fun onGeoLocationClick(
             GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
             GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
         }
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun OnFeedingConfirmationStatePreview() {
+    AnimealTheme {
+        OnFeedingConfirmationState(
+            onFeedingEvent = {},
+            feedingConfirmationState = FeedingConfirmationState.FeedingWasAlreadyBooked,
+        )
     }
 }

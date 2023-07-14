@@ -3,15 +3,14 @@ package com.epmedu.animeal.foundation.dialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -25,13 +24,13 @@ fun AnimealQuestionDialog(
     title: String,
     dismissText: String,
     acceptText: String,
-    onDismissRequest: () -> Unit = {},
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
+    titleFontSize: TextUnit = 18.sp,
+    onDismissRequest: () -> Unit = {},
     content: @Composable (() -> Unit)? = null,
 ) {
     AlertDialog(
-        modifier = Modifier.padding(36.dp),
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
@@ -39,15 +38,13 @@ fun AnimealQuestionDialog(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6,
-                fontSize = 18.sp
+                fontSize = titleFontSize
             )
         },
         text = content,
         buttons = {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -68,7 +65,7 @@ fun AnimealQuestionDialog(
             }
         },
         properties = DialogProperties(
-            usePlatformDefaultWidth = false,
+            usePlatformDefaultWidth = true,
             dismissOnBackPress = false,
             dismissOnClickOutside = false
         )

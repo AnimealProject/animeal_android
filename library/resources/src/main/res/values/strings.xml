@@ -95,7 +95,7 @@
     <string name="feeding_timer_suspended">Do you really want to cancel feeding?</string>
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
     <string name="feeding_point_expired_accept">Choose another location</string>
-    <string name="feeding_point_expired_description">Sorry, another volunteer has booked this location for feeding</string>
+    <string name="feeding_point_expired_description">Sorry, another volunteer has booked this location for feeding.</string>
 
     <string name="are_you_sure_you_want_delete_photo">Are you sure you want to delete this photo?</string>
 
