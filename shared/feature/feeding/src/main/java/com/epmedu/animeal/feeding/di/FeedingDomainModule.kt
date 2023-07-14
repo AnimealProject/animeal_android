@@ -5,11 +5,13 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,6 +50,18 @@ object FeedingDomainModule {
     fun providesGetFeedingInProgressUseCase(
         feedingRepository: FeedingRepository
     ): GetFeedingInProgressUseCase = GetFeedingInProgressUseCase(feedingRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesGetFeedStateUseCase(
+        feedingRepository: FeedingRepository
+    ): GetFeedStateUseCase = GetFeedStateUseCase(feedingRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesUpdateFeedStateUseCase(
+        feedingRepository: FeedingRepository
+    ): UpdateFeedStateUseCase = UpdateFeedStateUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides
