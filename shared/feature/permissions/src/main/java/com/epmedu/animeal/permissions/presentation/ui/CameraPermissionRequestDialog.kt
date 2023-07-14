@@ -27,7 +27,7 @@ fun CameraPermissionRequestDialog(onDismiss: () -> Unit) {
 
 @AnimealPreview
 @Composable
-fun AnimealQuestionDialogPreview() {
+private fun AnimealQuestionDialogPreview() {
     AnimealTheme {
         CameraPermissionRequestDialog(
             onDismiss = {}

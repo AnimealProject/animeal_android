@@ -69,7 +69,7 @@ private data class AlertDialogBaselineCalculator(
 }
 
 @Composable
-internal fun ColumnScope.AlertDialogBaselineLayout(
+private fun ColumnScope.AlertDialogBaselineLayout(
     title: @Composable (() -> Unit)?,
     text: @Composable (() -> Unit)?,
     button: @Composable (() -> Unit)?,
@@ -116,7 +116,7 @@ internal fun ColumnScope.AlertDialogBaselineLayout(
 }
 
 @Composable
-internal fun AlertDialogContent(
+private fun AlertDialogContent(
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable (() -> Unit)? = null,
@@ -156,8 +156,7 @@ internal fun AlertDialogContent(
 }
 
 @Composable
-@Suppress("ReusedModifierInstance")
-fun AlertDialog(
+internal fun AlertDialog(
     onDismissRequest: () -> Unit,
     title: (@Composable () -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
