@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AnimealApp" parent="@android:style/Theme.Material.NoActionBar">
+        <!-- This is required to forbid specific devices (such as Xiaomi devices) to override
+        desired modifiers while using dark mode. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+</resources>
