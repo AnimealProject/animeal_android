@@ -51,6 +51,10 @@ fun EnterCodeScreen() {
             }
         }
     }
+
+    LaunchedEffect(state.isError) {
+        if (state.isError) focusRequester.requestFocus()
+    }
 }
 
 private fun Navigator.navigateToTabs() {

@@ -103,7 +103,7 @@ internal class EnterCodeViewModel @Inject constructor(
     }
 
     private fun updateIsError() {
-        updateState { copy(isError = isCodeFilled() && state.isError) }
+        updateState { copy(isError = state.code == emptyCode() && state.isError) }
     }
 
     private fun confirmSignIn() {
@@ -117,7 +117,7 @@ internal class EnterCodeViewModel @Inject constructor(
                     fetchNetworkProfile()
                 },
                 onError = {
-                    updateState { copy(isError = true) }
+                    updateState { copy(code = emptyCode(), isError = true) }
                 }
             )
         }
