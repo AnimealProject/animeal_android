@@ -44,9 +44,11 @@ internal fun EnterCodeScreenUi(
                 }
             )
         }
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 24.dp),
         ) {
             Text(
                 modifier = Modifier.padding(top = 12.dp),
