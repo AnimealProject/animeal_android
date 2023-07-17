@@ -12,11 +12,11 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
-    implementation(projects.feature.home)
     implementation(projects.feature.tabsflow.analytics)
+    implementation(projects.feature.tabsflow.favourites)
+    implementation(projects.feature.tabsflow.home)
     implementation(projects.feature.tabsflow.moreflow.host)
     implementation(projects.feature.tabsflow.search)
-    implementation(projects.feature.tabsflow.favourites)
     implementation(projects.shared.feature.timer)
 
     implementation(projects.library.foundation)

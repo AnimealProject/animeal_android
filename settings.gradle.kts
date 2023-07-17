@@ -64,8 +64,6 @@ include(":app")
 
 include(":feature:debugmenu")
 
-include(":feature:home")
-
 include(":feature:signupflow:entercode")
 include(":feature:signupflow:enterphone")
 include(":feature:signupflow:finishprofile")
@@ -75,6 +73,8 @@ include(":feature:signupflow:signup")
 include(":feature:splash")
 
 include(":feature:tabsflow:analytics")
+include(":feature:tabsflow:favourites")
+include(":feature:tabsflow:home")
 include(":feature:tabsflow:moreflow:about")
 include(":feature:tabsflow:moreflow:account")
 include(":feature:tabsflow:moreflow:donate")
@@ -84,7 +84,6 @@ include(":feature:tabsflow:moreflow:more")
 include(":feature:tabsflow:moreflow:profile")
 include(":feature:tabsflow:search")
 include(":feature:tabsflow:tabs")
-include(":feature:tabsflow:favourites")
 
 include(":library:analytics")
 include(":library:api")
