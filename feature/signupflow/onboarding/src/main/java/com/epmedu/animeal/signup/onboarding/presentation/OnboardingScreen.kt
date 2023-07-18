@@ -1,5 +1,6 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,12 +14,14 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.getActivity
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.RedirectedFromFacebookWebUi
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingState
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnboardingScreen() {
+    val context = LocalContext.current
     val viewModel: OnboardingViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val activity = LocalContext.current.getActivity()
@@ -33,7 +36,15 @@ fun OnboardingScreen() {
         onSignInFacebook = {
             (activity as? FacebookSignInLauncher)?.signInWithFacebook(
                 onSuccess = { viewModel.handleEvent(RedirectedFromFacebookWebUi) },
-                onError = {}
+                onError = {
+                    activity.runOnUiThread {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.something_went_wrong),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             )
         },
     )
@@ -52,7 +63,7 @@ private fun OnState(
             }
             is AuthenticationType.Facebook -> {
                 if (it.isPhoneNumberVerified) {
-                    navigator.navigateToTabs()
+                    navigator.navigateTo(MainRoute.Tabs)
                 } else {
                     navigator.navigate(SignUpRoute.FinishProfile.name)
                 }
@@ -63,8 +74,8 @@ private fun OnState(
     }
 }
 
-private fun Navigator.navigateToTabs() {
-    parent?.navigate(MainRoute.Tabs.name) {
+private fun Navigator.navigateTo(route: MainRoute) {
+    parent?.navigate(route.name) {
         popUpTo(MainRoute.SignUp.name) {
             inclusive = true
         }
