@@ -61,9 +61,13 @@ internal class FinishProfileViewModel @Inject constructor(
     init {
         loadProfile()
         loadAuthenticationType()
+        getNetWorkState()
+    }
+
+    private fun getNetWorkState() {
         viewModelScope.launch {
-            networkStateProvider.getWifiState().collect {
-                updateState { copy(networkState = it) }
+            networkStateProvider.getNetworkState().collect { state ->
+                updateState { copy(networkState = state) }
             }
         }
     }

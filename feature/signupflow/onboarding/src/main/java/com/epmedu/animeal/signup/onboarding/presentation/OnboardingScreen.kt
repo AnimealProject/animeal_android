@@ -21,7 +21,6 @@ import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingVie
 
 @Composable
 fun OnboardingScreen() {
-    val context = LocalContext.current
     val viewModel: OnboardingViewModel = hiltViewModel()
     val navigator = LocalNavigator.currentOrThrow
     val activity = LocalContext.current.getActivity()
@@ -39,8 +38,8 @@ fun OnboardingScreen() {
                 onError = {
                     activity.runOnUiThread {
                         Toast.makeText(
-                            context,
-                            context.getString(R.string.something_went_wrong),
+                            activity,
+                            activity.getString(R.string.something_went_wrong),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -63,7 +62,7 @@ private fun OnState(
             }
             is AuthenticationType.Facebook -> {
                 if (it.isPhoneNumberVerified) {
-                    navigator.navigateTo(MainRoute.Tabs)
+                    navigator.navigateToTabs()
                 } else {
                     navigator.navigate(SignUpRoute.FinishProfile.name)
                 }
@@ -74,8 +73,8 @@ private fun OnState(
     }
 }
 
-private fun Navigator.navigateTo(route: MainRoute) {
-    parent?.navigate(route.name) {
+private fun Navigator.navigateToTabs() {
+    parent?.navigate(MainRoute.Tabs.name) {
         popUpTo(MainRoute.SignUp.name) {
             inclusive = true
         }

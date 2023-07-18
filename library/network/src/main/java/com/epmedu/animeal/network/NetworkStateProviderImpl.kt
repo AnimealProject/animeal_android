@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 class NetworkStateProviderImpl(
     private val connectivityManager: ConnectivityManager
 ) : NetworkStateProvider {
-    override fun getWifiState(): Flow<NetworkState> {
+    override fun getNetworkState(): Flow<NetworkState> {
         return flow {
             val networkCapabilities = connectivityManager.getNetworkCapabilities(
                 connectivityManager.activeNetwork
