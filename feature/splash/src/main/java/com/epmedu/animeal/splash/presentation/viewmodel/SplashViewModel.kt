@@ -6,6 +6,8 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.network.NetworkState
+import com.epmedu.animeal.network.NetworkStateProvider
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
@@ -13,6 +15,7 @@ import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsProfileSavedUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
 import com.epmedu.animeal.splash.domain.usecase.SetFinishProfileAsStartDestinationUseCase
+import com.epmedu.animeal.splash.domain.usecase.SetOnboardingAsSignUpStartDestinationUseCase
 import com.epmedu.animeal.splash.presentation.SplashScreenEvent
 import com.epmedu.animeal.splash.presentation.SplashScreenEvent.ErrorShown
 import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.Home
@@ -31,13 +34,25 @@ internal class SplashViewModel @Inject constructor(
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val setFinishProfileAsStartDestinationUseCase: SetFinishProfileAsStartDestinationUseCase,
+    private val setOnboardingAsSignUpStartDestinationUseCase: SetOnboardingAsSignUpStartDestinationUseCase,
+    private val networkStateProvider: NetworkStateProvider,
     private val logOutUseCase: LogOutUseCase
 ) : ViewModel(),
     StateDelegate<SplashState> by DefaultStateDelegate(SplashState()),
     ActionDelegate by actionDelegate {
 
     init {
-        checkIfUserIsSignedIn()
+        getNetWorkStateAsync().onAwait.run {
+            checkIfUserIsSignedIn()
+        }
+    }
+
+    private fun getNetWorkStateAsync() = viewModelScope.async {
+        networkStateProvider.getNetworkState().collect { state ->
+            updateState {
+                copy(networkState = state)
+            }
+        }
     }
 
     private fun checkIfUserIsSignedIn() {
@@ -64,12 +79,12 @@ internal class SplashViewModel @Inject constructor(
                 }
                 isPhoneNumberVerified -> {
                     setMobileAuthenticationTypeUseCase()
-                    setFinishProfileAsStartDestinationUseCase()
+                    setNextDestinationByNetworkState()
                     navigateToNextDirection(SignUp)
                 }
                 isProfileSaved -> {
                     setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = false)
-                    setFinishProfileAsStartDestinationUseCase()
+                    setNextDestinationByNetworkState()
                     navigateToNextDirection(SignUp)
                 }
                 else -> {
@@ -78,6 +93,14 @@ internal class SplashViewModel @Inject constructor(
             }
         } else {
             logOut()
+        }
+    }
+
+    private fun setNextDestinationByNetworkState() {
+        if (state.networkState == NetworkState.Available) {
+            setFinishProfileAsStartDestinationUseCase()
+        } else {
+            setOnboardingAsSignUpStartDestinationUseCase()
         }
     }
 

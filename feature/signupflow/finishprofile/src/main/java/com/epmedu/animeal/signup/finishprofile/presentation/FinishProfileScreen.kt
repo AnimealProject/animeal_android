@@ -12,7 +12,6 @@ import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.epmedu.animeal.network.NetworkState
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent
@@ -24,10 +23,6 @@ fun FinishProfileScreen() {
     val navigator = LocalNavigator.currentOrThrow
     val state by viewModel.stateFlow.collectAsState()
     val focusRequester = remember { FocusRequester() }
-
-    if (state.networkState == NetworkState.Lost) {
-        navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name)
-    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()

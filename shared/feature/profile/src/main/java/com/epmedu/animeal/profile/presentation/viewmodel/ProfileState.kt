@@ -1,7 +1,6 @@
 package com.epmedu.animeal.profile.presentation.viewmodel
 
 import com.epmedu.animeal.foundation.common.UiText
-import com.epmedu.animeal.network.NetworkState
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.model.getFormat
 
@@ -14,7 +13,6 @@ data class ProfileState(
     val emailError: UiText = UiText.Empty,
     val phoneNumberError: UiText = UiText.Empty,
     val birthDateError: UiText = UiText.Empty,
-    val networkState: NetworkState = NetworkState.Available
 ) {
     val region = profile.phoneNumberRegion
     val phoneNumberDigitsCount = profile.phoneNumberRegion.phoneNumberDigitsCount

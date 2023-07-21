@@ -20,7 +20,6 @@ dependencies {
 
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.networkuser)
-    implementation(projects.library.network)
 
     implementation(libs.androidx.viewmodel)
 

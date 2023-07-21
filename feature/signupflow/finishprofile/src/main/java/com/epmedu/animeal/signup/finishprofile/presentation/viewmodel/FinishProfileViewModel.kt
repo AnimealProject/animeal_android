@@ -5,7 +5,6 @@ import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
-import com.epmedu.animeal.network.NetworkStateProvider
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
@@ -45,8 +44,7 @@ internal class FinishProfileViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
     private val validateBirthDateUseCase: ValidateBirthDateUseCase,
-    private val logOutUseCase: LogOutUseCase,
-    private val networkStateProvider: NetworkStateProvider
+    private val logOutUseCase: LogOutUseCase
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
@@ -61,15 +59,6 @@ internal class FinishProfileViewModel @Inject constructor(
     init {
         loadProfile()
         loadAuthenticationType()
-        getNetWorkState()
-    }
-
-    private fun getNetWorkState() {
-        viewModelScope.launch {
-            networkStateProvider.getNetworkState().collect { state ->
-                updateState { copy(networkState = state) }
-            }
-        }
     }
 
     private fun loadProfile() {

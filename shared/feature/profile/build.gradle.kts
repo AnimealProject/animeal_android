@@ -16,7 +16,6 @@ dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
-    implementation(projects.library.network)
     implementation(projects.library.resources)
 
     implementation(projects.shared.feature.router)
