@@ -1,10 +1,8 @@
 package com.epmedu.animeal.feeding.di
 
 import androidx.lifecycle.SavedStateHandle
-import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
@@ -82,7 +80,6 @@ internal object FeedingPresentationModule {
     @Provides
     fun providesFeedingPointHandler(
         stateDelegate: StateDelegate<FeedingPointState>,
-        eventDelegate: EventDelegate<HomeViewModelEvent>,
         actionDelegate: ActionDelegate,
         routeHandler: RouteHandler,
         errorHandler: ErrorHandler,
@@ -97,7 +94,6 @@ internal object FeedingPresentationModule {
         updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
     ): FeedingPointHandler = DefaultFeedingPointHandler(
         stateDelegate,
-        eventDelegate,
         actionDelegate,
         routeHandler,
         errorHandler,

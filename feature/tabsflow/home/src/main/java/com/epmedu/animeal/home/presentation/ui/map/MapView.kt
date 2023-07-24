@@ -28,6 +28,7 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData
 import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
@@ -160,7 +161,10 @@ fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
 }
 
 @Composable
-fun MapView.GesturesListener(onMapInteraction: () -> Unit) {
+fun MapView.GesturesListeners(
+    onMapClick: (Point) -> Unit,
+    onCameraChange: () -> Unit
+) {
     val debounceState = remember {
         MutableSharedFlow<CameraChangedEventData>(
             replay = 0,
@@ -173,12 +177,18 @@ fun MapView.GesturesListener(onMapInteraction: () -> Unit) {
         debounceState
             .debounce(GESTURE_INTERACTION_DEBOUNCE)
             .collect {
-                onMapInteraction()
+                onCameraChange()
             }
     }
 
-    getMapboxMap().addOnCameraChangeListener {
-        debounceState.tryEmit(it)
+    getMapboxMap().apply {
+        addOnCameraChangeListener {
+            debounceState.tryEmit(it)
+        }
+        addOnMapClickListener { point ->
+            onMapClick(point)
+            false
+        }
     }
 }
 

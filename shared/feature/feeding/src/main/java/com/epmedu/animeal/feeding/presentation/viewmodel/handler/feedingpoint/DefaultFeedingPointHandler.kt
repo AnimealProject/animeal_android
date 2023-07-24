@@ -1,9 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint
 
 import androidx.lifecycle.SavedStateHandle
-import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
@@ -26,8 +24,10 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.util.Keys.SAVED_FEEDING_POINT_KEY
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.router.presentation.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState.Active
+import com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled
 import com.epmedu.animeal.router.presentation.RouteHandler
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,6 @@ import javax.inject.Inject
 
 class DefaultFeedingPointHandler @Inject constructor(
     stateDelegate: StateDelegate<FeedingPointState>,
-    eventDelegate: EventDelegate<HomeViewModelEvent>,
     actionDelegate: ActionDelegate,
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
@@ -55,7 +54,6 @@ class DefaultFeedingPointHandler @Inject constructor(
     private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
 ) : FeedingPointHandler,
     StateDelegate<FeedingPointState> by stateDelegate,
-    EventDelegate<HomeViewModelEvent> by eventDelegate,
     ActionDelegate by actionDelegate,
     RouteHandler by routeHandler,
     ErrorHandler by errorHandler {
@@ -88,32 +86,50 @@ class DefaultFeedingPointHandler @Inject constructor(
                 }
                 val currentFeedingPoint =
                     feedingPoints.find { it.id == state.currentFeedingPoint?.id }
-                val feedingPointsToShow = when {
-                    feedingRouteStateFlow.value is FeedingRouteState.Active &&
-                        currentFeedingPoint != null -> persistentListOf(currentFeedingPoint)
-
-                    else -> feedingPoints.toImmutableList()
-                }
-                val currentFeedingPointToShow = when (currentFeedingPoint?.feedStatus) {
-                    state.currentFeedingPoint?.feedStatus -> {
-                        currentFeedingPoint?.copy(
-                            feedings = state.currentFeedingPoint?.feedings
-                        )
-                    }
-                    else -> {
-                        currentFeedingPoint?.let { fetchFeedings(currentFeedingPoint.id) }
-                        currentFeedingPoint
-                    }
-                }
                 updateState {
                     copy(
-                        currentFeedingPoint = currentFeedingPointToShow,
-                        feedingPoints = feedingPointsToShow
+                        currentFeedingPoint = getCurrentFeedingPointToShow(currentFeedingPoint),
+                        feedingPoints = getFeedingPointsToShow(feedingPoints, currentFeedingPoint)
                     )
                 }
             }
         }
     }
+
+    private fun getFeedingPointsToShow(
+        feedingPoints: List<FeedingPointModel>,
+        currentFeedingPoint: FeedingPointModel?
+    ): ImmutableList<FeedingPointModel> {
+        return when (feedingRouteStateFlow.value) {
+            is Active -> {
+                currentFeedingPoint?.let {
+                    persistentListOf(currentFeedingPoint)
+                } ?: feedingPoints.find { feedingPoint ->
+                    feedingPoint.id == state.feedingPoints.firstOrNull()?.id
+                }?.let { feedingPoint ->
+                    persistentListOf(feedingPoint)
+                } ?: persistentListOf()
+            }
+
+            is Disabled -> {
+                feedingPoints.toImmutableList()
+            }
+        }
+    }
+
+    private fun CoroutineScope.getCurrentFeedingPointToShow(currentFeedingPoint: FeedingPointModel?) =
+        when (currentFeedingPoint?.feedStatus) {
+            state.currentFeedingPoint?.feedStatus -> {
+                currentFeedingPoint?.copy(
+                    feedings = state.currentFeedingPoint?.feedings
+                )
+            }
+
+            else -> {
+                currentFeedingPoint?.let { fetchFeedings(currentFeedingPoint.id) }
+                currentFeedingPoint
+            }
+        }
 
     override fun CoroutineScope.fetchNearestFeedingPoint(userLocation: MapLocation) {
         fetchByPriorityJob?.cancel()
@@ -124,6 +140,7 @@ class DefaultFeedingPointHandler @Inject constructor(
                 }
         }
     }
+
     override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
         val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
         selectFeedingPoint(forcedPoint)
@@ -134,7 +151,7 @@ class DefaultFeedingPointHandler @Inject constructor(
         val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
         updateState {
             copy(
-                currentFeedingPoint = reservedFeedingPoint,
+                currentFeedingPoint = null,
                 feedingPoints = persistentListOf(reservedFeedingPoint)
             )
         }
@@ -162,7 +179,6 @@ class DefaultFeedingPointHandler @Inject constructor(
     private fun CoroutineScope.selectFeedingPoint(feedingPoint: FeedingPointModel) {
         savedStateHandle[SAVED_FEEDING_POINT_KEY] = feedingPoint
         updateState { copy(currentFeedingPoint = feedingPoint) }
-        launch { sendEvent(HomeViewModelEvent.ShowCurrentFeedingPoint) }
         fetchFeedings(feedingPoint.id)
     }
 

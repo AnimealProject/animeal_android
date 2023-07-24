@@ -43,7 +43,7 @@ internal class DefaultCameraHandler @Inject constructor(
         updateState { copy(cameraState = CameraState.LoadingImageToServer) }
         val newPhoto = FeedingPhotoItem(
             uri,
-            "${state.feedingPointState.currentFeedingPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg"
+            "${state.feedState.feedPoint?.id}_feedPhoto_${UUID.randomUUID()}.jpg"
         )
         performAction(
             action = {
