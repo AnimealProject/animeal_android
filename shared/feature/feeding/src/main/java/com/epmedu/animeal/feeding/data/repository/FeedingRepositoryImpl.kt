@@ -2,6 +2,7 @@ package com.epmedu.animeal.feeding.data.repository
 
 import com.amplifyframework.core.model.temporal.Temporal
 import com.epmedu.animeal.api.feeding.FeedingApi
+import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
@@ -31,6 +32,7 @@ internal class FeedingRepositoryImpl(
     private val dispatchers: Dispatchers,
     private val authApi: AuthAPI,
     private val feedingApi: FeedingApi,
+    private val feedingPointApi: FeedingPointApi,
     private val favouriteRepository: FavouriteRepository,
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
@@ -47,10 +49,14 @@ internal class FeedingRepositoryImpl(
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
+            feedingPointApi.getAllFeedingPoints(),
             favouriteRepository.getFavouriteFeedingPointIds(shouldFetch = false)
-        ) { feedings, favouriteIds ->
+        ) { feedings, feedingPoints, favouriteIds ->
             feedings.map { feeding ->
-                feeding.toDomain(isFavourite = favouriteIds.any { it == feeding.feedingPoint.id })
+                feeding.toDomain(
+                    isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
+                    feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
+                )
             }
         }
             .flowOn(dispatchers.IO)
