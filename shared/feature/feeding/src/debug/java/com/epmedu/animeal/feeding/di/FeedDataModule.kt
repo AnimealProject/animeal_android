@@ -58,6 +58,7 @@ object FeedDataModule {
     fun providesFeedingRepository(
         authApi: AuthAPI,
         feedingAPI: FeedingApi,
+        feedingPointApi: FeedingPointApi,
         favouriteRepository: FavouriteRepository,
         usersRepository: UsersRepository,
         debugMenuRepository: DebugMenuRepository,
@@ -71,6 +72,7 @@ object FeedDataModule {
                     dispatchers = Dispatchers,
                     authApi = authApi,
                     feedingApi = feedingAPI,
+                    feedingPointApi = feedingPointApi,
                     favouriteRepository = favouriteRepository,
                     usersRepository = usersRepository
                 )
