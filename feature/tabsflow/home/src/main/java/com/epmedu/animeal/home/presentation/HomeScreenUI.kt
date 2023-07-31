@@ -20,6 +20,7 @@ import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
@@ -53,6 +54,7 @@ import com.epmedu.animeal.permissions.presentation.PermissionStatus.Granted
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.presentation.FeedingRouteState
+import com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled
 import com.epmedu.animeal.router.presentation.RouteEvent
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.epmedu.animeal.timer.presentation.handler.TimerEvent
@@ -68,6 +70,7 @@ import kotlinx.coroutines.launch
 internal fun HomeScreenUI(
     state: HomeState,
     bottomSheetState: AnimealBottomSheetState,
+    onCameraChange: () -> Unit,
     onScreenEvent: (HomeScreenEvent) -> Unit,
     onPermissionsEvent: (PermissionsEvent) -> Unit,
     onRouteEvent: (RouteEvent) -> Unit,
@@ -115,13 +118,10 @@ internal fun HomeScreenUI(
     }
 
     OnState(state, onScreenEvent, onTimerEvent)
-    LaunchedEffect(state.feedingPointState.currentFeedingPoint) {
-        if (state.feedingPointState.currentFeedingPoint == null) bottomSheetState.hide()
-    }
 
     LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
-        if (bottomSheetState.isHidden && state.feedingRouteState is FeedingRouteState.Disabled) {
-            onFeedingPointEvent(FeedingPointEvent.Deselect)
+        if (bottomSheetState.isHidden && state.feedingRouteState is Disabled) {
+            onFeedingPointEvent(Deselect)
         }
     }
 
@@ -188,7 +188,8 @@ internal fun HomeScreenUI(
             HomeMapbox(
                 state = state,
                 onFeedingPointSelect = { onFeedingPointEvent(FeedingPointEvent.Select(it)) },
-                onMapInteraction = { onScreenEvent(HomeScreenEvent.MapInteracted) },
+                onCameraChange = onCameraChange,
+                onMapClick = { hideBottomSheet() },
                 onInitialLocationDisplay = { onScreenEvent(HomeScreenEvent.InitialLocationWasDisplayed) },
                 onCancelRouteClick = {
                     onScreenEvent(TimerCancellationEvent.CancellationAttempt)

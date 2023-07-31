@@ -4,11 +4,8 @@ import com.epmedu.animeal.camera.domain.usecase.DeletePhotoUseCase
 import com.epmedu.animeal.camera.domain.usecase.UploadPhotoUseCase
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.domain.usecase.ForcedArgumentsUseCase
-import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
@@ -62,10 +59,6 @@ internal object HomePresentationModule {
     @Provides
     fun providesFeedingRouteStateDelegate(): StateDelegate<FeedingRouteState> =
         DefaultStateDelegate(FeedingRouteState.Disabled)
-
-    @ViewModelScoped
-    @Provides
-    fun providesEventDelegate(): EventDelegate<HomeViewModelEvent> = DefaultEventDelegate()
 
     @ViewModelScoped
     @Provides

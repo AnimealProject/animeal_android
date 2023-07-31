@@ -40,7 +40,7 @@ internal fun RouteView(
 
     with(state) {
         val feedingRouteState = feedingRouteState
-        val currentFeedingPoint = feedingPointState.currentFeedingPoint
+        val currentFeedingPoint = feedState.feedPoint
         LaunchedEffect(key1 = feedingRouteState) {
             when {
                 gpsSettingState == GpsSettingState.Disabled && currentFeedingPoint != null -> {
@@ -79,7 +79,7 @@ internal fun RouteView(
 }
 
 internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
-    state.feedingPointState.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
+    state.feedState.feedPoint?.coordinates?.let { feedingPointLocation ->
         mapView.setLocation(
             points = listOf(
                 state.locationState.location.toPoint(),
@@ -104,7 +104,7 @@ private fun fetchRoute(
     mapboxNavigation: MapboxNavigation,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
-    state.feedingPointState.currentFeedingPoint?.coordinates?.let { feedingPointLocation ->
+    state.feedState.feedPoint?.coordinates?.let { feedingPointLocation ->
         mapView.fetchRoute(
             mapBoxRouteInitOptions = mapBoxRouteInitOptions,
             navigation = mapboxNavigation,

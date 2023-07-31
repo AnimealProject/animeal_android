@@ -4,9 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
-import com.epmedu.animeal.common.presentation.viewmodel.HomeViewModelEvent
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -30,7 +28,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
-import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteEvent
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
@@ -52,14 +49,12 @@ internal class HomeViewModel @Inject constructor(
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val animalTypeUseCase: AnimalTypeUseCase,
     stateDelegate: StateDelegate<HomeState>,
-    eventDelegate: EventDelegate<HomeViewModelEvent>,
     defaultHomeHandler: DefaultHomeHandler,
     permissionsHandler: PermissionsHandler,
     photoGalleryHandler: FeedingPhotoGalleryHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<HomeState> by stateDelegate,
-    EventDelegate<HomeViewModelEvent> by eventDelegate,
     CameraHandler by defaultHomeHandler,
     FeedingPointHandler by defaultHomeHandler,
     RouteHandler by defaultHomeHandler,
@@ -97,7 +92,6 @@ internal class HomeViewModel @Inject constructor(
             is ErrorShowed -> hideError()
             ScreenDisplayed -> onScreenDisplayed()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
-            HomeScreenEvent.MapInteracted -> handleMapInteraction()
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
             HomeScreenEvent.DismissThankYouEvent -> finishFeedingProcess()
@@ -200,14 +194,6 @@ internal class HomeViewModel @Inject constructor(
                 showFeedingPoint(forcedFeedingPointId).coordinates.let {
                     collectLocations(Location(it.latitude(), it.longitude()))
                 }
-            }
-        }
-    }
-
-    private fun handleMapInteraction() {
-        viewModelScope.launch {
-            if (state.feedingRouteState is FeedingRouteState.Disabled) {
-                sendEvent(HomeViewModelEvent.MinimiseBottomSheet)
             }
         }
     }

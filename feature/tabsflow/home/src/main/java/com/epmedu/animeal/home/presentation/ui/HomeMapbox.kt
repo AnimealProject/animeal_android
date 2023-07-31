@@ -22,7 +22,7 @@ import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
-import com.epmedu.animeal.home.presentation.ui.map.GesturesListener
+import com.epmedu.animeal.home.presentation.ui.map.GesturesListeners
 import com.epmedu.animeal.home.presentation.ui.map.MapBoxInitOptions
 import com.epmedu.animeal.home.presentation.ui.map.MapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.MarkerController
@@ -52,7 +52,8 @@ internal fun HomeMapbox(
     onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onCancelRouteClick: () -> Unit,
-    onMapInteraction: () -> Unit,
+    onCameraChange: () -> Unit,
+    onMapClick: (Point) -> Unit,
     onSelectTab: (AnimalType) -> Unit
 ) {
     val context = LocalContext.current
@@ -71,7 +72,8 @@ internal fun HomeMapbox(
             onFeedingPointClick = onFeedingPointSelect,
             onInitialLocationDisplay = onInitialLocationDisplay,
             onRouteResult = onRouteResult,
-            onMapInteraction = onMapInteraction,
+            onCameraChange = onCameraChange,
+            onMapClick = onMapClick
         )
 
         when (val feedingRouteState = state.feedingRouteState) {
@@ -141,7 +143,8 @@ private fun MapboxMap(
     onFeedingPointClick: (point: FeedingPointModel) -> Unit,
     onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
-    onMapInteraction: () -> Unit,
+    onCameraChange: () -> Unit,
+    onMapClick: (Point) -> Unit
 ) {
     val markerController = remember(mapboxMapView) {
         MarkerController(
@@ -190,7 +193,7 @@ private fun MapboxMap(
 
     // TODO check if it is needed to remove, probably yes
     mapboxMapView.getMapboxMap().addOnStyleLoadedListener(onStyleLoadedListener)
-    mapboxMapView.GesturesListener(onMapInteraction = onMapInteraction)
+    mapboxMapView.GesturesListeners(onMapClick, onCameraChange)
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
