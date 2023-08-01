@@ -5,6 +5,10 @@ data class DomainFeedState(
     val feedingConfirmationState: DomainFeedingConfirmationState = DomainFeedingConfirmationState.Dismissed,
 )
 
-enum class DomainFeedingConfirmationState {
-    Dismissed, Loading, Showing, FeedingStarted
+sealed interface DomainFeedingConfirmationState {
+    object Dismissed : DomainFeedingConfirmationState
+    object Loading : DomainFeedingConfirmationState
+    object Showing : DomainFeedingConfirmationState
+    object FeedingStarted : DomainFeedingConfirmationState
+    object FeedingWasAlreadyBooked : DomainFeedingConfirmationState
 }
