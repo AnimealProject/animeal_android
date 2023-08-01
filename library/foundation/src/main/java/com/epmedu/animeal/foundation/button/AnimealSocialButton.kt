@@ -1,8 +1,5 @@
 package com.epmedu.animeal.foundation.button
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -39,27 +36,9 @@ fun AnimealSocialButton(
 @Composable
 private fun AnimealSocialButtonPreview() {
     AnimealTheme {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-        ) {
-            AnimealSocialButton(
-                onClick = { },
-                iconResource = R.drawable.ic_facebook
-            )
-            AnimealSocialButton(
-                onClick = { },
-                iconResource = R.drawable.ic_instagram
-            )
-            AnimealSocialButton(
-                onClick = { },
-                iconResource = R.drawable.ic_linkedin
-            )
-            AnimealSocialButton(
-                onClick = { },
-                iconResource = R.drawable.ic_web
-            )
-        }
+        AnimealSocialButton(
+            onClick = { },
+            iconResource = R.drawable.ic_facebook
+        )
     }
 }

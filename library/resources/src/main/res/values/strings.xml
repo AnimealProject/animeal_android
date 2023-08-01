@@ -25,7 +25,6 @@
     <string name="page_about">About</string>
     <string name="page_account">Account</string>
     <string name="page_about_detailed">About (terms and conditions)</string>
-    <string name="page_about_version">App version %s</string>
 
     <string name="sign_in_facebook">Sign in with Facebook</string>
     <string name="sign_in_mobile">Sign in with Mobile</string>
@@ -129,6 +128,18 @@
 
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
     <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at example@gmail.com</string>
+
+    <string-array name="about_paragraphs">
+        <item>Who are we?\nAnimal Project was founded in 2020 by animal lovers with different professions and experiences. For decades, our team members have been independently helping strays and raising awareness through personal channels.</item>
+        <item>What is our goal?\nWe exist so that dogs and cats no longer have to live in the streets of Georgia. Our goal is to create a habitable, comfortable environment for companion animals and raise awareness within our communities.</item>
+        <item>How are we working on this goal?\nOur team heavily relies on international best practices and experience. Our areas of work include:</item>
+    </string-array>
+    <string-array name="about_areas_of_work">
+        <item>Raising social awareness;</item>
+        <item>Advocating with the government;</item>
+        <item>Charitable and humanitarian projects in collaboration with the private sector, donor organizations, and local communities</item>
+    </string-array>
+    <string name="about_app_version">App version %s</string>
 
     <string name="kilometers">km</string>
     <string name="meters">m</string>
