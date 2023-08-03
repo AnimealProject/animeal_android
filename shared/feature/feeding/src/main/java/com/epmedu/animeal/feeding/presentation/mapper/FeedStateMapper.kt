@@ -40,7 +40,8 @@ internal fun FeedingConfirmationState.toDomainFeedingConfirmationState(): Domain
         FeedingConfirmationState.Loading -> DomainFeedingConfirmationState.Loading
         FeedingConfirmationState.Showing -> DomainFeedingConfirmationState.Showing
         FeedingConfirmationState.FeedingStarted -> DomainFeedingConfirmationState.FeedingStarted
-        else -> DomainFeedingConfirmationState.Dismissed
+        FeedingConfirmationState.FeedingWasAlreadyBooked -> DomainFeedingConfirmationState.FeedingWasAlreadyBooked
+        FeedingConfirmationState.Dismissed -> DomainFeedingConfirmationState.Dismissed
     }
 
 internal fun DomainFeedingConfirmationState.toPresentationFeedingConfirmationState(): FeedingConfirmationState =
@@ -48,5 +49,6 @@ internal fun DomainFeedingConfirmationState.toPresentationFeedingConfirmationSta
         DomainFeedingConfirmationState.Loading -> FeedingConfirmationState.Loading
         DomainFeedingConfirmationState.Showing -> FeedingConfirmationState.Showing
         DomainFeedingConfirmationState.FeedingStarted -> FeedingConfirmationState.FeedingStarted
-        else -> FeedingConfirmationState.Dismissed
+        DomainFeedingConfirmationState.FeedingWasAlreadyBooked -> FeedingConfirmationState.FeedingWasAlreadyBooked
+        DomainFeedingConfirmationState.Dismissed -> FeedingConfirmationState.Dismissed
     }
