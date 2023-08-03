@@ -94,6 +94,7 @@ include(":library:extensions")
 include(":library:foundation")
 include(":library:geolocation")
 include(":library:navigation")
+include(":library:network")
 include(":library:resources")
 include(":library:token")
 

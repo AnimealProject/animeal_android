@@ -1,5 +1,6 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,6 +14,7 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.getActivity
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.RedirectedFromFacebookWebUi
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingState
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
@@ -33,7 +35,15 @@ fun OnboardingScreen() {
         onSignInFacebook = {
             (activity as? FacebookSignInLauncher)?.signInWithFacebook(
                 onSuccess = { viewModel.handleEvent(RedirectedFromFacebookWebUi) },
-                onError = {}
+                onError = {
+                    activity.runOnUiThread {
+                        Toast.makeText(
+                            activity,
+                            activity.getString(R.string.something_went_wrong),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             )
         },
     )

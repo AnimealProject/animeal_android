@@ -8,6 +8,7 @@ import com.epmedu.animeal.splash.domain.repository.SplashRepository
 import com.epmedu.animeal.splash.domain.usecase.GetIsProfileSavedUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
 import com.epmedu.animeal.splash.domain.usecase.SetFinishProfileAsStartDestinationUseCase
+import com.epmedu.animeal.splash.domain.usecase.SetOnboardingAsSignUpStartDestinationUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,4 +41,10 @@ object SplashModule {
     fun provideSetFinishProfileAsStartDestinationUseCase(
         repository: RouterRepository
     ) = SetFinishProfileAsStartDestinationUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideSetOnboardingAsSignUpStartDestinationUseCase(
+        repository: RouterRepository
+    ) = SetOnboardingAsSignUpStartDestinationUseCase(repository)
 }
