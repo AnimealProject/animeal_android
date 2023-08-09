@@ -42,12 +42,10 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
     productFlavors {
         create("dev") {
             dimension = "environment"
-            applicationIdSuffix = ".dev"
             versionName = "dev." + provideVersionName()
         }
         create("qa") {
             dimension = "environment"
-            applicationIdSuffix = ".test"
             versionName = "test." + provideVersionName()
         }
         create("prod") {
