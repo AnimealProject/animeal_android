@@ -38,7 +38,7 @@ internal fun SplashScreenUI(
         )
         HeightSpacer(16.dp)
         Text(
-            text = stringResource(id = R.string.app_name).uppercase(),
+            text = stringResource(id = R.string.splash_title).uppercase(),
             style = MaterialTheme.typography.h6,
         )
     }

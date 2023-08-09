@@ -64,9 +64,9 @@ jobs:
 
       - name: Copy amplify config files DEV env
         run: |
-          mkdir -p app/src/main/res/raw
-          cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
-          cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
+          mkdir -p app/src/dev/res/raw
+          cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/dev/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/dev/res/raw/awsconfiguration.json
 
       - name: Copy keystore
         uses: RollyPeres/base64-to-path@v1
@@ -126,9 +126,9 @@ jobs:
 
       - name: Copy amplify config files TEST env
         run: |
-          rm ./app/src/main/res/raw/*
-          cat android-keystore/amplify-keys/qa/raw/amplifyconfiguration.json >> app/src/main/res/raw/amplifyconfiguration.json
-          cat android-keystore/amplify-keys/qa/raw/awsconfiguration.json >> app/src/main/res/raw/awsconfiguration.json
+          rm ./app/src/dev/res/raw/*
+          cat android-keystore/amplify-keys/qa/raw/amplifyconfiguration.json >> app/src/qa/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/qa/raw/awsconfiguration.json >> app/src/qa/res/raw/awsconfiguration.json
       
       - name: Build release APK qa env
         run: ./gradlew clean assembleRelease

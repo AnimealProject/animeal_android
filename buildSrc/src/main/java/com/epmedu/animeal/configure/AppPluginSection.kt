@@ -37,4 +37,18 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
             isMinifyEnabled = false
         }
     }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionName = "dev." + provideVersionName()
+        }
+        create("qa") {
+            dimension = "environment"
+            applicationIdSuffix = ".test"
+            versionName = "test." + provideVersionName()
+        }
+    }
 }

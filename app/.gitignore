@@ -1,4 +1,4 @@
 /build
-/src/main/res/raw/amplifyconfiguration.json
-/src/main/res/raw/awsconfiguration.json
+*amplifyconfiguration.json
+*awsconfiguration.json
 google-services.json
