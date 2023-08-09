@@ -153,9 +153,9 @@ jobs:
       - name: Create release tag
         uses: ncipollo/release-action@v1
         with:
-          artifacts: releases/dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk,
+          artifacts: "releases/dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk, 
             releases/test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk,
-            releases/prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk,
+            releases/prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk"
           tag: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
