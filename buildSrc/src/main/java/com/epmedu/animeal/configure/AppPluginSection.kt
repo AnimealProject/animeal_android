@@ -50,5 +50,8 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
             applicationIdSuffix = ".test"
             versionName = "test." + provideVersionName()
         }
+        create("prod") {
+            dimension = "environment"
+        }
     }
 }

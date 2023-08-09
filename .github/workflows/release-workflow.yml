@@ -62,11 +62,17 @@ jobs:
       - name: Copy google services config
         run: echo $GOOGLE_SERVICES >> app/google-services.json
 
-      - name: Copy amplify config files DEV env
+      - name: Copy amplify config files
         run: |
           mkdir -p app/src/dev/res/raw
+          mkdir -p app/src/qa/res/raw
+          mkdir -p app/src/prod/res/raw
           cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/dev/res/raw/amplifyconfiguration.json
           cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/dev/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/qa/raw/amplifyconfiguration.json >> app/src/qa/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/qa/raw/awsconfiguration.json >> app/src/qa/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/prod/res/raw/amplifyconfiguration.json
+          cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/prod/res/raw/awsconfiguration.json
 
       - name: Copy keystore
         uses: RollyPeres/base64-to-path@v1
@@ -83,22 +89,22 @@ jobs:
         run: ./increment.sh    
                     
       - name: Build release APK DEV env
-        run: ./gradlew clean assembleRelease
+        run: ./gradlew clean assembleDevRelease
 
       - name: Rename artifacts
         run: |
-           mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+           mv app/build/outputs/apk/release/app-dev-release.apk app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK DEV env
         uses: actions/upload-artifact@v2
         with:
-          name: app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          path: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          name: app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Create release Tag DEV env
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          artifacts: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           tag: dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -112,9 +118,49 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
           groups: developers
-          file: app/build/outputs/apk/release/app-release-dev-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          file: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       
-      # Start build for qa env
+      # Start build for testing env
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
+      - name: Build release APK TEST env
+        run: ./gradlew clean assembleQaRelease
+
+      - name: Rename artifacts
+        run: |
+           mv app/build/outputs/apk/release/app-test-release.apk app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+
+      - name: Upload APK TEST env
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+
+      - name: Create release tag TEST env
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Firebase App Distribution qa env
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFile: service_account.json
+          groups: qa_team
+          file: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+      # End
+
+      # Start build for prod env
       - uses: actions/cache@v2
         with:
           path: |
@@ -124,46 +170,40 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Copy amplify config files TEST env
-        run: |
-          rm ./app/src/dev/res/raw/*
-          cat android-keystore/amplify-keys/qa/raw/amplifyconfiguration.json >> app/src/qa/res/raw/amplifyconfiguration.json
-          cat android-keystore/amplify-keys/qa/raw/awsconfiguration.json >> app/src/qa/res/raw/awsconfiguration.json
-      
-      - name: Build release APK qa env
-        run: ./gradlew clean assembleRelease
+      - name: Build release APK prod env
+        run: ./gradlew clean assembleProdRelease
 
       - name: Rename artifacts
         run: |
-           mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/app-release-qa-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          mv app/build/outputs/apk/release/app-prod-release.apk app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
-      - name: Upload APK TEST env
+      - name: Upload APK PROD env
         uses: actions/upload-artifact@v2
         with:
-          name: app-release-qa-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          path: app/build/outputs/apk/release/app-release-qa-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          name: app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
-      - name: Create release tag qa env
+      - name: Create release tag prod env
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app/build/outputs/apk/release/app-release-qa-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          tag: qa.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
-          name: Release qa.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          artifacts: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          tag: prod.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
+          name: Release prod.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Firebase App Distribution qa env
+
+      - name: Firebase App Distribution prod env
         uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
-          groups: qa_team
-          file: app/build/outputs/apk/release/app-release-qa-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk 
+          groups: qa_team, developers
+          file: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       # End
       
       - name: Commit files
         run: |
-          git config --local user.email "egorikftp@gmail.com"
-          git config --local user.name "egorikftp"
+          git config --local user.email "balatayevvladislav@gmail.com"
+          git config --local user.name "Fileek"
           git commit -m "Increment build version" -a
 
       - name: Push changes
