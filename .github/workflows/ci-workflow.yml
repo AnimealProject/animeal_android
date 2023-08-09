@@ -80,4 +80,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-dev-debug.apk
-          path: app/build/outputs/apk/debug/app-dev-debug.apk
+          path: app/build/outputs/apk/dev/debug/app-dev-debug.apk

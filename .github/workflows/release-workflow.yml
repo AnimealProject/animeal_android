@@ -93,18 +93,18 @@ jobs:
 
       - name: Rename artifacts
         run: |
-           mv app/build/outputs/apk/release/app-dev-release.apk app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+           mv app/build/outputs/apk/dev/release/app-dev-release.apk app/build/outputs/apk/dev/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK DEV env
         uses: actions/upload-artifact@v2
         with:
           name: app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          path: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/dev/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Create release Tag DEV env
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          artifacts: app/build/outputs/apk/dev/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           tag: dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release dev.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -118,7 +118,7 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
           groups: developers
-          file: app/build/outputs/apk/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          file: app/build/outputs/apk/dev/release/app-dev-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       
       # Start build for testing env
       - uses: actions/cache@v2
@@ -135,18 +135,18 @@ jobs:
 
       - name: Rename artifacts
         run: |
-           mv app/build/outputs/apk/release/app-test-release.apk app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+           mv app/build/outputs/apk/qa/release/app-test-release.apk app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK TEST env
         uses: actions/upload-artifact@v2
         with:
           name: app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          path: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Create release tag TEST env
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          artifacts: app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           tag: test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release test.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -157,7 +157,7 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
           groups: qa_team
-          file: app/build/outputs/apk/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          file: app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       # End
 
       # Start build for prod env
@@ -175,18 +175,18 @@ jobs:
 
       - name: Rename artifacts
         run: |
-          mv app/build/outputs/apk/release/app-prod-release.apk app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          mv app/build/outputs/apk/prod/release/app-prod-release.apk app/build/outputs/apk/prod/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK PROD env
         uses: actions/upload-artifact@v2
         with:
           name: app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
-          path: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          path: app/build/outputs/apk/prod/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Create release tag prod env
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          artifacts: app/build/outputs/apk/prod/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
           tag: prod.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           name: Release prod.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -197,7 +197,7 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
           groups: qa_team, developers
-          file: app/build/outputs/apk/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+          file: app/build/outputs/apk/prod/release/app-prod-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
       # End
       
       - name: Commit files
