@@ -135,7 +135,7 @@ jobs:
 
       - name: Rename artifacts
         run: |
-           mv app/build/outputs/apk/qa/release/app-test-release.apk app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
+           mv app/build/outputs/apk/qa/release/app-qa-release.apk app/build/outputs/apk/qa/release/app-test-release-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.BUILD_NUMBER }}.apk
 
       - name: Upload APK TEST env
         uses: actions/upload-artifact@v2
