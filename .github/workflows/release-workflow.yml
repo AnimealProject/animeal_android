@@ -109,9 +109,6 @@ jobs:
       - name: Download releases
         uses: actions/download-artifact@v3
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
       - name: Create release tag
         uses: ncipollo/release-action@v1
         with:
