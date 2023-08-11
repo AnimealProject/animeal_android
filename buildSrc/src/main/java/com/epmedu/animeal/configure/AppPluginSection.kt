@@ -46,7 +46,7 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
         }
         create("qa") {
             dimension = "environment"
-            versionName = "test." + provideVersionName()
+            versionName = "qa." + provideVersionName()
         }
         create("prod") {
             dimension = "environment"
