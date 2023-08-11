@@ -9,6 +9,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.foundation.common.validation.result.PhoneNumberValidationResult
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.domain.model.Region
@@ -16,6 +17,7 @@ import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,6 +30,7 @@ internal class EnterPhoneViewModel @Inject constructor(
     private val savePhoneNumberInfoUseCase: SavePhoneNumberInfoUseCase,
     private val validator: ProfileValidator,
     private val buildConfigProvider: BuildConfigProvider,
+    private val loadingHandler: LoadingHandler
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(
@@ -40,6 +43,7 @@ internal class EnterPhoneViewModel @Inject constructor(
             is UpdatePhoneNumber -> updatePhoneNumber(event.phoneNumber)
             is NextButtonClicked -> sendCodeAndSavePhoneNumberAndPrefix()
             is EnterPhoneScreenEvent.RegionChosen -> updateRegion(event.region)
+            is ScreenDisplayed -> loadingHandler.hideLoading()
         }
     }
 
@@ -65,6 +69,8 @@ internal class EnterPhoneViewModel @Inject constructor(
 
     private fun sendCodeAndSavePhoneNumberAndPrefix() {
         val phoneNumber = state.prefix + state.phoneNumber
+
+        loadingHandler.showLoading()
         viewModelScope.launch {
             performAction(
                 action = {
@@ -75,6 +81,7 @@ internal class EnterPhoneViewModel @Inject constructor(
                 },
                 onError = {
                     updateNextEnabled()
+                    loadingHandler.hideLoading()
                     updateError(true)
                 }
             )
@@ -91,6 +98,7 @@ internal class EnterPhoneViewModel @Inject constructor(
                     navigateToEnterCode()
                 },
                 onError = {
+                    loadingHandler.hideLoading()
                     updateError(true)
                 }
             )

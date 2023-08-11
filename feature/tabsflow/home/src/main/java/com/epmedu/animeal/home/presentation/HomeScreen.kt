@@ -13,13 +13,17 @@ import com.epmedu.animeal.camera.presentation.CameraView
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenCreated
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
 import com.epmedu.animeal.router.presentation.FeedingRouteState.Active
 import com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled
 import kotlinx.coroutines.launch
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen() {
@@ -79,7 +83,11 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) {
         lifecycleOwner.withCreated {
-            homeViewModel.handleEvents(HomeScreenEvent.ScreenDisplayed)
+            homeViewModel.handleEvents(ScreenCreated)
         }
+    }
+
+    DisplayedEffect {
+        homeViewModel.handleEvents(ScreenDisplayed)
     }
 }

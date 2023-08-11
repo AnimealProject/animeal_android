@@ -5,6 +5,7 @@ import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
@@ -22,6 +23,7 @@ import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateBackToOnboarding
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent.NavigateToConfirmPhone
@@ -44,7 +46,8 @@ internal class FinishProfileViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
     private val validateBirthDateUseCase: ValidateBirthDateUseCase,
-    private val logOutUseCase: LogOutUseCase
+    private val logOutUseCase: LogOutUseCase,
+    private val loadingHandler: LoadingHandler
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
@@ -105,6 +108,9 @@ internal class FinishProfileViewModel @Inject constructor(
                     is AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
                 }
             }
+            ScreenDisplayed -> {
+                loadingHandler.hideLoading()
+            }
         }
     }
 
@@ -116,6 +122,7 @@ internal class FinishProfileViewModel @Inject constructor(
                     profile = profile.copy(phoneNumber = profile.phoneNumber),
                 )
             }
+            loadingHandler.showLoading()
             saveProfile()
         }
     }
@@ -184,7 +191,7 @@ internal class FinishProfileViewModel @Inject constructor(
                             }
                         )
                     },
-                    onError = {}
+                    onError = loadingHandler::hideLoading
                 )
             }
         }

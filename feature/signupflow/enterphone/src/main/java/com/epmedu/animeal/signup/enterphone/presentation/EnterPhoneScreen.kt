@@ -9,7 +9,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneEvent
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneViewModel
 
@@ -37,5 +39,9 @@ fun EnterPhoneScreen() {
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    DisplayedEffect {
+        viewModel.handleEvents(ScreenDisplayed)
     }
 }
