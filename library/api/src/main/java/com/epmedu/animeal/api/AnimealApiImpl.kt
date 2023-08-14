@@ -27,6 +27,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.retryWhen
+import java.net.SocketException
 import kotlin.coroutines.resume
 
 internal class AnimealApiImpl(
@@ -202,6 +204,8 @@ internal class AnimealApiImpl(
                 Log.i(LOG_TAG, "Flow with subscription $subscriptionId is closed")
                 graphQLOperation?.cancel()
             }
+        }.retryWhen { cause, attempt ->
+            cause.cause?.cause is SocketException && attempt <= SUBSCRIPTION_RETRY_ATTEMPTS
         }
     }
 
@@ -223,5 +227,6 @@ internal class AnimealApiImpl(
 
     private companion object {
         const val LOG_TAG = "AnimealApi"
+        const val SUBSCRIPTION_RETRY_ATTEMPTS = 3
     }
 }
