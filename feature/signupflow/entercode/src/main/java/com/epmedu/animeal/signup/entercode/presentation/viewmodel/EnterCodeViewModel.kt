@@ -10,6 +10,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.common.timer.tickerFlow
 import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
@@ -19,6 +20,8 @@ import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +43,7 @@ internal class EnterCodeViewModel @Inject constructor(
     private val getNetworkProfileUseCase: GetNetworkProfileUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
+    private val loadingHandler: LoadingHandler,
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
@@ -69,6 +73,12 @@ internal class EnterCodeViewModel @Inject constructor(
         updateState { copy(code = getNewCodeWithReplacedDigit(position, digit).toImmutableList()) }
     }
 
+    fun handleEvents(event: EnterCodeScreenEvent) {
+        when (event) {
+            ScreenDisplayed -> loadingHandler.hideLoading()
+        }
+    }
+
     private suspend fun getPhoneNumber() {
         getPhoneNumberUseCase().collect { updateState { copy(phoneNumber = it) } }
     }
@@ -93,6 +103,7 @@ internal class EnterCodeViewModel @Inject constructor(
         stateFlow.collect {
             updateIsError()
             if (state.isCodeFilled() && state.isCodeChanged(lastCode)) {
+                loadingHandler.showLoading()
                 lastCode = state.code
                 when (authenticationType) {
                     AuthenticationType.Mobile -> confirmSignIn()
@@ -117,6 +128,7 @@ internal class EnterCodeViewModel @Inject constructor(
                     fetchNetworkProfile()
                 },
                 onError = {
+                    loadingHandler.hideLoading()
                     updateState { copy(code = emptyCode(), isError = true) }
                 }
             )
@@ -152,6 +164,7 @@ internal class EnterCodeViewModel @Inject constructor(
                     viewModelScope.launch { sendEvent(NavigateToHomeScreen) }
                 },
                 onError = {
+                    loadingHandler.hideLoading()
                     updateState { copy(isError = true) }
                 }
             )

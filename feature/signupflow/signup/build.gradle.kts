@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.feature.signupflow.onboarding)
 
     implementation(projects.library.common)
+    implementation(projects.library.foundation)
     implementation(projects.library.navigation)
 
     implementation(projects.shared.feature.router)

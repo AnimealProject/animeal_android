@@ -10,9 +10,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel
@@ -39,6 +41,10 @@ fun FinishProfileScreen() {
                 }
             }
         }
+    }
+
+    DisplayedEffect {
+        viewModel.handleScreenEvents(ScreenDisplayed)
     }
 
     FinishProfileScreenUI(

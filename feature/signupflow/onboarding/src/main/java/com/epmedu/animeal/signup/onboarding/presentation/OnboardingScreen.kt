@@ -16,6 +16,8 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.RedirectedFromFacebookWebUi
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithFacebookClicked
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithMobileClicked
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingState
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
 
@@ -30,9 +32,10 @@ fun OnboardingScreen() {
 
     OnboardingScreenUI(
         onSignInMobile = {
-            viewModel.handleEvent(OnboardingScreenEvent.SignInWithMobileClicked)
+            viewModel.handleEvent(SignInWithMobileClicked)
         },
         onSignInFacebook = {
+            viewModel.handleEvent(SignInWithFacebookClicked)
             (activity as? FacebookSignInLauncher)?.signInWithFacebook(
                 onSuccess = { viewModel.handleEvent(RedirectedFromFacebookWebUi) },
                 onError = {

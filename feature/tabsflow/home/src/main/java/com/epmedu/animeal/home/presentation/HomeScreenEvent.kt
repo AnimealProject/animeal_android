@@ -26,6 +26,7 @@ sealed interface HomeScreenEvent {
     }
 
     object ErrorShowed : HomeScreenEvent
+    object ScreenCreated : HomeScreenEvent
     object ScreenDisplayed : HomeScreenEvent
     object InitialLocationWasDisplayed : HomeScreenEvent
 }

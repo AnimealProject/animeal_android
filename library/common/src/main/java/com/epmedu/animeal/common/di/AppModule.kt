@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandlerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +34,8 @@ internal object AppModule {
             produceFile = { context.preferencesDataStoreFile(DATA_STORE_PREFERENCES_KEY) }
         )
     }
+
+    @Singleton
+    @Provides
+    fun providesLoadingHandler(): LoadingHandler = LoadingHandlerImpl()
 }

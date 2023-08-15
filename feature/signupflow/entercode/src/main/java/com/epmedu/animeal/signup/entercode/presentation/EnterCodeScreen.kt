@@ -10,8 +10,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.MainRoute
 import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel
@@ -54,6 +56,10 @@ fun EnterCodeScreen() {
 
     LaunchedEffect(state.isError) {
         if (state.isError) focusRequester.requestFocus()
+    }
+
+    DisplayedEffect {
+        viewModel.handleEvents(ScreenDisplayed)
     }
 }
 

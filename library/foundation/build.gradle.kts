@@ -16,6 +16,8 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.pager.indicator)
 
+    implementation(libs.androidx.lifecycle)
+
     implementation(libs.compose.material)
     implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.material.dialog.datetime)

@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
@@ -18,6 +19,7 @@ import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
 import com.epmedu.animeal.home.presentation.HomeScreenEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.CameraEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenCreated
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.DefaultHomeHandler
@@ -48,6 +50,7 @@ internal class HomeViewModel @Inject constructor(
     private val locationProvider: LocationProvider,
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val animalTypeUseCase: AnimalTypeUseCase,
+    private val loadingHandler: LoadingHandler,
     stateDelegate: StateDelegate<HomeState>,
     defaultHomeHandler: DefaultHomeHandler,
     permissionsHandler: PermissionsHandler,
@@ -90,7 +93,8 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            ScreenDisplayed -> onScreenDisplayed()
+            ScreenCreated -> onScreenCreated()
+            ScreenDisplayed -> loadingHandler.hideLoading()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
@@ -98,7 +102,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onScreenDisplayed() {
+    private fun onScreenCreated() {
         handleForcedFeedingPoint()
         viewModelScope.launch { fetchCurrentFeeding() }
     }
