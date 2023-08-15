@@ -1,17 +1,15 @@
 package com.epmedu.animeal.signup.presentation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.common.route.SignUpRoute
-import com.epmedu.animeal.foundation.loading.ShimmerLoading
+import com.epmedu.animeal.foundation.loading.FullScreenLoading
 import com.epmedu.animeal.navigation.ScreenNavHost
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreen
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreen
@@ -38,6 +36,6 @@ fun SignUpFlow() {
 
     if (state.isLoading) {
         keyboardController?.hide()
-        ShimmerLoading(modifier = Modifier.fillMaxSize(), shape = RectangleShape, alpha = 0.7f)
+        FullScreenLoading()
     }
 }
