@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 
 internal class FavouriteRepositoryImpl(
     private val dispatchers: Dispatchers,
@@ -68,6 +69,7 @@ internal class FavouriteRepositoryImpl(
     }
 
     override suspend fun addFeedingPointToFavourites(feedingPointId: String): ActionResult<Unit> {
+        favouritesFlow.update { favouriteList -> favouriteList + Favourite.justId(feedingPointId) }
         return favouriteApi.addFavourite(
             feedingPointId = feedingPointId,
             userId = authApi.getCurrentUserId()
@@ -76,6 +78,9 @@ internal class FavouriteRepositoryImpl(
 
     override suspend fun removeFeedingPointFromFavourites(feedingPointId: String): ActionResult<Unit> {
         return favourites.find { it.feedingPointId == feedingPointId }?.let { favourite ->
+            favouritesFlow.update { favouriteList ->
+                favouriteList.filterNot { favourite -> favourite.feedingPointId == feedingPointId }
+            }
             favouriteApi.deleteFavourite(favourite.id)
         }.toActionResult()
     }
