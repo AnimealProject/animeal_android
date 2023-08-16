@@ -14,10 +14,13 @@ import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobil
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent
-import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.RedirectedFromFacebookWebUi
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.ErrorShown
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.FacebookWebUIOpened
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.NotSignedInWithFacebook
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInFinished
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithFacebookClicked
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithMobileClicked
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignedInWithFacebook
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,11 +40,27 @@ internal class OnboardingViewModel @Inject constructor(
 
     fun handleEvent(event: OnboardingScreenEvent) {
         when (event) {
-            RedirectedFromFacebookWebUi -> saveAuthenticationTypeAndProfile()
             SignInWithMobileClicked -> changeAuthenticationTypeToMobile()
-            SignInWithFacebookClicked -> loadingHandler.showLoading()
+            SignInWithFacebookClicked -> openFacebookWebUI()
+            FacebookWebUIOpened -> updateState { copy(isOpeningFacebookWebUI = false) }
+            SignedInWithFacebook -> saveAuthenticationTypeAndProfile()
+            NotSignedInWithFacebook -> showError()
+            ErrorShown -> updateState { copy(isError = false) }
             SignInFinished -> updateState { copy(authenticationType = null) }
         }
+    }
+
+    private fun changeAuthenticationTypeToMobile() {
+        loadingHandler.showLoading()
+        viewModelScope.launch {
+            setMobileAuthenticationTypeUseCase()
+            updateState { copy(authenticationType = AuthenticationType.Mobile) }
+        }
+    }
+
+    private fun openFacebookWebUI() {
+        loadingHandler.showLoading()
+        updateState { copy(isOpeningFacebookWebUI = true) }
     }
 
     private fun saveAuthenticationTypeAndProfile() {
@@ -55,23 +74,20 @@ internal class OnboardingViewModel @Inject constructor(
                     }
                 },
                 onError = {
-                    loadingHandler.hideLoading()
+                    showError()
                 }
             )
         }
     }
 
+    private fun showError() {
+        loadingHandler.hideLoading()
+        updateState { copy(isError = true) }
+    }
+
     private fun changeAuthenticationTypeToFacebook(isPhoneNumberVerified: Boolean) {
         viewModelScope.launch {
             setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified)
-        }
-    }
-
-    private fun changeAuthenticationTypeToMobile() {
-        loadingHandler.showLoading()
-        viewModelScope.launch {
-            setMobileAuthenticationTypeUseCase()
-            updateState { copy(authenticationType = AuthenticationType.Mobile) }
         }
     }
 
