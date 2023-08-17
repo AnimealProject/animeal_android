@@ -9,7 +9,7 @@ internal class BuildConfigProviderImpl : BuildConfigProvider {
     override val mapBoxPublicKey: String = BuildConfig.MAPBOX_PUBLIC_TOKEN
     override val mapBoxStyleURI: String = BuildConfig.MAPBOX_STYLE_URI
     override val isDebug: Boolean = BuildConfig.DEBUG
-    override val isProd: Boolean = BuildConfig.FLAVOR == PROD_FLAVOR
+    override val isProdFlavor: Boolean = BuildConfig.FLAVOR == PROD_FLAVOR
 
     private companion object {
         const val PROD_FLAVOR = "prod"

@@ -82,7 +82,7 @@ internal class FinishProfileViewModel @Inject constructor(
             if (authenticationType is AuthenticationType.Facebook) {
                 updateState {
                     copy(
-                        isFlagClickable = buildConfigProvider.isProd.not(),
+                        isCountrySelectorClickable = buildConfigProvider.isProdFlavor.not(),
                         isPhoneNumberEnabled = true
                     )
                 }

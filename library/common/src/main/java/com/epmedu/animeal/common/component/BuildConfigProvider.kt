@@ -10,5 +10,5 @@ interface BuildConfigProvider {
 
     val isDebug: Boolean
 
-    val isProd: Boolean
+    val isProdFlavor: Boolean
 }

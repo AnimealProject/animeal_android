@@ -92,7 +92,7 @@ private fun ProfileState.PhoneInput(
         onValueChange = { onEvent(PhoneNumberChanged(it)) },
         error = phoneNumberError.asString(),
         isEnabled = isPhoneNumberEnabled,
-        isFlagClickable = isFlagClickable,
+        isFlagClickable = isCountrySelectorClickable,
         onCountryClick = onCountryClick,
         onDone = { focusManager.clearFocus() },
     )

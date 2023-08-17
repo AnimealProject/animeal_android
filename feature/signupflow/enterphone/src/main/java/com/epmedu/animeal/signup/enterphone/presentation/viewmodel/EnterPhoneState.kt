@@ -9,7 +9,7 @@ internal data class EnterPhoneState(
     val phoneNumber: String = EMPTY_STRING,
     val isNextEnabled: Boolean = false,
     val isError: Boolean = false,
-    val isFlagClickable: Boolean,
+    val isCountrySelectorClickable: Boolean,
 ) {
     val prefix: String
         get() {
