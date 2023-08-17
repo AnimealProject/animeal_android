@@ -2,8 +2,10 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
@@ -20,6 +22,7 @@ import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
@@ -34,6 +37,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
+    buildConfigProvider: BuildConfigProvider,
     private val actionDelegate: ActionDelegate,
     private val getProfileUseCase: GetProfileUseCase,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
@@ -49,10 +53,13 @@ internal class FinishProfileViewModel @Inject constructor(
     private val logOutUseCase: LogOutUseCase,
     private val loadingHandler: LoadingHandler
 ) : BaseProfileViewModel(
-    validateNameUseCase,
-    validateSurnameUseCase,
-    validateEmailUseCase,
-    validateBirthDateUseCase
+    stateDelegate = DefaultStateDelegate(
+        initialState = ProfileState(isFlagClickable = buildConfigProvider.isProd.not())
+    ),
+    validateNameUseCase = validateNameUseCase,
+    validateSurnameUseCase = validateSurnameUseCase,
+    validateEmailUseCase = validateEmailUseCase,
+    validateBirthDateUseCase = validateBirthDateUseCase
 ),
     ActionDelegate by actionDelegate,
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {

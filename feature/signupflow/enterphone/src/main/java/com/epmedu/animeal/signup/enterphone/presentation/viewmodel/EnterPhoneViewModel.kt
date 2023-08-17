@@ -34,7 +34,7 @@ internal class EnterPhoneViewModel @Inject constructor(
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
     StateDelegate<EnterPhoneState> by DefaultStateDelegate(
-        initialState = EnterPhoneState(isDebug = buildConfigProvider.isDebug)
+        initialState = EnterPhoneState(isFlagClickable = buildConfigProvider.isProd.not())
     ),
     EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
 

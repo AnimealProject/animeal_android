@@ -137,9 +137,7 @@ private fun ScaffoldAndBody(
                 format = state.format,
                 numberLength = state.numberLength,
                 useNumberFormatter = state.region == Region.GE,
-                // TODO use state.isDebug
-                // TODO Update state.isDebug flag to be true for devs and QA, false for prod
-                isFlagClickable = true,
+                isFlagClickable = state.isFlagClickable,
                 flag = if (state.region == Region.GE) {
                     Flag(R.drawable.ic_georgia)
                 } else {
@@ -162,7 +160,7 @@ private fun EnterPhoneScreenPreview() {
     AnimealTheme {
         EnterPhoneScreenUi(
             focusRequester = FocusRequester(),
-            state = EnterPhoneState(isDebug = true),
+            state = EnterPhoneState(isFlagClickable = true),
             onEvent = {},
             onBack = {}
         )

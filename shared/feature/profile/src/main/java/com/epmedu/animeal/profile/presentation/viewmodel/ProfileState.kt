@@ -7,6 +7,7 @@ import com.epmedu.animeal.profile.domain.model.getFormat
 data class ProfileState(
     val profile: Profile = Profile(),
     val formState: FormState = FormState.READ_ONLY,
+    val isFlagClickable: Boolean = false,
     val isPhoneNumberEnabled: Boolean = false,
     val nameError: UiText = UiText.Empty,
     val surnameError: UiText = UiText.Empty,

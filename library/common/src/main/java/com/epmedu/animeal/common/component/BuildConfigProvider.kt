@@ -9,4 +9,6 @@ interface BuildConfigProvider {
     val mapBoxStyleURI: String
 
     val isDebug: Boolean
+
+    val isProd: Boolean
 }
