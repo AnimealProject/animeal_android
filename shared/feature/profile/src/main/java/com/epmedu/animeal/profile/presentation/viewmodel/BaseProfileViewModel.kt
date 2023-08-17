@@ -1,6 +1,7 @@
 package com.epmedu.animeal.profile.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
 import com.epmedu.animeal.extensions.formatDateToString
@@ -18,13 +19,12 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChan
 import java.time.LocalDate
 
 abstract class BaseProfileViewModel(
-    stateDelegate: StateDelegate<ProfileState>,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validateBirthDateUseCase: ValidateBirthDateUseCase,
+    private val validateBirthDateUseCase: ValidateBirthDateUseCase
 ) : ViewModel(),
-    StateDelegate<ProfileState> by stateDelegate {
+    StateDelegate<ProfileState> by DefaultStateDelegate(initialState = ProfileState()) {
 
     fun handleInputFormEvent(event: ProfileInputFormEvent) {
         when (event) {

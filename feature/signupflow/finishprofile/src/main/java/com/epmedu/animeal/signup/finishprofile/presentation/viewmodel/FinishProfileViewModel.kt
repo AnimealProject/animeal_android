@@ -5,7 +5,6 @@ import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
@@ -22,7 +21,6 @@ import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
@@ -37,7 +35,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
-    buildConfigProvider: BuildConfigProvider,
+    private val buildConfigProvider: BuildConfigProvider,
     private val actionDelegate: ActionDelegate,
     private val getProfileUseCase: GetProfileUseCase,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
@@ -53,9 +51,6 @@ internal class FinishProfileViewModel @Inject constructor(
     private val logOutUseCase: LogOutUseCase,
     private val loadingHandler: LoadingHandler
 ) : BaseProfileViewModel(
-    stateDelegate = DefaultStateDelegate(
-        initialState = ProfileState(isFlagClickable = buildConfigProvider.isProd.not())
-    ),
     validateNameUseCase = validateNameUseCase,
     validateSurnameUseCase = validateSurnameUseCase,
     validateEmailUseCase = validateEmailUseCase,
@@ -85,7 +80,12 @@ internal class FinishProfileViewModel @Inject constructor(
         viewModelScope.launch {
             authenticationType = getAuthenticationTypeUseCase()
             if (authenticationType is AuthenticationType.Facebook) {
-                updateState { copy(isPhoneNumberEnabled = true) }
+                updateState {
+                    copy(
+                        isFlagClickable = buildConfigProvider.isProd.not(),
+                        isPhoneNumberEnabled = true
+                    )
+                }
             }
         }
     }
@@ -109,12 +109,14 @@ internal class FinishProfileViewModel @Inject constructor(
             Submit -> {
                 submitProfile()
             }
+
             Cancel -> {
                 when (authenticationType) {
                     AuthenticationType.Mobile -> logout()
                     is AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
                 }
             }
+
             ScreenDisplayed -> {
                 loadingHandler.hideLoading()
             }

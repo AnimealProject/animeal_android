@@ -2,7 +2,6 @@ package com.epmedu.animeal.tabs.more.profile.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
@@ -39,11 +38,10 @@ internal class ProfileViewModel @Inject constructor(
     validateBirthDateUseCase: ValidateBirthDateUseCase,
     actionDelegate: ActionDelegate
 ) : BaseProfileViewModel(
-    stateDelegate = DefaultStateDelegate(ProfileState()),
-    validateNameUseCase = validateNameUseCase,
-    validateSurnameUseCase = validateSurnameUseCase,
-    validateEmailUseCase = validateEmailUseCase,
-    validateBirthDateUseCase = validateBirthDateUseCase
+    validateNameUseCase,
+    validateSurnameUseCase,
+    validateEmailUseCase,
+    validateBirthDateUseCase
 ),
     ActionDelegate by actionDelegate {
 
