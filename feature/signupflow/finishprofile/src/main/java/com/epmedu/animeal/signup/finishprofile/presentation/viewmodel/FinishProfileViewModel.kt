@@ -2,6 +2,7 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
+    private val buildConfigProvider: BuildConfigProvider,
     private val actionDelegate: ActionDelegate,
     private val getProfileUseCase: GetProfileUseCase,
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
@@ -49,10 +51,10 @@ internal class FinishProfileViewModel @Inject constructor(
     private val logOutUseCase: LogOutUseCase,
     private val loadingHandler: LoadingHandler
 ) : BaseProfileViewModel(
-    validateNameUseCase,
-    validateSurnameUseCase,
-    validateEmailUseCase,
-    validateBirthDateUseCase
+    validateNameUseCase = validateNameUseCase,
+    validateSurnameUseCase = validateSurnameUseCase,
+    validateEmailUseCase = validateEmailUseCase,
+    validateBirthDateUseCase = validateBirthDateUseCase
 ),
     ActionDelegate by actionDelegate,
     EventDelegate<FinishProfileEvent> by DefaultEventDelegate() {
@@ -78,7 +80,12 @@ internal class FinishProfileViewModel @Inject constructor(
         viewModelScope.launch {
             authenticationType = getAuthenticationTypeUseCase()
             if (authenticationType is AuthenticationType.Facebook) {
-                updateState { copy(isPhoneNumberEnabled = true) }
+                updateState {
+                    copy(
+                        isCountrySelectorClickable = buildConfigProvider.isProdFlavor.not(),
+                        isPhoneNumberEnabled = true
+                    )
+                }
             }
         }
     }
@@ -102,12 +109,14 @@ internal class FinishProfileViewModel @Inject constructor(
             Submit -> {
                 submitProfile()
             }
+
             Cancel -> {
                 when (authenticationType) {
                     AuthenticationType.Mobile -> logout()
                     is AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
                 }
             }
+
             ScreenDisplayed -> {
                 loadingHandler.hideLoading()
             }
