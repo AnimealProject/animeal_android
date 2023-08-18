@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.router.domain.RouterRepository
@@ -17,7 +18,8 @@ internal class MainViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val routerRepository: RouterRepository,
     private val logOutUseCase: LogOutUseCase,
-    private val clearProfileUseCase: ClearProfileUseCase
+    private val clearProfileUseCase: ClearProfileUseCase,
+    private val loadingHandler: LoadingHandler,
 ) : ViewModel(),
     StateDelegate<MainState> by stateDelegate,
     ActionDelegate by actionDelegate {
@@ -45,6 +47,7 @@ internal class MainViewModel @Inject constructor(
             onSuccess = {
                 clearProfileUseCase()
                 updateState { copy(navigateToStartDestination = true) }
+                loadingHandler.hideLoading()
             }
         )
     }
