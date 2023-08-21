@@ -48,6 +48,7 @@ import com.epmedu.animeal.home.presentation.ui.HomeMapbox
 import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.LocationState.UndefinedLocation
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionStatus.Granted
@@ -324,7 +325,18 @@ private fun onGeoLocationClick(
         PermissionStatus.Denied -> geolocationPermission.launchPermissionRequest()
         Granted -> when (state.gpsSettingState) {
             GpsSettingState.Disabled -> mapView.context.requestGpsByDialog()
-            GpsSettingState.Enabled -> mapView.showCurrentLocation(state.locationState.location)
+            GpsSettingState.Enabled -> when (state.locationState) {
+                is UndefinedLocation -> {
+                    Toast.makeText(
+                        mapView.context,
+                        R.string.location_not_received,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    mapView.showCurrentLocation(state.locationState.location)
+                }
+            }
         }
     }
 }
