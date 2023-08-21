@@ -1,6 +1,7 @@
 package com.epmedu.animeal.signup.enterphone.domain
 
 import com.amplifyframework.auth.cognito.exceptions.service.UsernameExistsException
+import com.amplifyframework.auth.exceptions.InvalidStateException
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 
 class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
@@ -14,10 +15,13 @@ class SignUpAndSignInUseCase(private val repository: EnterPhoneRepository) {
             }
 
             is ActionResult.Failure -> {
-                if (result.error is UsernameExistsException) {
-                    signIn(phone)
-                } else {
-                    ActionResult.Failure(result.error)
+                when (result.error) {
+                    is UsernameExistsException, is InvalidStateException -> {
+                        signIn(phone)
+                    }
+                    else -> {
+                        ActionResult.Failure(result.error)
+                    }
                 }
             }
         }
