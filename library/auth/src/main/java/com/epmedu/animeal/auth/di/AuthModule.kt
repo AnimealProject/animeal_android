@@ -18,8 +18,9 @@ object AuthModule {
     @Singleton
     @Provides
     fun providesAuthApi(
+        userAttributesAPI: UserAttributesAPI,
         tokenExpirationHandler: TokenExpirationHandler
-    ): AuthAPI = AuthAPIImpl(tokenExpirationHandler)
+    ): AuthAPI = AuthAPIImpl(userAttributesAPI, tokenExpirationHandler)
 
     @Singleton
     @Provides
