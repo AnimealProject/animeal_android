@@ -9,6 +9,7 @@ import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
+import com.epmedu.animeal.auth.constants.UserAttributesKey
 import com.epmedu.animeal.auth.error.WrongCodeError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
@@ -20,6 +21,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 internal class AuthAPIImpl(
+    private val userAttributesAPI: UserAttributesAPI,
     private val errorHandler: TokenExpirationHandler
 ) : AuthAPI,
     TokenExpirationHandler by errorHandler {
@@ -175,12 +177,12 @@ internal class AuthAPIImpl(
             Amplify.Auth.confirmUserAttribute(
                 AuthUserAttributeKey.phoneNumber(),
                 code,
-                { resume(ApiResult.Success<Unit>(Unit)) },
+                { resume(ApiResult.Success(Unit)) },
                 {
                     if (isRefreshTokenHasExpiredException(it)) {
                         handleRefreshTokenExpiration()
                     } else {
-                        resume(ApiResult.Failure<Unit>(it))
+                        resume(ApiResult.Failure(it))
                     }
                 },
             )
@@ -192,32 +194,23 @@ internal class AuthAPIImpl(
     ): ApiResult<Unit> {
         return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
-            is AuthenticationType.Facebook -> sendPhoneCodeByResend()
+            is AuthenticationType.Facebook -> sendPhoneCodeByUpdatingAttribute(phoneNumber)
         }
     }
 
     override suspend fun signOut(): ApiResult<Unit> {
         return suspendCancellableCoroutine {
             Amplify.Auth.signOut {
-                resume(ApiResult.Success<Unit>(Unit))
+                resume(ApiResult.Success(Unit))
             }
         }
     }
 
-    private suspend fun sendPhoneCodeByResend(): ApiResult<Unit> {
-        return suspendCancellableCoroutine {
-            Amplify.Auth.resendUserAttributeConfirmationCode(
-                AuthUserAttributeKey.phoneNumber(),
-                // Actual return type of onSuccess function here is AuthCodeDeliveryDetails, but currently it's unused
-                { resume(ApiResult.Success(Unit)) },
-                {
-                    if (isRefreshTokenHasExpiredException(it)) {
-                        handleRefreshTokenExpiration()
-                    } else {
-                        resume(ApiResult.Failure(it))
-                    }
-                }
+    private suspend fun sendPhoneCodeByUpdatingAttribute(phoneNumber: String): ApiResult<Unit> {
+        return userAttributesAPI.updateUserAttributes(
+            userAttributes = listOf(
+                AuthUserAttribute(UserAttributesKey.phoneNumberKey, phoneNumber)
             )
-        }
+        )
     }
 }
