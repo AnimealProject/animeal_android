@@ -11,7 +11,6 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoi
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
-import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
@@ -28,6 +27,7 @@ internal fun RouteView(
     state: HomeState,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
+    // mapView.setMapViewLocationPuck()
     var mapBoxRouteInitOptions by remember(mapView) {
         mutableStateOf(getMapBoxNavigationInitOptions(mapView, state))
     }
@@ -131,7 +131,6 @@ private fun getMapBoxNavigationInitOptions(
     state: HomeState
 ): MapBoxRouteInitOptions {
     val routeLineResources = RouteLineResources.Builder()
-        .originWaypointIcon(R.drawable.ic_your_location)
 
     state.feedState.feedPoint?.getDrawableRes()?.let { feedingPointDrawable ->
         routeLineResources.destinationWaypointIcon(feedingPointDrawable)

@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.androidx.viewmodel)
     implementation(libs.androidx.viewmodel.compose)
+    implementation(libs.androidx.appcompat.resources)
 
     debugImplementation(libs.compose.ui.tooling)
 
