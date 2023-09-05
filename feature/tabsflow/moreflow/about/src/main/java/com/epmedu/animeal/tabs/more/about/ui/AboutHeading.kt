@@ -34,7 +34,7 @@ internal fun AboutHeading(onBack: () -> Unit, horizontalPadding: Dp) {
                 .padding(horizontal = horizontalPadding)
                 .height(190.dp)
                 .clip(RoundedCornerShape(12.dp)),
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Crop,
             painter = painterResource(R.drawable.about),
             contentDescription = null,
         )
