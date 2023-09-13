@@ -32,12 +32,19 @@ class MarkerController(
     }
 
     fun drawMarkers(feedingPoints: List<FeedingPointModel>) {
-        val pointAnnotationOptionsList = mutableListOf<PointAnnotationOptions>()
+        resetMarkerState()
+        initMarkerState(feedingPoints)
+    }
 
+    private fun resetMarkerState() {
         pointAnnotationManager.deleteAll()
         pointAnnotationManager.removeClickListener(onPointClickListener)
-
         currentFeedingPoints.clear()
+    }
+
+    private fun initMarkerState(feedingPoints: List<FeedingPointModel>) {
+        if (feedingPoints.size <= 1) return
+        val pointAnnotationOptionsList = mutableListOf<PointAnnotationOptions>()
         currentFeedingPoints.addAll(feedingPoints)
 
         currentFeedingPoints.onEach { feedingPoint ->
