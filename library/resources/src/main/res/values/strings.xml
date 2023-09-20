@@ -8,6 +8,7 @@
     <string name="home">Home</string>
     <string name="more">More</string>
     <string name="favourites">Favourites</string>
+    <string name="feedings">Feedings</string>
 
     <string name="enter_phone_title">Please, enter your phone</string>
     <string name="phone_number">Phone Number</string>

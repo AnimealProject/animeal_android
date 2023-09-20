@@ -15,6 +15,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.epmedu.animeal.common.route.TabsRoute
+import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -49,6 +51,7 @@ import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.LocationState.UndefinedLocation
+import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionStatus.Granted
@@ -83,6 +86,7 @@ internal fun HomeScreenUI(
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
     val scope = rememberCoroutineScope()
+    val navigator = LocalNavigator.currentOrThrow
 
     if (state.isError) {
         Toast.makeText(
@@ -203,6 +207,9 @@ internal fun HomeScreenUI(
                 },
                 onSelectTab = {
                     onFeedingPointEvent(FeedingPointEvent.AnimalTypeChange(it))
+                },
+                onFeedingsClick = {
+                    navigator.navigate(TabsRoute.Feedings.name)
                 }
             )
         }

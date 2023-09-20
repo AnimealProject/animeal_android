@@ -12,6 +12,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.feedings.presentation.viewmodel.handlers.FeedingsButtonHandler
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
@@ -51,6 +52,7 @@ internal class HomeViewModel @Inject constructor(
     private val getTimerStateUseCase: GetTimerStateUseCase,
     private val animalTypeUseCase: AnimalTypeUseCase,
     private val loadingHandler: LoadingHandler,
+    private val feedingsButtonHandler: FeedingsButtonHandler,
     stateDelegate: StateDelegate<HomeState>,
     defaultHomeHandler: DefaultHomeHandler,
     permissionsHandler: PermissionsHandler,
@@ -77,6 +79,11 @@ internal class HomeViewModel @Inject constructor(
     init {
         viewModelScope.restoreSavedFeedingPoint()
         viewModelScope.launch { collectPermissionsState() }
+        viewModelScope.launch {
+            feedingsButtonHandler.getFeedingsButtonState().collect { feedingsButtonState ->
+                updateState { copy(feedingsButtonState = feedingsButtonState) }
+            }
+        }
         initialize()
     }
 

@@ -20,6 +20,7 @@ import com.epmedu.animeal.common.constants.Arguments.ANIMAL_TYPE
 import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.favourites.presentation.FavouritesScreen
+import com.epmedu.animeal.feedings.presentation.FeedingsScreen
 import com.epmedu.animeal.foundation.animation.VerticalSlideAnimatedVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
@@ -117,5 +118,6 @@ private fun NavigationTabs(
         ) { HomeScreen() }
         screen(TabsRoute.Analytics.name) { AnalyticsScreen() }
         screen(TabsRoute.More.name) { MoreHost() }
+        screen(TabsRoute.Feedings.name) { FeedingsScreen() }
     }
 }
