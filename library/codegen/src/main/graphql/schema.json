@@ -230,6 +230,85 @@
             },
             {
                 "kind": "OBJECT",
+                "name": "FeedingPointDetails",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": [
+                    {
+                        "name": "address",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "SCALAR",
+                "name": "String",
+                "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": null,
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "UserAttribute",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": [
+                    {
+                        "name": "Name",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "Value",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
                 "name": "Location",
                 "description": null,
                 "specifiedByUrl": null,
@@ -328,17 +407,6 @@
                 ],
                 "inputFields": null,
                 "interfaces": [],
-                "enumValues": null,
-                "possibleTypes": null
-            },
-            {
-                "kind": "SCALAR",
-                "name": "String",
-                "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
-                "specifiedByUrl": null,
-                "fields": null,
-                "inputFields": null,
-                "interfaces": null,
                 "enumValues": null,
                 "possibleTypes": null
             },
@@ -1788,67 +1856,6 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedings",
-                        "description": null,
-                        "args": [
-                            {
-                                "name": "filter",
-                                "description": null,
-                                "type": {
-                                    "kind": "INPUT_OBJECT",
-                                    "name": "ModelFeedingFilterInput",
-                                    "ofType": null
-                                },
-                                "defaultValue": null,
-                                "isDeprecated": false,
-                                "deprecationReason": null
-                            },
-                            {
-                                "name": "sortDirection",
-                                "description": null,
-                                "type": {
-                                    "kind": "ENUM",
-                                    "name": "ModelSortDirection",
-                                    "ofType": null
-                                },
-                                "defaultValue": null,
-                                "isDeprecated": false,
-                                "deprecationReason": null
-                            },
-                            {
-                                "name": "limit",
-                                "description": null,
-                                "type": {
-                                    "kind": "SCALAR",
-                                    "name": "Int",
-                                    "ofType": null
-                                },
-                                "defaultValue": null,
-                                "isDeprecated": false,
-                                "deprecationReason": null
-                            },
-                            {
-                                "name": "nextToken",
-                                "description": null,
-                                "type": {
-                                    "kind": "SCALAR",
-                                    "name": "String",
-                                    "ofType": null
-                                },
-                                "defaultValue": null,
-                                "isDeprecated": false,
-                                "deprecationReason": null
-                            }
-                        ],
-                        "type": {
-                            "kind": "OBJECT",
-                            "name": "ModelFeedingConnection",
-                            "ofType": null
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
                         "name": "cover",
                         "description": null,
                         "args": [],
@@ -2025,15 +2032,27 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPoint",
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingPointDetails",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "feedingPointFeedingsId",
                         "description": null,
                         "args": [],
                         "type": {
                             "kind": "NON_NULL",
                             "name": null,
                             "ofType": {
-                                "kind": "OBJECT",
-                                "name": "FeedingPoint",
+                                "kind": "SCALAR",
+                                "name": "String",
                                 "ofType": null
                             }
                         },
@@ -2057,12 +2076,128 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
                         "description": null,
                         "args": [],
                         "type": {
                             "kind": "SCALAR",
-                            "name": "ID",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "FeedingUsers",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "attributes",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "UserAttribute",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "createdAt",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "AWSDateTime",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "updatedAt",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "AWSDateTime",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "owner",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2221,6 +2356,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingPointDetails",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "status",
                         "description": null,
                         "args": [],
@@ -2240,6 +2387,46 @@
                             "kind": "SCALAR",
                             "name": "String",
                             "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -3759,6 +3946,34 @@
             },
             {
                 "kind": "INPUT_OBJECT",
+                "name": "FeedingPointDetailsInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "address",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
                 "name": "FeedingInput",
                 "description": null,
                 "specifiedByUrl": null,
@@ -3871,6 +4086,34 @@
                             "kind": "SCALAR",
                             "name": "String",
                             "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "FeedingPointDetailsInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
                         },
                         "defaultValue": null,
                         "isDeprecated": false,
@@ -5582,6 +5825,177 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "getFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "id",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "ID",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "listFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelFeedingUsersFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "limit",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "nextToken",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "ModelFeedingUsersConnection",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "searchFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "SearchableFeedingUsersFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "sort",
+                                "description": null,
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "SearchableFeedingUsersSortInput",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "limit",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "nextToken",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "from",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "aggregates",
+                                "description": null,
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "SearchableFeedingUsersAggregationInput",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "SearchableFeedingUsersConnection",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "getFeedingHistory",
                         "description": null,
                         "args": [
@@ -6343,6 +6757,184 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "relationUserPetsByUserIdAndPetId",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "userId",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "String",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "petId",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelIDKeyConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "sortDirection",
+                                "description": null,
+                                "type": {
+                                    "kind": "ENUM",
+                                    "name": "ModelSortDirection",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelRelationUserPetFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "limit",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "nextToken",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "ModelRelationUserPetConnection",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "relationUserPetsByPetIdAndUserId",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "petId",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "ID",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "userId",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelStringKeyConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "sortDirection",
+                                "description": null,
+                                "type": {
+                                    "kind": "ENUM",
+                                    "name": "ModelSortDirection",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelRelationUserPetFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "limit",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "nextToken",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "ModelRelationUserPetConnection",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "getMedication",
                         "description": null,
                         "args": [
@@ -6375,6 +6967,95 @@
                         "name": "listMedications",
                         "description": null,
                         "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelMedicationFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "limit",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "nextToken",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "ModelMedicationConnection",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "medicationsByPetIdAndDate",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "petId",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "ID",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "date",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelStringKeyConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "sortDirection",
+                                "description": null,
+                                "type": {
+                                    "kind": "ENUM",
+                                    "name": "ModelSortDirection",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
                             {
                                 "name": "filter",
                                 "description": null,
@@ -8293,6 +8974,129 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "createFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "input",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "CreateFeedingUsersInput",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "condition",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelFeedingUsersConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "updateFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "input",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "UpdateFeedingUsersInput",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "condition",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelFeedingUsersConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "deleteFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "input",
+                                "description": null,
+                                "type": {
+                                    "kind": "NON_NULL",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "DeleteFeedingUsersInput",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "condition",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelFeedingUsersConditionInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "createFeedingHistory",
                         "description": null,
                         "args": [
@@ -10060,6 +10864,82 @@
                                 "ofType": {
                                     "kind": "OBJECT",
                                     "name": "Feeding",
+                                    "ofType": null
+                                }
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "nextToken",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "total",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Int",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "aggregateItems",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "OBJECT",
+                                    "name": "SearchableAggregateResult",
+                                    "ofType": null
+                                }
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "SearchableFeedingUsersConnection",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": [
+                    {
+                        "name": "items",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "OBJECT",
+                                    "name": "FeedingUsers",
                                     "ofType": null
                                 }
                             }
@@ -13770,6 +14650,117 @@
                         "type": {
                             "kind": "OBJECT",
                             "name": "Feeding",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "onCreateFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelSubscriptionFeedingUsersFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "owner",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "onUpdateFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelSubscriptionFeedingUsersFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "owner",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "onDeleteFeedingUsers",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "filter",
+                                "description": null,
+                                "type": {
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "ModelSubscriptionFeedingUsersFilterInput",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            },
+                            {
+                                "name": "owner",
+                                "description": null,
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null,
+                                "isDeprecated": false,
+                                "deprecationReason": null
+                            }
+                        ],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "FeedingUsers",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -17810,11 +18801,59 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
                             "name": "ModelIntInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -17859,18 +18898,6 @@
                         "type": {
                             "kind": "INPUT_OBJECT",
                             "name": "ModelFeedingFilterInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null,
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "feedingPointFeedingsId",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelIDInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -17986,11 +19013,59 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
                             "name": "ModelIntInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -18035,18 +19110,6 @@
                         "type": {
                             "kind": "INPUT_OBJECT",
                             "name": "ModelFeedingConditionInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null,
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "feedingPointFeedingsId",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelIDInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -18194,6 +19257,34 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "FeedingPointDetailsInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
@@ -18210,11 +19301,39 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
-                            "name": "ID",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -18354,6 +19473,30 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "FeedingPointDetailsInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
@@ -18366,11 +19509,39 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
-                            "name": "ID",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -18514,11 +19685,59 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
                             "name": "ModelSubscriptionIntInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -18550,6 +19769,382 @@
                             "ofType": {
                                 "kind": "INPUT_OBJECT",
                                 "name": "ModelSubscriptionFeedingFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "UserAttributeInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "Name",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "Value",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "ModelFeedingUsersConnection",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": [
+                    {
+                        "name": "items",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "OBJECT",
+                                    "name": "FeedingUsers",
+                                    "ofType": null
+                                }
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "nextToken",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelFeedingUsersFilterInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelIDInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "and",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelFeedingUsersFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "or",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelFeedingUsersFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "not",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelFeedingUsersFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelFeedingUsersConditionInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "and",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelFeedingUsersConditionInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "or",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelFeedingUsersConditionInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "not",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelFeedingUsersConditionInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "CreateFeedingUsersInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "ID",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "attributes",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "UserAttributeInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "UpdateFeedingUsersInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "attributes",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "UserAttributeInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "DeleteFeedingUsersInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelSubscriptionFeedingUsersFilterInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionIDInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "and",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelSubscriptionFeedingUsersFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "or",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "ModelSubscriptionFeedingUsersFilterInput",
                                 "ofType": null
                             }
                         },
@@ -18746,6 +20341,42 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "and",
                         "description": null,
                         "type": {
@@ -18911,6 +20542,42 @@
                     },
                     {
                         "name": "reason",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -19106,6 +20773,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "FeedingPointDetailsInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "status",
                         "description": null,
                         "type": {
@@ -19124,6 +20803,46 @@
                             "kind": "SCALAR",
                             "name": "String",
                             "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
                         },
                         "defaultValue": null,
                         "isDeprecated": false,
@@ -19262,6 +20981,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointDetails",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "FeedingPointDetailsInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "status",
                         "description": null,
                         "type": {
@@ -19280,6 +21011,46 @@
                             "kind": "SCALAR",
                             "name": "String",
                             "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSDateTime",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
                         },
                         "defaultValue": null,
                         "isDeprecated": false,
@@ -19435,6 +21206,42 @@
                     },
                     {
                         "name": "reason",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelSubscriptionStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -27624,6 +29431,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "type": {
@@ -27636,11 +29455,35 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
-                            "name": "SearchableIDFilterInput",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
                             "ofType": null
                         },
                         "defaultValue": null,
@@ -27766,13 +29609,31 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -27880,13 +29741,31 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "feedingPointFeedingsId",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "expireAt",
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
                     },
                     {
-                        "name": "feedingPointFeedingsId",
+                        "name": "assignedModerators",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -27942,6 +29821,254 @@
                             "ofType": {
                                 "kind": "ENUM",
                                 "name": "SearchableFeedingAggregateField",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "SearchableFeedingUsersFilterInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableIDFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "createdAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "updatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "and",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "SearchableFeedingUsersFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "or",
+                        "description": null,
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "SearchableFeedingUsersFilterInput",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "not",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableFeedingUsersFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "ENUM",
+                "name": "SearchableFeedingUsersSortableFields",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": null,
+                "interfaces": null,
+                "enumValues": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "createdAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "updatedAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "SearchableFeedingUsersSortInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "field",
+                        "description": null,
+                        "type": {
+                            "kind": "ENUM",
+                            "name": "SearchableFeedingUsersSortableFields",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "direction",
+                        "description": null,
+                        "type": {
+                            "kind": "ENUM",
+                            "name": "SearchableSortDirection",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "interfaces": null,
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "ENUM",
+                "name": "SearchableFeedingUsersAggregateField",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": null,
+                "interfaces": null,
+                "enumValues": [
+                    {
+                        "name": "id",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "createdAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "updatedAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "possibleTypes": null
+            },
+            {
+                "kind": "INPUT_OBJECT",
+                "name": "SearchableFeedingUsersAggregationInput",
+                "description": null,
+                "specifiedByUrl": null,
+                "fields": null,
+                "inputFields": [
+                    {
+                        "name": "name",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "type",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "ENUM",
+                                "name": "SearchableAggregateType",
+                                "ofType": null
+                            }
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "field",
+                        "description": null,
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "ENUM",
+                                "name": "SearchableFeedingUsersAggregateField",
                                 "ofType": null
                             }
                         },
@@ -28082,6 +30209,42 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "SearchableStringFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "status",
                         "description": null,
                         "type": {
@@ -28210,6 +30373,24 @@
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
                     }
                 ],
                 "possibleTypes": null
@@ -28321,6 +30502,24 @@
                     },
                     {
                         "name": "reason",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedBy",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "moderatedAt",
+                        "description": null,
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "assignedModerators",
                         "description": null,
                         "isDeprecated": false,
                         "deprecationReason": null
