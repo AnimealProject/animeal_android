@@ -37,10 +37,6 @@ fun EnterPhoneScreen() {
         }
     }
 
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     DisplayedEffect {
         viewModel.handleEvents(ScreenDisplayed)
     }
