@@ -1,4 +1,4 @@
-package com.epmedu.animeal.users.data
+package com.epmedu.animeal.users.data.mapper
 
 import com.epmedu.animeal.users.data.model.User as DataUser
 import com.epmedu.animeal.users.domain.model.User as DomainUser
