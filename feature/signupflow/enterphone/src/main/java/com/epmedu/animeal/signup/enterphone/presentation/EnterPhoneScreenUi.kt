@@ -19,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealShortButton
 import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
+import com.epmedu.animeal.foundation.modifier.focusOnGloballyPositioned
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
@@ -133,7 +133,7 @@ private fun ScaffoldAndBody(
                 prefix = state.prefix,
                 modifier = Modifier
                     .padding(top = 56.dp)
-                    .focusRequester(focusRequester),
+                    .focusOnGloballyPositioned(focusRequester),
                 format = state.format,
                 numberLength = state.numberLength,
                 useNumberFormatter = state.region == Region.GE,

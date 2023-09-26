@@ -26,13 +26,22 @@ fun EnterCodeScreen() {
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.stateFlow.collectAsState()
 
+    // remember lambdas to avoid excess code row and back button recompositions
+    // while resend code delay is ticking, not needed for resend button though
+    val onBack: () -> Unit = remember {
+        { navigator.popBackStack() }
+    }
+    val onDigitChange: (position: Int, digit: Int?) -> Unit = remember {
+        { position, digit ->
+            viewModel.changeDigit(position, digit)
+        }
+    }
+
     EnterCodeScreenUi(
         state = state,
         focusRequester = focusRequester,
-        onBack = navigator::popBackStack,
-        onDigitChange = { position, digit ->
-            viewModel.changeDigit(position, digit)
-        },
+        onBack = onBack,
+        onDigitChange = onDigitChange,
         onResend = {
             viewModel.resendCode()
             focusRequester.requestFocus()
@@ -40,8 +49,6 @@ fun EnterCodeScreen() {
     )
 
     LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-
         viewModel.events.collect {
             when (it) {
                 NavigateToFinishProfile -> {
