@@ -21,10 +21,12 @@ dependencies {
 
     implementation(projects.shared.feature.camera)
     implementation(projects.shared.feature.feeding)
+    implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.permissions)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.router)
     implementation(projects.shared.feature.timer)
+    implementation(projects.shared.feature.users)
 
     implementation(libs.accompanist.permissions)
 

@@ -7,8 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
-import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Delete
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Logout

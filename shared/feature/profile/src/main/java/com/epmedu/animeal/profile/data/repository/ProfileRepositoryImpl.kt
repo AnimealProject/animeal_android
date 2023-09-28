@@ -2,9 +2,6 @@ package com.epmedu.animeal.profile.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.common.data.wrapper.ApiResult
-import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.data.util.birthDate
@@ -32,8 +29,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-    private val authAPI: AuthAPI,
+    private val dataStore: DataStore<Preferences>
 ) : ProfileRepository {
 
     override fun getProfile(): Flow<Profile> {
@@ -59,13 +55,6 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 updateEmail(profile.email)
                 updateBirthDate(profile.birthDate)
             }
-        }
-    }
-
-    override suspend fun logOut(): ActionResult<Unit> {
-        return when (val result = authAPI.signOut()) {
-            is ApiResult.Success -> ActionResult.Success(result.data)
-            is ApiResult.Failure -> ActionResult.Failure(result.error)
         }
     }
 

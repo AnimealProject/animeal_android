@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(projects.shared.feature.profile)
+    implementation(projects.shared.feature.router)
+    implementation(projects.shared.feature.users)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)

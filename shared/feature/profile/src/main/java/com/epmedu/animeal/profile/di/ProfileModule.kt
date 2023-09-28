@@ -2,13 +2,11 @@ package com.epmedu.animeal.profile.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
-import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
@@ -16,7 +14,6 @@ import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
-import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,10 +31,9 @@ internal object ProfileModule {
     @ViewModelScoped
     @Provides
     fun provideProfileRepository(
-        dataStore: DataStore<Preferences>,
-        authAPI: AuthAPI,
+        dataStore: DataStore<Preferences>
     ): ProfileRepository =
-        ProfileRepositoryImpl(dataStore, authAPI)
+        ProfileRepositoryImpl(dataStore)
 
     @ViewModelScoped
     @Provides
@@ -80,13 +76,6 @@ internal object ProfileModule {
     fun provideValidateBirthDateUseCase(
         validator: ProfileValidator
     ) = ValidateBirthDateUseCase(validator)
-
-    @ViewModelScoped
-    @Provides
-    fun provideLogOutUseCase(
-        profileRepository: ProfileRepository,
-        routerRepository: RouterRepository
-    ) = LogOutUseCase(profileRepository, routerRepository)
 
     @ViewModelScoped
     @Provides

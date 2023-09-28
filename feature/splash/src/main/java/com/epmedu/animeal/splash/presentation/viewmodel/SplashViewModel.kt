@@ -8,10 +8,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.network.NetworkState
 import com.epmedu.animeal.network.NetworkStateProvider
+import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.LogOutUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsProfileSavedUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
 import com.epmedu.animeal.splash.domain.usecase.SetFinishProfileAsStartDestinationUseCase
@@ -22,6 +23,7 @@ import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.Ho
 import com.epmedu.animeal.splash.presentation.viewmodel.SplashNextDestination.SignUp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +33,7 @@ internal class SplashViewModel @Inject constructor(
     private val getIsSignedInUseCase: GetIsSignedInUseCase,
     private val getIsProfileSavedUseCase: GetIsProfileSavedUseCase,
     private val getIsPhoneNumberVerifiedUseCase: GetIsPhoneNumberVerifiedUseCase,
+    private val getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase,
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
     private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val setFinishProfileAsStartDestinationUseCase: SetFinishProfileAsStartDestinationUseCase,
@@ -58,9 +61,15 @@ internal class SplashViewModel @Inject constructor(
     private fun checkIfUserIsSignedIn() {
         viewModelScope.launch {
             if (getIsSignedInUseCase()) {
-                val isPhoneNumberVerified = async { getIsPhoneNumberVerifiedUseCase() }
-                val isProfileSaved = async { getIsProfileSavedUseCase() }
-                selectNextDirection(isPhoneNumberVerified.await(), isProfileSaved.await())
+                val results = awaitAll(
+                    async { getIsPhoneNumberVerifiedUseCase() },
+                    async { getIsProfileSavedUseCase() },
+                    async { getCurrentUserGroupUseCase(shouldFetch = true) }
+                )
+                val isPhoneNumberVerified = results[0] as ActionResult<Boolean>
+                val isProfileSaved = results[1] as Boolean
+
+                selectNextDirection(isPhoneNumberVerified, isProfileSaved)
             } else {
                 navigateToNextDirection(SignUp)
             }
