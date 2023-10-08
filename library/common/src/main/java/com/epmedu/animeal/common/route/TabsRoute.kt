@@ -5,7 +5,8 @@ enum class TabsRoute : RouteWithArgs {
     Favourites,
     Home,
     Analytics,
-    More;
+    More,
+    Feedings;
     companion object {
         fun fromRoutePath(routeName: String?): TabsRoute? {
             routeName ?: return null
