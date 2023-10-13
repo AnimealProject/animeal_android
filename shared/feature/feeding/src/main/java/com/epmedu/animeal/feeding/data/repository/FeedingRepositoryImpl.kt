@@ -88,10 +88,10 @@ internal class FeedingRepositoryImpl(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>> {
+    override fun getFeedingHistories(feedingPointId: String, status: String): Flow<List<FeedingHistory>> {
         return flow {
             emit(
-                feedingApi.getApprovedFeedingHistories(feedingPointId).data?.searchFeedingHistories()
+                feedingApi.getFeedingHistories(feedingPointId, status).data?.searchFeedingHistories()
                     ?.items()
             )
         }.flatMapLatest { feedingsHistories ->
@@ -105,11 +105,11 @@ internal class FeedingRepositoryImpl(
 
                     feedingsHistories.map { feeding ->
                         val user = usersMap[feeding.userId()]
-
                         FeedingHistory(
                             id = feeding.userId(),
                             name = user?.name.orEmpty(),
                             surname = user?.surname.orEmpty(),
+                            status = feeding.status() ?: type.FeedingStatus.outdated,
                             date = Temporal.DateTime(feeding.createdAt()).toDate()
                         )
                     }

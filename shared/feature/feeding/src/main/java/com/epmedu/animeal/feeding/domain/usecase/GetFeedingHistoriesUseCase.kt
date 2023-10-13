@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 class GetFeedingHistoriesUseCase(private val repository: FeedingRepository) {
 
     operator fun invoke(feedingPointId: String): Flow<List<FeedingHistory>> {
-        return repository.getFeedingHistories(feedingPointId).map { feedingHistories ->
+        return repository.getFeedingHistories(feedingPointId, "").map { feedingHistories ->
             feedingHistories.sortedByDescending { history -> history.date }
         }
     }

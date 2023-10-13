@@ -13,7 +13,7 @@ interface FeedingRepository {
 
     fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?>
 
-    fun getFeedingHistories(feedingPointId: String): Flow<List<FeedingHistory>>
+    fun getFeedingHistories(feedingPointId: String, status: String = APPROVED_FILTER): Flow<List<FeedingHistory>>
 
     fun getFeedStateFlow(): Flow<DomainFeedState>
 
@@ -26,4 +26,8 @@ interface FeedingRepository {
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult<Unit>
 
     suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
+
+    private companion object {
+        const val APPROVED_FILTER = "approved"
+    }
 }

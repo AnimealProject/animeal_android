@@ -6,5 +6,6 @@ data class FeedingHistory(
     val id: String,
     val name: String,
     val surname: String,
+    val status: type.FeedingStatus,
     val date: Date
 )

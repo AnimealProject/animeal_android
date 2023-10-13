@@ -43,23 +43,21 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun getApprovedFeedingHistories(feedingPointId: String): ApiResult<SearchFeedingHistoriesQuery.Data> {
-        val query = SearchFeedingHistoriesQuery.builder()
-            .filter(
-                SearchableFeedingHistoryFilterInput.builder()
-                    .status(
-                        SearchableStringFilterInput.builder()
-                            .eq(APPROVED_FILTER)
-                            .build()
-                    )
-                    .feedingPointId(
-                        SearchableStringFilterInput.builder()
-                            .eq(feedingPointId)
-                            .build()
-                    )
+    override suspend fun getFeedingHistories(feedingPointId: String, status: String): ApiResult<SearchFeedingHistoriesQuery.Data> {
+        val searchFilterBuilder = SearchableFeedingHistoryFilterInput.builder()
+        searchFilterBuilder.feedingPointId(
+                SearchableStringFilterInput.builder()
+                    .eq(feedingPointId)
                     .build()
             )
-            .build()
+        if (status.isNotEmpty()) {
+            searchFilterBuilder.status(
+                SearchableStringFilterInput.builder()
+                    .eq(status)
+                    .build()
+            )
+        }
+        val query = SearchFeedingHistoriesQuery.builder().filter(searchFilterBuilder.build()).build()
         return animealApi.launchQuery(
             query = query,
             responseClass = SearchFeedingHistoriesQuery.Data::class.java
@@ -98,7 +96,6 @@ internal class FeedingApiImpl(
     }
 
     private companion object {
-        const val APPROVED_FILTER = "approved"
         const val CANCEL_FEEDING_REASON = "reason"
     }
 }

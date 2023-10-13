@@ -11,7 +11,7 @@ interface FeedingApi {
 
     suspend fun getFeedingsInProgress(feedingPointId: String): ApiResult<SearchFeedingsQuery.Data>
 
-    suspend fun getApprovedFeedingHistories(feedingPointId: String): ApiResult<SearchFeedingHistoriesQuery.Data>
+    suspend fun getFeedingHistories(feedingPointId: String, status: String): ApiResult<SearchFeedingHistoriesQuery.Data>
 
     suspend fun startFeeding(feedingPointId: String): ApiResult<String>
 
