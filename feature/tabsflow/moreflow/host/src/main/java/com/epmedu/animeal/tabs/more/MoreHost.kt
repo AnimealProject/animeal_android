@@ -10,6 +10,7 @@ import com.epmedu.animeal.tabs.more.account.AccountScreen
 import com.epmedu.animeal.tabs.more.donate.presentation.DonateScreen
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreen
 import com.epmedu.animeal.tabs.more.profile.ProfileScreen
+import com.epmedu.animeal.feedings.presentation.FeedingsScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -29,6 +30,7 @@ fun MoreHost() {
         screen(MoreRoute.Profile.name) { ProfileScreen() }
         screen(MoreRoute.Donate.name) { DonateScreen() }
         screen(MoreRoute.FAQ.name) { FAQScreen() }
+        screen(MoreRoute.Feedings.name) { FeedingsScreen() }
         screen(MoreRoute.About.name) { AboutScreen() }
         screen(MoreRoute.Account.name) { AccountScreen() }
     }

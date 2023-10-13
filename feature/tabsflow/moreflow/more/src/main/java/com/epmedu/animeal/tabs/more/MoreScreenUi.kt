@@ -27,6 +27,7 @@ internal fun MoreScreenUi(
         R.string.page_profile to MoreRoute.Profile,
         R.string.page_donate to MoreRoute.Donate,
         R.string.page_faq to MoreRoute.FAQ,
+        R.string.feedings to MoreRoute.Feedings,
         R.string.page_about_detailed to MoreRoute.About,
         R.string.page_account to MoreRoute.Account,
     )
