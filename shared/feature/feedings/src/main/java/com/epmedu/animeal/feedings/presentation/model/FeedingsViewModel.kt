@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.domain.usecase.GetFeedingPointsUseCase
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
@@ -47,7 +47,7 @@ internal class FeedingsViewModel @Inject constructor(
             val feedingItems = mutableListOf<FeedingItem>()
             feedingPoints.map { feedingPoint ->
                 getFeedingInProgressUseCase(feedingPoint.id).combine(
-                    getFeedingHistoriesUseCase(feedingPoint.id)
+                    getFeedingHistoriesUseCase(feedingPoint.id, "approved") //TODO: get status from UI
                 ) { feedingInProgress, feedingHistories ->
                     if (feedingInProgress != null) {
                         feedingItems.add(feedingInProgress.toFeedingItem(feedingPoint))
