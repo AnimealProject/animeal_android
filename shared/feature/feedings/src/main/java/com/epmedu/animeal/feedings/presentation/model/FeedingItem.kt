@@ -3,11 +3,9 @@ package com.epmedu.animeal.feedings.presentation.model
 import android.os.Parcelable
 import android.text.format.DateUtils
 import androidx.compose.runtime.Stable
-import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.users.domain.model.User
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
@@ -19,7 +17,7 @@ data class FeedingItem(
     val user: String,
     val status: FeedStatus,
     val image: String,
-    val elapsedTime : String,
+    val elapsedTime: String,
 ) : Parcelable {
     constructor(feedingPoint: FeedingPoint) : this(
         id = feedingPoint.id,

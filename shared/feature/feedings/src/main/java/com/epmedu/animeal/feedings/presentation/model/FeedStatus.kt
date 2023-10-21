@@ -24,9 +24,9 @@ enum class FeedStatus(
 fun FeedingStatus.toFeedStatus(deltaTime: Long): FeedStatus =
     when (this) {
         FeedingStatus.approved -> FeedStatus.APPROVED
-        FeedingStatus.pending -> when(deltaTime) {
-            in 0 ..ORANGE_TIME -> FeedStatus.PENDING_GREY
-            in ORANGE_TIME .. RED_TIME -> FeedStatus.PENDING_ORANGE
+        FeedingStatus.pending -> when (deltaTime) {
+            in 0..ORANGE_TIME -> FeedStatus.PENDING_GREY
+            in ORANGE_TIME..RED_TIME -> FeedStatus.PENDING_ORANGE
             else -> FeedStatus.PENDING_RED
         }
         FeedingStatus.rejected -> FeedStatus.REJECTED
@@ -34,5 +34,5 @@ fun FeedingStatus.toFeedStatus(deltaTime: Long): FeedStatus =
         FeedingStatus.outdated -> FeedStatus.OUTDATED
     }
 
-private const val ORANGE_TIME =1800000;
-private const val RED_TIME =  21600000;
+private const val ORANGE_TIME = 1_800_000
+private const val RED_TIME = 21_600_000

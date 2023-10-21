@@ -26,8 +26,8 @@ internal fun FeedingsScreenContentUI(
         feedings.isEmpty() -> {
             EmptyState(padding)
         } else -> {
-        FeedingList(feedings, onEvent)
-    }
+            FeedingList(feedings, onEvent)
+        }
     }
 }
 

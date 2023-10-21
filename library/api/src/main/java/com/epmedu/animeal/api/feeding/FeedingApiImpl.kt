@@ -43,13 +43,14 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun getFeedingHistories(feedingPointId: String, status: String): ApiResult<SearchFeedingHistoriesQuery.Data> {
+    override suspend fun getFeedingHistories(feedingPointId: String, status: String):
+        ApiResult<SearchFeedingHistoriesQuery.Data> {
         val searchFilterBuilder = SearchableFeedingHistoryFilterInput.builder()
         searchFilterBuilder.feedingPointId(
-                SearchableStringFilterInput.builder()
-                    .eq(feedingPointId)
-                    .build()
-            )
+            SearchableStringFilterInput.builder()
+                .eq(feedingPointId)
+                .build()
+        )
         if (status.isNotEmpty()) {
             searchFilterBuilder.status(
                 SearchableStringFilterInput.builder()

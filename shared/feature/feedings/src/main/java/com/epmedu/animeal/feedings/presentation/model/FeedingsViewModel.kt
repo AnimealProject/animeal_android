@@ -7,8 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetFeedingHistoriesUseCase
-import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.domain.usecase.GetFeedingPointsUseCase
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -34,10 +34,10 @@ internal class FeedingsViewModel @Inject constructor(
     fun handleEvents(event: FeedingsScreenEvent) {
         when (event) {
             is FeedingsScreenEvent.FeedingApprove -> {
-                tryApproveFeeding(event.feedingItem)
+                // TODO: implement me
             }
             is FeedingsScreenEvent.FeedingReject -> {
-                tryRejectFeeding(event.feedingItem, "no_reason")
+                // TODO: implement me
             }
         }
     }
@@ -47,7 +47,7 @@ internal class FeedingsViewModel @Inject constructor(
             val feedingItems = mutableListOf<FeedingItem>()
             feedingPoints.map { feedingPoint ->
                 getFeedingInProgressUseCase(feedingPoint.id).combine(
-                    getFeedingHistoriesUseCase(feedingPoint.id, "approved") //TODO: get status from UI
+                    getFeedingHistoriesUseCase(feedingPoint.id, "approved") // TODO: get status from UI
                 ) { feedingInProgress, feedingHistories ->
                     if (feedingInProgress != null) {
                         feedingItems.add(feedingInProgress.toFeedingItem(feedingPoint))
@@ -62,18 +62,6 @@ internal class FeedingsViewModel @Inject constructor(
                     feedings = feedingItems.toImmutableList(),
                 )
             }
-        }
-    }
-
-    private fun tryRejectFeeding(feedingItem: FeedingItem, reason: String) {
-        viewModelScope.launch {
-//TODO: implement me
-        }
-    }
-
-    private fun tryApproveFeeding(feedingItem: FeedingItem) {
-        viewModelScope.launch {
-//TODO: implement me
         }
     }
 }

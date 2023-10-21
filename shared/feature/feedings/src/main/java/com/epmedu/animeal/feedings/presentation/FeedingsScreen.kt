@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feedings.presentation
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue

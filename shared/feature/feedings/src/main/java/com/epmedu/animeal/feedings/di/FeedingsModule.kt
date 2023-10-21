@@ -12,10 +12,10 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 internal object FeedingsModule {
 
-        @ViewModelScoped
-        @Provides
-        fun provideGetFeedingPointsUseCase(
-                feedingPointRepository: FeedingPointRepository
-            ): GetFeedingPointsUseCase =
-            GetFeedingPointsUseCase(feedingPointRepository)
+    @ViewModelScoped
+    @Provides
+    fun provideGetFeedingPointsUseCase(
+        feedingPointRepository: FeedingPointRepository
+    ): GetFeedingPointsUseCase =
+        GetFeedingPointsUseCase(feedingPointRepository)
 }
