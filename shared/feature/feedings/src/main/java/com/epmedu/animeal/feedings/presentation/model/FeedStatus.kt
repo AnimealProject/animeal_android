@@ -13,17 +13,26 @@ enum class FeedStatus(
     val color: Color
 ) {
     APPROVED(R.string.feed_status_approved, R.drawable.ic_approved, CustomColor.StatusGreen),
-    PENDING(R.string.feed_status_pending, R.drawable.ic_pending, CustomColor.StatusYellow),
+    PENDING_ORANGE(R.string.feed_status_pending, R.drawable.ic_pending_orange, CustomColor.StatusYellow),
+    PENDING_RED(R.string.feed_status_pending, R.drawable.ic_pending_red, CustomColor.StatusRed),
+    PENDING_GREY(R.string.feed_status_pending, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
     REJECTED(R.string.feed_status_rejected, R.drawable.ic_rejected, CustomColor.StatusRed),
     OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusRed),
-    IN_PROGRESS(R.string.feed_status_pending, R.drawable.ic_pending, CustomColor.StatusYellow),
+    IN_PROGRESS(R.string.feeding_in_progress, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
 }
 
-fun FeedingStatus.toFeedStatus(): FeedStatus =
+fun FeedingStatus.toFeedStatus(deltaTime: Long): FeedStatus =
     when (this) {
         FeedingStatus.approved -> FeedStatus.APPROVED
-        FeedingStatus.pending -> FeedStatus.PENDING
+        FeedingStatus.pending -> when(deltaTime) {
+            in 0 ..ORANGE_TIME -> FeedStatus.PENDING_GREY
+            in ORANGE_TIME .. RED_TIME -> FeedStatus.PENDING_ORANGE
+            else -> FeedStatus.PENDING_RED
+        }
         FeedingStatus.rejected -> FeedStatus.REJECTED
         FeedingStatus.inProgress -> FeedStatus.IN_PROGRESS
         FeedingStatus.outdated -> FeedStatus.OUTDATED
     }
+
+private const val ORANGE_TIME =1800000;
+private const val RED_TIME =  21600000;

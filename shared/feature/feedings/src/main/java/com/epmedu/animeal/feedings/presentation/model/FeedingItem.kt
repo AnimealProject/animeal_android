@@ -54,7 +54,7 @@ fun FeedingHistory.toFeedingItem(feedingPoint: FeedingPoint) =
         id = feedingPoint.id,
         title = feedingPoint.title,
         user = "$name $surname",
-        status = status.toFeedStatus(),
+        status = status.toFeedStatus(System.currentTimeMillis() - date.time),
         image = feedingPoint.images[0],
         elapsedTime = DateUtils.getRelativeTimeSpanString(
             date.time,
