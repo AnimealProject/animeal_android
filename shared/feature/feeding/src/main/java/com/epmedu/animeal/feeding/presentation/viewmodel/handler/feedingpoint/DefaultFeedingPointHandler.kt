@@ -5,11 +5,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointsByTypeUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -45,9 +45,9 @@ class DefaultFeedingPointHandler @Inject constructor(
     errorHandler: ErrorHandler,
     private val savedStateHandle: SavedStateHandle,
     private val getFeedingPointByPriorityUseCase: GetFeedingPointByPriorityUseCase,
-    private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
+    private val getAllFeedingPointsUseCase: GetFeedingPointsByTypeUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
-    private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
+    private val getFeedingHistoriesUseCase: GetApprovedFeedingHistoriesUseCase,
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,

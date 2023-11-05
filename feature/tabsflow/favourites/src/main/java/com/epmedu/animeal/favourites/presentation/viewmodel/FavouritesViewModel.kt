@@ -12,7 +12,7 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.Favourit
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -37,7 +37,7 @@ internal class FavouritesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getFavouriteFeedingPointsUseCase: GetFavouriteFeedingPointsUseCase,
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
-    private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase,
+    private val getFeedingHistoriesUseCase: GetApprovedFeedingHistoriesUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
     private val permissionsHandler: PermissionsHandler,

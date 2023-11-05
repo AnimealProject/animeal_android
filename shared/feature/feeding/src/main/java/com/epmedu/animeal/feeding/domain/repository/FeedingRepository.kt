@@ -13,7 +13,7 @@ interface FeedingRepository {
 
     fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?>
 
-    fun getFeedingHistories(feedingPointId: String, status: String): Flow<List<FeedingHistory>>
+    fun getFeedingHistories(feedingPointId: String, status: String?): Flow<List<FeedingHistory>>
 
     fun getFeedStateFlow(): Flow<DomainFeedState>
 

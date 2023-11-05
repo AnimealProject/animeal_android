@@ -61,7 +61,27 @@ private fun FeedStatusItemPreview() {
             )
             Divider()
             FeedStatusItem(
+                status = FeedStatus.PENDING_ORANGE
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.PENDING_GREY
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.PENDING_RED
+            )
+            Divider()
+            FeedStatusItem(
                 status = FeedStatus.REJECTED
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.OUTDATED
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.IN_PROGRESS
             )
         }
     }

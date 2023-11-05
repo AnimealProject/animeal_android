@@ -23,7 +23,7 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return flowOf(null)
     }
 
-    override fun getFeedingHistories(feedingPointId: String, status: String): Flow<List<FeedingHistory>> {
+    override fun getFeedingHistories(feedingPointId: String, status: String?): Flow<List<FeedingHistory>> {
         return flowOf(emptyList())
     }
 

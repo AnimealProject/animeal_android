@@ -11,6 +11,7 @@ import com.epmedu.animeal.feeding.domain.model.DomainFeedState
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
+import com.epmedu.animeal.feeding.domain.model.toFeedingStatus
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.users.domain.UsersRepository
@@ -88,7 +89,7 @@ internal class FeedingRepositoryImpl(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getFeedingHistories(feedingPointId: String, status: String): Flow<List<FeedingHistory>> {
+    override fun getFeedingHistories(feedingPointId: String, status: String?): Flow<List<FeedingHistory>> {
         return flow {
             emit(
                 feedingApi.getFeedingHistories(feedingPointId, status).data?.searchFeedingHistories()
@@ -109,7 +110,7 @@ internal class FeedingRepositoryImpl(
                             id = feeding.userId(),
                             name = user?.name.orEmpty(),
                             surname = user?.surname.orEmpty(),
-                            status = feeding.status() ?: type.FeedingStatus.outdated,
+                            status = toFeedingStatus(feeding.status() ?: type.FeedingStatus.outdated),
                             date = Temporal.DateTime(feeding.createdAt()).toDate()
                         )
                     }

@@ -7,7 +7,6 @@ import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 @Stable
 @Parcelize
@@ -18,20 +17,7 @@ data class FeedingItem(
     val status: FeedStatus,
     val image: String,
     val elapsedTime: String,
-) : Parcelable {
-    constructor(feedingPoint: FeedingPoint) : this(
-        id = feedingPoint.id,
-        title = feedingPoint.title,
-        user = "UserID",
-        status = FeedStatus.OUTDATED,
-        image = feedingPoint.images[0],
-        elapsedTime = DateUtils.getRelativeTimeSpanString(
-            Date().time,
-            System.currentTimeMillis(),
-            DateUtils.SECOND_IN_MILLIS
-        ).toString()
-    )
-}
+) : Parcelable
 
 fun FeedingInProgress.toFeedingItem(feedingPoint: FeedingPoint) =
     FeedingItem(

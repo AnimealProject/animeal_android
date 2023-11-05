@@ -63,6 +63,10 @@ private fun FeedStatusItemPreview() {
             FeedStatusItem(
                 status = FeedStatus.RED
             )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.YELLOW
+            )
         }
     }
 }

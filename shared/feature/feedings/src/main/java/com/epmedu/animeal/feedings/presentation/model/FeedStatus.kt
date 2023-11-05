@@ -3,9 +3,11 @@ package com.epmedu.animeal.feedings.presentation.model
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
-import type.FeedingStatus
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 enum class FeedStatus(
     @StringRes val titleId: Int,
@@ -23,16 +25,16 @@ enum class FeedStatus(
 
 fun FeedingStatus.toFeedStatus(deltaTime: Long): FeedStatus =
     when (this) {
-        FeedingStatus.approved -> FeedStatus.APPROVED
-        FeedingStatus.pending -> when (deltaTime) {
-            in 0..ORANGE_TIME -> FeedStatus.PENDING_GREY
-            in ORANGE_TIME..RED_TIME -> FeedStatus.PENDING_ORANGE
+        FeedingStatus.APPROVED -> FeedStatus.APPROVED
+        FeedingStatus.PENDING -> when (deltaTime) {
+            in 0..orangeTime -> FeedStatus.PENDING_GREY
+            in orangeTime..redTime -> FeedStatus.PENDING_ORANGE
             else -> FeedStatus.PENDING_RED
         }
-        FeedingStatus.rejected -> FeedStatus.REJECTED
-        FeedingStatus.inProgress -> FeedStatus.IN_PROGRESS
-        FeedingStatus.outdated -> FeedStatus.OUTDATED
+        FeedingStatus.REJECTED -> FeedStatus.REJECTED
+        FeedingStatus.IN_PROGRESS -> FeedStatus.IN_PROGRESS
+        FeedingStatus.OUTDATED -> FeedStatus.OUTDATED
     }
 
-private const val ORANGE_TIME = 1_800_000
-private const val RED_TIME = 21_600_000
+private val orangeTime = 30.minutes.inWholeMilliseconds
+private val redTime = 1.hours.inWholeMilliseconds

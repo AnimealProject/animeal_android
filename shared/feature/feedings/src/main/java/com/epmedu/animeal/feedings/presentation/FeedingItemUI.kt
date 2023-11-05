@@ -94,6 +94,7 @@ fun FeedingApproveItem(
                 ) {
                     Text(
                         text = title,
+                        modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.subtitle1,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,

@@ -5,7 +5,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetFeedingHistoriesUseCase(private val repository: FeedingRepository) {
+class GetApprovedFeedingHistoriesUseCase(private val repository: FeedingRepository) {
 
     operator fun invoke(feedingPointId: String): Flow<List<FeedingHistory>> {
         return repository.getFeedingHistories(feedingPointId, APPROVED_FILTER).map { feedingHistories ->
