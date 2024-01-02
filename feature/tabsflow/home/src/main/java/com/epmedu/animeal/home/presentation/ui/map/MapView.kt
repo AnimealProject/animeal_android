@@ -2,7 +2,6 @@
 
 package com.epmedu.animeal.home.presentation.ui.map
 
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +44,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
+import com.mapbox.maps.plugin.locationcomponent.R as LocationcomponentR
 
 private const val GESTURE_INTERACTION_DEBOUNCE = 100L
 
@@ -248,14 +248,10 @@ private fun MapView.requestRoutes(
 
 fun MapView.setMapViewLocationPuck() {
     location.locationPuck = LocationPuck2D(
-        topImage = AppCompatResources.getDrawable(
-            context,
-            R.drawable.ic_your_location,
-
-        ),
-        shadowImage = AppCompatResources.getDrawable(
-            context,
-            com.mapbox.maps.plugin.locationcomponent.R.drawable.mapbox_user_stroke_icon
+        topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
+        shadowImage = context.resources.getDrawable(
+            LocationcomponentR.drawable.mapbox_user_stroke_icon,
+            null
         ),
         scaleExpression = interpolate {
             linear()
