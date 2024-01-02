@@ -10,15 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.modifier.focusOnGloballyPositioned
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun CodeRow(
-    code: List<Int?>,
+    code: ImmutableList<Int?>,
     focusRequester: FocusRequester,
     onDigitChange: (position: Int, digit: Int?) -> Unit,
     modifier: Modifier = Modifier,
@@ -41,7 +43,11 @@ internal fun CodeRow(
                     onDigitChange(index, null)
                     if (index > 0) focusManager.moveFocus(FocusDirection.Previous)
                 },
-                modifier = if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
+                modifier = if (index == 0) {
+                    Modifier.focusOnGloballyPositioned(focusRequester)
+                } else {
+                    Modifier
+                },
                 isError = isError
             )
         }
@@ -54,14 +60,14 @@ private fun CodeRowPreview() {
     AnimealTheme {
         Column {
             CodeRow(
-                code = listOf(1, 2, null, null, null, null),
+                code = persistentListOf(1, 2, null, null, null, null),
                 focusRequester = FocusRequester(),
                 onDigitChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp)
             )
             Divider()
             CodeRow(
-                code = listOf(1, 2, 3, 9, 5, 7),
+                code = persistentListOf(1, 2, 3, 9, 5, 7),
                 focusRequester = FocusRequester(),
                 onDigitChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp),

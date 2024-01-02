@@ -50,6 +50,7 @@ internal fun HomeMapbox(
     state: HomeState,
     onFeedingPointSelect: (point: FeedingPointModel) -> Unit,
     onGeolocationClick: (MapView) -> Unit,
+    onFeedingsClick: () -> Unit,
     onInitialLocationDisplay: () -> Unit,
     onRouteResult: (result: RouteResult) -> Unit,
     onCancelRouteClick: () -> Unit,
@@ -107,15 +108,13 @@ internal fun HomeMapbox(
             }
         }
 
-        GeoLocationFloatingActionButton(
+        HomeFABBox(
             modifier = Modifier
                 .bottomBarPadding()
-                .padding(
-                    bottom = 24.dp,
-                    end = 24.dp
-                )
                 .align(alignment = Alignment.BottomEnd),
-            onClick = { onGeolocationClick(mapboxMapView) }
+            feedingsButtonState = state.feedingsButtonState,
+            onGeoFABClick = { onGeolocationClick(mapboxMapView) },
+            onFeedingsFABClick = onFeedingsClick
         )
     }
 }
@@ -185,10 +184,12 @@ private fun MapboxMap(
             is LocationState.UndefinedLocation -> {
                 mapboxMapView.setLocation(state.locationState.location)
             }
+
             is LocationState.InitialLocation -> {
                 mapboxMapView.setLocation(state.locationState.location)
                 onInitialLocationDisplay()
             }
+
             else -> {}
         }
     }

@@ -315,10 +315,6 @@ subscription OnCreateFeedingPoint(
       nextToken
       __typename
     }
-    feedings {
-      nextToken
-      __typename
-    }
     cover
     feedingPointCategoryId
     __typename
@@ -385,10 +381,6 @@ subscription OnUpdateFeedingPoint(
       __typename
     }
     users {
-      nextToken
-      __typename
-    }
-    feedings {
       nextToken
       __typename
     }
@@ -461,10 +453,6 @@ subscription OnDeleteFeedingPoint(
       nextToken
       __typename
     }
-    feedings {
-      nextToken
-      __typename
-    }
     cover
     feedingPointCategoryId
     __typename
@@ -485,30 +473,15 @@ subscription OnCreateFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
     __typename
   }
 }
@@ -527,30 +500,15 @@ subscription OnUpdateFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
     __typename
   }
 }
@@ -569,30 +527,69 @@ subscription OnDeleteFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+subscription OnCreateFeedingUsers(
+  $filter: ModelSubscriptionFeedingUsersFilterInput
+  $owner: String
+) {
+  onCreateFeedingUsers(filter: $filter, owner: $owner) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnUpdateFeedingUsers(
+  $filter: ModelSubscriptionFeedingUsersFilterInput
+  $owner: String
+) {
+  onUpdateFeedingUsers(filter: $filter, owner: $owner) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnDeleteFeedingUsers(
+  $filter: ModelSubscriptionFeedingUsersFilterInput
+  $owner: String
+) {
+  onDeleteFeedingUsers(filter: $filter, owner: $owner) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
     __typename
   }
 }
@@ -611,8 +608,15 @@ subscription OnCreateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }
@@ -631,8 +635,15 @@ subscription OnUpdateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }
@@ -651,8 +662,15 @@ subscription OnDeleteFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }

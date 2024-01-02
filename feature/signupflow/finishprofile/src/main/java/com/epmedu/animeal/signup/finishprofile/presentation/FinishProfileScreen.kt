@@ -27,7 +27,6 @@ fun FinishProfileScreen() {
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
         viewModel.events.collect {
             when (it) {
                 FinishProfileEvent.NavigateBackToOnboarding -> {

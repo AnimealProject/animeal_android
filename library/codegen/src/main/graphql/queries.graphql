@@ -338,10 +338,6 @@ query GetFeedingPoint($id: ID!) {
       nextToken
       __typename
     }
-    feedings {
-      nextToken
-      __typename
-    }
     cover
     feedingPointCategoryId
     __typename
@@ -448,30 +444,15 @@ query GetFeeding($id: ID!) {
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
     __typename
   }
 }
@@ -492,8 +473,11 @@ query ListFeedings(
       createdBy
       updatedBy
       owner
-      expireAt
       feedingPointFeedingsId
+      expireAt
+      assignedModerators
+      moderatedBy
+      moderatedAt
       __typename
     }
     nextToken
@@ -523,8 +507,85 @@ query SearchFeedings(
       createdBy
       updatedBy
       owner
-      expireAt
       feedingPointFeedingsId
+      expireAt
+      assignedModerators
+      moderatedBy
+      moderatedAt
+      __typename
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+            __typename
+          }
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+query GetFeedingUsers($id: ID!) {
+  getFeedingUsers(id: $id) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+query ListFeedingUsers(
+  $filter: ModelFeedingUsersFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFeedingUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query SearchFeedingUsers(
+  $filter: SearchableFeedingUsersFilterInput
+  $limit: Int
+  $nextToken: String
+  $from: Int
+) {
+  searchFeedingUsers(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+  ) {
+    items {
+      id
+      createdAt
+      updatedAt
+      owner
       __typename
     }
     nextToken
@@ -560,8 +621,15 @@ query GetFeedingHistory($id: ID!) {
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }
@@ -584,6 +652,9 @@ query ListFeedingHistories(
       feedingPointId
       status
       reason
+      moderatedBy
+      moderatedAt
+      assignedModerators
       __typename
     }
     nextToken
@@ -615,6 +686,9 @@ query SearchFeedingHistories(
       feedingPointId
       status
       reason
+      moderatedBy
+      moderatedAt
+      assignedModerators
       __typename
     }
     nextToken
@@ -943,6 +1017,66 @@ query ListRelationUserPets(
   }
 }
 
+query RelationUserPetsByUserIdAndPetId(
+  $userId: String!
+  $petId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationUserPetFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationUserPetsByUserIdAndPetId(
+    userId: $userId
+    petId: $petId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      petId
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query RelationUserPetsByPetIdAndUserId(
+  $petId: ID!
+  $userId: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRelationUserPetFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  relationUserPetsByPetIdAndUserId(
+    petId: $petId
+    userId: $userId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      petId
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
 query GetMedication($id: ID!) {
   getMedication(id: $id) {
     id
@@ -984,6 +1118,37 @@ query ListMedications(
   $nextToken: String
 ) {
   listMedications(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      petId
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query MedicationsByPetIdAndDate(
+  $petId: ID!
+  $date: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMedicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  medicationsByPetIdAndDate(
+    petId: $petId
+    date: $date
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
     items {
       id
       name

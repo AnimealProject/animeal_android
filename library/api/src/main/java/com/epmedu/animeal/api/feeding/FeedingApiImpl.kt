@@ -12,7 +12,6 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 import type.SearchableFeedingFilterInput
 import type.SearchableFeedingHistoryFilterInput
-import type.SearchableIDFilterInput
 import type.SearchableStringFilterInput
 
 internal class FeedingApiImpl(
@@ -31,7 +30,7 @@ internal class FeedingApiImpl(
             .filter(
                 SearchableFeedingFilterInput.builder()
                     .feedingPointFeedingsId(
-                        SearchableIDFilterInput.builder()
+                        SearchableStringFilterInput.builder()
                             .eq(feedingPointId)
                             .build()
                     )

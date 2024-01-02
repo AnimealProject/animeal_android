@@ -343,10 +343,6 @@ mutation CreateFeedingPoint(
       nextToken
       __typename
     }
-    feedings {
-      nextToken
-      __typename
-    }
     cover
     feedingPointCategoryId
     __typename
@@ -413,10 +409,6 @@ mutation UpdateFeedingPoint(
       __typename
     }
     users {
-      nextToken
-      __typename
-    }
-    feedings {
       nextToken
       __typename
     }
@@ -489,10 +481,6 @@ mutation DeleteFeedingPoint(
       nextToken
       __typename
     }
-    feedings {
-      nextToken
-      __typename
-    }
     cover
     feedingPointCategoryId
     __typename
@@ -513,30 +501,15 @@ mutation CreateFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
     __typename
   }
 }
@@ -555,30 +528,15 @@ mutation UpdateFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
     __typename
   }
 }
@@ -597,30 +555,69 @@ mutation DeleteFeeding(
     createdBy
     updatedBy
     owner
-    feedingPoint {
-      id
-      name
-      description
-      city
-      street
+    feedingPointDetails {
       address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      feedingPointCategoryId
       __typename
     }
-    expireAt
     feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+mutation CreateFeedingUsers(
+  $input: CreateFeedingUsersInput!
+  $condition: ModelFeedingUsersConditionInput
+) {
+  createFeedingUsers(input: $input, condition: $condition) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+mutation UpdateFeedingUsers(
+  $input: UpdateFeedingUsersInput!
+  $condition: ModelFeedingUsersConditionInput
+) {
+  updateFeedingUsers(input: $input, condition: $condition) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+mutation DeleteFeedingUsers(
+  $input: DeleteFeedingUsersInput!
+  $condition: ModelFeedingUsersConditionInput
+) {
+  deleteFeedingUsers(input: $input, condition: $condition) {
+    id
+    attributes {
+      Name
+      Value
+      __typename
+    }
+    createdAt
+    updatedAt
+    owner
     __typename
   }
 }
@@ -639,8 +636,15 @@ mutation CreateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }
@@ -659,8 +663,15 @@ mutation UpdateFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }
@@ -679,8 +690,15 @@ mutation DeleteFeedingHistory(
     updatedBy
     owner
     feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
     status
     reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
     __typename
   }
 }

@@ -1,15 +1,13 @@
 package com.epmedu.animeal.networkuser.di
 
-import com.epmedu.animeal.auth.AuthAPI
-import com.epmedu.animeal.auth.UserAttributesAPI
-import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
-import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
-import com.epmedu.animeal.networkuser.data.repository.NetworkRepositoryImpl
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
+import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,22 +16,13 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object NetworkModule {
+object NetworkDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun provideNetworkRepository(
-        authAPI: AuthAPI,
-        userAttributesAPI: UserAttributesAPI,
-        authUserAttributesToProfileMapper: AuthUserAttributesToProfileMapper,
-        profileToAuthUserMapper: ProfileToAuthUserAttributesMapper,
-    ): NetworkRepository =
-        NetworkRepositoryImpl(
-            authAPI,
-            userAttributesAPI,
-            authUserAttributesToProfileMapper,
-            profileToAuthUserMapper,
-        )
+    fun provideGetCurrentUserGroupUseCase(
+        repository: NetworkRepository
+    ) = GetCurrentUserGroupUseCase(repository)
 
     @ViewModelScoped
     @Provides
@@ -45,7 +34,8 @@ object NetworkModule {
     @Provides
     fun provideGetNetworkProfileUseCase(
         repository: NetworkRepository,
-    ) = GetNetworkProfileUseCase(repository)
+        getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase
+    ) = GetNetworkProfileUseCase(repository, getCurrentUserGroupUseCase)
 
     @ViewModelScoped
     @Provides
@@ -58,4 +48,11 @@ object NetworkModule {
     fun provideDeleteNetworkUserUseCase(
         repository: NetworkRepository,
     ) = DeleteNetworkUserUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideLogOutUseCase(
+        networkRepository: NetworkRepository,
+        routerRepository: RouterRepository
+    ) = LogOutUseCase(networkRepository, routerRepository)
 }
