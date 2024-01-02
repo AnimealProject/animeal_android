@@ -33,7 +33,6 @@ import com.epmedu.animeal.home.presentation.ui.map.rememberMapUiSettings
 import com.epmedu.animeal.home.presentation.ui.map.rememberMapViewWithLifecycle
 import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.map.setLocationOnRoute
-import com.epmedu.animeal.home.presentation.ui.map.setMapViewLocationPuck
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.LocationState
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
@@ -146,7 +145,6 @@ private fun MapboxMap(
     onCameraChange: () -> Unit,
     onMapClick: (Point) -> Unit
 ) {
-    mapboxMapView.setMapViewLocationPuck()
     val markerController = remember(mapboxMapView) {
         MarkerController(
             mapView = mapboxMapView,

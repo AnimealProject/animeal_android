@@ -2,6 +2,7 @@
 
 package com.epmedu.animeal.home.presentation.ui.map
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +45,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
-import com.mapbox.maps.plugin.locationcomponent.R as LocationcomponentR
+import com.mapbox.maps.plugin.locationcomponent.R as LocationComponentR
 
 private const val GESTURE_INTERACTION_DEBOUNCE = 100L
 
@@ -71,6 +72,7 @@ fun rememberMapViewWithLifecycle(
             location.updateSettings {
                 enabled = uiSettings.userLocationOnMap
                 pulsingEnabled = uiSettings.locationPulsing
+                locationPuck = getLocationPuck(context)
             }
         }
     }
@@ -246,24 +248,22 @@ private fun MapView.requestRoutes(
     )
 }
 
-fun MapView.setMapViewLocationPuck() {
-    location.locationPuck = LocationPuck2D(
-        topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
-        shadowImage = context.resources.getDrawable(
-            LocationcomponentR.drawable.mapbox_user_stroke_icon,
-            null
-        ),
-        scaleExpression = interpolate {
-            linear()
-            zoom()
-            stop {
-                literal(0.0)
-                literal(0.6)
-            }
-            stop {
-                literal(20.0)
-                literal(1.0)
-            }
-        }.toJson()
-    )
-}
+private fun getLocationPuck(context: Context) = LocationPuck2D(
+    topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
+    shadowImage = context.resources.getDrawable(
+        LocationComponentR.drawable.mapbox_user_stroke_icon,
+        null
+    ),
+    scaleExpression = interpolate {
+        linear()
+        zoom()
+        stop {
+            literal(0.0)
+            literal(0.6)
+        }
+        stop {
+            literal(20.0)
+            literal(1.0)
+        }
+    }.toJson()
+)
