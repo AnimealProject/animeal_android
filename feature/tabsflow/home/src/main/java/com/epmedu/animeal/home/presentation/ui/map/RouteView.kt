@@ -1,5 +1,6 @@
 package com.epmedu.animeal.home.presentation.ui.map
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -8,14 +9,18 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoi
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants.LOCATION_INDICATOR_LAYER
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.core.MapboxNavigation
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
+import com.mapbox.navigation.ui.maps.route.line.model.RouteLineColorResources
+import com.mapbox.navigation.ui.maps.route.line.model.RouteLineResources
 
 @Composable
 internal fun RouteView(
@@ -26,7 +31,10 @@ internal fun RouteView(
     val mapBoxRouteInitOptions = rememberMapRouteInitOptions(
         mapView = mapView,
         mapBoxNavigationInitOptions = MapBoxRouteInitOptions(
-            MapboxRouteLineOptions.Builder(mapView.context).build()
+            MapboxRouteLineOptions.Builder(mapView.context)
+                .withRouteLineResources(getRouteLineResources(mapView.context))
+                .withRouteLineBelowLayerId(LOCATION_INDICATOR_LAYER)
+                .build()
         )
     )
 
@@ -76,6 +84,22 @@ internal fun RouteView(
     mapView.doOnDetach {
         mapboxNavigation.onDestroy()
     }
+}
+
+@Composable
+private fun getRouteLineResources(context: Context): RouteLineResources {
+    val color = context.getColor(R.color.color_sea_serpent)
+    val customColorResources = RouteLineColorResources.Builder()
+        .routeDefaultColor(color)
+        .routeCasingColor(color)
+        .routeUnknownCongestionColor(color)
+        .build()
+
+    return RouteLineResources.Builder()
+        .routeLineColorResources(customColorResources)
+        .originWaypointIcon(R.drawable.ic_empty)
+        .destinationWaypointIcon(R.drawable.ic_empty)
+        .build()
 }
 
 internal fun setLocationOnRoute(mapView: MapView, state: HomeState) {
