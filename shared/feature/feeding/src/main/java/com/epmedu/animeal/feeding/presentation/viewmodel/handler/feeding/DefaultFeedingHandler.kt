@@ -97,10 +97,7 @@ class DefaultFeedingHandler(
 
     override fun CoroutineScope.handleFeedingEvent(event: FeedingEvent) {
         when (event) {
-            is Start -> launch {
-                startFeeding(event.id)
-                fetchCurrentFeeding()
-            }
+            is Start -> launch { startFeeding(event.id) }
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
