@@ -45,7 +45,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
-import com.mapbox.maps.plugin.locationcomponent.R as LocationComponentR
 
 private const val GESTURE_INTERACTION_DEBOUNCE = 100L
 
@@ -250,10 +249,7 @@ private fun MapView.requestRoutes(
 
 private fun getLocationPuck(context: Context) = LocationPuck2D(
     topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
-    shadowImage = context.resources.getDrawable(
-        LocationComponentR.drawable.mapbox_user_stroke_icon,
-        null
-    ),
+    shadowImage = context.resources.getDrawable(R.drawable.ic_map_user_stroke, null),
     scaleExpression = interpolate {
         linear()
         zoom()
