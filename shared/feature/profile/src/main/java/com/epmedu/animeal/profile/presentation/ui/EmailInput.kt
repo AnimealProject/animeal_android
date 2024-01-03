@@ -19,6 +19,7 @@ internal fun EmailInput(
     error: String,
     imeAction: ImeAction,
     isEnabled: Boolean = true,
+    onClearFocus: () -> Unit = {},
     onNext: KeyboardActionScope.() -> Unit = {},
     onDone: KeyboardActionScope.() -> Unit = {}
 ) {
@@ -29,6 +30,7 @@ internal fun EmailInput(
         onValueChange = onValueChange,
         value = value,
         errorText = error,
+        onClearFocus = onClearFocus,
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
             keyboardType = KeyboardType.Email
