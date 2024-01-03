@@ -38,6 +38,12 @@ internal fun RouteView(
         )
     )
 
+    LaunchedEffect(mapView) {
+        mapView.getMapboxMap().getStyle()?.let { style ->
+            mapBoxRouteInitOptions.routeLineView.hideOriginAndDestinationPoints(style)
+        }
+    }
+
     val mapboxNavigation = remember(mapView) {
         MapboxNavigation(
             NavigationOptions.Builder(mapView.context)
@@ -97,8 +103,6 @@ private fun getRouteLineResources(context: Context): RouteLineResources {
 
     return RouteLineResources.Builder()
         .routeLineColorResources(customColorResources)
-        .originWaypointIcon(R.drawable.ic_empty)
-        .destinationWaypointIcon(R.drawable.ic_empty)
         .build()
 }
 
