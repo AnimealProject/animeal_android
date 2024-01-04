@@ -2,6 +2,7 @@
 
 package com.epmedu.animeal.home.presentation.ui.map
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +28,8 @@ import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData
+import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
+import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -68,6 +71,7 @@ fun rememberMapViewWithLifecycle(
             location.updateSettings {
                 enabled = uiSettings.userLocationOnMap
                 pulsingEnabled = uiSettings.locationPulsing
+                locationPuck = getLocationPuck(context)
             }
         }
     }
@@ -242,3 +246,20 @@ private fun MapView.requestRoutes(
         }
     )
 }
+
+private fun getLocationPuck(context: Context) = LocationPuck2D(
+    topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
+    shadowImage = context.resources.getDrawable(R.drawable.ic_map_user_stroke, null),
+    scaleExpression = interpolate {
+        linear()
+        zoom()
+        stop {
+            literal(0.0)
+            literal(0.6)
+        }
+        stop {
+            literal(20.0)
+            literal(1.0)
+        }
+    }.toJson()
+)
