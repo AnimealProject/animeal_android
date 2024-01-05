@@ -37,6 +37,7 @@ fun PhoneNumberInput(
     prefix: String,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
+    onClearFocus: () -> Unit = {},
     error: String = "",
     isEnabled: Boolean = true,
     isFlagClickable: Boolean = false,
@@ -59,6 +60,7 @@ fun PhoneNumberInput(
         value = value,
         isEnabled = isEnabled,
         errorText = error,
+        onClearFocus = onClearFocus,
         leadingIcon = {
             Row(
                 modifier = Modifier
