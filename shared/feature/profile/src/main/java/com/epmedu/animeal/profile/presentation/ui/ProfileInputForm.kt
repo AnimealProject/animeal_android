@@ -17,9 +17,13 @@ import com.epmedu.animeal.profile.domain.model.flagEmoji
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailFocusCleared
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameFocusCleared
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberFocusCleared
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameFocusCleared
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
 import com.epmedu.animeal.resources.R
@@ -44,6 +48,7 @@ fun ProfileInputForm(
                 onValueChange = { onEvent(NameChanged(it)) },
                 error = nameError.asString(),
                 isEnabled = isFormEnabled,
+                onClearFocus = { onEvent(NameFocusCleared) },
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
             SurnameInput(
@@ -51,6 +56,7 @@ fun ProfileInputForm(
                 onValueChange = { onEvent(SurnameChanged(it)) },
                 error = surnameError.asString(),
                 isEnabled = isFormEnabled,
+                onClearFocus = { onEvent(SurnameFocusCleared) },
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
             EmailInput(
@@ -59,10 +65,16 @@ fun ProfileInputForm(
                 error = emailError.asString(),
                 imeAction = if (isPhoneNumberEnabled) ImeAction.Next else ImeAction.Done,
                 isEnabled = isFormEnabled,
+                onClearFocus = { onEvent(EmailFocusCleared) },
                 onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 onDone = { focusManager.clearFocus() }
             )
-            PhoneInput(onEvent, focusManager, onCountryClick)
+            PhoneInput(
+                onEvent = onEvent,
+                focusManager = focusManager,
+                onClearFocus = { onEvent(PhoneNumberFocusCleared) },
+                onCountryClick = onCountryClick
+            )
             BirthDateInput(
                 value = profile.birthDate,
                 onValueChange = { onEvent(BirthDateChanged(it)) },
@@ -77,6 +89,7 @@ fun ProfileInputForm(
 private fun ProfileState.PhoneInput(
     onEvent: (ProfileInputFormEvent) -> Unit,
     focusManager: FocusManager,
+    onClearFocus: () -> Unit = {},
     onCountryClick: (() -> Unit)? = null,
 ) {
     PhoneNumberInput(
@@ -90,6 +103,7 @@ private fun ProfileState.PhoneInput(
         numberLength = numberLength,
         useNumberFormatter = region == Region.GE,
         onValueChange = { onEvent(PhoneNumberChanged(it)) },
+        onClearFocus = onClearFocus,
         error = phoneNumberError.asString(),
         isEnabled = isPhoneNumberEnabled,
         isFlagClickable = isCountrySelectorClickable,

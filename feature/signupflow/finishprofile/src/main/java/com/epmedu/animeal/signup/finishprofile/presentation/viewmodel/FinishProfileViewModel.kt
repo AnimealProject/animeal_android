@@ -7,6 +7,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
+import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
@@ -54,6 +55,7 @@ internal class FinishProfileViewModel @Inject constructor(
     validateNameUseCase = validateNameUseCase,
     validateSurnameUseCase = validateSurnameUseCase,
     validateEmailUseCase = validateEmailUseCase,
+    validatePhoneNumberUseCase = validatePhoneNumberUseCase,
     validateBirthDateUseCase = validateBirthDateUseCase
 ),
     ActionDelegate by actionDelegate,
@@ -94,10 +96,7 @@ internal class FinishProfileViewModel @Inject constructor(
         updateState {
             copy(
                 profile = profile.copy(phoneNumber = event.phoneNumber),
-                phoneNumberError = validatePhoneNumberUseCase(
-                    event.phoneNumber,
-                    state.phoneNumberDigitsCount
-                )
+                phoneNumberError = UiText.Empty
             )
         }
     }
