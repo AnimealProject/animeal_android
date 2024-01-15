@@ -1,4 +1,4 @@
-package com.epmedu.animeal.api.storage
+package com.epmedu.animeal.networkstorage.data.api
 
 import android.net.Uri
 import android.webkit.URLUtil
@@ -16,7 +16,7 @@ internal class StorageApiImpl(
 ) : StorageApi,
     TokenExpirationHandler by errorHandler {
 
-    private val cachedImageUrls = mutableMapOf<String, String>()
+    private val cachedFileUrls = mutableMapOf<String, String>()
 
     override suspend fun uploadFile(fileName: String, uri: Uri): ApiResult<Unit> {
         return suspendCancellableCoroutine {
@@ -37,19 +37,19 @@ internal class StorageApiImpl(
         }
     }
 
-    override suspend fun parseAmplifyUrl(imageId: String): String {
-        val cachedUrl = cachedImageUrls[imageId]
+    override suspend fun getUrlFromFileName(fileName: String): String {
+        val cachedUrl = cachedFileUrls[fileName]
         return when {
             cachedUrl != null -> cachedUrl
-            URLUtil.isValidUrl(imageId) -> imageId
+            URLUtil.isValidUrl(fileName) -> fileName
             else -> suspendCancellableCoroutine {
                 val options = StorageGetUrlOptions.builder().build()
                 Amplify.Storage.getUrl(
-                    imageId,
+                    fileName,
                     options,
                     { result ->
                         resume(
-                            result.url.toString().also { cachedImageUrls[imageId] = it }
+                            result.url.toString().also { cachedFileUrls[fileName] = it }
                         )
                     },
                     {

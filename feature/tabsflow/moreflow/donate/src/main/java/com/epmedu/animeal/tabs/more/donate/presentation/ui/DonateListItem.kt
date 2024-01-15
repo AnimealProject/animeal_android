@@ -61,7 +61,8 @@ internal fun DonateListItem(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(donateInformation.iconUrl)
+                    .data(donateInformation.icon?.url)
+                    .diskCacheKey(donateInformation.icon?.name)
                     .build(),
                 modifier = Modifier.size(26.dp),
                 contentDescription = donateInformation.title
