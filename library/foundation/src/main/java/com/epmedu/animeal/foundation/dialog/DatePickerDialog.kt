@@ -39,6 +39,7 @@ fun DatePickerDialog(
             initialDate = date,
             allowedDateValidator = {
                 it.isBefore(LocalDate.now().plusDays(1))
+                it.isAfter(LocalDate.now().minusYears(150))
             }
         ) {
             onPickDate(it)

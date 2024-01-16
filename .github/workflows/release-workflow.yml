@@ -123,7 +123,7 @@ jobs:
         run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
 
       - name: Publish dev release to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
@@ -131,7 +131,7 @@ jobs:
           file: dev-release-${{ env.VERSION_NAME }}.apk/dev-release-${{ env.VERSION_NAME }}.apk
 
       - name: Publish qa release to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json
@@ -139,7 +139,7 @@ jobs:
           file: qa-release-${{ env.VERSION_NAME }}.apk/qa-release-${{ env.VERSION_NAME }}.apk
 
       - name: Publish prod release to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFile: service_account.json

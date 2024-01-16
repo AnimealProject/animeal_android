@@ -9,6 +9,7 @@ import com.epmedu.animeal.profile.domain.SaveProfileUseCase
 import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
+import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberChanged
 import com.epmedu.animeal.profile.presentation.viewmodel.BaseProfileViewModel
@@ -35,12 +36,14 @@ internal class ProfileViewModel @Inject constructor(
     validateNameUseCase: ValidateNameUseCase,
     validateSurnameUseCase: ValidateSurnameUseCase,
     validateEmailUseCase: ValidateEmailUseCase,
+    validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
     validateBirthDateUseCase: ValidateBirthDateUseCase,
     actionDelegate: ActionDelegate
 ) : BaseProfileViewModel(
     validateNameUseCase,
     validateSurnameUseCase,
     validateEmailUseCase,
+    validatePhoneNumberUseCase,
     validateBirthDateUseCase
 ),
     ActionDelegate by actionDelegate {
@@ -89,7 +92,7 @@ internal class ProfileViewModel @Inject constructor(
                 updateState { ProfileState(profile = lastSavedProfile) }
             }
             is Save -> {
-                saveChanges()
+                if (state.hasErrors().not()) saveChanges()
             }
         }
     }
