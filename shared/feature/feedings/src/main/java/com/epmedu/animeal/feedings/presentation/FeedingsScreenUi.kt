@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.DefaultConstants
-import com.epmedu.animeal.feedings.presentation.model.FeedStatus
-import com.epmedu.animeal.feedings.presentation.model.FeedingItem
+import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
+import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
@@ -18,7 +18,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun FeedingsScreenUI(
-    feedings: ImmutableList<FeedingItem>,
+    feedings: ImmutableList<FeedingModel>,
     onBack: () -> Unit,
     onEvent: (FeedingsScreenEvent) -> Unit,
 ) {
@@ -38,11 +38,11 @@ internal fun FeedingsScreenUI(
 private fun FeedingScreenPreview() {
     val title = "FeedSpot"
     val feedings = listOf(
-        FeedingItem(
+        FeedingModel(
             id = "0",
             title = title,
             user = DefaultConstants.EMPTY_STRING,
-            status = FeedStatus.OUTDATED,
+            status = FeedingModelStatus.OUTDATED,
             image = DefaultConstants.EMPTY_STRING,
             elapsedTime = "12 hours ago"
         ),
@@ -61,7 +61,7 @@ private fun FeedingScreenPreview() {
 private fun FeedingScreenEmptyPreview() {
     AnimealTheme {
         FeedingsScreenUI(
-            feedings = listOf<FeedingItem>().toImmutableList(),
+            feedings = listOf<FeedingModel>().toImmutableList(),
             {},
             {},
         )

@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feedings.presentation.model.FeedingItem
+import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun FeedingsScreenContentUI(
-    feedings: ImmutableList<FeedingItem>,
+    feedings: ImmutableList<FeedingModel>,
     padding: PaddingValues,
     onEvent: (FeedingsScreenEvent) -> Unit,
 ) {
@@ -49,7 +49,7 @@ private fun EmptyState(padding: PaddingValues) {
 
 @Composable
 private fun FeedingList(
-    feedings: List<FeedingItem>,
+    feedings: List<FeedingModel>,
     onEvent: (FeedingsScreenEvent) -> Unit
 ) {
     LazyColumn(
@@ -57,15 +57,15 @@ private fun FeedingList(
         contentPadding = PaddingValues(30.dp)
 
     ) {
-        items(feedings) { feedingItem ->
+        items(feedings) { feedingModel ->
             FeedingApproveItem(
-                title = feedingItem.title,
-                status = feedingItem.status,
-                feededBy = feedingItem.user,
-                feededDate = feedingItem.elapsedTime,
-                imageUrl = feedingItem.image,
-                onApporoveClick = { onEvent(FeedingsScreenEvent.FeedingApprove(feedingItem)) },
-                onRejectClick = { onEvent(FeedingsScreenEvent.FeedingReject(feedingItem)) }
+                title = feedingModel.title,
+                status = feedingModel.status,
+                feededBy = feedingModel.user,
+                feededDate = feedingModel.elapsedTime,
+                imageUrl = feedingModel.image,
+                onApporoveClick = { onEvent(FeedingsScreenEvent.FeedingApprove(feedingModel.id)) },
+                onRejectClick = { onEvent(FeedingsScreenEvent.FeedingReject(feedingModel.id)) }
             )
         }
     }

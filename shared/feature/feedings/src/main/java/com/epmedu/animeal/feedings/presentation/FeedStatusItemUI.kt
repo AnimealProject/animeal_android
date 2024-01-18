@@ -17,13 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feedings.presentation.model.FeedStatus
+import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 fun FeedStatusItem(
-    status: FeedStatus,
+    status: FeedingModelStatus,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -57,31 +57,27 @@ private fun FeedStatusItemPreview() {
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
         ) {
             FeedStatusItem(
-                status = FeedStatus.APPROVED
+                status = FeedingModelStatus.APPROVED
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.PENDING_ORANGE
+                status = FeedingModelStatus.PENDING_ORANGE
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.PENDING_GREY
+                status = FeedingModelStatus.PENDING_GREY
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.PENDING_RED
+                status = FeedingModelStatus.PENDING_RED
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.REJECTED
+                status = FeedingModelStatus.REJECTED
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.OUTDATED
-            )
-            Divider()
-            FeedStatusItem(
-                status = FeedStatus.IN_PROGRESS
+                status = FeedingModelStatus.OUTDATED
             )
         }
     }

@@ -1,67 +1,80 @@
 package com.epmedu.animeal.feedings.presentation.model
 
+import android.text.format.DateUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
-import com.epmedu.animeal.feedings.domain.usecase.GetFeedingHistoriesUseCase
-import com.epmedu.animeal.feedings.domain.usecase.GetFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.model.Feeding
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class FeedingsViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
-    private val getFeedingPointsUseCase: GetFeedingPointsUseCase,
-    private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
-    private val getFeedingHistoriesUseCase: GetFeedingHistoriesUseCase
+    private val getAllFeedingsUseCase: GetAllFeedingsUseCase,
+    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase
 ) : ViewModel(),
     StateDelegate<FeedingsState> by DefaultStateDelegate(initialState = FeedingsState()),
     ActionDelegate by actionDelegate {
 
     init {
-        viewModelScope.launch { collectFeedingPoints() }
+        viewModelScope.launch { collectFeedings() }
     }
 
     fun handleEvents(event: FeedingsScreenEvent) {
         when (event) {
             is FeedingsScreenEvent.FeedingApprove -> {
-                // TODO: implement me
+                // TODO: implement
             }
+
             is FeedingsScreenEvent.FeedingReject -> {
-                // TODO: implement me
+                // TODO: implement
             }
         }
     }
 
-    private suspend fun collectFeedingPoints() {
-        getFeedingPointsUseCase().collect { feedingPoints ->
-            val feedingItems = mutableListOf<FeedingItem>()
-            feedingPoints.map { feedingPoint ->
-                getFeedingInProgressUseCase(feedingPoint.id).combine(
-                    getFeedingHistoriesUseCase(feedingPoint.id, "approved") // TODO: get status from UI
-                ) { feedingInProgress, feedingHistories ->
-                    if (feedingInProgress != null) {
-                        feedingItems.add(feedingInProgress.toFeedingItem(feedingPoint))
-                    }
-                    feedingHistories.forEach { feedingHistory ->
-                        feedingItems.add(feedingHistory.toFeedingItem(feedingPoint))
-                    }
-                }.collect()
+    private suspend fun collectFeedings() {
+        getAllFeedingsUseCase().map { feedings ->
+            feedings.mapNotNull { feeding ->
+                getFeedingPointByIdUseCase(feeding.feedingPointId)?.let { feedingPoint ->
+                    createFeedingModel(feeding, feedingPoint)
+                }
             }
-            updateState {
-                copy(
-                    feedings = feedingItems.toImmutableList(),
-                )
-            }
+        }.collectLatest { feedings ->
+            updateState { copy(feedings = feedings.toImmutableList()) }
+        }
+    }
+
+    private fun createFeedingModel(
+        feeding: Feeding,
+        feedingPoint: FeedingPoint
+    ): FeedingModel? {
+        return feeding.status.toFeedingModelStatus(
+            deltaTime = System.currentTimeMillis() - feeding.date.time
+        )?.let {
+            FeedingModel(
+                id = feeding.id,
+                title = feedingPoint.title,
+                user = "${feeding.name} ${feeding.surname}",
+                status = it,
+                image = feedingPoint.images[0],
+                elapsedTime = DateUtils.getRelativeTimeSpanString(
+                    feeding.date.time,
+                    System.currentTimeMillis(),
+                    DateUtils.SECOND_IN_MILLIS
+                ).toString()
+            )
         }
     }
 }

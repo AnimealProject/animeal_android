@@ -5,11 +5,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointsByTypeUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -45,7 +45,7 @@ class DefaultFeedingPointHandler @Inject constructor(
     errorHandler: ErrorHandler,
     private val savedStateHandle: SavedStateHandle,
     private val getFeedingPointByPriorityUseCase: GetFeedingPointByPriorityUseCase,
-    private val getAllFeedingPointsUseCase: GetFeedingPointsByTypeUseCase,
+    private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getFeedingHistoriesUseCase: GetApprovedFeedingHistoriesUseCase,
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
@@ -141,10 +141,12 @@ class DefaultFeedingPointHandler @Inject constructor(
         }
     }
 
-    override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
-        val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
-        selectFeedingPoint(forcedPoint)
-        return forcedPoint
+    override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel? {
+        return getFeedingPointByIdUseCase(feedingPointId)?.let { feedingPoint ->
+            FeedingPointModel(feedingPoint).also {
+                selectFeedingPoint(it)
+            }
+        }
     }
 
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {

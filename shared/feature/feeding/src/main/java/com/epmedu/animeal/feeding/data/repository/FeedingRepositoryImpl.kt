@@ -1,17 +1,21 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 import com.amplifyframework.core.model.temporal.Temporal
+import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
+import com.epmedu.animeal.feeding.data.mapper.toData
 import com.epmedu.animeal.feeding.data.mapper.toDomain
+import com.epmedu.animeal.feeding.data.mapper.toFeeding
 import com.epmedu.animeal.feeding.domain.model.DomainFeedState
+import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
-import com.epmedu.animeal.feeding.domain.model.toFeedingStatus
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.users.domain.UsersRepository
@@ -53,12 +57,13 @@ internal class FeedingRepositoryImpl(
             feedingPointApi.getAllFeedingPoints(),
             favouriteRepository.getFavouriteFeedingPointIds(shouldFetch = false)
         ) { feedings, feedingPoints, favouriteIds ->
-            feedings.map { feeding ->
-                feeding.toDomain(
-                    isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
-                    feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
-                )
-            }
+            feedings.filter { it.status == FeedingStatus.inProgress }
+                .map { feeding ->
+                    feeding.toDomain(
+                        isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
+                        feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
+                    )
+                }
         }
             .flowOn(dispatchers.IO)
             .first()
@@ -68,7 +73,7 @@ internal class FeedingRepositoryImpl(
     override fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?> {
         return flow {
             emit(
-                feedingApi.getFeedingsInProgress(feedingPointId).data?.searchFeedings()?.items()
+                feedingApi.getFeedingsBy(feedingPointId).data?.searchFeedings()?.items()
             )
         }.flatMapLatest { feedings ->
             if (feedings.isNullOrEmpty()) {
@@ -89,11 +94,41 @@ internal class FeedingRepositoryImpl(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getFeedingHistories(feedingPointId: String, status: String?): Flow<List<FeedingHistory>> {
+    override fun getAllFeedings(): Flow<List<Feeding>> {
+        return flow {
+            val feedingHistories =
+                feedingApi.getAllFeedingHistories().data?.searchFeedingHistories()?.items()
+            val feedings = feedingApi.getAllFeedings().data?.searchFeedings()?.items()
+            val userIds = feedingHistories.orEmpty().map { it.userId() }
+                .plus(feedings.orEmpty().map { it.userId() })
+                .toSet()
+
+            emit(Triple(feedingHistories, feedings, userIds))
+        }.flatMapLatest { triple ->
+            usersRepository.getUsersById(triple.third).map { users ->
+                val usersMap = users.associateBy { it.id }
+
+                triple.first.orEmpty().mapNotNull { feeding ->
+                    feeding.toFeeding(feeder = usersMap[feeding.userId()])
+                } + triple.second.orEmpty().mapNotNull { feeding ->
+                    feeding.toFeeding(feeder = usersMap[feeding.userId()])
+                }
+            }
+        }
+            .flowOn(dispatchers.IO)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getFeedingHistoriesBy(
+        feedingPointId: String,
+        status: DomainFeedingStatus?
+    ): Flow<List<FeedingHistory>> {
         return flow {
             emit(
-                feedingApi.getFeedingHistories(feedingPointId, status).data?.searchFeedingHistories()
-                    ?.items()
+                feedingApi.getFeedingHistoriesBy(
+                    feedingPointId = feedingPointId,
+                    status = status?.toData()
+                ).data?.searchFeedingHistories()?.items()
             )
         }.flatMapLatest { feedingsHistories ->
             if (feedingsHistories.isNullOrEmpty()) {
@@ -104,19 +139,13 @@ internal class FeedingRepositoryImpl(
                 usersRepository.getUsersById(userIds).map { users ->
                     val usersMap = users.associateBy { it.id }
 
-                    feedingsHistories.map { feeding ->
-                        val user = usersMap[feeding.userId()]
-                        FeedingHistory(
-                            id = feeding.userId(),
-                            name = user?.name.orEmpty(),
-                            surname = user?.surname.orEmpty(),
-                            status = toFeedingStatus(feeding.status() ?: type.FeedingStatus.outdated),
-                            date = Temporal.DateTime(feeding.createdAt()).toDate()
-                        )
+                    feedingsHistories.mapNotNull { feeding ->
+                        feeding.     toDomain(feeder = usersMap[feeding.userId()])
                     }
                 }
             }
-        }.flowOn(dispatchers.IO)
+        }
+            .flowOn(dispatchers.IO)
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {

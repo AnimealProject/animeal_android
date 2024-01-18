@@ -10,6 +10,7 @@ import kotlin.math.ceil
 private const val DAY_MONTH_NAME_COMMA_YEAR_FORMATTER_PATTERN = "d MMM, yyyy"
 private const val DAY_MONTH_YEAR_DOT_FORMATTER_PATTERN = "dd.MM.yyyy"
 private const val MONTH_DAY_YEAR_SLASH_FORMATTER_PATTERN = "MM/dd/yyyy"
+private const val YEAR_MONTH_DAY_DASH_FORMATTER_PATTERN = "yyyy-MM-dd"
 private const val DAY_MONTH_YEAR_SLASH_FORMATTER_PATTERN = "dd/MM/yyyy"
 const val HOUR_IN_MILLIS = 3_600_000L
 const val MINUTE_IN_MILLIS = 60_000L
@@ -34,6 +35,10 @@ val DAY_MONTH_YEAR_SLASH_FORMATTER = DateTimeFormatter
 
 val MONTH_DAY_YEAR_SLASH_FORMATTER = DateTimeFormatter
     .ofPattern(MONTH_DAY_YEAR_SLASH_FORMATTER_PATTERN)
+    .withLocale(DEFAULT_LOCALE)
+
+val YEAR_MONTH_DAY_DASH_FORMATTER = DateTimeFormatter
+    .ofPattern(YEAR_MONTH_DAY_DASH_FORMATTER_PATTERN)
     .withLocale(DEFAULT_LOCALE)
 
 val DEFAULT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME

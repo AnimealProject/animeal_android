@@ -1,7 +1,7 @@
 package com.epmedu.animeal.feedings.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
-import com.epmedu.animeal.feedings.domain.usecase.GetFeedingHistoriesUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
 import dagger.Module
 import dagger.Provides
@@ -19,8 +19,8 @@ object FeedingsDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun provideGetFeedingHistoriesUseCase(
+    fun provideGetAllFeedingsUseCase(
         feedingRepository: FeedingRepository
-    ): GetFeedingHistoriesUseCase =
-        GetFeedingHistoriesUseCase(feedingRepository)
+    ): GetAllFeedingsUseCase =
+        GetAllFeedingsUseCase(feedingRepository)
 }

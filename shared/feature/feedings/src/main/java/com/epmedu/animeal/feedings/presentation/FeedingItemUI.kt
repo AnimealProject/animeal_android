@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.epmedu.animeal.feedings.presentation.model.FeedStatus
+import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -37,7 +37,7 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 @Composable
 fun FeedingApproveItem(
     title: String,
-    status: FeedStatus,
+    status: FeedingModelStatus,
     feededBy: String,
     feededDate: String,
     imageUrl: String,
@@ -137,7 +137,7 @@ fun FeedingApproveItemPreview() {
         Column {
             FeedingApproveItem(
                 longText,
-                FeedStatus.APPROVED,
+                FeedingModelStatus.APPROVED,
                 "Giorgi Abutibze",
                 "12 hours ago",
                 imgUrl,
@@ -146,7 +146,7 @@ fun FeedingApproveItemPreview() {
             )
             FeedingApproveItem(
                 shortText,
-                FeedStatus.REJECTED,
+                FeedingModelStatus.REJECTED,
                 "Giorgi Abutibze",
                 "12 hours ago",
                 imgUrl,

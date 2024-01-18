@@ -9,7 +9,7 @@ import com.epmedu.animeal.resources.R
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
-enum class FeedStatus(
+enum class FeedingModelStatus(
     @StringRes val titleId: Int,
     @DrawableRes val iconId: Int,
     val color: Color
@@ -20,20 +20,19 @@ enum class FeedStatus(
     PENDING_GREY(R.string.feed_status_pending, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
     REJECTED(R.string.feed_status_rejected, R.drawable.ic_rejected, CustomColor.StatusRed),
     OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusRed),
-    IN_PROGRESS(R.string.feeding_in_progress, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
 }
 
-fun FeedingStatus.toFeedStatus(deltaTime: Long): FeedStatus =
+fun FeedingStatus.toFeedingModelStatus(deltaTime: Long): FeedingModelStatus? =
     when (this) {
-        FeedingStatus.APPROVED -> FeedStatus.APPROVED
-        FeedingStatus.PENDING -> when (deltaTime) {
-            in 0..orangeTime -> FeedStatus.PENDING_GREY
-            in orangeTime..redTime -> FeedStatus.PENDING_ORANGE
-            else -> FeedStatus.PENDING_RED
+        FeedingStatus.Approved -> FeedingModelStatus.APPROVED
+        FeedingStatus.Pending -> when (deltaTime) {
+            in 0..orangeTime -> FeedingModelStatus.PENDING_GREY
+            in orangeTime..redTime -> FeedingModelStatus.PENDING_ORANGE
+            else -> FeedingModelStatus.PENDING_RED
         }
-        FeedingStatus.REJECTED -> FeedStatus.REJECTED
-        FeedingStatus.IN_PROGRESS -> FeedStatus.IN_PROGRESS
-        FeedingStatus.OUTDATED -> FeedStatus.OUTDATED
+        FeedingStatus.Rejected -> FeedingModelStatus.REJECTED
+        FeedingStatus.Outdated -> FeedingModelStatus.OUTDATED
+        else -> null
     }
 
 private val orangeTime = 30.minutes.inWholeMilliseconds

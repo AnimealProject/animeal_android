@@ -9,7 +9,10 @@ import StartFeedingMutation
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.epmedu.animeal.extensions.YEAR_MONTH_DAY_DASH_FORMATTER
+import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
+import type.FeedingStatus
 import type.SearchableFeedingFilterInput
 import type.SearchableFeedingHistoryFilterInput
 import type.SearchableStringFilterInput
@@ -18,6 +21,13 @@ internal class FeedingApiImpl(
     private val animealApi: AnimealApi
 ) : FeedingApi {
 
+    private val feedingsCreatedAtFilterInput = SearchableStringFilterInput.builder()
+        .gte(
+            LocalDate.now().minusDays(FEEDINGS_LIMIT_IN_DAYS)
+                .format(YEAR_MONTH_DAY_DASH_FORMATTER)
+        )
+        .build()
+
     override fun getUserFeedings(userId: String): Flow<List<Feeding>> {
         return animealApi.getModelList(
             predicate = Feeding.USER_ID.eq(userId),
@@ -25,40 +35,80 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun getFeedingsInProgress(feedingPointId: String): ApiResult<SearchFeedingsQuery.Data> {
-        val query = SearchFeedingsQuery.builder()
-            .filter(
-                SearchableFeedingFilterInput.builder()
-                    .feedingPointFeedingsId(
-                        SearchableStringFilterInput.builder()
-                            .eq(feedingPointId)
-                            .build()
-                    )
+    override suspend fun getAllFeedings(): ApiResult<SearchFeedingsQuery.Data> {
+        return animealApi.launchQuery(
+            query = SearchFeedingsQuery.builder()
+                .filter(
+                    SearchableFeedingFilterInput.builder()
+                        .createdAt(feedingsCreatedAtFilterInput)
+                        .build()
+                )
+                .build(),
+            responseClass = SearchFeedingsQuery.Data::class.java
+        )
+    }
+
+    override suspend fun getFeedingsBy(
+        feedingPointId: String,
+        status: FeedingStatus?
+    ): ApiResult<SearchFeedingsQuery.Data> {
+        val filterBuilder = SearchableFeedingFilterInput.builder()
+            .feedingPointFeedingsId(
+                SearchableStringFilterInput.builder()
+                    .eq(feedingPointId)
                     .build()
             )
+        status?.let {
+            filterBuilder.status(
+                SearchableStringFilterInput.builder()
+                    .eq(status.name)
+                    .build()
+            )
+        }
+        val query = SearchFeedingsQuery.builder()
+            .filter(filterBuilder.build())
             .build()
+
         return animealApi.launchQuery(
             query = query,
             responseClass = SearchFeedingsQuery.Data::class.java
         )
     }
 
-    override suspend fun getFeedingHistories(feedingPointId: String, status: String?):
-        ApiResult<SearchFeedingHistoriesQuery.Data> {
-        val searchFilterBuilder = SearchableFeedingHistoryFilterInput.builder()
-        searchFilterBuilder.feedingPointId(
-            SearchableStringFilterInput.builder()
-                .eq(feedingPointId)
-                .build()
+    override suspend fun getAllFeedingHistories(): ApiResult<SearchFeedingHistoriesQuery.Data> {
+        return animealApi.launchQuery(
+            query = SearchFeedingHistoriesQuery.builder()
+                .filter(
+                    SearchableFeedingHistoryFilterInput.builder()
+                        .createdAt(feedingsCreatedAtFilterInput)
+                        .build()
+                )
+                .build(),
+            responseClass = SearchFeedingHistoriesQuery.Data::class.java
         )
-        if (status != null) {
-            searchFilterBuilder.status(
+    }
+
+    override suspend fun getFeedingHistoriesBy(
+        feedingPointId: String,
+        status: FeedingStatus?
+    ): ApiResult<SearchFeedingHistoriesQuery.Data> {
+        val filterBuilder = SearchableFeedingHistoryFilterInput.builder()
+            .feedingPointId(
                 SearchableStringFilterInput.builder()
-                    .eq(status)
+                    .eq(feedingPointId)
+                    .build()
+            )
+        status?.name?.let {
+            filterBuilder.status(
+                SearchableStringFilterInput.builder()
+                    .eq(status.name)
                     .build()
             )
         }
-        val query = SearchFeedingHistoriesQuery.builder().filter(searchFilterBuilder.build()).build()
+        val query = SearchFeedingHistoriesQuery.builder()
+            .filter(filterBuilder.build())
+            .build()
+
         return animealApi.launchQuery(
             query = query,
             responseClass = SearchFeedingHistoriesQuery.Data::class.java
@@ -98,5 +148,6 @@ internal class FeedingApiImpl(
 
     private companion object {
         const val CANCEL_FEEDING_REASON = "reason"
+        const val FEEDINGS_LIMIT_IN_DAYS = 10L
     }
 }
