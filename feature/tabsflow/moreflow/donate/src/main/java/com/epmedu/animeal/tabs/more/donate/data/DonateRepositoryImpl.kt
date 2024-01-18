@@ -25,7 +25,7 @@ class DonateRepositoryImpl(
                         icon = with(bankAccount.cover) {
                             NetworkFile(
                                 name = this,
-                                url = storageApi.getUrlFromFileName(fileName = this)
+                                url = storageApi.getUrlFrom(fileName = this)
                             )
                         }
                     )

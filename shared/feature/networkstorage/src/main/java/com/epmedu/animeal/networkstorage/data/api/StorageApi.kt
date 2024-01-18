@@ -7,7 +7,7 @@ interface StorageApi {
 
     suspend fun uploadFile(fileName: String, uri: Uri): ApiResult<Unit>
 
-    suspend fun getUrlFromFileName(fileName: String): String
+    suspend fun getUrlFrom(fileName: String): String
 
     suspend fun deleteFile(fileName: String): ApiResult<Unit>
 }

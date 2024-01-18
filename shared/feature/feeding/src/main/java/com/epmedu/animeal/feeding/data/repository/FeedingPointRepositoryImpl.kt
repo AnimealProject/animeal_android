@@ -103,10 +103,10 @@ internal class FeedingPointRepositoryImpl(
 
     private suspend fun mapDataFeedingPointToDomain(feedingPoint: DataFeedingPoint): DomainFeedingPoint {
         return feedingPoint.toDomainFeedingPoint(
-            getImageFromName = { name ->
+            getImageFrom = { name ->
                 NetworkFile(
                     name = name,
-                    url = storageApi.getUrlFromFileName(name)
+                    url = storageApi.getUrlFrom(name)
                 )
             }
         )

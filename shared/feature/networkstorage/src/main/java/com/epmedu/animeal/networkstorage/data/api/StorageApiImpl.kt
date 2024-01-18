@@ -37,7 +37,7 @@ internal class StorageApiImpl(
         }
     }
 
-    override suspend fun getUrlFromFileName(fileName: String): String {
+    override suspend fun getUrlFrom(fileName: String): String {
         val cachedUrl = cachedFileUrls[fileName]
         return when {
             cachedUrl != null -> cachedUrl

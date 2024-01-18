@@ -11,7 +11,7 @@ import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedin
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal suspend fun DataFeedingPoint.toDomainFeedingPoint(
-    getImageFromName: suspend (String) -> NetworkFile?,
+    getImageFrom: suspend (fileName: String) -> NetworkFile?,
     isFavourite: Boolean = false
 ) = DomainFeedingPoint(
     id = id ?: EMPTY_STRING,
@@ -32,5 +32,5 @@ internal suspend fun DataFeedingPoint.toDomainFeedingPoint(
         latitude = location?.lat ?: 0.0,
         longitude = location?.lon ?: 0.0
     ),
-    image = images.getOrNull(0)?.let { getImageFromName(it) }
+    image = images.getOrNull(0)?.let { fileName -> getImageFrom(fileName) }
 )

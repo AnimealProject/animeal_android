@@ -60,7 +60,7 @@ internal class FeedingRepositoryImpl(
                     getImageFromName = { fileName ->
                         NetworkFile(
                             name = fileName,
-                            url = storageApi.getUrlFromFileName(fileName = fileName)
+                            url = storageApi.getUrlFrom(fileName = fileName)
                         )
                     },
                     isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
