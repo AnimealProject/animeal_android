@@ -5,11 +5,11 @@ import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 import type.FeedingStatus
-import type.FeedingStatus.inProgress
-import type.FeedingStatus.pending
 import type.FeedingStatus.approved
-import type.FeedingStatus.rejected
+import type.FeedingStatus.inProgress
 import type.FeedingStatus.outdated
+import type.FeedingStatus.pending
+import type.FeedingStatus.rejected
 
 interface FeedingApi {
 

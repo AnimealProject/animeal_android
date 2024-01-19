@@ -9,6 +9,7 @@ import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import kotlinx.coroutines.flow.Flow
 
+@Suppress("ComplexInterface")
 interface FeedingRepository {
 
     suspend fun getUserFeedings(): List<UserFeeding>

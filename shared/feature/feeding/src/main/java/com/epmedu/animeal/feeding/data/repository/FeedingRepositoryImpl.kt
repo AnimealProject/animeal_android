@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.epmedu.animeal.api.feeding.FeedingApi
@@ -34,6 +33,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
 internal class FeedingRepositoryImpl(
     private val dispatchers: Dispatchers,
@@ -62,17 +62,17 @@ internal class FeedingRepositoryImpl(
         ) { feedings, feedingPoints, favouriteIds ->
             feedings.filter { it.status == FeedingStatus.inProgress }
                 .map { feeding ->
-                feeding.toDomain(
-                    getImageFromName = { fileName ->
-                        NetworkFile(
-                            name = fileName,
-                            url = storageApi.getUrlFrom(fileName = fileName)
-                        )
-                    },
-                    isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
-                    feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
-                )
-            }
+                    feeding.toDomain(
+                        getImageFromName = { fileName ->
+                            NetworkFile(
+                                name = fileName,
+                                url = storageApi.getUrlFrom(fileName = fileName)
+                            )
+                        },
+                        isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
+                        feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
+                    )
+                }
         }
             .flowOn(dispatchers.IO)
             .first()
@@ -149,7 +149,7 @@ internal class FeedingRepositoryImpl(
                     val usersMap = users.associateBy { it.id }
 
                     feedingsHistories.mapNotNull { feeding ->
-                        feeding.     toDomain(feeder = usersMap[feeding.userId()])
+                        feeding.toDomain(feeder = usersMap[feeding.userId()])
                     }
                 }
             }
