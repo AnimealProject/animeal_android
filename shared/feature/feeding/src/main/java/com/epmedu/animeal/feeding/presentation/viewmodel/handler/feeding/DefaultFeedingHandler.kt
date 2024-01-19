@@ -112,27 +112,28 @@ class DefaultFeedingHandler(
     }
 
     private suspend fun startFeeding(id: String) {
-        val feedingPoint = getFeedingPointByIdUseCase(id)
-        updateState {
-            copy(
-                feedPoint = FeedingPointModel(feedingPoint)
+        getFeedingPointByIdUseCase(id)?.let { feedingPoint ->
+            updateState {
+                copy(
+                    feedPoint = FeedingPointModel(feedingPoint)
+                )
+            }
+            performFeedingAction(
+                action = startFeedingUseCase::invoke,
+                onSuccess = { currentFeedingPoint ->
+                    showSingleReservedFeedingPoint(currentFeedingPoint)
+                    startRoute()
+                    startTimer()
+                    updateFeedingState(
+                        feedPoint = FeedingPointModel(feedingPoint),
+                        feedingConfirmationState = FeedingStarted
+                    )
+                },
+                onError = {
+                    updateFeedingState(FeedingWasAlreadyBooked)
+                }
             )
         }
-        performFeedingAction(
-            action = startFeedingUseCase::invoke,
-            onSuccess = { currentFeedingPoint ->
-                showSingleReservedFeedingPoint(currentFeedingPoint)
-                startRoute()
-                startTimer()
-                updateFeedingState(
-                    feedPoint = FeedingPointModel(feedingPoint),
-                    feedingConfirmationState = FeedingStarted
-                )
-            },
-            onError = {
-                updateFeedingState(FeedingWasAlreadyBooked)
-            }
-        )
     }
 
     override fun CoroutineScope.cancelFeeding() {

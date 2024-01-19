@@ -12,5 +12,5 @@ interface FeedingPointRepository {
         predicate: (FeedingPoint) -> Boolean
     ): Flow<List<FeedingPoint>>
 
-    fun getFeedingPointById(id: String): FeedingPoint
+    fun getFeedingPointById(id: String): FeedingPoint?
 }

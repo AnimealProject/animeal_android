@@ -207,7 +207,7 @@ internal class HomeViewModel @Inject constructor(
             val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
             if (forcedFeedingPointId != null) {
                 savedStateHandle[FORCED_FEEDING_POINT_ID] = null
-                showFeedingPoint(forcedFeedingPointId).coordinates.let {
+                showFeedingPoint(forcedFeedingPointId)?.coordinates?.let {
                     collectLocations(Location(it.latitude(), it.longitude()))
                 }
             }
