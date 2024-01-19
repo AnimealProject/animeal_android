@@ -50,9 +50,8 @@ internal class FeedingPointRepositoryImpl(
         }
     }
 
-    override fun getFeedingPointById(id: String): FeedingPoint {
+    override fun getFeedingPointById(id: String): FeedingPoint? {
         return feedingPoints.find { it.id == id }
-            ?: throw IllegalArgumentException("No feeding point with id: $id")
     }
 
     private fun fetchFeedingPoints(): Flow<List<DomainFeedingPoint>> {

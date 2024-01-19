@@ -22,7 +22,7 @@ interface FeedingPointHandler {
 
     fun deselectFeedingPoint()
 
-    fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel
+    fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel?
 
     fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel)
 

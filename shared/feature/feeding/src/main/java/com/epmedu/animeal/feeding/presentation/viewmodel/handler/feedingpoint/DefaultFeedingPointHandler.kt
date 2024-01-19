@@ -141,10 +141,12 @@ class DefaultFeedingPointHandler @Inject constructor(
         }
     }
 
-    override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel {
-        val forcedPoint = FeedingPointModel(getFeedingPointByIdUseCase(feedingPointId))
-        selectFeedingPoint(forcedPoint)
-        return forcedPoint
+    override fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel? {
+        return getFeedingPointByIdUseCase(feedingPointId)?.let { feedingPoint ->
+            FeedingPointModel(feedingPoint).also {
+                selectFeedingPoint(it)
+            }
+        }
     }
 
     override fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
