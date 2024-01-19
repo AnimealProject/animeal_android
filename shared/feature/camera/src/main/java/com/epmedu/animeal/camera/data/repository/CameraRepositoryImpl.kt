@@ -1,10 +1,10 @@
 package com.epmedu.animeal.camera.data.repository
 
 import android.net.Uri
-import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.camera.domain.repository.CameraRepository
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.networkstorage.data.api.StorageApi
 
 internal class CameraRepositoryImpl(private val storageApi: StorageApi) : CameraRepository {
     override suspend fun uploadPhoto(fileName: String, fileUri: Uri): ActionResult<Unit> {

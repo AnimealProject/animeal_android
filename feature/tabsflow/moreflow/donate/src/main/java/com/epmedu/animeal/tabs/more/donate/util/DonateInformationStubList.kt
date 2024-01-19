@@ -6,13 +6,13 @@ import kotlinx.collections.immutable.persistentListOf
 internal val tbcBankInformation = DonateInformation(
     title = "TBC Bank",
     paymentCredentials = "2GE82983752093855555",
-    iconUrl = "",
+    icon = null,
 )
 
 internal val payPalInformation = DonateInformation(
     title = "PayPal",
     paymentCredentials = "donate.me@example.com",
-    iconUrl = "",
+    icon = null,
 )
 
 internal val donateInformationStubList = persistentListOf(

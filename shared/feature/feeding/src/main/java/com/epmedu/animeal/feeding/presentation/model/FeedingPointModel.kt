@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 import kotlinx.parcelize.Parcelize
@@ -22,7 +23,7 @@ data class FeedingPointModel(
     val isFavourite: Boolean = false,
     val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point,
-    val image: String = "",
+    val image: NetworkFile? = null,
     val feedings: @RawValue List<Feeding>? = null
 ) : Parcelable {
 
@@ -36,7 +37,7 @@ data class FeedingPointModel(
         feedingPoint.isFavourite,
         feedingPoint.remoteness,
         Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude),
-        feedingPoint.images[0]
+        feedingPoint.image
     )
 
     fun getDrawableRes(): Int =

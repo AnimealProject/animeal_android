@@ -1,7 +1,7 @@
 package com.epmedu.animeal.tabs.more.donate.di
 
 import com.epmedu.animeal.api.donate.DonateApi
-import com.epmedu.animeal.api.storage.StorageApi
+import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.tabs.more.donate.data.DonateRepositoryImpl
 import com.epmedu.animeal.tabs.more.donate.domain.repository.DonateRepository
 import dagger.Module
