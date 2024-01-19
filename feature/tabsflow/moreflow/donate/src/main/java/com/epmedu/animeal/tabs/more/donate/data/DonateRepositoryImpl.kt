@@ -1,7 +1,8 @@
 package com.epmedu.animeal.tabs.more.donate.data
 
 import com.epmedu.animeal.api.donate.DonateApi
-import com.epmedu.animeal.api.storage.StorageApi
+import com.epmedu.animeal.networkstorage.data.api.StorageApi
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.tabs.more.donate.data.mapper.toDomain
 import com.epmedu.animeal.tabs.more.donate.domain.DonateInformation
 import com.epmedu.animeal.tabs.more.donate.domain.repository.DonateRepository
@@ -21,7 +22,12 @@ class DonateRepositoryImpl(
                 .filter { it.enabled }
                 .map { bankAccount ->
                     bankAccount.toDomain(
-                        iconUrl = storageApi.parseAmplifyUrl(imageId = bankAccount.cover)
+                        icon = with(bankAccount.cover) {
+                            NetworkFile(
+                                name = this,
+                                url = storageApi.getUrlFrom(fileName = this)
+                            )
+                        }
                     )
                 }
                 .toImmutableList()

@@ -20,6 +20,8 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
 
+    implementation(projects.shared.feature.networkstorage)
+
     implementation(libs.amplify.core)
     implementation(libs.coil)
     implementation(libs.compose.ui)

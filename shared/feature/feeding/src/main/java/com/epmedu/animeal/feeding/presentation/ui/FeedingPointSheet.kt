@@ -53,6 +53,7 @@ import com.epmedu.animeal.foundation.text.MarkupText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.foundation.util.withLocalAlpha
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
 
@@ -98,7 +99,7 @@ fun FeedingPointSheetContent(
                 title = title,
                 status = feedStatus,
                 isFavourite = isFavourite,
-                imageUrl = image,
+                image = image,
                 onFavouriteChange = onFavouriteChange
             )
             FeedingPointDetails(
@@ -118,7 +119,7 @@ internal fun FeedingPointHeader(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
-    imageUrl: String,
+    image: NetworkFile?,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -136,8 +137,9 @@ internal fun FeedingPointHeader(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl)
+                    .data(image?.url)
                     .crossfade(true)
+                    .diskCacheKey(image?.name)
                     .build(),
                 contentScale = ContentScale.Crop,
                 contentDescription = title,
