@@ -68,12 +68,12 @@ internal class FeedingsViewModel @Inject constructor(
                 title = feedingPoint.title,
                 user = "${feeding.name} ${feeding.surname}",
                 status = it,
-                image = feedingPoint.images[0],
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
                     feeding.date.time,
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
-                ).toString()
+                ).toString(),
+                image = feedingPoint.image
             )
         }
     }

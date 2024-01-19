@@ -18,6 +18,8 @@ import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.networkstorage.data.api.StorageApi
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,6 +40,7 @@ internal class FeedingRepositoryImpl(
     private val authApi: AuthAPI,
     private val feedingApi: FeedingApi,
     private val feedingPointApi: FeedingPointApi,
+    private val storageApi: StorageApi,
     private val favouriteRepository: FavouriteRepository,
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
@@ -59,11 +62,17 @@ internal class FeedingRepositoryImpl(
         ) { feedings, feedingPoints, favouriteIds ->
             feedings.filter { it.status == FeedingStatus.inProgress }
                 .map { feeding ->
-                    feeding.toDomain(
-                        isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
-                        feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
-                    )
-                }
+                feeding.toDomain(
+                    getImageFromName = { fileName ->
+                        NetworkFile(
+                            name = fileName,
+                            url = storageApi.getUrlFrom(fileName = fileName)
+                        )
+                    },
+                    isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
+                    feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
+                )
+            }
         }
             .flowOn(dispatchers.IO)
             .first()

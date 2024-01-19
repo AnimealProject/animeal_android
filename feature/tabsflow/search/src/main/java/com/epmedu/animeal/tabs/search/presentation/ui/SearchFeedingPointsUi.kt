@@ -110,7 +110,7 @@ private fun LazyListScope.renderGroupedFeedingPoints(
                                 )
                             )
                         },
-                        imageUrl = feedingPoint.image,
+                        image = feedingPoint.image,
                         onClick = { onEvent(SearchScreenEvent.FeedingPointSelected(feedingPoint)) }
                     )
                 }

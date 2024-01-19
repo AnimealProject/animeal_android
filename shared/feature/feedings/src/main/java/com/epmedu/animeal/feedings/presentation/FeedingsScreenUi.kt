@@ -43,7 +43,6 @@ private fun FeedingScreenPreview() {
             title = title,
             user = DefaultConstants.EMPTY_STRING,
             status = FeedingModelStatus.OUTDATED,
-            image = DefaultConstants.EMPTY_STRING,
             elapsedTime = "12 hours ago"
         ),
     )

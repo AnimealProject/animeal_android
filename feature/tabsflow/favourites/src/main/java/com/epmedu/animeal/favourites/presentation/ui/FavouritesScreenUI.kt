@@ -278,7 +278,7 @@ private fun FavouritesList(
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
-                    imageUrl = feedingPoint.image,
+                    image = feedingPoint.image,
                     onClick = { onEvent(FeedingPointSelected(feedingPoint)) }
                 )
             }
@@ -300,8 +300,7 @@ private fun FavouritesScreenPreview() {
                 animalStatus = AnimalState.RED,
                 animalType = AnimalType.Dogs,
                 isFavourite = true,
-                location = MapLocation.Tbilisi,
-                images = emptyList(),
+                location = MapLocation.Tbilisi
             )
         ),
     )

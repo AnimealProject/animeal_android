@@ -1,12 +1,13 @@
 package com.epmedu.animeal.feeding.data.repository
 
 import com.epmedu.animeal.api.feeding.FeedingPointApi
-import com.epmedu.animeal.api.storage.StorageApi
 import com.epmedu.animeal.extensions.replaceElement
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.networkstorage.data.api.StorageApi
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import com.amplifyframework.datastore.generated.model.FeedingPoint as DataFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint as DomainFeedingPoint
 
 internal class FeedingPointRepositoryImpl(
@@ -63,10 +65,9 @@ internal class FeedingPointRepositoryImpl(
         ).combine(
             favouriteRepository.getFavouriteFeedingPointIds()
         ) { feedingPointsList, favouriteIds ->
-            feedingPointsList.map { dataFeedingPoint ->
-                dataFeedingPoint.copy(
-                    isFavourite = favouriteIds.any { it == dataFeedingPoint.id },
-                    images = listOf(storageApi.parseAmplifyUrl(dataFeedingPoint.images[0]))
+            feedingPointsList.map { domainFeedingPoint ->
+                domainFeedingPoint.copy(
+                    isFavourite = favouriteIds.any { it == domainFeedingPoint.id }
                 )
             }
         }.onEach {
@@ -77,14 +78,14 @@ internal class FeedingPointRepositoryImpl(
     private fun getFeedingPoints(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.getAllFeedingPoints().map { dataFeedingPoints ->
             dataFeedingPoints.map { dataFeedingPoint ->
-                dataFeedingPoint.toDomainFeedingPoint()
+                mapDataFeedingPointToDomain(dataFeedingPoint)
             }
         }
     }
 
     private fun subscribeToFeedingPointsCreation(): Flow<List<DomainFeedingPoint>> {
         return feedingPointApi.subscribeToFeedingPointsCreation().map { createdFeedingPoint ->
-            feedingPoints + createdFeedingPoint.toDomainFeedingPoint()
+            feedingPoints + mapDataFeedingPointToDomain(createdFeedingPoint)
         }
     }
 
@@ -93,10 +94,21 @@ internal class FeedingPointRepositoryImpl(
             feedingPoints.find { it.id == updatedFeedingPoint.id }?.let {
                 feedingPoints.replaceElement(
                     oldElement = it,
-                    newElement = updatedFeedingPoint.toDomainFeedingPoint()
+                    newElement = mapDataFeedingPointToDomain(updatedFeedingPoint)
                 )
             } ?: feedingPoints
         }
+    }
+
+    private suspend fun mapDataFeedingPointToDomain(feedingPoint: DataFeedingPoint): DomainFeedingPoint {
+        return feedingPoint.toDomainFeedingPoint(
+            getImageFrom = { name ->
+                NetworkFile(
+                    name = name,
+                    url = storageApi.getUrlFrom(name)
+                )
+            }
+        )
     }
 
     private fun subscribeToFeedingPointsDeletion(): Flow<List<DomainFeedingPoint>> {

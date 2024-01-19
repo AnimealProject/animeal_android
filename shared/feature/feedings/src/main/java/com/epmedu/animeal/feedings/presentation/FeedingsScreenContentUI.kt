@@ -63,7 +63,7 @@ private fun FeedingList(
                 status = feedingModel.status,
                 feededBy = feedingModel.user,
                 feededDate = feedingModel.elapsedTime,
-                imageUrl = feedingModel.image,
+                image = feedingModel.image,
                 onApporoveClick = { onEvent(FeedingsScreenEvent.FeedingApprove(feedingModel.id)) },
                 onRejectClick = { onEvent(FeedingsScreenEvent.FeedingReject(feedingModel.id)) }
             )

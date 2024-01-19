@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.library.navigation)
 
     implementation(projects.shared.feature.feeding)
+    implementation(projects.shared.feature.networkstorage)
     implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.users)
 

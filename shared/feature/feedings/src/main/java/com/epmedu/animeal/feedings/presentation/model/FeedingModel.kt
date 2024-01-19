@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import kotlinx.parcelize.Parcelize
 
 @Stable
@@ -15,6 +16,6 @@ data class FeedingModel(
     val title: String,
     val user: String,
     val status: FeedingModelStatus,
-    val image: String,
     val elapsedTime: String,
+    val image: NetworkFile? = null,
 ) : Parcelable

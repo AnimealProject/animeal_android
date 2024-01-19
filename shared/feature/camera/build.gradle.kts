@@ -12,11 +12,12 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
-    implementation(projects.library.api)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
+
+    implementation(projects.shared.feature.networkstorage)
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.viewmodel)

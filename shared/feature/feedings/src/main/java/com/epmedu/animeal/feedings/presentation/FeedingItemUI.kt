@@ -27,10 +27,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 
 @OptIn(ExperimentalMaterialApi::class)
 @Suppress("LongMethod")
@@ -40,7 +42,7 @@ fun FeedingApproveItem(
     status: FeedingModelStatus,
     feededBy: String,
     feededDate: String,
-    imageUrl: String,
+    image: NetworkFile?,
     onApporoveClick: () -> Unit,
     onRejectClick: () -> Unit
 ) {
@@ -72,7 +74,8 @@ fun FeedingApproveItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageUrl)
+                        .data(image?.url)
+                        .diskCacheKey(image?.name)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop,
@@ -130,8 +133,8 @@ fun FeedingApproveItem(
 fun FeedingApproveItemPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
-    val imgUrl = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
-        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+    val image = NetworkFile(EMPTY_STRING, "https://fastly.picsum.photos/id/866/200/300.jpg?" +
+        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI")
 
     AnimealTheme {
         Column {
@@ -140,7 +143,7 @@ fun FeedingApproveItemPreview() {
                 FeedingModelStatus.APPROVED,
                 "Giorgi Abutibze",
                 "12 hours ago",
-                imgUrl,
+                image,
                 {},
                 {}
             )
@@ -149,7 +152,7 @@ fun FeedingApproveItemPreview() {
                 FeedingModelStatus.REJECTED,
                 "Giorgi Abutibze",
                 "12 hours ago",
-                imgUrl,
+                image,
                 {},
                 {}
             )

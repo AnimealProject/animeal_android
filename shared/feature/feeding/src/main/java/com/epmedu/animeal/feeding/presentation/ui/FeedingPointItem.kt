@@ -28,11 +28,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 
 @OptIn(ExperimentalMaterialApi::class)
 @Suppress("LongMethod")
@@ -41,7 +43,7 @@ fun FeedingPointItem(
     title: String,
     status: FeedStatus,
     isFavourite: Boolean,
-    imageUrl: String,
+    image: NetworkFile?,
     onFavouriteChange: (Boolean) -> Unit,
     onClick: () -> Unit
 ) {
@@ -70,8 +72,9 @@ fun FeedingPointItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageUrl)
+                        .data(image?.url)
                         .crossfade(true)
+                        .diskCacheKey(image?.name)
                         .build(),
                     contentScale = ContentScale.Crop,
                     contentDescription = title,
@@ -110,8 +113,11 @@ fun FeedingPointItem(
 fun MoreScreenPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
-    val imgUrl = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
-        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+    val image = NetworkFile(
+        name = EMPTY_STRING,
+        url = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
+            "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+    )
 
     AnimealTheme {
         Column {
@@ -119,14 +125,14 @@ fun MoreScreenPreview() {
                 longText,
                 FeedStatus.RED,
                 isFavourite = true,
-                imgUrl,
+                image,
                 {}
             ) {}
             FeedingPointItem(
                 shortText,
                 FeedStatus.GREEN,
                 isFavourite = false,
-                imgUrl,
+                image,
                 {}
             ) {}
         }
