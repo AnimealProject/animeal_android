@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import com.epmedu.animeal.common.route.MoreRoute
-import com.epmedu.animeal.feedings.presentation.FeedingsScreen
 import com.epmedu.animeal.navigation.AnimatedScreenNavHost
 import com.epmedu.animeal.tabs.more.about.AboutScreen
 import com.epmedu.animeal.tabs.more.account.AccountScreen
@@ -30,7 +29,6 @@ fun MoreHost() {
         screen(MoreRoute.Profile.name) { ProfileScreen() }
         screen(MoreRoute.Donate.name) { DonateScreen() }
         screen(MoreRoute.FAQ.name) { FAQScreen() }
-        screen(MoreRoute.Feedings.name) { FeedingsScreen() }
         screen(MoreRoute.About.name) { AboutScreen() }
         screen(MoreRoute.Account.name) { AccountScreen() }
     }

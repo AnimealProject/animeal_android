@@ -15,7 +15,6 @@ dependencies {
     implementation(projects.feature.tabsflow.moreflow.more)
     implementation(projects.feature.tabsflow.moreflow.profile)
 
-    implementation(projects.shared.feature.feedings)
     implementation(projects.library.common)
     implementation(projects.library.navigation)
 }
