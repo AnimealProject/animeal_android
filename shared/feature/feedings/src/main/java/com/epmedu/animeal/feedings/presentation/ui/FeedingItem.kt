@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feedings.presentation
+package com.epmedu.animeal.feedings.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,42 +21,30 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
+import com.epmedu.animeal.resources.R
 
-@OptIn(ExperimentalMaterialApi::class)
-@Suppress("LongMethod")
 @Composable
-fun FeedingApproveItem(
-    title: String,
-    status: FeedingModelStatus,
-    feededBy: String,
-    feededDate: String,
-    image: NetworkFile?,
-    onApporoveClick: () -> Unit,
-    onRejectClick: () -> Unit
-) {
+fun FeedingItem(feedingModel: FeedingModel) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         border = BorderStroke(
             width = 1.dp,
             color = if (isSystemInDarkTheme()) Color.Black else CustomColor.Porcelain
-        ),
-        onClick = {
-            onApporoveClick()
-            onRejectClick()
-        }
+        )
     ) {
         Row(
             modifier = Modifier
@@ -74,12 +61,12 @@ fun FeedingApproveItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(image?.url)
-                        .diskCacheKey(image?.name)
+                        .data(feedingModel.image?.url)
+                        .diskCacheKey(feedingModel.image?.name)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop,
-                    contentDescription = title,
+                    contentDescription = feedingModel.title,
                 )
             }
             Column(
@@ -96,7 +83,7 @@ fun FeedingApproveItem(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = title,
+                        text = feedingModel.title,
                         modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.subtitle1,
                         fontWeight = FontWeight.Bold,
@@ -105,7 +92,7 @@ fun FeedingApproveItem(
                         maxLines = 2,
                     )
                     Text(
-                        text = feededDate,
+                        text = feedingModel.elapsedTime,
                         style = MaterialTheme.typography.body2,
                         overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colors.onBackground,
@@ -114,15 +101,16 @@ fun FeedingApproveItem(
                 }
 
                 Text(
-                    text = "Feeded by: $feededBy",
+                    text = stringResource(
+                        id = R.string.fed_by,
+                        feedingModel.feeder.ifEmpty { stringResource(R.string.unknown_user) }
+                    ),
                     style = MaterialTheme.typography.subtitle2,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colors.onSurface,
                     maxLines = 2,
                 )
-                FeedStatusItem(
-                    status = status,
-                )
+                FeedingStatusUi(status = feedingModel.status)
             }
         }
     }
@@ -130,32 +118,29 @@ fun FeedingApproveItem(
 
 @AnimealPreview
 @Composable
-fun FeedingApproveItemPreview() {
+fun FeedingItemPreview() {
     val longText = "Very very very very very very very very very long text"
     val shortText = "Short text"
-    val image = NetworkFile(EMPTY_STRING, "https://fastly.picsum.photos/id/866/200/300.jpg?" +
-        "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI")
+    val image = NetworkFile(
+        name = EMPTY_STRING,
+        url = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
+                "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+    )
 
     AnimealTheme {
         Column {
-            FeedingApproveItem(
-                longText,
-                FeedingModelStatus.APPROVED,
-                "Giorgi Abutibze",
-                "12 hours ago",
-                image,
-                {},
-                {}
-            )
-            FeedingApproveItem(
-                shortText,
-                FeedingModelStatus.REJECTED,
-                "Giorgi Abutibze",
-                "12 hours ago",
-                image,
-                {},
-                {}
-            )
+            FeedingModelStatus.values().forEachIndexed { index, status  ->
+                FeedingItem(
+                    feedingModel = FeedingModel(
+                        id = "$index",
+                        title = setOf(longText, shortText).elementAt(index % 2),
+                        feeder = "Giorgi Abutibze",
+                        status = status,
+                        elapsedTime = "12 hours ago",
+                        image = image
+                    )
+                )
+            }
         }
     }
 }

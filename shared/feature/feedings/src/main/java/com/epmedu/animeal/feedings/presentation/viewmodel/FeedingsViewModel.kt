@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feedings.presentation.model
+package com.epmedu.animeal.feedings.presentation.viewmodel
 
 import android.text.format.DateUtils
 import androidx.lifecycle.ViewModel
@@ -10,8 +10,8 @@ import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
-import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
-import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
+import com.epmedu.animeal.feedings.presentation.model.FeedingModel
+import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
@@ -32,19 +32,9 @@ internal class FeedingsViewModel @Inject constructor(
         viewModelScope.launch { collectFeedings() }
     }
 
-    fun handleEvents(event: FeedingsScreenEvent) {
-        when (event) {
-            is FeedingsScreenEvent.FeedingApprove -> {
-                // TODO: implement
-            }
-
-            is FeedingsScreenEvent.FeedingReject -> {
-                // TODO: implement
-            }
-        }
-    }
-
     private suspend fun collectFeedings() {
+        updateState { copy(isLoading = true) }
+
         getAllFeedingsUseCase().map { feedings ->
             feedings.mapNotNull { feeding ->
                 getFeedingPointByIdUseCase(feeding.feedingPointId)?.let { feedingPoint ->
@@ -52,7 +42,7 @@ internal class FeedingsViewModel @Inject constructor(
                 }
             }
         }.collectLatest { feedings ->
-            updateState { copy(feedings = feedings.toImmutableList()) }
+            updateState { copy(feedings = feedings.toImmutableList(), isLoading = false) }
         }
     }
 
@@ -66,7 +56,7 @@ internal class FeedingsViewModel @Inject constructor(
             FeedingModel(
                 id = feeding.id,
                 title = feedingPoint.title,
-                user = "${feeding.name} ${feeding.surname}",
+                feeder = "${feeding.name} ${feeding.surname}",
                 status = it,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
                     feeding.date.time,

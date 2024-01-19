@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feedings.presentation
+package com.epmedu.animeal.feedings.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
-fun FeedStatusItem(
+internal fun FeedingStatusUi(
     status: FeedingModelStatus,
     modifier: Modifier = Modifier,
 ) {
@@ -50,35 +50,23 @@ fun FeedStatusItem(
 
 @Composable
 @AnimealPreview
-private fun FeedStatusItemPreview() {
+private fun FeedingStatusUiPreview() {
     AnimealTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
-            FeedStatusItem(
-                status = FeedingModelStatus.APPROVED
-            )
+            FeedingStatusUi(status = FeedingModelStatus.APPROVED)
             Divider()
-            FeedStatusItem(
-                status = FeedingModelStatus.PENDING_ORANGE
-            )
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_ORANGE)
             Divider()
-            FeedStatusItem(
-                status = FeedingModelStatus.PENDING_GREY
-            )
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_GREY)
             Divider()
-            FeedStatusItem(
-                status = FeedingModelStatus.PENDING_RED
-            )
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_RED)
             Divider()
-            FeedStatusItem(
-                status = FeedingModelStatus.REJECTED
-            )
+            FeedingStatusUi(status = FeedingModelStatus.REJECTED)
             Divider()
-            FeedStatusItem(
-                status = FeedingModelStatus.OUTDATED
-            )
+            FeedingStatusUi(status = FeedingModelStatus.OUTDATED)
         }
     }
 }
