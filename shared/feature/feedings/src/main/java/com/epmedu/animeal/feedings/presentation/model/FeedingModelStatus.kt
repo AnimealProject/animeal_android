@@ -19,7 +19,7 @@ enum class FeedingModelStatus(
     PENDING_RED(R.string.feed_status_pending, R.drawable.ic_pending_red, CustomColor.StatusRed),
     PENDING_GREY(R.string.feed_status_pending, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
     REJECTED(R.string.feed_status_rejected, R.drawable.ic_rejected, CustomColor.StatusRed),
-    OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusRed),
+    OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusMaroon),
 }
 
 fun FeedingStatus.toFeedingModelStatus(deltaTime: Long): FeedingModelStatus? =
