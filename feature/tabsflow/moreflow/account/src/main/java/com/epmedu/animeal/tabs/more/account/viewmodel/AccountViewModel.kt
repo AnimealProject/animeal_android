@@ -12,6 +12,7 @@ import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Delete
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Logout
+import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.NavigatedToOnboarding
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.ToastShown
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ internal class AccountViewModel @Inject constructor(
             Logout -> logout()
             Delete -> delete()
             ToastShown -> clearToast()
+            NavigatedToOnboarding -> updateState { copy(isNavigatingToOnboarding = false) }
         }
     }
 
