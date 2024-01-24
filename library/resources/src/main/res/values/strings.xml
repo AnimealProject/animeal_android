@@ -78,6 +78,14 @@
     <string name="feed_status_yellow">Feeding in progress</string>
     <string name="feed_status_red">There is no food</string>
 
+    <string name="feed_status_approved">Approved</string>
+    <string name="feed_status_pending">Pending</string>
+    <string name="feed_status_rejected">Rejected</string>
+    <string name="feed_status_outdated">Outdated</string>
+
+    <string name="no_feedings">There is no items in the list yet</string>
+    <string name="fed_by">Fed by: %s</string>
+
     <string name="unknown_user">Unknown user</string>
     <string name="feeding_in_progress">Feeding in progress, %s left</string>
     <string name="unknown_time">unknown time</string>

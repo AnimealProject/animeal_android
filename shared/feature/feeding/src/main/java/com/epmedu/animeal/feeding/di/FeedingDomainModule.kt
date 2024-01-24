@@ -5,8 +5,8 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
-import com.epmedu.animeal.feeding.domain.usecase.GetFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
@@ -41,9 +41,9 @@ object FeedingDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGetFeedingHistoriesUseCase(
+    fun providesGetApprovedFeedingHistoriesUseCase(
         feedingRepository: FeedingRepository
-    ): GetFeedingHistoriesUseCase = GetFeedingHistoriesUseCase(feedingRepository)
+    ): GetApprovedFeedingHistoriesUseCase = GetApprovedFeedingHistoriesUseCase(feedingRepository)
 
     @ViewModelScoped
     @Provides

@@ -25,7 +25,10 @@ dependencies {
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
+    implementation(projects.library.navigation)
 
+    implementation(projects.shared.feature.feeding)
+    implementation(projects.shared.feature.networkstorage)
     implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.users)
 

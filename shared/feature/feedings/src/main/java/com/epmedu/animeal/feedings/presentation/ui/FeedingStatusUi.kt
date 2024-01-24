@@ -1,4 +1,4 @@
-package com.epmedu.animeal.feeding.presentation.ui
+package com.epmedu.animeal.feedings.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,13 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.feeding.presentation.model.FeedStatus
+import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
-fun FeedStatusItem(
-    status: FeedStatus,
+internal fun FeedingStatusUi(
+    status: FeedingModelStatus,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -50,23 +50,23 @@ fun FeedStatusItem(
 
 @Composable
 @AnimealPreview
-private fun FeedStatusItemPreview() {
+private fun FeedingStatusUiPreview() {
     AnimealTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
-            FeedStatusItem(
-                status = FeedStatus.GREEN
-            )
+            FeedingStatusUi(status = FeedingModelStatus.APPROVED)
             Divider()
-            FeedStatusItem(
-                status = FeedStatus.RED
-            )
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_ORANGE)
             Divider()
-            FeedStatusItem(
-                status = FeedStatus.YELLOW
-            )
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_GREY)
+            Divider()
+            FeedingStatusUi(status = FeedingModelStatus.PENDING_RED)
+            Divider()
+            FeedingStatusUi(status = FeedingModelStatus.REJECTED)
+            Divider()
+            FeedingStatusUi(status = FeedingModelStatus.OUTDATED)
         }
     }
 }
