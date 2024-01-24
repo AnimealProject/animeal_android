@@ -165,7 +165,7 @@ internal class HomeViewModel @Inject constructor(
                 }
 
                 if (feedingPointUpdate.feedingPoints.isNotEmpty()) {
-                    if (homeStateFlow.locationState !is LocationState.UndefinedLocation) {
+                    if (homeStateFlow.locationState !is LocationState.UndefinedLocation && nearestFeedingJob.isCompleted.not()) {
                         nearestFeedingJob.start()
                     } else {
                         nearestFeedingJob.cancel()
@@ -206,6 +206,7 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
             if (forcedFeedingPointId != null) {
+                nearestFeedingJob.cancel()
                 savedStateHandle[FORCED_FEEDING_POINT_ID] = null
                 showFeedingPoint(forcedFeedingPointId)?.coordinates?.let {
                     collectLocations(Location(it.latitude(), it.longitude()))
