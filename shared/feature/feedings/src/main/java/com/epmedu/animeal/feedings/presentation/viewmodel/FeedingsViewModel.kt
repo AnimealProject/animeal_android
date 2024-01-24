@@ -50,14 +50,16 @@ internal class FeedingsViewModel @Inject constructor(
         feeding: Feeding,
         feedingPoint: FeedingPoint
     ): FeedingModel? {
-        return feeding.status.toFeedingModelStatus(
+        val feedingStatus = feeding.status.toFeedingModelStatus(
             deltaTime = System.currentTimeMillis() - feeding.date.time
-        )?.let {
+        )
+
+        return if (feeding.feedingPointId == feedingPoint.id && feedingStatus != null) {
             FeedingModel(
                 id = feeding.id,
                 title = feedingPoint.title,
                 feeder = "${feeding.name} ${feeding.surname}",
-                status = it,
+                status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
                     feeding.date.time,
                     System.currentTimeMillis(),
@@ -65,6 +67,8 @@ internal class FeedingsViewModel @Inject constructor(
                 ).toString(),
                 image = feedingPoint.image
             )
+        } else {
+            null
         }
     }
 }
