@@ -12,6 +12,7 @@ import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.HIDDEN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.GoToOnboarding
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.ToastShown
 import com.epmedu.animeal.tabs.more.account.viewmodel.AccountToast
 import com.epmedu.animeal.tabs.more.account.viewmodel.AccountViewModel
@@ -43,6 +44,7 @@ fun AccountScreen() {
                 inclusive = true
             }
         }
+        viewModel.handleScreenEvent(GoToOnboarding)
     }
 
     AccountScreenUI(

@@ -11,6 +11,7 @@ import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Delete
+import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.GoToOnboarding
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.Logout
 import com.epmedu.animeal.tabs.more.account.AccountScreenEvent.ToastShown
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,7 @@ internal class AccountViewModel @Inject constructor(
             Logout -> logout()
             Delete -> delete()
             ToastShown -> clearToast()
+            GoToOnboarding -> updateState { copy(isNavigatingToOnboarding = false) }
         }
     }
 
