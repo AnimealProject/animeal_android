@@ -9,8 +9,7 @@ internal fun SearchFeedingHistoriesQuery.Item.toFeeding(feeder: User?): Feeding?
     return status()?.toDomain()?.let { status ->
         Feeding(
             id = id(),
-            name = feeder?.name.orEmpty(),
-            surname = feeder?.surname.orEmpty(),
+            feeder = feeder,
             status = status,
             date = Temporal.DateTime(createdAt()).toDate(),
             feedingPointId = feedingPointId()

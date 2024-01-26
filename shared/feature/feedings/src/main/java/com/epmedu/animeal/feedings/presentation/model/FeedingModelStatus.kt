@@ -14,6 +14,7 @@ enum class FeedingModelStatus(
     @DrawableRes val iconId: Int,
     val color: Color
 ) {
+    AUTO_APPROVED(R.string.feed_status_auto_approved, R.drawable.ic_approved, CustomColor.StatusGreen),
     APPROVED(R.string.feed_status_approved, R.drawable.ic_approved, CustomColor.StatusGreen),
     PENDING_ORANGE(R.string.feed_status_pending, R.drawable.ic_pending_orange, CustomColor.StatusYellow),
     PENDING_RED(R.string.feed_status_pending, R.drawable.ic_pending_red, CustomColor.StatusRed),
@@ -22,18 +23,23 @@ enum class FeedingModelStatus(
     OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusMaroon),
 }
 
-fun FeedingStatus.toFeedingModelStatus(deltaTime: Long): FeedingModelStatus? =
+fun FeedingStatus.toFeedingModelStatus(
+    deltaTime: Long,
+    isFeederTrusted: Boolean
+): FeedingModelStatus? =
     when (this) {
-        FeedingStatus.Approved -> FeedingModelStatus.APPROVED
+        FeedingStatus.Approved -> if (isFeederTrusted) FeedingModelStatus.AUTO_APPROVED else FeedingModelStatus.APPROVED
         FeedingStatus.Pending -> when (deltaTime) {
-            in 0..orangeTime -> FeedingModelStatus.PENDING_GREY
-            in orangeTime..redTime -> FeedingModelStatus.PENDING_ORANGE
-            else -> FeedingModelStatus.PENDING_RED
+            in greyTimeRange -> FeedingModelStatus.PENDING_GREY
+            in orangeTimeRange -> FeedingModelStatus.PENDING_ORANGE
+            in redTimeRange -> FeedingModelStatus.PENDING_RED
+            else -> FeedingModelStatus.OUTDATED
         }
         FeedingStatus.Rejected -> FeedingModelStatus.REJECTED
         FeedingStatus.Outdated -> FeedingModelStatus.OUTDATED
         else -> null
     }
 
-private val orangeTime = 30.minutes.inWholeMilliseconds
-private val redTime = 1.hours.inWholeMilliseconds
+private val greyTimeRange = 0..30.minutes.inWholeMilliseconds
+private val orangeTimeRange = 30.minutes.inWholeMilliseconds..1.hours.inWholeMilliseconds
+private val redTimeRange = 1.hours.inWholeMilliseconds..12.hours.inWholeMilliseconds

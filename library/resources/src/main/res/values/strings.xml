@@ -79,6 +79,7 @@
     <string name="feed_status_yellow">Feeding in progress</string>
     <string name="feed_status_red">There is no food</string>
 
+    <string name="feed_status_auto_approved">Auto-approved</string>
     <string name="feed_status_approved">Approved</string>
     <string name="feed_status_pending">Pending</string>
     <string name="feed_status_rejected">Rejected</string>
