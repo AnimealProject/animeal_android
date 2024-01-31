@@ -20,6 +20,9 @@ fun FeedingsScreen() {
 
     FeedingsScreenUI(
         state = state,
-        onBack = navigator::popBackStack
+        onBack = navigator::popBackStack,
+        onFilterClick = {
+            feedingsCategory -> viewModel.updateFeedingsCategory(feedingsCategory)
+        }
     )
 }

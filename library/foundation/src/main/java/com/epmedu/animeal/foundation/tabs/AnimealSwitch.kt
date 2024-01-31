@@ -36,10 +36,6 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
-private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"
-private const val INDICATOR_LEFT_TRANSITION_LABEL = "TAB_INDICATOR_LEFT"
-private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
-
 /**
  * Shows the bar that holds 2 tabs.
  *
@@ -81,81 +77,6 @@ fun AnimealSwitch(
                 onSelectTab(AnimalType.Cats)
                 currentAnimalType = AnimalType.Cats
             }
-        )
-    }
-}
-
-/**
- * Shows an indicator for the tab.
- *
- * @param tabPositions The list of [TabPosition]s from a [TabRow].
- * @param animalType The [AnimalType] that is currently selected.
- */
-@Composable
-private fun TabIndicator(
-    tabPositions: List<TabPosition>,
-    animalType: AnimalType
-) {
-    val transition = updateTransition(
-        targetState = animalType,
-        label = INDICATOR_TRANSITION_LABEL
-    )
-
-    val indicatorLeft by transition.animateDp(
-        label = INDICATOR_LEFT_TRANSITION_LABEL
-    ) { page ->
-        tabPositions[page.ordinal].left
-    }
-
-    val indicatorRight by transition.animateDp(
-        label = INDICATOR_RIGHT_TRANSITION_LABEL
-    ) { page ->
-        tabPositions[page.ordinal].right
-    }
-
-    Box(
-        Modifier
-            .wrapContentSize(align = Alignment.BottomStart)
-            .offset(x = indicatorLeft)
-            .width(indicatorRight - indicatorLeft)
-            .fillMaxHeight()
-            .padding(all = 2.dp)
-            .background(
-                color = MaterialTheme.colors.primary,
-                shape = RoundedCornerShape(9.dp)
-            )
-            .zIndex(-1f)
-    )
-}
-
-/**
- * Shows a tab.
- *
- * @param titleResId current Tab string resource id.
- * @param selected current tab selected state.
- * @param onClick Called when this tab is clicked.
- * @param modifier The [Modifier].
- */
-@Composable
-private fun AnimealSwitchTab(
-    @StringRes titleResId: Int,
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .padding(all = 2.dp)
-            .clip(shape = RoundedCornerShape(size = 9.dp))
-            .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = titleResId),
-            fontSize = 14.sp,
-            modifier = Modifier.zIndex(1f),
-            color = if (selected) Color.White else MaterialTheme.colors.onSurface
         )
     }
 }

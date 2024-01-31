@@ -11,6 +11,7 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
+import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -42,9 +43,21 @@ internal class FeedingsViewModel @Inject constructor(
                 }
             }
         }.collectLatest { feedings ->
-            updateState { copy(feedings = feedings.toImmutableList(), isLoading = false) }
+//            val feedingsFiltered = feedings.filter { state.feedingsCategory == toFilterCategory(it.status) }
+            updateState { copy(
+                feedings = feedings.toImmutableList(),
+                feedingsFiltered = feedings.toImmutableList(),//feedingsFiltered.toImmutableList(),
+                isLoading = false) }
         }
     }
+
+    private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
+        when(feedingStatus) {
+            FeedingModelStatus.APPROVED -> FeedingFilterCategory.APPROVED
+            FeedingModelStatus.PENDING_ORANGE, FeedingModelStatus.PENDING_RED, FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
+            FeedingModelStatus.REJECTED -> FeedingFilterCategory.REJECTED
+            FeedingModelStatus.OUTDATED -> FeedingFilterCategory.OUTDATED
+        }
 
     private fun createFeedingModel(
         feeding: Feeding,
@@ -69,6 +82,13 @@ internal class FeedingsViewModel @Inject constructor(
             )
         } else {
             null
+        }
+    }
+
+    fun updateFeedingsCategory(feedingsCategory: FeedingFilterCategory) {
+        updateState { copy(
+            feedingsCategory = feedingsCategory,
+            feedingsFiltered = feedings.toImmutableList()) //feedings.filter { feedingsCategory == toFilterCategory(it.status) }.toImmutableList())
         }
     }
 }
