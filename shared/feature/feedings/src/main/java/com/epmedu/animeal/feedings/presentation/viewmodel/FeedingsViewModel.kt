@@ -44,17 +44,22 @@ internal class FeedingsViewModel @Inject constructor(
             }
         }.collectLatest { feedings ->
             val feedingsFiltered = feedings.filter { state.feedingsCategory == toFilterCategory(it.status) }
-            updateState { copy(
-                feedings = feedings.toImmutableList(),
-                feedingsFiltered = feedingsFiltered.toImmutableList(),
-                isLoading = false) }
+            updateState {
+                copy(
+                    feedings = feedings.toImmutableList(),
+                    feedingsFiltered = feedingsFiltered.toImmutableList(),
+                    isLoading = false
+                )
+            }
         }
     }
 
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
-        when(feedingStatus) {
+        when (feedingStatus) {
             FeedingModelStatus.APPROVED -> FeedingFilterCategory.APPROVED
-            FeedingModelStatus.PENDING_RED, FeedingModelStatus.PENDING_ORANGE, FeedingModelStatus.PENDING_GREY  -> FeedingFilterCategory.PENDING
+            FeedingModelStatus.PENDING_RED,
+            FeedingModelStatus.PENDING_ORANGE,
+            FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
             FeedingModelStatus.REJECTED -> FeedingFilterCategory.REJECTED
             FeedingModelStatus.OUTDATED -> FeedingFilterCategory.OUTDATED
         }
@@ -86,9 +91,11 @@ internal class FeedingsViewModel @Inject constructor(
     }
 
     fun updateFeedingsCategory(feedingsCategory: FeedingFilterCategory) {
-        updateState { copy(
-            feedingsCategory = feedingsCategory,
-            feedingsFiltered = feedings.filter { feedingsCategory == toFilterCategory(it.status) }.toImmutableList())
+        updateState {
+            copy(
+                feedingsCategory = feedingsCategory,
+                feedingsFiltered = feedings.filter { feedingsCategory == toFilterCategory(it.status) }.toImmutableList()
+            )
         }
     }
 }

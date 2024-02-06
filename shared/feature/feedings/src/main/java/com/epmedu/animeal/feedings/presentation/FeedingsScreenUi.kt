@@ -77,8 +77,9 @@ fun FeedingsCategoryTab(
 ) {
     var selectedTab by remember { mutableStateOf(feedingsCategory) }
 
-    Column(modifier = Modifier
-        .padding(start = 30.dp, end = 30.dp, top = 20.dp)
+    Column(
+        modifier = Modifier
+            .padding(start = 30.dp, end = 30.dp, top = 20.dp)
     ) {
         Card(elevation = 5.dp, shape = RoundedCornerShape(9.dp)) {
             TabRow(
@@ -98,7 +99,8 @@ fun FeedingsCategoryTab(
                         onClick = {
                             selectedTab = type
                             onFilterClick(type)
-                        })
+                        }
+                    )
                 }
             }
         }

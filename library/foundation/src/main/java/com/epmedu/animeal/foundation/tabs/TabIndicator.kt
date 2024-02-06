@@ -20,20 +20,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.epmedu.animeal.foundation.tabs.model.AnimalType
 
 private const val INDICATOR_TRANSITION_LABEL = "TAB_INDICATOR"
 private const val INDICATOR_LEFT_TRANSITION_LABEL = "TAB_INDICATOR_LEFT"
 private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 
 /**
- * Shows an indicator for the tab.
+ * Shows an indicator for the tab based on a given Enum.
  *
  * @param tabPositions The list of [TabPosition]s from a [TabRow].
- * @param animalType The [AnimalType] that is currently selected.
+ * @param type The [Enum] type that is currently selected.
  */
 @Composable
-fun <T: Enum<T>> TabIndicator(
+fun <T : Enum<T>> TabIndicator(
     tabPositions: List<TabPosition>,
     type: T
 ) {
