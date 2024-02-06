@@ -78,7 +78,7 @@ fun FeedingsCategoryTab(
     var selectedTab by remember { mutableStateOf(feedingsCategory) }
 
     Column(modifier = Modifier
-        .padding(horizontal = 8.dp, vertical = 0.dp)
+        .padding(start = 30.dp, end = 30.dp, top = 20.dp)
     ) {
         Card(elevation = 5.dp, shape = RoundedCornerShape(9.dp)) {
             TabRow(
@@ -102,7 +102,11 @@ fun FeedingsCategoryTab(
                 }
             }
         }
-        FeedingList(feedings)
+        if (feedings.isEmpty()) {
+            EmptyState()
+        } else {
+            FeedingList(feedings)
+        }
     }
 }
 
@@ -130,7 +134,7 @@ private fun EmptyState() {
 private fun FeedingList(feedings: List<FeedingModel>) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(30.dp)
+        contentPadding = PaddingValues(vertical = 30.dp)
     ) {
         items(feedings) { feedingModel ->
             FeedingItem(feedingModel = feedingModel)
@@ -147,13 +151,16 @@ private fun FeedingScreenPreview() {
             id = "0",
             title = title,
             feeder = "Feeder",
-            status = FeedingModelStatus.values().getOrElse(it) { FeedingModelStatus.OUTDATED },
+            status = FeedingModelStatus.values().random(),
             elapsedTime = "12 hours ago"
         )
     }
     AnimealTheme {
         FeedingsScreenUI(
-            state = FeedingsState(feedings.toImmutableList()),
+            state = FeedingsState(
+                feedings = feedings.toImmutableList(),
+                feedingsFiltered = feedings.toImmutableList(),
+            ),
             onBack = {},
             onFilterClick = {}
         )
