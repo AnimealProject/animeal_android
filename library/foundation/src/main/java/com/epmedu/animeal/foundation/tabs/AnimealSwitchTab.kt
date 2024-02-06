@@ -1,7 +1,6 @@
 package com.epmedu.animeal.foundation.tabs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -38,7 +37,6 @@ fun AnimealSwitchTab(
         modifier = modifier
             .padding(all = 2.dp)
             .clip(shape = RoundedCornerShape(size = 9.dp))
-//            .background(if (selected) Color.White else MaterialTheme.colors.secondary)
             .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
