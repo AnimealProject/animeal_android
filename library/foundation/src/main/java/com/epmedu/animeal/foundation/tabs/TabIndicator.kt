@@ -1,6 +1,5 @@
 package com.epmedu.animeal.foundation.tabs
 
-import android.util.Log
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
@@ -27,16 +26,14 @@ private const val INDICATOR_RIGHT_TRANSITION_LABEL = "TAB_INDICATOR_RIGHT"
 
 /**
  * Shows an indicator for the tab based on a given Enum.
- *
  * @param tabPositions The list of [TabPosition]s from a [TabRow].
  * @param type The [Enum] type that is currently selected.
  */
 @Composable
 fun <T : Enum<T>> TabIndicator(
     tabPositions: List<TabPosition>,
-    type: T
+    type: T,
 ) {
-    Log.d("SADFSADF", "tabPositions: $tabPositions")
     val transition = updateTransition(
         targetState = type,
         label = INDICATOR_TRANSITION_LABEL
