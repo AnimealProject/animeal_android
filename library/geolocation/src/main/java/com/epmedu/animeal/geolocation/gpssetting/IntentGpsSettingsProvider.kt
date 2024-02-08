@@ -31,6 +31,7 @@ internal class IntentGpsSettingsProvider(
             }
         )
 
+        trySend(gpsSettingState)
         gnssStatusCompat.registerCallback()
 
         awaitClose { gnssStatusCompat.unregisterCallback() }
