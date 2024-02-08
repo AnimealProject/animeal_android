@@ -24,7 +24,7 @@ interface FeedingPointHandler {
 
     fun CoroutineScope.showFeedingPoint(feedingPointId: String): FeedingPointModel
 
-    fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel)
+    suspend fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel)
 
     fun CoroutineScope.handleFeedingPointEvent(event: FeedingPointEvent)
 }
