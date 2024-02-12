@@ -10,6 +10,7 @@ import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
@@ -29,8 +30,16 @@ internal class FeedingsViewModel @Inject constructor(
     StateDelegate<FeedingsState> by DefaultStateDelegate(initialState = FeedingsState()),
     ActionDelegate by actionDelegate {
 
+    private var allFeedings: List<FeedingModel> = emptyList()
+
     init {
         viewModelScope.launch { collectFeedings() }
+    }
+
+    fun handleEvents(event: FeedingsScreenEvent) {
+        when (event) {
+            is FeedingsScreenEvent.UpdateCategoryEvent -> updateFeedingsCategory(event.category)
+        }
     }
 
     private suspend fun collectFeedings() {
@@ -43,11 +52,12 @@ internal class FeedingsViewModel @Inject constructor(
                 }
             }
         }.collectLatest { feedings ->
-            val feedingsFiltered = feedings.filter { state.feedingsCategory == toFilterCategory(it.status) }
+            allFeedings = feedings
             updateState {
                 copy(
-                    feedings = feedings.toImmutableList(),
-                    feedingsFiltered = feedingsFiltered.toImmutableList(),
+                    feedingsFiltered = feedings.filter {
+                        state.feedingsCategory == toFilterCategory(it.status)
+                    }.toImmutableList(),
                     isLoading = false
                 )
             }
@@ -90,12 +100,16 @@ internal class FeedingsViewModel @Inject constructor(
         }
     }
 
-    fun updateFeedingsCategory(feedingsCategory: FeedingFilterCategory) {
-        updateState {
-            copy(
-                feedingsCategory = feedingsCategory,
-                feedingsFiltered = feedings.filter { feedingsCategory == toFilterCategory(it.status) }.toImmutableList()
-            )
+    private fun updateFeedingsCategory(feedingsCategory: FeedingFilterCategory) {
+        if (allFeedings.isNotEmpty() && state.isLoading.not()) {
+            updateState {
+                copy(
+                    feedingsCategory = feedingsCategory,
+                    feedingsFiltered = allFeedings.filter {
+                        feedingsCategory == toFilterCategory(it.status)
+                    }.toImmutableList()
+                )
+            }
         }
     }
 }

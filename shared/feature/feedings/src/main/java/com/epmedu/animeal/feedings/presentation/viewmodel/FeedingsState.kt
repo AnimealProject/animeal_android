@@ -5,7 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class FeedingsState(
-    val feedings: ImmutableList<FeedingModel> = persistentListOf(),
     val feedingsFiltered: ImmutableList<FeedingModel> = persistentListOf(),
     val isLoading: Boolean = false,
     val feedingsCategory: FeedingFilterCategory = FeedingFilterCategory.PENDING

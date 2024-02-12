@@ -23,7 +23,7 @@ fun FeedingsScreen() {
         onBack = navigator::popBackStack,
         onFilterClick = {
                 feedingsCategory ->
-            viewModel.updateFeedingsCategory(feedingsCategory)
+            viewModel.handleEvents(FeedingsScreenEvent.UpdateCategoryEvent(feedingsCategory))
         }
     )
 }

@@ -58,7 +58,7 @@ internal fun FeedingsScreenUI(
                 LoadingState()
             }
 
-            state.feedings.isEmpty() -> {
+            state.feedingsFiltered.isEmpty() -> {
                 EmptyState()
             }
 
@@ -92,16 +92,38 @@ fun FeedingsCategoryTab(
                 },
                 divider = {}
             ) {
-                FeedingFilterCategory.values().forEach { type ->
-                    AnimealSwitchTab(
-                        titleResId = type.title,
-                        selected = selectedTab == type,
-                        onClick = {
-                            selectedTab = type
-                            onFilterClick(type)
-                        }
-                    )
-                }
+                AnimealSwitchTab(
+                    titleResId = FeedingFilterCategory.PENDING.title,
+                    selected = selectedTab == FeedingFilterCategory.PENDING,
+                    onClick = {
+                        selectedTab = FeedingFilterCategory.PENDING
+                        onFilterClick(FeedingFilterCategory.PENDING)
+                    }
+                )
+                AnimealSwitchTab(
+                    titleResId = FeedingFilterCategory.APPROVED.title,
+                    selected = selectedTab == FeedingFilterCategory.APPROVED,
+                    onClick = {
+                        selectedTab = FeedingFilterCategory.APPROVED
+                        onFilterClick(FeedingFilterCategory.APPROVED)
+                    }
+                )
+                AnimealSwitchTab(
+                    titleResId = FeedingFilterCategory.REJECTED.title,
+                    selected = selectedTab == FeedingFilterCategory.REJECTED,
+                    onClick = {
+                        selectedTab = FeedingFilterCategory.REJECTED
+                        onFilterClick(FeedingFilterCategory.REJECTED)
+                    }
+                )
+                AnimealSwitchTab(
+                    titleResId = FeedingFilterCategory.OUTDATED.title,
+                    selected = selectedTab == FeedingFilterCategory.OUTDATED,
+                    onClick = {
+                        selectedTab = FeedingFilterCategory.OUTDATED
+                        onFilterClick(FeedingFilterCategory.OUTDATED)
+                    }
+                )
             }
         }
         if (feedings.isEmpty()) {
@@ -160,7 +182,6 @@ private fun FeedingScreenPreview() {
     AnimealTheme {
         FeedingsScreenUI(
             state = FeedingsState(
-                feedings = feedings.toImmutableList(),
                 feedingsFiltered = feedings.toImmutableList(),
             ),
             onBack = {},
