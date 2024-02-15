@@ -37,7 +37,6 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -53,34 +52,36 @@ internal fun FeedingsScreenUI(
                 BackButton(onClick = onBack)
             }
         )
-        when {
-            state.isLoading -> {
-                LoadingState()
-            }
+        Box(
+            modifier = Modifier
+                .padding(start = 25.dp, end = 25.dp, top = 20.dp)
+        ) {
+            when {
+                state.isLoading -> {
+                    LoadingState()
+                }
 
-            state.feedingsFiltered.isEmpty() -> {
-                EmptyState()
-            }
+                state.feedingsFiltered.isEmpty() -> {
+                    EmptyState()
+                }
 
-            else -> {
-                FeedingsCategoryTab(state.feedingsFiltered, state.feedingsCategory, onFilterClick)
+                else -> {
+                    FeedingList(state.feedingsFiltered)
+                }
             }
+            FeedingsCategoryTab(state.feedingsCategory, onFilterClick)
         }
     }
 }
 
 @Composable
 fun FeedingsCategoryTab(
-    feedings: ImmutableList<FeedingModel>,
     feedingsCategory: FeedingFilterCategory,
     onFilterClick: (FeedingFilterCategory) -> Unit
 ) {
     var selectedTab by remember { mutableStateOf(feedingsCategory) }
 
-    Column(
-        modifier = Modifier
-            .padding(start = 30.dp, end = 30.dp, top = 20.dp)
-    ) {
+    Column {
         Card(elevation = 5.dp, shape = RoundedCornerShape(9.dp)) {
             TabRow(
                 selectedTabIndex = selectedTab.ordinal,
@@ -126,11 +127,6 @@ fun FeedingsCategoryTab(
                 )
             }
         }
-        if (feedings.isEmpty()) {
-            EmptyState()
-        } else {
-            FeedingList(feedings)
-        }
     }
 }
 
@@ -158,7 +154,7 @@ private fun EmptyState() {
 private fun FeedingList(feedings: List<FeedingModel>) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 30.dp)
+        contentPadding = PaddingValues(top = 70.dp, bottom = 30.dp, start = 5.dp, end = 5.dp)
     ) {
         items(feedings) { feedingModel ->
             FeedingItem(feedingModel = feedingModel)
