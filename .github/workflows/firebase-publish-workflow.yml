@@ -1,4 +1,4 @@
-name: Release workflow
+name: Firebase publish workflow
 
 on:
   push:
@@ -109,16 +109,6 @@ jobs:
       - name: Download releases
         uses: actions/download-artifact@v3
 
-      - name: Create release tag
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: dev-release-${{ env.VERSION_NAME }}.apk/dev-release-${{ env.VERSION_NAME }}.apk,
-            qa-release-${{ env.VERSION_NAME }}.apk/qa-release-${{ env.VERSION_NAME }}.apk,
-            prod-release-${{ env.VERSION_NAME }}.apk/prod-release-${{ env.VERSION_NAME }}.apk
-          tag: ${{ env.VERSION_NAME }}
-          name: Release ${{ env.VERSION_NAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Google Service Account.json
         run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
 
@@ -145,19 +135,4 @@ jobs:
           serviceCredentialsFile: service_account.json
           groups: qa_team, developers
           file: prod-release-${{ env.VERSION_NAME }}.apk/prod-release-${{ env.VERSION_NAME }}.apk
-
-      - name: Increment build number
-        run: ./.github/scripts/increment.sh
-
-      - name: Commit files
-        run: |
-          git config --local user.email "balatayevvladislav@gmail.com"
-          git config --local user.name "Fileek"
-          git commit -m "Increment build version" -a
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
 
