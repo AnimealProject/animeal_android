@@ -93,38 +93,16 @@ fun FeedingsCategoryTab(
                 },
                 divider = {}
             ) {
-                AnimealSwitchTab(
-                    titleResId = FeedingFilterCategory.PENDING.title,
-                    selected = selectedTab == FeedingFilterCategory.PENDING,
-                    onClick = {
-                        selectedTab = FeedingFilterCategory.PENDING
-                        onFilterClick(FeedingFilterCategory.PENDING)
-                    }
-                )
-                AnimealSwitchTab(
-                    titleResId = FeedingFilterCategory.APPROVED.title,
-                    selected = selectedTab == FeedingFilterCategory.APPROVED,
-                    onClick = {
-                        selectedTab = FeedingFilterCategory.APPROVED
-                        onFilterClick(FeedingFilterCategory.APPROVED)
-                    }
-                )
-                AnimealSwitchTab(
-                    titleResId = FeedingFilterCategory.REJECTED.title,
-                    selected = selectedTab == FeedingFilterCategory.REJECTED,
-                    onClick = {
-                        selectedTab = FeedingFilterCategory.REJECTED
-                        onFilterClick(FeedingFilterCategory.REJECTED)
-                    }
-                )
-                AnimealSwitchTab(
-                    titleResId = FeedingFilterCategory.OUTDATED.title,
-                    selected = selectedTab == FeedingFilterCategory.OUTDATED,
-                    onClick = {
-                        selectedTab = FeedingFilterCategory.OUTDATED
-                        onFilterClick(FeedingFilterCategory.OUTDATED)
-                    }
-                )
+                FeedingFilterCategory.values().forEach { type ->
+                    AnimealSwitchTab(
+                        titleResId = type.title,
+                        selected = selectedTab == type,
+                        onClick = {
+                            selectedTab = type
+                            onFilterClick(type)
+                        }
+                    )
+                }
             }
         }
     }
