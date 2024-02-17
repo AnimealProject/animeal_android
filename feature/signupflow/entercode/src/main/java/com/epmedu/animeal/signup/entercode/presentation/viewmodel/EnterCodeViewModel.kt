@@ -21,6 +21,9 @@ import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NumberChanged
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ReadSMS
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ResendCode
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
@@ -60,23 +63,31 @@ internal class EnterCodeViewModel @Inject constructor(
         viewModelScope.launch { loadAuthenticationType() }
     }
 
-    fun resendCode() {
+    fun handleEvents(event: EnterCodeScreenEvent) {
+        when (event) {
+            is ScreenDisplayed -> loadingHandler.hideLoading()
+            is NumberChanged -> changeNumber(event.position, event.number)
+            is ResendCode -> resendCode()
+            is ReadSMS -> parseCodeFromSMS(event.message)
+        }
+    }
+
+    private fun parseCodeFromSMS(message: String) {
+        val code = message.filter { it.isDigit() }.map { it.digitToInt() }
+        updateState { copy(code = code.toImmutableList()) }
+    }
+
+    private fun changeNumber(
+        position: Int,
+        number: String?
+    ) {
+        updateState { copy(code = getNewCodeWithReplacedNumber(position, number).toImmutableList()) }
+    }
+
+    private fun resendCode() {
         updateState { copy(code = emptyCode(), isResendEnabled = false) }
         viewModelScope.launch { launchResendTimer() }
         viewModelScope.launch { sendCodeUseCase() }
-    }
-
-    fun changeDigit(
-        position: Int,
-        digit: Int?
-    ) {
-        updateState { copy(code = getNewCodeWithReplacedDigit(position, digit).toImmutableList()) }
-    }
-
-    fun handleEvents(event: EnterCodeScreenEvent) {
-        when (event) {
-            ScreenDisplayed -> loadingHandler.hideLoading()
-        }
     }
 
     private suspend fun getPhoneNumber() {
@@ -171,16 +182,23 @@ internal class EnterCodeViewModel @Inject constructor(
         }
     }
 
-    private fun getNewCodeWithReplacedDigit(
+    private fun getNewCodeWithReplacedNumber(
         position: Int,
-        newDigit: Int?
+        newNumber: String?
     ): List<Int?> {
-        return state.code.mapIndexed { index, currentDigit ->
-            when (index) {
-                position -> newDigit
-                else -> currentDigit
+        val code = state.code.toMutableList()
+
+        newNumber?.let {
+            // iterate through the digits of newNumber, discarding the part that does not fit
+            for (index in 0..newNumber.lastIndex - position - (newNumber.length - CODE_SIZE)) {
+                val codeIndex = position + index
+
+                code[codeIndex] = newNumber[index].digitToInt()
             }
+        } ?: run {
+            code[position] = null
         }
+        return code
     }
 
     companion object {

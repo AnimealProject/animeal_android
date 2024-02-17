@@ -22,7 +22,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun CodeRow(
     code: ImmutableList<Int?>,
     focusRequester: FocusRequester,
-    onDigitChange: (position: Int, digit: Int?) -> Unit,
+    onNumberChange: (position: Int, number: String?) -> Unit,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
 ) {
@@ -35,12 +35,14 @@ internal fun CodeRow(
         for (index in code.indices) {
             DigitField(
                 digit = code[index],
-                onDigitInput = { digit ->
-                    onDigitChange(index, digit)
-                    if (index < code.lastIndex) focusManager.moveFocus(FocusDirection.Next)
+                onNumberInput = { number ->
+                    onNumberChange(index, number)
+                    if (index < code.lastIndex && number.length == 1) {
+                        focusManager.moveFocus(FocusDirection.Next)
+                    }
                 },
                 onDigitRemove = {
-                    onDigitChange(index, null)
+                    onNumberChange(index, null)
                     if (index > 0) focusManager.moveFocus(FocusDirection.Previous)
                 },
                 modifier = if (index == 0) {
@@ -62,14 +64,14 @@ private fun CodeRowPreview() {
             CodeRow(
                 code = persistentListOf(1, 2, null, null, null, null),
                 focusRequester = FocusRequester(),
-                onDigitChange = { _, _ -> },
+                onNumberChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp)
             )
             Divider()
             CodeRow(
                 code = persistentListOf(1, 2, 3, 9, 5, 7),
                 focusRequester = FocusRequester(),
-                onDigitChange = { _, _ -> },
+                onNumberChange = { _, _ -> },
                 modifier = Modifier.padding(8.dp),
                 isError = true
             )

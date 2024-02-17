@@ -39,6 +39,8 @@ mapboxNavigation = "2.13.0"
 mapboxTurfMeasurement = "6.12.0"
 navigationCompose = "2.5.3"
 navigationComposeHilt = "1.0.0"
+playServicesAuth = "21.0.0"
+playServicesAuthApiPhone = "18.0.2"
 playServicesLocation = "21.0.1"
 richtext = "0.17.0"
 versions = "0.42.0"
@@ -62,6 +64,8 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-auth-api-phone = { module = "com.google.android.gms:play-services-auth-api-phone", version.ref = "playServicesAuthApiPhone" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }

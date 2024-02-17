@@ -29,7 +29,7 @@ internal fun EnterCodeScreenUi(
     state: EnterCodeState,
     focusRequester: FocusRequester,
     onBack: () -> Unit,
-    onDigitChange: (position: Int, digit: Int?) -> Unit,
+    onNumberChange: (position: Int, digit: String?) -> Unit,
     onResend: () -> Unit
 ) {
     Scaffold(
@@ -60,7 +60,7 @@ internal fun EnterCodeScreenUi(
                 code = state.code,
                 isError = state.isError,
                 focusRequester = focusRequester,
-                onDigitChange = onDigitChange
+                onNumberChange = onNumberChange
             )
             Spacer(modifier = Modifier.weight(1f))
             ResendButton(
@@ -86,7 +86,7 @@ private fun EnterCodeScreenPreview() {
             ),
             focusRequester = FocusRequester(),
             onBack = {},
-            onDigitChange = { _, _ -> },
+            onNumberChange = { _, _ -> },
             onResend = {}
         )
     }

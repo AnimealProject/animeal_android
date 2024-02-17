@@ -13,7 +13,11 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NumberChanged
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ReadSMS
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ResendCode
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
+import com.epmedu.animeal.signup.entercode.presentation.ui.SMSReader
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel
@@ -31,19 +35,23 @@ fun EnterCodeScreen() {
     val onBack: () -> Unit = remember {
         { navigator.popBackStack() }
     }
-    val onDigitChange: (position: Int, digit: Int?) -> Unit = remember {
-        { position, digit ->
-            viewModel.changeDigit(position, digit)
+    val onNumberChange: (position: Int, number: String?) -> Unit = remember {
+        { position, number ->
+            viewModel.handleEvents(NumberChanged(position, number))
         }
     }
+
+    SMSReader(
+        onSMS = { sms -> viewModel.handleEvents(ReadSMS(sms)) }
+    )
 
     EnterCodeScreenUi(
         state = state,
         focusRequester = focusRequester,
         onBack = onBack,
-        onDigitChange = onDigitChange,
+        onNumberChange = onNumberChange,
         onResend = {
-            viewModel.resendCode()
+            viewModel.handleEvents(ResendCode)
             focusRequester.requestFocus()
         }
     )
@@ -54,6 +62,7 @@ fun EnterCodeScreen() {
                 NavigateToFinishProfile -> {
                     navigator.navigate(SignUpRoute.FinishProfile.name)
                 }
+
                 NavigateToHomeScreen -> {
                     navigator.navigateToTabs()
                 }
