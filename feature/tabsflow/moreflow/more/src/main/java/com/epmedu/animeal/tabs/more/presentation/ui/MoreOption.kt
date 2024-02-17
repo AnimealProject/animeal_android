@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.ui
+package com.epmedu.animeal.tabs.more.presentation.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth

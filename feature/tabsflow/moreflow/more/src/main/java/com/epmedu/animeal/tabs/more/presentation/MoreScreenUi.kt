@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more
+package com.epmedu.animeal.tabs.more.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,26 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.common.route.MoreRoute
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.more.ui.MoreOption
+import com.epmedu.animeal.tabs.more.presentation.model.MoreOption
+import com.epmedu.animeal.tabs.more.presentation.ui.MoreOption
+import com.epmedu.animeal.tabs.more.presentation.viewmodel.MoreState
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun MoreScreenUi(
+    state: MoreState,
     onNavigate: (String) -> Unit,
 ) {
-    val options = listOf(
-        R.string.page_profile to MoreRoute.Profile,
-        R.string.page_donate to MoreRoute.Donate,
-        R.string.page_faq to MoreRoute.FAQ,
-        R.string.page_about_detailed to MoreRoute.About,
-        R.string.page_account to MoreRoute.Account,
-    )
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -48,10 +43,10 @@ internal fun MoreScreenUi(
                 .padding(top = 12.dp, bottom = 32.dp)
         ) {
             LazyColumn {
-                items(options) {
+                items(state.options) { option ->
                     MoreOption(
-                        title = stringResource(id = it.first),
-                        onClick = { onNavigate(it.second.name) }
+                        title = stringResource(id = option.stringResource),
+                        onClick = { onNavigate(option.route.name) }
                     )
                 }
             }
@@ -64,7 +59,13 @@ internal fun MoreScreenUi(
 private fun MoreScreenPreview() {
     AnimealTheme {
         MoreScreenUi(
-            onNavigate = {},
+            state = MoreState(
+                options = persistentListOf(
+                    MoreOption.Profile,
+                    MoreOption.Feedings
+                )
+            ),
+            onNavigate = {}
         )
     }
 }

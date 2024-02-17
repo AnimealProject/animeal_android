@@ -17,4 +17,6 @@ dependencies {
 
     implementation(projects.library.common)
     implementation(projects.library.navigation)
+
+    implementation(projects.shared.feature.feedings)
 }
