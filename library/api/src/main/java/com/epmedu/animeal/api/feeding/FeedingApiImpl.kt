@@ -49,19 +49,30 @@ internal class FeedingApiImpl(
     }
 
     override suspend fun getFeedingsBy(
-        feedingPointId: String,
-        status: FeedingStatus?
+        feedingPointId: String?,
+        assignedModeratorId: String?,
+        status: FeedingStatus?,
     ): ApiResult<SearchFeedingsQuery.Data> {
         val filterBuilder = SearchableFeedingFilterInput.builder()
-            .feedingPointFeedingsId(
+
+        feedingPointId?.let {
+            filterBuilder.feedingPointFeedingsId(
                 SearchableStringFilterInput.builder()
                     .eq(feedingPointId)
                     .build()
             )
+        }
         status?.let {
             filterBuilder.status(
                 SearchableStringFilterInput.builder()
                     .eq(status.name)
+                    .build()
+            )
+        }
+        assignedModeratorId?.let {
+            filterBuilder.assignedModerators(
+                SearchableStringFilterInput.builder()
+                    .eq(assignedModeratorId)
                     .build()
             )
         }
@@ -89,15 +100,19 @@ internal class FeedingApiImpl(
     }
 
     override suspend fun getFeedingHistoriesBy(
-        feedingPointId: String,
+        feedingPointId: String?,
+        assignedModeratorId: String?,
         status: FeedingStatus?
     ): ApiResult<SearchFeedingHistoriesQuery.Data> {
         val filterBuilder = SearchableFeedingHistoryFilterInput.builder()
-            .feedingPointId(
+
+        feedingPointId?.let {
+            filterBuilder.feedingPointId(
                 SearchableStringFilterInput.builder()
                     .eq(feedingPointId)
                     .build()
             )
+        }
         status?.name?.let {
             filterBuilder.status(
                 SearchableStringFilterInput.builder()
@@ -105,6 +120,14 @@ internal class FeedingApiImpl(
                     .build()
             )
         }
+        assignedModeratorId?.let {
+            filterBuilder.assignedModerators(
+                SearchableStringFilterInput.builder()
+                    .eq(assignedModeratorId)
+                    .build()
+            )
+        }
+
         val query = SearchFeedingHistoriesQuery.builder()
             .filter(filterBuilder.build())
             .build()

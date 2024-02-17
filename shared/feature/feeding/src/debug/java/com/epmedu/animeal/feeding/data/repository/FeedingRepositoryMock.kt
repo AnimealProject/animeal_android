@@ -25,6 +25,10 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return flowOf(emptyList())
     }
 
+    override fun getAssignedFeedings(): Flow<List<Feeding>> {
+        return flowOf(emptyList())
+    }
+
     override fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?> {
         return flowOf(null)
     }

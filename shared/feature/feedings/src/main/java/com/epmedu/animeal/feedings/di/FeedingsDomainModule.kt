@@ -3,6 +3,7 @@ package com.epmedu.animeal.feedings.di
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ object FeedingsDomainModule {
     @ViewModelScoped
     @Provides
     fun provideGetAllFeedingsUseCase(
+        getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase,
         feedingRepository: FeedingRepository
-    ): GetAllFeedingsUseCase =
-        GetAllFeedingsUseCase(feedingRepository)
+    ): GetAllFeedingsUseCase = GetAllFeedingsUseCase(getCurrentUserGroupUseCase, feedingRepository)
 }

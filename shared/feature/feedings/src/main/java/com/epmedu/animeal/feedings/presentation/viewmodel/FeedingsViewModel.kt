@@ -101,7 +101,7 @@ internal class FeedingsViewModel @Inject constructor(
     }
 
     private fun updateFeedingsCategory(feedingsCategory: FeedingFilterCategory) {
-        if (allFeedings.isNotEmpty() && state.isLoading.not()) {
+        if (state.isLoading.not()) {
             updateState {
                 copy(
                     feedingsCategory = feedingsCategory,
