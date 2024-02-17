@@ -27,7 +27,8 @@ fun FeedingSheet(
                 modifier = Modifier.wrapContentHeight(),
                 photos = feedingPhotos,
                 isUploadingNextImage = cameraState == CameraState.LoadingImageToServer,
-                feedingPointTitle = feedingPoint.title,
+                title = feedingPoint.title,
+                image = feedingPoint.image,
                 onDeletePhotoClick = onDeletePhotoClick,
                 onTakePhotoClick = onTakePhotoClick
             )

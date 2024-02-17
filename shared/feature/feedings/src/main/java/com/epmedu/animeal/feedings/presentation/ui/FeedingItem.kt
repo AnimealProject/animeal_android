@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.feeding.presentation.ui.FeedingPointImage
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -40,7 +41,10 @@ fun FeedingItem(feedingModel: FeedingModel) {
                 .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            FeedingItemImage(feedingModel.image)
+            FeedingPointImage(
+                image = feedingModel.image,
+                contentDescription = feedingModel.title
+            )
             FeedingItemDetails(feedingModel)
         }
     }
