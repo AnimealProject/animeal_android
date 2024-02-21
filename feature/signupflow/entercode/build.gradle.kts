@@ -36,4 +36,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.auth.api.phone)
 }

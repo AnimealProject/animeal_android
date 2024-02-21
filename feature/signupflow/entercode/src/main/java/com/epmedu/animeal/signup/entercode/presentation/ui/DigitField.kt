@@ -29,7 +29,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @Composable
 internal fun DigitField(
     digit: Int?,
-    onDigitInput: (Int?) -> Unit,
+    onNumberInput: (String) -> Unit,
     onDigitRemove: () -> Unit,
     modifier: Modifier = Modifier,
     isError: Boolean = false
@@ -38,8 +38,8 @@ internal fun DigitField(
         value = digit?.toString() ?: "",
         onValueChange = { value ->
             when {
-                value.isOneDigit() -> onDigitInput(value.toInt())
                 value.isEmpty() -> onDigitRemove()
+                value.isDigitsOnly() -> onNumberInput(value)
             }
         },
         modifier = modifier
@@ -63,8 +63,6 @@ internal fun DigitField(
     )
 }
 
-private fun String.isOneDigit() = isDigitsOnly() && length == 1
-
 @AnimealPreview
 @Composable
 private fun DigitFieldPreview() {
@@ -72,14 +70,14 @@ private fun DigitFieldPreview() {
         Column {
             DigitField(
                 digit = null,
-                onDigitInput = {},
+                onNumberInput = {},
                 onDigitRemove = {},
                 modifier = Modifier.padding(8.dp)
             )
             Divider(modifier = Modifier.width(82.dp))
             DigitField(
                 digit = 4,
-                onDigitInput = {},
+                onNumberInput = {},
                 onDigitRemove = {},
                 modifier = Modifier.padding(8.dp),
                 isError = true
