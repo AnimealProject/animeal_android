@@ -17,7 +17,6 @@ class DefaultRouteHandler(
     override fun handleRouteEvent(event: RouteEvent) {
         when (event) {
             is RouteEvent.FeedingRouteUpdateRequest -> updateRoute(event)
-            is RouteEvent.FeedingTimerUpdateRequest -> updateTimer(event)
         }
     }
 
@@ -37,25 +36,11 @@ class DefaultRouteHandler(
             updateState {
                 FeedingRouteState.Active(
                     showFullRoad = showFullRoad,
-                    event.result.distanceLeft,
-                    state.timeLeft,
-                    event.result.routeData
+                    distanceLeft = event.result.distanceLeft,
+                    routeData = event.result.routeData
                 )
             }
             showFullRoad = false
-        }
-    }
-
-    private fun updateTimer(event: RouteEvent.FeedingTimerUpdateRequest) {
-        if (state is FeedingRouteState.Active) {
-            updateState {
-                FeedingRouteState.Active(
-                    showFullRoad = showFullRoad,
-                    state.distanceLeft,
-                    event.timeLeft,
-                    state.routeData
-                )
-            }
         }
     }
 }

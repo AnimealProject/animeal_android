@@ -9,7 +9,6 @@ sealed interface FeedingRouteState {
     data class Active(
         val showFullRoad: Boolean = false,
         val distanceLeft: Long? = null,
-        val timeLeft: Long? = null,
         val routeData: NavigationRoute? = null,
         val isError: Boolean = false
     ) : FeedingRouteState

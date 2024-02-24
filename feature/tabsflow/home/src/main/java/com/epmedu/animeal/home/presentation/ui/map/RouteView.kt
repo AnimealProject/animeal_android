@@ -12,7 +12,6 @@ import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
-import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants.LOCATION_INDICATOR_LAYER
 import com.mapbox.navigation.base.options.NavigationOptions
@@ -63,8 +62,7 @@ internal fun RouteView(
                 feedingRouteState is FeedingRouteState.Disabled -> {
                     mapView.removeRoute(mapBoxRouteInitOptions)
                 }
-                feedingRouteState is FeedingRouteState.Active &&
-                    timerState is TimerState.Active -> {
+                feedingRouteState is FeedingRouteState.Active -> {
                     if (feedingRouteState.routeData != null) {
                         feedingRouteState.routeData?.let { data ->
                             drawRoute(data, mapView, mapBoxRouteInitOptions)

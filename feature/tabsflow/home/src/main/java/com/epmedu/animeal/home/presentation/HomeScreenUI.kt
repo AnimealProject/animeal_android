@@ -104,21 +104,9 @@ internal fun HomeScreenUI(
     }
 
     LaunchedEffect(key1 = state.timerState) {
-        when (state.timerState) {
-            is TimerState.Active -> {
-                onRouteEvent(
-                    RouteEvent.FeedingTimerUpdateRequest(
-                        state.timerState.timeLeft
-                    )
-                )
-            }
-
-            TimerState.Expired -> {
-                hideBottomSheet()
-                onFeedingEvent(FeedingEvent.Expired)
-            }
-
-            else -> {}
+        if (state.timerState == TimerState.Expired) {
+            hideBottomSheet()
+            onFeedingEvent(FeedingEvent.Expired)
         }
     }
 
