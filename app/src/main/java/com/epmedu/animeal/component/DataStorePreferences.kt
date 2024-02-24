@@ -7,30 +7,26 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.epmedu.animeal.common.constants.DefaultConstants
 
 private val ANIMAL_TYPE = stringPreferencesKey("AnimalType")
+private val INITIAL_CAMERA_PERMISSION = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
+private val IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN = booleanPreferencesKey("is_geolocation_permission_rationale_shown")
+
 val Preferences.animalType: String
     get() = this[ANIMAL_TYPE] ?: DefaultConstants.EMPTY_STRING
+
+val Preferences.initialCameraPermission: Boolean
+    get() = this[INITIAL_CAMERA_PERMISSION] ?: false
+
+val Preferences.isGeolocationPermissionRationaleShown: Boolean
+    get() = this[IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN] ?: false
+
 fun MutablePreferences.updateAnimalType(value: String) {
     this[ANIMAL_TYPE] = value
 }
 
-private val INITIAL_GEOLOCATION_PERMISSION = booleanPreferencesKey("InitialGeolocationPermissionOnHomeScreen")
-val Preferences.initialGeolocationPermission: Boolean
-    get() = this[INITIAL_GEOLOCATION_PERMISSION] ?: false
-fun MutablePreferences.updateInitialGeolocationPermission(value: Boolean) {
-    this[INITIAL_GEOLOCATION_PERMISSION] = value
-}
-
-private val INITIAL_CAMERA_PERMISSION = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
-val Preferences.initialCameraPermission: Boolean
-    get() = this[INITIAL_CAMERA_PERMISSION] ?: false
 fun MutablePreferences.updateInitialCameraPermission(value: Boolean) {
     this[INITIAL_CAMERA_PERMISSION] = value
 }
 
-private val GEOLOCATION_PERMISSION_AGAIN = booleanPreferencesKey("GeolocationPermissionRequestedAgain")
-val Preferences.isGeolocationPermissionRequestedAgain: Boolean
-    get() = this[GEOLOCATION_PERMISSION_AGAIN] ?: false
-
-fun MutablePreferences.updateIsGeolocationPermissionRequestedAgain(value: Boolean) {
-    this[GEOLOCATION_PERMISSION_AGAIN] = value
+fun MutablePreferences.updateIsGeolocationPermissionRationaleShown(value: Boolean) {
+    this[IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN] = value
 }
