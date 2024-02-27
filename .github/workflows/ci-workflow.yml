@@ -60,10 +60,10 @@ jobs:
           cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/dev/res/raw/amplifyconfiguration.json
           cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/dev/res/raw/awsconfiguration.json
 
-      - name: Setup Java 11
+      - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: temurin
           cache: gradle
 
