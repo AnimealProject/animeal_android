@@ -11,6 +11,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.home.domain.usecases.AnimalTypeUseCase
+import com.epmedu.animeal.timer.domain.usecase.GetTimerStateUseCase
 import com.epmedu.animeal.timer.domain.usecase.StartTimerUseCase
 import dagger.Module
 import dagger.Provides
@@ -32,9 +33,11 @@ object HomeDomainModule {
     @ViewModelScoped
     @Provides
     fun providesFetchCurrentFeedingUseCase(
+        getTimerStateUseCase: GetTimerStateUseCase,
         startTimerUseCase: StartTimerUseCase,
         feedingRepository: FeedingRepository
     ): FetchCurrentFeedingPointUseCase = FetchCurrentFeedingPointUseCase(
+        getTimerStateUseCase,
         startTimerUseCase,
         feedingRepository
     )

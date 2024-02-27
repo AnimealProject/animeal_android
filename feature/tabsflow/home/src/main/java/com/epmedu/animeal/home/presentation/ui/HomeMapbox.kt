@@ -39,6 +39,7 @@ import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
+import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -77,8 +78,23 @@ internal fun HomeMapbox(
             onMapClick = onMapClick
         )
 
-        when (val feedingRouteState = state.feedingRouteState) {
-            is FeedingRouteState.Disabled -> {
+        when {
+            state.feedingRouteState is FeedingRouteState.Active && state.timerState is TimerState.Active -> {
+                RouteTopBar(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(top = 16.dp)
+                        .padding(horizontal = 20.dp),
+                    timeLeft = context.formatNumberToHourMin(state.timerState.timeLeft)
+                        ?: stringResource(R.string.calculating_route),
+                    distanceLeft = state.feedingRouteState.distanceLeft?.run {
+                        " • ${context.formatMetersToKilometers(this)}"
+                    } ?: "",
+                    onCancelClick = onCancelRouteClick
+                )
+            }
+
+            else -> {
                 AnimealSwitch(
                     modifier = Modifier
                         .statusBarsPadding()
@@ -86,23 +102,6 @@ internal fun HomeMapbox(
                         .padding(top = 24.dp),
                     onSelectTab = onSelectTab,
                     defaultAnimalType = state.feedingPointState.defaultAnimalType
-                )
-            }
-
-            is FeedingRouteState.Active -> {
-                RouteTopBar(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(top = 16.dp)
-                        .padding(horizontal = 20.dp),
-                    timeLeft = context.formatNumberToHourMin(
-                        feedingRouteState.timeLeft
-                    )
-                        ?: stringResource(R.string.calculating_route),
-                    distanceLeft = feedingRouteState.distanceLeft?.run {
-                        " • ${context.formatMetersToKilometers(this)}"
-                    } ?: "",
-                    onCancelClick = onCancelRouteClick
                 )
             }
         }
