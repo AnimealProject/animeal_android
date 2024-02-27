@@ -2,14 +2,12 @@ package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -29,11 +27,13 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
 
 @Composable
 fun MarkFeedingDoneSheet(
-    feedingPointTitle: String,
+    title: String,
+    image: NetworkFile?,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -61,7 +61,8 @@ fun MarkFeedingDoneSheet(
         )
 
         MarkFeedingDoneHeader(
-            title = feedingPointTitle
+            title = title,
+            image = image
         )
 
         Divider(
@@ -80,7 +81,8 @@ fun MarkFeedingDoneSheet(
 
 @Composable
 private fun MarkFeedingDoneHeader(
-    title: String
+    title: String,
+    image: NetworkFile?
 ) {
     Row(
         modifier = Modifier
@@ -89,11 +91,10 @@ private fun MarkFeedingDoneHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(60.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colors.secondaryVariant)
+        FeedingPointImage(
+            size = 60.dp,
+            image = image,
+            contentDescription = title
         )
         Text(
             modifier = Modifier.weight(1f),
@@ -141,7 +142,8 @@ private fun MarkFeedingDoneSheetPreview(@PreviewParameter(LoremIpsum::class) tex
     AnimealTheme {
         MarkFeedingDoneSheet(
             modifier = Modifier.fillMaxHeight(),
-            feedingPointTitle = text.take(50),
+            title = text.take(50),
+            image = null,
             onDeletePhotoClick = {},
             onTakePhotoClick = {}
         )
