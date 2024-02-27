@@ -23,7 +23,7 @@ dependencies {
     //https://github.com/google/dagger/issues/3068#issuecomment-999118496
     implementation(libs.javapoet)
 
-    implementation(libs.gradle.plugin.buildtools)
+    implementation(libs.gradle.plugin.android)
     implementation(libs.gradle.plugin.kotlin)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

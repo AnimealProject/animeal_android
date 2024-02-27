@@ -4,6 +4,7 @@ import com.epmedu.animeal.extension.provideVersionCode
 import com.epmedu.animeal.extension.provideVersionName
 import com.epmedu.animeal.internal.applicationExtension
 import com.epmedu.animeal.internal.libs
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 
 internal fun Project.configureAndroidApplication() = applicationExtension.run {
@@ -36,6 +37,11 @@ internal fun Project.configureAndroidApplication() = applicationExtension.run {
         debug {
             isMinifyEnabled = false
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     flavorDimensions += "environment"
