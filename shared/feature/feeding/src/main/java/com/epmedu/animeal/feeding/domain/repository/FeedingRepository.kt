@@ -18,6 +18,8 @@ interface FeedingRepository {
 
     fun getAllFeedings(): Flow<List<Feeding>>
 
+    fun getAssignedFeedings(): Flow<List<Feeding>>
+
     fun getFeedingHistoriesBy(
         feedingPointId: String,
         status: FeedingStatus? = null

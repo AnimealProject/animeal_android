@@ -102,7 +102,6 @@ internal class FeedingRepositoryImpl(
         }.flowOn(dispatchers.IO)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllFeedings(): Flow<List<Feeding>> {
         return flow {
             val feedingHistories =
@@ -113,18 +112,49 @@ internal class FeedingRepositoryImpl(
                 .toSet()
 
             emit(Triple(feedingHistories, feedings, userIds))
-        }.flatMapLatest { triple ->
+        }
+            .mergeToFeedings()
+            .flowOn(dispatchers.IO)
+    }
+
+    override fun getAssignedFeedings(): Flow<List<Feeding>> {
+        return flow {
+            val currentUserId = authApi.getCurrentUserId()
+            val feedingHistories = feedingApi.getFeedingHistoriesBy(
+                assignedModeratorId = currentUserId
+            ).data?.searchFeedingHistories()?.items()
+            val feedings = feedingApi.getFeedingsBy(
+                assignedModeratorId = currentUserId
+            ).data?.searchFeedings()?.items()
+            val userIds = feedingHistories.orEmpty().map { it.userId() }
+                .plus(feedings.orEmpty().map { it.userId() })
+                .toSet()
+
+            emit(Triple(feedingHistories, feedings, userIds))
+        }
+            .mergeToFeedings()
+            .flowOn(dispatchers.IO)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun Flow<
+        Triple<
+            List<SearchFeedingHistoriesQuery.Item?>?,
+            List<SearchFeedingsQuery.Item?>?,
+            Set<String>
+            >
+        >.mergeToFeedings(): Flow<List<Feeding>> {
+        return flatMapLatest { triple ->
             usersRepository.getUsersById(triple.third).map { users ->
                 val usersMap = users.associateBy { it.id }
 
                 triple.first.orEmpty().mapNotNull { feeding ->
-                    feeding.toFeeding(feeder = usersMap[feeding.userId()])
+                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
                 } + triple.second.orEmpty().mapNotNull { feeding ->
-                    feeding.toFeeding(feeder = usersMap[feeding.userId()])
+                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
                 }
             }
         }
-            .flowOn(dispatchers.IO)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

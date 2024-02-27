@@ -18,30 +18,32 @@ interface FeedingApi {
     suspend fun getAllFeedings(): ApiResult<SearchFeedingsQuery.Data>
 
     /**
-     * Returns feedings with provided [status] associated to provided [feedingPointId].
-     * `null` in [status] means ignoring filtering by it.
+     * Returns feedings filtered by parameters that are not `null`.
      * @param feedingPointId Id of associated feeding point.
-     * @param status Feeding status of feeding histories.
+     * @param assignedModeratorId Id of assigned moderator.
+     * @param status Feeding status of feedings.
      * Can be [inProgress] or [pending].
      * `null` by default.
      */
     suspend fun getFeedingsBy(
-        feedingPointId: String,
-        status: FeedingStatus? = null
+        feedingPointId: String? = null,
+        assignedModeratorId: String? = null,
+        status: FeedingStatus? = null,
     ): ApiResult<SearchFeedingsQuery.Data>
 
     suspend fun getAllFeedingHistories(): ApiResult<SearchFeedingHistoriesQuery.Data>
 
     /**
-     * Returns feeding histories with provided [status] associated to provided [feedingPointId].
-     * `null` in [status] means ignoring filtering by it.
+     * Returns feeding histories filtered by parameters that are not `null`.
      * @param feedingPointId Id of associated feeding point.
+     * @param assignedModeratorId Id of assigned moderator.
      * @param status Feeding status of feeding histories.
      * Can be [approved], [rejected] or [outdated].
      * `null` by default.
      */
     suspend fun getFeedingHistoriesBy(
-        feedingPointId: String,
+        feedingPointId: String? = null,
+        assignedModeratorId: String? = null,
         status: FeedingStatus? = null
     ): ApiResult<SearchFeedingHistoriesQuery.Data>
 
