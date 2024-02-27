@@ -1,9 +1,9 @@
 package com.epmedu.animeal.permissions.presentation
 
-import com.google.accompanist.permissions.PermissionStatus as AccompanistPermissionStatus
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.google.accompanist.permissions.PermissionStatus as AccompanistPermissionStatus
 
 sealed interface PermissionStatus {
 

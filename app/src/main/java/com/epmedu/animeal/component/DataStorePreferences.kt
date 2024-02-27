@@ -8,7 +8,9 @@ import com.epmedu.animeal.common.constants.DefaultConstants
 
 private val ANIMAL_TYPE = stringPreferencesKey("AnimalType")
 private val INITIAL_CAMERA_PERMISSION = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
-private val IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN = booleanPreferencesKey("is_geolocation_permission_rationale_shown")
+private val IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN = booleanPreferencesKey(
+    "is_geolocation_permission_rationale_shown"
+)
 
 val Preferences.animalType: String
     get() = this[ANIMAL_TYPE] ?: DefaultConstants.EMPTY_STRING
