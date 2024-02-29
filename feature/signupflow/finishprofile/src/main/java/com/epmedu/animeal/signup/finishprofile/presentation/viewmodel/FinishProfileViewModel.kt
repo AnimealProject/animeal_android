@@ -33,8 +33,8 @@ import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProf
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Onboarding
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Tabs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
