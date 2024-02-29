@@ -17,6 +17,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ButtonsBlock(
+    isFacebookButtonAvailable: Boolean,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
     modifier: Modifier = Modifier,
@@ -38,16 +39,18 @@ internal fun ButtonsBlock(
                 tint = MaterialTheme.colors.onPrimary
             )
         }
-        AnimealButton(
-            backgroundColor = CustomColor.Facebook,
-            contentColor = MaterialTheme.colors.onPrimary,
-            onClick = onSignInFacebook,
-        ) {
-            LoginButtonContent(
-                iconId = R.drawable.ic_facebook,
-                textId = R.string.sign_in_facebook,
-                tint = MaterialTheme.colors.onPrimary
-            )
+        if (isFacebookButtonAvailable) {
+            AnimealButton(
+                backgroundColor = CustomColor.Facebook,
+                contentColor = MaterialTheme.colors.onPrimary,
+                onClick = onSignInFacebook,
+            ) {
+                LoginButtonContent(
+                    iconId = R.drawable.ic_facebook,
+                    textId = R.string.sign_in_facebook,
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
         }
     }
 }
@@ -57,6 +60,7 @@ internal fun ButtonsBlock(
 private fun ButtonsBlockPreview() {
     AnimealTheme {
         ButtonsBlock(
+            isFacebookButtonAvailable = true,
             onSignInMobile = {},
             onSignInFacebook = {}
         )
