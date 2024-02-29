@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feedings.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,7 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
@@ -62,7 +67,7 @@ internal fun FeedingsScreenUI(
                 }
 
                 state.feedingsFiltered.isEmpty() -> {
-                    EmptyState()
+                    EmptyState(state.feedingsCategory == FeedingFilterCategory.PENDING)
                 }
 
                 else -> {
@@ -116,15 +121,40 @@ private fun LoadingState() {
 }
 
 @Composable
-private fun EmptyState() {
+private fun EmptyState(isPendingTab: Boolean) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(R.string.no_feedings),
-            modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center,
-        )
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Image(
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(200.dp),
+                contentScale = ContentScale.Fit,
+                painter = painterResource(R.drawable.empty_screen_bone),
+                contentDescription = null
+            )
+            Text(
+                text = stringResource(
+                    id = if (isPendingTab) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title
+                ),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h5,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = stringResource(
+                    id = if (isPendingTab) R.string.feeding_tab_all_reviewed_subtitle else R.string.feeding_tab_empty_subtitle
+                ),
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 

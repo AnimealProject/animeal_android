@@ -110,6 +110,12 @@
     <string name="feeding_category_rejected">Rejected</string>
     <string name="feeding_category_outdated">Outdated</string>
 
+    <string name="feeding_tab_all_reviewed_title">Well done!</string>
+    <string name="feeding_tab_all_reviewed_subtitle">Thank you!\n All feedings have been reviewed.</string>
+
+    <string name="feeding_tab_empty_title">Ooops!</string>
+    <string name="feeding_tab_empty_subtitle">There are no items on the list yet.</string>
+
     <string name="are_you_sure_you_want_delete_photo">Are you sure you want to delete this photo?</string>
 
     <string name="feeding_take_pictures">Please take pictures where pet and food is detected</string>
