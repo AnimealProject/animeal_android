@@ -8,6 +8,7 @@
     <string name="home">Home</string>
     <string name="more">More</string>
     <string name="favourites">Favourites</string>
+    <string name="feeding_analysis">Feeding Analysis</string>
     <string name="feedings">Feedings</string>
 
     <string name="enter_phone_title">Please, enter your phone</string>
@@ -173,4 +174,6 @@
     <string name="open_settings">Open settings</string>
 
     <string name="session_expired">Your user session has expired</string>
+    <string name="coming_soon">Coming soon…</string>
+    <string name="thank_you_for_visiting">Thank you for visiting!</string>
 </resources>

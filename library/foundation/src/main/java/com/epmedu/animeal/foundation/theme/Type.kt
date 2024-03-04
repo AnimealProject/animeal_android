@@ -22,6 +22,10 @@ val interFontFamily =
 
 val Typography = Typography(
     defaultFontFamily = interFontFamily,
+    h1 = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp
+    ),
     h4 = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp
