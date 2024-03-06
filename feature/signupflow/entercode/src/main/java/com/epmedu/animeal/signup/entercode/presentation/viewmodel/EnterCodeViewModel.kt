@@ -189,11 +189,16 @@ internal class EnterCodeViewModel @Inject constructor(
         val code = state.code.toMutableList()
 
         newNumber?.let {
-            // iterate through the digits of newNumber, discarding the part that does not fit
-            for (index in 0..newNumber.lastIndex - position - (newNumber.length - CODE_SIZE)) {
-                val codeIndex = position + index
-
-                code[codeIndex] = newNumber[index].digitToInt()
+            val numberToPaste = when {
+                position + newNumber.length > CODE_SIZE -> {
+                    newNumber.substring(0, CODE_SIZE - position)
+                }
+                else -> {
+                    newNumber
+                }
+            }
+            numberToPaste.forEachIndexed { index, char ->
+                code[position + index] = char.digitToInt()
             }
         } ?: run {
             code[position] = null
