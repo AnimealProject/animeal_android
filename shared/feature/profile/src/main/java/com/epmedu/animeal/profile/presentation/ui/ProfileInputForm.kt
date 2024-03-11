@@ -24,13 +24,13 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumber
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumberFocusCleared
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameFocusCleared
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.READ_ONLY
 import com.epmedu.animeal.resources.R
 
 @Composable
 fun ProfileInputForm(
-    state: ProfileState,
+    state: ProfileInputFormState,
     onEvent: (ProfileInputFormEvent) -> Unit,
     modifier: Modifier = Modifier,
     onCountryClick: (() -> Unit)? = null,
@@ -86,7 +86,7 @@ fun ProfileInputForm(
 }
 
 @Composable
-private fun ProfileState.PhoneInput(
+private fun ProfileInputFormState.PhoneInput(
     onEvent: (ProfileInputFormEvent) -> Unit,
     focusManager: FocusManager,
     onClearFocus: () -> Unit = {},
@@ -117,7 +117,7 @@ private fun ProfileState.PhoneInput(
 private fun ProfileInputFormPreview() {
     com.epmedu.animeal.foundation.theme.AnimealTheme {
         ProfileInputForm(
-            state = ProfileState(),
+            state = ProfileInputFormState(),
             {}
         )
     }

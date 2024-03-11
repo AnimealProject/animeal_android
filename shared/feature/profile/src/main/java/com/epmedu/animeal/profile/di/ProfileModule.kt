@@ -14,6 +14,8 @@ import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
+import com.epmedu.animeal.profile.presentation.viewmodel.handler.ProfileInputFormHandler
+import com.epmedu.animeal.profile.presentation.viewmodel.handler.ProfileInputFormHandlerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -82,4 +84,20 @@ internal object ProfileModule {
     fun provideClearProfileUseCase(
         repository: ProfileRepository
     ) = ClearProfileUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideProfileInputFormHandler(
+        validateNameUseCase: ValidateNameUseCase,
+        validateSurnameUseCase: ValidateSurnameUseCase,
+        validateEmailUseCase: ValidateEmailUseCase,
+        validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
+        validateBirthDateUseCase: ValidateBirthDateUseCase
+    ): ProfileInputFormHandler = ProfileInputFormHandlerImpl(
+        validateNameUseCase,
+        validateSurnameUseCase,
+        validateEmailUseCase,
+        validatePhoneNumberUseCase,
+        validateBirthDateUseCase
+    )
 }

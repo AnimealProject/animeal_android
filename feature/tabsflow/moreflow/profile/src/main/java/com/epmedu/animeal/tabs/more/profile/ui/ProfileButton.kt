@@ -9,10 +9,10 @@ import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITABLE
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.EDITED
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState.FormState.READ_ONLY
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.EDITABLE
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.EDITED
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.READ_ONLY
 import com.epmedu.animeal.resources.R
 
 @Composable
