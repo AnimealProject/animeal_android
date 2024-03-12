@@ -4,7 +4,7 @@ import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.model.getFormat
 
-data class ProfileState(
+data class ProfileInputFormState(
     val profile: Profile = Profile(),
     val formState: FormState = FormState.READ_ONLY,
     val isCountrySelectorClickable: Boolean = false,

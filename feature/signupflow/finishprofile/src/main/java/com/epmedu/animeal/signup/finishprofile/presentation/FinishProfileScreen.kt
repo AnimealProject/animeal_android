@@ -13,10 +13,11 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.NavigatedToNextDestination
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ScreenDisplayed
-import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.EnterCode
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Onboarding
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Tabs
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileViewModel
 
 @Composable
@@ -26,20 +27,15 @@ fun FinishProfileScreen() {
     val state by viewModel.stateFlow.collectAsState()
     val focusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(Unit) {
-        viewModel.events.collect {
-            when (it) {
-                FinishProfileEvent.NavigateBackToOnboarding -> {
-                    navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name)
-                }
-                FinishProfileEvent.ProfileFinished -> {
-                    navigator.navigateToTabs()
-                }
-                FinishProfileEvent.NavigateToConfirmPhone -> {
-                    navigator.navigate(SignUpRoute.EnterCode.name)
-                }
-            }
+    LaunchedEffect(state.nextDestination) {
+        when (state.nextDestination) {
+            Onboarding -> navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name)
+            Tabs -> navigator.navigateToTabs()
+            EnterCode -> navigator.navigate(SignUpRoute.EnterCode.name)
+            else -> {}
         }
+
+        if (state.nextDestination != null) viewModel.handleScreenEvents(NavigatedToNextDestination)
     }
 
     DisplayedEffect {
@@ -49,9 +45,7 @@ fun FinishProfileScreen() {
     FinishProfileScreenUI(
         state = state,
         focusRequester = focusRequester,
-        onCancel = { viewModel.handleScreenEvents(Cancel) },
-        onDone = { viewModel.handleScreenEvents(Submit) },
-        onInputFormEvent = viewModel::handleInputFormEvent
+        onEvent = viewModel::handleScreenEvents
     )
 }
 

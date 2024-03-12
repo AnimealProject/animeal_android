@@ -1,6 +1,5 @@
-package com.epmedu.animeal.profile.presentation.viewmodel
+package com.epmedu.animeal.profile.presentation.viewmodel.handler
 
-import androidx.lifecycle.ViewModel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.extensions.DAY_MONTH_NAME_COMMA_YEAR_FORMATTER
@@ -22,18 +21,19 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.PhoneNumber
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.RegionChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameFocusCleared
+import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState
 import java.time.LocalDate
 
-abstract class BaseProfileViewModel(
+class ProfileInputFormHandlerImpl(
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
     private val validateBirthDateUseCase: ValidateBirthDateUseCase
-) : ViewModel(),
-    StateDelegate<ProfileState> by DefaultStateDelegate(initialState = ProfileState()) {
+) : ProfileInputFormHandler,
+    StateDelegate<ProfileInputFormState> by DefaultStateDelegate(initialState = ProfileInputFormState()) {
 
-    fun handleInputFormEvent(event: ProfileInputFormEvent) {
+    override fun handleInputFormEvent(event: ProfileInputFormEvent) {
         when (event) {
             is NameChanged -> handleNameChangedEvent(event)
             is SurnameChanged -> handleSurnameChangedEvent(event)
@@ -47,8 +47,6 @@ abstract class BaseProfileViewModel(
             is PhoneNumberFocusCleared -> validatePhoneNumber()
         }
     }
-
-    protected abstract fun handlePhoneNumberChangedEvent(event: PhoneNumberChanged)
 
     private fun handleNameChangedEvent(event: NameChanged) {
         updateState {
@@ -73,6 +71,15 @@ abstract class BaseProfileViewModel(
             copy(
                 profile = profile.copy(email = event.email),
                 emailError = UiText.Empty
+            )
+        }
+    }
+
+    private fun handlePhoneNumberChangedEvent(event: PhoneNumberChanged) {
+        updateState {
+            copy(
+                profile = profile.copy(phoneNumber = event.phoneNumber),
+                phoneNumberError = UiText.Empty
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feedings.presentation.viewmodel.handlers
 
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
 import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState
@@ -10,25 +11,34 @@ import com.epmedu.animeal.users.domain.model.UserGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class FeedingsButtonHandlerImpl @Inject constructor(
+    private val buildConfigProvider: BuildConfigProvider,
     private val getUserGroupUseCase: GetCurrentUserGroupUseCase,
     private val getIsNewFeedingPendingUseCase: GetIsNewFeedingPendingUseCase
 ) : FeedingsButtonHandler {
 
     override fun getFeedingsButtonState(): Flow<FeedingsButtonState> {
-        return combine(
-            getIsNewFeedingPendingUseCase(),
-            flow { emit(getUserGroupUseCase()) }
-        ) { isNewFeedingPending, userGroupResult ->
-            when {
-                userGroupResult.isEligibleForFeedingsButton() -> {
-                    if (isNewFeedingPending) Pulsating else Static
-                }
+        return when {
+            buildConfigProvider.isProdFlavor -> {
+                flowOf(FeedingsButtonState.Hidden)
+            }
+            else -> {
+                combine(
+                    getIsNewFeedingPendingUseCase(),
+                    flow { emit(getUserGroupUseCase()) }
+                ) { isNewFeedingPending, userGroupResult ->
+                    when {
+                        userGroupResult.isEligibleForFeedingsButton() -> {
+                            if (isNewFeedingPending) Pulsating else Static
+                        }
 
-                else -> {
-                    FeedingsButtonState.Hidden
+                        else -> {
+                            FeedingsButtonState.Hidden
+                        }
+                    }
                 }
             }
         }
