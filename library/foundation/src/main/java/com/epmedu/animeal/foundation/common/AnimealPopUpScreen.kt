@@ -14,7 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
@@ -33,6 +35,7 @@ fun AnimealPopUpScreen(
             painter = painterResource,
             contentDescription = null,
         )
+        HeightSpacer(height = 16.dp)
         Text(
             text = stringResource(titleText),
             textAlign = TextAlign.Center,
@@ -40,6 +43,7 @@ fun AnimealPopUpScreen(
             color = MaterialTheme.colors.primary,
             fontWeight = FontWeight.Bold
         )
+        HeightSpacer(height = 8.dp)
         Text(
             text = stringResource(subtitleText),
             style = MaterialTheme.typography.body1,
@@ -50,7 +54,7 @@ fun AnimealPopUpScreen(
 
 @AnimealPreview
 @Composable
-private fun ThankYouContentPreview() {
+private fun AnimealPopUpScreenPreview() {
     AnimealTheme {
         AnimealPopUpScreen(
             painterResource(R.drawable.empty_screen_bone),
