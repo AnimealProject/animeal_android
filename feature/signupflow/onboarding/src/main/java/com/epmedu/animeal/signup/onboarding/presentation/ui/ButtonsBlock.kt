@@ -2,8 +2,10 @@ package com.epmedu.animeal.signup.onboarding.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +27,12 @@ internal fun ButtonsBlock(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp),
+            .padding(
+                when {
+                    isFacebookButtonAvailable -> PaddingValues(24.dp)
+                    else -> PaddingValues(horizontal = 24.dp, vertical = 56.dp)
+                }
+            ),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -59,10 +66,18 @@ internal fun ButtonsBlock(
 @Composable
 private fun ButtonsBlockPreview() {
     AnimealTheme {
-        ButtonsBlock(
-            isFacebookButtonAvailable = true,
-            onSignInMobile = {},
-            onSignInFacebook = {}
-        )
+        Column {
+            ButtonsBlock(
+                isFacebookButtonAvailable = true,
+                onSignInMobile = {},
+                onSignInFacebook = {}
+            )
+            Divider()
+            ButtonsBlock(
+                isFacebookButtonAvailable = false,
+                onSignInMobile = {},
+                onSignInFacebook = {}
+            )
+        }
     }
 }

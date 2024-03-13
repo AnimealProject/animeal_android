@@ -1,7 +1,7 @@
 package com.epmedu.animeal.signup.onboarding.presentation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -14,13 +14,11 @@ import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingSta
 internal fun OnboardingScreenUI(
     state: OnboardingState,
     onSignInMobile: () -> Unit,
-    onSignInFacebook: () -> Unit,
-    modifier: Modifier = Modifier,
+    onSignInFacebook: () -> Unit
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-    ) {
+    Column {
         OnBoarding()
+        Spacer(modifier = Modifier.weight(1f))
         ButtonsBlock(
             isFacebookButtonAvailable = state.isFacebookLoginAvailable,
             onSignInMobile = onSignInMobile,
