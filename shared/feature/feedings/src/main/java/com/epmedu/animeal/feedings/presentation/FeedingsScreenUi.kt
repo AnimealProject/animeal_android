@@ -118,7 +118,6 @@ private fun LoadingState() {
 @Composable
 private fun EmptyState(isPendingTab: Boolean) {
     Box(
-        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         AnimealPopUpScreen(
