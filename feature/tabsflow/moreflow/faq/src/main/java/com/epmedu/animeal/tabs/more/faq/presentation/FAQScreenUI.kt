@@ -36,6 +36,7 @@ private fun FAQScreenUIPreview() {
     AnimealTheme {
         FAQScreenUI(
             state = FAQState(
+                isLoading = false,
                 questions = List(3) { index ->
                     FrequentlyAskedQuestion(
                         question = "Question ${index + 1}",
@@ -43,6 +44,32 @@ private fun FAQScreenUIPreview() {
                     )
                 }.toImmutableList()
             ),
+            onBack = {},
+            onEvent = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun FAQScreenUIEmptyStatePreview() {
+    AnimealTheme {
+        FAQScreenUI(
+            state = FAQState(
+                isLoading = false
+            ),
+            onBack = {},
+            onEvent = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun FAQScreenUILoadingStatePreview() {
+    AnimealTheme {
+        FAQScreenUI(
+            state = FAQState(),
             onBack = {},
             onEvent = {}
         )
