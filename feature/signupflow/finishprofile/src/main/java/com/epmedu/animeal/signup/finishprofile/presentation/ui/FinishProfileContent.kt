@@ -31,20 +31,21 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
-import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 import com.epmedu.animeal.profile.presentation.ui.ProfileInputForm
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.InputFormEvent
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileState
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun FinishProfileContent(
-    state: ProfileState,
+    state: FinishProfileState,
     bottomSheetState: ModalBottomSheetState,
     focusRequester: FocusRequester,
     onCancel: () -> Unit,
-    onDone: () -> Unit,
-    onInputFormEvent: (ProfileInputFormEvent) -> Unit,
+    onEvent: (FinishProfileScreenEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -72,8 +73,10 @@ internal fun FinishProfileContent(
                 style = MaterialTheme.typography.subtitle1,
             )
             ProfileInputForm(
-                state = state,
-                onEvent = onInputFormEvent,
+                state = state.profileInputFormState,
+                onEvent = { event ->
+                    onEvent(InputFormEvent(event))
+                },
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .focusOnGloballyPositioned(focusRequester),
@@ -85,6 +88,7 @@ internal fun FinishProfileContent(
         }
         Spacer(modifier = Modifier.weight(1f))
         FinishProfileButtonsRow(
+            isDoneButtonEnabled = state.isDoneButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
@@ -95,7 +99,7 @@ internal fun FinishProfileContent(
             },
             onDoneClick = {
                 focusManager.clearFocus()
-                onDone()
+                onEvent(Submit)
             }
         )
     }
@@ -106,11 +110,10 @@ internal fun FinishProfileContent(
 private fun FinishProfileContentPreview() {
     AnimealTheme {
         FinishProfileContent(
-            state = ProfileState(),
+            state = FinishProfileState(),
             focusRequester = FocusRequester(),
             onCancel = {},
-            onDone = {},
-            onInputFormEvent = {},
+            onEvent = {},
             bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
         )
     }

@@ -1,10 +1,7 @@
-import com.epmedu.animeal.extension.propertyInt
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
+import java.util.Locale
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.file.File
-import org.jetbrains.kotlin.konan.properties.loadProperties
-import org.jetbrains.kotlin.konan.properties.saveToFile
 
 apply(plugin = "com.github.ben-manes.versions")
 
@@ -20,7 +17,7 @@ buildscript {
 
     dependencies {
         classpath(libs.gradle.plugin.appsync)
-        classpath(libs.gradle.plugin.buildtools)
+        classpath(libs.gradle.plugin.android)
         classpath(libs.gradle.plugin.crashlytics)
         classpath(libs.gradle.plugin.googleservices)
         classpath(libs.gradle.plugin.hilt)
@@ -30,7 +27,7 @@ buildscript {
 }
 
 detekt {
-    config = files("config/detekt/detekt.yml")
+    config.setFrom(files("config/detekt/detekt.yml"))
     allRules = true
     autoCorrect = true
 }
@@ -71,7 +68,9 @@ tasks {
 }
 
 fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any {
+        version.uppercase(Locale.getDefault()).contains(it)
+    }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     val isStable = stableKeyword || regex.matches(version)
     return isStable.not()
@@ -80,11 +79,15 @@ fun isNonStable(version: String): Boolean {
 subprojects {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
+            // https://issuetracker.google.com/issues/285090974
+            val args = mutableListOf("-Xstring-concat=inline")
+
             if (project.findProperty("animeal.enableComposeCompilerReports") == "true") {
-                freeCompilerArgs = freeCompilerArgs +
-                        "-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics" +
-                        "-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics"
+                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics")
+                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics")
             }
+
+            freeCompilerArgs = freeCompilerArgs + args.toList()
         }
     }
 }

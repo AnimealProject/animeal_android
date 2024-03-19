@@ -3,6 +3,8 @@ compileSdk = "34"
 targetSdk = "34"
 minSdk = "26"
 
+androidGradlePlugin = "8.2.2"
+
 accompanist = "0.30.1"
 activityCompose = "1.7.2"
 androidxComposeBom = "2023.05.01"
@@ -12,7 +14,6 @@ amplify = "2.10.0"
 androidxEspresso = "3.5.1"
 androidxJunit = "1.1.5"
 appsync = "3.4.0"
-buildTools = "7.3.0"
 camerax = "1.2.3"
 composeCompiler = "1.4.7"
 core = "1.9.0"
@@ -48,9 +49,9 @@ versions = "0.42.0"
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 
+gradle-plugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradle-plugin-appsync = { module = "com.amazonaws:aws-android-sdk-appsync-gradle-plugin", version.ref = "appsync" }
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
-gradle-plugin-buildtools = { module = "com.android.tools.build:gradle", version.ref = "buildTools" }
 gradle-plugin-detekt-compose = { module = "ru.kode:detekt-rules-compose", version.ref = "detektCompose" }
 gradle-plugin-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 gradle-plugin-googleservices = { module = "com.google.gms:google-services", version.ref = "googleServices" }

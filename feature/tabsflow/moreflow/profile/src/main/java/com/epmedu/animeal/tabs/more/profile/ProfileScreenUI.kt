@@ -10,24 +10,23 @@ import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.foundation.dialog.AnimealQuestionDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.profile.ProfileScreenEvent.Discard
 import com.epmedu.animeal.tabs.more.profile.ui.ProfileContent
+import com.epmedu.animeal.tabs.more.profile.viewmodel.ProfileState
 
 @Composable
 internal fun ProfileScreenUI(
     state: ProfileState,
     onBack: () -> Unit,
-    onProfileScreenEvent: (ProfileScreenEvent) -> Unit,
-    onProfileFormEvent: (ProfileInputFormEvent) -> Unit
+    onProfileScreenEvent: (ProfileScreenEvent) -> Unit
 ) {
+    val inputFormState = state.profileInputFormState
     var showDiscardAlert by rememberSaveable {
         mutableStateOf(false)
     }
 
-    BackHandler(!showDiscardAlert && state.isEditedOrHasErrors()) {
+    BackHandler(!showDiscardAlert && inputFormState.isEditedOrHasErrors()) {
         showDiscardAlert = true
     }
 
@@ -45,15 +44,14 @@ internal fun ProfileScreenUI(
         )
     }
     ProfileContent(
-        state = state,
+        state = inputFormState,
         onBack = {
             when {
-                state.isEditedOrHasErrors() -> showDiscardAlert = true
+                inputFormState.isEditedOrHasErrors() -> showDiscardAlert = true
                 else -> onBack()
             }
         },
-        onScreenEvent = onProfileScreenEvent,
-        onInputFormEvent = onProfileFormEvent
+        onScreenEvent = onProfileScreenEvent
     )
 }
 
@@ -64,8 +62,7 @@ private fun ProfileScreenPreview() {
         ProfileScreenUI(
             state = ProfileState(),
             onBack = {},
-            onProfileScreenEvent = {},
-            onProfileFormEvent = {}
+            onProfileScreenEvent = {}
         )
     }
 }

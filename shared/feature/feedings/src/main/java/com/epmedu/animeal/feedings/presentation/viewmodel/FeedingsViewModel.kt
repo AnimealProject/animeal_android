@@ -66,7 +66,8 @@ internal class FeedingsViewModel @Inject constructor(
 
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
         when (feedingStatus) {
-            FeedingModelStatus.APPROVED -> FeedingFilterCategory.APPROVED
+            FeedingModelStatus.APPROVED,
+            FeedingModelStatus.AUTO_APPROVED -> FeedingFilterCategory.APPROVED
             FeedingModelStatus.PENDING_RED,
             FeedingModelStatus.PENDING_ORANGE,
             FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
@@ -79,14 +80,15 @@ internal class FeedingsViewModel @Inject constructor(
         feedingPoint: FeedingPoint
     ): FeedingModel? {
         val feedingStatus = feeding.status.toFeedingModelStatus(
-            deltaTime = System.currentTimeMillis() - feeding.date.time
+            deltaTime = System.currentTimeMillis() - feeding.date.time,
+            isFeederTrusted = feeding.feeder?.isTrusted == true
         )
 
         return if (feeding.feedingPointId == feedingPoint.id && feedingStatus != null) {
             FeedingModel(
                 id = feeding.id,
                 title = feedingPoint.title,
-                feeder = "${feeding.name} ${feeding.surname}",
+                feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
                     feeding.date.time,

@@ -17,19 +17,19 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
+import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.RegionChanged
 import com.epmedu.animeal.profile.presentation.ui.RegionsLazyColumn
-import com.epmedu.animeal.profile.presentation.viewmodel.ProfileState
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
+import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.InputFormEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.ui.CancellationDialog
 import com.epmedu.animeal.signup.finishprofile.presentation.ui.FinishProfileContent
+import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileState
 
 @Composable
 internal fun FinishProfileScreenUI(
-    state: ProfileState,
+    state: FinishProfileState,
     focusRequester: FocusRequester,
-    onCancel: () -> Unit,
-    onDone: () -> Unit,
-    onInputFormEvent: (ProfileInputFormEvent) -> Unit
+    onEvent: (FinishProfileScreenEvent) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -48,7 +48,7 @@ internal fun FinishProfileScreenUI(
             onDismiss = { showCancellationAlert = false },
             onConfirm = {
                 showCancellationAlert = false
-                onCancel()
+                onEvent(Cancel)
             }
         )
     }
@@ -58,7 +58,7 @@ internal fun FinishProfileScreenUI(
         sheetState = bottomSheetState,
         sheetContent = {
             RegionsLazyColumn(scope, bottomSheetState) { region ->
-                onInputFormEvent(ProfileInputFormEvent.RegionChanged(region))
+                onEvent(InputFormEvent(RegionChanged(region)))
             }
         },
     ) {
@@ -67,8 +67,7 @@ internal fun FinishProfileScreenUI(
             bottomSheetState = bottomSheetState,
             focusRequester = focusRequester,
             onCancel = { showCancellationAlert = true },
-            onDone = onDone,
-            onInputFormEvent = onInputFormEvent
+            onEvent = onEvent
         )
     }
 }
@@ -78,11 +77,9 @@ internal fun FinishProfileScreenUI(
 private fun FinishProfileScreenPreview() {
     AnimealTheme {
         FinishProfileScreenUI(
-            state = ProfileState(),
+            state = FinishProfileState(),
             focusRequester = FocusRequester(),
-            onCancel = {},
-            onDone = {},
-            onInputFormEvent = {}
+            onEvent = {}
         )
     }
 }
