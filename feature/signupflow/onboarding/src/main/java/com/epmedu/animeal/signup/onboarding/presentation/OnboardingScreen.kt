@@ -34,6 +34,7 @@ fun OnboardingScreen() {
     OnState(state = state, navigator = navigator, onEvent = viewModel::handleEvent)
 
     OnboardingScreenUI(
+        state = state,
         onSignInMobile = { viewModel.handleEvent(SignInWithMobileClicked) },
         onSignInFacebook = { viewModel.handleEvent(SignInWithFacebookClicked) },
     )

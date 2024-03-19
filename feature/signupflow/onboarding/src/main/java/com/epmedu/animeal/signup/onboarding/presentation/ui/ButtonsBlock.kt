@@ -2,8 +2,10 @@ package com.epmedu.animeal.signup.onboarding.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ButtonsBlock(
+    isFacebookButtonAvailable: Boolean,
     onSignInMobile: () -> Unit,
     onSignInFacebook: () -> Unit,
     modifier: Modifier = Modifier,
@@ -24,7 +27,12 @@ internal fun ButtonsBlock(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp),
+            .padding(
+                when {
+                    isFacebookButtonAvailable -> PaddingValues(24.dp)
+                    else -> PaddingValues(horizontal = 24.dp, vertical = 56.dp)
+                }
+            ),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -38,16 +46,18 @@ internal fun ButtonsBlock(
                 tint = MaterialTheme.colors.onPrimary
             )
         }
-        AnimealButton(
-            backgroundColor = CustomColor.Facebook,
-            contentColor = MaterialTheme.colors.onPrimary,
-            onClick = onSignInFacebook,
-        ) {
-            LoginButtonContent(
-                iconId = R.drawable.ic_facebook,
-                textId = R.string.sign_in_facebook,
-                tint = MaterialTheme.colors.onPrimary
-            )
+        if (isFacebookButtonAvailable) {
+            AnimealButton(
+                backgroundColor = CustomColor.Facebook,
+                contentColor = MaterialTheme.colors.onPrimary,
+                onClick = onSignInFacebook,
+            ) {
+                LoginButtonContent(
+                    iconId = R.drawable.ic_facebook,
+                    textId = R.string.sign_in_facebook,
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
         }
     }
 }
@@ -56,9 +66,18 @@ internal fun ButtonsBlock(
 @Composable
 private fun ButtonsBlockPreview() {
     AnimealTheme {
-        ButtonsBlock(
-            onSignInMobile = {},
-            onSignInFacebook = {}
-        )
+        Column {
+            ButtonsBlock(
+                isFacebookButtonAvailable = true,
+                onSignInMobile = {},
+                onSignInFacebook = {}
+            )
+            Divider()
+            ButtonsBlock(
+                isFacebookButtonAvailable = false,
+                onSignInMobile = {},
+                onSignInFacebook = {}
+            )
+        }
     }
 }
