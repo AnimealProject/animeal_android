@@ -95,7 +95,8 @@ internal class FeedingsViewModel @Inject constructor(
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),
-                image = feedingPoint.image
+                image = feedingPoint.image,
+                photos = feeding.photos.toImmutableList()
             )
         } else {
             null

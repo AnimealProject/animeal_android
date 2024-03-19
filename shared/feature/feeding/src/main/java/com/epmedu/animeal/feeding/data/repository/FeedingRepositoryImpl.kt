@@ -1,5 +1,7 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import SearchFeedingHistoriesQuery
+import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.epmedu.animeal.api.feeding.FeedingApi
@@ -20,6 +22,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.UsersRepository
+import com.epmedu.animeal.users.domain.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -33,6 +36,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
 internal class FeedingRepositoryImpl(
@@ -107,11 +111,8 @@ internal class FeedingRepositoryImpl(
             val feedingHistories =
                 feedingApi.getAllFeedingHistories().data?.searchFeedingHistories()?.items()
             val feedings = feedingApi.getAllFeedings().data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
             .flowOn(dispatchers.IO)
@@ -126,36 +127,70 @@ internal class FeedingRepositoryImpl(
             val feedings = feedingApi.getFeedingsBy(
                 assignedModeratorId = currentUserId
             ).data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
             .flowOn(dispatchers.IO)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun Flow<
-        Triple<
-            List<SearchFeedingHistoriesQuery.Item?>?,
-            List<SearchFeedingsQuery.Item?>?,
-            Set<String>
-            >
-        >.mergeToFeedings(): Flow<List<Feeding>> {
-        return flatMapLatest { triple ->
-            usersRepository.getUsersById(triple.third).map { users ->
-                val usersMap = users.associateBy { it.id }
+    private fun Flow<FeedingsContainer>.mergeToFeedings(): Flow<List<Feeding>> {
+        return flatMapLatest { feedingsContainer ->
+            val userIds = feedingsContainer.feedingHistories.orEmpty().mapNotNull { it?.userId() }
+                .plus(feedingsContainer.feedings.orEmpty().mapNotNull { it?.userId() })
+                .toSet()
 
-                triple.first.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
-                } + triple.second.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
+            usersRepository.getUsersById(userIds).map { users ->
+                mergeToFeedings(feedingsContainer, users)
+            }
+        }
+    }
+
+    private suspend fun mergeToFeedings(
+        container: FeedingsContainer,
+        users: List<User>
+    ): List<Feeding> {
+        val usersMap = users.associateBy { it.id }
+        val getImageFrom: suspend (String) -> NetworkFile = { name ->
+            NetworkFile(
+                name = name,
+                url = storageApi.getUrlFrom(name)
+            )
+        }
+
+        return container.feedingHistories.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = getImageFrom
+                    )
+                }
+            }
+        } + container.feedings.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = getImageFrom
+                    )
                 }
             }
         }
     }
+
+    private fun SearchFeedingsQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFeedingHistoriesBy(
@@ -209,4 +244,9 @@ internal class FeedingRepositoryImpl(
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
         _domainFeedState.emit(newFeedState)
     }
+
+    private data class FeedingsContainer(
+        val feedings: List<SearchFeedingsQuery.Item?>?,
+        val feedingHistories: List<SearchFeedingHistoriesQuery.Item?>?
+    )
 }

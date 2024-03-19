@@ -131,6 +131,8 @@
     <string name="show_on_map">Show on map</string>
     <string name="agree">Agree</string>
     <string name="finish">Finish</string>
+    <string name="reject">Reject</string>
+    <string name="approve">Approve</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
