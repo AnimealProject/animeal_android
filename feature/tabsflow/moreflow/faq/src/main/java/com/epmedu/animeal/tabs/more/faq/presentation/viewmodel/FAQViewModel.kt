@@ -25,7 +25,7 @@ internal class FAQViewModel @Inject constructor(
     private fun getFaq() {
         viewModelScope.launch {
             getFAQUseCase().collect {
-                updateState { copy(questions = it) }
+                updateState { copy(questions = it, isLoading = false) }
             }
         }
     }
