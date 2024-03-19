@@ -6,8 +6,7 @@ import com.epmedu.animeal.users.domain.model.User
 
 internal fun SearchFeedingsQuery.Item.toFeeding(feeder: User?) = Feeding(
     id = id(),
-    name = feeder?.name.orEmpty(),
-    surname = feeder?.surname.orEmpty(),
+    feeder = feeder,
     status = status().toDomain(),
     date = Temporal.DateTime(createdAt()).toDate(),
     feedingPointId = feedingPointFeedingsId()
