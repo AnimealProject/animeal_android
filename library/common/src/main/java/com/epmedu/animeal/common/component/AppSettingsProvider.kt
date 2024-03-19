@@ -4,21 +4,19 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppSettingsProvider {
 
-    suspend fun getAppSettings(): Flow<AppSettings>
+    fun getAppSettings(): Flow<AppSettings>
 
     suspend fun updateAppSettings(action: AppSettingsUpdateScope.() -> Unit)
 }
 
 interface AppSettingsUpdateScope {
-    var isInitialGeolocationPermissionRequested: Boolean
+    var isGeolocationPermissionRationaleShown: Boolean
     var isCameraPermissionRequested: Boolean
     var animalType: String
-    var isGeolocationPermissionRequestedAgain: Boolean
 }
 
 data class AppSettings(
-    val isInitialGeolocationPermissionRequested: Boolean,
+    val isGeolocationPermissionRationaleShown: Boolean,
     val isCameraPermissionRequested: Boolean,
-    val animalType: String,
-    val isGeolocationPermissionRequestedAgain: Boolean
+    val animalType: String
 )

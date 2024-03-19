@@ -11,12 +11,12 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClick
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.DialogDismissed
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRequested
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRationale
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GpsSettingRequested
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
-import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionAsked
+import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionRationaleShown
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -45,9 +45,9 @@ class WillFeedViewModel @Inject constructor(
                     updateState { CameraPermissionRequested }
                 }
 
-                geolocationPermissionStatus !is PermissionStatus.Granted && !isGeolocationPermissionRequestedAgain -> {
-                    viewModelScope.handlePermissionEvent(GeolocationPermissionAsked)
-                    updateState { GeolocationPermissionRequested }
+                geolocationPermissionStatus !is PermissionStatus.Granted && shouldShowGeolocationPermissionRationale -> {
+                    viewModelScope.handlePermissionEvent(GeolocationPermissionRationaleShown)
+                    updateState { GeolocationPermissionRationale }
                 }
 
                 gpsSettingsProvider.gpsSettingState == GpsSettingState.Disabled && !askedToEnableGps -> {

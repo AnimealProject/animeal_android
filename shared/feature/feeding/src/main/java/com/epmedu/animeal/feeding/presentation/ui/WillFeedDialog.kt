@@ -16,7 +16,7 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.DismissWillFe
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.CameraPermissionRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.ConfirmationRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.DialogDismissed
-import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRequested
+import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GeolocationPermissionRationale
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedState.GpsSettingRequested
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.permissions.presentation.ui.CameraPermissionRequestDialog
@@ -39,7 +39,7 @@ fun WillFeedDialog(onAgreeClick: () -> Unit) {
             CameraPermissionRequestDialog(onDismiss = { viewModel.handleEvent(DismissWillFeed) })
         }
 
-        GeolocationPermissionRequested -> {
+        GeolocationPermissionRationale -> {
             GeolocationPermissionRequestDialog(
                 onDismiss = { viewModel.handleEvent(ContinueWillFeed) },
                 onConfirm = { viewModel.handleEvent(DismissWillFeed) }

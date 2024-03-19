@@ -13,47 +13,44 @@ internal class AppSettingsProviderImpl(
     private val dataStore: DataStore<Preferences>,
 ) : AppSettingsProvider {
 
-    override suspend fun getAppSettings(): Flow<AppSettings> {
+    override fun getAppSettings(): Flow<AppSettings> {
         return dataStore.data.map { preferences -> preferences.toAppSettings() }
     }
 
     override suspend fun updateAppSettings(action: AppSettingsUpdateScope.() -> Unit) {
         dataStore.edit {
             val scope = AppSettingsUpdateScopeImpl(toAppSettings()).apply(action)
-            val settings = scope.toAppSettings()
-            updateInitialGeolocationPermission(settings.isInitialGeolocationPermissionRequested)
-            updateInitialCameraPermission(settings.isCameraPermissionRequested)
-            updateAnimalType(settings.animalType)
-            updateIsGeolocationPermissionRequestedAgain(settings.isGeolocationPermissionRequestedAgain)
+
+            with(scope.toAppSettings()) {
+                updateIsGeolocationPermissionRationaleShown(isGeolocationPermissionRationaleShown)
+                updateInitialCameraPermission(isCameraPermissionRequested)
+                updateAnimalType(animalType)
+            }
         }
     }
 
     private fun Preferences.toAppSettings() = AppSettings(
-        isInitialGeolocationPermissionRequested = initialGeolocationPermission,
+        isGeolocationPermissionRationaleShown = isGeolocationPermissionRationaleShown,
         isCameraPermissionRequested = initialCameraPermission,
         animalType = animalType,
-        isGeolocationPermissionRequestedAgain = isGeolocationPermissionRequestedAgain
     )
 }
 
 private class AppSettingsUpdateScopeImpl(
-    override var isInitialGeolocationPermissionRequested: Boolean,
+    override var isGeolocationPermissionRationaleShown: Boolean,
     override var isCameraPermissionRequested: Boolean,
     override var animalType: String,
-    override var isGeolocationPermissionRequestedAgain: Boolean,
 ) : AppSettingsUpdateScope {
 
     constructor(settings: AppSettings) : this(
-        settings.isInitialGeolocationPermissionRequested,
+        settings.isGeolocationPermissionRationaleShown,
         settings.isCameraPermissionRequested,
-        settings.animalType,
-        settings.isGeolocationPermissionRequestedAgain
+        settings.animalType
     )
 
     fun toAppSettings() = AppSettings(
-        isInitialGeolocationPermissionRequested = isInitialGeolocationPermissionRequested,
+        isGeolocationPermissionRationaleShown = isGeolocationPermissionRationaleShown,
         isCameraPermissionRequested = isCameraPermissionRequested,
         animalType = animalType,
-        isGeolocationPermissionRequestedAgain = isGeolocationPermissionRequestedAgain
     )
 }

@@ -1,7 +1,7 @@
 package com.epmedu.animeal.permissions.presentation
 
 sealed interface PermissionsEvent {
-    object GeolocationPermissionAsked : PermissionsEvent
+    object GeolocationPermissionRationaleShown : PermissionsEvent
     object CameraPermissionAsked : PermissionsEvent
 
     data class GeolocationPermissionStatusChanged(val status: PermissionStatus) : PermissionsEvent

@@ -9,7 +9,7 @@ class ApplicationSettingsRepositoryImpl(
     private val appSettingsProvider: AppSettingsProvider,
 ) : ApplicationSettingsRepository {
 
-    override suspend fun getAppSettings(): Flow<AppSettings> {
+    override fun getAppSettings(): Flow<AppSettings> {
         return appSettingsProvider.getAppSettings()
     }
 
