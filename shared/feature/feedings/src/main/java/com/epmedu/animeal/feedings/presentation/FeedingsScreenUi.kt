@@ -116,14 +116,16 @@ private fun LoadingState() {
 }
 
 @Composable
-private fun EmptyState(isPendingTab: Boolean) {
+private fun EmptyState(hasReviewedFeedings: Boolean) {
     Box(
         contentAlignment = Alignment.Center
     ) {
         AnimealPopUpScreen(
             painterResource = painterResource(R.drawable.empty_screen_bone),
-            titleText = if (isPendingTab) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
-            subtitleText = if (isPendingTab) R.string.feeding_tab_all_reviewed_subtitle else R.string.feeding_tab_empty_subtitle
+            titleText = if (hasReviewedFeedings) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
+            subtitleText = if (hasReviewedFeedings) {
+                R.string.feeding_tab_all_reviewed_subtitle
+            } else { R.string.feeding_tab_empty_subtitle }
         )
     }
 }

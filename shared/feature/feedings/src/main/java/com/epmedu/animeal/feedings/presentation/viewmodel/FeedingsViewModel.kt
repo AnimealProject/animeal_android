@@ -15,6 +15,7 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -30,7 +31,7 @@ internal class FeedingsViewModel @Inject constructor(
     StateDelegate<FeedingsState> by DefaultStateDelegate(initialState = FeedingsState()),
     ActionDelegate by actionDelegate {
 
-    private var allFeedings: List<FeedingModel> = emptyList()
+    private var allFeedings: Map<FeedingFilterCategory, List<FeedingModel>> = emptyMap()
 
     init {
         viewModelScope.launch { collectFeedings() }
@@ -52,7 +53,17 @@ internal class FeedingsViewModel @Inject constructor(
                 }
             }
         }.collectLatest { feedings ->
-            allFeedings = feedings
+            allFeedings = persistentMapOf(
+                FeedingFilterCategory.PENDING
+                    to feedings.filter { FeedingFilterCategory.PENDING == toFilterCategory(it.status) },
+                FeedingFilterCategory.APPROVED
+                    to feedings.filter { FeedingFilterCategory.APPROVED == toFilterCategory(it.status) },
+                FeedingFilterCategory.REJECTED
+                    to feedings.filter { FeedingFilterCategory.REJECTED == toFilterCategory(it.status) },
+                FeedingFilterCategory.OUTDATED
+                    to feedings.filter { FeedingFilterCategory.OUTDATED == toFilterCategory(it.status) },
+
+            )
             updateState {
                 copy(
                     feedingsFiltered = feedings.filter {
@@ -105,11 +116,13 @@ internal class FeedingsViewModel @Inject constructor(
             updateState {
                 copy(
                     feedingsCategory = feedingsCategory,
-                    feedingsFiltered = allFeedings.filter {
-                        feedingsCategory == toFilterCategory(it.status)
-                    }.toImmutableList()
+                    feedingsFiltered = allFeedings.getOrDefault(feedingsCategory, emptyList()).toImmutableList(),
+                    hasReviewedFeedings = hasReviewedFeedings()
                 )
             }
         }
     }
+    private fun hasReviewedFeedings(): Boolean =
+        allFeedings.getOrDefault(FeedingFilterCategory.APPROVED, emptyList()).isEmpty() ||
+            allFeedings.getOrDefault(FeedingFilterCategory.REJECTED, emptyList()).isEmpty()
 }
