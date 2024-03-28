@@ -7,7 +7,7 @@ import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.ResetGeolocationPermissionRequestedAgain
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SetFinishProfileAsStartDestination
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.SwitchUsingMockedFeedingPoints
-import com.epmedu.animeal.permissions.domain.UpdateIsGeolocationPermissionRequestedAgainUseCase
+import com.epmedu.animeal.permissions.domain.UpdateAppSettingsUseCase
 import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class DebugMenuViewModel @Inject constructor(
-    private val updateIsGeolocationPermissionRequestedAgainUseCase: UpdateIsGeolocationPermissionRequestedAgainUseCase,
+    private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
     private val routerRepository: RouterRepository,
     private val debugMenuRepository: DebugMenuRepository
 ) : ViewModel() {
@@ -32,7 +32,7 @@ internal class DebugMenuViewModel @Inject constructor(
 
             is ResetGeolocationPermissionRequestedAgain -> {
                 viewModelScope.launch {
-                    updateIsGeolocationPermissionRequestedAgainUseCase(false)
+                    updateAppSettingsUseCase { isGeolocationPermissionRationaleShown = false }
                 }
             }
         }
