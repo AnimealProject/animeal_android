@@ -21,7 +21,7 @@ internal class MoreViewModel @Inject constructor(
         viewModelScope.launch {
             val options = mutableSetOf(
                 MoreOption.Profile,
-                MoreOption.Feedings,
+                MoreOption.Feedings(),
                 MoreOption.FAQ,
                 MoreOption.About,
                 MoreOption.Account,
@@ -30,11 +30,20 @@ internal class MoreViewModel @Inject constructor(
 
             feedingsButtonHandler.getFeedingsButtonState().collect { buttonState ->
                 when (buttonState) {
-                    FeedingsButtonState.Hidden -> options.remove(MoreOption.Feedings)
-                    else -> options.add(MoreOption.Feedings)
+                    FeedingsButtonState.Hidden -> {
+                        options.removeIf { it is MoreOption.Feedings }
+                    }
+                    else -> {
+                        options.removeIf { it is MoreOption.Feedings }
+                        options.add(
+                            MoreOption.Feedings(
+                                isIndicatorEnabled = buttonState == FeedingsButtonState.Pulsating
+                            )
+                        )
+                    }
                 }
                 updateState {
-                    copy(options = options.toImmutableList())
+                    copy(options = options.sortedBy { it.route.ordinal }.toImmutableList())
                 }
             }
         }

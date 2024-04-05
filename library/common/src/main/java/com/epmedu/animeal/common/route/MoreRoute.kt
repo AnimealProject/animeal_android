@@ -4,8 +4,8 @@ enum class MoreRoute {
     More,
     Profile,
     Feedings,
-    Donate,
     FAQ,
     About,
-    Account
+    Account,
+    Donate
 }

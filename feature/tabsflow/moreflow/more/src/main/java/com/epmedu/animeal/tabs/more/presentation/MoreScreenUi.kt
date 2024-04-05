@@ -1,13 +1,17 @@
 package com.epmedu.animeal.tabs.more.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -17,6 +21,7 @@ import com.epmedu.animeal.foundation.theme.bottomBarPadding
 import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.presentation.model.MoreOption
+import com.epmedu.animeal.tabs.more.presentation.ui.FeedingsIndicator
 import com.epmedu.animeal.tabs.more.presentation.ui.MoreOption
 import com.epmedu.animeal.tabs.more.presentation.viewmodel.MoreState
 import kotlinx.collections.immutable.persistentListOf
@@ -45,7 +50,18 @@ internal fun MoreScreenUi(
             LazyColumn {
                 items(state.options) { option ->
                     MoreOption(
-                        title = stringResource(id = option.stringResource),
+                        text = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                Text(text = stringResource(id = option.stringResource))
+
+                                if (option is MoreOption.Feedings && option.isIndicatorEnabled) {
+                                    FeedingsIndicator()
+                                }
+                            }
+                        },
                         onClick = { onNavigate(option.route.name) }
                     )
                 }
@@ -62,7 +78,8 @@ private fun MoreScreenPreview() {
             state = MoreState(
                 options = persistentListOf(
                     MoreOption.Profile,
-                    MoreOption.Feedings
+                    MoreOption.Feedings(),
+                    MoreOption.Feedings(isIndicatorEnabled = true)
                 )
             ),
             onNavigate = {}

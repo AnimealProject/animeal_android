@@ -12,7 +12,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -29,7 +28,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
-fun BoxScope.PulseEffect(
+fun PulseEffect(
     infiniteTransition: InfiniteTransition,
     durationMillis: Int,
     minSize: Dp,
@@ -70,7 +69,6 @@ fun BoxScope.PulseEffect(
                 shape = shape
             )
             .size(pulseSize)
-            .align(Alignment.Center)
     )
 }
 
