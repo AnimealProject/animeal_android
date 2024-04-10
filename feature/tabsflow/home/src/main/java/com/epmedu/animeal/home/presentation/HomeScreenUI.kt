@@ -31,6 +31,7 @@ import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
 import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
@@ -122,6 +123,8 @@ internal fun HomeScreenUI(
         scope = scope,
         bottomSheetState = bottomSheetState
     )
+
+    BottomBarVisibility(state = bottomSheetState)
 
     AnimealBottomSheetLayout(
         skipHalfExpanded = state.feedingRouteState is FeedingRouteState.Active,
