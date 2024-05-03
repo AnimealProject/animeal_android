@@ -17,13 +17,17 @@ internal fun OnboardingScreenUI(
     onSignInFacebook: () -> Unit
 ) {
     Column {
-        OnBoarding()
         Spacer(modifier = Modifier.weight(1f))
+        OnBoarding()
+        Spacer(
+            modifier = Modifier.weight(if (state.isFacebookLoginAvailable) 5f else 4f)
+        )
         ButtonsBlock(
             isFacebookButtonAvailable = state.isFacebookLoginAvailable,
             onSignInMobile = onSignInMobile,
             onSignInFacebook = onSignInFacebook,
         )
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
