@@ -27,6 +27,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.isPending
@@ -51,11 +53,9 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun FeedingsScreenUI(
     state: FeedingsState,
-    currentFeeding: FeedingModel?,
     bottomSheetState: AnimealBottomSheetState,
     onBack: () -> Unit,
-    onFilterClick: (FeedingFilterCategory) -> Unit,
-    onFeedingClick: (FeedingModel) -> Unit
+    onEvent: (FeedingsScreenEvent) -> Unit
 ) {
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha(
         skipHalfExpanded = true
@@ -68,7 +68,7 @@ internal fun FeedingsScreenUI(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetBackgroundColor = MaterialTheme.colors.onPrimary,
         sheetContent = {
-            currentFeeding?.let {
+            state.currentFeeding?.let {
                 FeedingItemSheetContent(
                     feeding = it,
                     contentAlpha = contentAlpha,
@@ -77,9 +77,9 @@ internal fun FeedingsScreenUI(
             }
         },
         sheetControls = {
-            currentFeeding?.let {
+            state.currentFeeding?.let {
                 FeedingItemButtons(
-                    areEnabled = currentFeeding.status.isPending(),
+                    areEnabled = state.currentFeeding.status.isPending(),
                     onRejectClick = {},
                     onApproveClick = {},
                     modifier = Modifier
@@ -89,7 +89,7 @@ internal fun FeedingsScreenUI(
             }
         }
     ) {
-        FeedingsScreenContent(onBack, state, onFeedingClick, onFilterClick)
+        FeedingsScreenContent(onBack, state, onEvent)
     }
 }
 
@@ -97,8 +97,7 @@ internal fun FeedingsScreenUI(
 private fun FeedingsScreenContent(
     onBack: () -> Unit,
     state: FeedingsState,
-    onFeedingClick: (FeedingModel) -> Unit,
-    onFilterClick: (FeedingFilterCategory) -> Unit
+    onEvent: (FeedingsScreenEvent) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
@@ -123,11 +122,14 @@ private fun FeedingsScreenContent(
                 else -> {
                     FeedingList(
                         feedings = state.feedingsFiltered,
-                        onFeedingClick = onFeedingClick
+                        onFeedingClick = { feeding -> onEvent(UpdateCurrentFeeding(feeding)) }
                     )
                 }
             }
-            FeedingsCategoryTab(state.feedingsCategory, onFilterClick)
+            FeedingsCategoryTab(
+                feedingsCategory = state.feedingsCategory,
+                onFilterClick = { filterCategory -> onEvent(UpdateCategoryEvent(filterCategory)) }
+            )
         }
     }
 }
@@ -219,11 +221,9 @@ private fun FeedingScreenPreview() {
             state = FeedingsState(
                 feedingsFiltered = feedings.toImmutableList(),
             ),
-            currentFeeding = null,
             bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {},
-            onFeedingClick = {}
+            onEvent = {}
         )
     }
 }
@@ -234,11 +234,9 @@ private fun FeedingScreenEmptyPreview() {
     AnimealTheme {
         FeedingsScreenUI(
             state = FeedingsState(),
-            currentFeeding = null,
             bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {},
-            onFeedingClick = {}
+            onEvent = {}
         )
     }
 }
@@ -249,11 +247,9 @@ private fun FeedingScreenLoadingPreview() {
     AnimealTheme {
         FeedingsScreenUI(
             state = FeedingsState(isLoading = true),
-            currentFeeding = null,
             bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {},
-            onFeedingClick = {}
+            onEvent = {}
         )
     }
 }

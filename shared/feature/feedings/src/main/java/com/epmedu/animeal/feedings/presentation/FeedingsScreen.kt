@@ -6,13 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.epmedu.animeal.extensions.currentOrThrow
-import com.epmedu.animeal.feedings.presentation.model.FeedingModel
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsViewModel
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
@@ -29,7 +26,6 @@ fun FeedingsScreen() {
     val state by viewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(initialValue = Hidden)
     val coroutineScope = rememberCoroutineScope()
-    var currentFeeding: FeedingModel? by rememberSaveable { mutableStateOf(null) }
 
     BottomBarVisibility(BottomBarVisibilityState.HIDDEN)
 
@@ -38,21 +34,22 @@ fun FeedingsScreen() {
     }
 
     LaunchedEffect(bottomSheetState.isHidden) {
-        if (bottomSheetState.isHidden) currentFeeding = null
+        if (bottomSheetState.isHidden) viewModel.handleEvents(UpdateCurrentFeeding(null))
+    }
+
+    LaunchedEffect(state.currentFeeding) {
+        coroutineScope.launch {
+            when (state.currentFeeding) {
+                null -> bottomSheetState.hide()
+                else -> bottomSheetState.expand()
+            }
+        }
     }
 
     FeedingsScreenUI(
         state = state,
-        currentFeeding = currentFeeding,
         bottomSheetState = bottomSheetState,
         onBack = navigator::popBackStack,
-        onFilterClick = {
-                feedingsCategory ->
-            viewModel.handleEvents(FeedingsScreenEvent.UpdateCategoryEvent(feedingsCategory))
-        },
-        onFeedingClick = {
-            currentFeeding = it
-            coroutineScope.launch { bottomSheetState.expand() }
-        }
+        onEvent = viewModel::handleEvents
     )
 }

@@ -11,6 +11,8 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
@@ -38,7 +40,8 @@ internal class FeedingsViewModel @Inject constructor(
 
     fun handleEvents(event: FeedingsScreenEvent) {
         when (event) {
-            is FeedingsScreenEvent.UpdateCategoryEvent -> updateFeedingsCategory(event.category)
+            is UpdateCategoryEvent -> updateFeedingsCategory(event.category)
+            is UpdateCurrentFeeding -> updateCurrentFeeding(event.feeding)
         }
     }
 
@@ -114,5 +117,9 @@ internal class FeedingsViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun updateCurrentFeeding(feeding: FeedingModel?) {
+        updateState { copy(currentFeeding = feeding) }
     }
 }
