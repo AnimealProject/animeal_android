@@ -33,8 +33,8 @@ internal fun FeedingItemSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier
 ) {
-    var currentPhotoIndex by rememberSaveable { mutableStateOf(0) }
-    val currentPhoto by remember(currentPhotoIndex) {
+    var currentPhotoIndex by rememberSaveable(feeding.id) { mutableStateOf(0) }
+    val currentPhoto by remember(currentPhotoIndex, feeding.id) {
         mutableStateOf(feeding.photos[currentPhotoIndex])
     }
 

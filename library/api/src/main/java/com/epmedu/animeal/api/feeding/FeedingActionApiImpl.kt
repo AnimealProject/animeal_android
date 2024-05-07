@@ -1,5 +1,6 @@
 package com.epmedu.animeal.api.feeding
 
+import ApproveFeedingMutation
 import CancelFeedingMutation
 import FinishFeedingMutation
 import RejectFeedingMutation
@@ -38,6 +39,13 @@ internal class FeedingActionApiImpl(
     ): ApiResult<String> {
         return animealApi.launchMutation(
             mutation = FinishFeedingMutation(feedingPointId, images),
+            responseClass = String::class.java
+        )
+    }
+
+    override suspend fun approveFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+        return animealApi.launchMutation(
+            mutation = ApproveFeedingMutation(feedingPointId, reason, null),
             responseClass = String::class.java
         )
     }

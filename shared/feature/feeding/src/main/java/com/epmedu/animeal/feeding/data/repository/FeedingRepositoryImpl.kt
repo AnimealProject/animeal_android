@@ -338,6 +338,10 @@ internal class FeedingRepositoryImpl(
         return feedingActionApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
     }
 
+    override suspend fun approveFeeding(feedingId: String, reason: String): ActionResult<Unit> {
+        return feedingActionApi.approveFeeding(feedingId, reason).toActionResult(feedingId)
+    }
+
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
         _domainFeedState.emit(newFeedState)
     }

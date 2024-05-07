@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ApproveClicked
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
@@ -81,7 +82,7 @@ internal fun FeedingsScreenUI(
                 FeedingItemButtons(
                     areEnabled = state.currentFeeding.status.isPending(),
                     onRejectClick = {},
-                    onApproveClick = {},
+                    onApproveClick = { onEvent(ApproveClicked) },
                     modifier = Modifier
                         .alpha(buttonAlpha)
                         .padding(vertical = 40.dp)
@@ -115,7 +116,7 @@ private fun FeedingsScreenContent(
                 .padding(start = 25.dp, end = 25.dp, top = 20.dp)
         ) {
             when {
-                state.isLoading -> {
+                state.isListLoading -> {
                     LoadingState()
                 }
 
@@ -257,7 +258,7 @@ private fun FeedingScreenEmptyPreview() {
 private fun FeedingScreenLoadingPreview() {
     AnimealTheme {
         FeedingsScreenUI(
-            state = FeedingsState(isLoading = true),
+            state = FeedingsState(isListLoading = true),
             bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
             onEvent = {}

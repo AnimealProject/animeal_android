@@ -11,4 +11,6 @@ interface FeedingActionApi {
     suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String>
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ApiResult<String>
+
+    suspend fun approveFeeding(feedingPointId: String, reason: String): ApiResult<String>
 }

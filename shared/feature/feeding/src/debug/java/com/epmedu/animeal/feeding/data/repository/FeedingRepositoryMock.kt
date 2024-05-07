@@ -59,6 +59,10 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return ActionResult.Success(Unit)
     }
 
+    override suspend fun approveFeeding(feedingId: String, reason: String): ActionResult<Unit> {
+        return ActionResult.Success(Unit)
+    }
+
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {}
 
 }

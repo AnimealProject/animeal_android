@@ -9,5 +9,8 @@ data class FeedingsState(
     val feedingsFiltered: ImmutableList<FeedingModel> = persistentListOf(),
     val isLoading: Boolean = false,
     val feedingsCategory: FeedingFilterCategory = FeedingFilterCategory.PENDING,
-    val hasReviewedFeedings: Boolean = false
+    val hasReviewedFeedings: Boolean = false,
+    val isListLoading: Boolean = false,
+    val isLockedAndLoading: Boolean = false,
+    val isError: Boolean = false
 )
