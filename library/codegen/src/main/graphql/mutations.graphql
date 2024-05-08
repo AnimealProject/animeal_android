@@ -28,6 +28,258 @@ mutation CancelFeeding($feedingId: String!, $reason: String!) {
   cancelFeeding(feedingId: $feedingId, reason: $reason)
 }
 
+mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
+  createFeedingPointExt(input: $input) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+      __typename
+    }
+    location {
+      lat
+      lon
+      __typename
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+      __typename
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+      __typename
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    users {
+      nextToken
+      __typename
+    }
+    cover
+    feedingPointCategoryId
+    __typename
+  }
+}
+
+mutation UpdateFeedingPointExt($input: UpdateFeedingPointInput!) {
+  updateFeedingPointExt(input: $input) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+      __typename
+    }
+    location {
+      lat
+      lon
+      __typename
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+      __typename
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+      __typename
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    users {
+      nextToken
+      __typename
+    }
+    cover
+    feedingPointCategoryId
+    __typename
+  }
+}
+
+mutation CreateFeedingExt($input: CreateFeedingInput!) {
+  createFeedingExt(input: $input) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+mutation UpdateFeedingExt($input: UpdateFeedingInput!) {
+  updateFeedingExt(input: $input) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+mutation CreateFeedingHistoryExt($input: CreateFeedingHistoryInput!) {
+  createFeedingHistoryExt(input: $input) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
+    status
+    reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
+    __typename
+  }
+}
+
+mutation UpdateFeedingHistoryExt($input: UpdateFeedingHistoryInput!) {
+  updateFeedingHistoryExt(input: $input) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
+    status
+    reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
+    __typename
+  }
+}
+
+mutation DeleteFeedingExt($input: DeleteFeedingExtInput!) {
+  deleteFeedingExt(input: $input) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
 mutation CreatePet(
   $input: CreatePetInput!
   $condition: ModelPetConditionInput

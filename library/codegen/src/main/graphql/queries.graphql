@@ -1017,66 +1017,6 @@ query ListRelationUserPets(
   }
 }
 
-query RelationUserPetsByUserIdAndPetId(
-  $userId: String!
-  $petId: ModelIDKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelRelationUserPetFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  relationUserPetsByUserIdAndPetId(
-    userId: $userId
-    petId: $petId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      userId
-      petId
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-
-query RelationUserPetsByPetIdAndUserId(
-  $petId: ID!
-  $userId: ModelStringKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelRelationUserPetFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  relationUserPetsByPetIdAndUserId(
-    petId: $petId
-    userId: $userId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      userId
-      petId
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-
 query GetMedication($id: ID!) {
   getMedication(id: $id) {
     id
@@ -1118,37 +1058,6 @@ query ListMedications(
   $nextToken: String
 ) {
   listMedications(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      name
-      petId
-      date
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-
-query MedicationsByPetIdAndDate(
-  $petId: ID!
-  $date: ModelStringKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelMedicationFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  medicationsByPetIdAndDate(
-    petId: $petId
-    date: $date
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
     items {
       id
       name
