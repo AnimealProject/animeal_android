@@ -8,8 +8,12 @@ import com.epmedu.animeal.api.faq.FAQApi
 import com.epmedu.animeal.api.faq.FAQApiImpl
 import com.epmedu.animeal.api.favourite.FavouriteApi
 import com.epmedu.animeal.api.favourite.FavouriteApiImpl
+import com.epmedu.animeal.api.feeding.FeedingActionApi
+import com.epmedu.animeal.api.feeding.FeedingActionApiImpl
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingApiImpl
+import com.epmedu.animeal.api.feeding.FeedingHistoryApi
+import com.epmedu.animeal.api.feeding.FeedingHistoryApiImpl
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.feeding.FeedingPointApiImpl
 import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
@@ -40,6 +44,18 @@ internal object ApiModule {
     fun providesFeedingApi(
         animealApi: AnimealApi
     ): FeedingApi = FeedingApiImpl(animealApi)
+
+    @Singleton
+    @Provides
+    fun providesFeedingHistoryApi(
+        animealApi: AnimealApi
+    ): FeedingHistoryApi = FeedingHistoryApiImpl(animealApi)
+
+    @Singleton
+    @Provides
+    fun providesFeedingActionApi(
+        animealApi: AnimealApi
+    ): FeedingActionApi = FeedingActionApiImpl(animealApi)
 
     @Singleton
     @Provides

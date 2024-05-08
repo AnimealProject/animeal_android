@@ -8,6 +8,7 @@ import com.amplifyframework.core.model.query.predicate.QueryPredicate
 import com.apollographql.apollo.api.Mutation
 import com.apollographql.apollo.api.Operation
 import com.apollographql.apollo.api.Query
+import com.apollographql.apollo.api.Subscription
 import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
@@ -76,4 +77,9 @@ interface AnimealApi {
         subscriptionType: SubscriptionType,
         modelClass: Class<GraphQLModel>
     ): Flow<GraphQLModel>
+
+    fun <D : Operation.Data, T, V : Operation.Variables> launchSubscription(
+        subscription: Subscription<D, T, V>,
+        responseClass: Class<D>
+    ): Flow<D>
 }
