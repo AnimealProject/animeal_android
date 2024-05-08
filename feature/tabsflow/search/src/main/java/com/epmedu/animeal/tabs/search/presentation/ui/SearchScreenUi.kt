@@ -236,8 +236,10 @@ private fun ScreenContent(
             .padding(top = 16.dp),
     ) {
         AnimalTypeHorizontalPager(
+            state = state,
             tabRowHorizontalPadding = 30.dp,
-            scope = scope
+            scope = scope,
+            onEvent = onEvent
         ) { animalType ->
 
             SearchFeedingPointsUi(

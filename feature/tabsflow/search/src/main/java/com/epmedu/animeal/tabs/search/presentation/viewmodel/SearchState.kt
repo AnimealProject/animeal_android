@@ -15,7 +15,8 @@ data class SearchState(
     val favourites: ImmutableList<FeedingPointModel> = persistentListOf(),
     val showingFeedingPoint: FeedingPointModel? = null,
     val feedState: FeedState = FeedState(),
-    val permissionsState: PermissionsState = PermissionsState()
+    val permissionsState: PermissionsState = PermissionsState(),
+    val animalType: AnimalType = AnimalType.Dogs
 ) {
     fun getQueryBy(animalType: AnimalType) = when (animalType) {
         AnimalType.Dogs -> dogsQuery

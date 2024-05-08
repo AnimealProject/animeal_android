@@ -29,7 +29,7 @@ fun AnimealSwitch(
     onSelectTab: (animalType: AnimalType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var currentAnimalType by remember { mutableStateOf(defaultAnimalType) }
+    var currentAnimalType by remember(defaultAnimalType) { mutableStateOf(defaultAnimalType) }
 
     TabRow(
         selectedTabIndex = currentAnimalType.ordinal,

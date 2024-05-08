@@ -10,6 +10,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandl
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.AnimalTypeChange
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.feedings.presentation.viewmodel.handlers.FeedingsButtonHandler
@@ -101,7 +102,7 @@ internal class HomeViewModel @Inject constructor(
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
             ScreenCreated -> onScreenCreated()
-            ScreenDisplayed -> loadingHandler.hideLoading()
+            ScreenDisplayed -> onScreenDisplayed()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()
             is HomeScreenEvent.FeedingGalleryEvent -> viewModelScope.handleGalleryEvent(event)
@@ -112,6 +113,16 @@ internal class HomeViewModel @Inject constructor(
     private fun onScreenCreated() {
         handleForcedFeedingPoint()
         viewModelScope.launch { fetchCurrentFeeding() }
+    }
+
+    private fun onScreenDisplayed() {
+        loadingHandler.hideLoading()
+        viewModelScope.launch { showCurrentAnimalType() }
+    }
+
+    private suspend fun showCurrentAnimalType() {
+        val animalType = animalTypeUseCase()
+        handleFeedingPointEvent(AnimalTypeChange(animalType))
     }
 
     private fun finishFeedingProcess() {
