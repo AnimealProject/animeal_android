@@ -58,6 +58,7 @@ internal class FeedingsViewModel @Inject constructor(
             allFeedings = feedings
             updateState {
                 copy(
+                    currentFeeding = feedings.find { it.id == currentFeeding?.id },
                     feedingsFiltered = feedings.filter {
                         state.feedingsCategory == toFilterCategory(it.status)
                     }.toImmutableList(),
