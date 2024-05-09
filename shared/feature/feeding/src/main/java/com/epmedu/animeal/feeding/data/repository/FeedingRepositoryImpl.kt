@@ -150,7 +150,7 @@ internal class FeedingRepositoryImpl(
             getRawFeeding = { onCreateFeedingHistoryExt() },
             getFeedingId = { id() },
             getUserId = { userId() },
-            toFeeding = { user -> toFeeding(user) }
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
         )
     }
 
@@ -160,13 +160,13 @@ internal class FeedingRepositoryImpl(
                 getRawFeeding = { onCreateFeedingExt() },
                 getFeedingId = { id() },
                 getUserId = { userId() },
-                toFeeding = { user -> toFeeding(user) }
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
             ),
             feedingApi.subscribeToFeedingsUpdates().updateFeedingsMap(
                 getRawFeeding = { onUpdateFeedingExt() },
                 getFeedingId = { id() },
                 getUserId = { userId() },
-                toFeeding = { user -> toFeeding(user) }
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
             ),
             feedingApi.subscribeToFeedingsDeletion().map { data ->
                 cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
@@ -179,7 +179,7 @@ internal class FeedingRepositoryImpl(
         getRawFeeding: RawData.() -> RawFeeding?,
         getFeedingId: RawFeeding.() -> String,
         getUserId: RawFeeding.() -> String,
-        toFeeding: RawFeeding.(User?) -> Feeding?
+        toFeeding: suspend RawFeeding.(User?) -> Feeding?
     ): Flow<Any?> {
         return flatMapLatest { data ->
             data.getRawFeeding()?.let { rawFeeding ->
@@ -226,12 +226,6 @@ internal class FeedingRepositoryImpl(
         users: List<User>
     ): List<Feeding> {
         val usersMap = users.associateBy { it.id }
-        val getImageFrom: suspend (String) -> NetworkFile = { name ->
-            NetworkFile(
-                name = name,
-                url = storageApi.getUrlFrom(name)
-            )
-        }
 
         return container.feedingHistories.orEmpty().mapNotNull { feeding ->
             when {
@@ -242,7 +236,7 @@ internal class FeedingRepositoryImpl(
                 else -> {
                     feeding?.toFeeding(
                         feeder = usersMap[feeding.userId()],
-                        getImageFrom = getImageFrom
+                        getImageFrom = ::getImageFromName
                     )
                 }
             }
@@ -255,7 +249,7 @@ internal class FeedingRepositoryImpl(
                 else -> {
                     feeding?.toFeeding(
                         feeder = usersMap[feeding.userId()],
-                        getImageFrom = getImageFrom
+                        getImageFrom = ::getImageFromName
                     )
                 }
             }
@@ -265,6 +259,13 @@ internal class FeedingRepositoryImpl(
     private fun SearchFeedingsQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
 
     private fun SearchFeedingHistoriesQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private suspend fun getImageFromName(fileName: String): NetworkFile {
+        return NetworkFile(
+            name = fileName,
+            url = storageApi.getUrlFrom(fileName)
+        )
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFeedingHistoriesBy(

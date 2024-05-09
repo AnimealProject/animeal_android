@@ -23,7 +23,8 @@ internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
     }
 }
 
-internal fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt.toFeeding(
+internal suspend fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt.toFeeding(
+    getImageFrom: suspend (fileName: String) -> NetworkFile,
     feeder: User? = null
 ): Feeding? {
     return status()?.toDomain()?.let { status ->
@@ -32,7 +33,8 @@ internal fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt.toF
             feeder = feeder,
             status = status,
             date = Temporal.DateTime(createdAt()).toDate(),
-            feedingPointId = feedingPointId()
+            feedingPointId = feedingPointId(),
+            photos = images().map { getImageFrom(it) }
         )
     }
 }
