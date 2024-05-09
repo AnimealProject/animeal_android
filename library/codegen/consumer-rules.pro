@@ -26,3 +26,19 @@
     final java.util.List items;
  }
 -keepclassmembers class SearchQuestionsQuery$Item { *; }
+-keepclassmembers class OnCreateFeedingExtSubscription$Data {
+    final OnCreateFeedingExtSubscription$OnCreateFeedingExt onCreateFeedingExt;
+}
+-keepclassmembers class OnCreateFeedingExtSubscription$OnCreateFeedingExt { *; }
+-keepclassmembers class OnUpdateFeedingExtSubscription$Data {
+    final OnUpdateFeedingExtSubscription$OnUpdateFeedingExt onUpdateFeedingExt;
+}
+-keepclassmembers class OnUpdateFeedingExtSubscription$OnUpdateFeedingExt { *; }
+-keepclassmembers class OnDeleteFeedingExtSubscription$Data {
+    final OnDeleteFeedingExtSubscription$OnDeleteFeedingExt onDeleteFeedingExt;
+}
+-keepclassmembers class OnDeleteFeedingExtSubscription$OnDeleteFeedingExt { *; }
+-keepclassmembers class OnCreateFeedingHistoryExtSubscription$Data {
+    final OnCreateFeedingHistoryExtSubscription$OnCreateFeedingHistoryExt onCreateFeedingHistoryExt;
+}
+-keepclassmembers class OnCreateFeedingHistoryExtSubscription$OnCreateFeedingHistoryExt { *; }

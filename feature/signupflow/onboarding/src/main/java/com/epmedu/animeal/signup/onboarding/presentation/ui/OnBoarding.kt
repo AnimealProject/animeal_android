@@ -24,7 +24,7 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun OnBoarding() {
     Column(
-        modifier = Modifier.padding(56.dp),
+        modifier = Modifier.padding(horizontal = 56.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(

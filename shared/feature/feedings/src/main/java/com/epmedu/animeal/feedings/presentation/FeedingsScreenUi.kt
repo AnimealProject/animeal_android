@@ -99,7 +99,11 @@ private fun FeedingsScreenContent(
     state: FeedingsState,
     onEvent: (FeedingsScreenEvent) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         TopBar(
             title = stringResource(id = R.string.feedings),
             navigationIcon = {

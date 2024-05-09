@@ -2,7 +2,6 @@ package com.epmedu.animeal.signup.onboarding.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -27,12 +26,7 @@ internal fun ButtonsBlock(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(
-                when {
-                    isFacebookButtonAvailable -> PaddingValues(24.dp)
-                    else -> PaddingValues(horizontal = 24.dp, vertical = 56.dp)
-                }
-            ),
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
