@@ -1,32 +1,18 @@
 package com.epmedu.animeal.api.feeding
 
-import CancelFeedingMutation
-import FinishFeedingMutation
-import RejectFeedingMutation
-import SearchFeedingHistoriesQuery
 import SearchFeedingsQuery
-import StartFeedingMutation
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.api.AnimealApi
+import com.epmedu.animeal.api.feeding.FeedingFilters.feedingsCreatedAtFilterInput
 import com.epmedu.animeal.common.data.wrapper.ApiResult
-import com.epmedu.animeal.extensions.YEAR_MONTH_DAY_DASH_FORMATTER
 import kotlinx.coroutines.flow.Flow
 import type.FeedingStatus
 import type.SearchableFeedingFilterInput
-import type.SearchableFeedingHistoryFilterInput
 import type.SearchableStringFilterInput
-import java.time.LocalDate
 
 internal class FeedingApiImpl(
     private val animealApi: AnimealApi
 ) : FeedingApi {
-
-    private val feedingsCreatedAtFilterInput = SearchableStringFilterInput.builder()
-        .gte(
-            LocalDate.now().minusDays(FEEDINGS_LIMIT_IN_DAYS)
-                .format(YEAR_MONTH_DAY_DASH_FORMATTER)
-        )
-        .build()
 
     override fun getUserFeedings(userId: String): Flow<List<Feeding>> {
         return animealApi.getModelList(
@@ -86,91 +72,24 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun getAllFeedingHistories(): ApiResult<SearchFeedingHistoriesQuery.Data> {
-        return animealApi.launchQuery(
-            query = SearchFeedingHistoriesQuery.builder()
-                .filter(
-                    SearchableFeedingHistoryFilterInput.builder()
-                        .createdAt(feedingsCreatedAtFilterInput)
-                        .build()
-                )
-                .build(),
-            responseClass = SearchFeedingHistoriesQuery.Data::class.java
+    override fun subscribeToFeedingsUpdates(): Flow<OnUpdateFeedingExtSubscription.Data> {
+        return animealApi.launchSubscription(
+            subscription = OnUpdateFeedingExtSubscription.builder().build(),
+            responseClass = OnUpdateFeedingExtSubscription.Data::class.java
         )
     }
 
-    override suspend fun getFeedingHistoriesBy(
-        feedingPointId: String?,
-        assignedModeratorId: String?,
-        status: FeedingStatus?
-    ): ApiResult<SearchFeedingHistoriesQuery.Data> {
-        val filterBuilder = SearchableFeedingHistoryFilterInput.builder()
-
-        feedingPointId?.let {
-            filterBuilder.feedingPointId(
-                SearchableStringFilterInput.builder()
-                    .eq(feedingPointId)
-                    .build()
-            )
-        }
-        status?.name?.let {
-            filterBuilder.status(
-                SearchableStringFilterInput.builder()
-                    .eq(status.name)
-                    .build()
-            )
-        }
-        assignedModeratorId?.let {
-            filterBuilder.assignedModerators(
-                SearchableStringFilterInput.builder()
-                    .eq(assignedModeratorId)
-                    .build()
-            )
-        }
-
-        val query = SearchFeedingHistoriesQuery.builder()
-            .filter(filterBuilder.build())
-            .build()
-
-        return animealApi.launchQuery(
-            query = query,
-            responseClass = SearchFeedingHistoriesQuery.Data::class.java
+    override fun subscribeToFeedingsCreation(): Flow<OnCreateFeedingExtSubscription.Data> {
+        return animealApi.launchSubscription(
+            subscription = OnCreateFeedingExtSubscription.builder().build(),
+            responseClass = OnCreateFeedingExtSubscription.Data::class.java
         )
     }
 
-    override suspend fun startFeeding(feedingPointId: String): ApiResult<String> {
-        return animealApi.launchMutation(
-            mutation = StartFeedingMutation(feedingPointId),
-            responseClass = String::class.java
+    override fun subscribeToFeedingsDeletion(): Flow<OnDeleteFeedingExtSubscription.Data> {
+        return animealApi.launchSubscription(
+            subscription = OnDeleteFeedingExtSubscription.builder().build(),
+            responseClass = OnDeleteFeedingExtSubscription.Data::class.java
         )
-    }
-
-    override suspend fun cancelFeeding(feedingPointId: String): ApiResult<String> {
-        return animealApi.launchMutation(
-            mutation = CancelFeedingMutation(feedingPointId, CANCEL_FEEDING_REASON),
-            responseClass = String::class.java
-        )
-    }
-
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
-        return animealApi.launchMutation(
-            mutation = RejectFeedingMutation(feedingPointId, reason, null),
-            responseClass = String::class.java
-        )
-    }
-
-    override suspend fun finishFeeding(
-        feedingPointId: String,
-        images: List<String>
-    ): ApiResult<String> {
-        return animealApi.launchMutation(
-            mutation = FinishFeedingMutation(feedingPointId, images),
-            responseClass = String::class.java
-        )
-    }
-
-    private companion object {
-        const val CANCEL_FEEDING_REASON = "reason"
-        const val FEEDINGS_LIMIT_IN_DAYS = 10L
     }
 }

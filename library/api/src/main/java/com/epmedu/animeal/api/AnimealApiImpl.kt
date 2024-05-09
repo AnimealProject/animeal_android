@@ -14,6 +14,7 @@ import com.amplifyframework.core.model.query.predicate.QueryPredicate
 import com.apollographql.apollo.api.Mutation
 import com.apollographql.apollo.api.Operation
 import com.apollographql.apollo.api.Query
+import com.apollographql.apollo.api.Subscription
 import com.apollographql.apollo.internal.json.SortedInputFieldMapWriter
 import com.epmedu.animeal.api.wrapper.ResponseError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
@@ -189,6 +190,51 @@ internal class AnimealApiImpl(
                 },
                 { apiException ->
                     Log.i(LOG_TAG, "Subscription $subscriptionId terminates with $apiException")
+                    if (isRefreshTokenHasExpiredException(apiException)) {
+                        handleRefreshTokenExpiration()
+                    }
+                    cancel(CancellationException(apiException.message, apiException))
+                },
+                {
+                    Log.i(LOG_TAG, "Subscription $subscriptionId ended")
+                    channel.close()
+                }
+            )
+
+            awaitClose {
+                Log.i(LOG_TAG, "Flow with subscription $subscriptionId is closed")
+                graphQLOperation?.cancel()
+            }
+        }.retryWhen { cause, attempt ->
+            cause.cause?.cause is SocketException && attempt <= SUBSCRIPTION_RETRY_ATTEMPTS
+        }
+    }
+
+    override fun <D : Operation.Data, T, V : Operation.Variables> launchSubscription(
+        subscription: Subscription<D, T, V>,
+        responseClass: Class<D>
+    ): Flow<D> {
+        return callbackFlow {
+            var subscriptionId = ""
+
+            val graphQLOperation = Amplify.API.subscribe(
+                buildRequestFromOperation(subscription, responseClass),
+                { id ->
+                    subscriptionId = id
+                    Log.i(
+                        LOG_TAG,
+                        "Subscription $subscriptionId with type $subscription " +
+                            "has been established"
+                    )
+                },
+                { response ->
+                    Log.i(LOG_TAG, "Subscription $subscriptionId received response: $response")
+                    response.data?.let {
+                        trySendBlocking(response.data)
+                    }
+                },
+                { apiException ->
+                    Log.e(LOG_TAG, "Subscription $subscriptionId terminates with $apiException")
                     if (isRefreshTokenHasExpiredException(apiException)) {
                         handleRefreshTokenExpiration()
                     }
