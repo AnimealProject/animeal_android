@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
 @Suppress("LongParameterList")
@@ -138,11 +139,8 @@ internal class FeedingRepositoryImpl(
                 feedingHistoryApi.getAllFeedingHistories().data?.searchFeedingHistories()
                     ?.items()
             val feedings = feedingApi.getAllFeedings().data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
     }
@@ -152,7 +150,7 @@ internal class FeedingRepositoryImpl(
             getRawFeeding = { onCreateFeedingHistoryExt() },
             getFeedingId = { id() },
             getUserId = { userId() },
-            toFeeding = { user -> toFeeding(user) }
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
         )
     }
 
@@ -162,13 +160,13 @@ internal class FeedingRepositoryImpl(
                 getRawFeeding = { onCreateFeedingExt() },
                 getFeedingId = { id() },
                 getUserId = { userId() },
-                toFeeding = { user -> toFeeding(user) }
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
             ),
             feedingApi.subscribeToFeedingsUpdates().updateFeedingsMap(
                 getRawFeeding = { onUpdateFeedingExt() },
                 getFeedingId = { id() },
                 getUserId = { userId() },
-                toFeeding = { user -> toFeeding(user) }
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
             ),
             feedingApi.subscribeToFeedingsDeletion().map { data ->
                 cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
@@ -181,7 +179,7 @@ internal class FeedingRepositoryImpl(
         getRawFeeding: RawData.() -> RawFeeding?,
         getFeedingId: RawFeeding.() -> String,
         getUserId: RawFeeding.() -> String,
-        toFeeding: RawFeeding.(User?) -> Feeding?
+        toFeeding: suspend RawFeeding.(User?) -> Feeding?
     ): Flow<Any?> {
         return flatMapLatest { data ->
             data.getRawFeeding()?.let { rawFeeding ->
@@ -203,35 +201,70 @@ internal class FeedingRepositoryImpl(
             val feedings = feedingApi.getFeedingsBy(
                 assignedModeratorId = currentUserId
             ).data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
             .flowOn(dispatchers.IO)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun Flow<
-        Triple<
-            List<SearchFeedingHistoriesQuery.Item?>?,
-            List<SearchFeedingsQuery.Item?>?,
-            Set<String>
-            >
-        >.mergeToFeedings(): Flow<List<Feeding>> {
-        return flatMapLatest { triple ->
-            usersRepository.getUsersById(triple.third).map { users ->
-                val usersMap = users.associateBy { it.id }
+    private fun Flow<FeedingsContainer>.mergeToFeedings(): Flow<List<Feeding>> {
+        return flatMapLatest { feedingsContainer ->
+            val userIds = feedingsContainer.feedingHistories.orEmpty().mapNotNull { it?.userId() }
+                .plus(feedingsContainer.feedings.orEmpty().mapNotNull { it?.userId() })
+                .toSet()
 
-                triple.first.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
-                } + triple.second.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
+            usersRepository.getUsersById(userIds).map { users ->
+                mergeToFeedings(feedingsContainer, users)
+            }
+        }
+    }
+
+    private suspend fun mergeToFeedings(
+        container: FeedingsContainer,
+        users: List<User>
+    ): List<Feeding> {
+        val usersMap = users.associateBy { it.id }
+
+        return container.feedingHistories.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = ::getImageFromName
+                    )
+                }
+            }
+        } + container.feedings.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = ::getImageFromName
+                    )
                 }
             }
         }
+    }
+
+    private fun SearchFeedingsQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private suspend fun getImageFromName(fileName: String): NetworkFile {
+        return NetworkFile(
+            name = fileName,
+            url = storageApi.getUrlFrom(fileName)
+        )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -286,4 +319,9 @@ internal class FeedingRepositoryImpl(
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
         _domainFeedState.emit(newFeedState)
     }
+
+    private data class FeedingsContainer(
+        val feedings: List<SearchFeedingsQuery.Item?>?,
+        val feedingHistories: List<SearchFeedingHistoriesQuery.Item?>?
+    )
 }

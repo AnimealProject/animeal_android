@@ -17,7 +17,8 @@ suspend fun DataFeeding.toDomain(
     createdAt = createdAt.toDate()
 )
 
-internal fun OnCreateFeedingExtSubscription.OnCreateFeedingExt.toFeeding(
+internal suspend fun OnCreateFeedingExtSubscription.OnCreateFeedingExt.toFeeding(
+    getImageFrom: suspend (fileName: String) -> NetworkFile,
     feeder: User? = null
 ): Feeding {
     return Feeding(
@@ -25,11 +26,13 @@ internal fun OnCreateFeedingExtSubscription.OnCreateFeedingExt.toFeeding(
         feeder = feeder,
         status = status().toDomain(),
         date = Temporal.DateTime(createdAt()).toDate(),
-        feedingPointId = feedingPointFeedingsId()
+        feedingPointId = feedingPointFeedingsId(),
+        photos = images().map { getImageFrom(it) }
     )
 }
 
-internal fun OnUpdateFeedingExtSubscription.OnUpdateFeedingExt.toFeeding(
+internal suspend fun OnUpdateFeedingExtSubscription.OnUpdateFeedingExt.toFeeding(
+    getImageFrom: suspend (fileName: String) -> NetworkFile,
     feeder: User? = null
 ): Feeding {
     return Feeding(
@@ -37,6 +40,7 @@ internal fun OnUpdateFeedingExtSubscription.OnUpdateFeedingExt.toFeeding(
         feeder = feeder,
         status = status().toDomain(),
         date = Temporal.DateTime(createdAt()).toDate(),
-        feedingPointId = feedingPointFeedingsId()
+        feedingPointId = feedingPointFeedingsId(),
+        photos = images().map { getImageFrom(it) }
     )
 }
