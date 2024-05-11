@@ -8,8 +8,9 @@ fun provideVersionCode(): Int {
     val major = properties.propertyInt("VERSION")
     val minor = properties.propertyInt("SUB_VERSION")
     val patch = properties.propertyInt("BUILD_VERSION")
+    val hotfix = properties.propertyInt("HOTFIX_VERSION")
 
-    return calcVersionCode(major, minor, patch)
+    return calcVersionCode(major, minor, patch, hotfix)
 }
 
 fun provideVersionName(): String {
@@ -21,8 +22,8 @@ fun provideVersionName(): String {
     return "$major.$minor.$patch"
 }
 
-private fun calcVersionCode(major: Int, minor: Int, patch: Int): Int =
-    major * 100000 + minor * 1000 + patch
+private fun calcVersionCode(major: Int, minor: Int, patch: Int, hotfix: Int): Int =
+    major * 10000000 + minor * 100000 + patch * 100 + hotfix
 
 
 fun loadVersionProperties(): Properties =

@@ -1,9 +1,8 @@
 package com.epmedu.animeal.signup.onboarding.presentation.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -16,43 +15,37 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun ColumnScope.OnBoarding(
-    modifier: Modifier = Modifier,
-) {
+internal fun OnBoarding() {
     Column(
-        modifier = modifier
-            .padding(bottom = 32.dp)
-            .weight(1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 56.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-        ) {
-            Image(
-                modifier = Modifier.weight(1f),
-                contentScale = ContentScale.Crop,
-                painter = painterResource(R.drawable.ic_feed_us),
-                contentDescription = null
-            )
-            Text(
-                text = stringResource(R.string.onboarding_image_title),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h5,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = stringResource(R.string.onboarding_image_msg),
-                style = MaterialTheme.typography.body1,
-                textAlign = TextAlign.Center,
-            )
-        }
+        Image(
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillWidth,
+            painter = painterResource(R.drawable.ic_feed_us),
+            contentDescription = null
+        )
+        HeightSpacer(height = 24.dp)
+        Text(
+            text = stringResource(R.string.onboarding_image_title),
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center,
+        )
+        HeightSpacer(height = 12.dp)
+        Text(
+            text = stringResource(R.string.onboarding_image_msg),
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -60,8 +53,6 @@ internal fun ColumnScope.OnBoarding(
 @Composable
 private fun OnBoardingPreview() {
     AnimealTheme {
-        Column {
-            OnBoarding()
-        }
+        OnBoarding()
     }
 }

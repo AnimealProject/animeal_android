@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -47,6 +48,7 @@ fun AnimealSecondaryButton(
             text = text,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            fontWeight = FontWeight.Bold
         )
     }
 }

@@ -20,7 +20,6 @@ import androidx.compose.material.SwipeableState
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +40,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState
-import com.epmedu.animeal.foundation.bottombar.LocalBottomBarVisibilityController
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Expanded
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Shown
@@ -259,19 +256,13 @@ private fun Modifier.bottomSheetSwipeable(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AnimealBottomSheetState.contentAlphaButtonAlpha(): Pair<Float, Float> {
-    val changeBottomBarVisibilityState = LocalBottomBarVisibilityController.current
-
-    LaunchedEffect(progress, currentValue) {
-        val showBottomBar = if (isShowing || isExpanding) false else isHidden
-
-        changeBottomBarVisibilityState(BottomBarVisibilityState.ofBoolean(showBottomBar))
-    }
-
+fun AnimealBottomSheetState.contentAlphaButtonAlpha(
+    skipHalfExpanded: Boolean = false
+): Pair<Float, Float> {
     val contentAlpha: Float by animateFloatAsState(
         targetValue = when {
             isExpanding -> progress.fraction
-            isCollapsing -> 1f - progress.fraction
+            skipHalfExpanded && isHiding || isCollapsing -> 1f - progress.fraction
             else -> 0f
         }
     )

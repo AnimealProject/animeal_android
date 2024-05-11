@@ -178,6 +178,7 @@ class DefaultFeedingHandler(
                 onSuccess = {
                     displayThankYouDialog()
                     stopRoute()
+                    disableTimer()
                     fetchFeedingPoints()
                 },
                 onError = {

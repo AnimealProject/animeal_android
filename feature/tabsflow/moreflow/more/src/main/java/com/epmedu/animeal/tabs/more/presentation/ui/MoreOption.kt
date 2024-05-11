@@ -20,7 +20,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MoreOption(
-    title: String,
+    text: @Composable () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -30,14 +30,12 @@ internal fun MoreOption(
             .heightIn(min = 48.dp)
             .clickable { onClick() }
             .padding(start = 8.dp, end = 8.dp),
-        text = {
-            Text(text = title)
-        },
+        text = text,
         trailing = {
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = title,
+                contentDescription = null,
             )
         }
     )
@@ -47,6 +45,9 @@ internal fun MoreOption(
 @Composable
 private fun MoreOptionPreview() {
     AnimealTheme {
-        MoreOption(title = "Profile Page", onClick = {})
+        MoreOption(
+            text = { Text(text = "Profile Page") },
+            onClick = {}
+        )
     }
 }

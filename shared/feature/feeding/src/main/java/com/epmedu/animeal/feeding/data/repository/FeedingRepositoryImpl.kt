@@ -1,8 +1,13 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import SearchFeedingHistoriesQuery
+import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
+import com.apollographql.apollo.api.Operation.Data
+import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
+import com.epmedu.animeal.api.feeding.FeedingHistoryApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
@@ -20,6 +25,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.UsersRepository
+import com.epmedu.animeal.users.domain.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -27,18 +33,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
+import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
+@Suppress("LongParameterList")
 internal class FeedingRepositoryImpl(
     private val dispatchers: Dispatchers,
     private val authApi: AuthAPI,
     private val feedingApi: FeedingApi,
+    private val feedingHistoryApi: FeedingHistoryApi,
+    private val feedingActionApi: FeedingActionApi,
     private val feedingPointApi: FeedingPointApi,
     private val storageApi: StorageApi,
     private val favouriteRepository: FavouriteRepository,
@@ -49,6 +62,8 @@ internal class FeedingRepositoryImpl(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
+
+    private var cachedFeedingsMap = mutableMapOf<String, Feeding>()
 
     override fun getFeedStateFlow(): Flow<DomainFeedState> {
         return _domainFeedState.asSharedFlow()
@@ -103,58 +118,153 @@ internal class FeedingRepositoryImpl(
     }
 
     override fun getAllFeedings(): Flow<List<Feeding>> {
+        return merge(
+            fetchAllFeedings()
+                .onEach { feedings ->
+                    cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
+                },
+            merge(
+                subscribeToFeedings(),
+                subscribeToFeedingHistories()
+            ).map {
+                cachedFeedingsMap.values.toList()
+            }
+        )
+            .flowOn(dispatchers.IO)
+    }
+
+    private fun fetchAllFeedings(): Flow<List<Feeding>> {
         return flow {
             val feedingHistories =
-                feedingApi.getAllFeedingHistories().data?.searchFeedingHistories()?.items()
+                feedingHistoryApi.getAllFeedingHistories().data?.searchFeedingHistories()
+                    ?.items()
             val feedings = feedingApi.getAllFeedings().data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
-            .flowOn(dispatchers.IO)
+    }
+
+    private fun subscribeToFeedingHistories(): Flow<Any?> {
+        return feedingHistoryApi.subscribeToFeedingHistoriesCreation().updateFeedingsMap(
+            getRawFeeding = { onCreateFeedingHistoryExt() },
+            getFeedingId = { id() },
+            getUserId = { userId() },
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
+        )
+    }
+
+    private fun subscribeToFeedings(): Flow<Any?> {
+        return merge(
+            feedingApi.subscribeToFeedingsCreation().updateFeedingsMap(
+                getRawFeeding = { onCreateFeedingExt() },
+                getFeedingId = { id() },
+                getUserId = { userId() },
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
+            ),
+            feedingApi.subscribeToFeedingsUpdates().updateFeedingsMap(
+                getRawFeeding = { onUpdateFeedingExt() },
+                getFeedingId = { id() },
+                getUserId = { userId() },
+                toFeeding = { user -> toFeeding(::getImageFromName, user) }
+            ),
+            feedingApi.subscribeToFeedingsDeletion().map { data ->
+                cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
+            }
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun <RawData : Data, RawFeeding> Flow<RawData>.updateFeedingsMap(
+        getRawFeeding: RawData.() -> RawFeeding?,
+        getFeedingId: RawFeeding.() -> String,
+        getUserId: RawFeeding.() -> String,
+        toFeeding: suspend RawFeeding.(User?) -> Feeding?
+    ): Flow<Any?> {
+        return flatMapLatest { data ->
+            data.getRawFeeding()?.let { rawFeeding ->
+                usersRepository.getUserById(rawFeeding.getUserId()).map { user ->
+                    rawFeeding.toFeeding(user)?.let { feeding ->
+                        cachedFeedingsMap[rawFeeding.getFeedingId()] = feeding
+                    }
+                }
+            } ?: emptyFlow()
+        }
     }
 
     override fun getAssignedFeedings(): Flow<List<Feeding>> {
         return flow {
             val currentUserId = authApi.getCurrentUserId()
-            val feedingHistories = feedingApi.getFeedingHistoriesBy(
+            val feedingHistories = feedingHistoryApi.getFeedingHistoriesBy(
                 assignedModeratorId = currentUserId
             ).data?.searchFeedingHistories()?.items()
             val feedings = feedingApi.getFeedingsBy(
                 assignedModeratorId = currentUserId
             ).data?.searchFeedings()?.items()
-            val userIds = feedingHistories.orEmpty().map { it.userId() }
-                .plus(feedings.orEmpty().map { it.userId() })
-                .toSet()
 
-            emit(Triple(feedingHistories, feedings, userIds))
+            emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
             .flowOn(dispatchers.IO)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun Flow<
-        Triple<
-            List<SearchFeedingHistoriesQuery.Item?>?,
-            List<SearchFeedingsQuery.Item?>?,
-            Set<String>
-            >
-        >.mergeToFeedings(): Flow<List<Feeding>> {
-        return flatMapLatest { triple ->
-            usersRepository.getUsersById(triple.third).map { users ->
-                val usersMap = users.associateBy { it.id }
+    private fun Flow<FeedingsContainer>.mergeToFeedings(): Flow<List<Feeding>> {
+        return flatMapLatest { feedingsContainer ->
+            val userIds = feedingsContainer.feedingHistories.orEmpty().mapNotNull { it?.userId() }
+                .plus(feedingsContainer.feedings.orEmpty().mapNotNull { it?.userId() })
+                .toSet()
 
-                triple.first.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
-                } + triple.second.orEmpty().mapNotNull { feeding ->
-                    feeding?.toFeeding(feeder = usersMap[feeding.userId()])
+            usersRepository.getUsersById(userIds).map { users ->
+                mergeToFeedings(feedingsContainer, users)
+            }
+        }
+    }
+
+    private suspend fun mergeToFeedings(
+        container: FeedingsContainer,
+        users: List<User>
+    ): List<Feeding> {
+        val usersMap = users.associateBy { it.id }
+
+        return container.feedingHistories.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = ::getImageFromName
+                    )
+                }
+            }
+        } + container.feedings.orEmpty().mapNotNull { feeding ->
+            when {
+                feeding.isCanceled() -> {
+                    null
+                }
+
+                else -> {
+                    feeding?.toFeeding(
+                        feeder = usersMap[feeding.userId()],
+                        getImageFrom = ::getImageFromName
+                    )
                 }
             }
         }
+    }
+
+    private fun SearchFeedingsQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+
+    private suspend fun getImageFromName(fileName: String): NetworkFile {
+        return NetworkFile(
+            name = fileName,
+            url = storageApi.getUrlFrom(fileName)
+        )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -164,7 +274,7 @@ internal class FeedingRepositoryImpl(
     ): Flow<List<FeedingHistory>> {
         return flow {
             emit(
-                feedingApi.getFeedingHistoriesBy(
+                feedingHistoryApi.getFeedingHistoriesBy(
                     feedingPointId = feedingPointId,
                     status = status?.toData()
                 ).data?.searchFeedingHistories()?.items()
@@ -188,25 +298,30 @@ internal class FeedingRepositoryImpl(
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {
-        return feedingApi.startFeeding(feedingPointId).toActionResult(feedingPointId)
+        return feedingActionApi.startFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
     override suspend fun cancelFeeding(feedingPointId: String): ActionResult<Unit> {
-        return feedingApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
+        return feedingActionApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
     override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit> {
-        return feedingApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
+        return feedingActionApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
     }
 
     override suspend fun finishFeeding(
         feedingPointId: String,
         images: List<String>
     ): ActionResult<Unit> {
-        return feedingApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
+        return feedingActionApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
     }
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
         _domainFeedState.emit(newFeedState)
     }
+
+    private data class FeedingsContainer(
+        val feedings: List<SearchFeedingsQuery.Item?>?,
+        val feedingHistories: List<SearchFeedingHistoriesQuery.Item?>?
+    )
 }

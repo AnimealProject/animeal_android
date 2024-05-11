@@ -7,9 +7,11 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetAnimalTypeFromSettingsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -20,9 +22,11 @@ import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
 import com.epmedu.animeal.tabs.search.domain.SearchFeedingPointsUseCase
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
+import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.AnimalTypeChange
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FavouriteChange
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointHidden
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.FeedingPointSelected
+import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.ScreenCreated
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.Search
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -43,6 +47,8 @@ class SearchViewModel @Inject constructor(
     private val getFeedingInProgressUseCase: GetFeedingInProgressUseCase,
     private val addFeedingPointToFavouritesUseCase: AddFeedingPointToFavouritesUseCase,
     private val removeFeedingPointFromFavouritesUseCase: RemoveFeedingPointFromFavouritesUseCase,
+    private val getAnimalTypeFromSettingsUseCase: GetAnimalTypeFromSettingsUseCase,
+    private val updateAnimalTypeSettingsUseCase: UpdateAnimalTypeSettingsUseCase,
     private val feedingHandler: FeedingHandler,
     private val permissionsHandler: PermissionsHandler,
 ) : ViewModel(),
@@ -72,6 +78,16 @@ class SearchViewModel @Inject constructor(
                 copy(
                     feedState = feedingState
                 )
+            }
+        }
+    }
+
+    private fun onScreenCreated() {
+        viewModelScope.launch {
+            val animalType = getAnimalTypeFromSettingsUseCase()
+
+            updateState {
+                copy(animalType = animalType)
             }
         }
     }
@@ -115,10 +131,12 @@ class SearchViewModel @Inject constructor(
 
     fun handleEvents(event: SearchScreenEvent) {
         when (event) {
+            is ScreenCreated -> onScreenCreated()
             is FavouriteChange -> handleFavouriteChange(event)
             is FeedingPointSelected -> selectFeedingPoint(event.feedingPoint)
             is FeedingPointHidden -> updateState { copy(showingFeedingPoint = null) }
             is Search -> handleSearch(event)
+            is AnimalTypeChange -> handleAnimalTypeChange(event)
         }
     }
 
@@ -175,6 +193,12 @@ class SearchViewModel @Inject constructor(
         when {
             event.isFavourite -> addFeedingPointToFavourites(event.feedingPoint)
             else -> removeFeedingPointFromFavourites(event.feedingPoint)
+        }
+    }
+
+    private fun handleAnimalTypeChange(event: AnimalTypeChange) {
+        viewModelScope.launch {
+            updateAnimalTypeSettingsUseCase(event.animalType)
         }
     }
 

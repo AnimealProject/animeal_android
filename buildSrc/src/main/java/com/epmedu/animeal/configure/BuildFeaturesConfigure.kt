@@ -5,7 +5,7 @@ import com.epmedu.animeal.AnimealPluginExtension
 import com.epmedu.animeal.internal.libs
 import org.gradle.api.Project
 
-fun CommonExtension<*, *, *, *>.configureBuildFeatures(
+fun CommonExtension<*, *, *, *, *>.configureBuildFeatures(
     project: Project,
     pluginExtension: AnimealPluginExtension
 ) {

@@ -7,6 +7,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetAnimalTypeFromSettingsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
@@ -69,9 +70,12 @@ object HomeDomainModule {
     @ViewModelScoped
     @Provides
     fun providesGetAnimalTypeSettingsUseCase(
-        repository: ApplicationSettingsRepository,
+        getAnimalTypeFromSettingsUseCase: GetAnimalTypeFromSettingsUseCase,
         forcedFeedingPoint: ForcedArgumentsUseCase
-    ): AnimalTypeUseCase = AnimalTypeUseCase(repository, forcedFeedingPoint)
+    ): AnimalTypeUseCase = AnimalTypeUseCase(
+        getAnimalTypeFromSettingsUseCase,
+        forcedFeedingPoint
+    )
 
     @ViewModelScoped
     @Provides

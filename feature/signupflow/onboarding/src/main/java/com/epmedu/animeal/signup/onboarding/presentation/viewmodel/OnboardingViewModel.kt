@@ -3,6 +3,7 @@ package com.epmedu.animeal.signup.onboarding.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
+import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
+    buildConfigProvider: BuildConfigProvider,
     private val getIsPhoneNumberVerifiedUseCase: GetIsPhoneNumberVerifiedUseCase,
     private val getNetworkProfileUseCase: GetNetworkProfileUseCase,
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
@@ -37,6 +39,12 @@ internal class OnboardingViewModel @Inject constructor(
 ) : ViewModel(),
     StateDelegate<OnboardingState> by DefaultStateDelegate(initialState = OnboardingState()),
     ActionDelegate by actionDelegate {
+
+    init {
+        updateState {
+            copy(isFacebookLoginAvailable = buildConfigProvider.isProdFlavor.not())
+        }
+    }
 
     fun handleEvent(event: OnboardingScreenEvent) {
         when (event) {

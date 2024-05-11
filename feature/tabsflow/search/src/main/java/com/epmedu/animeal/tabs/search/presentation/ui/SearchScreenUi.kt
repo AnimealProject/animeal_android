@@ -34,6 +34,7 @@ import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
+import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
@@ -67,13 +68,17 @@ internal fun SearchScreenUi(
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
-    val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
+    val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha(
+        skipHalfExpanded = true
+    )
 
     val scope = rememberCoroutineScope()
 
     BackHandler(enabled = bottomSheetState.isVisible) {
         scope.launch { bottomSheetState.hide() }
     }
+
+    BottomBarVisibility(state = bottomSheetState)
 
     AnimealPermissions(
         permissionsState = state.permissionsState,
@@ -231,8 +236,10 @@ private fun ScreenContent(
             .padding(top = 16.dp),
     ) {
         AnimalTypeHorizontalPager(
+            state = state,
             tabRowHorizontalPadding = 30.dp,
-            scope = scope
+            scope = scope,
+            onEvent = onEvent
         ) { animalType ->
 
             SearchFeedingPointsUi(

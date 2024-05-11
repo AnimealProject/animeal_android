@@ -10,19 +10,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.foundation.topbar.BackButton
-import com.epmedu.animeal.foundation.topbar.TopBar
 import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FAQHeader(onBack: () -> Unit) {
     Column {
-        TopBar(
-            title = stringResource(id = R.string.page_faq),
-            navigationIcon = {
-                BackButton(onClick = onBack)
-            }
-        )
+        FAQTopBar(onBack)
         Text(
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 24.dp)

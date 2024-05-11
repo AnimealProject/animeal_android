@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# https://github.com/aws-amplify/aws-sdk-android/issues/796
+-dontwarn com.amazonaws.mobile.auth.**
+-dontwarn com.amazonaws.mobile.auth.ui.**
+-dontwarn com.amazonaws.mobileconnectors.cognitoauth.**
+-dontwarn com.amazonaws.services.s3.AmazonS3Client
+-dontwarn com.amazonaws.services.s3.model.**
+-dontwarn org.eclipse.paho.android.service.MqttAndroidClient
+-dontwarn org.eclipse.paho.client.mqttv3.**

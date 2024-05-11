@@ -11,6 +11,8 @@ import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
@@ -39,7 +41,8 @@ internal class FeedingsViewModel @Inject constructor(
 
     fun handleEvents(event: FeedingsScreenEvent) {
         when (event) {
-            is FeedingsScreenEvent.UpdateCategoryEvent -> updateFeedingsCategory(event.category)
+            is UpdateCategoryEvent -> updateFeedingsCategory(event.category)
+            is UpdateCurrentFeeding -> updateCurrentFeeding(event.feeding)
         }
     }
 
@@ -66,9 +69,8 @@ internal class FeedingsViewModel @Inject constructor(
             )
             updateState {
                 copy(
-                    feedingsFiltered = feedings.filter {
-                        state.feedingsCategory == toFilterCategory(it.status)
-                    }.toImmutableList(),
+                    currentFeeding = feedings.find { it.id == currentFeeding?.id },
+                    feedingsFiltered = allFeedings.getOrDefault(feedingsCategory, emptyList()).toImmutableList(),
                     isLoading = false
                 )
             }
@@ -77,7 +79,8 @@ internal class FeedingsViewModel @Inject constructor(
 
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
         when (feedingStatus) {
-            FeedingModelStatus.APPROVED -> FeedingFilterCategory.APPROVED
+            FeedingModelStatus.APPROVED,
+            FeedingModelStatus.AUTO_APPROVED -> FeedingFilterCategory.APPROVED
             FeedingModelStatus.PENDING_RED,
             FeedingModelStatus.PENDING_ORANGE,
             FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
@@ -90,21 +93,23 @@ internal class FeedingsViewModel @Inject constructor(
         feedingPoint: FeedingPoint
     ): FeedingModel? {
         val feedingStatus = feeding.status.toFeedingModelStatus(
-            deltaTime = System.currentTimeMillis() - feeding.date.time
+            deltaTime = System.currentTimeMillis() - feeding.date.time,
+            isFeederTrusted = feeding.feeder?.isTrusted == true
         )
 
         return if (feeding.feedingPointId == feedingPoint.id && feedingStatus != null) {
             FeedingModel(
                 id = feeding.id,
                 title = feedingPoint.title,
-                feeder = "${feeding.name} ${feeding.surname}",
+                feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
                     feeding.date.time,
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),
-                image = feedingPoint.image
+                image = feedingPoint.image,
+                photos = feeding.photos.toImmutableList()
             )
         } else {
             null
@@ -125,4 +130,8 @@ internal class FeedingsViewModel @Inject constructor(
     private fun hasReviewedFeedings(): Boolean =
         allFeedings.getOrDefault(FeedingFilterCategory.APPROVED, emptyList()).isEmpty() ||
             allFeedings.getOrDefault(FeedingFilterCategory.REJECTED, emptyList()).isEmpty()
+
+    private fun updateCurrentFeeding(feeding: FeedingModel?) {
+        updateState { copy(currentFeeding = feeding) }
+    }
 }

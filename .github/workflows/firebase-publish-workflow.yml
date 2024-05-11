@@ -37,10 +37,10 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           path: android-keystore
 
-      - name: Setup Java 11
+      - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: temurin
           cache: gradle
 

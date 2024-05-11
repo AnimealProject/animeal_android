@@ -1,5 +1,257 @@
 # this is an auto generated file. This will be overwritten
 
+subscription OnUpdateFeedingExt {
+  onUpdateFeedingExt {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+subscription OnCreateFeedingExt {
+  onCreateFeedingExt {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateFeedingPointExt {
+  onUpdateFeedingPointExt {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+      __typename
+    }
+    location {
+      lat
+      lon
+      __typename
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+      __typename
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+      __typename
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    users {
+      nextToken
+      __typename
+    }
+    cover
+    feedingPointCategoryId
+    __typename
+  }
+}
+
+subscription OnCreateFeedingPointExt {
+  onCreateFeedingPointExt {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+      __typename
+    }
+    location {
+      lat
+      lon
+      __typename
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+      __typename
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+      __typename
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    users {
+      nextToken
+      __typename
+    }
+    cover
+    feedingPointCategoryId
+    __typename
+  }
+}
+
+subscription OnUpdateFeedingHistoryExt {
+  onUpdateFeedingHistoryExt {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
+    status
+    reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
+    __typename
+  }
+}
+
+subscription OnCreateFeedingHistoryExt {
+  onCreateFeedingHistoryExt {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
+    status
+    reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
+    __typename
+  }
+}
+
+subscription OnDeleteFeedingExt {
+  onDeleteFeedingExt {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
 subscription OnCreatePet(
   $filter: ModelSubscriptionPetFilterInput
   $owner: String

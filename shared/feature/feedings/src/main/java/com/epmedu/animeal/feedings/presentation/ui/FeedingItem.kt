@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +26,11 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 
 @Composable
-fun FeedingItem(feedingModel: FeedingModel) {
+fun FeedingItem(feedingModel: FeedingModel, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(10.dp),
         border = BorderStroke(
             width = 1.dp,
@@ -72,7 +75,8 @@ fun FeedingItemPreview() {
                         status = status,
                         elapsedTime = "12 hours ago",
                         image = image
-                    )
+                    ),
+                    onClick = {}
                 )
             }
         }

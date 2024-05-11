@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,14 +22,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
+import com.epmedu.animeal.feedings.presentation.model.isPending
 import com.epmedu.animeal.feedings.presentation.ui.FeedingItem
+import com.epmedu.animeal.feedings.presentation.ui.FeedingItemButtons
+import com.epmedu.animeal.feedings.presentation.ui.FeedingItemSheetContent
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingFilterCategory
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
+import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.AnimealSwitchTab
@@ -42,10 +53,57 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun FeedingsScreenUI(
     state: FeedingsState,
+    bottomSheetState: AnimealBottomSheetState,
     onBack: () -> Unit,
-    onFilterClick: (FeedingFilterCategory) -> Unit
+    onEvent: (FeedingsScreenEvent) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha(
+        skipHalfExpanded = true
+    )
+
+    AnimealBottomSheetLayout(
+        modifier = Modifier.statusBarsPadding(),
+        skipHalfExpanded = true,
+        sheetState = bottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        sheetBackgroundColor = MaterialTheme.colors.onPrimary,
+        sheetContent = {
+            state.currentFeeding?.let {
+                FeedingItemSheetContent(
+                    feeding = it,
+                    contentAlpha = contentAlpha,
+                    modifier = Modifier.padding(top = 24.dp, bottom = 120.dp)
+                )
+            }
+        },
+        sheetControls = {
+            state.currentFeeding?.let {
+                FeedingItemButtons(
+                    areEnabled = state.currentFeeding.status.isPending(),
+                    onRejectClick = {},
+                    onApproveClick = {},
+                    modifier = Modifier
+                        .alpha(buttonAlpha)
+                        .padding(vertical = 40.dp)
+                )
+            }
+        }
+    ) {
+        FeedingsScreenContent(onBack, state, onEvent)
+    }
+}
+
+@Composable
+private fun FeedingsScreenContent(
+    onBack: () -> Unit,
+    state: FeedingsState,
+    onEvent: (FeedingsScreenEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         TopBar(
             title = stringResource(id = R.string.feedings),
             navigationIcon = {
@@ -66,10 +124,16 @@ internal fun FeedingsScreenUI(
                 }
 
                 else -> {
-                    FeedingList(state.feedingsFiltered)
+                    FeedingList(
+                        feedings = state.feedingsFiltered,
+                        onFeedingClick = { feeding -> onEvent(UpdateCurrentFeeding(feeding)) }
+                    )
                 }
             }
-            FeedingsCategoryTab(state.feedingsCategory, onFilterClick)
+            FeedingsCategoryTab(
+                feedingsCategory = state.feedingsCategory,
+                onFilterClick = { filterCategory -> onEvent(UpdateCategoryEvent(filterCategory)) }
+            )
         }
     }
 }
@@ -125,19 +189,23 @@ private fun EmptyState(hasReviewedFeedings: Boolean) {
             titleText = if (hasReviewedFeedings) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
             subtitleText = if (hasReviewedFeedings) {
                 R.string.feeding_tab_all_reviewed_subtitle
-            } else { R.string.feeding_tab_empty_subtitle }
+            } else { R.string.feeding_tab_empty_subtitle },
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
 
 @Composable
-private fun FeedingList(feedings: List<FeedingModel>) {
+private fun FeedingList(feedings: List<FeedingModel>, onFeedingClick: (FeedingModel) -> Unit) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(top = 70.dp, bottom = 30.dp, start = 5.dp, end = 5.dp)
     ) {
         items(feedings) { feedingModel ->
-            FeedingItem(feedingModel = feedingModel)
+            FeedingItem(
+                feedingModel = feedingModel,
+                onClick = { onFeedingClick(feedingModel) }
+            )
         }
     }
 }
@@ -160,8 +228,9 @@ private fun FeedingScreenPreview() {
             state = FeedingsState(
                 feedingsFiltered = feedings.toImmutableList(),
             ),
+            bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {}
+            onEvent = {}
         )
     }
 }
@@ -172,8 +241,9 @@ private fun FeedingScreenEmptyPreview() {
     AnimealTheme {
         FeedingsScreenUI(
             state = FeedingsState(),
+            bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {}
+            onEvent = {}
         )
     }
 }
@@ -184,8 +254,9 @@ private fun FeedingScreenLoadingPreview() {
     AnimealTheme {
         FeedingsScreenUI(
             state = FeedingsState(isLoading = true),
+            bottomSheetState = AnimealBottomSheetState(Hidden),
             onBack = {},
-            onFilterClick = {}
+            onEvent = {}
         )
     }
 }
