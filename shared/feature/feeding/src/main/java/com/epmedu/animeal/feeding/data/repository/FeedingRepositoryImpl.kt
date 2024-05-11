@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feeding.data.repository
 
-import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 import SearchFeedingHistoriesQuery
 import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
@@ -44,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import type.FeedingStatus.rejected
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
 @Suppress("LongParameterList")
 internal class FeedingRepositoryImpl(
@@ -144,7 +144,6 @@ internal class FeedingRepositoryImpl(
                 feedingsFlow.asSharedFlow()
             }
         }
-
     }
 
     private fun fetchAllFeedings(): Flow<List<Feeding>> {

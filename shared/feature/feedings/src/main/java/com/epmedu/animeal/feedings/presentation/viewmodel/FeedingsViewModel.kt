@@ -18,12 +18,12 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 internal class FeedingsViewModel @Inject constructor(
