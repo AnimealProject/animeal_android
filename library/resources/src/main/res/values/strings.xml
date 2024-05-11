@@ -116,7 +116,7 @@
     <string name="feeding_tab_all_reviewed_subtitle">Thank you!\n All feedings have been reviewed.</string>
 
     <string name="feeding_tab_empty_title">Ooops!</string>
-    <string name="feeding_tab_empty_subtitle">There are no items on the list yet.</string>
+    <string name="feeding_tab_empty_subtitle">There are no items in the list yet.</string>
 
     <string name="are_you_sure_you_want_delete_photo">Are you sure you want to delete this photo?</string>
 
