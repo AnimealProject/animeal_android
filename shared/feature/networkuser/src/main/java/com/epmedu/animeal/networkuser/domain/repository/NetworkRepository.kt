@@ -8,6 +8,8 @@ interface NetworkRepository {
 
     suspend fun isPhoneNumberVerified(): ActionResult<Boolean>
 
+    suspend fun getUserId(): String
+
     suspend fun getUserGroup(shouldFetch: Boolean = false): ActionResult<UserGroup>
 
     suspend fun getNetworkProfile(): Profile?

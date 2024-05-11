@@ -25,7 +25,7 @@ class GetAllFeedingsUseCase(
             if (userGroupResult is ActionResult.Success) {
                 when (userGroupResult.result) {
                     UserGroup.Administrator -> {
-                        repository.getAllFeedings().map { feedings ->
+                        repository.getAllFeedings(shouldFetch = true).map { feedings ->
                             feedings.sortedByDescending { feeding -> feeding.date }
                         }
                     }

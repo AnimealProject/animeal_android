@@ -21,7 +21,7 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return emptyList()
     }
 
-    override fun getAllFeedings(): Flow<List<Feeding>> {
+    override fun getAllFeedings(shouldFetch: Boolean): Flow<List<Feeding>> {
         return flowOf(emptyList())
     }
 
@@ -38,10 +38,6 @@ internal class FeedingRepositoryMock : FeedingRepository {
         status: FeedingStatus?
     ): Flow<List<FeedingHistory>> {
         return flowOf(emptyList())
-    }
-
-    override fun hasReviewedFeedings(): Flow<Boolean> {
-        return flowOf(false)
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {

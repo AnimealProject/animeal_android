@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 import SearchFeedingHistoriesQuery
 import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
@@ -43,7 +44,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import type.FeedingStatus.rejected
-import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
 @Suppress("LongParameterList")
 internal class FeedingRepositoryImpl(
@@ -59,6 +59,10 @@ internal class FeedingRepositoryImpl(
 ) : FeedingRepository {
 
     private val _domainFeedState = MutableSharedFlow<DomainFeedState>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    private val feedingsFlow = MutableSharedFlow<List<Feeding>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
@@ -117,20 +121,30 @@ internal class FeedingRepositoryImpl(
         }.flowOn(dispatchers.IO)
     }
 
-    override fun getAllFeedings(): Flow<List<Feeding>> {
-        return merge(
-            fetchAllFeedings()
-                .onEach { feedings ->
-                    cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
-                },
-            merge(
-                subscribeToFeedings(),
-                subscribeToFeedingHistories()
-            ).map {
-                cachedFeedingsMap.values.toList()
+    override fun getAllFeedings(shouldFetch: Boolean): Flow<List<Feeding>> {
+        return when {
+            shouldFetch -> {
+                merge(
+                    fetchAllFeedings()
+                        .onEach { feedings ->
+                            cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
+                        },
+                    merge(
+                        subscribeToFeedings(),
+                        subscribeToFeedingHistories()
+                    ).map {
+                        cachedFeedingsMap.values.toList()
+                    }
+                ).onEach { feedings ->
+                    feedingsFlow.emit(feedings)
+                }
             }
-        )
-            .flowOn(dispatchers.IO)
+
+            else -> {
+                feedingsFlow.asSharedFlow()
+            }
+        }
+
     }
 
     private fun fetchAllFeedings(): Flow<List<Feeding>> {
@@ -304,14 +318,6 @@ internal class FeedingRepositoryImpl(
             }
         }
             .flowOn(dispatchers.IO)
-    }
-
-    override fun hasReviewedFeedings(): Flow<Boolean> {
-        return getAllFeedings().map { feedings ->
-            val currentUserId = authApi.getCurrentUserId()
-
-            feedings.any { it.reviewedBy?.id == currentUserId }
-        }
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {
