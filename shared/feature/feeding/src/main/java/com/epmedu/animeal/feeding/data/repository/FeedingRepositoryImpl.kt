@@ -211,9 +211,17 @@ internal class FeedingRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun Flow<FeedingsContainer>.mergeToFeedings(): Flow<List<Feeding>> {
         return flatMapLatest { feedingsContainer ->
-            val userIds = feedingsContainer.feedingHistories.orEmpty().mapNotNull { it?.userId() }
-                .plus(feedingsContainer.feedings.orEmpty().mapNotNull { it?.userId() })
-                .toSet()
+            val userIds = mutableSetOf<String>()
+
+            feedingsContainer.feedings?.forEach { item ->
+                item?.let { userIds.add(item.userId()) }
+            }
+            feedingsContainer.feedingHistories?.forEach { item ->
+                item?.let {
+                    userIds.add(item.userId())
+                    item.moderatedBy()?.let { id -> userIds.add(id) }
+                }
+            }
 
             usersRepository.getUsersById(userIds).map { users ->
                 mergeToFeedings(feedingsContainer, users)
@@ -236,6 +244,7 @@ internal class FeedingRepositoryImpl(
                 else -> {
                     feeding?.toFeeding(
                         feeder = usersMap[feeding.userId()],
+                        reviewedBy = usersMap[feeding.moderatedBy()],
                         getImageFrom = ::getImageFromName
                     )
                 }
@@ -295,6 +304,14 @@ internal class FeedingRepositoryImpl(
             }
         }
             .flowOn(dispatchers.IO)
+    }
+
+    override fun hasReviewedFeedings(): Flow<Boolean> {
+        return getAllFeedings().map { feedings ->
+            val currentUserId = authApi.getCurrentUserId()
+
+            feedings.any { it.reviewedBy?.id == currentUserId }
+        }
     }
 
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {

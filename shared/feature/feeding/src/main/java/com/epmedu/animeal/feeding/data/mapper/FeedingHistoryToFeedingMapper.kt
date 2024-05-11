@@ -9,6 +9,7 @@ import com.epmedu.animeal.users.domain.model.User
 
 internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
     feeder: User?,
+    reviewedBy: User?,
     getImageFrom: suspend (fileName: String) -> NetworkFile
 ): Feeding? {
     return status()?.toDomain()?.let { status ->
@@ -18,13 +19,15 @@ internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
             status = status,
             date = Temporal.DateTime(createdAt()).toDate(),
             feedingPointId = feedingPointId(),
-            photos = images().map { getImageFrom(it) }
+            photos = images().map { getImageFrom(it) },
+            reviewedBy = reviewedBy
         )
     }
 }
 
 internal suspend fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt.toFeeding(
     getImageFrom: suspend (fileName: String) -> NetworkFile,
+    reviewedBy: User?,
     feeder: User? = null
 ): Feeding? {
     return status()?.toDomain()?.let { status ->
@@ -34,7 +37,8 @@ internal suspend fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistor
             status = status,
             date = Temporal.DateTime(createdAt()).toDate(),
             feedingPointId = feedingPointId(),
-            photos = images().map { getImageFrom(it) }
+            photos = images().map { getImageFrom(it) },
+            reviewedBy = reviewedBy
         )
     }
 }

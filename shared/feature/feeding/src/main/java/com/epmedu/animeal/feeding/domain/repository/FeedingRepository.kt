@@ -27,6 +27,8 @@ interface FeedingRepository {
 
     fun getFeedStateFlow(): Flow<DomainFeedState>
 
+    fun hasReviewedFeedings(): Flow<Boolean>
+
     suspend fun startFeeding(feedingPointId: String): ActionResult<Unit>
 
     suspend fun cancelFeeding(feedingPointId: String): ActionResult<Unit>

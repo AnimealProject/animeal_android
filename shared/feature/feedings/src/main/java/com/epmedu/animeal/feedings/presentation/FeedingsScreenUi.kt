@@ -120,7 +120,7 @@ private fun FeedingsScreenContent(
                 }
 
                 state.feedingsFiltered.isEmpty() -> {
-                    EmptyState(state.feedingsCategory == FeedingFilterCategory.PENDING)
+                    EmptyState(state)
                 }
 
                 else -> {
@@ -180,16 +180,20 @@ private fun LoadingState() {
 }
 
 @Composable
-private fun EmptyState(hasReviewedFeedings: Boolean) {
+private fun EmptyState(state: FeedingsState) {
+    val isWellDone = state.feedingsCategory == FeedingFilterCategory.PENDING && state.hasReviewedFeedings
+
     Box(
         contentAlignment = Alignment.Center
     ) {
         AnimealPopUpScreen(
             painterResource = painterResource(R.drawable.empty_screen_bone),
-            titleText = if (hasReviewedFeedings) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
-            subtitleText = if (hasReviewedFeedings) {
+            titleText = if (isWellDone) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
+            subtitleText = if (isWellDone) {
                 R.string.feeding_tab_all_reviewed_subtitle
-            } else { R.string.feeding_tab_empty_subtitle },
+            } else {
+                R.string.feeding_tab_empty_subtitle
+            },
             modifier = Modifier.fillMaxSize()
         )
     }

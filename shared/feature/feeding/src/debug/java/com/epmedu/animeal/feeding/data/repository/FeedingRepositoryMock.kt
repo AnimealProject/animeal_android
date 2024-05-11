@@ -40,6 +40,10 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return flowOf(emptyList())
     }
 
+    override fun hasReviewedFeedings(): Flow<Boolean> {
+        return flowOf(false)
+    }
+
     override suspend fun startFeeding(feedingPointId: String): ActionResult<Unit> {
         return ActionResult.Success(Unit)
     }
