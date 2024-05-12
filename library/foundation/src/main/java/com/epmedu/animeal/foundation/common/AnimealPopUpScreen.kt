@@ -3,7 +3,6 @@ package com.epmedu.animeal.foundation.common
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,17 +33,11 @@ fun AnimealPopUpScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_sticker),
-                contentDescription = null,
-            )
-            Image(
-                contentScale = ContentScale.None,
-                painter = painterResource,
-                contentDescription = null,
-            )
-        }
+        Image(
+            contentScale = ContentScale.None,
+            painter = painterResource,
+            contentDescription = null,
+        )
         HeightSpacer(height = 16.dp)
         Text(
             text = stringResource(titleText),

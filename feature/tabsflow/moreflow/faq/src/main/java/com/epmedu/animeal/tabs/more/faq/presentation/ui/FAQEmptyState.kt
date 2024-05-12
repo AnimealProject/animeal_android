@@ -20,7 +20,7 @@ internal fun FAQEmptyState(onBack: () -> Unit) {
     ) {
         FAQTopBar(onBack)
         AnimealPopUpScreen(
-            painterResource = painterResource(id = R.drawable.ic_questions),
+            painterResource = painterResource(id = R.drawable.ic_faqs_soon),
             titleText = R.string.coming_soon,
             subtitleText = R.string.thank_you_for_visiting,
             modifier = Modifier.fillMaxSize()
