@@ -10,6 +10,7 @@ import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
@@ -18,7 +19,8 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,12 +29,13 @@ import javax.inject.Inject
 internal class FeedingsViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val getAllFeedingsUseCase: GetAllFeedingsUseCase,
-    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase
+    private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
+    private val getHasReviewedFeedingsUseCase: GetHasReviewedFeedingsUseCase
 ) : ViewModel(),
     StateDelegate<FeedingsState> by DefaultStateDelegate(initialState = FeedingsState()),
     ActionDelegate by actionDelegate {
 
-    private var allFeedings: List<FeedingModel> = emptyList()
+    private val allFeedings = mutableMapOf<FeedingFilterCategory, List<FeedingModel>>()
 
     init {
         viewModelScope.launch { collectFeedings() }
@@ -54,27 +57,52 @@ internal class FeedingsViewModel @Inject constructor(
                     createFeedingModel(feeding, feedingPoint)
                 }
             }
-        }.collectLatest { feedings ->
-            allFeedings = feedings
+        }.combine(getHasReviewedFeedingsUseCase()) { feedings, hasReviewedFeedings ->
+            mapFeedingsByCategory(feedings)
+
             updateState {
                 copy(
                     currentFeeding = feedings.find { it.id == currentFeeding?.id },
-                    feedingsFiltered = feedings.filter {
-                        state.feedingsCategory == toFilterCategory(it.status)
-                    }.toImmutableList(),
-                    isLoading = false
+                    feedingsFiltered = allFeedings.getOrDefault(feedingsCategory, emptyList())
+                        .toImmutableList(),
+                    isLoading = false,
+                    hasReviewedFeedings = hasReviewedFeedings
                 )
             }
+        }.collect()
+    }
+
+    private fun mapFeedingsByCategory(feedings: List<FeedingModel>) {
+        val pendingFeedings = mutableListOf<FeedingModel>()
+        val approvedFeedings = mutableListOf<FeedingModel>()
+        val rejectedFeedings = mutableListOf<FeedingModel>()
+        val outdatedFeedings = mutableListOf<FeedingModel>()
+
+        feedings.forEach { feeding ->
+            when (toFilterCategory(feeding.status)) {
+                FeedingFilterCategory.PENDING -> pendingFeedings.add(feeding)
+                FeedingFilterCategory.APPROVED -> approvedFeedings.add(feeding)
+                FeedingFilterCategory.REJECTED -> rejectedFeedings.add(feeding)
+                FeedingFilterCategory.OUTDATED -> outdatedFeedings.add(feeding)
+            }
         }
+
+        allFeedings.clear()
+        allFeedings[FeedingFilterCategory.PENDING] = pendingFeedings
+        allFeedings[FeedingFilterCategory.APPROVED] = approvedFeedings
+        allFeedings[FeedingFilterCategory.REJECTED] = rejectedFeedings
+        allFeedings[FeedingFilterCategory.OUTDATED] = outdatedFeedings
     }
 
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
         when (feedingStatus) {
             FeedingModelStatus.APPROVED,
             FeedingModelStatus.AUTO_APPROVED -> FeedingFilterCategory.APPROVED
+
             FeedingModelStatus.PENDING_RED,
             FeedingModelStatus.PENDING_ORANGE,
             FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
+
             FeedingModelStatus.REJECTED -> FeedingFilterCategory.REJECTED
             FeedingModelStatus.OUTDATED -> FeedingFilterCategory.OUTDATED
         }
@@ -112,9 +140,8 @@ internal class FeedingsViewModel @Inject constructor(
             updateState {
                 copy(
                     feedingsCategory = feedingsCategory,
-                    feedingsFiltered = allFeedings.filter {
-                        feedingsCategory == toFilterCategory(it.status)
-                    }.toImmutableList()
+                    feedingsFiltered = allFeedings.getOrDefault(feedingsCategory, emptyList())
+                        .toImmutableList()
                 )
             }
         }

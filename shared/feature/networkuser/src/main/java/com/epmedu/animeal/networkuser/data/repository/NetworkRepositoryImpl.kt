@@ -35,6 +35,8 @@ class NetworkRepositoryImpl @Inject constructor(
         return ActionResult.Success(result is ApiResult.Success && result.data.isVerified())
     }
 
+    override suspend fun getUserId(): String = authAPI.getCurrentUserId()
+
     private fun List<AuthUserAttribute>.isVerified() = find {
         it.key == AuthUserAttributeKey.custom(UserAttributesKey.phoneNumberVerifiedKey)
     }?.value.toBoolean()

@@ -62,6 +62,10 @@ internal class FeedingRepositoryImpl(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
+    private val feedingsFlow = MutableSharedFlow<List<Feeding>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     private var cachedFeedingsMap = mutableMapOf<String, Feeding>()
 
@@ -117,20 +121,29 @@ internal class FeedingRepositoryImpl(
         }.flowOn(dispatchers.IO)
     }
 
-    override fun getAllFeedings(): Flow<List<Feeding>> {
-        return merge(
-            fetchAllFeedings()
-                .onEach { feedings ->
-                    cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
-                },
-            merge(
-                subscribeToFeedings(),
-                subscribeToFeedingHistories()
-            ).map {
-                cachedFeedingsMap.values.toList()
+    override fun getAllFeedings(shouldFetch: Boolean): Flow<List<Feeding>> {
+        return when {
+            shouldFetch -> {
+                merge(
+                    fetchAllFeedings()
+                        .onEach { feedings ->
+                            cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
+                        },
+                    merge(
+                        subscribeToFeedings(),
+                        subscribeToFeedingHistories()
+                    ).map {
+                        cachedFeedingsMap.values.toList()
+                    }
+                ).onEach { feedings ->
+                    feedingsFlow.emit(feedings)
+                }
             }
-        )
-            .flowOn(dispatchers.IO)
+
+            else -> {
+                feedingsFlow.asSharedFlow()
+            }
+        }
     }
 
     private fun fetchAllFeedings(): Flow<List<Feeding>> {
@@ -211,9 +224,17 @@ internal class FeedingRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun Flow<FeedingsContainer>.mergeToFeedings(): Flow<List<Feeding>> {
         return flatMapLatest { feedingsContainer ->
-            val userIds = feedingsContainer.feedingHistories.orEmpty().mapNotNull { it?.userId() }
-                .plus(feedingsContainer.feedings.orEmpty().mapNotNull { it?.userId() })
-                .toSet()
+            val userIds = mutableSetOf<String>()
+
+            feedingsContainer.feedings?.forEach { item ->
+                item?.let { userIds.add(item.userId()) }
+            }
+            feedingsContainer.feedingHistories?.forEach { item ->
+                item?.let {
+                    userIds.add(item.userId())
+                    item.moderatedBy()?.let { id -> userIds.add(id) }
+                }
+            }
 
             usersRepository.getUsersById(userIds).map { users ->
                 mergeToFeedings(feedingsContainer, users)
@@ -236,6 +257,7 @@ internal class FeedingRepositoryImpl(
                 else -> {
                     feeding?.toFeeding(
                         feeder = usersMap[feeding.userId()],
+                        reviewedBy = usersMap[feeding.moderatedBy()],
                         getImageFrom = ::getImageFromName
                     )
                 }

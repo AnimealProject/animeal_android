@@ -2,7 +2,9 @@ package com.epmedu.animeal.feedings.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
+import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import dagger.Module
 import dagger.Provides
@@ -24,4 +26,11 @@ object FeedingsDomainModule {
         getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase,
         feedingRepository: FeedingRepository
     ): GetAllFeedingsUseCase = GetAllFeedingsUseCase(getCurrentUserGroupUseCase, feedingRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun providesGetHasReviewedFeedingsUseCase(
+        feedingRepository: FeedingRepository,
+        networkRepository: NetworkRepository
+    ) = GetHasReviewedFeedingsUseCase(feedingRepository, networkRepository)
 }

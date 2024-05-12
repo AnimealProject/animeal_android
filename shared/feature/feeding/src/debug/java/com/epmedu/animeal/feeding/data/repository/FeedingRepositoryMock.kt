@@ -21,7 +21,7 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return emptyList()
     }
 
-    override fun getAllFeedings(): Flow<List<Feeding>> {
+    override fun getAllFeedings(shouldFetch: Boolean): Flow<List<Feeding>> {
         return flowOf(emptyList())
     }
 

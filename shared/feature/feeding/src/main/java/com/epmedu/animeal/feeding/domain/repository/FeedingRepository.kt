@@ -16,7 +16,7 @@ interface FeedingRepository {
 
     fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?>
 
-    fun getAllFeedings(): Flow<List<Feeding>>
+    fun getAllFeedings(shouldFetch: Boolean = false): Flow<List<Feeding>>
 
     fun getAssignedFeedings(): Flow<List<Feeding>>
 

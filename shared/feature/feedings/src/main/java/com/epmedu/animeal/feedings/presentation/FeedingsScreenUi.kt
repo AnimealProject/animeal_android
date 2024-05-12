@@ -15,7 +15,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabRow
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,8 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
@@ -41,6 +40,7 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
+import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.AnimealSwitchTab
 import com.epmedu.animeal.foundation.tabs.TabIndicator
@@ -120,7 +120,7 @@ private fun FeedingsScreenContent(
                 }
 
                 state.feedingsFiltered.isEmpty() -> {
-                    EmptyState()
+                    EmptyState(state)
                 }
 
                 else -> {
@@ -180,14 +180,21 @@ private fun LoadingState() {
 }
 
 @Composable
-private fun EmptyState() {
+private fun EmptyState(state: FeedingsState) {
+    val isWellDone = state.feedingsCategory == FeedingFilterCategory.PENDING && state.hasReviewedFeedings
+
     Box(
-        modifier = Modifier.fillMaxSize()
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(R.string.no_feedings),
-            modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center,
+        AnimealPopUpScreen(
+            painterResource = painterResource(R.drawable.empty_screen_bone),
+            titleText = if (isWellDone) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
+            subtitleText = if (isWellDone) {
+                R.string.feeding_tab_all_reviewed_subtitle
+            } else {
+                R.string.feeding_tab_empty_subtitle
+            },
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
