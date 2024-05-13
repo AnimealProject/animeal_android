@@ -43,14 +43,15 @@ internal class FeedingActionApiImpl(
         )
     }
 
-    override suspend fun approveFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+    override suspend fun approveFeeding(feedingPointId: String): ApiResult<String> {
         return animealApi.launchMutation(
-            mutation = ApproveFeedingMutation(feedingPointId, reason, null),
+            mutation = ApproveFeedingMutation(feedingPointId, APPROVE_FEEDING_REASON, null),
             responseClass = String::class.java
         )
     }
 
     private companion object {
         const val CANCEL_FEEDING_REASON = "reason"
+        const val APPROVE_FEEDING_REASON = "The request includes all necessary details."
     }
 }

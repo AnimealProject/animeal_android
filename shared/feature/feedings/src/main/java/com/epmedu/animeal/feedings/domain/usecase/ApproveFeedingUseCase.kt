@@ -8,7 +8,7 @@ class ApproveFeedingUseCase @Inject constructor(
     private val repository: FeedingRepository
 ) {
 
-    suspend operator fun invoke(feedingId: String, reason: String): ActionResult<Unit> {
-        return repository.approveFeeding(feedingId, reason)
+    suspend operator fun invoke(feedingId: String): ActionResult<Unit> {
+        return repository.approveFeeding(feedingId)
     }
 }
