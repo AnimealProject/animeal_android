@@ -179,7 +179,7 @@ internal class FeedingsViewModel @Inject constructor(
             viewModelScope.launch {
                 performAction(
                     action = {
-                        approveFeedingUseCase(feeding.id, "")
+                        approveFeedingUseCase(feedingId = feeding.id, reason = APPROVE_REASON)
                     },
                     onSuccess = {
                         fetchFeedings()
@@ -199,5 +199,9 @@ internal class FeedingsViewModel @Inject constructor(
 
     private fun hideError() {
         updateState { copy(isError = false) }
+    }
+
+    private companion object {
+        const val APPROVE_REASON = "The request includes all necessary details."
     }
 }
