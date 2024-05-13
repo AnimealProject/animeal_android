@@ -1,5 +1,6 @@
 package com.epmedu.animeal.api.feeding
 
+import ApproveFeedingMutation
 import CancelFeedingMutation
 import FinishFeedingMutation
 import RejectFeedingMutation
@@ -42,7 +43,15 @@ internal class FeedingActionApiImpl(
         )
     }
 
+    override suspend fun approveFeeding(feedingPointId: String): ApiResult<String> {
+        return animealApi.launchMutation(
+            mutation = ApproveFeedingMutation(feedingPointId, APPROVE_FEEDING_REASON, null),
+            responseClass = String::class.java
+        )
+    }
+
     private companion object {
         const val CANCEL_FEEDING_REASON = "reason"
+        const val APPROVE_FEEDING_REASON = "The request includes all necessary details."
     }
 }

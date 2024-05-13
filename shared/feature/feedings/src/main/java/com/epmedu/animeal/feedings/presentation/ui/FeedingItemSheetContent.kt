@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,9 +19,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter.State.Loading
 import coil.request.ImageRequest
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
+import com.epmedu.animeal.foundation.loading.ShimmerLoading
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -33,31 +36,44 @@ internal fun FeedingItemSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier
 ) {
-    var currentPhotoIndex by rememberSaveable { mutableStateOf(0) }
-    val currentPhoto by remember(currentPhotoIndex) {
+    var currentPhotoIndex by rememberSaveable(feeding.id) { mutableStateOf(0) }
+    val currentPhoto by remember(currentPhotoIndex, feeding.id) {
         mutableStateOf(feeding.photos[currentPhotoIndex])
     }
+    var isPhotoLoading by rememberSaveable(feeding.id) { mutableStateOf(false) }
 
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
         FeedingItemSheetHeading(feeding)
         HeightSpacer(height = 24.dp)
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(currentPhoto.url)
-                .diskCacheKey(currentPhoto.name)
-                .crossfade(true)
-                .build(),
-            contentScale = ContentScale.Fit,
-            contentDescription = null,
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .alpha(contentAlpha)
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 30.dp)
                 .clip(RoundedCornerShape(8.dp))
-        )
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(currentPhoto.url)
+                    .diskCacheKey(currentPhoto.name)
+                    .crossfade(true)
+                    .build(),
+                contentScale = ContentScale.Fit,
+                contentDescription = null,
+                onState = { state ->
+                    isPhotoLoading = state is Loading
+                }
+            )
+            if (isPhotoLoading) {
+                ShimmerLoading(
+                    modifier = Modifier.fillMaxSize(),
+                    shape = RoundedCornerShape(8.dp)
+                )
+            }
+        }
         HeightSpacer(height = 10.dp)
         FeedingPhotoCarousel(
             feeding = feeding,

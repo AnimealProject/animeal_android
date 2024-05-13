@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feedings.di
 
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
@@ -33,4 +34,10 @@ object FeedingsDomainModule {
         feedingRepository: FeedingRepository,
         networkRepository: NetworkRepository
     ) = GetHasReviewedFeedingsUseCase(feedingRepository, networkRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideApproveFeedingUseCase(
+        feedingRepository: FeedingRepository
+    ): ApproveFeedingUseCase = ApproveFeedingUseCase(feedingRepository)
 }
