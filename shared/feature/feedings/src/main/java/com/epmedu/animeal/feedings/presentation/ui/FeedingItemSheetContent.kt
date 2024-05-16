@@ -1,10 +1,13 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,15 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State.Loading
-import coil.request.ImageRequest
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
-import com.epmedu.animeal.foundation.loading.ShimmerLoading
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -40,47 +39,58 @@ internal fun FeedingItemSheetContent(
     val currentPhoto by remember(currentPhotoIndex, feeding.id) {
         mutableStateOf(feeding.photos[currentPhotoIndex])
     }
-    var isPhotoLoading by rememberSaveable(feeding.id) { mutableStateOf(false) }
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        FeedingItemSheetHeading(feeding)
-        HeightSpacer(height = 24.dp)
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .alpha(contentAlpha)
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 30.dp)
-                .clip(RoundedCornerShape(8.dp))
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(currentPhoto.url)
-                    .diskCacheKey(currentPhoto.name)
-                    .crossfade(true)
-                    .build(),
-                contentScale = ContentScale.Fit,
-                contentDescription = null,
-                onState = { state ->
-                    isPhotoLoading = state is Loading
-                }
-            )
-            if (isPhotoLoading) {
-                ShimmerLoading(
-                    modifier = Modifier.fillMaxSize(),
-                    shape = RoundedCornerShape(8.dp)
+    BoxWithConstraints(modifier = modifier) {
+        val photoContainerHeight = calculatePhotoContainerMaxHeight(screenHeightDp, maxHeight)
+
+        Column {
+            FeedingItemSheetHeading(feeding)
+            HeightSpacer(height = 24.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                FeedingPhoto(
+                    photo = currentPhoto,
+                    modifier = Modifier
+                        .heightIn(max = photoContainerHeight)
+                        .alpha(contentAlpha)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 30.dp)
+                        .clip(RoundedCornerShape(8.dp))
                 )
+                HeightSpacer(height = 10.dp)
+                FeedingPhotoCarousel(
+                    feeding = feeding,
+                    contentAlpha = contentAlpha,
+                    onPhotoClick = { index -> currentPhotoIndex = index }
+                )
+                if (feeding.reviewedBy != null || feeding.rejectionReason != null) {
+                    HeightSpacer(height = 24.dp)
+                    FeedingItemReviewDetails(
+                        feeding = feeding,
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    )
+                }
             }
         }
-        HeightSpacer(height = 10.dp)
-        FeedingPhotoCarousel(
-            feeding = feeding,
-            contentAlpha = contentAlpha,
-            onPhotoClick = { index -> currentPhotoIndex = index }
-        )
     }
+}
+
+private fun calculatePhotoContainerMaxHeight(
+    screenHeight: Dp,
+    parentContainerHeight: Dp
+): Dp {
+    val photoContainerHeightMultiplier = when {
+        screenHeight <= 470.dp -> 0.4f
+        screenHeight <= 640.dp -> 0.5f
+        screenHeight <= 960.dp -> 0.6f
+        else -> 0.7f
+    }
+
+    return parentContainerHeight * photoContainerHeightMultiplier
 }
 
 @AnimealPreview
@@ -109,9 +119,11 @@ private fun FeedingItemSheetContentPreview() {
                         index % 2 == 0 -> image
                         else -> secondImage
                     }
-                }.toImmutableList()
+                }.toImmutableList(),
+                reviewedBy = "Moderator",
+                rejectionReason = "Rejection reason"
             ),
-            contentAlpha = 0f
+            contentAlpha = 1f
         )
     }
 }

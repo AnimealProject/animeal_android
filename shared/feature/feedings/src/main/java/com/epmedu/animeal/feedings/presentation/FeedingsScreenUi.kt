@@ -39,6 +39,7 @@ import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingFilterCategory
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
+import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Expanded
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
@@ -48,6 +49,7 @@ import com.epmedu.animeal.foundation.tabs.TabIndicator
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
 import kotlinx.collections.immutable.toImmutableList
 
@@ -260,6 +262,48 @@ private fun FeedingScreenLoadingPreview() {
         FeedingsScreenUI(
             state = FeedingsState(isListLoading = true),
             bottomSheetState = AnimealBottomSheetState(Hidden),
+            onBack = {},
+            onEvent = {}
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun FeedingScreenWithExpandedBottomSheetPreview() {
+    val image = NetworkFile(
+        name = "cat",
+        url = "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg"
+    )
+    val secondImage = NetworkFile(
+        name = "cat2",
+        url = "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg"
+    )
+    val feedings = List(10) {
+        FeedingModel(
+            id = "",
+            title = "Feeding point",
+            feeder = "Feeder name",
+            status = FeedingModelStatus.PENDING_ORANGE,
+            elapsedTime = "1 hour ago",
+            image = image,
+            photos = List(10) { index ->
+                when {
+                    index % 2 == 0 -> image
+                    else -> secondImage
+                }
+            }.toImmutableList(),
+            reviewedBy = "Moderator",
+            rejectionReason = "Rejection reason"
+        )
+    }
+    AnimealTheme {
+        FeedingsScreenUI(
+            state = FeedingsState(
+                feedingsFiltered = feedings.toImmutableList(),
+                currentFeeding = feedings.first()
+            ),
+            bottomSheetState = AnimealBottomSheetState(Expanded),
             onBack = {},
             onEvent = {}
         )

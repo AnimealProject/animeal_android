@@ -17,5 +17,7 @@ data class FeedingModel(
     val status: FeedingModelStatus,
     val elapsedTime: String,
     val image: NetworkFile? = null,
-    val photos: @RawValue ImmutableList<NetworkFile> = persistentListOf()
+    val photos: @RawValue ImmutableList<NetworkFile> = persistentListOf(),
+    val reviewedBy: String? = null,
+    val rejectionReason: String? = null
 ) : Parcelable

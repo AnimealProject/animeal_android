@@ -88,6 +88,9 @@
     <string name="no_feedings">There is no items in the list yet</string>
     <string name="fed_by">Fed by: %s</string>
 
+    <string name="feeding_reviewed_by">Reviewed by: %s</string>
+    <string name="feeding_rejection_reason">Rejection reason: %s</string>
+
     <string name="unknown_user">Unknown user</string>
     <string name="feeding_in_progress">Feeding in progress, %s left</string>
     <string name="unknown_time">unknown time</string>
