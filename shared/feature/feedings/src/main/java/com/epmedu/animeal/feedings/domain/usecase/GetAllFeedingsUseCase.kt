@@ -26,13 +26,13 @@ class GetAllFeedingsUseCase(
                 when (userGroupResult.result) {
                     UserGroup.Administrator -> {
                         repository.getAllFeedings(shouldFetch = true).map { feedings ->
-                            feedings.sortedByDescending { feeding -> feeding.date }
+                            feedings.sortedBy { feeding -> feeding.date }
                         }
                     }
 
                     UserGroup.Moderator -> {
                         repository.getAssignedFeedings().map { feedings ->
-                            feedings.sortedByDescending { feeding -> feeding.date }
+                            feedings.sortedBy { feeding -> feeding.date }
                         }
                     }
 

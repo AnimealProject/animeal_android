@@ -28,7 +28,9 @@ internal class MoreViewModel @Inject constructor(
                 MoreOption.Donate,
             )
 
-            feedingsButtonHandler.getFeedingsButtonState().collect { buttonState ->
+            feedingsButtonHandler.getFeedingsButtonState(
+                shouldFetchFeedings = false
+            ).collect { buttonState ->
                 when (buttonState) {
                     FeedingsButtonState.Hidden -> {
                         options.removeIf { it is MoreOption.Feedings }

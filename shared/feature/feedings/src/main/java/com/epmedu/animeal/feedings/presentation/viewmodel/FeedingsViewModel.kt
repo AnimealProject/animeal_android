@@ -12,6 +12,8 @@ import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetViewedFeedingsUseCase
+import com.epmedu.animeal.feedings.domain.usecase.UpdateViewedFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ApproveClicked
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ErrorShown
@@ -35,7 +37,9 @@ internal class FeedingsViewModel @Inject constructor(
     private val getAllFeedingsUseCase: GetAllFeedingsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getHasReviewedFeedingsUseCase: GetHasReviewedFeedingsUseCase,
-    private val approveFeedingUseCase: ApproveFeedingUseCase
+    private val approveFeedingUseCase: ApproveFeedingUseCase,
+    private val getViewedFeedingsUseCase: GetViewedFeedingsUseCase,
+    private val updateViewedFeedingsUseCase: UpdateViewedFeedingsUseCase
 ) : ViewModel(),
     StateDelegate<FeedingsState> by DefaultStateDelegate(initialState = FeedingsState()),
     ActionDelegate by actionDelegate {
@@ -45,6 +49,7 @@ internal class FeedingsViewModel @Inject constructor(
 
     init {
         fetchFeedings()
+        observeCurrentFeeding()
     }
 
     fun handleEvents(event: FeedingsScreenEvent) {
@@ -59,14 +64,17 @@ internal class FeedingsViewModel @Inject constructor(
     private suspend fun collectFeedings() {
         updateState { copy(isListLoading = true) }
 
-        getAllFeedingsUseCase().map { feedings ->
-            feedings.mapNotNull { feeding ->
+        combine(
+            getAllFeedingsUseCase(),
+            getHasReviewedFeedingsUseCase(),
+            getViewedFeedingsUseCase()
+        ) { feedings, hasReviewedFeedings, viewedFeedingIds ->
+            val feedingModels = feedings.mapNotNull { feeding ->
                 getFeedingPointByIdUseCase(feeding.feedingPointId)?.let { feedingPoint ->
                     createFeedingModel(feeding, feedingPoint)
                 }
             }
-        }.combine(getHasReviewedFeedingsUseCase()) { feedings, hasReviewedFeedings ->
-            mapFeedingsByCategory(feedings)
+            mapFeedingsByCategory(feedingModels)
 
             val feedingsFiltered =
                 allFeedings.getOrDefault(state.feedingsCategory, emptyList()).toImmutableList()
@@ -74,6 +82,10 @@ internal class FeedingsViewModel @Inject constructor(
             val currentFeeding = when {
                 state.isLockedAndLoading && feedingsFiltered.isNotEmpty() -> {
                     feedingsFiltered.first()
+                }
+
+                state.isListLoading && state.feedingsCategory == FeedingFilterCategory.PENDING -> {
+                    feedingsFiltered.firstOrNull { viewedFeedingIds.contains(it.id).not() }
                 }
 
                 else -> {
@@ -199,6 +211,17 @@ internal class FeedingsViewModel @Inject constructor(
     private fun fetchFeedings() {
         feedingsJob?.cancel()
         feedingsJob = viewModelScope.launch { collectFeedings() }
+    }
+
+    private fun observeCurrentFeeding() {
+        viewModelScope.launch {
+            stateFlow.map { it.currentFeeding }
+                .collect { currentFeeding ->
+                    currentFeeding?.let {
+                        updateViewedFeedingsUseCase(it.id)
+                    }
+                }
+        }
     }
 
     private fun hideError() {

@@ -81,7 +81,9 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.restoreSavedFeedingPoint()
         viewModelScope.launch { collectPermissionsState() }
         viewModelScope.launch {
-            feedingsButtonHandler.getFeedingsButtonState().collect { feedingsButtonState ->
+            feedingsButtonHandler.getFeedingsButtonState(
+                shouldFetchFeedings = true
+            ).collect { feedingsButtonState ->
                 updateState { copy(feedingsButtonState = feedingsButtonState) }
             }
         }

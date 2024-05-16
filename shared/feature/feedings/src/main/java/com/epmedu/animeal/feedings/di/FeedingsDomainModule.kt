@@ -1,10 +1,13 @@
 package com.epmedu.animeal.feedings.di
 
+import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetViewedFeedingsUseCase
+import com.epmedu.animeal.feedings.domain.usecase.UpdateViewedFeedingsUseCase
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import dagger.Module
@@ -19,7 +22,10 @@ object FeedingsDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGetIsNewFeedingPendingUseCase() = GetIsNewFeedingPendingUseCase()
+    fun providesGetIsNewFeedingPendingUseCase(
+        feedingRepository: FeedingRepository,
+        applicationSettingsRepository: ApplicationSettingsRepository
+    ) = GetIsNewFeedingPendingUseCase(feedingRepository, applicationSettingsRepository)
 
     @ViewModelScoped
     @Provides
@@ -40,4 +46,16 @@ object FeedingsDomainModule {
     fun provideApproveFeedingUseCase(
         feedingRepository: FeedingRepository
     ): ApproveFeedingUseCase = ApproveFeedingUseCase(feedingRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetViewedFeedingsUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository
+    ) = GetViewedFeedingsUseCase(applicationSettingsRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideUpdateViewedFeedingsUseCase(
+        applicationSettingsRepository: ApplicationSettingsRepository
+    ) = UpdateViewedFeedingsUseCase(applicationSettingsRepository)
 }
