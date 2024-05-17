@@ -26,7 +26,6 @@ object CustomColor {
     val DarkerGrey = Color(0xFF99A8B0)
     val DarkestGrey = Color(0xFF262626)
     val Error = Color(0xFFF04E45)
-    val HitGrey = Color(0xFF99A8B0)
     val CarminePink = Color(0xFFF04E45)
 
     val Porcelain = Color(0xFFF2F2F2)

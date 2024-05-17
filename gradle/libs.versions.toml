@@ -8,7 +8,6 @@ androidGradlePlugin = "8.2.2"
 accompanist = "0.30.1"
 activityCompose = "1.7.2"
 androidxComposeBom = "2023.05.01"
-androidxEmoji2 = "1.2.0"
 appcompat = "1.6.1"
 amplify = "2.10.0"
 androidxEspresso = "3.5.1"
@@ -98,8 +97,6 @@ camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cam
 camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 
-compose-material-dialog-core = { module = "io.github.vanpra.compose-material-dialogs:core", version.ref = "dialogCore" }
-compose-material-dialog-datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "dialogCore" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 

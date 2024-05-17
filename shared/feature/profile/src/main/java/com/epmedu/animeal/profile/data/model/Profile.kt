@@ -7,11 +7,10 @@ import com.epmedu.animeal.profile.domain.model.Region
 data class Profile(
     val name: String = EMPTY_STRING,
     val surname: String = EMPTY_STRING,
-    val birthDate: String = EMPTY_STRING,
     val phoneNumberRegion: Region = Region.GE,
     val phoneNumber: String = EMPTY_STRING,
     val email: String = EMPTY_STRING
 ) {
     fun isFilled() =
-        name.isNotBlank() && surname.isNotBlank() && birthDate.isNotBlank() && email.isNotBlank()
+        name.isNotBlank() && surname.isNotBlank() && email.isNotBlank()
 }

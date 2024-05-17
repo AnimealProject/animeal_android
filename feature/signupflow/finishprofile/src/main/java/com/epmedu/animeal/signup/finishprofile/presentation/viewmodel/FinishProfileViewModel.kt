@@ -16,7 +16,6 @@ import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthe
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
@@ -51,7 +50,6 @@ internal class FinishProfileViewModel @Inject constructor(
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
-    private val validateBirthDateUseCase: ValidateBirthDateUseCase,
     private val logOutUseCase: LogOutUseCase,
     private val loadingHandler: LoadingHandler
 ) : ViewModel(),
@@ -70,7 +68,7 @@ internal class FinishProfileViewModel @Inject constructor(
         viewModelScope.launch {
             getProfileUseCase().collect {
                 profileInputFormHandler.updateState {
-                    copy(profile = it, formState = EDITABLE)
+                    copy(profile = it, formState = EDITABLE, isAgeConfirmationEnabled = true)
                 }
             }
         }
@@ -98,14 +96,14 @@ internal class FinishProfileViewModel @Inject constructor(
                         validateNameUseCase(name),
                         validateSurnameUseCase(surname),
                         validateEmailUseCase(email),
-                        validateBirthDateUseCase(birthDate),
                         validatePhoneNumberUseCase(phoneNumber, phoneNumberRegion.phoneNumberDigitsCount)
                     )
                 }
                 updateState {
                     copy(
                         profileInputFormState = inputFormState,
-                        isDoneButtonEnabled = errors.all { it is UiText.Empty }
+                        isDoneButtonEnabled = errors.all { it is UiText.Empty } &&
+                            inputFormState.isAgeConfirmed
                     )
                 }
             }

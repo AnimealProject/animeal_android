@@ -7,7 +7,6 @@ object UserAttributesKey {
 
     val nameKey: AuthUserAttributeKey = AuthUserAttributeKey.name()
     val surnameKey: AuthUserAttributeKey = AuthUserAttributeKey.familyName()
-    val birthDateKey: AuthUserAttributeKey = AuthUserAttributeKey.birthdate()
     val phoneNumberKey: AuthUserAttributeKey = AuthUserAttributeKey.phoneNumber()
     val emailKey: AuthUserAttributeKey = AuthUserAttributeKey.email()
 }
