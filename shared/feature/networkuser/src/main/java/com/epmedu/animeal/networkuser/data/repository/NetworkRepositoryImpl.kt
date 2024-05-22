@@ -70,10 +70,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun getNetworkProfile(): Profile? {
         return when (val result = userAttributesAPI.fetchUserAttributes()) {
-            is ApiResult.Success -> authUserAttributesToProfileMapper.map(
-                attributes = result.data,
-                authenticationType = authAPI.authenticationType
-            )
+            is ApiResult.Success -> authUserAttributesToProfileMapper.map(attributes = result.data)
             is ApiResult.Failure -> null
         }
     }

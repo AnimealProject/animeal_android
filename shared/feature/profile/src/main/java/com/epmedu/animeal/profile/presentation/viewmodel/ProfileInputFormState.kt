@@ -6,14 +6,15 @@ import com.epmedu.animeal.profile.domain.model.getFormat
 
 data class ProfileInputFormState(
     val profile: Profile = Profile(),
+    val isAgeConfirmed: Boolean = false,
     val formState: FormState = FormState.READ_ONLY,
     val isCountrySelectorClickable: Boolean = false,
     val isPhoneNumberEnabled: Boolean = false,
+    val isAgeConfirmationEnabled: Boolean = false,
     val nameError: UiText = UiText.Empty,
     val surnameError: UiText = UiText.Empty,
     val emailError: UiText = UiText.Empty,
-    val phoneNumberError: UiText = UiText.Empty,
-    val birthDateError: UiText = UiText.Empty,
+    val phoneNumberError: UiText = UiText.Empty
 ) {
     val region = profile.phoneNumberRegion
     val phoneNumberDigitsCount = profile.phoneNumberRegion.phoneNumberDigitsCount
@@ -39,9 +40,8 @@ data class ProfileInputFormState(
             nameError,
             surnameError,
             emailError,
-            phoneNumberError,
-            birthDateError
-        ).any { it !is UiText.Empty }
+            phoneNumberError
+        ).any { it !is UiText.Empty } || isAgeConfirmed.not()
 
     fun isEditedOrHasErrors() = formState == FormState.EDITED || hasErrors()
 

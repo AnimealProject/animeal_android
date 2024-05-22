@@ -15,7 +15,6 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.model.flagEmoji
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
-import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.BirthDateChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailChanged
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.EmailFocusCleared
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.NameChanged
@@ -75,12 +74,7 @@ fun ProfileInputForm(
                 onClearFocus = { onEvent(PhoneNumberFocusCleared) },
                 onCountryClick = onCountryClick
             )
-            BirthDateInput(
-                value = profile.birthDate,
-                onValueChange = { onEvent(BirthDateChanged(it)) },
-                error = birthDateError.asString(),
-                clickable = isFormEnabled,
-            )
+            AgeConfirmationCheckbox(state, onEvent)
         }
     }
 }

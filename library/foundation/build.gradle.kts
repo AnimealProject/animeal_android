@@ -19,8 +19,6 @@ dependencies {
     implementation(libs.androidx.lifecycle)
 
     implementation(libs.compose.material)
-    implementation(libs.compose.material.dialog.core)
-    implementation(libs.compose.material.dialog.datetime)
     implementation(libs.compose.richtext)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)

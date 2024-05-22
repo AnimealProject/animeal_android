@@ -1,7 +1,6 @@
 package com.epmedu.animeal.profile.presentation
 
 import com.epmedu.animeal.profile.domain.model.Region
-import java.time.LocalDate
 
 sealed interface ProfileInputFormEvent {
     data class NameChanged(val name: String) : ProfileInputFormEvent
@@ -9,7 +8,7 @@ sealed interface ProfileInputFormEvent {
     data class EmailChanged(val email: String) : ProfileInputFormEvent
     data class PhoneNumberChanged(val phoneNumber: String) : ProfileInputFormEvent
     data class RegionChanged(val region: Region) : ProfileInputFormEvent
-    data class BirthDateChanged(val birthDate: LocalDate) : ProfileInputFormEvent
+    data class AgeConfirmationChanged(val isConfirmed: Boolean) : ProfileInputFormEvent
     object NameFocusCleared : ProfileInputFormEvent
     object SurnameFocusCleared : ProfileInputFormEvent
     object EmailFocusCleared : ProfileInputFormEvent

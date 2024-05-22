@@ -9,6 +9,4 @@ class DefaultProfileValidator : ProfileValidator {
 
     override fun validatePhoneNumber(phoneNumber: String, phoneNumberDigitsCount: IntArray) =
         PhoneNumberValidator.validate(phoneNumber, phoneNumberDigitsCount)
-
-    override fun validateBirthDate(birthDate: String) = BirthDateValidator.validate(birthDate)
 }

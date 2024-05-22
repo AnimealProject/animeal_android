@@ -8,7 +8,6 @@ import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.profile.domain.ValidateBirthDateUseCase
 import com.epmedu.animeal.profile.domain.ValidateEmailUseCase
 import com.epmedu.animeal.profile.domain.ValidateNameUseCase
 import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
@@ -75,12 +74,6 @@ internal object ProfileModule {
 
     @ViewModelScoped
     @Provides
-    fun provideValidateBirthDateUseCase(
-        validator: ProfileValidator
-    ) = ValidateBirthDateUseCase(validator)
-
-    @ViewModelScoped
-    @Provides
     fun provideClearProfileUseCase(
         repository: ProfileRepository
     ) = ClearProfileUseCase(repository)
@@ -91,13 +84,11 @@ internal object ProfileModule {
         validateNameUseCase: ValidateNameUseCase,
         validateSurnameUseCase: ValidateSurnameUseCase,
         validateEmailUseCase: ValidateEmailUseCase,
-        validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
-        validateBirthDateUseCase: ValidateBirthDateUseCase
+        validatePhoneNumberUseCase: ValidatePhoneNumberUseCase
     ): ProfileInputFormHandler = ProfileInputFormHandlerImpl(
         validateNameUseCase,
         validateSurnameUseCase,
         validateEmailUseCase,
-        validatePhoneNumberUseCase,
-        validateBirthDateUseCase
+        validatePhoneNumberUseCase
     )
 }

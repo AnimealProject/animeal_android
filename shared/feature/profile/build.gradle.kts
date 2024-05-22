@@ -23,7 +23,6 @@ dependencies {
     implementation(libs.androidx.viewmodel)
 
     implementation(libs.compose.material)
-    implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)

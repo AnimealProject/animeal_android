@@ -4,8 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.profile.data.model.Profile
-import com.epmedu.animeal.profile.data.util.birthDate
-import com.epmedu.animeal.profile.data.util.clearBirthDate
 import com.epmedu.animeal.profile.data.util.clearEmail
 import com.epmedu.animeal.profile.data.util.clearName
 import com.epmedu.animeal.profile.data.util.clearPhoneNumber
@@ -15,7 +13,6 @@ import com.epmedu.animeal.profile.data.util.name
 import com.epmedu.animeal.profile.data.util.phoneNumber
 import com.epmedu.animeal.profile.data.util.phoneNumberRegion
 import com.epmedu.animeal.profile.data.util.surname
-import com.epmedu.animeal.profile.data.util.updateBirthDate
 import com.epmedu.animeal.profile.data.util.updateEmail
 import com.epmedu.animeal.profile.data.util.updateName
 import com.epmedu.animeal.profile.data.util.updatePhoneNumber
@@ -39,8 +36,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 surname = preferences.surname,
                 phoneNumberRegion = preferences.phoneNumberRegion,
                 phoneNumber = preferences.phoneNumber,
-                email = preferences.email,
-                birthDate = preferences.birthDate,
+                email = preferences.email
             )
         }
     }
@@ -53,7 +49,6 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 updateName(profile.name)
                 updateSurname(profile.surname)
                 updateEmail(profile.email)
-                updateBirthDate(profile.birthDate)
             }
         }
     }
@@ -64,13 +59,12 @@ internal class ProfileRepositoryImpl @Inject constructor(
             clearSurname()
             clearPhoneNumber()
             clearEmail()
-            clearBirthDate()
         }
     }
 
     override suspend fun isProfileSaved(): Boolean {
         return with(getProfile().first()) {
-            listOf(name, surname, email, birthDate).all { it.isNotEmpty() }
+            listOf(name, surname, email).all { it.isNotEmpty() }
         }
     }
 }

@@ -27,7 +27,6 @@ dependencies {
     implementation(libs.amplify.aws.auth.cognito)
 
     implementation(libs.compose.material)
-    implementation(libs.compose.material.dialog.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)

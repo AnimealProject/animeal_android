@@ -49,7 +49,7 @@ internal class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             getProfileUseCase().collect {
                 lastSavedProfile = it
-                profileInputFormHandler.updateState { copy(profile = it) }
+                profileInputFormHandler.updateState { copy(profile = it, isAgeConfirmed = true) }
             }
         }
     }
