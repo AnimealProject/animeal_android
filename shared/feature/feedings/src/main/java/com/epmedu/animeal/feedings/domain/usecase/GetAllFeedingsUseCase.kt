@@ -31,7 +31,7 @@ class GetAllFeedingsUseCase(
                     }
 
                     UserGroup.Moderator -> {
-                        repository.getAssignedFeedings().map { feedings ->
+                        repository.getAssignedFeedings(shouldFetch = true).map { feedings ->
                             feedings.sortedByDescending { feeding -> feeding.date }
                         }
                     }

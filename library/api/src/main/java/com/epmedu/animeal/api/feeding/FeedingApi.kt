@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import type.FeedingStatus
 import type.FeedingStatus.inProgress
 import type.FeedingStatus.pending
+import type.SearchableStringFilterInput
 
 interface FeedingApi {
 
@@ -26,6 +27,7 @@ interface FeedingApi {
         feedingPointId: String? = null,
         assignedModeratorId: String? = null,
         status: FeedingStatus? = null,
+        createdAt: SearchableStringFilterInput? = null
     ): ApiResult<SearchFeedingsQuery.Data>
 
     fun subscribeToFeedingsUpdates(): Flow<OnUpdateFeedingExtSubscription.Data>

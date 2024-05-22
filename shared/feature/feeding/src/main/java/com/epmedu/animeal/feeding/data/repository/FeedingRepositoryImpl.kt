@@ -1,5 +1,8 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import OnCreateFeedingExtSubscription
+import OnCreateFeedingHistoryExtSubscription
+import OnUpdateFeedingExtSubscription
 import SearchFeedingHistoriesQuery
 import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
@@ -7,6 +10,7 @@ import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.apollographql.apollo.api.Operation.Data
 import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
+import com.epmedu.animeal.api.feeding.FeedingFilters
 import com.epmedu.animeal.api.feeding.FeedingHistoryApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.auth.AuthAPI
@@ -34,6 +38,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -130,8 +135,8 @@ internal class FeedingRepositoryImpl(
                             cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
                         },
                     merge(
-                        subscribeToFeedings(),
-                        subscribeToFeedingHistories()
+                        subscribeToAllFeedings(),
+                        subscribeToAllFeedingHistories()
                     ).map {
                         cachedFeedingsMap.values.toList()
                     }
@@ -158,32 +163,16 @@ internal class FeedingRepositoryImpl(
             .mergeToFeedings()
     }
 
-    private fun subscribeToFeedingHistories(): Flow<Any?> {
-        return feedingHistoryApi.subscribeToFeedingHistoriesCreation().updateFeedingsMap(
-            getRawFeeding = { onCreateFeedingHistoryExt() },
-            getFeedingId = { id() },
-            getUserId = { userId() },
-            toFeeding = { user -> toFeeding(::getImageFromName, user) }
-        )
+    private fun subscribeToAllFeedingHistories(): Flow<Any?> {
+        return feedingHistoryApi.subscribeToFeedingHistoriesCreation()
+            .addCreatedFeedingHistoryToFeedingsMap()
     }
 
-    private fun subscribeToFeedings(): Flow<Any?> {
+    private fun subscribeToAllFeedings(): Flow<Any?> {
         return merge(
-            feedingApi.subscribeToFeedingsCreation().updateFeedingsMap(
-                getRawFeeding = { onCreateFeedingExt() },
-                getFeedingId = { id() },
-                getUserId = { userId() },
-                toFeeding = { user -> toFeeding(::getImageFromName, user) }
-            ),
-            feedingApi.subscribeToFeedingsUpdates().updateFeedingsMap(
-                getRawFeeding = { onUpdateFeedingExt() },
-                getFeedingId = { id() },
-                getUserId = { userId() },
-                toFeeding = { user -> toFeeding(::getImageFromName, user) }
-            ),
-            feedingApi.subscribeToFeedingsDeletion().map { data ->
-                cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
-            }
+            feedingApi.subscribeToFeedingsCreation().addCreatedFeedingToFeedingsMap(),
+            feedingApi.subscribeToFeedingsUpdates().updateFeedingInFeedingsMap(),
+            subscribeToFeedingsDeletion()
         )
     }
 
@@ -205,20 +194,104 @@ internal class FeedingRepositoryImpl(
         }
     }
 
-    override fun getAssignedFeedings(): Flow<List<Feeding>> {
+    override fun getAssignedFeedings(shouldFetch: Boolean): Flow<List<Feeding>> {
+        return when {
+            shouldFetch -> {
+                merge(
+                    fetchAssignedFeedings()
+                        .onEach { feedings ->
+                            cachedFeedingsMap = feedings.associateBy { it.id }.toMutableMap()
+                        },
+                    merge(
+                        subscribeToAssignedFeedings(),
+                        subscribeToAssignedFeedingHistories()
+                    ).map {
+                        cachedFeedingsMap.values.toList()
+                    }
+                ).onEach { feedings ->
+                    feedingsFlow.emit(feedings)
+                }
+            }
+
+            else -> {
+                feedingsFlow.asSharedFlow()
+            }
+        }
+    }
+
+    private fun fetchAssignedFeedings(): Flow<List<Feeding>> {
         return flow {
             val currentUserId = authApi.getCurrentUserId()
             val feedingHistories = feedingHistoryApi.getFeedingHistoriesBy(
-                assignedModeratorId = currentUserId
+                assignedModeratorId = currentUserId,
+                createdAt = FeedingFilters.feedingsCreatedAtFilterInput
             ).data?.searchFeedingHistories()?.items()
             val feedings = feedingApi.getFeedingsBy(
-                assignedModeratorId = currentUserId
+                assignedModeratorId = currentUserId,
+                createdAt = FeedingFilters.feedingsCreatedAtFilterInput
             ).data?.searchFeedings()?.items()
 
             emit(FeedingsContainer(feedings, feedingHistories))
         }
             .mergeToFeedings()
-            .flowOn(dispatchers.IO)
+    }
+
+    private fun subscribeToAssignedFeedingHistories(): Flow<Any?> {
+        return feedingHistoryApi.subscribeToFeedingHistoriesCreation()
+            .filter { data ->
+                data.onCreateFeedingHistoryExt()?.assignedModerators().containsCurrentUserId()
+            }
+            .addCreatedFeedingHistoryToFeedingsMap()
+    }
+
+    private fun subscribeToAssignedFeedings(): Flow<Any?> {
+        return merge(
+            feedingApi.subscribeToFeedingsCreation()
+                .filter { data ->
+                    data.onCreateFeedingExt()?.assignedModerators().containsCurrentUserId()
+                }
+                .addCreatedFeedingToFeedingsMap(),
+            feedingApi.subscribeToFeedingsUpdates()
+                .filter { data ->
+                    data.onUpdateFeedingExt()?.assignedModerators().containsCurrentUserId()
+                }
+                .updateFeedingInFeedingsMap(),
+            subscribeToFeedingsDeletion()
+        )
+    }
+
+    private fun subscribeToFeedingsDeletion() = feedingApi.subscribeToFeedingsDeletion().map { data ->
+        cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
+    }
+
+    private suspend fun List<String>?.containsCurrentUserId() =
+        this?.contains(authApi.getCurrentUserId()) == true
+
+    private fun Flow<OnCreateFeedingHistoryExtSubscription.Data>.addCreatedFeedingHistoryToFeedingsMap(): Flow<Any?> {
+        return updateFeedingsMap(
+            getRawFeeding = { onCreateFeedingHistoryExt() },
+            getFeedingId = { id() },
+            getUserId = { userId() },
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
+        )
+    }
+
+    private fun Flow<OnCreateFeedingExtSubscription.Data>.addCreatedFeedingToFeedingsMap(): Flow<Any?> {
+        return updateFeedingsMap(
+            getRawFeeding = { onCreateFeedingExt() },
+            getFeedingId = { id() },
+            getUserId = { userId() },
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
+        )
+    }
+
+    private fun Flow<OnUpdateFeedingExtSubscription.Data>.updateFeedingInFeedingsMap(): Flow<Any?> {
+        return updateFeedingsMap(
+            getRawFeeding = { onUpdateFeedingExt() },
+            getFeedingId = { id() },
+            getUserId = { userId() },
+            toFeeding = { user -> toFeeding(::getImageFromName, user) }
+        )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -279,9 +352,11 @@ internal class FeedingRepositoryImpl(
         }
     }
 
-    private fun SearchFeedingsQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+    private fun SearchFeedingsQuery.Item?.isCanceled() =
+        this?.status() == rejected && images().isEmpty()
 
-    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() = this?.status() == rejected && images().isEmpty()
+    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() =
+        this?.status() == rejected && images().isEmpty()
 
     private suspend fun getImageFromName(fileName: String): NetworkFile {
         return NetworkFile(

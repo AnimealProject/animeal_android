@@ -8,6 +8,7 @@ import type.FeedingStatus
 import type.FeedingStatus.approved
 import type.FeedingStatus.outdated
 import type.FeedingStatus.rejected
+import type.SearchableStringFilterInput
 
 interface FeedingHistoryApi {
 
@@ -24,7 +25,8 @@ interface FeedingHistoryApi {
     suspend fun getFeedingHistoriesBy(
         feedingPointId: String? = null,
         assignedModeratorId: String? = null,
-        status: FeedingStatus? = null
+        status: FeedingStatus? = null,
+        createdAt: SearchableStringFilterInput? = null
     ): ApiResult<SearchFeedingHistoriesQuery.Data>
 
     fun subscribeToFeedingHistoriesCreation(): Flow<OnCreateFeedingHistoryExtSubscription.Data>

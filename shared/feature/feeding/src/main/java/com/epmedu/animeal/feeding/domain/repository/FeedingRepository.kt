@@ -18,7 +18,7 @@ interface FeedingRepository {
 
     fun getAllFeedings(shouldFetch: Boolean = false): Flow<List<Feeding>>
 
-    fun getAssignedFeedings(): Flow<List<Feeding>>
+    fun getAssignedFeedings(shouldFetch: Boolean = false): Flow<List<Feeding>>
 
     fun getFeedingHistoriesBy(
         feedingPointId: String,
