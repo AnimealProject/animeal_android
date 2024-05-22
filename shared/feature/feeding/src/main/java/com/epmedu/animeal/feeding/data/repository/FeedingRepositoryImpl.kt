@@ -258,6 +258,7 @@ internal class FeedingRepositoryImpl(
                     feeding?.toFeeding(
                         feeder = usersMap[feeding.userId()],
                         reviewedBy = usersMap[feeding.moderatedBy()],
+                        rejectionReason = feeding.reason(),
                         getImageFrom = ::getImageFromName
                     )
                 }

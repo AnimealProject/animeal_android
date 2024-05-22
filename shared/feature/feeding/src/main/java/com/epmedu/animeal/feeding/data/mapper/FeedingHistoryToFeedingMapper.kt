@@ -10,6 +10,7 @@ import com.epmedu.animeal.users.domain.model.User
 internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
     feeder: User?,
     reviewedBy: User?,
+    rejectionReason: String?,
     getImageFrom: suspend (fileName: String) -> NetworkFile
 ): Feeding? {
     return status()?.toDomain()?.let { status ->
@@ -20,7 +21,8 @@ internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
             date = Temporal.DateTime(createdAt()).toDate(),
             feedingPointId = feedingPointId(),
             photos = images().map { getImageFrom(it) },
-            reviewedBy = reviewedBy
+            reviewedBy = reviewedBy,
+            rejectionReason = rejectionReason
         )
     }
 }

@@ -11,5 +11,6 @@ data class Feeding(
     val date: Date,
     val feedingPointId: String,
     val photos: List<NetworkFile>,
-    val reviewedBy: User? = null
+    val reviewedBy: User? = null,
+    val rejectionReason: String? = null
 )

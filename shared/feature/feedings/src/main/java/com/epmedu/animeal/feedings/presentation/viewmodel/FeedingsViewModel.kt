@@ -149,7 +149,11 @@ internal class FeedingsViewModel @Inject constructor(
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),
                 image = feedingPoint.image,
-                photos = feeding.photos.toImmutableList()
+                photos = feeding.photos.toImmutableList(),
+                reviewedBy = feeding.reviewedBy?.let { "${it.name} ${it.surname}" }
+                    .takeIf { feedingStatus == FeedingModelStatus.APPROVED || feedingStatus == FeedingModelStatus.REJECTED },
+                rejectionReason = feeding.rejectionReason
+                    .takeIf { feedingStatus == FeedingModelStatus.REJECTED }
             )
         } else {
             null
