@@ -19,6 +19,7 @@ interface FeedingHistoryApi {
      * @param feedingPointId Id of associated feeding point.
      * @param assignedModeratorId Id of assigned moderator.
      * @param status Feeding status of feeding histories.
+     * @param createdAt Filter by date of feeding history creation.
      * Can be [approved], [rejected] or [outdated].
      * `null` by default.
      */

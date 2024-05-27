@@ -20,6 +20,7 @@ interface FeedingApi {
      * @param feedingPointId Id of associated feeding point.
      * @param assignedModeratorId Id of assigned moderator.
      * @param status Feeding status of feedings.
+     * @param createdAt Filter by date of feeding creation.
      * Can be [inProgress] or [pending].
      * `null` by default.
      */
