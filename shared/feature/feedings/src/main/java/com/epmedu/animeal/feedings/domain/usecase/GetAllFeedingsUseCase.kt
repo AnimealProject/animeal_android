@@ -29,7 +29,7 @@ class GetAllFeedingsUseCase(
                     }
 
                     UserGroup.Moderator -> {
-                        repository.getAssignedFeedings().map(::sortByDate)
+                        repository.getAssignedFeedings(shouldFetch = true).map(::sortByDate)
                     }
 
                     UserGroup.Volunteer -> {

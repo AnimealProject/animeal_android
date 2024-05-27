@@ -38,6 +38,7 @@ internal class FeedingApiImpl(
         feedingPointId: String?,
         assignedModeratorId: String?,
         status: FeedingStatus?,
+        createdAt: SearchableStringFilterInput?
     ): ApiResult<SearchFeedingsQuery.Data> {
         val filterBuilder = SearchableFeedingFilterInput.builder()
 
@@ -62,6 +63,10 @@ internal class FeedingApiImpl(
                     .build()
             )
         }
+        createdAt?.let {
+            filterBuilder.createdAt(createdAt)
+        }
+
         val query = SearchFeedingsQuery.builder()
             .filter(filterBuilder.build())
             .build()

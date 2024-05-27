@@ -30,7 +30,8 @@ internal class FeedingHistoryApiImpl(
     override suspend fun getFeedingHistoriesBy(
         feedingPointId: String?,
         assignedModeratorId: String?,
-        status: FeedingStatus?
+        status: FeedingStatus?,
+        createdAt: SearchableStringFilterInput?
     ): ApiResult<SearchFeedingHistoriesQuery.Data> {
         val filterBuilder = SearchableFeedingHistoryFilterInput.builder()
 
@@ -54,6 +55,9 @@ internal class FeedingHistoryApiImpl(
                     .eq(assignedModeratorId)
                     .build()
             )
+        }
+        createdAt?.let {
+            filterBuilder.createdAt(createdAt)
         }
 
         val query = SearchFeedingHistoriesQuery.builder()
