@@ -6,7 +6,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
-class GetIsNewFeedingPendingUseCase(
+class GetHasNewPendingFeedingUseCase(
     private val feedingRepository: FeedingRepository,
     private val applicationSettingsRepository: ApplicationSettingsRepository
 ) {

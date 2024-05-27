@@ -5,7 +5,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
-import com.epmedu.animeal.feedings.domain.usecase.GetIsNewFeedingPendingUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetHasNewPendingFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetViewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.UpdateViewedFeedingsUseCase
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
@@ -22,10 +22,10 @@ object FeedingsDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun providesGetIsNewFeedingPendingUseCase(
+    fun providesGetHasNewPendingFeedingUseCase(
         feedingRepository: FeedingRepository,
         applicationSettingsRepository: ApplicationSettingsRepository
-    ) = GetIsNewFeedingPendingUseCase(feedingRepository, applicationSettingsRepository)
+    ) = GetHasNewPendingFeedingUseCase(feedingRepository, applicationSettingsRepository)
 
     @ViewModelScoped
     @Provides
