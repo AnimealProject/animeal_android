@@ -4,8 +4,8 @@ import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
-import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasNewPendingFeedingUseCase
+import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetViewedFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.UpdateViewedFeedingsUseCase
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
