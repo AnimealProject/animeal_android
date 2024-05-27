@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface FeedingsButtonHandler {
 
-    fun getFeedingsButtonState(): Flow<FeedingsButtonState>
+    fun getFeedingsButtonState(shouldFetchFeedings: Boolean): Flow<FeedingsButtonState>
 }

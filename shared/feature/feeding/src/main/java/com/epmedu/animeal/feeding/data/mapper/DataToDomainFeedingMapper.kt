@@ -22,7 +22,7 @@ internal suspend fun OnCreateFeedingExtSubscription.OnCreateFeedingExt.toFeeding
     feeder: User? = null
 ): Feeding {
     return Feeding(
-        id = id(),
+        id = id() + createdAt(), // id is not unique because it is equal to the feeding point id
         feeder = feeder,
         status = status().toDomain(),
         date = Temporal.DateTime(createdAt()).toDate(),
@@ -36,7 +36,7 @@ internal suspend fun OnUpdateFeedingExtSubscription.OnUpdateFeedingExt.toFeeding
     feeder: User? = null
 ): Feeding {
     return Feeding(
-        id = id(),
+        id = id() + createdAt(), // id is not unique because it is equal to the feeding point id
         feeder = feeder,
         status = status().toDomain(),
         date = Temporal.DateTime(createdAt()).toDate(),

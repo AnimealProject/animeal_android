@@ -25,15 +25,11 @@ class GetAllFeedingsUseCase(
             if (userGroupResult is ActionResult.Success) {
                 when (userGroupResult.result) {
                     UserGroup.Administrator -> {
-                        repository.getAllFeedings(shouldFetch = true).map { feedings ->
-                            feedings.sortedByDescending { feeding -> feeding.date }
-                        }
+                        repository.getAllFeedings(shouldFetch = true).map(::sortByDate)
                     }
 
                     UserGroup.Moderator -> {
-                        repository.getAssignedFeedings(shouldFetch = true).map { feedings ->
-                            feedings.sortedByDescending { feeding -> feeding.date }
-                        }
+                        repository.getAssignedFeedings(shouldFetch = true).map(::sortByDate)
                     }
 
                     UserGroup.Volunteer -> {
@@ -44,5 +40,9 @@ class GetAllFeedingsUseCase(
                 flowOf(emptyList())
             }
         }
+    }
+
+    private fun sortByDate(feedings: List<Feeding>): List<Feeding> {
+        return feedings.sortedBy { feeding -> feeding.date }
     }
 }
