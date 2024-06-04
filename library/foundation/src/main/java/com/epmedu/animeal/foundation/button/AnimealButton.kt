@@ -2,6 +2,7 @@ package com.epmedu.animeal.foundation.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,8 +61,10 @@ fun AnimealButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
+    shape: Shape = MaterialTheme.shapes.large,
     enabled: Boolean = true,
     onClick: () -> Unit,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
@@ -80,9 +84,10 @@ fun AnimealButton(
             hoveredElevation = 0.dp,
             focusedElevation = 0.dp,
         ),
-        shape = MaterialTheme.shapes.large,
+        shape = shape,
         enabled = enabled,
         onClick = onClick,
+        contentPadding = contentPadding,
         content = content,
     )
 }

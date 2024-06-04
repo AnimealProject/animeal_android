@@ -35,6 +35,7 @@ import com.epmedu.animeal.feedings.presentation.model.isPending
 import com.epmedu.animeal.feedings.presentation.ui.FeedingItem
 import com.epmedu.animeal.feedings.presentation.ui.FeedingItemButtons
 import com.epmedu.animeal.feedings.presentation.ui.FeedingItemSheetContent
+import com.epmedu.animeal.feedings.presentation.ui.SwipeableFeedingItem
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingFilterCategory
 import com.epmedu.animeal.feedings.presentation.viewmodel.FeedingsState
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
@@ -43,6 +44,7 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Expande
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
+import com.epmedu.animeal.foundation.listener.TapListener
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.AnimealSwitchTab
 import com.epmedu.animeal.foundation.tabs.TabIndicator
@@ -84,7 +86,7 @@ internal fun FeedingsScreenUI(
                 FeedingItemButtons(
                     areEnabled = state.currentFeeding.status.isPending(),
                     onRejectClick = {},
-                    onApproveClick = { onEvent(ApproveClicked) },
+                    onApproveClick = { onEvent(ApproveClicked(state.currentFeeding)) },
                     modifier = Modifier
                         .alpha(buttonAlpha)
                         .padding(vertical = 40.dp)
@@ -102,41 +104,46 @@ private fun FeedingsScreenContent(
     state: FeedingsState,
     onEvent: (FeedingsScreenEvent) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-    ) {
-        TopBar(
-            title = stringResource(id = R.string.feedings),
-            navigationIcon = {
-                BackButton(onClick = onBack)
-            }
-        )
-        Box(
+    TapListener { isTappedOutside, onTappedOutsideHandle ->
+        Column(
             modifier = Modifier
-                .padding(start = 25.dp, end = 25.dp, top = 20.dp)
+                .fillMaxSize()
+                .statusBarsPadding()
         ) {
-            when {
-                state.isListLoading -> {
-                    LoadingState()
+            TopBar(
+                title = stringResource(id = R.string.feedings),
+                navigationIcon = {
+                    BackButton(onClick = onBack)
                 }
-
-                state.feedingsFiltered.isEmpty() -> {
-                    EmptyState(state)
-                }
-
-                else -> {
-                    FeedingList(
-                        feedings = state.feedingsFiltered,
-                        onFeedingClick = { feeding -> onEvent(UpdateCurrentFeeding(feeding)) }
-                    )
-                }
-            }
-            FeedingsCategoryTab(
-                feedingsCategory = state.feedingsCategory,
-                onFilterClick = { filterCategory -> onEvent(UpdateCategoryEvent(filterCategory)) }
             )
+            Box(
+                modifier = Modifier
+                    .padding(start = 25.dp, end = 25.dp, top = 20.dp)
+            ) {
+                when {
+                    state.isListLoading -> {
+                        LoadingState()
+                    }
+
+                    state.feedingsFiltered.isEmpty() -> {
+                        EmptyState(state)
+                    }
+
+                    else -> {
+                        FeedingList(
+                            feedings = state.feedingsFiltered,
+                            isPendingCategory = state.feedingsCategory == FeedingFilterCategory.PENDING,
+                            isTappedOutside = isTappedOutside,
+                            onTappedOutsideHandle = onTappedOutsideHandle,
+                            onEvent = onEvent
+                        )
+                    }
+                }
+                FeedingsCategoryTab(
+                    feedingsCategory = state.feedingsCategory,
+                    onFilterClick = { filterCategory -> onEvent(UpdateCategoryEvent(filterCategory)) }
+                )
+            }
         }
     }
 }
@@ -184,7 +191,8 @@ private fun LoadingState() {
 
 @Composable
 private fun EmptyState(state: FeedingsState) {
-    val isWellDone = state.feedingsCategory == FeedingFilterCategory.PENDING && state.hasReviewedFeedings
+    val isWellDone =
+        state.feedingsCategory == FeedingFilterCategory.PENDING && state.hasReviewedFeedings
 
     Box(
         contentAlignment = Alignment.Center
@@ -203,16 +211,56 @@ private fun EmptyState(state: FeedingsState) {
 }
 
 @Composable
-private fun FeedingList(feedings: List<FeedingModel>, onFeedingClick: (FeedingModel) -> Unit) {
+private fun FeedingList(
+    feedings: List<FeedingModel>,
+    isPendingCategory: Boolean,
+    isTappedOutside: Boolean,
+    onTappedOutsideHandle: () -> Unit,
+    onEvent: (FeedingsScreenEvent) -> Unit
+) {
+    var currentlySwipedItemId: String? by remember { mutableStateOf(null) }
+    var isTappedInside by remember { mutableStateOf(false) }
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(top = 70.dp, bottom = 30.dp, start = 5.dp, end = 5.dp)
     ) {
         items(feedings) { feedingModel ->
-            FeedingItem(
-                feedingModel = feedingModel,
-                onClick = { onFeedingClick(feedingModel) }
-            )
+            when {
+                isPendingCategory -> {
+                    SwipeableFeedingItem(
+                        feedingModel = feedingModel,
+                        currentlySwipedItemId = currentlySwipedItemId,
+                        isTappedAnywhere = isTappedOutside || isTappedInside,
+                        onTappedAnywhereHandle = {
+                            isTappedInside = false
+                            onTappedOutsideHandle()
+                        },
+                        onItemClick = {
+                            onEvent(UpdateCurrentFeeding(feedingModel))
+                            isTappedInside = true
+                        },
+                        onApproveClick = {
+                            onEvent(ApproveClicked(feedingModel))
+                            isTappedInside = true
+                        },
+                        onRejectClick = {
+                            // TODO: Implement reject action
+                            isTappedInside = true
+                        },
+                        onSwipe = {
+                            currentlySwipedItemId = feedingModel.id
+                        }
+                    )
+                }
+
+                else -> {
+                    FeedingItem(
+                        feedingModel = feedingModel,
+                        onClick = { onEvent(UpdateCurrentFeeding(feedingModel)) }
+                    )
+                }
+            }
         }
     }
 }
