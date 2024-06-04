@@ -18,7 +18,7 @@ class GetAllFeedingsUseCase(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<List<Feeding>> {
+    operator fun invoke(shouldFetch: Boolean = false): Flow<List<Feeding>> {
         return flow {
             emit(getCurrentUserGroupUseCase())
         }.flatMapLatest { userGroupResult ->

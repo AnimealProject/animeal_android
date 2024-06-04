@@ -2,19 +2,18 @@ package com.epmedu.animeal.feedings.domain.usecase
 
 import com.epmedu.animeal.common.domain.ApplicationSettingsRepository
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus
-import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class GetHasNewPendingFeedingUseCase(
-    private val feedingRepository: FeedingRepository,
+    private val getAllFeedingsUseCase: GetAllFeedingsUseCase,
     private val applicationSettingsRepository: ApplicationSettingsRepository
 ) {
 
     operator fun invoke(shouldFetch: Boolean): Flow<Boolean> {
         return combine(
             applicationSettingsRepository.getAppSettings(),
-            feedingRepository.getAllFeedings(shouldFetch = shouldFetch)
+            getAllFeedingsUseCase(shouldFetch)
         ) { appSettings, feedings ->
             feedings.any { feeding ->
                 feeding.status == FeedingStatus.Pending &&

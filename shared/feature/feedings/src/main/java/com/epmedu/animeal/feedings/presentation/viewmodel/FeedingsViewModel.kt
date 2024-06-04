@@ -65,7 +65,7 @@ internal class FeedingsViewModel @Inject constructor(
         updateState { copy(isListLoading = true) }
 
         combine(
-            getAllFeedingsUseCase(),
+            getAllFeedingsUseCase(shouldFetch = true),
             getHasReviewedFeedingsUseCase(),
             getViewedFeedingsUseCase()
         ) { feedings, hasReviewedFeedings, viewedFeedingIds ->

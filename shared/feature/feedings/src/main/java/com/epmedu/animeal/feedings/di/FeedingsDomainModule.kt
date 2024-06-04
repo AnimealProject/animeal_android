@@ -23,9 +23,9 @@ object FeedingsDomainModule {
     @ViewModelScoped
     @Provides
     fun providesGetHasNewPendingFeedingUseCase(
-        feedingRepository: FeedingRepository,
+        getAllFeedingsUseCase: GetAllFeedingsUseCase,
         applicationSettingsRepository: ApplicationSettingsRepository
-    ) = GetHasNewPendingFeedingUseCase(feedingRepository, applicationSettingsRepository)
+    ) = GetHasNewPendingFeedingUseCase(getAllFeedingsUseCase, applicationSettingsRepository)
 
     @ViewModelScoped
     @Provides
