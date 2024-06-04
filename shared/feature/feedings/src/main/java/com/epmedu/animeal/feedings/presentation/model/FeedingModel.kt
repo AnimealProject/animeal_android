@@ -19,5 +19,9 @@ data class FeedingModel(
     val image: NetworkFile? = null,
     val photos: @RawValue ImmutableList<NetworkFile> = persistentListOf(),
     val reviewedBy: String? = null,
-    val rejectionReason: String? = null
+    val rejectionReason: String? = null,
+
+    // id is not unique because it is equal to the feeding point id
+    // TODO: Remove when EPMEDU-3783 is implemented
+    val temporaryId: String = "",
 ) : Parcelable

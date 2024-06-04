@@ -18,7 +18,7 @@ class GetHasNewPendingFeedingUseCase(
         ) { appSettings, feedings ->
             feedings.any { feeding ->
                 feeding.status == FeedingStatus.Pending &&
-                    appSettings.viewedFeedingIds.contains(feeding.id).not()
+                    appSettings.viewedFeedingIds.contains(feeding.temporaryId).not()
             }
         }
     }
