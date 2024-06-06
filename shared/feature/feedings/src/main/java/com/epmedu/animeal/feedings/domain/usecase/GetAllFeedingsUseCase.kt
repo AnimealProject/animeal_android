@@ -25,11 +25,11 @@ class GetAllFeedingsUseCase(
             if (userGroupResult is ActionResult.Success) {
                 when (userGroupResult.result) {
                     UserGroup.Administrator -> {
-                        repository.getAllFeedings(shouldFetch = true).map(::sortByDate)
+                        repository.getAllFeedings(shouldFetch).map(::sortByDate)
                     }
 
                     UserGroup.Moderator -> {
-                        repository.getAssignedFeedings(shouldFetch = true).map(::sortByDate)
+                        repository.getAssignedFeedings(shouldFetch).map(::sortByDate)
                     }
 
                     UserGroup.Volunteer -> {
