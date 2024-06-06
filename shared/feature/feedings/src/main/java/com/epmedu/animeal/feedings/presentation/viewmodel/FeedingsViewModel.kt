@@ -85,7 +85,7 @@ internal class FeedingsViewModel @Inject constructor(
                 }
 
                 state.isListLoading && state.feedingsCategory == FeedingFilterCategory.PENDING -> {
-                    feedingsFiltered.firstOrNull { viewedFeedingIds.contains(it.temporaryId).not() }
+                    feedingsFiltered.firstOrNull { viewedFeedingIds.contains(it.id).not() }
                 }
 
                 else -> {
@@ -152,7 +152,6 @@ internal class FeedingsViewModel @Inject constructor(
         return if (feeding.feedingPointId == feedingPoint.id && feedingStatus != null) {
             FeedingModel(
                 id = feeding.id,
-                temporaryId = feeding.temporaryId,
                 title = feedingPoint.title,
                 feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
@@ -219,7 +218,7 @@ internal class FeedingsViewModel @Inject constructor(
             stateFlow.map { it.currentFeeding }
                 .collect { currentFeeding ->
                     currentFeeding?.let {
-                        updateViewedFeedingsUseCase(it.temporaryId)
+                        updateViewedFeedingsUseCase(it.id)
                     }
                 }
         }

@@ -13,9 +13,4 @@ data class Feeding(
     val photos: List<NetworkFile>,
     val reviewedBy: User? = null,
     val rejectionReason: String? = null
-) {
-    // id is not unique because it is equal to the feeding point id
-    // TODO: Remove when EPMEDU-3783 is implemented
-    val temporaryId: String
-        get() = "$id-$date"
-}
+)
