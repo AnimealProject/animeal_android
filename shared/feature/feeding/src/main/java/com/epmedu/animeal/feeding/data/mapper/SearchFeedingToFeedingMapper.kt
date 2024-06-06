@@ -9,7 +9,7 @@ internal suspend fun SearchFeedingsQuery.Item.toFeeding(
     feeder: User?,
     getImageFrom: suspend (fileName: String) -> NetworkFile
 ) = Feeding(
-    id = id() + createdAt(), // id is not unique because it is equal to the feeding point id
+    id = id(),
     feeder = feeder,
     status = status().toDomain(),
     date = Temporal.DateTime(createdAt()).toDate(),

@@ -18,18 +18,18 @@ class GetAllFeedingsUseCase(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<List<Feeding>> {
+    operator fun invoke(shouldFetch: Boolean = false): Flow<List<Feeding>> {
         return flow {
             emit(getCurrentUserGroupUseCase())
         }.flatMapLatest { userGroupResult ->
             if (userGroupResult is ActionResult.Success) {
                 when (userGroupResult.result) {
                     UserGroup.Administrator -> {
-                        repository.getAllFeedings(shouldFetch = true).map(::sortByDate)
+                        repository.getAllFeedings(shouldFetch).map(::sortByDate)
                     }
 
                     UserGroup.Moderator -> {
-                        repository.getAssignedFeedings(shouldFetch = true).map(::sortByDate)
+                        repository.getAssignedFeedings(shouldFetch).map(::sortByDate)
                     }
 
                     UserGroup.Volunteer -> {
