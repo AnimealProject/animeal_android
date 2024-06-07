@@ -70,6 +70,7 @@ fun FeedingItemPreview() {
                 FeedingItem(
                     feedingModel = FeedingModel(
                         id = "$index",
+                        feedingPointId = "$index",
                         title = setOf(longText, shortText).elementAt(index % 2),
                         feeder = "Giorgi Abutibze",
                         status = status,

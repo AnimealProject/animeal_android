@@ -224,6 +224,7 @@ private fun FeedingScreenPreview() {
     val feedings = List(10) {
         FeedingModel(
             id = "0",
+            feedingPointId = "0",
             title = title,
             feeder = "Feeder",
             status = FeedingModelStatus.values().random(),
@@ -282,6 +283,7 @@ private fun FeedingScreenWithExpandedBottomSheetPreview() {
     val feedings = List(10) {
         FeedingModel(
             id = "",
+            feedingPointId = "",
             title = "Feeding point",
             feeder = "Feeder name",
             status = FeedingModelStatus.PENDING_ORANGE,

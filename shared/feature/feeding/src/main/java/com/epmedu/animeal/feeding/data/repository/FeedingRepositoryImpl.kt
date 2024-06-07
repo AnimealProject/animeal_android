@@ -414,8 +414,8 @@ internal class FeedingRepositoryImpl(
         return feedingActionApi.finishFeeding(feedingPointId, images).toActionResult(feedingPointId)
     }
 
-    override suspend fun approveFeeding(feedingId: String): ActionResult<Unit> {
-        return feedingActionApi.approveFeeding(feedingId).toActionResult(feedingId)
+    override suspend fun approveFeeding(feedingPointId: String): ActionResult<Unit> {
+        return feedingActionApi.approveFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {

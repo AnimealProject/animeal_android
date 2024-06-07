@@ -59,7 +59,7 @@ internal class FeedingRepositoryMock : FeedingRepository {
         return ActionResult.Success(Unit)
     }
 
-    override suspend fun approveFeeding(feedingId: String): ActionResult<Unit> {
+    override suspend fun approveFeeding(feedingPointId: String): ActionResult<Unit> {
         return ActionResult.Success(Unit)
     }
 
