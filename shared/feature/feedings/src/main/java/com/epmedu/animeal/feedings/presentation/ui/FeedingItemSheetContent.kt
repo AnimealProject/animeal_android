@@ -109,6 +109,7 @@ private fun FeedingItemSheetContentPreview() {
         FeedingItemSheetContent(
             feeding = FeedingModel(
                 id = "",
+                feedingPointId = "",
                 title = "Feeding point",
                 feeder = "Feeder name",
                 status = FeedingModelStatus.PENDING_ORANGE,

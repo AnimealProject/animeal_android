@@ -152,6 +152,7 @@ internal class FeedingsViewModel @Inject constructor(
         return if (feeding.feedingPointId == feedingPoint.id && feedingStatus != null) {
             FeedingModel(
                 id = feeding.id,
+                feedingPointId = feeding.feedingPointId,
                 title = feedingPoint.title,
                 feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
@@ -195,7 +196,7 @@ internal class FeedingsViewModel @Inject constructor(
             viewModelScope.launch {
                 performAction(
                     action = {
-                        approveFeedingUseCase(feedingId = feeding.id)
+                        approveFeedingUseCase(feedingPointId = feeding.feedingPointId)
                     },
                     onSuccess = {
                         fetchFeedings()

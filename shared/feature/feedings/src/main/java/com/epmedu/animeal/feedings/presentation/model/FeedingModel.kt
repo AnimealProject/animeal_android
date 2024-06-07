@@ -12,6 +12,7 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class FeedingModel(
     val id: String,
+    val feedingPointId: String,
     val title: String,
     val feeder: String,
     val status: FeedingModelStatus,

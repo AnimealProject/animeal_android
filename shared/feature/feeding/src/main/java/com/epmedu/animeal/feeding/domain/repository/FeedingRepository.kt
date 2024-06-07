@@ -35,7 +35,7 @@ interface FeedingRepository {
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult<Unit>
 
-    suspend fun approveFeeding(feedingId: String): ActionResult<Unit>
+    suspend fun approveFeeding(feedingPointId: String): ActionResult<Unit>
 
     suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
 }
