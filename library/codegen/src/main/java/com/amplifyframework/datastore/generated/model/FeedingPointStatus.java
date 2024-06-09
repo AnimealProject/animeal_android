@@ -4,5 +4,6 @@ package com.amplifyframework.datastore.generated.model;
 public enum FeedingPointStatus {
   fed,
   pending,
-  starved
+  starved,
+  inProgress
 }

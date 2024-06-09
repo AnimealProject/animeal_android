@@ -126,7 +126,7 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
                     state.feedState.feedPoint == null,
                 onClick = {
                     state.showingFeedingPoint?.id?.let { feedingPointId ->

@@ -19,9 +19,10 @@ internal suspend fun DataFeedingPoint.toDomainFeedingPoint(
     description = description ?: EMPTY_STRING,
     city = city.orEmpty(),
     animalStatus = when (status) {
-        FeedingPointStatus.fed -> AnimalState.GREEN
-        FeedingPointStatus.pending -> AnimalState.YELLOW
-        else -> AnimalState.RED
+        FeedingPointStatus.starved -> AnimalState.Starved
+        FeedingPointStatus.inProgress -> AnimalState.InProgress
+        FeedingPointStatus.pending -> AnimalState.Pending
+        else -> AnimalState.Fed
     },
     animalType = when (category?.tag) {
         CategoryTag.cats -> AnimalType.Cats
