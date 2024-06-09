@@ -171,8 +171,7 @@ internal class FeedingRepositoryImpl(
     private fun subscribeToAllFeedings(): Flow<Any?> {
         return merge(
             feedingApi.subscribeToFeedingsCreation().addCreatedFeedingToFeedingsMap(),
-            feedingApi.subscribeToFeedingsUpdates().updateFeedingInFeedingsMap(),
-            subscribeToFeedingsDeletion()
+            feedingApi.subscribeToFeedingsUpdates().updateFeedingInFeedingsMap()
         )
     }
 
@@ -255,25 +254,33 @@ internal class FeedingRepositoryImpl(
                 .filter { data ->
                     data.onUpdateFeedingExt()?.assignedModerators().containsCurrentUserId()
                 }
-                .updateFeedingInFeedingsMap(),
-            subscribeToFeedingsDeletion()
+                .updateFeedingInFeedingsMap()
         )
-    }
-
-    private fun subscribeToFeedingsDeletion() = feedingApi.subscribeToFeedingsDeletion().map { data ->
-        cachedFeedingsMap.remove(data.onDeleteFeedingExt()?.id())
     }
 
     private suspend fun List<String>?.containsCurrentUserId() =
         this?.contains(authApi.getCurrentUserId()) == true
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun Flow<OnCreateFeedingHistoryExtSubscription.Data>.addCreatedFeedingHistoryToFeedingsMap(): Flow<Any?> {
-        return updateFeedingsMap(
-            getRawFeeding = { onCreateFeedingHistoryExt() },
-            getFeedingId = { id() },
-            getUserId = { userId() },
-            toFeeding = { user -> toFeeding(::getImageFromName, user) }
-        )
+        return flatMapLatest { data ->
+            data.onCreateFeedingHistoryExt()?.let { feedingHistory ->
+                val userIds = mutableSetOf(feedingHistory.userId())
+                feedingHistory.moderatedBy()?.let { userIds.add(it) }
+
+                usersRepository.getUsersById(userIds).map { users ->
+                    val userMap = users.associateBy { it.id }
+
+                    feedingHistory.toFeeding(
+                        getImageFrom = ::getImageFromName,
+                        reviewedBy = userMap[feedingHistory.moderatedBy()],
+                        feeder = userMap[feedingHistory.userId()]
+                    )?.let {
+                        cachedFeedingsMap[feedingHistory.id()] = it
+                    }
+                }
+            } ?: emptyFlow()
+        }
     }
 
     private fun Flow<OnCreateFeedingExtSubscription.Data>.addCreatedFeedingToFeedingsMap(): Flow<Any?> {

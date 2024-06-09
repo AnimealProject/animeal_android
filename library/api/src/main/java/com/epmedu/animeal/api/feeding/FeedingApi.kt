@@ -34,6 +34,4 @@ interface FeedingApi {
     fun subscribeToFeedingsUpdates(): Flow<OnUpdateFeedingExtSubscription.Data>
 
     fun subscribeToFeedingsCreation(): Flow<OnCreateFeedingExtSubscription.Data>
-
-    fun subscribeToFeedingsDeletion(): Flow<OnDeleteFeedingExtSubscription.Data>
 }

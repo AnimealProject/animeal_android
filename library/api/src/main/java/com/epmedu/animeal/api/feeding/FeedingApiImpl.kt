@@ -90,11 +90,4 @@ internal class FeedingApiImpl(
             responseClass = OnCreateFeedingExtSubscription.Data::class.java
         )
     }
-
-    override fun subscribeToFeedingsDeletion(): Flow<OnDeleteFeedingExtSubscription.Data> {
-        return animealApi.launchSubscription(
-            subscription = OnDeleteFeedingExtSubscription.builder().build(),
-            responseClass = OnDeleteFeedingExtSubscription.Data::class.java
-        )
-    }
 }

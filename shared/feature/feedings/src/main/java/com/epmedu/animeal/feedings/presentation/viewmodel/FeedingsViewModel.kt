@@ -89,14 +89,18 @@ internal class FeedingsViewModel @Inject constructor(
                 }
 
                 else -> {
-                    feedingsFiltered.find { it.id == state.currentFeeding?.id }
+                    feedingModels.find { it.id == state.currentFeeding?.id }
                 }
             }
+            val feedingsCategory = currentFeeding?.status?.let {
+                toFilterCategory(it)
+            } ?: state.feedingsCategory
 
             updateState {
                 copy(
                     currentFeeding = currentFeeding,
                     feedingsFiltered = feedingsFiltered,
+                    feedingsCategory = feedingsCategory,
                     hasReviewedFeedings = hasReviewedFeedings,
                     isListLoading = false,
                     isLockedAndLoading = false

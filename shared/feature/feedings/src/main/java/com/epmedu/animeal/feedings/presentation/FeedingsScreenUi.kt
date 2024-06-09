@@ -146,7 +146,7 @@ fun FeedingsCategoryTab(
     feedingsCategory: FeedingFilterCategory,
     onFilterClick: (FeedingFilterCategory) -> Unit
 ) {
-    var selectedTab by remember { mutableStateOf(feedingsCategory) }
+    var selectedTab by remember(feedingsCategory) { mutableStateOf(feedingsCategory) }
 
     Column {
         Card(elevation = 5.dp, shape = RoundedCornerShape(9.dp)) {
