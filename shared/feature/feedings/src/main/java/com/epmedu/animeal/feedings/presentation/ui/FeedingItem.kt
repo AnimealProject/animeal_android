@@ -26,9 +26,13 @@ import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 
 @Composable
-fun FeedingItem(feedingModel: FeedingModel, onClick: () -> Unit) {
+internal fun FeedingItem(
+    feedingModel: FeedingModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(10.dp),

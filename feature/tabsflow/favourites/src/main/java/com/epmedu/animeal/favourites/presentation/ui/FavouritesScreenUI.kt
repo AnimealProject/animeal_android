@@ -172,7 +172,7 @@ private fun ScreenScaffold(
         sheetControls = {
             FeedingPointActionButton(
                 alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.RED &&
+                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
                     state.feedState.feedPoint == null,
                 onClick = { onWillFeedEvent(WillFeedClicked) },
             )
@@ -302,7 +302,7 @@ private fun FavouritesScreenPreview() {
                 title = title,
                 description = "Hungry dog",
                 city = "Minsk",
-                animalStatus = AnimalState.RED,
+                animalStatus = AnimalState.Starved,
                 animalType = AnimalType.Dogs,
                 isFavourite = true,
                 location = MapLocation.Tbilisi

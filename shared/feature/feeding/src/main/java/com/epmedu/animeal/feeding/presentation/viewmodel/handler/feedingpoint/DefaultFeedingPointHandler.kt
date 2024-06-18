@@ -150,7 +150,7 @@ class DefaultFeedingPointHandler @Inject constructor(
     }
 
     override suspend fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
-        val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.YELLOW)
+        val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.InProgress)
         updateState {
             copy(
                 defaultAnimalType = reservedFeedingPoint.animalType,

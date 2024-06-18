@@ -3,6 +3,7 @@ package com.epmedu.animeal.foundation.button
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.ButtonDefaults
@@ -12,6 +13,7 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,8 +30,37 @@ fun AnimealSecondaryButtonOutlined(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    shape: Shape = MaterialTheme.shapes.large
 ) {
     val primaryColor = if (enabled) MaterialTheme.colors.primary else DisabledButtonColor
+
+    AnimealSecondaryButtonOutlined(
+        onClick = onClick,
+        modifier = modifier,
+        shape = shape,
+        enabled = enabled
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = primaryColor,
+            style = TextStyle(letterSpacing = 1.sp, fontWeight = FontWeight.Bold)
+        )
+    }
+}
+
+@Composable
+fun AnimealSecondaryButtonOutlined(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.large,
+    enabled: Boolean = true,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    content: @Composable () -> Unit
+) {
+    val primaryColor = if (enabled) MaterialTheme.colors.primary else DisabledButtonColor
+
     OutlinedButton(
         modifier = modifier
             .heightIn(min = 60.dp)
@@ -48,17 +79,12 @@ fun AnimealSecondaryButtonOutlined(
             hoveredElevation = 0.dp,
             focusedElevation = 0.dp,
         ),
-        shape = MaterialTheme.shapes.large,
+        shape = shape,
         enabled = enabled,
-        onClick = onClick
+        onClick = onClick,
+        contentPadding = contentPadding
     ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = primaryColor,
-            style = TextStyle(letterSpacing = 1.sp, fontWeight = FontWeight.Bold)
-        )
+        content()
     }
 }
 

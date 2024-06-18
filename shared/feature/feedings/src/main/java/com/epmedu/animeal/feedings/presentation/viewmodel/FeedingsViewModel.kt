@@ -23,6 +23,7 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -48,7 +49,7 @@ internal class FeedingsViewModel @Inject constructor(
     private var feedingsJob: Job? = null
 
     init {
-        fetchFeedings()
+        fetchFeedings(withLoading = true)
         observeCurrentFeeding()
     }
 
@@ -56,13 +57,13 @@ internal class FeedingsViewModel @Inject constructor(
         when (event) {
             is UpdateCategoryEvent -> updateFeedingsCategory(event.category)
             is UpdateCurrentFeeding -> updateCurrentFeeding(event.feeding)
-            is ApproveClicked -> approveFeeding()
+            is ApproveClicked -> approveFeeding(event.feeding)
             is ErrorShown -> hideError()
         }
     }
 
-    private suspend fun collectFeedings() {
-        updateState { copy(isListLoading = true) }
+    private suspend fun collectFeedings(withLoading: Boolean) {
+        if (withLoading) updateState { copy(isListLoading = true) }
 
         combine(
             getAllFeedingsUseCase(shouldFetch = true),
@@ -79,19 +80,7 @@ internal class FeedingsViewModel @Inject constructor(
             val feedingsFiltered =
                 allFeedings.getOrDefault(state.feedingsCategory, emptyList()).toImmutableList()
 
-            val currentFeeding = when {
-                state.isLockedAndLoading && feedingsFiltered.isNotEmpty() -> {
-                    feedingsFiltered.first()
-                }
-
-                state.isListLoading && state.feedingsCategory == FeedingFilterCategory.PENDING -> {
-                    feedingsFiltered.firstOrNull { viewedFeedingIds.contains(it.id).not() }
-                }
-
-                else -> {
-                    feedingModels.find { it.id == state.currentFeeding?.id }
-                }
-            }
+            val currentFeeding = getCurrentFeeding(feedingModels, feedingsFiltered, viewedFeedingIds)
             val feedingsCategory = currentFeeding?.status?.let {
                 toFilterCategory(it)
             } ?: state.feedingsCategory
@@ -107,6 +96,31 @@ internal class FeedingsViewModel @Inject constructor(
                 )
             }
         }.collect()
+    }
+
+    private fun getCurrentFeeding(
+        feedingModels: List<FeedingModel>,
+        feedingsFiltered: List<FeedingModel>,
+        viewedFeedingIds: Set<String>
+    ): FeedingModel? {
+        return when {
+            state.isLockedAndLoading && feedingsFiltered.isNotEmpty() -> {
+                // only after reviewing feeding from the detailed view,
+                // we need to show the next feeding
+                when {
+                    state.currentFeeding != null -> feedingsFiltered.first()
+                    else -> null
+                }
+            }
+
+            state.isListLoading && state.feedingsCategory == FeedingFilterCategory.PENDING -> {
+                feedingsFiltered.firstOrNull { viewedFeedingIds.contains(it.id).not() }
+            }
+
+            else -> {
+                feedingModels.find { it.id == state.currentFeeding?.id }
+            }
+        }
     }
 
     private fun mapFeedingsByCategory(feedings: List<FeedingModel>) {
@@ -193,29 +207,27 @@ internal class FeedingsViewModel @Inject constructor(
         updateState { copy(currentFeeding = feeding) }
     }
 
-    private fun approveFeeding() {
-        state.currentFeeding?.let { feeding ->
-            updateState { copy(isLockedAndLoading = true) }
+    private fun approveFeeding(feeding: FeedingModel) {
+        updateState { copy(isLockedAndLoading = true) }
 
-            viewModelScope.launch {
-                performAction(
-                    action = {
-                        approveFeedingUseCase(feedingPointId = feeding.feedingPointId)
-                    },
-                    onSuccess = {
-                        fetchFeedings()
-                    },
-                    onError = {
-                        updateState { copy(isLockedAndLoading = false, isError = true) }
-                    }
-                )
-            }
+        viewModelScope.launch {
+            performAction(
+                action = {
+                    approveFeedingUseCase(feedingPointId = feeding.feedingPointId)
+                },
+                onSuccess = {
+                    fetchFeedings(withLoading = false)
+                },
+                onError = {
+                    updateState { copy(isLockedAndLoading = false, isError = true) }
+                }
+            )
         }
     }
 
-    private fun fetchFeedings() {
+    private fun fetchFeedings(withLoading: Boolean) {
         feedingsJob?.cancel()
-        feedingsJob = viewModelScope.launch { collectFeedings() }
+        feedingsJob = viewModelScope.launch { collectFeedings(withLoading) }
     }
 
     private fun observeCurrentFeeding() {

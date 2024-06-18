@@ -312,7 +312,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
             feedingPoint = FeedingPointModel(
                 id = "",
                 title = text.take(30),
-                feedStatus = FeedStatus.RED,
+                feedStatus = FeedStatus.Starved,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
@@ -338,7 +338,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
             feedingPoint = FeedingPointModel(
                 id = "",
                 title = text.take(30),
-                feedStatus = FeedStatus.RED,
+                feedStatus = FeedStatus.Starved,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,

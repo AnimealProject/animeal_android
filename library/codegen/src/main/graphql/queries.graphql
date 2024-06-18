@@ -485,6 +485,42 @@ query ListFeedings(
   }
 }
 
+query FeedingByFeedingPointId(
+  $feedingPointFeedingsId: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelFeedingFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  feedingByFeedingPointId(
+    feedingPointFeedingsId: $feedingPointFeedingsId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      userId
+      images
+      status
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      feedingPointFeedingsId
+      expireAt
+      assignedModerators
+      moderatedBy
+      moderatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
 query SearchFeedings(
   $filter: SearchableFeedingFilterInput
   $limit: Int
@@ -640,6 +676,42 @@ query ListFeedingHistories(
   $nextToken: String
 ) {
   listFeedingHistories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userId
+      images
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      feedingPointId
+      status
+      reason
+      moderatedBy
+      moderatedAt
+      assignedModerators
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query FeedingHistoryByFeedingPointId(
+  $feedingPointId: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelFeedingHistoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  feedingHistoryByFeedingPointId(
+    feedingPointId: $feedingPointId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
     items {
       id
       userId
