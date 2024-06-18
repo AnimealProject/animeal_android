@@ -28,7 +28,7 @@ class GetFeedingPointByPriorityUseCase(
         userLocation: MapLocation,
     ): Flow<FeedingPoint> {
         return feedingPointRepository.getFeedingPointsBy(shouldFetch = false) {
-            it.animalType == type && it.animalStatus == AnimalState.RED
+            it.animalType == type && it.animalStatus == AnimalState.Starved
         }.map { feedingPoints ->
             Factory(feedingPoints).resolvePriority(userLocation)
         }.filterNotNull().take(1)

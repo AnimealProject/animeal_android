@@ -12,14 +12,16 @@ enum class FeedStatus(
     @DrawableRes val iconId: Int,
     val color: Color
 ) {
-    GREEN(R.string.feed_status_green, R.drawable.ic_face_happy, CustomColor.StatusGreen),
-    YELLOW(R.string.feed_status_yellow, R.drawable.ic_face_neutral, CustomColor.StatusYellow),
-    RED(R.string.feed_status_red, R.drawable.ic_face_upset, CustomColor.StatusRed)
+    Fed(R.string.feed_status_fed, R.drawable.ic_face_happy, CustomColor.StatusGreen),
+    InProgress(R.string.feed_status_in_progress, R.drawable.ic_face_neutral, CustomColor.StatusYellow),
+    Pending(R.string.feed_status_pending, R.drawable.ic_pending_orange, CustomColor.StatusYellow),
+    Starved(R.string.feed_status_starved, R.drawable.ic_face_upset, CustomColor.StatusRed)
 }
 
 fun AnimalState.toFeedStatus(): FeedStatus =
     when (this) {
-        AnimalState.GREEN -> FeedStatus.GREEN
-        AnimalState.YELLOW -> FeedStatus.YELLOW
-        AnimalState.RED -> FeedStatus.RED
+        AnimalState.Fed -> FeedStatus.Fed
+        AnimalState.InProgress -> FeedStatus.InProgress
+        AnimalState.Pending -> FeedStatus.Pending
+        AnimalState.Starved -> FeedStatus.Starved
     }

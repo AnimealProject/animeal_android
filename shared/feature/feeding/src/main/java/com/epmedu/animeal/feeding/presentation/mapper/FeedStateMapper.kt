@@ -23,9 +23,10 @@ internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
         description = this.description,
         city = this.city,
         animalStatus = when (this.feedStatus) {
-            FeedStatus.GREEN -> AnimalState.GREEN
-            FeedStatus.YELLOW -> AnimalState.YELLOW
-            else -> AnimalState.RED
+            FeedStatus.Fed -> AnimalState.Fed
+            FeedStatus.Pending -> AnimalState.Pending
+            FeedStatus.InProgress -> AnimalState.InProgress
+            else -> AnimalState.Starved
         },
         animalType = animalType,
         image = image,

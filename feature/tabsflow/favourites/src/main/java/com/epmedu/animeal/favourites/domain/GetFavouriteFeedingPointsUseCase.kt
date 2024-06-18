@@ -11,9 +11,10 @@ class GetFavouriteFeedingPointsUseCase(private val feedingPointRepository: Feedi
             .filter { feedingPoint -> feedingPoint.isFavourite }
             .sortedBy {
                 when (it.animalStatus) {
-                    AnimalState.RED -> 0
-                    AnimalState.YELLOW -> 1
-                    AnimalState.GREEN -> 2
+                    AnimalState.Starved -> 0
+                    AnimalState.InProgress -> 1
+                    AnimalState.Pending -> 2
+                    AnimalState.Fed -> 3
                 }
             }
     }
