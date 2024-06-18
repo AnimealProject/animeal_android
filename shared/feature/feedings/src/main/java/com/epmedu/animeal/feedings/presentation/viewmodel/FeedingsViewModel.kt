@@ -23,7 +23,6 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -80,12 +79,16 @@ internal class FeedingsViewModel @Inject constructor(
             val feedingsFiltered =
                 allFeedings.getOrDefault(state.feedingsCategory, emptyList()).toImmutableList()
 
-            val currentFeeding = getCurrentFeeding(feedingsFiltered, viewedFeedingIds)
+            val currentFeeding = getCurrentFeeding(feedingModels, feedingsFiltered, viewedFeedingIds)
+            val feedingsCategory = currentFeeding?.status?.let {
+                toFilterCategory(it)
+            } ?: state.feedingsCategory
 
             updateState {
                 copy(
                     currentFeeding = currentFeeding,
                     feedingsFiltered = feedingsFiltered,
+                    feedingsCategory = feedingsCategory,
                     hasReviewedFeedings = hasReviewedFeedings,
                     isListLoading = false,
                     isLockedAndLoading = false
@@ -95,7 +98,8 @@ internal class FeedingsViewModel @Inject constructor(
     }
 
     private fun getCurrentFeeding(
-        feedingsFiltered: ImmutableList<FeedingModel>,
+        feedingModels: List<FeedingModel>,
+        feedingsFiltered: List<FeedingModel>,
         viewedFeedingIds: Set<String>
     ): FeedingModel? {
         return when {
@@ -113,7 +117,7 @@ internal class FeedingsViewModel @Inject constructor(
             }
 
             else -> {
-                feedingsFiltered.find { it.id == state.currentFeeding?.id }
+                feedingModels.find { it.id == state.currentFeeding?.id }
             }
         }
     }
