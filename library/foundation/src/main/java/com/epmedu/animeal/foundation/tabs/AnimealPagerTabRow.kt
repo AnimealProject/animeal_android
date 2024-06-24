@@ -1,16 +1,19 @@
 package com.epmedu.animeal.foundation.tabs
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
@@ -28,9 +31,6 @@ import androidx.compose.ui.zIndex
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 
 /**
  * Shows the tab bar that can hold several tabs.
@@ -42,7 +42,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
  * @param modifier The [Modifier].
  * @param backgroundColor background color.
  */
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimealPagerTabRow(
     pagerState: PagerState,
@@ -55,10 +55,7 @@ fun AnimealPagerTabRow(
         modifier = modifier,
         indicator = { tabPositions ->
             AnimealPagerTabIndicator(
-                Modifier.pagerTabIndicatorOffset(
-                    pagerState,
-                    tabPositions
-                )
+                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
             )
         },
         divider = { AnimealPagerTabDivider() },
@@ -144,7 +141,7 @@ private fun AnimealPagerTabDivider(modifier: Modifier = Modifier) {
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @AnimealPreview
 @Composable
 private fun AnimealTabPreview() {

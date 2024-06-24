@@ -14,7 +14,6 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.pager.indicator)
 
     implementation(libs.androidx.lifecycle)
 

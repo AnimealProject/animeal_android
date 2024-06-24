@@ -36,10 +36,6 @@ dependencies {
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pager.indicator)
-
-
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 }
