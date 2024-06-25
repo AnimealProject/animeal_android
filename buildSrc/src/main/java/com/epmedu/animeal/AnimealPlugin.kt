@@ -28,16 +28,8 @@ open class AnimealPlugin : Plugin<Project> {
         project.afterEvaluate {
             plugins.all {
                 when (this) {
-                    is AppPlugin -> applicationExtension
-                        .configureBuildFeatures(
-                            project = project,
-                            pluginExtension = pluginExtension
-                        )
-                    is LibraryPlugin -> libraryExtension
-                        .configureBuildFeatures(
-                            project = project,
-                            pluginExtension = pluginExtension
-                        )
+                    is AppPlugin -> applicationExtension.configureBuildFeatures(pluginExtension)
+                    is LibraryPlugin -> libraryExtension.configureBuildFeatures(pluginExtension)
                 }
             }
         }
