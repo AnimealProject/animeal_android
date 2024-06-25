@@ -4,7 +4,7 @@ plugins {
     id("AnimealPlugin")
     id("com.android.library")
     id("com.amazonaws.appsync")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.compose")
 }
@@ -38,7 +38,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     
     implementation(libs.immutable.collections)
 }

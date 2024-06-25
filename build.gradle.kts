@@ -23,6 +23,7 @@ buildscript {
         classpath(libs.gradle.plugin.googleservices)
         classpath(libs.gradle.plugin.hilt)
         classpath(libs.gradle.plugin.kotlin)
+        classpath(libs.gradle.plugin.ksp)
         classpath(libs.gradle.plugin.versions)
     }
 }

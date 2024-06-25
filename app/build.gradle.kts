@@ -4,10 +4,10 @@ import com.epmedu.animeal.extension.release
 plugins {
     id("AnimealPlugin")
     id("com.android.application")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -99,7 +99,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
