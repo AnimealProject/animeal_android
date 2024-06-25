@@ -7,5 +7,5 @@ sealed interface FeedingsScreenEvent {
     data class UpdateCurrentFeeding(val feeding: FeedingModel?) : FeedingsScreenEvent
     data class UpdateCategoryEvent(val category: FeedingFilterCategory) : FeedingsScreenEvent
     data class ApproveClicked(val feeding: FeedingModel) : FeedingsScreenEvent
-    object ErrorShown : FeedingsScreenEvent
+    data object ErrorShown : FeedingsScreenEvent
 }

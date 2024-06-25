@@ -9,6 +9,10 @@ android {
     namespace = "com.epmedu.animeal.auth"
 }
 
+animealPlugin {
+    compose = false
+}
+
 dependencies {
     implementation(projects.library.common)
     implementation(projects.library.extensions)

@@ -4,8 +4,8 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent
 
 internal sealed interface FinishProfileScreenEvent {
     data class InputFormEvent(val event: ProfileInputFormEvent) : FinishProfileScreenEvent
-    object Cancel : FinishProfileScreenEvent
-    object Submit : FinishProfileScreenEvent
-    object ScreenDisplayed : FinishProfileScreenEvent
-    object NavigatedToNextDestination : FinishProfileScreenEvent
+    data object Cancel : FinishProfileScreenEvent
+    data object Submit : FinishProfileScreenEvent
+    data object ScreenDisplayed : FinishProfileScreenEvent
+    data object NavigatedToNextDestination : FinishProfileScreenEvent
 }

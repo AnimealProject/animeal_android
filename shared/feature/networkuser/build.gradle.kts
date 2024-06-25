@@ -9,6 +9,10 @@ android {
     namespace = "com.epmedu.animeal.networkuser"
 }
 
+animealPlugin {
+    compose = false
+}
+
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 

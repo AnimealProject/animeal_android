@@ -4,7 +4,7 @@ import com.mapbox.navigation.base.route.NavigationRoute
 
 sealed interface FeedingRouteState {
 
-    object Disabled : FeedingRouteState
+    data object Disabled : FeedingRouteState
 
     data class Active(
         val showFullRoad: Boolean = false,
