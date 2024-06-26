@@ -8,6 +8,7 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
+@Suppress("ComplexInterface")
 interface FeedingPointHandler {
 
     var feedingPointStateFlow: StateFlow<FeedingPointState>
@@ -15,6 +16,8 @@ interface FeedingPointHandler {
     fun updateAnimalType(animalType: AnimalType)
 
     fun CoroutineScope.restoreSavedFeedingPoint()
+
+    fun getForcedFeedingPointId(): String?
 
     fun CoroutineScope.fetchFeedingPoints()
 
