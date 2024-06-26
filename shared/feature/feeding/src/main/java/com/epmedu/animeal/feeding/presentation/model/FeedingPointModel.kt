@@ -4,6 +4,10 @@ import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus.Fed
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus.InProgress
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus.Pending
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus.Starved
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
@@ -44,24 +48,24 @@ data class FeedingPointModel(
         when {
             isFavourite -> {
                 when (feedStatus) {
-                    FeedStatus.RED -> R.drawable.ic_favstate_favouritehungry_high
-                    FeedStatus.YELLOW -> R.drawable.ic_favstate_favouritehungry_in_process
-                    FeedStatus.GREEN -> R.drawable.ic_favstate_favouritehungry_low
+                    Starved -> R.drawable.ic_favstate_favouritehungry_high
+                    InProgress, Pending -> R.drawable.ic_favstate_favouritehungry_in_process
+                    Fed -> R.drawable.ic_favstate_favouritehungry_low
                 }
             }
             animalType == AnimalType.Dogs -> {
                 when (feedStatus) {
-                    FeedStatus.RED -> R.drawable.ic_dogsstate_doghungry_high
-                    FeedStatus.YELLOW -> R.drawable.ic_dogsstate_doghungry_in_process
-                    FeedStatus.GREEN -> R.drawable.ic_dogsstate_doghungry_low
+                    Starved -> R.drawable.ic_dogsstate_doghungry_high
+                    InProgress, Pending -> R.drawable.ic_dogsstate_doghungry_in_process
+                    Fed -> R.drawable.ic_dogsstate_doghungry_low
                 }
             }
             // animalType == AnimalType.Cats
             else -> {
                 when (feedStatus) {
-                    FeedStatus.RED -> R.drawable.ic_catsstate_cathungry_high
-                    FeedStatus.YELLOW -> R.drawable.ic_catsstate_cathungry_in_process
-                    FeedStatus.GREEN -> R.drawable.ic_catsstate_cathungry_low
+                    Starved -> R.drawable.ic_catsstate_cathungry_high
+                    InProgress, Pending -> R.drawable.ic_catsstate_cathungry_in_process
+                    Fed -> R.drawable.ic_catsstate_cathungry_low
                 }
             }
         }

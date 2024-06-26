@@ -105,14 +105,14 @@ fun MoreScreenPreview() {
         Column {
             FeedingPointItem(
                 longText,
-                FeedStatus.RED,
+                FeedStatus.Starved,
                 isFavourite = true,
                 image,
                 {}
             ) {}
             FeedingPointItem(
                 shortText,
-                FeedStatus.GREEN,
+                FeedStatus.Fed,
                 isFavourite = false,
                 image,
                 {}

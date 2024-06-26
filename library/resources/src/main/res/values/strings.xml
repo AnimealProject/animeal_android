@@ -75,9 +75,9 @@
     <string name="profile_logout_cancel">Are you sure you want to log out of your account?</string>
     <string name="profile_logout_success">You have successfully logged out</string>
 
-    <string name="feed_status_green">Newly fed</string>
-    <string name="feed_status_yellow">Feeding in progress</string>
-    <string name="feed_status_red">There is no food</string>
+    <string name="feed_status_fed">Newly fed</string>
+    <string name="feed_status_in_progress">Feeding in progress</string>
+    <string name="feed_status_starved">There is no food</string>
 
     <string name="feed_status_auto_approved">Auto-approved</string>
     <string name="feed_status_approved">Approved</string>

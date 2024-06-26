@@ -57,15 +57,19 @@ private fun FeedStatusItemPreview() {
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
         ) {
             FeedStatusItem(
-                status = FeedStatus.GREEN
+                status = FeedStatus.Fed
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.RED
+                status = FeedStatus.Starved
             )
             Divider()
             FeedStatusItem(
-                status = FeedStatus.YELLOW
+                status = FeedStatus.InProgress
+            )
+            Divider()
+            FeedStatusItem(
+                status = FeedStatus.Pending
             )
         }
     }
