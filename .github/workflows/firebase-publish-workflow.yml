@@ -2,7 +2,7 @@ name: Firebase publish workflow
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, r/release_* ]
     paths-ignore:
       - '**/README.md'
       - '.github/**'
