@@ -2,12 +2,12 @@ name: Debug CI workflow
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, r/release_* ]
     paths-ignore:
       - '**/README.md'
       - '.github/**'
   push:
-    branches: [ develop ]
+    branches: [ develop, r/release_* ]
     paths-ignore:
       - '**/README.md'
       - '.github/**'
