@@ -142,6 +142,7 @@ private fun ScreenScaffold(
 ) {
     val scope = rememberCoroutineScope()
     val navigator = LocalNavigator.currentOrThrow
+    val feedingPointInProgress = state.feedState.feedPoint
 
     AnimealBottomSheetLayout(
         modifier = Modifier.statusBarsPadding(),
@@ -154,7 +155,8 @@ private fun ScreenScaffold(
                     feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
-                    isShowOnMapVisible = state.feedState.feedPoint == null,
+                    isShowOnMapVisible = feedingPointInProgress == null ||
+                        feedingPointInProgress.id == feedingPoint.id,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
                     },
@@ -173,7 +175,7 @@ private fun ScreenScaffold(
             FeedingPointActionButton(
                 alpha = buttonAlpha,
                 enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                    state.feedState.feedPoint == null,
+                    feedingPointInProgress == null,
                 onClick = { onWillFeedEvent(WillFeedClicked) },
             )
         }
@@ -213,6 +215,7 @@ private fun OnFeedingConfirmationState(
             navigator.navigateTo(TabsRoute.Home.name)
             onFeedingEvent(FeedingEvent.Reset)
         }
+
         FeedingWasAlreadyBooked -> {
             AnimealAlertDialog(
                 title = stringResource(id = R.string.feeding_point_expired_description),
@@ -222,6 +225,7 @@ private fun OnFeedingConfirmationState(
                 }
             )
         }
+
         else -> {}
     }
 }
