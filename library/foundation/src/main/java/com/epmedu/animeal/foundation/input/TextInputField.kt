@@ -37,11 +37,11 @@ import com.epmedu.animeal.foundation.theme.interFontFamily
 
 @Composable
 fun TextInputField(
-    title: String,
     hint: String,
     onValueChange: (String) -> Unit,
     value: String,
     modifier: Modifier = Modifier,
+    title: String? = null,
     isEnabled: Boolean = true,
     errorText: String = "",
     onClearFocus: () -> Unit = {},
@@ -55,12 +55,14 @@ fun TextInputField(
     val borderColor: Color = if (errorText.isEmpty()) LynxWhite else CustomColor.Error
 
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(bottom = 2.dp),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.subtitle2
-        )
+        title?.let {
+            Text(
+                text = title,
+                modifier = Modifier.padding(bottom = 2.dp),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.subtitle2
+            )
+        }
 
         TextInputFieldBox(
             value = value,

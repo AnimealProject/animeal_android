@@ -9,6 +9,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetAllFeedingsUseCase
 import com.epmedu.animeal.feedings.domain.usecase.GetHasReviewedFeedingsUseCase
@@ -17,13 +18,24 @@ import com.epmedu.animeal.feedings.domain.usecase.UpdateViewedFeedingsUseCase
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ApproveClicked
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ErrorShown
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectClicked
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectionCommentConfirmed
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectionCommentDismissed
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectionCommentUpdated
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectionReasonSelected
+import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.RejectionReasonSelectionDismissed
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCategoryEvent
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.UpdateCurrentFeeding
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import com.epmedu.animeal.feedings.presentation.model.FeedingModelStatus
+import com.epmedu.animeal.feedings.presentation.model.RejectionReasonRequestType
+import com.epmedu.animeal.feedings.presentation.model.RejectionReasonType
 import com.epmedu.animeal.feedings.presentation.model.toFeedingModelStatus
+import com.epmedu.animeal.foundation.common.UiText
+import com.epmedu.animeal.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -38,6 +50,7 @@ internal class FeedingsViewModel @Inject constructor(
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
     private val getHasReviewedFeedingsUseCase: GetHasReviewedFeedingsUseCase,
     private val approveFeedingUseCase: ApproveFeedingUseCase,
+    private val rejectFeedingUseCase: RejectFeedingUseCase,
     private val getViewedFeedingsUseCase: GetViewedFeedingsUseCase,
     private val updateViewedFeedingsUseCase: UpdateViewedFeedingsUseCase
 ) : ViewModel(),
@@ -45,6 +58,7 @@ internal class FeedingsViewModel @Inject constructor(
     ActionDelegate by actionDelegate {
 
     private val allFeedings = mutableMapOf<FeedingFilterCategory, List<FeedingModel>>()
+    private var feedingForRejection: FeedingModel? = null
     private var feedingsJob: Job? = null
 
     init {
@@ -57,6 +71,12 @@ internal class FeedingsViewModel @Inject constructor(
             is UpdateCategoryEvent -> updateFeedingsCategory(event.category)
             is UpdateCurrentFeeding -> updateCurrentFeeding(event.feeding)
             is ApproveClicked -> approveFeeding(event.feeding)
+            is RejectClicked -> showRejectionDialog(event.feeding)
+            is RejectionReasonSelected -> onRejectionReasonSelected(event.reasonType, event.reasonText)
+            is RejectionReasonSelectionDismissed -> hideRejectionReasonDialogs()
+            is RejectionCommentUpdated -> onRejectionCommentUpdated(event.comment)
+            is RejectionCommentConfirmed -> onRejectionCommentConfirmed(event.comment)
+            is RejectionCommentDismissed -> onRejectionCommentDismissed()
             is ErrorShown -> hideError()
         }
     }
@@ -222,6 +242,104 @@ internal class FeedingsViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun rejectFeeding(
+        feeding: FeedingModel,
+        reason: String
+    ) {
+        updateState { copy(isLockedAndLoading = true) }
+
+        viewModelScope.launch {
+            performAction(
+                action = {
+                    rejectFeedingUseCase(
+                        feedingPointId = feeding.feedingPointId,
+                        reason = reason
+                    )
+                },
+                onSuccess = {
+                    fetchFeedings(withLoading = false)
+                },
+                onError = {
+                    updateState { copy(isLockedAndLoading = false, isError = true) }
+                }
+            )
+        }
+    }
+
+    private fun showRejectionDialog(feeding: FeedingModel) {
+        feedingForRejection = feeding
+
+        updateState {
+            copy(
+                rejectionReasonRequestType = RejectionReasonRequestType.ReasonSelection(
+                    reasons = RejectionReasonType.values().toList().toPersistentList(),
+                    selectedReason = RejectionReasonType.NoFood
+                )
+            )
+        }
+    }
+
+    private fun hideRejectionReasonDialogs() {
+        feedingForRejection = null
+        updateState { copy(rejectionReasonRequestType = null) }
+    }
+
+    private fun onRejectionReasonSelected(
+        reasonType: RejectionReasonType,
+        reasonText: String
+    ) {
+        if (reasonType == RejectionReasonType.Other) {
+            updateState {
+                copy(rejectionReasonRequestType = RejectionReasonRequestType.Comment())
+            }
+        } else {
+            onRejectionReasonConfirmed(reasonText)
+        }
+    }
+
+    private fun onRejectionReasonConfirmed(reason: String) {
+        feedingForRejection?.let { feeding ->
+            rejectFeeding(feeding, reason)
+            hideRejectionReasonDialogs()
+        }
+    }
+
+    private fun onRejectionCommentConfirmed(comment: String) {
+        val isValid = comment.isNotBlank()
+
+        updateState {
+            copy(
+                rejectionReasonRequestType = RejectionReasonRequestType.Comment(
+                    comment = comment,
+                    error = if (isValid) {
+                        UiText.Empty
+                    } else {
+                        UiText.StringResource(R.string.rejection_reason_comment_dialog_empty_error)
+                    }
+                )
+            )
+        }
+
+        if (isValid) {
+            onRejectionReasonConfirmed(comment)
+        }
+    }
+
+    private fun onRejectionCommentUpdated(comment: String) {
+        updateState {
+            copy(
+                rejectionReasonRequestType = RejectionReasonRequestType.Comment(
+                    comment = comment,
+                    error = UiText.Empty
+                )
+            )
+        }
+    }
+
+    private fun onRejectionCommentDismissed() {
+        feedingForRejection?.let(::showRejectionDialog)
     }
 
     private fun fetchFeedings(withLoading: Boolean) {
