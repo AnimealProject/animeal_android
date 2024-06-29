@@ -177,7 +177,6 @@ internal fun HomeScreenUI(
         }
     ) {
         AnimealPermissions(
-            permissionsState = state.permissionsState,
             lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
             onEvent = onPermissionsEvent,
         ) { geolocationPermissionState ->

@@ -5,7 +5,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.permissions.domain.GetAppSettingsUseCase
 import com.epmedu.animeal.permissions.domain.UpdateAppSettingsUseCase
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
-import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionAsked
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent.CameraPermissionStatusChanged
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionRationaleShown
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent.GeolocationPermissionStatusChanged
@@ -32,8 +31,7 @@ internal class PermissionsHandlerImpl(
                 with(appSettings) {
                     updateState {
                         copy(
-                            shouldShowGeolocationPermissionRationale = isGeolocationPermissionRationaleShown.not(),
-                            isCameraPermissionAsked = isCameraPermissionRequested
+                            shouldShowGeolocationPermissionRationale = isGeolocationPermissionRationaleShown.not()
                         )
                     }
                 }
@@ -43,7 +41,6 @@ internal class PermissionsHandlerImpl(
 
     override fun CoroutineScope.handlePermissionEvent(event: PermissionsEvent) {
         when (event) {
-            is CameraPermissionAsked -> markCameraPermissionAsAsked()
             is GeolocationPermissionRationaleShown -> markGeolocationPermissionRationaleAsShown()
             is GeolocationPermissionStatusChanged -> updateGeolocationPermissionStatus(event)
             is CameraPermissionStatusChanged -> updateCameraPermissionStatus(event)
@@ -52,12 +49,6 @@ internal class PermissionsHandlerImpl(
 
     private fun CoroutineScope.markGeolocationPermissionRationaleAsShown() {
         launch { updateAppSettingsUseCase { isGeolocationPermissionRationaleShown = true } }
-    }
-
-    private fun CoroutineScope.markCameraPermissionAsAsked() {
-        if (!state.isCameraPermissionAsked) {
-            launch { updateAppSettingsUseCase { isCameraPermissionRequested = true } }
-        }
     }
 
     private fun updateGeolocationPermissionStatus(event: GeolocationPermissionStatusChanged) {
