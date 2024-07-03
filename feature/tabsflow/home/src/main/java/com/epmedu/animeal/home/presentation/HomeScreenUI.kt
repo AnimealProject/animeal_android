@@ -121,6 +121,7 @@ internal fun HomeScreenUI(
         snapshotFlow { bottomSheetState.isHidden && state.feedingRouteState is Disabled }
             .distinctUntilChanged()
             .filter { it }
+            // skip first deselect to avoid race condition with initially selected feeding point
             .drop(1)
             .collect {
                 onFeedingPointEvent(Deselect)
