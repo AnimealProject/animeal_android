@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint
 
 import androidx.lifecycle.SavedStateHandle
+import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
@@ -67,6 +68,10 @@ class DefaultFeedingPointHandler @Inject constructor(
     override fun CoroutineScope.restoreSavedFeedingPoint() {
         val savedFeedingPoint: FeedingPointModel? = savedStateHandle[SAVED_FEEDING_POINT_KEY]
         savedFeedingPoint?.let { selectFeedingPoint(savedFeedingPoint) }
+    }
+
+    override fun getForcedFeedingPointId(): String? {
+        return savedStateHandle[FORCED_FEEDING_POINT_ID]
     }
 
     override fun updateAnimalType(animalType: AnimalType) {
@@ -151,10 +156,16 @@ class DefaultFeedingPointHandler @Inject constructor(
 
     override suspend fun showSingleReservedFeedingPoint(feedingPoint: FeedingPointModel) {
         val reservedFeedingPoint = feedingPoint.copy(feedStatus = FeedStatus.InProgress)
+        val currentFeedingPoint = getForcedFeedingPointId()?.let { id ->
+            getFeedingPointByIdUseCase(id)?.let { point ->
+                FeedingPointModel(point)
+            }
+        }
+
         updateState {
             copy(
                 defaultAnimalType = reservedFeedingPoint.animalType,
-                currentFeedingPoint = null,
+                currentFeedingPoint = currentFeedingPoint,
                 feedingPoints = persistentListOf(reservedFeedingPoint)
             )
         }
@@ -177,6 +188,7 @@ class DefaultFeedingPointHandler @Inject constructor(
                     currentFeedingPoint = null,
                 )
             }
+            savedStateHandle[FORCED_FEEDING_POINT_ID] = null
         }
     }
 
