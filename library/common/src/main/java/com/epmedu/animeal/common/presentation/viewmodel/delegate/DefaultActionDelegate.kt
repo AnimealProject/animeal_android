@@ -13,7 +13,7 @@ class DefaultActionDelegate(
     override suspend fun performAction(
         action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit,
-        onError: () -> Unit
+        onError: suspend () -> Unit
     ) {
         coroutineScope {
             when (val result = withContext(dispatchers.IO) { action() }) {

@@ -9,6 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -67,6 +68,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.mapbox.maps.MapView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -113,10 +117,14 @@ internal fun HomeScreenUI(
 
     OnState(state, onScreenEvent, onTimerEvent)
 
-    LaunchedEffect(key1 = bottomSheetState.isHidden, key2 = state.feedingRouteState) {
-        if (bottomSheetState.isHidden && state.feedingRouteState is Disabled) {
-            onFeedingPointEvent(Deselect)
-        }
+    LaunchedEffect(key1 = bottomSheetState, key2 = state.feedingRouteState) {
+        snapshotFlow { bottomSheetState.isHidden && state.feedingRouteState is Disabled }
+            .distinctUntilChanged()
+            .filter { it }
+            .drop(1)
+            .collect {
+                onFeedingPointEvent(Deselect)
+            }
     }
 
     OnBackHandling(
@@ -331,6 +339,7 @@ private fun onGeoLocationClick(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
                 else -> {
                     mapView.showCurrentLocation(state.locationState.location)
                 }

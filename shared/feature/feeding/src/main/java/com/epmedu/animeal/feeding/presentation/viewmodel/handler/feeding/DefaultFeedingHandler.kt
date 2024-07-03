@@ -28,13 +28,12 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationStat
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
@@ -69,27 +68,30 @@ class DefaultFeedingHandler(
         fetchCurrentFeedingJob?.cancel()
         fetchCurrentFeedingJob = launch {
             fetchCurrentFeedingPointUseCase()?.let { feedingPoint ->
-                updateFeedingState(
-                    feedingConfirmationState = Dismissed,
-                    feedPoint = FeedingPointModel(feedingPoint)
-                )
-                showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
-                startRoute()
+                if (feedingRouteStateFlow.value is FeedingRouteState.Disabled) {
+                    updateFeedingState(
+                        feedingConfirmationState = Dismissed,
+                        feedPoint = FeedingPointModel(feedingPoint)
+                    )
+                    showSingleReservedFeedingPoint(FeedingPointModel(feedingPoint))
+                    startRoute()
+                }
             } ?: run {
                 updateFeedingState(
                     feedingConfirmationState = Dismissed
                 )
             }
         }
-        stateFlow.onEach {
-            // updates state flow at repository
-            updateFeedStateUseCase(it.toDomainFeedState())
-        }.launchIn(this)
         launch {
             getFeedStateUseCase().collect { feedState ->
+                if (feedingRouteStateFlow.value is FeedingRouteState.Disabled && feedState.feedPoint != null) {
+                    showSingleReservedFeedingPoint(FeedingPointModel(feedState.feedPoint))
+                    startRoute()
+                }
                 updateFeedingState(
                     feedingConfirmationState = feedState.feedingConfirmationState.toPresentationFeedingConfirmationState(),
                     feedPoint = feedState.feedPoint?.let { FeedingPointModel(it) },
+                    updateGlobally = false
                 )
             }
         }
@@ -101,13 +103,14 @@ class DefaultFeedingHandler(
             Cancel -> cancelFeeding()
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
-            Reset -> restartFeedingConfirmationState()
+            Reset -> launch { restartFeedingConfirmationState() }
         }
     }
 
-    private fun restartFeedingConfirmationState() {
+    private suspend fun restartFeedingConfirmationState() {
         updateFeedingState(
-            feedingConfirmationState = Dismissed
+            feedingConfirmationState = Dismissed,
+            updateGlobally = false
         )
     }
 
@@ -187,18 +190,18 @@ class DefaultFeedingHandler(
         }
     }
 
-    private fun displayThankYouDialog() {
+    private suspend fun displayThankYouDialog() {
         updateFeedingState(FeedingConfirmationState.Showing)
     }
 
-    override fun dismissThankYouDialog() {
+    override suspend fun dismissThankYouDialog() {
         updateFeedingState(Dismissed)
     }
 
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit,
-        onError: () -> Unit = { showError() },
+        onError: suspend () -> Unit = { showError() },
     ) {
         state.feedPoint?.let { currentFeedingPoint ->
             performAction(
@@ -212,9 +215,10 @@ class DefaultFeedingHandler(
         }
     }
 
-    private fun updateFeedingState(
+    private suspend fun updateFeedingState(
         feedingConfirmationState: FeedingConfirmationState,
-        feedPoint: FeedingPointModel? = null
+        feedPoint: FeedingPointModel? = null,
+        updateGlobally: Boolean = true
     ) {
         updateState {
             copy(
@@ -222,6 +226,7 @@ class DefaultFeedingHandler(
                 feedingConfirmationState = feedingConfirmationState
             )
         }
+        if (updateGlobally) updateFeedStateUseCase(state.toDomainFeedState())
     }
 
     companion object {
