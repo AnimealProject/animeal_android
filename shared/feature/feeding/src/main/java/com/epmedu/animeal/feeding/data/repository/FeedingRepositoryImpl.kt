@@ -1,5 +1,7 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import SearchFeedingHistoriesQuery
+import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.epmedu.animeal.api.feeding.FeedingApi
@@ -22,10 +24,9 @@ import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -45,13 +46,10 @@ internal class FeedingRepositoryImpl(
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
 
-    private val _domainFeedState = MutableSharedFlow<DomainFeedState>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _domainFeedState = MutableStateFlow(DomainFeedState())
 
     override fun getFeedStateFlow(): Flow<DomainFeedState> {
-        return _domainFeedState.asSharedFlow()
+        return _domainFeedState.asStateFlow()
     }
 
     override suspend fun getUserFeedings(): List<UserFeeding> {
