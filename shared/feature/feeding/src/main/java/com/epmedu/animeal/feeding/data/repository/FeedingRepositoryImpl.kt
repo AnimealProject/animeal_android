@@ -35,7 +35,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
@@ -63,10 +65,8 @@ internal class FeedingRepositoryImpl(
     private val usersRepository: UsersRepository
 ) : FeedingRepository {
 
-    private val _domainFeedState = MutableSharedFlow<DomainFeedState>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _domainFeedState = MutableStateFlow(DomainFeedState())
+
     private val feedingsFlow = MutableSharedFlow<List<Feeding>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -75,7 +75,7 @@ internal class FeedingRepositoryImpl(
     private var cachedFeedingsMap = mutableMapOf<String, Feeding>()
 
     override fun getFeedStateFlow(): Flow<DomainFeedState> {
-        return _domainFeedState.asSharedFlow()
+        return _domainFeedState.asStateFlow()
     }
 
     override suspend fun getUserFeedings(): List<UserFeeding> {
