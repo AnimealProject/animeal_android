@@ -5,9 +5,11 @@ import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.domain.model.DomainFeedState
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
@@ -25,8 +27,6 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.util.Keys.SAVED_FEEDING_POINT_KEY
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
-import com.epmedu.animeal.router.presentation.FeedingRouteState.Active
-import com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled
 import com.epmedu.animeal.router.presentation.RouteHandler
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -45,6 +45,7 @@ class DefaultFeedingPointHandler @Inject constructor(
     routeHandler: RouteHandler,
     errorHandler: ErrorHandler,
     private val savedStateHandle: SavedStateHandle,
+    private val getFeedStateUseCase: GetFeedStateUseCase,
     private val getFeedingPointByPriorityUseCase: GetFeedingPointByPriorityUseCase,
     private val getAllFeedingPointsUseCase: GetAllFeedingPointsUseCase,
     private val getFeedingPointByIdUseCase: GetFeedingPointByIdUseCase,
@@ -85,38 +86,44 @@ class DefaultFeedingPointHandler @Inject constructor(
     override fun CoroutineScope.fetchFeedingPoints() {
         fetchFeedingPointsJob?.cancel()
         fetchFeedingPointsJob = launch {
-            getAllFeedingPointsUseCase(type = state.defaultAnimalType).collect { domainFeedingPoints ->
+            combine(
+                getFeedStateUseCase(),
+                getAllFeedingPointsUseCase(type = state.defaultAnimalType)
+            ) { feedState, domainFeedingPoints ->
                 val feedingPoints = domainFeedingPoints.map { domainFeedingPoint ->
                     FeedingPointModel(domainFeedingPoint)
                 }
                 val currentFeedingPoint =
                     feedingPoints.find { it.id == state.currentFeedingPoint?.id }
+                val feedingPointsToShow =
+                    getFeedingPointsToShow(feedState, feedingPoints, currentFeedingPoint)
                 updateState {
                     copy(
                         currentFeedingPoint = getCurrentFeedingPointToShow(currentFeedingPoint),
-                        feedingPoints = getFeedingPointsToShow(feedingPoints, currentFeedingPoint)
+                        feedingPoints = feedingPointsToShow
                     )
                 }
-            }
+            }.collect()
         }
     }
 
     private fun getFeedingPointsToShow(
+        feedState: DomainFeedState,
         feedingPoints: List<FeedingPointModel>,
         currentFeedingPoint: FeedingPointModel?
     ): ImmutableList<FeedingPointModel> {
-        return when (feedingRouteStateFlow.value) {
-            is Active -> {
+        return when {
+            feedState.feedPoint != null -> {
                 currentFeedingPoint?.let {
                     persistentListOf(currentFeedingPoint)
                 } ?: feedingPoints.find { feedingPoint ->
-                    feedingPoint.id == state.feedingPoints.firstOrNull()?.id
+                    feedingPoint.id == feedState.feedPoint.id
                 }?.let { feedingPoint ->
                     persistentListOf(feedingPoint)
-                } ?: persistentListOf()
+                } ?: persistentListOf(FeedingPointModel(feedState.feedPoint))
             }
 
-            is Disabled -> {
+            else -> {
                 feedingPoints.toImmutableList()
             }
         }
