@@ -1,9 +1,7 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epmedu.animeal.common.constants.Arguments.FORCED_FEEDING_POINT_ID
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
@@ -47,7 +45,6 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val actionDelegate: ActionDelegate,
-    private val savedStateHandle: SavedStateHandle,
     private val gpsSettingsProvider: GpsSettingsProvider,
     private val locationProvider: LocationProvider,
     private val getTimerStateUseCase: GetTimerStateUseCase,
@@ -129,7 +126,7 @@ internal class HomeViewModel @Inject constructor(
 
     private fun finishFeedingProcess() {
         deselectFeedingPoint()
-        dismissThankYouDialog()
+        viewModelScope.launch { dismissThankYouDialog() }
         updateState { copy(feedingPhotos = emptyList()) }
     }
 
@@ -220,11 +217,9 @@ internal class HomeViewModel @Inject constructor(
 
     private fun handleForcedFeedingPoint() {
         viewModelScope.launch {
-            val forcedFeedingPointId: String? = savedStateHandle[FORCED_FEEDING_POINT_ID]
-            if (forcedFeedingPointId != null) {
+            getForcedFeedingPointId()?.let { id ->
                 nearestFeedingJob.cancel()
-                savedStateHandle[FORCED_FEEDING_POINT_ID] = null
-                showFeedingPoint(forcedFeedingPointId)?.coordinates?.let {
+                showFeedingPoint(id)?.coordinates?.let {
                     collectLocations(Location(it.latitude(), it.longitude()))
                 }
             }

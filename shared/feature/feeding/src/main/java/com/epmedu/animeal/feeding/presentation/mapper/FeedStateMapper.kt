@@ -29,6 +29,7 @@ internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
             else -> AnimalState.Starved
         },
         animalType = animalType,
+        isFavourite = isFavourite,
         image = image,
         location = MapLocation(
             latitude = coordinates.latitude(),

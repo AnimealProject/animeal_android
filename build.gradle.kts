@@ -65,7 +65,7 @@ tasks {
     }
 
     registering(Delete::class) {
-        delete(buildDir)
+        delete(layout.buildDirectory)
     }
 }
 
@@ -83,10 +83,11 @@ subprojects {
         compilerOptions {
             // https://issuetracker.google.com/issues/285090974
             val args = mutableListOf("-Xstring-concat=inline")
+            val buildDirectoryPath = project.layout.buildDirectory.get().asFile.absolutePath
 
             if (project.findProperty("animeal.enableComposeCompilerReports") == "true") {
-                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics")
-                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics")
+                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$buildDirectoryPath/compose_metrics")
+                args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$buildDirectoryPath/compose_metrics")
             }
 
             freeCompilerArgs.addAll(args.toList())

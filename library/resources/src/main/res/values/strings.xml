@@ -89,6 +89,17 @@
     <string name="feeding_reviewed_by">Reviewed by: %s</string>
     <string name="feeding_rejection_reason">Rejection reason: %s</string>
 
+    <string name="rejection_reason_selection_dialog_title">Rejection reason</string>
+    <string name="rejection_reason_selection_dialog_subtitle">Please choose reason to reject.</string>
+    <string name="rejection_reason_comment_dialog_title">Other reason</string>
+    <string name="rejection_reason_comment_dialog_subtitle">Please write reason for rejection.</string>
+    <string name="rejection_reason_comment_dialog_empty_error">Please type reason for rejection</string>
+    <string name="rejection_reason_no_food">No food</string>
+    <string name="rejection_reason_bad_photo_quality">Bad photo quality</string>
+    <string name="rejection_reason_feeding_point_not_visible">Feeding point is not visible</string>
+    <string name="rejection_reason_inappropriate_content">Inappropriate content</string>
+    <string name="rejection_reason_other">Other</string>
+
     <string name="unknown_user">Unknown user</string>
     <string name="feeding_in_progress">Feeding in progress, %s left</string>
     <string name="unknown_time">unknown time</string>
@@ -140,6 +151,7 @@
     <string name="finish">Finish</string>
     <string name="reject">Reject</string>
     <string name="approve">Approve</string>
+    <string name="go_back">Go back</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
@@ -178,6 +190,7 @@
     <string name="donation_copy_toast">Copied</string>
 
     <string name="search_hint">Search here</string>
+    <string name="type_hint">Type here</string>
     <string name="search_no_items">There are no feeding points matching\n ‘%s’</string>
     <string name="geolocation_permission_title">We can calculate the route to the feeding point. To use the function please grant the permission to use the \"Geolocation\"</string>
     <string name="no_thanks">No, thanks</string>

@@ -1,6 +1,7 @@
 package com.epmedu.animeal.foundation.dialog
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,11 +18,13 @@ import androidx.compose.ui.window.DialogProperties
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
 @Composable
 fun AnimealQuestionDialog(
     title: String,
+    subtitle: String? = null,
     dismissText: String,
     acceptText: String,
     onDismiss: () -> Unit,
@@ -34,12 +37,21 @@ fun AnimealQuestionDialog(
         shape = RoundedCornerShape(30.dp),
         onDismissRequest = onDismissRequest,
         title = {
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6,
-                fontSize = titleFontSize
-            )
+            Column {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h6,
+                    fontSize = titleFontSize
+                )
+                subtitle?.let { subtitle ->
+                    HeightSpacer(height = 4.dp)
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+            }
         },
         text = content,
         buttons = {
@@ -78,6 +90,7 @@ private fun AnimealAlertQuestionPreview() {
     AnimealTheme {
         AnimealQuestionDialog(
             title = "Title",
+            subtitle = "Subtitle",
             dismissText = "No",
             acceptText = "Yes",
             onDismiss = {},
