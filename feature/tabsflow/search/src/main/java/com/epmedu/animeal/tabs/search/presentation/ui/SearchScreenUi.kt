@@ -190,12 +190,15 @@ private fun SearchSheetContent(
     contentAlpha: Float,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
+    val feedingPointInProgress = state.feedState.feedPoint
+
     state.showingFeedingPoint?.let { feedingPoint ->
         FeedingPointSheetContent(
             feedingPoint = feedingPoint,
             contentAlpha = contentAlpha,
             modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = state.feedState.feedPoint == null,
+            isShowOnMapVisible = feedingPointInProgress == null ||
+                feedingPointInProgress.id == feedingPoint.id,
             onFavouriteChange = { isFavourite ->
                 onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
             },
