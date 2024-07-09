@@ -3,7 +3,7 @@ compileSdk = "34"
 targetSdk = "34"
 minSdk = "26"
 
-androidGradlePlugin = "8.2.2"
+androidGradlePlugin = "8.5.0"
 
 accompanist = "0.30.1"
 activityCompose = "1.7.2"
