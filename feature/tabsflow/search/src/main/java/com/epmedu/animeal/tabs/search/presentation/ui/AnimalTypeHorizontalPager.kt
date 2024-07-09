@@ -1,9 +1,12 @@
 package com.epmedu.animeal.tabs.search.presentation.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -16,11 +19,10 @@ import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent
 import com.epmedu.animeal.tabs.search.presentation.SearchScreenEvent.AnimalTypeChange
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchState
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimalTypeHorizontalPager(
     state: SearchState,
@@ -44,16 +46,15 @@ fun AnimalTypeHorizontalPager(
         )
 
         HorizontalPager(
-            count = pages.size,
+            pageCount = pages.size,
             state = pagerState,
-            content = { page ->
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    content(pages[page])
-                }
+        ) { page ->
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                content(pages[page])
             }
-        )
+        }
     }
 
     LaunchedEffect(state.animalType) {
