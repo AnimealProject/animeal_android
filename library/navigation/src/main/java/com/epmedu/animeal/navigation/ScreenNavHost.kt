@@ -1,9 +1,8 @@
 package com.epmedu.animeal.navigation
 
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,8 +22,6 @@ import com.epmedu.animeal.navigation.navBuilder.NavBuilder
 import com.epmedu.animeal.navigation.navigator.AnimealNavigator
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @Suppress("ReusedModifierInstance", "ComposableParametersOrdering", "ModifierParameterPosition")
 @Composable
@@ -43,6 +40,8 @@ fun ScreenNavHost(
             navController = navController,
             startDestination = startDestination,
             route = route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
         ) {
             DefaultNavBuilder(this).builder()
         }
@@ -50,26 +49,25 @@ fun ScreenNavHost(
 }
 
 @Suppress("ReusedModifierInstance", "ComposableParametersOrdering", "ModifierParameterPosition")
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedScreenNavHost(
     startDestination: String,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     contentAlignment: Alignment = Alignment.Center,
     route: String? = null,
-    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) =
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
-    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) =
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         { fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
-    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
+    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
+    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
     builder: NavBuilder.Animated.() -> Unit
 ) {
     CompositionLocalProvider(
         LocalNavigator provides rememberNavigator(navController),
     ) {
-        AnimatedNavHost(
+        NavHost(
             startDestination = startDestination,
             modifier = modifier,
             navController = navController,

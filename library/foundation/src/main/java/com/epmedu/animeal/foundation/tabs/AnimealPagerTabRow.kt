@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
@@ -146,6 +147,6 @@ private fun AnimealPagerTabDivider(modifier: Modifier = Modifier) {
 @Composable
 private fun AnimealTabPreview() {
     AnimealTheme {
-        AnimealPagerTabRow(pagerState = PagerState(), onSwitchTab = {})
+        AnimealPagerTabRow(pagerState = rememberPagerState { 2 }, onSwitchTab = {})
     }
 }

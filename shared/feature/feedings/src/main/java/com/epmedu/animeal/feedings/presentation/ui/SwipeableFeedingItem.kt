@@ -1,14 +1,18 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
+import androidx.compose.animation.core.SpringSpec
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberSwipeableState
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -21,7 +25,7 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingModel
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SwipeableFeedingItem(
     feedingModel: FeedingModel,
@@ -34,15 +38,13 @@ internal fun SwipeableFeedingItem(
     onSwipe: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val swipeableState = rememberSwipeableState(initialValue = SwipeableFeedingItemState.Idle)
-    val swipeOffset = with(LocalDensity.current) { -160.dp.toPx() }
-    val anchors = mapOf(
-        0f to SwipeableFeedingItemState.Idle,
-        swipeOffset to SwipeableFeedingItemState.Swiped
-    )
-    val buttonsAlpha = swipeableState.offset.value / swipeOffset
+    val (swipeOffset, velocity) = with(LocalDensity.current) {
+        -160.dp.toPx() to 125.dp.toPx()
+    }
+    val anchoredDraggableState = remember { createAnchoredDraggableState(swipeOffset, velocity) }
+    val buttonsAlpha = anchoredDraggableState.offset / swipeOffset
     val swipeToIdle: suspend () -> Unit = {
-        swipeableState.animateTo(SwipeableFeedingItemState.Idle)
+        anchoredDraggableState.animateTo(SwipeableFeedingItemState.Idle)
     }
 
     LaunchedEffect(currentlySwipedItemId) {
@@ -58,8 +60,8 @@ internal fun SwipeableFeedingItem(
         }
     }
 
-    LaunchedEffect(swipeableState) {
-        snapshotFlow { swipeableState.targetValue }.collect { itemState ->
+    LaunchedEffect(anchoredDraggableState) {
+        snapshotFlow { anchoredDraggableState.targetValue }.collect { itemState ->
             if (itemState == SwipeableFeedingItemState.Swiped) {
                 onSwipe()
             }
@@ -82,14 +84,40 @@ internal fun SwipeableFeedingItem(
             feedingModel = feedingModel,
             onClick = onItemClick,
             modifier = Modifier
-                .offset { IntOffset(x = swipeableState.offset.value.roundToInt(), y = 0) }
-                .swipeable(
-                    state = swipeableState,
-                    anchors = anchors,
+                .offset {
+                    IntOffset(
+                        x = when {
+                            anchoredDraggableState.offset.isNaN() -> 0
+                            else -> anchoredDraggableState.offset.roundToInt()
+                        },
+                        y = 0
+                    )
+                }
+                .anchoredDraggable(
+                    state = anchoredDraggableState,
                     orientation = Orientation.Horizontal
                 )
         )
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun createAnchoredDraggableState(
+    swipeOffset: Float,
+    velocity: Float
+): AnchoredDraggableState<SwipeableFeedingItemState> {
+    val anchors = DraggableAnchors {
+        SwipeableFeedingItemState.Idle at 0f
+        SwipeableFeedingItemState.Swiped at swipeOffset
+    }
+
+    return AnchoredDraggableState(
+        initialValue = SwipeableFeedingItemState.Idle,
+        anchors = anchors,
+        positionalThreshold = { distance -> distance / 2 },
+        velocityThreshold = { velocity },
+        animationSpec = SpringSpec()
+    )
 }
 
 internal enum class SwipeableFeedingItemState {

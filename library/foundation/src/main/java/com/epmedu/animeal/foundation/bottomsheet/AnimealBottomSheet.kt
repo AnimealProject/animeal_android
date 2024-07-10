@@ -240,6 +240,8 @@ private fun Modifier.bottomSheetSwipeable(
             )
         }
 
+        // TODO: Migrate to AnchoredDraggable when overscroll effect will be configurable
+        // https://issuetracker.google.com/288084801
         Modifier.swipeable(
             state = sheetState,
             anchors = anchors,
