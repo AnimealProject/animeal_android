@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feedings.presentation.viewmodel.handlers
 
-import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feedings.domain.usecase.GetHasNewPendingFeedingUseCase
 import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class FeedingsButtonHandlerImpl @Inject constructor(
-    private val buildConfigProvider: BuildConfigProvider,
     private val getUserGroupUseCase: GetCurrentUserGroupUseCase,
     private val getHasNewPendingFeedingUseCase: GetHasNewPendingFeedingUseCase
 ) : FeedingsButtonHandler {
@@ -22,8 +20,7 @@ class FeedingsButtonHandlerImpl @Inject constructor(
     override fun getFeedingsButtonState(shouldFetchFeedings: Boolean): Flow<FeedingsButtonState> {
         return flow {
             when {
-                buildConfigProvider.isProdFlavor ||
-                    getUserGroupUseCase().isEligibleForFeedingsButton().not() -> {
+                getUserGroupUseCase().isEligibleForFeedingsButton().not() -> {
                     emit(Hidden)
                 }
 

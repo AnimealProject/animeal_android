@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feedings.di
 
-import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.feedings.domain.usecase.GetHasNewPendingFeedingUseCase
 import com.epmedu.animeal.feedings.presentation.viewmodel.handlers.FeedingsButtonHandler
 import com.epmedu.animeal.feedings.presentation.viewmodel.handlers.FeedingsButtonHandlerImpl
@@ -18,11 +17,9 @@ object FeedingsPresentationModule {
     @ViewModelScoped
     @Provides
     fun providesFeedingsButtonHandler(
-        buildConfigProvider: BuildConfigProvider,
         getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase,
         getHasNewPendingFeedingUseCase: GetHasNewPendingFeedingUseCase
     ): FeedingsButtonHandler = FeedingsButtonHandlerImpl(
-        buildConfigProvider,
         getCurrentUserGroupUseCase,
         getHasNewPendingFeedingUseCase
     )
