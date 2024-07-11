@@ -1,5 +1,8 @@
 package com.epmedu.animeal.home.presentation.viewmodel
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
@@ -188,6 +191,7 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     private fun fetchLocationUpdates() {
         viewModelScope.launch {
             locationProvider.fetchUpdates().collect(::collectLocations)
@@ -199,14 +203,22 @@ internal class HomeViewModel @Inject constructor(
             if (permissionsState.geolocationPermissionStatus is PermissionStatus.Granted &&
                 state.permissionsState.geolocationPermissionStatus !is PermissionStatus.Granted
             ) {
-                fetchLocationUpdates()
-                collectGpsSettingState()
+                // We have to catch SecurityException instead of checking the permission status
+                // through the context because we don't have access to the context here
+                try {
+                    fetchLocationUpdates()
+                    collectGpsSettingState()
+                } catch (e: SecurityException) {
+                    Log.e(LOG_TAG, "Location permission was not granted", e)
+                    updateState { copy(isError = true) }
+                }
             }
 
             updateState { copy(permissionsState = permissionsState) }
         }
     }
 
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     private fun collectGpsSettingState() {
         viewModelScope.launch {
             gpsSettingsProvider.fetchGpsSettingsUpdates().collect { gpsSettingState ->
@@ -224,5 +236,9 @@ internal class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private companion object {
+        const val LOG_TAG = "HomeViewModel"
     }
 }
