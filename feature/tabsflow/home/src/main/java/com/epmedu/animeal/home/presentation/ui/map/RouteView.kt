@@ -9,6 +9,7 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoi
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
+import com.epmedu.animeal.home.presentation.viewmodel.LocationState
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
@@ -54,7 +55,8 @@ internal fun RouteView(
     with(state) {
         val feedingRouteState = feedingRouteState
         val currentFeedingPoint = feedState.feedPoint
-        LaunchedEffect(key1 = feedingRouteState) {
+        val exactUserLocationAcquired = locationState is LocationState.ExactLocation
+        LaunchedEffect(feedingRouteState, exactUserLocationAcquired) {
             when {
                 gpsSettingState == GpsSettingState.Disabled && currentFeedingPoint != null -> {
                     currentFeedingPoint.let { mapView.focusOnFeedingPoint(it) }
@@ -130,15 +132,17 @@ private fun fetchRoute(
     mapboxNavigation: MapboxNavigation,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
-    state.feedState.feedPoint?.coordinates?.let { feedingPointLocation ->
-        mapView.fetchRoute(
-            mapBoxRouteInitOptions = mapBoxRouteInitOptions,
-            navigation = mapboxNavigation,
-            path = MapPath(
-                state.locationState.location.toPoint(),
-                feedingPointLocation
-            ),
-            onRouteResult = onRouteResult
-        )
+    (state.locationState as? LocationState.ExactLocation)?.location?.toPoint()?.let { exactUserLocation ->
+        state.feedState.feedPoint?.coordinates?.let { feedingPointLocation ->
+            mapView.fetchRoute(
+                mapBoxRouteInitOptions = mapBoxRouteInitOptions,
+                navigation = mapboxNavigation,
+                path = MapPath(
+                    exactUserLocation,
+                    feedingPointLocation
+                ),
+                onRouteResult = onRouteResult
+            )
+        }
     }
 }
