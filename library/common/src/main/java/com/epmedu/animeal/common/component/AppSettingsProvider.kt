@@ -11,12 +11,10 @@ interface AppSettingsProvider {
 
 interface AppSettingsUpdateScope {
     var isGeolocationPermissionRationaleShown: Boolean
-    var isCameraPermissionRequested: Boolean
     var animalType: String
 }
 
 data class AppSettings(
     val isGeolocationPermissionRationaleShown: Boolean,
-    val isCameraPermissionRequested: Boolean,
     val animalType: String
 )
