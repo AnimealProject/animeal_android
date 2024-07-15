@@ -5,7 +5,7 @@ import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.model.getFormat
 
 internal data class EnterPhoneState(
-    val region: Region = Region.PL,
+    val region: Region = Region.GE,
     val phoneNumber: String = EMPTY_STRING,
     val isNextEnabled: Boolean = false,
     val isError: Boolean = false,
