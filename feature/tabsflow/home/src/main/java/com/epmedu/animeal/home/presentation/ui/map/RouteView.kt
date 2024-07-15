@@ -132,17 +132,18 @@ private fun fetchRoute(
     mapboxNavigation: MapboxNavigation,
     onRouteResult: (result: RouteResult) -> Unit
 ) {
-    (state.locationState as? LocationState.ExactLocation)?.location?.toPoint()?.let { exactUserLocation ->
-        state.feedState.feedPoint?.coordinates?.let { feedingPointLocation ->
-            mapView.fetchRoute(
-                mapBoxRouteInitOptions = mapBoxRouteInitOptions,
-                navigation = mapboxNavigation,
-                path = MapPath(
-                    exactUserLocation,
-                    feedingPointLocation
-                ),
-                onRouteResult = onRouteResult
-            )
-        }
+    val exactUserLocation = (state.locationState as? LocationState.ExactLocation)?.location?.toPoint()
+    val feedingPointLocation = state.feedState.feedPoint?.coordinates
+
+    if (exactUserLocation != null && feedingPointLocation != null) {
+        mapView.fetchRoute(
+            mapBoxRouteInitOptions = mapBoxRouteInitOptions,
+            navigation = mapboxNavigation,
+            path = MapPath(
+                exactUserLocation,
+                feedingPointLocation
+            ),
+            onRouteResult = onRouteResult
+        )
     }
 }
