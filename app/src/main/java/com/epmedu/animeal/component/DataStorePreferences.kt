@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.epmedu.animeal.common.constants.DefaultConstants
 
 private val ANIMAL_TYPE = stringPreferencesKey("AnimalType")
-private val INITIAL_CAMERA_PERMISSION = booleanPreferencesKey("InitialCameraPermissionOnHomeScreen")
 private val IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN = booleanPreferencesKey(
     "is_geolocation_permission_rationale_shown"
 )
@@ -16,9 +15,6 @@ private val VIEWED_FEEDING_IDS = stringSetPreferencesKey("viewed_feedings_ids")
 
 val Preferences.animalType: String
     get() = this[ANIMAL_TYPE] ?: DefaultConstants.EMPTY_STRING
-
-val Preferences.initialCameraPermission: Boolean
-    get() = this[INITIAL_CAMERA_PERMISSION] ?: false
 
 val Preferences.isGeolocationPermissionRationaleShown: Boolean
     get() = this[IS_GEOLOCATION_PERMISSION_RATIONALE_SHOWN] ?: false
@@ -28,10 +24,6 @@ val Preferences.viewedFeedingIds: Set<String>
 
 fun MutablePreferences.updateAnimalType(value: String) {
     this[ANIMAL_TYPE] = value
-}
-
-fun MutablePreferences.updateInitialCameraPermission(value: Boolean) {
-    this[INITIAL_CAMERA_PERMISSION] = value
 }
 
 fun MutablePreferences.updateIsGeolocationPermissionRationaleShown(value: Boolean) {
