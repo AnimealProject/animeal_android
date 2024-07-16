@@ -8,6 +8,8 @@ interface ActionDelegate {
         action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit = {},
         onError: suspend () -> Unit = {},
+        onStart: suspend () -> Unit = {},
+        onFinish: suspend () -> Unit = {}
     )
 
     suspend fun <T> performAction(
