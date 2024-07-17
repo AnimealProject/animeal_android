@@ -13,8 +13,11 @@ class DefaultActionDelegate(
     override suspend fun performAction(
         action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit,
-        onError: suspend () -> Unit
+        onError: suspend () -> Unit,
+        onStart: suspend () -> Unit,
+        onFinish: suspend () -> Unit
     ) {
+        onStart()
         coroutineScope {
             when (val result = withContext(dispatchers.IO) { action() }) {
                 is ActionResult.Success<*> -> {
@@ -26,6 +29,7 @@ class DefaultActionDelegate(
                 }
             }
         }
+        onFinish()
     }
 
     override suspend fun <T> performAction(
