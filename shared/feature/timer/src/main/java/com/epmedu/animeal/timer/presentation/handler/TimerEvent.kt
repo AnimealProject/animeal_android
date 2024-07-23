@@ -1,5 +1,5 @@
 package com.epmedu.animeal.timer.presentation.handler
 
 sealed interface TimerEvent {
-    object Disable : TimerEvent
+    data object Disable : TimerEvent
 }

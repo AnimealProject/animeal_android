@@ -13,9 +13,9 @@ sealed class MoreOption(
         stringResource = R.string.feedings
     )
 
-    object Profile : MoreOption(MoreRoute.Profile, R.string.page_profile)
-    object FAQ : MoreOption(MoreRoute.FAQ, R.string.page_faq)
-    object About : MoreOption(MoreRoute.About, R.string.page_about_detailed)
-    object Account : MoreOption(MoreRoute.Account, R.string.page_account)
-    object Donate : MoreOption(MoreRoute.Donate, R.string.page_donate)
+    data object Profile : MoreOption(MoreRoute.Profile, R.string.page_profile)
+    data object FAQ : MoreOption(MoreRoute.FAQ, R.string.page_faq)
+    data object About : MoreOption(MoreRoute.About, R.string.page_about_detailed)
+    data object Account : MoreOption(MoreRoute.Account, R.string.page_account)
+    data object Donate : MoreOption(MoreRoute.Donate, R.string.page_donate)
 }

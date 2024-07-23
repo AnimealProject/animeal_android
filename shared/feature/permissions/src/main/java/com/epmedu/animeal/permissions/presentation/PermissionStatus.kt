@@ -8,13 +8,13 @@ import com.google.accompanist.permissions.PermissionStatus as AccompanistPermiss
 sealed interface PermissionStatus {
 
     /** Permission was granted. */
-    object Granted : PermissionStatus
+    data object Granted : PermissionStatus
 
     /** Permission was denied. */
-    object Denied : PermissionStatus
+    data object Denied : PermissionStatus
 
     /** Permission was either not asked yet or denied and can not be asked again. */
-    object Restricted : PermissionStatus
+    data object Restricted : PermissionStatus
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

@@ -6,27 +6,27 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 sealed interface HomeScreenEvent {
 
     sealed interface TimerCancellationEvent : HomeScreenEvent {
-        object CancellationAttempt : TimerCancellationEvent
-        object CancellationAccepted : TimerCancellationEvent
-        object CancellationDismissed : TimerCancellationEvent
+        data object CancellationAttempt : TimerCancellationEvent
+        data object CancellationAccepted : TimerCancellationEvent
+        data object CancellationDismissed : TimerCancellationEvent
     }
 
-    object DismissThankYouEvent : HomeScreenEvent
+    data object DismissThankYouEvent : HomeScreenEvent
 
     sealed interface CameraEvent : HomeScreenEvent {
-        object OpenCamera : CameraEvent
+        data object OpenCamera : CameraEvent
         data class TakeNewPhoto(val uri: Uri) : CameraEvent
-        object CloseCamera : CameraEvent
+        data object CloseCamera : CameraEvent
     }
 
     sealed interface FeedingGalleryEvent : HomeScreenEvent {
         data class DeletePhoto(val photo: FeedingPhotoItem) : FeedingGalleryEvent
         data class ConfirmDeletePhoto(val photo: FeedingPhotoItem) : FeedingGalleryEvent
-        object CloseDeletePhotoDialog : FeedingGalleryEvent
+        data object CloseDeletePhotoDialog : FeedingGalleryEvent
     }
 
-    object ErrorShowed : HomeScreenEvent
-    object ScreenCreated : HomeScreenEvent
-    object ScreenDisplayed : HomeScreenEvent
-    object InitialLocationWasDisplayed : HomeScreenEvent
+    data object ErrorShowed : HomeScreenEvent
+    data object ScreenCreated : HomeScreenEvent
+    data object ScreenDisplayed : HomeScreenEvent
+    data object InitialLocationWasDisplayed : HomeScreenEvent
 }

@@ -14,7 +14,6 @@ androidxEspresso = "3.5.1"
 androidxJunit = "1.1.5"
 appsync = "3.4.0"
 camerax = "1.2.3"
-composeCompiler = "1.4.7"
 core = "1.9.0"
 coil = "2.4.0"
 crashlytics = "2.9.2"
@@ -23,15 +22,15 @@ datastore = "1.0.0"
 desugarJdkLibs = "1.1.5"
 detekt = "1.23.0"
 detektCompose = "1.2.2"
-dialogCore = "0.9.0"
 firebaseBom = "32.0.0"
 googleServices = "4.3.15"
 gson = "2.10.1"
-hilt = "2.46.1"
+hilt = "2.51.1"
 immutableCollections = "0.3.5"
 javapoet = "1.13.0"
 junit = "4.13.2"
-kotlin = "1.8.21"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.21"
 leakcanaryAndroid = "2.9.1"
 lifecycle = "2.6.1"
 mapbox = "10.13.0"
@@ -50,12 +49,14 @@ androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = 
 
 gradle-plugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradle-plugin-appsync = { module = "com.amazonaws:aws-android-sdk-appsync-gradle-plugin", version.ref = "appsync" }
+gradle-plugin-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 gradle-plugin-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-plugin-detekt-compose = { module = "ru.kode:detekt-rules-compose", version.ref = "detektCompose" }
 gradle-plugin-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 gradle-plugin-googleservices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle-plugin-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-plugin-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 gradle-plugin-versions = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "versions" }
 
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }

@@ -6,6 +6,6 @@ sealed interface DebugMenuScreenEvent {
         val useMockedFeedingPoint: Boolean
     ) : DebugMenuScreenEvent
 
-    object SetFinishProfileAsStartDestination : DebugMenuScreenEvent
-    object ResetGeolocationPermissionRequestedAgain : DebugMenuScreenEvent
+    data object SetFinishProfileAsStartDestination : DebugMenuScreenEvent
+    data object ResetGeolocationPermissionRequestedAgain : DebugMenuScreenEvent
 }

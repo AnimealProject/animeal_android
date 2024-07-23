@@ -2,7 +2,7 @@ package com.epmedu.animeal.debugmenu.presentation.ui
 
 internal sealed interface DebugMenuItem {
 
-    object Divider : DebugMenuItem
+    data object Divider : DebugMenuItem
 
     data class Switch(
         val title: String,

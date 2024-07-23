@@ -5,27 +5,27 @@ import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.resources.R
 
 sealed class NavigationTab(val route: TabsRoute, val icon: Int, @StringRes val contentDescription: Int) {
-    object Search : NavigationTab(
+    data object Search : NavigationTab(
         route = TabsRoute.Search,
         icon = R.drawable.ic_search,
         contentDescription = R.string.tab_search
     )
-    object Favorites : NavigationTab(
+    data object Favorites : NavigationTab(
         route = TabsRoute.Favourites,
         icon = R.drawable.ic_favorites,
         contentDescription = R.string.tab_favourites
     )
-    object Home : NavigationTab(
+    data object Home : NavigationTab(
         route = TabsRoute.Home,
         icon = R.drawable.ic_home,
         contentDescription = R.string.tab_home
     )
-    object Analytics : NavigationTab(
+    data object Analytics : NavigationTab(
         route = TabsRoute.Analytics,
         icon = R.drawable.ic_analytics,
         contentDescription = R.string.tab_analytics
     )
-    object More : NavigationTab(
+    data object More : NavigationTab(
         route = TabsRoute.More,
         icon = R.drawable.ic_more,
         contentDescription = R.string.tab_more

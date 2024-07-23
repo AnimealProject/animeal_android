@@ -1,6 +1,6 @@
 package com.epmedu.animeal.foundation.common.validation.result
 
 sealed interface PhoneNumberValidationResult {
-    object TooShortPhoneNumberError : PhoneNumberValidationResult
-    object ValidPhoneNumber : PhoneNumberValidationResult
+    data object TooShortPhoneNumberError : PhoneNumberValidationResult
+    data object ValidPhoneNumber : PhoneNumberValidationResult
 }
