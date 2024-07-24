@@ -1,5 +1,6 @@
 package com.epmedu.animeal.navigation.navBuilder
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -15,7 +16,7 @@ internal class DefaultNavBuilder(
         route: String,
         arguments: List<NamedNavArgument>,
         deepLinks: List<NavDeepLink>,
-        content: @Composable (NavBackStackEntry) -> Unit
+        content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
     ) {
         navGraphBuilder.composable(
             route = route,

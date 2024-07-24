@@ -33,10 +33,13 @@ fun EnterCodeScreen() {
     // remember lambdas to avoid excess code row and back button recompositions
     // while resend code delay is ticking, not needed for resend button though
     val onBack: () -> Unit = remember {
-        { navigator.popBackStack() }
+        {
+            navigator.popBackStack()
+        }
     }
     val onNumberChange: (position: Int, number: String?) -> Unit = remember {
-        { position, number ->
+        {
+                position, number ->
             viewModel.handleEvents(NumberChanged(position, number))
         }
     }

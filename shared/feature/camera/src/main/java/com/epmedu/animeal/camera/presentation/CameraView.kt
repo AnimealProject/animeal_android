@@ -8,6 +8,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
+import androidx.camera.core.resolutionselector.ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.border
@@ -60,13 +63,7 @@ fun CameraView(
 
     val preview = Preview.Builder().build()
     val previewView = remember { PreviewView(context) }
-    val imageCapture: ImageCapture = remember {
-        ImageCapture.Builder()
-            .setTargetResolution(
-                Size(PHOTO_WIDTH, PHOTO_HEIGHT)
-            )
-            .build()
-    }
+    val imageCapture: ImageCapture = remember { buildImageCapture() }
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)
         .build()
@@ -112,6 +109,19 @@ fun CameraView(
         )
     }
 }
+
+private fun buildImageCapture() = ImageCapture.Builder()
+    .setResolutionSelector(
+        ResolutionSelector.Builder()
+            .setResolutionStrategy(
+                ResolutionStrategy(
+                    Size(PHOTO_WIDTH, PHOTO_HEIGHT),
+                    FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER
+                )
+            )
+            .build()
+    )
+    .build()
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->

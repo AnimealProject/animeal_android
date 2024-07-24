@@ -32,7 +32,7 @@ fun AnimalTypeHorizontalPager(
     content: @Composable (animalType: AnimalType) -> Unit,
 ) {
     val pages = remember { AnimalType.values() }
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = pages::size)
 
     Column {
         AnimealPagerTabRow(
@@ -45,10 +45,7 @@ fun AnimalTypeHorizontalPager(
             }
         )
 
-        HorizontalPager(
-            pageCount = pages.size,
-            state = pagerState,
-        ) { page ->
+        HorizontalPager(state = pagerState) { page ->
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {

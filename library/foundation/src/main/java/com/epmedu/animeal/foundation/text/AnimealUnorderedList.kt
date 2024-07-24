@@ -10,10 +10,10 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.halilibo.richtext.ui.FormattedList
 import com.halilibo.richtext.ui.ListStyle
 import com.halilibo.richtext.ui.ListType.Unordered
-import com.halilibo.richtext.ui.RichText
 import com.halilibo.richtext.ui.RichTextScope
 import com.halilibo.richtext.ui.RichTextStyle
-import com.halilibo.richtext.ui.RichTextThemeIntegration
+import com.halilibo.richtext.ui.RichTextThemeProvider
+import com.halilibo.richtext.ui.material.RichText
 
 @Composable
 fun AnimealUnorderedList(
@@ -21,8 +21,8 @@ fun AnimealUnorderedList(
     modifier: Modifier = Modifier,
     drawItem: @Composable RichTextScope.(String) -> Unit
 ) {
-    RichTextThemeIntegration(
-        contentColor = { LocalContentColor.current }
+    RichTextThemeProvider(
+        contentColorProvider = { LocalContentColor.current }
     ) {
         RichText(
             modifier = modifier,
