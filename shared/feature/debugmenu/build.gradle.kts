@@ -1,7 +1,7 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
 }
 
@@ -15,5 +15,5 @@ animealPlugin {
 
 dependencies {
     debugImplementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }

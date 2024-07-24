@@ -18,10 +18,12 @@ buildscript {
     dependencies {
         classpath(libs.gradle.plugin.appsync)
         classpath(libs.gradle.plugin.android)
+        classpath(libs.gradle.plugin.compose.compiler)
         classpath(libs.gradle.plugin.crashlytics)
         classpath(libs.gradle.plugin.googleservices)
         classpath(libs.gradle.plugin.hilt)
         classpath(libs.gradle.plugin.kotlin)
+        classpath(libs.gradle.plugin.ksp)
         classpath(libs.gradle.plugin.versions)
     }
 }
@@ -78,7 +80,7 @@ fun isNonStable(version: String): Boolean {
 
 subprojects {
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
+        compilerOptions {
             // https://issuetracker.google.com/issues/285090974
             val args = mutableListOf("-Xstring-concat=inline")
             val buildDirectoryPath = project.layout.buildDirectory.get().asFile.absolutePath
@@ -88,7 +90,7 @@ subprojects {
                 args.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$buildDirectoryPath/compose_metrics")
             }
 
-            freeCompilerArgs = freeCompilerArgs + args.toList()
+            freeCompilerArgs.addAll(args.toList())
         }
     }
 }

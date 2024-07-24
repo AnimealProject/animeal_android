@@ -98,7 +98,6 @@ internal fun FavouritesScreenUI(
     BottomBarVisibility(state = bottomSheetState)
 
     AnimealPermissions(
-        permissionsState = state.permissionsState,
         lifecycleState = LocalLifecycleOwner.current.lifecycle.currentState,
         onEvent = onPermissionsEvent
     ) {

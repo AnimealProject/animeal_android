@@ -155,15 +155,19 @@ class DefaultFeedingHandler(
     }
 
     override fun CoroutineScope.expireFeeding() {
-        /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
-        stopRoute()
         launch {
             performFeedingAction(
+                onStart = {
+                    /** stopRoute() is outside of onSuccess to immediately remove timer bar on TimerExpired Dialog */
+                    stopRoute()
+                    deselectFeedingPoint()
+                },
                 action = { feedingPointId ->
                     rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
                 },
-                onSuccess = {
-                    deselectFeedingPoint()
+                onFinish = {
+                    // if the feeding is expired by backend, rejectFeedingUseCase will return an error,
+                    // so we need to fetch feeding points no matter what the result is
                     fetchFeedingPoints()
                     updateFeedingState(Dismissed)
                 }
@@ -201,14 +205,18 @@ class DefaultFeedingHandler(
 
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult<Unit>,
-        onSuccess: suspend (FeedingPointModel) -> Unit,
+        onSuccess: suspend (FeedingPointModel) -> Unit = {},
         onError: suspend () -> Unit = { showError() },
+        onStart: suspend (String) -> Unit = {},
+        onFinish: suspend () -> Unit = {},
     ) {
         state.feedPoint?.let { currentFeedingPoint ->
             performAction(
                 action = { action(currentFeedingPoint.id) },
+                onStart = { onStart(currentFeedingPoint.id) },
                 onSuccess = { onSuccess(currentFeedingPoint) },
                 onError = onError,
+                onFinish = onFinish
             )
         } ?: run {
             onError()

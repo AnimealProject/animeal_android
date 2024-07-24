@@ -1,6 +1,7 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {

@@ -1,7 +1,7 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
 }
 
@@ -19,5 +19,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }

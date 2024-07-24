@@ -109,7 +109,7 @@ enum class AnimealBottomSheetValue {
 fun rememberAnimealBottomSheetState(
     initialValue: AnimealBottomSheetValue,
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    confirmStateChange: (AnimealBottomSheetValue) -> Boolean = { true },
+    confirmStateChange: (AnimealBottomSheetValue) -> Boolean = @JvmSerializableLambda { true },
 ): AnimealBottomSheetState {
     return rememberSaveable(
         initialValue,

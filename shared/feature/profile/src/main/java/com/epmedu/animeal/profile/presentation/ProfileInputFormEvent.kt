@@ -9,8 +9,8 @@ sealed interface ProfileInputFormEvent {
     data class PhoneNumberChanged(val phoneNumber: String) : ProfileInputFormEvent
     data class RegionChanged(val region: Region) : ProfileInputFormEvent
     data class AgeConfirmationChanged(val isConfirmed: Boolean) : ProfileInputFormEvent
-    object NameFocusCleared : ProfileInputFormEvent
-    object SurnameFocusCleared : ProfileInputFormEvent
-    object EmailFocusCleared : ProfileInputFormEvent
-    object PhoneNumberFocusCleared : ProfileInputFormEvent
+    data object NameFocusCleared : ProfileInputFormEvent
+    data object SurnameFocusCleared : ProfileInputFormEvent
+    data object EmailFocusCleared : ProfileInputFormEvent
+    data object PhoneNumberFocusCleared : ProfileInputFormEvent
 }

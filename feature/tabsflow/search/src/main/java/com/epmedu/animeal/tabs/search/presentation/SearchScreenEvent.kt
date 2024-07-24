@@ -4,9 +4,9 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 
 sealed interface SearchScreenEvent {
-    object ScreenCreated : SearchScreenEvent
+    data object ScreenCreated : SearchScreenEvent
     data class FeedingPointSelected(val feedingPoint: FeedingPointModel) : SearchScreenEvent
-    object FeedingPointHidden : SearchScreenEvent
+    data object FeedingPointHidden : SearchScreenEvent
 
     data class FavouriteChange(
         val isFavourite: Boolean,

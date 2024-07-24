@@ -1,9 +1,11 @@
 package com.epmedu.animeal.geolocation.gpssetting
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.location.GnssStatus
 import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.RequiresPermission
 
 internal class GnssStatusCompat(
     private val locationManager: LocationManager,
@@ -12,6 +14,7 @@ internal class GnssStatusCompat(
 ) {
     private val statusListener = GnssStatusCallback(onGpsStarted, onGpsStopped)
 
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     fun registerCallback() {
         locationManager.registerGnssStatusCallback(
             statusListener,

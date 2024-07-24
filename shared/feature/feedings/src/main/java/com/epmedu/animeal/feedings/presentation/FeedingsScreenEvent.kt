@@ -15,9 +15,9 @@ sealed interface FeedingsScreenEvent {
         val reasonText: String
     ) : FeedingsScreenEvent
 
-    object RejectionReasonSelectionDismissed : FeedingsScreenEvent
+    data object RejectionReasonSelectionDismissed : FeedingsScreenEvent
     data class RejectionCommentUpdated(val comment: String) : FeedingsScreenEvent
     data class RejectionCommentConfirmed(val comment: String) : FeedingsScreenEvent
-    object RejectionCommentDismissed : FeedingsScreenEvent
-    object ErrorShown : FeedingsScreenEvent
+    data object RejectionCommentDismissed : FeedingsScreenEvent
+    data object ErrorShown : FeedingsScreenEvent
 }

@@ -1,8 +1,9 @@
 plugins {
     id("AnimealPlugin")
     id("com.android.library")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -30,5 +31,5 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     debugImplementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }

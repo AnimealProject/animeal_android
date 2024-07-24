@@ -23,7 +23,6 @@ internal class AppSettingsProviderImpl(
 
             with(scope.toAppSettings()) {
                 updateIsGeolocationPermissionRationaleShown(isGeolocationPermissionRationaleShown)
-                updateInitialCameraPermission(isCameraPermissionRequested)
                 updateAnimalType(animalType)
                 updateViewedFeedingIds(viewedFeedingIds)
             }
@@ -32,7 +31,6 @@ internal class AppSettingsProviderImpl(
 
     private fun Preferences.toAppSettings() = AppSettings(
         isGeolocationPermissionRationaleShown = isGeolocationPermissionRationaleShown,
-        isCameraPermissionRequested = initialCameraPermission,
         animalType = animalType,
         viewedFeedingIds = viewedFeedingIds
     )
@@ -40,21 +38,18 @@ internal class AppSettingsProviderImpl(
 
 private class AppSettingsUpdateScopeImpl(
     override var isGeolocationPermissionRationaleShown: Boolean,
-    override var isCameraPermissionRequested: Boolean,
     override var animalType: String,
     override var viewedFeedingIds: Set<String>
 ) : AppSettingsUpdateScope {
 
     constructor(settings: AppSettings) : this(
         settings.isGeolocationPermissionRationaleShown,
-        settings.isCameraPermissionRequested,
         settings.animalType,
         settings.viewedFeedingIds
     )
 
     fun toAppSettings() = AppSettings(
         isGeolocationPermissionRationaleShown = isGeolocationPermissionRationaleShown,
-        isCameraPermissionRequested = isCameraPermissionRequested,
         animalType = animalType,
         viewedFeedingIds = viewedFeedingIds
     )
