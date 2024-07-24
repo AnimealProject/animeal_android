@@ -9,7 +9,8 @@ internal data class EnterCodeState(
     val phoneNumber: String = "",
     val isError: Boolean = false,
     val isResendEnabled: Boolean = false,
-    val resendDelay: Long = RESEND_DELAY
+    val resendDelay: Long = RESEND_DELAY,
+    val nextDestination: EnterCodeNextDestination? = null
 ) {
     fun isCodeFilled() = code.all { it != null }
 

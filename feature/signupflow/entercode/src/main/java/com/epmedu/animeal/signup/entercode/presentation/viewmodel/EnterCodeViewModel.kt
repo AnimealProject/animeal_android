@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.common.timer.tickerFlow
@@ -21,12 +19,13 @@ import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NavigatedToNextDestination
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NumberChanged
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ReadSMS
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ResendCode
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeNextDestination.FinishProfile
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeNextDestination.Tabs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
@@ -49,8 +48,7 @@ internal class EnterCodeViewModel @Inject constructor(
     private val loadingHandler: LoadingHandler,
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
-    StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()),
-    EventDelegate<EnterCodeEvent> by DefaultEventDelegate() {
+    StateDelegate<EnterCodeState> by DefaultStateDelegate(initialState = EnterCodeState()) {
 
     private var authenticationType: AuthenticationType = AuthenticationType.Mobile
 
@@ -69,6 +67,7 @@ internal class EnterCodeViewModel @Inject constructor(
             is NumberChanged -> changeNumber(event.position, event.number)
             is ResendCode -> resendCode()
             is ReadSMS -> parseCodeFromSMS(event.message)
+            is NavigatedToNextDestination -> updateNextDestination(null)
         }
     }
 
@@ -150,14 +149,14 @@ internal class EnterCodeViewModel @Inject constructor(
         viewModelScope.launch {
             getNetworkProfileUseCase()?.let { networkProfile ->
                 saveProfileUseCase(networkProfile).collect {
-                    sendEvent(
+                    updateNextDestination(
                         when {
-                            networkProfile.isFilled() -> NavigateToHomeScreen
-                            else -> NavigateToFinishProfile
+                            networkProfile.isFilled() -> Tabs
+                            else -> FinishProfile
                         }
                     )
                 }
-            } ?: sendEvent(NavigateToFinishProfile)
+            } ?: updateNextDestination(FinishProfile)
         }
     }
 
@@ -169,10 +168,8 @@ internal class EnterCodeViewModel @Inject constructor(
                 },
                 onSuccess = {
                     updateState { copy(isError = false) }
-                    viewModelScope.launch {
-                        setFacebookAuthenticationTypeUseCase.invoke(isPhoneNumberVerified = true)
-                    }
-                    viewModelScope.launch { sendEvent(NavigateToHomeScreen) }
+                    setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = true)
+                    updateNextDestination(Tabs)
                 },
                 onError = {
                     loadingHandler.hideLoading()
@@ -180,6 +177,10 @@ internal class EnterCodeViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun updateNextDestination(nextDestination: EnterCodeNextDestination?) {
+        updateState { copy(nextDestination = nextDestination) }
     }
 
     private fun getNewCodeWithReplacedNumber(
@@ -193,6 +194,7 @@ internal class EnterCodeViewModel @Inject constructor(
                 position + newNumber.length > CODE_SIZE -> {
                     newNumber.substring(0, CODE_SIZE - position)
                 }
+
                 else -> {
                     newNumber
                 }
