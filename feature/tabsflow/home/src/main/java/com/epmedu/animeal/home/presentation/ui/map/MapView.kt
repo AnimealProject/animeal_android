@@ -8,6 +8,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -248,8 +249,8 @@ private fun MapView.requestRoutes(
 }
 
 private fun getLocationPuck(context: Context) = LocationPuck2D(
-    topImage = context.resources.getDrawable(R.drawable.ic_your_location, null),
-    shadowImage = context.resources.getDrawable(R.drawable.ic_map_user_stroke, null),
+    topImage = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_your_location, null),
+    shadowImage = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_map_user_stroke, null),
     scaleExpression = interpolate {
         linear()
         zoom()

@@ -1,6 +1,8 @@
 package com.epmedu.animeal.geolocation.gpssetting
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import androidx.core.location.LocationManagerCompat
 import com.epmedu.animeal.extensions.locationManager
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,6 +22,7 @@ internal class IntentGpsSettingsProvider(
             else -> GpsSettingState.Disabled
         }
 
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     override fun fetchGpsSettingsUpdates() = callbackFlow {
         val gnssStatusCompat = GnssStatusCompat(
             locationManager = locationManager,
