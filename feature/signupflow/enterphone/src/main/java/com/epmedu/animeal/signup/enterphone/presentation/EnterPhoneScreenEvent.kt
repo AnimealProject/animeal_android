@@ -7,4 +7,5 @@ sealed interface EnterPhoneScreenEvent {
     data class RegionChosen(val region: Region) : EnterPhoneScreenEvent
     data object NextButtonClicked : EnterPhoneScreenEvent
     data object ScreenDisplayed : EnterPhoneScreenEvent
+    data object NavigatedToEnterCode : EnterPhoneScreenEvent
 }

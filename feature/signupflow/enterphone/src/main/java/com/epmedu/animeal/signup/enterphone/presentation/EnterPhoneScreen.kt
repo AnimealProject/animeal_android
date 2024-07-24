@@ -11,8 +11,8 @@ import com.epmedu.animeal.common.route.SignUpRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NavigatedToEnterCode
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.ScreenDisplayed
-import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneEvent
 import com.epmedu.animeal.signup.enterphone.presentation.viewmodel.EnterPhoneViewModel
 
 @Composable
@@ -29,11 +29,10 @@ fun EnterPhoneScreen() {
         onBack = { navigator.popBackStackOrNavigate(SignUpRoute.Onboarding.name) }
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.events.collect {
-            if (it is EnterPhoneEvent.NavigateToEnterCode) {
-                navigator.navigate(SignUpRoute.EnterCode.name)
-            }
+    LaunchedEffect(state.navigateToEnterCode) {
+        if (state.navigateToEnterCode) {
+            navigator.navigate(SignUpRoute.EnterCode.name)
+            viewModel.handleEvents(NavigatedToEnterCode)
         }
     }
 

@@ -13,13 +13,14 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.foundation.effect.DisplayedEffect
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
+import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NavigatedToNextDestination
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.NumberChanged
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ReadSMS
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ResendCode
 import com.epmedu.animeal.signup.entercode.presentation.EnterCodeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.entercode.presentation.ui.SMSReader
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToFinishProfile
-import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeEvent.NavigateToHomeScreen
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeNextDestination.FinishProfile
+import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeNextDestination.Tabs
 import com.epmedu.animeal.signup.entercode.presentation.viewmodel.EnterCodeViewModel
 
 @Composable
@@ -59,18 +60,20 @@ fun EnterCodeScreen() {
         }
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.events.collect {
-            when (it) {
-                NavigateToFinishProfile -> {
-                    navigator.navigate(SignUpRoute.FinishProfile.name)
-                }
-
-                NavigateToHomeScreen -> {
-                    navigator.navigateToTabs()
-                }
+    LaunchedEffect(state.nextDestination) {
+        when (state.nextDestination) {
+            FinishProfile -> {
+                navigator.navigate(SignUpRoute.FinishProfile.name)
             }
+
+            Tabs -> {
+                navigator.navigateToTabs()
+            }
+
+            else -> {}
         }
+
+        if (state.nextDestination != null) viewModel.handleEvents(NavigatedToNextDestination)
     }
 
     LaunchedEffect(state.isError) {

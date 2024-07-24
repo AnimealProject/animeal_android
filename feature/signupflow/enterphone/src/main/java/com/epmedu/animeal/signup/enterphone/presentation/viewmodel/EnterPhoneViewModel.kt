@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.constants.DefaultConstants
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultEventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
-import com.epmedu.animeal.common.presentation.viewmodel.delegate.EventDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.foundation.common.validation.result.PhoneNumberValidationResult
@@ -16,6 +14,7 @@ import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
 import com.epmedu.animeal.signup.enterphone.domain.SignUpAndSignInUseCase
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent
+import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NavigatedToEnterCode
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.NextButtonClicked
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.enterphone.presentation.EnterPhoneScreenEvent.UpdatePhoneNumber
@@ -37,8 +36,7 @@ internal class EnterPhoneViewModel @Inject constructor(
         initialState = EnterPhoneState(
             isCountrySelectorClickable = buildConfigProvider.isProdFlavor.not()
         )
-    ),
-    EventDelegate<EnterPhoneEvent> by DefaultEventDelegate() {
+    ) {
 
     fun handleEvents(event: EnterPhoneScreenEvent) {
         when (event) {
@@ -46,6 +44,7 @@ internal class EnterPhoneViewModel @Inject constructor(
             is NextButtonClicked -> sendCodeAndSavePhoneNumberAndPrefix()
             is EnterPhoneScreenEvent.RegionChosen -> updateRegion(event.region)
             is ScreenDisplayed -> loadingHandler.hideLoading()
+            is NavigatedToEnterCode -> updateState { copy(navigateToEnterCode = false) }
         }
     }
 
@@ -108,9 +107,7 @@ internal class EnterPhoneViewModel @Inject constructor(
     }
 
     private fun navigateToEnterCode() {
-        viewModelScope.launch {
-            sendEvent(EnterPhoneEvent.NavigateToEnterCode)
-        }
+        updateState { copy(navigateToEnterCode = true) }
     }
 
     private fun updateNextEnabled(isNextEnabled: Boolean? = null) {
