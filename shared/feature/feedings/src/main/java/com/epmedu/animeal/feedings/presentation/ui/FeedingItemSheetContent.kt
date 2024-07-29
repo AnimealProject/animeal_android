@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,7 +36,7 @@ internal fun FeedingItemSheetContent(
     contentAlpha: Float,
     modifier: Modifier = Modifier
 ) {
-    var currentPhotoIndex by rememberSaveable(feeding.id) { mutableStateOf(0) }
+    var currentPhotoIndex by rememberSaveable(feeding.id) { mutableIntStateOf(0) }
     val currentPhoto by remember(currentPhotoIndex, feeding.id) {
         mutableStateOf(feeding.photos[currentPhotoIndex])
     }
