@@ -1,3 +1,5 @@
+@file:Suppress("UnusedReceiverParameter")
+
 package com.epmedu.animeal.foundation.layout
 
 import androidx.compose.foundation.layout.Arrangement
