@@ -34,7 +34,7 @@ fun RegionsLazyColumn(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
         items(
-            items = Region.values().apply {
+            items = Region.entries.toTypedArray().apply {
                 sortBy { region -> region.countryName() }
             }
         ) { region ->

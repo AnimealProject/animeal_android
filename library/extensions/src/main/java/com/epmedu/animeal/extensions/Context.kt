@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
+import java.util.concurrent.TimeUnit
 
 private const val URI_SCHEME = "package"
 
@@ -41,21 +42,14 @@ fun Context.launchAppSettings() {
     startActivity(intent)
 }
 
-// FLAG_ACTIVITY_NEW_TASK is required when we're starting activity from app context
-fun Context.launchGpsSettings() {
-    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    startActivity(intent)
-}
-
 /** Workaround method to request GPS location using dialog provided by Google. */
 fun Context.requestGpsByDialog(showDialog: ((PendingIntent) -> Unit)? = null) {
-    val locationRequest = LocationRequest.create().apply {
-        interval = ONE_SECOND_INTERVAL
-        fastestInterval = ONE_SECOND_INTERVAL
-        priority = Priority.PRIORITY_HIGH_ACCURACY
-    }
+    val locationRequest = LocationRequest.Builder(
+        TimeUnit.SECONDS.toMillis(ONE_SECOND_INTERVAL)
+    )
+        .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+        .setMinUpdateIntervalMillis(TimeUnit.SECONDS.toMillis(ONE_SECOND_INTERVAL))
+        .build()
 
     val builder = LocationSettingsRequest.Builder()
         .addLocationRequest(locationRequest)

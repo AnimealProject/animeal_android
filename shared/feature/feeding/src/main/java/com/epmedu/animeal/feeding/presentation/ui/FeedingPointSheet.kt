@@ -37,7 +37,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.formatNumberToHourMin
-import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
@@ -318,7 +317,6 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
                 isFavourite = true,
                 feedings = null,
                 animalType = AnimalType.Dogs,
-                remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
@@ -350,7 +348,6 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                     )
                 ),
                 animalType = AnimalType.Dogs,
-                remoteness = Remoteness.ANY,
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,

@@ -38,7 +38,7 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun getUserId(): String = authAPI.getCurrentUserId()
 
     private fun List<AuthUserAttribute>.isVerified() = find {
-        it.key == AuthUserAttributeKey.custom(UserAttributesKey.phoneNumberVerifiedKey)
+        it.key == AuthUserAttributeKey.custom(UserAttributesKey.PHONE_NUMBER_VERIFIED_KEY)
     }?.value.toBoolean()
 
     override suspend fun getUserGroup(shouldFetch: Boolean): ActionResult<UserGroup> {

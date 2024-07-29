@@ -11,7 +11,7 @@ enum class TabsRoute : RouteWithArgs {
         fun fromRoutePath(routeName: String?): TabsRoute? {
             routeName ?: return null
 
-            return TabsRoute.values().firstOrNull {
+            return entries.firstOrNull {
                 routeName.contains(it.name)
             }
         }

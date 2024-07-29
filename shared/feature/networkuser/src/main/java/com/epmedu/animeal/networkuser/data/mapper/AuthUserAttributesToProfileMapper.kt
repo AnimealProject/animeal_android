@@ -14,7 +14,7 @@ class AuthUserAttributesToProfileMapper {
     fun map(attributes: List<AuthUserAttribute>): Profile {
         val phoneNumberWithPrefix = attributes.find { it.key == phoneNumberKey }?.value
         val phoneNumberRegion = phoneNumberWithPrefix?.let {
-            Region.values().find { phoneNumberWithPrefix.startsWith(it.phoneNumberCode) }
+            Region.entries.find { phoneNumberWithPrefix.startsWith(it.phoneNumberCode) }
         } ?: Region.GE
         val phoneNumber =
             phoneNumberWithPrefix?.removePrefix(phoneNumberRegion.phoneNumberCode) ?: EMPTY_STRING
