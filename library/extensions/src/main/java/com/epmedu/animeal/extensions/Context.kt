@@ -41,14 +41,6 @@ fun Context.launchAppSettings() {
     startActivity(intent)
 }
 
-// FLAG_ACTIVITY_NEW_TASK is required when we're starting activity from app context
-fun Context.launchGpsSettings() {
-    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    startActivity(intent)
-}
-
 /** Workaround method to request GPS location using dialog provided by Google. */
 fun Context.requestGpsByDialog(showDialog: ((PendingIntent) -> Unit)? = null) {
     val locationRequest = LocationRequest.create().apply {
