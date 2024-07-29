@@ -70,7 +70,7 @@ fun FeedingItemPreview() {
 
     AnimealTheme {
         Column {
-            FeedingModelStatus.values().forEachIndexed { index, status ->
+            FeedingModelStatus.entries.forEachIndexed { index, status ->
                 FeedingItem(
                     feedingModel = FeedingModel(
                         id = "$index",

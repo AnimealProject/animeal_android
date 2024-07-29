@@ -62,7 +62,7 @@ fun AnimealPagerTabRow(
         divider = { AnimealPagerTabDivider() },
         backgroundColor = backgroundColor
     ) {
-        AnimalType.values().forEachIndexed { index, animalType ->
+        AnimalType.entries.forEachIndexed { index, animalType ->
 
             AnimealPagerTab(
                 animalType = animalType,

@@ -31,7 +31,7 @@ fun AnimalTypeHorizontalPager(
     onEvent: (SearchScreenEvent) -> Unit,
     content: @Composable (animalType: AnimalType) -> Unit,
 ) {
-    val pages = remember { AnimalType.values() }
+    val pages = remember { AnimalType.entries }
     val pagerState = rememberPagerState(pageCount = pages::size)
 
     Column {

@@ -59,7 +59,7 @@ private fun RejectionReasonDialogPreview() {
     AnimealTheme {
         RejectionReasonDialog(
             state = RejectionReasonRequestType.ReasonSelection(
-                reasons = RejectionReasonType.values().toList().toPersistentList()
+                reasons = RejectionReasonType.entries.toPersistentList()
             ),
             onConfirm = {},
             onDismiss = {}

@@ -274,7 +274,7 @@ internal class FeedingsViewModel @Inject constructor(
         updateState {
             copy(
                 rejectionReasonRequestType = RejectionReasonRequestType.ReasonSelection(
-                    reasons = RejectionReasonType.values().toList().toPersistentList(),
+                    reasons = RejectionReasonType.entries.toPersistentList(),
                     selectedReason = RejectionReasonType.NoFood
                 )
             )

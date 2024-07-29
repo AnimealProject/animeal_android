@@ -179,7 +179,7 @@ fun FeedingsCategoryTab(
                 },
                 divider = {}
             ) {
-                FeedingFilterCategory.values().forEach { type ->
+                FeedingFilterCategory.entries.forEach { type ->
                     AnimealSwitchTab(
                         titleResId = type.title,
                         selected = selectedTab == type,
@@ -287,7 +287,7 @@ private fun FeedingScreenPreview() {
             feedingPointId = "0",
             title = title,
             feeder = "Feeder",
-            status = FeedingModelStatus.values().random(),
+            status = FeedingModelStatus.entries.random(),
             elapsedTime = "12 hours ago"
         )
     }
