@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class RefreshTokenApiImpl : RefreshTokenApi {
 
-    private val refreshTokenExpirationFlow = MutableStateFlow<Boolean>(false)
+    private val refreshTokenExpirationFlow = MutableStateFlow(false)
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
