@@ -3,7 +3,6 @@ package com.epmedu.animeal.feeding.presentation.model
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.domain.model.enum.Remoteness
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus.Fed
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus.InProgress
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus.Pending
@@ -25,7 +24,6 @@ data class FeedingPointModel(
     val feedStatus: FeedStatus,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
-    val remoteness: Remoteness = Remoteness.ANY,
     val coordinates: Point,
     val image: NetworkFile? = null,
     val feedings: @RawValue List<Feeding>? = null
@@ -39,7 +37,6 @@ data class FeedingPointModel(
         feedingPoint.animalStatus.toFeedStatus(),
         feedingPoint.animalType,
         feedingPoint.isFavourite,
-        feedingPoint.remoteness,
         Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude),
         feedingPoint.image
     )
