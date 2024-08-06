@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
@@ -64,7 +64,7 @@ internal fun HomeMapbox(
         val mapboxMapView = rememberMapboxMapView(homeState = state)
 
         /** Show user location after successful feeding operation */
-        if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Showing) {
+        if (state.feedState.feedingConfirmationState is Showing) {
             ShowUserCurrentLocation(state, mapboxMapView)
         }
 

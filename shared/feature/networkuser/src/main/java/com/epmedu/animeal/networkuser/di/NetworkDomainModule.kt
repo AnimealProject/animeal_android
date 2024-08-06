@@ -4,6 +4,7 @@ import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.GetIsTrustedUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
@@ -29,6 +30,12 @@ object NetworkDomainModule {
     fun provideGetIsPhoneNumberVerifiedUseCase(
         repository: NetworkRepository,
     ) = GetIsPhoneNumberVerifiedUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetIsTrustedUseCase(
+        repository: NetworkRepository
+    ) = GetIsTrustedUseCase(repository)
 
     @ViewModelScoped
     @Provides

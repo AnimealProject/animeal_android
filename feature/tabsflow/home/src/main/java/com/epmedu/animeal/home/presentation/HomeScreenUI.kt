@@ -20,6 +20,10 @@ import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Loading
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
@@ -31,7 +35,6 @@ import com.epmedu.animeal.feeding.presentation.ui.DeletePhotoDialog
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.MarkFeedingDoneActionButton
 import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
@@ -40,6 +43,7 @@ import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
+import com.epmedu.animeal.home.presentation.HomeScreenEvent.DismissThankYouEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ErrorShowed
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.FeedingGalleryEvent
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.TimerCancellationEvent
@@ -163,7 +167,7 @@ internal fun HomeScreenUI(
             state.feedingPointState.currentFeedingPoint?.let { feedingPoint ->
                 when (state.feedingRouteState) {
                     is FeedingRouteState.Active -> {
-                        if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Loading) {
+                        if (state.feedState.feedingConfirmationState == Loading) {
                             CircularProgressIndicator(Modifier.padding(24.dp))
                         } else {
                             MarkFeedingDoneActionButton(
@@ -219,7 +223,7 @@ internal fun HomeScreenUI(
             hideBottomSheet()
         }
     )
-    ThankYouConfirmationDialog(state, onScreenEvent)
+    ThankYouConfirmationDialog(state.feedState.feedingConfirmationState, onScreenEvent)
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, onFeedingEvent)
 }
 
@@ -283,13 +287,16 @@ private fun OnState(
 
 @Composable
 private fun ThankYouConfirmationDialog(
-    state: HomeState,
+    state: FeedingConfirmationState,
     onScreenEvent: (HomeScreenEvent) -> Unit,
 ) {
-    if (state.feedState.feedingConfirmationState == FeedingConfirmationState.Showing) {
-        ThankYouDialog(onDismiss = {
-            onScreenEvent(HomeScreenEvent.DismissThankYouEvent)
-        })
+    if (state is Showing) {
+        ThankYouDialog(
+            isAutoApproved = state.isAutoApproved,
+            onDismiss = {
+                onScreenEvent(DismissThankYouEvent)
+            }
+        )
     }
 }
 
@@ -298,7 +305,7 @@ fun OnFeedingConfirmationState(
     feedingConfirmationState: FeedingConfirmationState,
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
-    if (feedingConfirmationState == FeedingConfirmationState.FeedingWasAlreadyBooked) {
+    if (feedingConfirmationState == FeedingWasAlreadyBooked) {
         AnimealAlertDialog(
             titleFontSize = 16.sp,
             title = stringResource(id = R.string.feeding_point_expired_description),
@@ -354,7 +361,7 @@ private fun OnFeedingConfirmationStatePreview() {
     AnimealTheme {
         OnFeedingConfirmationState(
             onFeedingEvent = {},
-            feedingConfirmationState = FeedingConfirmationState.FeedingWasAlreadyBooked,
+            feedingConfirmationState = FeedingWasAlreadyBooked,
         )
     }
 }
