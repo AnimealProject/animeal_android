@@ -35,11 +35,20 @@ class NetworkRepositoryImpl @Inject constructor(
         return ActionResult.Success(result is ApiResult.Success && result.data.isVerified())
     }
 
-    override suspend fun getUserId(): String = authAPI.getCurrentUserId()
-
     private fun List<AuthUserAttribute>.isVerified() = find {
         it.key == AuthUserAttributeKey.custom(UserAttributesKey.PHONE_NUMBER_VERIFIED_KEY)
     }?.value.toBoolean()
+
+    override suspend fun isTrusted(): ActionResult<Boolean> {
+        val result = userAttributesAPI.fetchUserAttributes()
+        return ActionResult.Success(result is ApiResult.Success && result.data.isTrusted())
+    }
+
+    private fun List<AuthUserAttribute>.isTrusted() = find {
+        it.key == AuthUserAttributeKey.custom(UserAttributesKey.IS_TRUSTED_ATTRIBUTE_KEY)
+    }?.value.toBoolean()
+
+    override suspend fun getUserId(): String = authAPI.getCurrentUserId()
 
     override suspend fun getUserGroup(shouldFetch: Boolean): ActionResult<UserGroup> {
         val cachedResult = currentUserGroupResult

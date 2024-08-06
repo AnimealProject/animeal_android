@@ -15,6 +15,7 @@ animealPlugin {
 
 dependencies {
     implementation(projects.library.api)
+    implementation(projects.library.auth)
     implementation(projects.library.common)
     implementation(projects.library.extensions)
 

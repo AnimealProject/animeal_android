@@ -26,6 +26,7 @@ import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.Default
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.DefaultFeedingPointHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.networkuser.domain.usecase.GetIsTrustedUseCase
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
 import dagger.Module
@@ -59,6 +60,7 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         rejectFeedingUseCase: RejectFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
+        getIsTrustedUseCase: GetIsTrustedUseCase
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -74,6 +76,7 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase,
         rejectFeedingUseCase,
         finishFeedingUseCase,
+        getIsTrustedUseCase
     )
 
     @ViewModelScoped

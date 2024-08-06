@@ -26,7 +26,8 @@ fun AnimealPopUpScreen(
     painterResource: Painter,
     @StringRes titleText: Int,
     @StringRes subtitleText: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    subtitleModifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
@@ -49,6 +50,7 @@ fun AnimealPopUpScreen(
         HeightSpacer(height = 8.dp)
         Text(
             text = stringResource(subtitleText),
+            modifier = subtitleModifier,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center,
         )

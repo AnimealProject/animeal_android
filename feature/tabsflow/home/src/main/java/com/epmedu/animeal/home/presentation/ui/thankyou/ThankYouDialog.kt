@@ -21,6 +21,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun ThankYouDialog(
+    isAutoApproved: Boolean,
     onDismiss: () -> Unit
 ) {
     BackHandler(enabled = true) {
@@ -33,12 +34,14 @@ internal fun ThankYouDialog(
             .background(color = MaterialTheme.colors.secondaryVariant)
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            ThankYouContent()
+            ThankYouContent(isAutoApproved)
             Spacer(modifier = Modifier.weight(1f))
             AnimealButton(
                 modifier = Modifier.padding(30.dp),
@@ -51,9 +54,21 @@ internal fun ThankYouDialog(
 
 @AnimealPreview
 @Composable
-private fun ThankYouScreenPreview() {
+private fun ThankYouScreenFirstPreview() {
     AnimealTheme {
         ThankYouDialog(
+            isAutoApproved = true,
+            onDismiss = {},
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun ThankYouScreenSecondPreview() {
+    AnimealTheme {
+        ThankYouDialog(
+            isAutoApproved = false,
             onDismiss = {},
         )
     }

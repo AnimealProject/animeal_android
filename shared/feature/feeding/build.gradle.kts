@@ -30,6 +30,7 @@ dependencies {
 
     debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.networkstorage)
+    implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.permissions)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.router)

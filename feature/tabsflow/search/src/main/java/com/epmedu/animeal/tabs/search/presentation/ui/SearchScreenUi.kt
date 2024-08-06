@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
@@ -31,9 +34,6 @@ import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
 import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState

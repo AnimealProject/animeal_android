@@ -4,6 +4,11 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Dismissed
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
@@ -19,15 +24,11 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Reset
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.mapper.toDomainFeedState
-import com.epmedu.animeal.feeding.presentation.mapper.toPresentationFeedingConfirmationState
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.Dismissed
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingStarted
-import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
+import com.epmedu.animeal.networkuser.domain.usecase.GetIsTrustedUseCase
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.router.presentation.RouteHandler
 import com.epmedu.animeal.timer.presentation.handler.TimerHandler
@@ -52,6 +53,7 @@ class DefaultFeedingHandler(
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val rejectFeedingUseCase: RejectFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase,
+    private val getIsTrustedUseCase: GetIsTrustedUseCase
 ) : FeedingHandler,
     StateDelegate<FeedState> by stateDelegate,
     ActionDelegate by actionDelegate,
@@ -89,7 +91,7 @@ class DefaultFeedingHandler(
                     startRoute()
                 }
                 updateFeedingState(
-                    feedingConfirmationState = feedState.feedingConfirmationState.toPresentationFeedingConfirmationState(),
+                    feedingConfirmationState = feedState.feedingConfirmationState,
                     feedPoint = feedState.feedPoint?.let { FeedingPointModel(it) },
                     updateGlobally = false
                 )
@@ -196,7 +198,10 @@ class DefaultFeedingHandler(
     }
 
     private suspend fun displayThankYouDialog() {
-        updateFeedingState(FeedingConfirmationState.Showing)
+        val isUserTrustedResult = getIsTrustedUseCase()
+        val isUserTrusted = isUserTrustedResult is ActionResult.Success && isUserTrustedResult.result
+
+        updateFeedingState(Showing(isAutoApproved = isUserTrusted))
     }
 
     override suspend fun dismissThankYouDialog() {

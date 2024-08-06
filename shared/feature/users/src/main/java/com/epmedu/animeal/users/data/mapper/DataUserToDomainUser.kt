@@ -1,5 +1,6 @@
 package com.epmedu.animeal.users.data.mapper
 
+import com.epmedu.animeal.auth.constants.UserAttributesKey.IS_TRUSTED_ATTRIBUTE_KEY
 import com.epmedu.animeal.extensions.containsAnyNotLetterCharacter
 import com.epmedu.animeal.users.domain.model.User
 import com.epmedu.animeal.users.data.model.User as DataUser
@@ -25,4 +26,3 @@ internal fun DataUser?.toDomain(id: String): User {
 private const val DELETED_USER = "Deleted User"
 private const val NAME_ATTRIBUTE_KEY = "name"
 private const val SURNAME_ATTRIBUTE_KEY = "family_name"
-private const val IS_TRUSTED_ATTRIBUTE_KEY = "custom:trusted"
