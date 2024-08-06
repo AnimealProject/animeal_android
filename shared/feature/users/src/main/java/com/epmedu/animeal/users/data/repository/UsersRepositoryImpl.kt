@@ -20,7 +20,7 @@ internal class UsersRepositoryImpl(
     override fun getUserById(id: String): Flow<User?> {
         return flow {
             emit(
-                usersApi.getUserById(id).data?.toDomain()
+                usersApi.getUserById(id).data.toDomain(id)
             )
         }
     }
@@ -30,11 +30,14 @@ internal class UsersRepositoryImpl(
             coroutineScope {
                 emit(
                     ids.map { id ->
-                        async { usersApi.getUserById(id).data }
+                        async { id to usersApi.getUserById(id).data }
                     }
                         .awaitAll()
-                        .mapNotNull { dataUser ->
-                            dataUser?.toDomain()
+                        .map { pair ->
+                            val userID = pair.first
+                            val user = pair.second
+
+                            user.toDomain(userID)
                         }
                 )
             }
