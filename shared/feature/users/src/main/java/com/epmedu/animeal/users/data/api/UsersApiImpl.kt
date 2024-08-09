@@ -5,6 +5,8 @@ import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.users.data.model.User
 import com.epmedu.animeal.users.data.model.UserGroups
+import com.epmedu.animeal.users.data.model.Users
+import com.epmedu.animeal.users.domain.model.UserGroup
 
 internal class UsersApiImpl(
     private val animealApi: AnimealApi
@@ -26,6 +28,17 @@ internal class UsersApiImpl(
         return animealApi.launchGetRequest(
             restOptions = restOptions,
             responseClass = UserGroups::class.java
+        )
+    }
+
+    override suspend fun getUsersInGroup(group: UserGroup): ApiResult<Users> {
+        val restOptions = RestOptions.builder()
+            .addPath("/listUsersInGroup")
+            .addQueryParameters(mapOf("groupname" to group.name))
+            .build()
+        return animealApi.launchGetRequest(
+            restOptions = restOptions,
+            responseClass = Users::class.java
         )
     }
 }

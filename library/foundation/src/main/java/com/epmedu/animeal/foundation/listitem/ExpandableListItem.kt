@@ -3,6 +3,7 @@ package com.epmedu.animeal.foundation.listitem
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExpandableListItem(
     modifier: Modifier = Modifier,
@@ -34,12 +34,31 @@ fun ExpandableListItem(
     isExpanded: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    ExpandableListItem(
+        modifier = modifier,
+        text = { Text(text = title) },
+        onClick = onClick,
+        isExpanded = isExpanded,
+        content = content
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ExpandableListItem(
+    text: @Composable () -> Unit,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    headerPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
+    isExpanded: Boolean = false,
+    content: @Composable () -> Unit,
+) {
     Column(modifier = modifier) {
         ListItem(
             modifier = Modifier
                 .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp),
-            text = { Text(text = title) },
+                .padding(headerPadding),
+            text = text,
             trailing = {
                 Icon(
                     modifier = Modifier.size(32.dp),

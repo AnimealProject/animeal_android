@@ -13,6 +13,7 @@ import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryImpl
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.users.domain.UsersRepository
 import dagger.Module
 import dagger.Provides
@@ -30,11 +31,15 @@ object FeedDataModule {
     fun providesFeedingPointRepository(
         feedingPointApi: FeedingPointApi,
         favouriteRepository: FavouriteRepository,
+        usersRepository: UsersRepository,
+        networkRepository: NetworkRepository,
         storageApi: StorageApi,
     ): FeedingPointRepository = FeedingPointRepositoryImpl(
         dispatchers = Dispatchers,
         favouriteRepository = favouriteRepository,
         feedingPointApi = feedingPointApi,
+        usersRepository = usersRepository,
+        networkRepository = networkRepository,
         storageApi = storageApi,
     )
 
@@ -47,6 +52,7 @@ object FeedDataModule {
         feedingHistoryApi: FeedingHistoryApi,
         feedingPointApi: FeedingPointApi,
         storageApi: StorageApi,
+        feedingPointRepository: FeedingPointRepository,
         favouriteRepository: FavouriteRepository,
         usersRepository: UsersRepository
     ): FeedingRepository {
@@ -56,7 +62,7 @@ object FeedDataModule {
             feedingApi = feedingAPI,
             feedingActionApi = feedingActionApi,
             feedingHistoryApi = feedingHistoryApi,
-            feedingPointApi = feedingPointApi,
+            feedingPointRepository = feedingPointRepository,
             storageApi = storageApi,
             favouriteRepository = favouriteRepository,
             usersRepository = usersRepository

@@ -18,6 +18,7 @@ import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavourite
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.util.FeedingConstants.FEEDERS_LIMIT
 import com.epmedu.animeal.feeding.presentation.util.Keys
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
@@ -84,6 +85,7 @@ internal class FavouritesViewModel @Inject constructor(
                         feedings = state.showingFeedingPoint?.feedings
                     )
                 }
+
                 else -> {
                     showingFeedingPoint?.let { fetchFeedings(showingFeedingPoint.id) }
                     showingFeedingPoint
@@ -126,7 +128,7 @@ internal class FavouritesViewModel @Inject constructor(
                 updateState {
                     copy(
                         showingFeedingPoint = showingFeedingPoint?.copy(
-                            feedings = feedings.filterNotNull()
+                            feedings = feedings.filterNotNull().take(FEEDERS_LIMIT)
                         )
                     )
                 }

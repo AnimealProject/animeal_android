@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,6 +49,7 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.ui.ShowOnMapLink
 import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
@@ -154,29 +156,40 @@ private fun ScreenScaffold(
                     feedingPoint = feedingPoint,
                     contentAlpha = contentAlpha,
                     modifier = Modifier.fillMaxHeight(),
-                    isShowOnMapVisible = feedingPointInProgress == null ||
-                        feedingPointInProgress.id == feedingPoint.id,
+                    useExpandableFeeders = true,
+                    showAssignedModerators = true,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
-                    },
-                    onShowOnMap = {
-                        navigator.navigate(
-                            TabsRoute.Home.withArg(
-                                Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
-                                Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
-                            )
-                        )
                     }
                 )
             }
         },
         sheetControls = {
-            FeedingPointActionButton(
-                alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                    feedingPointInProgress == null,
-                onClick = { onWillFeedEvent(WillFeedClicked) },
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (feedingPointInProgress == null || feedingPointInProgress.id == state.showingFeedingPoint?.id) {
+                    ShowOnMapLink(
+                        onClick = {
+                            state.showingFeedingPoint?.let { feedingPoint ->
+                                navigator.navigate(
+                                    TabsRoute.Home.withArg(
+                                        Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                                        Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                                    )
+                                )
+                            }
+                        }
+                    )
+                }
+                FeedingPointActionButton(
+                    alpha = buttonAlpha,
+                    enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
+                        feedingPointInProgress == null,
+                    onClick = { onWillFeedEvent(WillFeedClicked) },
+                )
+            }
         }
     ) {
         Scaffold(
@@ -308,7 +321,8 @@ private fun FavouritesScreenPreview() {
                 animalStatus = AnimalState.Starved,
                 animalType = AnimalType.Dogs,
                 isFavourite = true,
-                location = MapLocation.Tbilisi
+                location = MapLocation.Tbilisi,
+                assignedModerators = null
             )
         ),
     )

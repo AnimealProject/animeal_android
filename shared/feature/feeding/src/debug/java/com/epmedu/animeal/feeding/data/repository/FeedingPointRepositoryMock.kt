@@ -7,6 +7,7 @@ import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
+import com.epmedu.animeal.users.domain.model.User
 import kotlin.random.Random
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,10 @@ internal class FeedingPointRepositoryMock(
             image = NetworkFile(
                 name = "300.jpg",
                 url = "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
-            )
+            ),
+            assignedModerators = List(Random.nextInt(1, 4)) {
+                User(id = "$it", name = "Moderator $it")
+            }
         )
     }
 

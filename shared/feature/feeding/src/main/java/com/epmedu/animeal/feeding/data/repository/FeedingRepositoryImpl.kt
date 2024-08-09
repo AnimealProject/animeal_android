@@ -12,7 +12,6 @@ import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingFilters
 import com.epmedu.animeal.api.feeding.FeedingHistoryApi
-import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
@@ -25,6 +24,7 @@ import com.epmedu.animeal.feeding.domain.model.FeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress
 import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
+import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
 
@@ -59,7 +60,7 @@ internal class FeedingRepositoryImpl(
     private val feedingApi: FeedingApi,
     private val feedingHistoryApi: FeedingHistoryApi,
     private val feedingActionApi: FeedingActionApi,
-    private val feedingPointApi: FeedingPointApi,
+    private val feedingPointRepository: FeedingPointRepository,
     private val storageApi: StorageApi,
     private val favouriteRepository: FavouriteRepository,
     private val usersRepository: UsersRepository
@@ -81,19 +82,12 @@ internal class FeedingRepositoryImpl(
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
             feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
-            feedingPointApi.getAllFeedingPoints(),
+            feedingPointRepository.getAllFeedingPoints(shouldFetch = false).take(1),
             favouriteRepository.getFavouriteFeedingPointIds(shouldFetch = false)
         ) { feedings, feedingPoints, favouriteIds ->
             feedings.filter { it.status == FeedingStatus.inProgress }
                 .map { feeding ->
                     feeding.toDomain(
-                        getImageFromName = { fileName ->
-                            NetworkFile(
-                                name = fileName,
-                                url = storageApi.getUrlFrom(fileName = fileName)
-                            )
-                        },
-                        isFavourite = favouriteIds.any { it == feeding.feedingPointFeedingsId },
                         feedingPoint = feedingPoints.first { it.id == feeding.feedingPointFeedingsId }
                     )
                 }

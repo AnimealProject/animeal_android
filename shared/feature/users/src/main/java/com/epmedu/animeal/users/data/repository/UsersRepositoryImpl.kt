@@ -47,4 +47,10 @@ internal class UsersRepositoryImpl(
     override suspend fun getGroupsForUser(userId: String): ActionResult<List<UserGroup>> {
         return usersApi.getGroupsForUser(userId).toActionResult()
     }
+
+    override fun getUsersInGroup(group: UserGroup): Flow<List<User>> {
+        return flow {
+            emit(usersApi.getUsersInGroup(group).data?.users?.map { it.toDomain() } ?: emptyList())
+        }
+    }
 }

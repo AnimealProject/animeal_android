@@ -17,6 +17,7 @@ import com.epmedu.animeal.feeding.data.repository.FeedingRepositoryMock
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.users.domain.UsersRepository
 import dagger.Module
 import dagger.Provides
@@ -35,7 +36,9 @@ object FeedDataModule {
         favouriteRepository: FavouriteRepository,
         feedingPointApi: FeedingPointApi,
         debugMenuRepository: DebugMenuRepository,
-        storageApi: StorageApi
+        storageApi: StorageApi,
+        usersRepository: UsersRepository,
+        networkRepository: NetworkRepository
     ): FeedingPointRepository {
         return when {
             debugMenuRepository.useMockedFeedingPoints -> {
@@ -49,7 +52,9 @@ object FeedDataModule {
                     dispatchers = Dispatchers,
                     favouriteRepository = favouriteRepository,
                     feedingPointApi = feedingPointApi,
-                    storageApi = storageApi
+                    storageApi = storageApi,
+                    usersRepository = usersRepository,
+                    networkRepository = networkRepository
                 )
             }
         }
@@ -62,8 +67,8 @@ object FeedDataModule {
         feedingAPI: FeedingApi,
         feedingActionApi: FeedingActionApi,
         feedingHistoryApi: FeedingHistoryApi,
-        feedingPointApi: FeedingPointApi,
         storageApi: StorageApi,
+        feedingPointRepository: FeedingPointRepository,
         favouriteRepository: FavouriteRepository,
         usersRepository: UsersRepository,
         debugMenuRepository: DebugMenuRepository,
@@ -79,7 +84,7 @@ object FeedDataModule {
                     feedingApi = feedingAPI,
                     feedingActionApi = feedingActionApi,
                     feedingHistoryApi = feedingHistoryApi,
-                    feedingPointApi = feedingPointApi,
+                    feedingPointRepository = feedingPointRepository,
                     storageApi = storageApi,
                     favouriteRepository = favouriteRepository,
                     usersRepository = usersRepository
