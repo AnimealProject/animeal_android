@@ -31,11 +31,13 @@ interface FeedingRepository {
 
     suspend fun cancelFeeding(feedingPointId: String): ActionResult<Unit>
 
-    suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit>
+    suspend fun expireFeeding(feedingPointId: String): ActionResult<Unit>
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ActionResult<Unit>
 
     suspend fun approveFeeding(feedingPointId: String): ActionResult<Unit>
+
+    suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit>
 
     suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
 }

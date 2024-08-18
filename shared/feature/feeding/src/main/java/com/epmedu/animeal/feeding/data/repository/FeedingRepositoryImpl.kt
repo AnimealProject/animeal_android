@@ -410,8 +410,8 @@ internal class FeedingRepositoryImpl(
         return feedingActionApi.cancelFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit> {
-        return feedingActionApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
+    override suspend fun expireFeeding(feedingPointId: String): ActionResult<Unit> {
+        return feedingActionApi.expireFeeding(feedingPointId).toActionResult(feedingPointId)
     }
 
     override suspend fun finishFeeding(
@@ -423,6 +423,10 @@ internal class FeedingRepositoryImpl(
 
     override suspend fun approveFeeding(feedingPointId: String): ActionResult<Unit> {
         return feedingActionApi.approveFeeding(feedingPointId).toActionResult(feedingPointId)
+    }
+
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit> {
+        return feedingActionApi.rejectFeeding(feedingPointId, reason).toActionResult(feedingPointId)
     }
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
