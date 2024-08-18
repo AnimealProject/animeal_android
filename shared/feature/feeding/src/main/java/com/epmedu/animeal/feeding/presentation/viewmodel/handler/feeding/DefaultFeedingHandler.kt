@@ -10,11 +10,11 @@ import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingS
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
+import com.epmedu.animeal.feeding.domain.usecase.ExpireFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
-import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -51,7 +51,7 @@ class DefaultFeedingHandler(
     private val updateFeedStateUseCase: UpdateFeedStateUseCase,
     private val startFeedingUseCase: StartFeedingUseCase,
     private val cancelFeedingUseCase: CancelFeedingUseCase,
-    private val rejectFeedingUseCase: RejectFeedingUseCase,
+    private val expireFeedingUseCase: ExpireFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase,
     private val getIsTrustedUseCase: GetIsTrustedUseCase
 ) : FeedingHandler,
@@ -165,10 +165,10 @@ class DefaultFeedingHandler(
                     deselectFeedingPoint()
                 },
                 action = { feedingPointId ->
-                    rejectFeedingUseCase(feedingPointId, FEEDING_TIMER_EXPIRED)
+                    expireFeedingUseCase(feedingPointId)
                 },
                 onFinish = {
-                    // if the feeding is expired by backend, rejectFeedingUseCase will return an error,
+                    // if the feeding is expired by backend, expireFeedingUseCase will return an error,
                     // so we need to fetch feeding points no matter what the result is
                     fetchFeedingPoints()
                     updateFeedingState(Dismissed)
@@ -241,9 +241,5 @@ class DefaultFeedingHandler(
             )
         }
         if (updateGlobally) updateFeedStateUseCase(state.toDomainFeedState())
-    }
-
-    companion object {
-        private const val FEEDING_TIMER_EXPIRED = "Feeding time has expired"
     }
 }
