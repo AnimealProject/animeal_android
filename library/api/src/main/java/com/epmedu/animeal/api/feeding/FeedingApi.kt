@@ -11,6 +11,7 @@ import type.FeedingStatus.outdated
 import type.FeedingStatus.pending
 import type.FeedingStatus.rejected
 
+@Suppress("ComplexInterface")
 interface FeedingApi {
 
     fun getUserFeedings(userId: String): Flow<List<Feeding>>
