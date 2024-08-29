@@ -131,7 +131,8 @@ class DefaultFeedingHandler(
                     startTimer()
                     updateFeedingState(
                         feedPoint = FeedingPointModel(feedingPoint),
-                        feedingConfirmationState = FeedingStarted
+                        feedingConfirmationState = FeedingStarted,
+                        updateGlobally = false
                     )
                 },
                 onError = {
