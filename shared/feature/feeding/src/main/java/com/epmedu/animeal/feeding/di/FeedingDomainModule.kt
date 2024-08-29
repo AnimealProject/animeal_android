@@ -4,6 +4,7 @@ import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
 import com.epmedu.animeal.feeding.domain.usecase.AddFeedingPointToFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.ExpireFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetAllFeedingPointsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetApprovedFeedingHistoriesUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
@@ -74,4 +75,10 @@ object FeedingDomainModule {
     fun providesDeleteFavouriteFeedingPointUseCase(
         repo: FavouriteRepository
     ) = RemoveFeedingPointFromFavouritesUseCase(repo)
+
+    @ViewModelScoped
+    @Provides
+    fun providesExpireFeedingUseCase(
+        feedingRepository: FeedingRepository
+    ) = ExpireFeedingUseCase(feedingRepository)
 }

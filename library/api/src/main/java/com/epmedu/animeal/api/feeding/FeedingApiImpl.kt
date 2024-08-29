@@ -1,6 +1,7 @@
 package com.epmedu.animeal.api.feeding
 
 import CancelFeedingMutation
+import ExpireFeedingMutation
 import FinishFeedingMutation
 import RejectFeedingMutation
 import SearchFeedingHistoriesQuery
@@ -152,9 +153,9 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+    override suspend fun expireFeeding(feedingPointId: String): ApiResult<String> {
         return animealApi.launchMutation(
-            mutation = RejectFeedingMutation(feedingPointId, reason, null),
+            mutation = ExpireFeedingMutation(feedingPointId, EXPIRE_FEEDING_REASON),
             responseClass = String::class.java
         )
     }
@@ -169,8 +170,16 @@ internal class FeedingApiImpl(
         )
     }
 
+    override suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String> {
+        return animealApi.launchMutation(
+            mutation = RejectFeedingMutation(feedingPointId, reason, null),
+            responseClass = String::class.java
+        )
+    }
+
     private companion object {
-        const val CANCEL_FEEDING_REASON = "reason"
+        const val CANCEL_FEEDING_REASON = "Canceled by user"
+        const val EXPIRE_FEEDING_REASON = "Feeding time has expired"
         const val FEEDINGS_LIMIT_IN_DAYS = 10L
     }
 }

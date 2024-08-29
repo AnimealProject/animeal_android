@@ -28,6 +28,10 @@ mutation CancelFeeding($feedingId: String!, $reason: String!) {
   cancelFeeding(feedingId: $feedingId, reason: $reason)
 }
 
+mutation ExpireFeeding($feedingId: String!, $reason: String!) {
+  expireFeeding(feedingId: $feedingId, reason: $reason)
+}
+
 mutation CreatePet(
   $input: CreatePetInput!
   $condition: ModelPetConditionInput

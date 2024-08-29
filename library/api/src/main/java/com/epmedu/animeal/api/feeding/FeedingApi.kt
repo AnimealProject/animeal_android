@@ -11,6 +11,7 @@ import type.FeedingStatus.outdated
 import type.FeedingStatus.pending
 import type.FeedingStatus.rejected
 
+@Suppress("ComplexInterface")
 interface FeedingApi {
 
     fun getUserFeedings(userId: String): Flow<List<Feeding>>
@@ -51,7 +52,9 @@ interface FeedingApi {
 
     suspend fun cancelFeeding(feedingPointId: String): ApiResult<String>
 
-    suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String>
+    suspend fun expireFeeding(feedingPointId: String): ApiResult<String>
 
     suspend fun finishFeeding(feedingPointId: String, images: List<String>): ApiResult<String>
+
+    suspend fun rejectFeeding(feedingPointId: String, reason: String): ApiResult<String>
 }
