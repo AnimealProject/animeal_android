@@ -129,9 +129,11 @@ class DefaultFeedingHandler(
                     startTimer()
                     updateFeedingState(
                         feedPoint = FeedingPointModel(feedingPoint),
-                        feedingConfirmationState = FeedingStarted,
-                        updateGlobally = false
+                        feedingConfirmationState = state.feedingConfirmationState
                     )
+                    updateState {
+                        copy(feedingConfirmationState = FeedingStarted)
+                    }
                 },
                 onError = {
                     updateFeedingState(FeedingWasAlreadyBooked)
