@@ -24,7 +24,7 @@ jobs:
   Build:
     strategy:
       matrix:
-        flavor: [ dev, qa, prod ]
+        flavor: [ dev, qa ]
     runs-on: ubuntu-latest
     steps:
 
@@ -127,12 +127,4 @@ jobs:
           serviceCredentialsFile: service_account.json
           groups: qa_team
           file: qa-release-${{ env.VERSION_NAME }}.apk/qa-release-${{ env.VERSION_NAME }}.apk
-
-      - name: Publish prod release to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
-        with:
-          appId: ${{secrets.FIREBASE_APP_ID}}
-          serviceCredentialsFile: service_account.json
-          groups: qa_team, developers
-          file: prod-release-${{ env.VERSION_NAME }}.apk/prod-release-${{ env.VERSION_NAME }}.apk
 
