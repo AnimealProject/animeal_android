@@ -43,7 +43,7 @@ import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.plugin.delegates.listeners.OnStyleLoadedListener
+import com.mapbox.maps.StyleLoadedCallback
 
 @Composable
 internal fun HomeMapbox(
@@ -153,12 +153,10 @@ private fun MapboxMap(
 
     // If we return from other tab and there was a route active in map the camera zoom will not work
     // so we have to make sure the map is loaded before setting location
-    val onStyleLoadedListener = OnStyleLoadedListener { event ->
-        event.end?.run {
-            when (state.feedingRouteState) {
-                is FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
-                is FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
-            }
+    val styleLoadedCallback = StyleLoadedCallback {
+        when (state.feedingRouteState) {
+            is FeedingRouteState.Disabled -> mapboxMapView.setLocation(state.locationState.location)
+            is FeedingRouteState.Active -> setLocationOnRoute(mapboxMapView, state)
         }
     }
 
@@ -191,8 +189,7 @@ private fun MapboxMap(
         }
     }
 
-    // TODO check if it is needed to remove, probably yes
-    mapboxMapView.getMapboxMap().addOnStyleLoadedListener(onStyleLoadedListener)
+    mapboxMapView.mapboxMap.subscribeStyleLoaded(styleLoadedCallback)
     mapboxMapView.GesturesListeners(onMapClick, onCameraChange)
 
     AndroidView(
@@ -222,8 +219,10 @@ private fun rememberMapboxMapView(homeState: HomeState): MapView {
     )
 }
 
-internal fun MapView.showCurrentLocation(location: MapLocation) = getMapboxMap().setCamera(
-    CameraOptions.Builder()
-        .center(Point.fromLngLat(location.longitude, location.latitude))
-        .build()
-)
+internal fun MapView.showCurrentLocation(location: MapLocation) {
+    mapboxMap.setCamera(
+        CameraOptions.Builder()
+            .center(Point.fromLngLat(location.longitude, location.latitude))
+            .build()
+    )
+}

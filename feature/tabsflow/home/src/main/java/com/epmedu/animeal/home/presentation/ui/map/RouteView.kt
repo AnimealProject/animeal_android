@@ -18,9 +18,9 @@ import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants.LOCAT
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.core.MapboxNavigation
-import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
+import com.mapbox.navigation.core.MapboxNavigationProvider
+import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineViewOptions
 import com.mapbox.navigation.ui.maps.route.line.model.RouteLineColorResources
-import com.mapbox.navigation.ui.maps.route.line.model.RouteLineResources
 
 @Composable
 internal fun RouteView(
@@ -30,25 +30,12 @@ internal fun RouteView(
 ) {
     val mapBoxRouteInitOptions = rememberMapRouteInitOptions(
         mapView = mapView,
-        mapBoxNavigationInitOptions = MapBoxRouteInitOptions(
-            MapboxRouteLineOptions.Builder(mapView.context)
-                .withRouteLineResources(getRouteLineResources(mapView.context))
-                .withRouteLineBelowLayerId(LOCATION_INDICATOR_LAYER)
-                .build()
-        )
+        routeLineViewOptions = getRouteLineViewOptions(mapView.context),
     )
 
-    LaunchedEffect(mapView) {
-        mapView.getMapboxMap().getStyle()?.let { style ->
-            mapBoxRouteInitOptions.routeLineView.hideOriginAndDestinationPoints(style)
-        }
-    }
-
     val mapboxNavigation = remember(mapView) {
-        MapboxNavigation(
-            NavigationOptions.Builder(mapView.context)
-                .accessToken(mapView.getMapboxMap().getResourceOptions().accessToken)
-                .build()
+        MapboxNavigationProvider.create(
+            NavigationOptions.Builder(mapView.context).build()
         )
     }
 
@@ -88,12 +75,11 @@ internal fun RouteView(
 
     // App crashes if we don't destroy mapNavigation onDetach
     mapView.doOnDetach {
-        mapboxNavigation.onDestroy()
+        MapboxNavigationProvider.destroy()
     }
 }
 
-@Composable
-private fun getRouteLineResources(context: Context): RouteLineResources {
+private fun getRouteLineViewOptions(context: Context): MapboxRouteLineViewOptions {
     val color = context.getColor(R.color.color_sea_serpent)
     val customColorResources = RouteLineColorResources.Builder()
         .routeDefaultColor(color)
@@ -101,7 +87,8 @@ private fun getRouteLineResources(context: Context): RouteLineResources {
         .routeUnknownCongestionColor(color)
         .build()
 
-    return RouteLineResources.Builder()
+    return MapboxRouteLineViewOptions.Builder(context)
+        .routeLineBelowLayerId(LOCATION_INDICATOR_LAYER)
         .routeLineColorResources(customColorResources)
         .build()
 }
