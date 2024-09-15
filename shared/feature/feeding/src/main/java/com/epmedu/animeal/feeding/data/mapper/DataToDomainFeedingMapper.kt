@@ -1,19 +1,17 @@
 package com.epmedu.animeal.feeding.data.mapper
 
 import com.amplifyframework.core.model.temporal.Temporal
-import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.Feeding
+import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.model.User
 import com.amplifyframework.datastore.generated.model.Feeding as DataFeeding
 import com.epmedu.animeal.feeding.domain.model.UserFeeding as DomainFeeding
 
-suspend fun DataFeeding.toDomain(
-    getImageFromName: suspend (String) -> NetworkFile,
-    isFavourite: Boolean,
+fun DataFeeding.toDomain(
     feedingPoint: FeedingPoint
 ) = DomainFeeding(
-    feedingPoint = feedingPoint.toDomainFeedingPoint(getImageFromName, isFavourite),
+    feedingPoint = feedingPoint,
     createdAt = createdAt.toDate()
 )
 

@@ -2,33 +2,29 @@ package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -36,39 +32,36 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.foundation.button.AnimealHeartButton
-import com.epmedu.animeal.foundation.loading.ShimmerLoading
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.text.MarkupText
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.foundation.util.withLocalAlpha
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Point
+import kotlinx.coroutines.launch
 
 /**
  * @param feedingPoint feeding point to be presented.
  * @param contentAlpha alpha of the content.
  * @param modifier Modifier.fillMaxHeight() to make the dialog full screen,
  * Modifier.wrapContentHeight() to make the dialog cover a part of the screen.
- * @param isShowOnMapVisible configures "Show on Map" button visibility.
  * @param onFavouriteChange callback to be invoked on tapping on the heart button.
- * @param onShowOnMap callback to be invoked on tapping "Show on Map" button.
  */
 @Composable
 fun FeedingPointSheetContent(
     feedingPoint: FeedingPointModel,
     contentAlpha: Float,
     modifier: Modifier = Modifier,
-    isShowOnMapVisible: Boolean = false,
-    onFavouriteChange: (Boolean) -> Unit = {},
-    onShowOnMap: () -> Unit = {}
+    useExpandableFeeders: Boolean = false,
+    showAssignedModerators: Boolean = false,
+    onFavouriteChange: (Boolean) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -76,7 +69,7 @@ fun FeedingPointSheetContent(
             .background(MaterialTheme.colors.surface)
             .padding(
                 top = 8.dp,
-                bottom = 110.dp,
+                bottom = if (useExpandableFeeders) 140.dp else 110.dp,
                 start = 24.dp,
                 end = 24.dp,
             ),
@@ -100,11 +93,10 @@ fun FeedingPointSheetContent(
             FeedingPointDetails(
                 description = description,
                 feedings = feedings,
-                scrimAlpha = contentAlpha
+                scrimAlpha = contentAlpha,
+                assignedModerators = if (showAssignedModerators) assignedModerators else null,
+                useExpandableFeeders = useExpandableFeeders
             )
-        }
-        if (isShowOnMapVisible) {
-            ShowOnMapLink(onClick = onShowOnMap)
         }
     }
 }
@@ -159,139 +151,67 @@ internal fun FeedingPointDetails(
     scrimAlpha: Float,
     description: String,
     feedings: List<Feeding>?,
+    assignedModerators: List<String>?,
+    useExpandableFeeders: Boolean
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp)
-    ) {
-        CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colors.onSurface,
-            LocalContentAlpha provides scrimAlpha,
-        ) {
-            MarkupText(
-                text = description,
-                style = MaterialTheme.typography.body2,
-                overflow = TextOverflow.Ellipsis,
-                alpha = scrimAlpha
-            )
-            FeedingPointFeedings(feedings = feedings)
-        }
-    }
-}
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-@Composable
-private fun FeedingPointFeedings(feedings: List<Feeding>?) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+    CompositionLocalProvider(
+        LocalContentColor provides MaterialTheme.colors.onSurface,
+        LocalContentAlpha provides scrimAlpha,
     ) {
-        Text(
-            text = stringResource(R.string.last_feeder),
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold,
-        )
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.fillMaxWidth(),
+            state = lazyListState,
+            horizontalAlignment = Alignment.Start
         ) {
-            feedings?.let {
-                items(feedings.take(4)) { feeding ->
-                    Feeding(feeding = feeding)
+            item {
+                MarkupText(
+                    text = description,
+                    style = MaterialTheme.typography.body2,
+                    overflow = TextOverflow.Ellipsis,
+                    alpha = scrimAlpha
+                )
+            }
+            item {
+                HeightSpacer(height = 24.dp)
+            }
+            item {
+                when {
+                    useExpandableFeeders -> {
+                        FeedingPointExpandableLastFeeders(feedings = feedings)
+                    }
+
+                    else -> {
+                        FeedingPointLastFeeder(
+                            feeding = feedings?.firstOrNull(),
+                            modifier = Modifier.padding(top = 8.dp),
+                            isLoading = feedings == null
+                        )
+                    }
                 }
-            } ?: item {
-                FeedingsLoading()
+            }
+            assignedModerators?.let { moderators ->
+                item {
+                    FeedingPointAssignedModerators(
+                        moderators = moderators,
+                        onExpanding = {
+                            coroutineScope.launch {
+                                lazyListState.layoutInfo.viewportSize.height.let {
+                                    lazyListState.animateScrollBy(it.toFloat())
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun Feeding(feeding: Feeding) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape)
-                .background(CustomColor.LynxWhite.withLocalAlpha()),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_person),
-                tint = CustomColor.Orange.withLocalAlpha(),
-                contentDescription = null
-            )
-        }
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(
-                text = feeding.feederName.ifBlank { stringResource(id = R.string.unknown_user) },
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Medium,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colors.onSurface.withLocalAlpha(),
-                maxLines = 1,
-            )
-            Text(
-                text = when (feeding) {
-                    is Feeding.InProgress -> {
-                        stringResource(
-                            id = R.string.feeding_in_progress,
-                            LocalContext.current.formatNumberToHourMin(feeding.timeLeft)
-                                ?: stringResource(id = R.string.unknown_time)
-                        )
-                    }
-
-                    is Feeding.History -> {
-                        feeding.elapsedTime
-                    }
-                },
-                style = MaterialTheme.typography.caption,
-                overflow = TextOverflow.Ellipsis,
-                color = CustomColor.DarkerGrey.withLocalAlpha(),
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-@Composable
-private fun FeedingsLoading() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        ShimmerLoading(
-            modifier = Modifier.size(56.dp),
-            alpha = LocalContentAlpha.current
-        )
-        Column(
-            modifier = Modifier.height(56.dp),
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            ShimmerLoading(
-                modifier = Modifier.size(height = 14.dp, width = 160.dp),
-                alpha = LocalContentAlpha.current
-            )
-            ShimmerLoading(
-                modifier = Modifier.size(height = 12.dp, width = 96.dp),
-                alpha = LocalContentAlpha.current
-            )
-        }
-    }
-}
-
-@Composable
-private fun ShowOnMapLink(onClick: () -> Unit) {
+fun ShowOnMapLink(onClick: () -> Unit) {
     Text(
         modifier = Modifier.clickable { onClick() },
         text = stringResource(id = R.string.show_on_map),
@@ -321,9 +241,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
             ),
             contentAlpha = 1f,
             modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = true,
-            onFavouriteChange = {},
-            onShowOnMap = {}
+            onFavouriteChange = {}
         )
     }
 }
@@ -351,8 +269,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 coordinates = Point.fromLngLat(0.0, 0.0)
             ),
             contentAlpha = 1f,
-            modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = true
+            modifier = Modifier.fillMaxHeight()
         )
     }
 }

@@ -15,6 +15,7 @@ import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
+import com.epmedu.animeal.feeding.presentation.util.FeedingConstants.FEEDERS_LIMIT
 import com.epmedu.animeal.feeding.presentation.util.Keys
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -168,7 +169,7 @@ class SearchViewModel @Inject constructor(
                 updateState {
                     copy(
                         showingFeedingPoint = showingFeedingPoint?.copy(
-                            feedings = feedings.filterNotNull()
+                            feedings = feedings.filterNotNull().take(FEEDERS_LIMIT)
                         )
                     )
                 }

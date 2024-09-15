@@ -7,6 +7,6 @@ import com.google.gson.annotations.SerializedName
 internal data class User(
     @SerializedName("Username")
     val userId: String,
-    @SerializedName("UserAttributes")
+    @SerializedName(value = "UserAttributes", alternate = ["Attributes"])
     val userAttributes: List<UserAttribute>
 )

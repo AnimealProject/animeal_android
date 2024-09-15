@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,7 @@ import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClick
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointActionButton
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointSheetContent
+import com.epmedu.animeal.feeding.presentation.ui.ShowOnMapLink
 import com.epmedu.animeal.feeding.presentation.ui.WillFeedDialog
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
@@ -111,6 +114,7 @@ private fun ScreenScaffold(
     onWillFeedEvent: (WillFeedEvent) -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
+    val feedingPointInProgress = state.feedState.feedPoint
 
     AnimealBottomSheetLayout(
         modifier = Modifier
@@ -120,19 +124,38 @@ private fun ScreenScaffold(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         skipHalfExpanded = true,
         sheetContent = {
-            SearchSheetContent(navigator, state, contentAlpha, onEvent)
+            SearchSheetContent(state, contentAlpha, onEvent)
         },
         sheetControls = {
-            FeedingPointActionButton(
-                alpha = buttonAlpha,
-                enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                    state.feedState.feedPoint == null,
-                onClick = {
-                    state.showingFeedingPoint?.id?.let { feedingPointId ->
-                        onWillFeedEvent(WillFeedClicked)
-                    }
-                },
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (feedingPointInProgress == null || feedingPointInProgress.id == state.showingFeedingPoint?.id) {
+                    ShowOnMapLink(
+                        onClick = {
+                            state.showingFeedingPoint?.let { feedingPoint ->
+                                navigator.navigate(
+                                    TabsRoute.Home.withArg(
+                                        Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
+                                        Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
+                                    )
+                                )
+                            }
+                        }
+                    )
+                }
+                FeedingPointActionButton(
+                    alpha = buttonAlpha,
+                    enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
+                        state.feedState.feedPoint == null,
+                    onClick = {
+                        state.showingFeedingPoint?.id?.let { feedingPointId ->
+                            onWillFeedEvent(WillFeedClicked)
+                        }
+                    },
+                )
+            }
         }
     ) {
         Scaffold(
@@ -185,30 +208,19 @@ private fun OnFeedingConfirmationState(
 
 @Composable
 private fun SearchSheetContent(
-    navigator: Navigator,
     state: SearchState,
     contentAlpha: Float,
     onEvent: (SearchScreenEvent) -> Unit
 ) {
-    val feedingPointInProgress = state.feedState.feedPoint
-
     state.showingFeedingPoint?.let { feedingPoint ->
         FeedingPointSheetContent(
             feedingPoint = feedingPoint,
             contentAlpha = contentAlpha,
             modifier = Modifier.fillMaxHeight(),
-            isShowOnMapVisible = feedingPointInProgress == null ||
-                feedingPointInProgress.id == feedingPoint.id,
+            useExpandableFeeders = true,
+            showAssignedModerators = true,
             onFavouriteChange = { isFavourite ->
                 onEvent(SearchScreenEvent.FavouriteChange(isFavourite, feedingPoint))
-            },
-            onShowOnMap = {
-                navigator.navigate(
-                    TabsRoute.Home.withArg(
-                        Arguments.FORCED_FEEDING_POINT_ID to feedingPoint.id,
-                        Arguments.ANIMAL_TYPE to feedingPoint.animalType.name
-                    )
-                )
             }
         )
     }

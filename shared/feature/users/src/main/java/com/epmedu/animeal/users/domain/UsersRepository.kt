@@ -12,4 +12,6 @@ interface UsersRepository {
     fun getUsersById(ids: Set<String>): Flow<List<User>>
 
     suspend fun getGroupsForUser(userId: String): ActionResult<List<UserGroup>>
+
+    fun getUsersInGroup(group: UserGroup): Flow<List<User>>
 }

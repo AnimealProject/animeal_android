@@ -26,19 +26,26 @@ data class FeedingPointModel(
     val isFavourite: Boolean = false,
     val coordinates: Point,
     val image: NetworkFile? = null,
-    val feedings: @RawValue List<Feeding>? = null
+    val feedings: @RawValue List<Feeding>? = null,
+    val assignedModerators: List<String>? = null
 ) : Parcelable {
 
     constructor(feedingPoint: FeedingPoint) : this(
-        feedingPoint.id,
-        feedingPoint.title,
-        feedingPoint.description,
-        feedingPoint.city,
-        feedingPoint.animalStatus.toFeedStatus(),
-        feedingPoint.animalType,
-        feedingPoint.isFavourite,
-        Point.fromLngLat(feedingPoint.location.longitude, feedingPoint.location.latitude),
-        feedingPoint.image
+        id = feedingPoint.id,
+        title = feedingPoint.title,
+        description = feedingPoint.description,
+        city = feedingPoint.city,
+        feedStatus = feedingPoint.animalStatus.toFeedStatus(),
+        animalType = feedingPoint.animalType,
+        isFavourite = feedingPoint.isFavourite,
+        coordinates = Point.fromLngLat(
+            feedingPoint.location.longitude,
+            feedingPoint.location.latitude
+        ),
+        image = feedingPoint.image,
+        assignedModerators = feedingPoint.assignedModerators?.map { moderator ->
+            "${moderator.name} ${moderator.surname}"
+        }
     )
 
     fun getDrawableRes(): Int =
@@ -50,6 +57,7 @@ data class FeedingPointModel(
                     Fed -> R.drawable.ic_favstate_favouritehungry_low
                 }
             }
+
             animalType == AnimalType.Dogs -> {
                 when (feedStatus) {
                     Starved -> R.drawable.ic_dogsstate_doghungry_high
