@@ -5,16 +5,21 @@ import androidx.compose.runtime.remember
 import com.mapbox.maps.MapView
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
-import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
+import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineApiOptions
+import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineViewOptions
 
 data class MapBoxRouteInitOptions(
-    val routeLineOptions: MapboxRouteLineOptions,
-    val routeLineApi: MapboxRouteLineApi = MapboxRouteLineApi(routeLineOptions),
-    val routeLineView: MapboxRouteLineView = MapboxRouteLineView(routeLineOptions)
+    val routeLineApi: MapboxRouteLineApi,
+    val routeLineView: MapboxRouteLineView
 )
 
 @Composable
 fun rememberMapRouteInitOptions(
     mapView: MapView,
-    mapBoxNavigationInitOptions: MapBoxRouteInitOptions
-) = remember(mapView) { mapBoxNavigationInitOptions }
+    routeLineViewOptions: MapboxRouteLineViewOptions
+) = remember(mapView) {
+    MapBoxRouteInitOptions(
+        routeLineApi = MapboxRouteLineApi(MapboxRouteLineApiOptions.Builder().build()),
+        routeLineView = MapboxRouteLineView(routeLineViewOptions)
+    )
+}

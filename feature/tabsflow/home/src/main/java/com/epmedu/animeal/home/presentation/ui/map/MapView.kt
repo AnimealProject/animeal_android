@@ -2,13 +2,11 @@
 
 package com.epmedu.animeal.home.presentation.ui.map
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -22,15 +20,17 @@ import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.router.model.RouteResult
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.RouteOptions
+import com.mapbox.common.MapboxOptions
 import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraChanged
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData
 import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -40,7 +40,6 @@ import com.mapbox.navigation.base.extensions.coordinates
 import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.base.route.NavigationRouterCallback
 import com.mapbox.navigation.base.route.RouterFailure
-import com.mapbox.navigation.base.route.RouterOrigin
 import com.mapbox.navigation.core.MapboxNavigation
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
@@ -56,11 +55,10 @@ fun rememberMapViewWithLifecycle(
 ): MapView {
     val context = LocalContext.current
 
+    MapboxOptions.accessToken = mapBoxInitOptions.publicKey
+
     val mapInitOptions = MapInitOptions(
         context = context,
-        resourceOptions = ResourceOptions.Builder()
-            .accessToken(mapBoxInitOptions.publicKey)
-            .build(),
         styleUri = mapBoxInitOptions.styleUrl
     )
 
@@ -72,7 +70,9 @@ fun rememberMapViewWithLifecycle(
             location.updateSettings {
                 enabled = uiSettings.userLocationOnMap
                 pulsingEnabled = uiSettings.locationPulsing
-                locationPuck = getLocationPuck(context)
+                locationPuck = getLocationPuck()
+                puckBearing = PuckBearing.HEADING
+                puckBearingEnabled = true
             }
         }
     }
@@ -88,7 +88,7 @@ fun rememberMapViewWithLifecycle(
 }
 
 fun MapView.setLocation(location: MapLocation, zoom: Double = DEFAULT_ZOOM) =
-    getMapboxMap().setCamera(
+    mapboxMap.setCamera(
         CameraOptions.Builder()
             .zoom(zoom)
             .center(Point.fromLngLat(location.longitude, location.latitude))
@@ -104,8 +104,15 @@ fun MapView.setLocation(
         DEFAULT_MAP_END_PADDING
     )
 ) {
-    val cameraPosition = getMapboxMap().cameraForCoordinates(points, padding)
-    getMapboxMap().setCamera(cameraPosition)
+    mapboxMap.cameraForCoordinates(
+        coordinates = points,
+        camera = CameraOptions.Builder().build(),
+        coordinatesPadding = padding,
+        maxZoom = null,
+        offset = null
+    ) { cameraOptions ->
+        mapboxMap.setCamera(cameraOptions)
+    }
 }
 
 fun MapView.fetchRoute(
@@ -147,8 +154,11 @@ fun MapView.drawRoute(
     route: NavigationRoute
 ) {
     mapBoxRouteInitOptions.routeLineApi.setNavigationRoutes(listOf(route)) { value ->
-        getMapboxMap().getStyle()?.let { style ->
-            mapBoxRouteInitOptions.routeLineView.renderRouteDrawData(style, value)
+        mapboxMap.style?.let { style ->
+            mapBoxRouteInitOptions.routeLineView.run {
+                renderRouteDrawData(style, value)
+                hideOriginAndDestinationPoints(style)
+            }
         }
     }
 }
@@ -157,7 +167,7 @@ fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
     mapBoxRouteInitOptions.run {
         if (routeLineApi.getNavigationRoutes().isNotEmpty()) {
             routeLineApi.clearRouteLine { value ->
-                getMapboxMap().getStyle()?.let { style ->
+                mapboxMap.style?.let { style ->
                     routeLineView.renderClearRouteLineValue(style, value)
                 }
             }
@@ -171,7 +181,7 @@ fun MapView.GesturesListeners(
     onCameraChange: () -> Unit
 ) {
     val debounceState = remember {
-        MutableSharedFlow<CameraChangedEventData>(
+        MutableSharedFlow<CameraChanged>(
             replay = 0,
             extraBufferCapacity = 1,
             onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -186,8 +196,8 @@ fun MapView.GesturesListeners(
             }
     }
 
-    getMapboxMap().apply {
-        addOnCameraChangeListener {
+    mapboxMap.apply {
+        subscribeCameraChanged {
             debounceState.tryEmit(it)
         }
         addOnMapClickListener { point ->
@@ -205,14 +215,13 @@ private fun MapView.requestRoutes(
     navigation.requestRoutes(
         routeOptions,
         object : NavigationRouterCallback {
-            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
+            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: String) {
                 // Mapbox always considers the first route the better one
-                routes.firstOrNull()?.directionsResponse?.routes()?.firstOrNull()?.run {
+                routes.firstOrNull()?.waypoints?.firstOrNull()?.run {
                     onRouteResult(
                         RouteResult(
                             true,
-                            distanceLeft = distance().toLong(),
-                            timeLeft = duration().toLong(),
+                            distanceLeft = distance()?.toLong(),
                             routeData = routes.first()
                         )
                     )
@@ -236,7 +245,7 @@ private fun MapView.requestRoutes(
                 )
             }
 
-            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
+            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: String) {
                 onRouteResult(
                     RouteResult(
                         false,
@@ -248,9 +257,11 @@ private fun MapView.requestRoutes(
     )
 }
 
-private fun getLocationPuck(context: Context) = LocationPuck2D(
-    topImage = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_your_location, null),
-    shadowImage = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_map_user_stroke, null),
+// https://github.com/mapbox/mapbox-maps-android/issues/2373
+@Suppress("IncorrectNumberOfArgumentsInExpression")
+private fun getLocationPuck() = LocationPuck2D(
+    topImage = ImageHolder.from(R.drawable.ic_your_location),
+    shadowImage = ImageHolder.from(R.drawable.ic_map_user_stroke),
     scaleExpression = interpolate {
         linear()
         zoom()
