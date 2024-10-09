@@ -19,9 +19,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
@@ -150,7 +150,7 @@ private fun ScreenScaffold(
                     enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
                         state.feedState.feedPoint == null,
                     onClick = {
-                        state.showingFeedingPoint?.id?.let { feedingPointId ->
+                        state.showingFeedingPoint?.id?.let {
                             onWillFeedEvent(WillFeedClicked)
                         }
                     },
@@ -163,7 +163,12 @@ private fun ScreenScaffold(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.secondaryVariant),
         ) { padding ->
-            ScreenContent(state, scope, onEvent)
+            ScreenContent(
+                state = state,
+                scope = scope,
+                onEvent = onEvent,
+                modifier = Modifier.padding(padding)
+            )
         }
     }
 
@@ -243,9 +248,10 @@ private fun ScreenContent(
     state: SearchState,
     scope: CoroutineScope,
     onEvent: (SearchScreenEvent) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(top = 16.dp),
     ) {

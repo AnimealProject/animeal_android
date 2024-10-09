@@ -1,6 +1,8 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -22,8 +24,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedings.presentation.model.FeedingModel
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -41,7 +43,8 @@ internal fun SwipeableFeedingItem(
     val (swipeOffset, velocity) = with(LocalDensity.current) {
         -160.dp.toPx() to 125.dp.toPx()
     }
-    val anchoredDraggableState = remember { createAnchoredDraggableState(swipeOffset, velocity) }
+    val decay = rememberSplineBasedDecay<Float>()
+    val anchoredDraggableState = remember { createAnchoredDraggableState(swipeOffset, velocity, decay) }
     val buttonsAlpha = anchoredDraggableState.offset / swipeOffset
     val swipeToIdle: suspend () -> Unit = {
         anchoredDraggableState.animateTo(SwipeableFeedingItemState.Idle)
@@ -104,7 +107,8 @@ internal fun SwipeableFeedingItem(
 @OptIn(ExperimentalFoundationApi::class)
 private fun createAnchoredDraggableState(
     swipeOffset: Float,
-    velocity: Float
+    velocity: Float,
+    decay: DecayAnimationSpec<Float>
 ): AnchoredDraggableState<SwipeableFeedingItemState> {
     val anchors = DraggableAnchors {
         SwipeableFeedingItemState.Idle at 0f
@@ -114,9 +118,10 @@ private fun createAnchoredDraggableState(
     return AnchoredDraggableState(
         initialValue = SwipeableFeedingItemState.Idle,
         anchors = anchors,
-        positionalThreshold = { distance -> distance / 2 },
+        positionalThreshold = { distance: Float -> distance / 2 },
         velocityThreshold = { velocity },
-        animationSpec = SpringSpec()
+        snapAnimationSpec = SpringSpec(),
+        decayAnimationSpec = decay
     )
 }
 

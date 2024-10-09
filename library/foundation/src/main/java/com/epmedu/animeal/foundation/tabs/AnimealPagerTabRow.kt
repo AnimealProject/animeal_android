@@ -1,6 +1,5 @@
 package com.epmedu.animeal.foundation.tabs
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -10,15 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -43,7 +41,6 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
  * @param modifier The [Modifier].
  * @param backgroundColor background color.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimealPagerTabRow(
     pagerState: PagerState,
@@ -73,13 +70,14 @@ fun AnimealPagerTabRow(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AnimealPagerTab(
     animalType: AnimalType,
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme()) {
+    CompositionLocalProvider(LocalRippleConfiguration provides null) {
         Tab(
             selected = selected,
             onClick = onClick,
@@ -106,19 +104,6 @@ private fun AnimealPagerTab(
     }
 }
 
-class NoRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor(): Color = Color.Unspecified
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(
-        draggedAlpha = 0f,
-        focusedAlpha = 0f,
-        hoveredAlpha = 0f,
-        pressedAlpha = 0f,
-    )
-}
-
 @Composable
 private fun AnimealPagerTabIndicator(
     modifier: Modifier = Modifier,
@@ -142,7 +127,6 @@ private fun AnimealPagerTabDivider(modifier: Modifier = Modifier) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @AnimealPreview
 @Composable
 private fun AnimealTabPreview() {

@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.immutable.collections)
 
     implementation(libs.compose.material)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.ui.tooling)
