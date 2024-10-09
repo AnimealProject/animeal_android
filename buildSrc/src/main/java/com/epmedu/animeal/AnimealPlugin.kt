@@ -5,6 +5,7 @@ import com.android.build.gradle.LibraryPlugin
 import com.epmedu.animeal.configure.configureAndroidApplication
 import com.epmedu.animeal.configure.configureAndroidLibrary
 import com.epmedu.animeal.configure.configureBuildFeatures
+import com.epmedu.animeal.configure.configureKotlin
 import com.epmedu.animeal.internal.applicationExtension
 import com.epmedu.animeal.internal.libraryExtension
 import org.gradle.api.Plugin
@@ -26,6 +27,8 @@ open class AnimealPlugin : Plugin<Project> {
         val pluginExtension = project.extensions.create<AnimealPluginExtension>("animealPlugin")
 
         project.afterEvaluate {
+            configureKotlin()
+
             plugins.all {
                 when (this) {
                     is AppPlugin -> applicationExtension.configureBuildFeatures(pluginExtension)
