@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.library.foundation)
     implementation(projects.library.resources)
 
+    debugImplementation(projects.shared.feature.debugmenu)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.router)
     implementation(projects.shared.feature.users)
