@@ -25,6 +25,7 @@ dependencies {
     debugImplementation(libs.compose.ui)
     debugImplementation(libs.compose.ui.preview)
     debugImplementation(libs.compose.material)
+    debugImplementation(libs.compose.material.icons.extended)
     debugImplementation(libs.androidx.viewmodel)
     debugImplementation(libs.androidx.viewmodel.compose)
 

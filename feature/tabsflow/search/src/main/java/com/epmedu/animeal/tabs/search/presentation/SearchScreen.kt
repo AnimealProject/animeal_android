@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.withCreated
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue

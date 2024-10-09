@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -41,7 +42,7 @@ internal fun SwipeableFeedingItem(
     val (swipeOffset, velocity) = with(LocalDensity.current) {
         -160.dp.toPx() to 125.dp.toPx()
     }
-    val anchoredDraggableState = remember { createAnchoredDraggableState(swipeOffset, velocity) }
+    val anchoredDraggableState = rememberAnchoredDraggableState(swipeOffset, velocity)
     val buttonsAlpha = anchoredDraggableState.offset / swipeOffset
     val swipeToIdle: suspend () -> Unit = {
         anchoredDraggableState.animateTo(SwipeableFeedingItemState.Idle)
@@ -101,23 +102,29 @@ internal fun SwipeableFeedingItem(
     }
 }
 
+@Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun createAnchoredDraggableState(
+private fun rememberAnchoredDraggableState(
     swipeOffset: Float,
-    velocity: Float
+    velocity: Float,
 ): AnchoredDraggableState<SwipeableFeedingItemState> {
+    val decay = rememberSplineBasedDecay<Float>()
+
     val anchors = DraggableAnchors {
         SwipeableFeedingItemState.Idle at 0f
         SwipeableFeedingItemState.Swiped at swipeOffset
     }
 
-    return AnchoredDraggableState(
-        initialValue = SwipeableFeedingItemState.Idle,
-        anchors = anchors,
-        positionalThreshold = { distance -> distance / 2 },
-        velocityThreshold = { velocity },
-        animationSpec = SpringSpec()
-    )
+    return remember {
+        AnchoredDraggableState(
+            initialValue = SwipeableFeedingItemState.Idle,
+            anchors = anchors,
+            positionalThreshold = { distance: Float -> distance / 2 },
+            velocityThreshold = { velocity },
+            snapAnimationSpec = SpringSpec(),
+            decayAnimationSpec = decay
+        )
+    }
 }
 
 internal enum class SwipeableFeedingItemState {
