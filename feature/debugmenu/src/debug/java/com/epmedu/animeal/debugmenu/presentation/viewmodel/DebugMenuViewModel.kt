@@ -2,6 +2,8 @@ package com.epmedu.animeal.debugmenu.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
+import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.debugmenu.domain.DebugMenuRepository
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent
 import com.epmedu.animeal.debugmenu.presentation.DebugMenuScreenEvent.ResetGeolocationPermissionRequestedAgain
@@ -18,7 +20,12 @@ internal class DebugMenuViewModel @Inject constructor(
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
     private val routerRepository: RouterRepository,
     private val debugMenuRepository: DebugMenuRepository
-) : ViewModel() {
+) : ViewModel(),
+    StateDelegate<DebugMenuState> by DefaultStateDelegate(
+        initialState = DebugMenuState(
+            useMockedFeedingPoints = debugMenuRepository.useMockedFeedingPoints
+        )
+    ) {
 
     fun handleEvents(event: DebugMenuScreenEvent) {
         when (event) {

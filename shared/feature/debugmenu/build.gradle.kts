@@ -14,6 +14,8 @@ animealPlugin {
 }
 
 dependencies {
+    debugImplementation(libs.androidx.datastore)
+
     debugImplementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }
