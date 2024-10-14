@@ -18,18 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.common.validation.Constants.GE_PHONE_NUMBER_LENGTH
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
+
+internal const val GE_PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
 
 @Composable
 fun PhoneNumberInput(
@@ -83,60 +81,14 @@ fun PhoneNumberInput(
                 )
             }
         },
-        visualTransformation = if (useNumberFormatter) GePhoneFormatTransformation else VisualTransformation.None,
+        visualTransformation = if (useNumberFormatter) {
+            GeorgianPhoneTransformation()
+        } else {
+            VisualTransformation.None
+        },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         keyboardActions = KeyboardActions(onDone = onDone)
     )
-}
-
-internal const val GE_PHONE_NUMBER_FORMAT = "xxx xx-xx-xx"
-
-object GePhoneFormatTransformation : VisualTransformation {
-
-    override fun filter(text: AnnotatedString): TransformedText {
-        val trimmed =
-            if (text.text.length >= GE_PHONE_NUMBER_LENGTH) {
-                text.text.substring(0..8)
-            } else {
-                text.text
-            }
-        val annotatedString = buildAnnotatedString {
-            for (i in trimmed.indices) {
-                append(trimmed[i])
-                if (i == 2) {
-                    append(" ")
-                } else if (i == 4 || i == 6) {
-                    append("-")
-                }
-            }
-            GE_PHONE_NUMBER_FORMAT.takeLast(GE_PHONE_NUMBER_FORMAT.length - length)
-            toAnnotatedString()
-        }
-        return TransformedText(
-            text = annotatedString,
-            offsetMapping = object : OffsetMapping {
-                override fun originalToTransformed(offset: Int): Int {
-                    return when {
-                        offset <= 2 -> offset
-                        offset <= 4 -> offset + 1
-                        offset <= 6 -> offset + 2
-                        offset <= 9 -> offset + 3
-                        else -> 12
-                    }
-                }
-
-                override fun transformedToOriginal(offset: Int): Int {
-                    return when {
-                        offset <= 2 -> offset
-                        offset <= 4 -> offset - 1
-                        offset <= 8 -> offset - 2
-                        offset <= 10 -> offset - 3
-                        else -> 9
-                    }
-                }
-            }
-        )
-    }
 }
 
 @AnimealPreview
