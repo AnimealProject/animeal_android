@@ -197,6 +197,9 @@
     <string name="geolocation_permission_title">We can calculate the route to the feeding point. To use the function please grant the permission to use the \"Geolocation\"</string>
     <string name="no_thanks">No, thanks</string>
     <string name="open_settings">Open settings</string>
+    <string name="filter_all">All</string>
+    <string name="filter_newly_fed">Newly fed</string>
+    <string name="filter_no_food">No food</string>
 
     <string name="session_expired">Your user session has expired</string>
     <string name="coming_soon">Coming soon…</string>
