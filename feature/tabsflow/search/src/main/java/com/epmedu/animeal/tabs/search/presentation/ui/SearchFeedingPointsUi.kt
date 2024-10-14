@@ -12,12 +12,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
@@ -35,15 +40,26 @@ fun SearchFeedingPointsUi(
     onEvent: (SearchScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val groupedPoints = remember(feedingPoints) {
-        feedingPoints.groupBy { it.city }.map { entry ->
-            GroupFeedingPointsModel(
-                title = entry.key,
-                points = entry.value
-            )
+    var selectedFilter by remember { mutableStateOf(SearchFilters.All) }
+    val groupedPoints by remember(feedingPoints) {
+        derivedStateOf {
+            feedingPoints
+                .run {
+                    when (selectedFilter) {
+                        SearchFilters.All -> this
+                        SearchFilters.NewlyFed -> filter { it.feedStatus == FeedStatus.Fed }
+                        SearchFilters.NoFood -> filter { it.feedStatus == FeedStatus.Starved }
+                    }
+                }
+                .groupBy { it.city }
+                .map { entry ->
+                    GroupFeedingPointsModel(
+                        title = entry.key,
+                        points = entry.value
+                    )
+                }
         }
     }
-
     val scrollState = rememberLazyListState()
     val isSearchResultsEmpty = groupedPoints.isEmpty() && query.isNotEmpty()
 
@@ -53,6 +69,7 @@ fun SearchFeedingPointsUi(
         contentPadding = PaddingValues(bottom = 8.dp)
     ) {
         renderSearchView(query, animalType, onEvent)
+        renderFilters(selectedFilter = selectedFilter, onSelectFilter = { selectedFilter = it })
 
         when {
             isSearchResultsEmpty -> renderEmptyListState(query)
@@ -77,6 +94,15 @@ private fun LazyListScope.renderSearchView(
                 onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))
             }
         )
+    }
+}
+
+private fun LazyListScope.renderFilters(
+    selectedFilter: SearchFilters,
+    onSelectFilter: (SearchFilters) -> Unit
+) {
+    item {
+        SearchFilters(selectedFilter, onSelectFilter)
     }
 }
 

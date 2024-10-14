@@ -39,4 +39,8 @@ object CustomColor {
 
     val TextGrey = Color(0xFF898A8D)
     val TrolleyGrey = Color(0xFF818181)
+
+    val FilterGrey = Color(0xFF706F6F)
+    val FilterGreen = Color(0xFF3BC372)
+    val FilterRed = Color(0xFFF04E45)
 }
