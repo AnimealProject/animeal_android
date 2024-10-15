@@ -34,9 +34,9 @@ class GeorgianPhoneTransformation : VisualTransformation {
                 override fun transformedToOriginal(offset: Int): Int {
                     return when (offset) {
                         in 0..3 -> offset
-                        in 5..6 -> offset - 1
-                        in 8..9 -> offset - 2
-                        in 11..12 -> offset - 3
+                        in 4..6 -> offset - 1
+                        in 7..9 -> offset - 2
+                        in 10..12 -> offset - 3
                         else -> -1
                     }
                 }
