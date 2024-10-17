@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -52,7 +53,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
-import kotlinx.coroutines.flow.filterNot
 
 @Suppress("LongParameterList")
 internal class FeedingRepositoryImpl(
