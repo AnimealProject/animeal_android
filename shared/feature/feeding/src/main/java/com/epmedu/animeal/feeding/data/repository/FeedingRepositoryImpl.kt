@@ -52,6 +52,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import type.FeedingStatus.rejected
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus as DomainFeedingStatus
+import kotlinx.coroutines.flow.filterNot
 
 @Suppress("LongParameterList")
 internal class FeedingRepositoryImpl(
@@ -159,6 +160,9 @@ internal class FeedingRepositoryImpl(
 
     private fun subscribeToAllFeedingHistories(): Flow<Any?> {
         return feedingHistoryApi.subscribeToFeedingHistoriesCreation()
+            .filterNot { data ->
+                data.onCreateFeedingHistoryExt().isExpired()
+            }
             .addCreatedFeedingHistoryToFeedingsMap()
     }
 
@@ -232,7 +236,8 @@ internal class FeedingRepositoryImpl(
     private fun subscribeToAssignedFeedingHistories(): Flow<Any?> {
         return feedingHistoryApi.subscribeToFeedingHistoriesCreation()
             .filter { data ->
-                data.onCreateFeedingHistoryExt()?.assignedModerators().containsCurrentUserId()
+                data.onCreateFeedingHistoryExt()?.assignedModerators().containsCurrentUserId() &&
+                    data.onCreateFeedingHistoryExt().isExpired().not()
             }
             .addCreatedFeedingHistoryToFeedingsMap()
     }
@@ -322,42 +327,36 @@ internal class FeedingRepositoryImpl(
     ): List<Feeding> {
         val usersMap = users.associateBy { it.id }
 
-        return container.feedingHistories.orEmpty().mapNotNull { feeding ->
+        return container.feedingHistories.orEmpty().mapNotNull { feedingHistory ->
             when {
-                feeding.isCanceled() -> {
+                feedingHistory.isExpired() -> {
                     null
                 }
 
                 else -> {
-                    feeding?.toFeeding(
-                        feeder = usersMap[feeding.userId()],
-                        reviewedBy = usersMap[feeding.moderatedBy()],
-                        rejectionReason = feeding.reason(),
+                    feedingHistory?.toFeeding(
+                        feeder = usersMap[feedingHistory.userId()],
+                        reviewedBy = usersMap[feedingHistory.moderatedBy()],
+                        rejectionReason = feedingHistory.reason(),
                         getImageFrom = ::getImageFromName
                     )
                 }
             }
         } + container.feedings.orEmpty().mapNotNull { feeding ->
-            when {
-                feeding.isCanceled() -> {
-                    null
-                }
-
-                else -> {
-                    feeding?.toFeeding(
-                        feeder = usersMap[feeding.userId()],
-                        getImageFrom = ::getImageFromName
-                    )
-                }
-            }
+            feeding?.toFeeding(
+                feeder = usersMap[feeding.userId()],
+                getImageFrom = ::getImageFromName
+            )
         }
     }
 
-    private fun SearchFeedingsQuery.Item?.isCanceled() =
-        this?.status() == rejected && images().isEmpty()
+    private fun SearchFeedingHistoriesQuery.Item?.isExpired(): Boolean {
+        return this?.status() == rejected && images().isEmpty()
+    }
 
-    private fun SearchFeedingHistoriesQuery.Item?.isCanceled() =
-        this?.status() == rejected && images().isEmpty()
+    private fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt?.isExpired(): Boolean {
+        return this?.status() == rejected && images().isEmpty()
+    }
 
     private suspend fun getImageFromName(fileName: String): NetworkFile {
         return NetworkFile(
