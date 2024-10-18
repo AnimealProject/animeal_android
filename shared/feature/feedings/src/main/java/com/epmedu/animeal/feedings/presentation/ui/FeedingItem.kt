@@ -60,7 +60,7 @@ internal fun FeedingItem(
 @AnimealPreview
 @Composable
 fun FeedingItemPreview() {
-    val longText = "Very very very very very very very very very long text"
+    val longText = "1234567890123456789012345 25 symbols word"
     val shortText = "Short text"
     val image = NetworkFile(
         name = EMPTY_STRING,

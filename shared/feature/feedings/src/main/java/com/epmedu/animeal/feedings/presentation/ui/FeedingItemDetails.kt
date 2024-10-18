@@ -31,7 +31,9 @@ internal fun FeedingItemDetails(feedingModel: FeedingModel) {
         ) {
             Text(
                 text = feedingModel.title,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 16.dp),
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
