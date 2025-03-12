@@ -70,6 +70,9 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
+      - name: Run Android Lint
+        run: ./gradlew lint
+        
       - name: Run Unit Tests
         run: ./gradlew test
 
