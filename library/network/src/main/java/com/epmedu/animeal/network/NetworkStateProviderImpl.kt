@@ -1,6 +1,5 @@
 package com.epmedu.animeal.network
 
-import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +8,6 @@ import kotlinx.coroutines.flow.flow
 class NetworkStateProviderImpl(
     private val connectivityManager: ConnectivityManager
 ) : NetworkStateProvider {
-    @SuppressLint("MissingPermission")
     override fun getNetworkState(): Flow<NetworkState> {
         return flow {
             val networkCapabilities = connectivityManager.getNetworkCapabilities(
