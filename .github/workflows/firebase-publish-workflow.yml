@@ -91,7 +91,7 @@ jobs:
         run: mv app/build/outputs/apk/${{ matrix.flavor }}/release/app-${{ matrix.flavor }}-release.apk ${{ matrix.flavor }}-release-${{ env.VERSION_NAME }}.apk
 
       - name: Upload release apk
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.flavor }}-release-${{ env.VERSION_NAME }}.apk
           path: ${{ matrix.flavor }}-release-${{ env.VERSION_NAME }}.apk
