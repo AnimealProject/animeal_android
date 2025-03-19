@@ -107,7 +107,7 @@ jobs:
         run: ./.github/scripts/extract-version.sh
 
       - name: Download releases
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Create Google Service Account.json
         run: echo $FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT_JSON >> service_account.json
