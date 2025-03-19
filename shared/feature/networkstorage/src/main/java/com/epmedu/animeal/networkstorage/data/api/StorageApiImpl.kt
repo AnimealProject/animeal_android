@@ -9,7 +9,6 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
 import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 internal class StorageApiImpl(
     private val errorHandler: TokenExpirationHandler
@@ -56,7 +55,7 @@ internal class StorageApiImpl(
                         if (isRefreshTokenHasExpiredException(it)) {
                             handleRefreshTokenExpiration()
                         } else {
-                            resumeWithException(it)
+                            resume("")
                         }
                     }
                 )
