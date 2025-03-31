@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(libs.androidx.datastore)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

@@ -9,7 +9,6 @@ import com.amplifyframework.auth.exceptions.SessionExpiredException
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.core.Amplify
-import com.epmedu.animeal.auth.constants.UserAttributesKey
 import com.epmedu.animeal.auth.error.WrongCodeError
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.extensions.suspendCancellableCoroutine
@@ -21,7 +20,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 internal class AuthAPIImpl(
-    private val userAttributesAPI: UserAttributesAPI,
     private val errorHandler: TokenExpirationHandler
 ) : AuthAPI,
     TokenExpirationHandler by errorHandler {
@@ -29,20 +27,18 @@ internal class AuthAPIImpl(
     override var authenticationType: AuthenticationType = AuthenticationType.Mobile
 
     private val AWSCognitoAuthSession.isExpired
-        get() = isSignedIn.not() &&
-            (
-                awsCredentialsResult.error is SessionExpiredException ||
-                    identityIdResult.error is SessionExpiredException ||
-                    userPoolTokensResult.error is SessionExpiredException ||
-                    userSubResult.error is SessionExpiredException
+        get() = isSignedIn.not() && (awsCredentialsResult.error is SessionExpiredException ||
+                identityIdResult.error is SessionExpiredException ||
+                userPoolTokensResult.error is SessionExpiredException ||
+                userSubResult.error is SessionExpiredException
                 )
 
     private val AWSCognitoAuthSession.isSignedInWithoutErrors
         get() = isSignedIn &&
-            awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
-            identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
-            userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
-            userSubResult.type == AuthSessionResult.Type.SUCCESS
+                awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
+                identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
+                userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
+                userSubResult.type == AuthSessionResult.Type.SUCCESS
 
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
@@ -194,7 +190,6 @@ internal class AuthAPIImpl(
     ): ApiResult<Unit> {
         return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
-            is AuthenticationType.Facebook -> sendPhoneCodeByUpdatingAttribute(phoneNumber)
         }
     }
 
@@ -204,13 +199,5 @@ internal class AuthAPIImpl(
                 resume(ApiResult.Success(Unit))
             }
         }
-    }
-
-    private suspend fun sendPhoneCodeByUpdatingAttribute(phoneNumber: String): ApiResult<Unit> {
-        return userAttributesAPI.updateUserAttributes(
-            userAttributes = listOf(
-                AuthUserAttribute(UserAttributesKey.phoneNumberKey, phoneNumber)
-            )
-        )
     }
 }

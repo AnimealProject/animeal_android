@@ -9,8 +9,7 @@ data class Profile(
     val surname: String = EMPTY_STRING,
     val phoneNumberRegion: Region = Region.GE,
     val phoneNumber: String = EMPTY_STRING,
-    val email: String = EMPTY_STRING
+    val email: String = EMPTY_STRING,
 ) {
-    fun isFilled() =
-        name.isNotBlank() && surname.isNotBlank() && email.isNotBlank()
+    fun isFilled() = name.isNotBlank() && surname.isNotBlank() && email.isNotBlank()
 }

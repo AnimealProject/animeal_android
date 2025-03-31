@@ -14,8 +14,4 @@ class AuthenticationTypeRepositoryImpl @Inject constructor(
     override fun setAuthenticationTypeAsMobile() {
         authAPI.authenticationType = AuthenticationType.Mobile
     }
-
-    override fun setAuthenticationTypeAsFacebook(isPhoneNumberVerified: Boolean) {
-        authAPI.authenticationType = AuthenticationType.Facebook(isPhoneNumberVerified)
-    }
 }

@@ -3,13 +3,11 @@ package com.epmedu.animeal.signup.finishprofile.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epmedu.animeal.auth.AuthenticationType
-import com.epmedu.animeal.common.component.BuildConfigProvider
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.foundation.common.UiText
-import com.epmedu.animeal.networkuser.domain.usecase.DeleteNetworkUserUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
@@ -28,7 +26,6 @@ import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenE
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.NavigatedToNextDestination
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Submit
-import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.EnterCode
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Onboarding
 import com.epmedu.animeal.signup.finishprofile.presentation.viewmodel.FinishProfileNextDestination.Tabs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +34,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishProfileViewModel @Inject constructor(
-    private val buildConfigProvider: BuildConfigProvider,
     private val actionDelegate: ActionDelegate,
     private val profileInputFormHandler: ProfileInputFormHandler,
     private val getProfileUseCase: GetProfileUseCase,
@@ -45,7 +41,6 @@ internal class FinishProfileViewModel @Inject constructor(
     private val saveProfileUseCase: SaveProfileUseCase,
     private val updateNetworkProfileUseCase: UpdateNetworkProfileUseCase,
     private val clearProfileUseCase: ClearProfileUseCase,
-    private val deleteNetworkUserUseCase: DeleteNetworkUserUseCase,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
@@ -77,14 +72,6 @@ internal class FinishProfileViewModel @Inject constructor(
     private fun loadAuthenticationType() {
         viewModelScope.launch {
             authenticationType = getAuthenticationTypeUseCase()
-            if (authenticationType is AuthenticationType.Facebook) {
-                profileInputFormHandler.updateState {
-                    copy(
-                        isCountrySelectorClickable = buildConfigProvider.isProdFlavor.not(),
-                        isPhoneNumberEnabled = true
-                    )
-                }
-            }
         }
     }
 
@@ -96,14 +83,17 @@ internal class FinishProfileViewModel @Inject constructor(
                         validateNameUseCase(name),
                         validateSurnameUseCase(surname),
                         validateEmailUseCase(email),
-                        validatePhoneNumberUseCase(phoneNumber, phoneNumberRegion.phoneNumberDigitsCount)
+                        validatePhoneNumberUseCase(
+                            phoneNumber,
+                            phoneNumberRegion.phoneNumberDigitsCount
+                        )
                     )
                 }
                 updateState {
                     copy(
                         profileInputFormState = inputFormState,
                         isDoneButtonEnabled = errors.all { it is UiText.Empty } &&
-                            inputFormState.isAgeConfirmed
+                                inputFormState.isAgeConfirmed
                     )
                 }
             }
@@ -125,7 +115,6 @@ internal class FinishProfileViewModel @Inject constructor(
             Cancel -> {
                 when (authenticationType) {
                     AuthenticationType.Mobile -> logout()
-                    is AuthenticationType.Facebook -> removeUnfinishedNetworkUser()
                 }
             }
 
@@ -166,19 +155,6 @@ internal class FinishProfileViewModel @Inject constructor(
         }
     }
 
-    private fun removeUnfinishedNetworkUser() {
-        viewModelScope.launch {
-            performAction(
-                action = deleteNetworkUserUseCase::invoke,
-                onSuccess = {
-                    clearProfileUseCase()
-                    navigateBack()
-                },
-                onError = {}
-            )
-        }
-    }
-
     private fun navigateBack() {
         viewModelScope.launch {
             updateState { copy(nextDestination = Onboarding) }
@@ -202,7 +178,6 @@ internal class FinishProfileViewModel @Inject constructor(
             copy(
                 nextDestination = when (authenticationType) {
                     AuthenticationType.Mobile -> Tabs
-                    is AuthenticationType.Facebook -> EnterCode
                 }
             )
         }

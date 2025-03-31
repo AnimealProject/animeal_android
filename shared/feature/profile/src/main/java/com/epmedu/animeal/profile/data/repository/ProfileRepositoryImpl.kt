@@ -26,7 +26,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+//    @GsonPreferences private val gson: Gson,
 ) : ProfileRepository {
 
     override fun getProfile(): Flow<Profile> {
@@ -36,7 +37,7 @@ internal class ProfileRepositoryImpl @Inject constructor(
                 surname = preferences.surname,
                 phoneNumberRegion = preferences.phoneNumberRegion,
                 phoneNumber = preferences.phoneNumber,
-                email = preferences.email
+                email = preferences.email,
             )
         }
     }
