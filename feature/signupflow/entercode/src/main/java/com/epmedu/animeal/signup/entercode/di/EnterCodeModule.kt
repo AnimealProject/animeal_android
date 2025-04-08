@@ -1,8 +1,7 @@
 package com.epmedu.animeal.signup.entercode.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.signup.entercode.data.EnterCodeRepositoryImpl
 import com.epmedu.animeal.signup.entercode.domain.EnterCodeRepository
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
@@ -21,9 +20,9 @@ internal object EnterCodeModule {
     @ViewModelScoped
     @Provides
     fun providesEnterCodeRepository(
-        dataStore: DataStore<Preferences>,
+        profileRepository: ProfileRepository,
         authAPI: AuthAPI,
-    ): EnterCodeRepository = EnterCodeRepositoryImpl(dataStore, authAPI)
+    ): EnterCodeRepository = EnterCodeRepositoryImpl(profileRepository, authAPI)
 
     @ViewModelScoped
     @Provides

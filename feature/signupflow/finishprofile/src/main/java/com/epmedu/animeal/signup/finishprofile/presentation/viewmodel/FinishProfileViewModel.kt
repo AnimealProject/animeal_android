@@ -93,7 +93,7 @@ internal class FinishProfileViewModel @Inject constructor(
                     copy(
                         profileInputFormState = inputFormState,
                         isDoneButtonEnabled = errors.all { it is UiText.Empty } &&
-                                inputFormState.isAgeConfirmed
+                            inputFormState.isAgeConfirmed
                     )
                 }
             }

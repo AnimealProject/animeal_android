@@ -29,7 +29,10 @@ fun OnboardingScreen() {
 
     OnboardingScreenUI(
         onSignInMobile = { viewModel.handleEvent(SignInWithMobileClicked) },
-        continueClicked = { navigator.navigateToTabs() },
+        onContinueClick = {
+            viewModel.saveGuestProfile()
+            navigator.navigateToTabs()
+        },
     )
 }
 

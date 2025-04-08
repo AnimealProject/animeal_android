@@ -12,7 +12,7 @@ import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
 @Composable
 internal fun OnboardingScreenUI(
     onSignInMobile: () -> Unit,
-    continueClicked: () -> Unit
+    onContinueClick: () -> Unit
 ) {
     Column {
         Spacer(modifier = Modifier.weight(1f))
@@ -22,7 +22,7 @@ internal fun OnboardingScreenUI(
         )
         ButtonsBlock(
             onSignInMobile = onSignInMobile,
-            continueClicked = continueClicked,
+            onContinueClick = onContinueClick,
         )
         Spacer(modifier = Modifier.weight(1f))
     }
@@ -34,7 +34,7 @@ private fun OnboardingScreenWithoutFacebookPreview() {
     AnimealTheme {
         OnboardingScreenUI(
             onSignInMobile = {},
-            continueClicked = {},
+            onContinueClick = {},
         )
     }
 }
@@ -45,7 +45,7 @@ private fun OnboardingScreenWithFacebookPreview() {
     AnimealTheme {
         OnboardingScreenUI(
             onSignInMobile = {},
-            continueClicked = {},
+            onContinueClick = {},
         )
     }
 }

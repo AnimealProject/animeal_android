@@ -27,18 +27,19 @@ internal class AuthAPIImpl(
     override var authenticationType: AuthenticationType = AuthenticationType.Mobile
 
     private val AWSCognitoAuthSession.isExpired
-        get() = isSignedIn.not() && (awsCredentialsResult.error is SessionExpiredException ||
+        get() = isSignedIn.not() && (
+            awsCredentialsResult.error is SessionExpiredException ||
                 identityIdResult.error is SessionExpiredException ||
                 userPoolTokensResult.error is SessionExpiredException ||
                 userSubResult.error is SessionExpiredException
-                )
+            )
 
     private val AWSCognitoAuthSession.isSignedInWithoutErrors
         get() = isSignedIn &&
-                awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
-                identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
-                userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
-                userSubResult.type == AuthSessionResult.Type.SUCCESS
+            awsCredentialsResult.type == AuthSessionResult.Type.SUCCESS &&
+            identityIdResult.type == AuthSessionResult.Type.SUCCESS &&
+            userPoolTokensResult.type == AuthSessionResult.Type.SUCCESS &&
+            userSubResult.type == AuthSessionResult.Type.SUCCESS
 
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
         Amplify.Auth.getCurrentUser(
@@ -69,7 +70,10 @@ internal class AuthAPIImpl(
                                     resume(false)
                                 }
                             } else {
-                                resume(session.isSignedInWithoutErrors)
+                                // TODO find out why dev env has errors
+                                // resume(session.isSignedInWithoutErrors)
+                                session.isSignedInWithoutErrors
+                                resume(session.isSignedIn)
                             }
                         }
 

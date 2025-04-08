@@ -7,6 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
+import com.epmedu.animeal.profile.domain.model.BasicProfile
+import com.epmedu.animeal.profile.domain.model.GuestProfile
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,10 +30,10 @@ internal class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getProfile().collect {
-                // TODO check whether any valid user exists. User model needs to be reworked in aligning with guest role
-                if (it.isFilled()) {
-                    getRefreshTokenExpiration()
+            repository.getProfile().collect { profile ->
+                when (profile) {
+                    is BasicProfile -> getRefreshTokenExpiration()
+                    is GuestProfile -> Unit
                 }
             }
         }

@@ -8,8 +8,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
+import com.epmedu.animeal.profile.domain.model.GuestProfile
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.ErrorShown
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInFinished
@@ -44,12 +44,7 @@ internal class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private fun showError() {
-        loadingHandler.hideLoading()
-        updateState { copy(isError = true) }
-    }
-
-    private fun saveLocalProfile(profile: Profile) {
-        viewModelScope.launch { saveProfileUseCase(profile) }
+    fun saveGuestProfile() {
+        viewModelScope.launch { saveProfileUseCase(GuestProfile) }
     }
 }
