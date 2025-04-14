@@ -2,7 +2,7 @@ package com.epmedu.animeal.networkuser.data
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
-import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.users.domain.model.UserGroup
 
 class NetworkRepositoryMock : NetworkRepository {
@@ -22,11 +22,11 @@ class NetworkRepositoryMock : NetworkRepository {
         return ActionResult.Success(UserGroup.Administrator)
     }
 
-    override suspend fun getNetworkProfile(): Profile? {
+    override suspend fun getNetworkProfile(): BasicProfile? {
         return null
     }
 
-    override suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult<Unit> {
+    override suspend fun updateNetworkUserAttributes(profile: BasicProfile): ActionResult<Unit> {
         return ActionResult.Success(Unit)
     }
 

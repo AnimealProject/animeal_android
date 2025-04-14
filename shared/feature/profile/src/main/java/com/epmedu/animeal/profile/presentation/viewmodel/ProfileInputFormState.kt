@@ -1,11 +1,11 @@
 package com.epmedu.animeal.profile.presentation.viewmodel
 
 import com.epmedu.animeal.foundation.common.UiText
-import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.profile.domain.model.getFormat
 
 data class ProfileInputFormState(
-    val profile: Profile = Profile(),
+    val profile: BasicProfile = BasicProfile(),
     val isAgeConfirmed: Boolean = false,
     val formState: FormState = FormState.READ_ONLY,
     val isCountrySelectorClickable: Boolean = false,

@@ -5,11 +5,11 @@ import com.epmedu.animeal.auth.constants.UserAttributesKey.emailKey
 import com.epmedu.animeal.auth.constants.UserAttributesKey.nameKey
 import com.epmedu.animeal.auth.constants.UserAttributesKey.phoneNumberKey
 import com.epmedu.animeal.auth.constants.UserAttributesKey.surnameKey
-import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 
 class ProfileToAuthUserAttributesMapper {
 
-    fun map(profile: Profile): List<AuthUserAttribute> {
+    fun map(profile: BasicProfile): List<AuthUserAttribute> {
         return listOf(
             AuthUserAttribute(nameKey, profile.name),
             AuthUserAttribute(surnameKey, profile.surname),

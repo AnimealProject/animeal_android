@@ -1,8 +1,7 @@
 package com.epmedu.animeal.signup.enterphone.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.epmedu.animeal.auth.AuthAPI
+import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.signup.enterphone.data.EnterPhoneRepositoryImpl
 import com.epmedu.animeal.signup.enterphone.domain.EnterPhoneRepository
 import com.epmedu.animeal.signup.enterphone.domain.SavePhoneNumberInfoUseCase
@@ -20,9 +19,8 @@ internal object EnterPhoneModule {
     @ViewModelScoped
     @Provides
     fun providesEnterPhoneRepository(
-        dataStore: DataStore<Preferences>,
         authAPI: AuthAPI,
-    ): EnterPhoneRepository = EnterPhoneRepositoryImpl(dataStore, authAPI)
+    ): EnterPhoneRepository = EnterPhoneRepositoryImpl(authAPI)
 
     @ViewModelScoped
     @Provides
@@ -33,6 +31,6 @@ internal object EnterPhoneModule {
     @ViewModelScoped
     @Provides
     fun provideSavePhoneNumberUseCase(
-        repository: EnterPhoneRepository
+        repository: ProfileRepository
     ) = SavePhoneNumberInfoUseCase(repository)
 }

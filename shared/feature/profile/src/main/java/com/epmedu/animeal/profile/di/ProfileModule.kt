@@ -1,7 +1,6 @@
 package com.epmedu.animeal.profile.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import com.epmedu.animeal.common.di.gson.AbsGsonTypeAdapter
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
@@ -15,11 +14,14 @@ import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.profile.presentation.viewmodel.handler.ProfileInputFormHandler
 import com.epmedu.animeal.profile.presentation.viewmodel.handler.ProfileInputFormHandlerImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -28,13 +30,6 @@ internal object ProfileModule {
     @ViewModelScoped
     @Provides
     fun provideProfileValidator(): ProfileValidator = DefaultProfileValidator()
-
-    @ViewModelScoped
-    @Provides
-    fun provideProfileRepository(
-        dataStore: DataStore<Preferences>
-    ): ProfileRepository =
-        ProfileRepositoryImpl(dataStore)
 
     @ViewModelScoped
     @Provides
@@ -91,4 +86,16 @@ internal object ProfileModule {
         validateEmailUseCase,
         validatePhoneNumberUseCase
     )
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface ProfileBinding {
+
+    @Binds
+    fun bindProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
+
+    @IntoSet
+    @Binds
+    fun bindBasicUserAdapter(impl: BasicProfileTypeAdapter): AbsGsonTypeAdapter<*>
 }

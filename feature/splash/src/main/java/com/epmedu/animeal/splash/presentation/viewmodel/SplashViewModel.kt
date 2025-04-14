@@ -11,7 +11,6 @@ import com.epmedu.animeal.network.NetworkStateProvider
 import com.epmedu.animeal.networkuser.domain.usecase.GetCurrentUserGroupUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.GetIsPhoneNumberVerifiedUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
-import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsProfileSavedUseCase
 import com.epmedu.animeal.splash.domain.usecase.GetIsSignedInUseCase
@@ -35,7 +34,6 @@ internal class SplashViewModel @Inject constructor(
     private val getIsPhoneNumberVerifiedUseCase: GetIsPhoneNumberVerifiedUseCase,
     private val getCurrentUserGroupUseCase: GetCurrentUserGroupUseCase,
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
-    private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val setFinishProfileAsStartDestinationUseCase: SetFinishProfileAsStartDestinationUseCase,
     private val setOnboardingAsSignUpStartDestinationUseCase: SetOnboardingAsSignUpStartDestinationUseCase,
     private val networkStateProvider: NetworkStateProvider,
@@ -58,6 +56,7 @@ internal class SplashViewModel @Inject constructor(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun checkIfUserIsSignedIn() {
         viewModelScope.launch {
             if (getIsSignedInUseCase()) {
@@ -92,7 +91,6 @@ internal class SplashViewModel @Inject constructor(
                     navigateToNextDirection(SignUp)
                 }
                 isProfileSaved -> {
-                    setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = false)
                     setNextDestinationByNetworkState()
                     navigateToNextDirection(SignUp)
                 }

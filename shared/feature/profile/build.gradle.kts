@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.emoji2)
     implementation(libs.androidx.viewmodel)
+    implementation(libs.gson)
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui)

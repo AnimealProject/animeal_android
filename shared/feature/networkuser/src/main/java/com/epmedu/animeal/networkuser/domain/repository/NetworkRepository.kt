@@ -1,7 +1,7 @@
 package com.epmedu.animeal.networkuser.domain.repository
 
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
-import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.users.domain.model.UserGroup
 
 interface NetworkRepository {
@@ -14,9 +14,9 @@ interface NetworkRepository {
 
     suspend fun getUserGroup(shouldFetch: Boolean = false): ActionResult<UserGroup>
 
-    suspend fun getNetworkProfile(): Profile?
+    suspend fun getNetworkProfile(): BasicProfile?
 
-    suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult<Unit>
+    suspend fun updateNetworkUserAttributes(profile: BasicProfile): ActionResult<Unit>
 
     suspend fun logOut(): ActionResult<Unit>
 

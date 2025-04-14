@@ -7,9 +7,9 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.foundation.common.UiText
 import com.epmedu.animeal.networkuser.domain.usecase.UpdateNetworkProfileUseCase
-import com.epmedu.animeal.profile.data.model.Profile
 import com.epmedu.animeal.profile.domain.GetProfileUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.EDITABLE
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.EDITED
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.READ_ONLY
@@ -37,7 +37,7 @@ internal class ProfileViewModel @Inject constructor(
     StateDelegate<ProfileState> by DefaultStateDelegate(ProfileState()),
     ActionDelegate by actionDelegate {
 
-    private var lastSavedProfile = Profile()
+    private var lastSavedProfile = BasicProfile()
 
     init {
         loadProfile()

@@ -11,7 +11,7 @@ import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
-import com.epmedu.animeal.profile.data.model.Profile
+import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.users.domain.UsersRepository
 import com.epmedu.animeal.users.domain.model.UserGroup
 import javax.inject.Inject
@@ -77,14 +77,14 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNetworkProfile(): Profile? {
+    override suspend fun getNetworkProfile(): BasicProfile? {
         return when (val result = userAttributesAPI.fetchUserAttributes()) {
             is ApiResult.Success -> authUserAttributesToProfileMapper.map(attributes = result.data)
             is ApiResult.Failure -> null
         }
     }
 
-    override suspend fun updateNetworkUserAttributes(profile: Profile): ActionResult<Unit> {
+    override suspend fun updateNetworkUserAttributes(profile: BasicProfile): ActionResult<Unit> {
         return userAttributesAPI.updateUserAttributes(profileToAuthUserMapper.map(profile)).toActionResult()
     }
 

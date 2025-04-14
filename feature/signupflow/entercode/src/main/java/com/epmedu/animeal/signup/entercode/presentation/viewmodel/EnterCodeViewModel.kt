@@ -12,9 +12,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingH
 import com.epmedu.animeal.common.timer.tickerFlow
 import com.epmedu.animeal.networkuser.domain.usecase.GetNetworkProfileUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
-import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetFacebookAuthenticationTypeUseCase
 import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.signup.entercode.domain.FacebookConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.GetPhoneNumberUseCase
 import com.epmedu.animeal.signup.entercode.domain.MobileConfirmCodeUseCase
 import com.epmedu.animeal.signup.entercode.domain.SendCodeUseCase
@@ -40,11 +38,9 @@ internal class EnterCodeViewModel @Inject constructor(
     private val getAuthenticationTypeUseCase: GetAuthenticationTypeUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     private val mobileConfirmCodeUseCase: MobileConfirmCodeUseCase,
-    private val facebookConfirmCodeUseCase: FacebookConfirmCodeUseCase,
     private val getPhoneNumberUseCase: GetPhoneNumberUseCase,
     private val getNetworkProfileUseCase: GetNetworkProfileUseCase,
     private val saveProfileUseCase: SaveProfileUseCase,
-    private val setFacebookAuthenticationTypeUseCase: SetFacebookAuthenticationTypeUseCase,
     private val loadingHandler: LoadingHandler,
 ) : ViewModel(),
     ActionDelegate by actionDelegate,
@@ -80,7 +76,14 @@ internal class EnterCodeViewModel @Inject constructor(
         position: Int,
         number: String?
     ) {
-        updateState { copy(code = getNewCodeWithReplacedNumber(position, number).toImmutableList()) }
+        updateState {
+            copy(
+                code = getNewCodeWithReplacedNumber(
+                    position,
+                    number
+                ).toImmutableList()
+            )
+        }
     }
 
     private fun resendCode() {
@@ -103,7 +106,7 @@ internal class EnterCodeViewModel @Inject constructor(
             .collect()
     }
 
-    private suspend fun loadAuthenticationType() {
+    private fun loadAuthenticationType() {
         viewModelScope.launch {
             authenticationType = getAuthenticationTypeUseCase()
         }
@@ -117,7 +120,6 @@ internal class EnterCodeViewModel @Inject constructor(
                 lastCode = state.code
                 when (authenticationType) {
                     AuthenticationType.Mobile -> confirmSignIn()
-                    is AuthenticationType.Facebook -> confirmResendCode()
                 }
             }
         }
@@ -157,25 +159,6 @@ internal class EnterCodeViewModel @Inject constructor(
                     )
                 }
             } ?: updateNextDestination(FinishProfile)
-        }
-    }
-
-    private fun confirmResendCode() {
-        viewModelScope.launch {
-            performAction(
-                action = {
-                    facebookConfirmCodeUseCase(code = state.code)
-                },
-                onSuccess = {
-                    updateState { copy(isError = false) }
-                    setFacebookAuthenticationTypeUseCase(isPhoneNumberVerified = true)
-                    updateNextDestination(Tabs)
-                },
-                onError = {
-                    loadingHandler.hideLoading()
-                    updateState { copy(isError = true) }
-                }
-            )
         }
     }
 
