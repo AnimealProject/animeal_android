@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState
@@ -22,9 +21,10 @@ import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState.Pulsat
 import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState.Static
 import com.epmedu.animeal.feedings.presentation.ui.NewFeedingAnimation
 import com.epmedu.animeal.feedings.presentation.ui.NewFeedingAnimationSizeConfiguration
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.outlined.Pets
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun HomeFeedingsButton(
@@ -78,7 +78,7 @@ private fun StaticFeedingsButton(
         elevation = elevation(0.dp)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_pets),
+            imageVector = AnimealIcons.Outlined.Pets,
             contentDescription = null,
             tint = MaterialTheme.colors.onBackground,
         )

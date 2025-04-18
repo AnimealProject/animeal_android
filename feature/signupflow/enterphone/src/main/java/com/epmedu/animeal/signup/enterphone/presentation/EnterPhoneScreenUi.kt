@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealShortButton
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Georgia
 import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.modifier.focusOnGloballyPositioned
@@ -138,7 +140,7 @@ private fun ScaffoldAndBody(
                 useNumberFormatter = state.region == Region.GE,
                 isFlagClickable = state.isCountrySelectorClickable,
                 flag = if (state.region == Region.GE) {
-                    Flag(R.drawable.ic_georgia)
+                    Flag(iconFlag = AnimealIcons.Colored.Georgia)
                 } else {
                     Flag(emojiFlag = state.region.flagEmoji())
                 },

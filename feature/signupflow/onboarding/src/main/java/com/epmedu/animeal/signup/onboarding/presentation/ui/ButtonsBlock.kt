@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Phone
+import com.epmedu.animeal.foundation.icons.colored.SignInGuest
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -33,14 +36,14 @@ internal fun ButtonsBlock(
             contentColor = MaterialTheme.colors.onPrimary,
         ) {
             LoginButtonContent(
-                iconId = R.drawable.ic_phone,
+                icon = AnimealIcons.Colored.Phone,
                 textId = R.string.sign_in_mobile,
                 tint = MaterialTheme.colors.onPrimary
             )
         }
         AnimealSecondaryButtonOutlined(onClick = onContinueClick) {
             LoginButtonContent(
-                iconId = R.drawable.ic_sign_in_guest,
+                icon = AnimealIcons.Colored.SignInGuest,
                 textId = R.string.sign_in_as_guest,
                 tint = MaterialTheme.colors.primaryVariant
             )

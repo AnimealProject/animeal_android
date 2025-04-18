@@ -1,21 +1,42 @@
 package com.epmedu.animeal.feeding.presentation.model
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.FaceHappy
+import com.epmedu.animeal.foundation.icons.colored.FaceNeutral
+import com.epmedu.animeal.foundation.icons.colored.FaceUpset
+import com.epmedu.animeal.foundation.icons.colored.PendingOrange
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 
 enum class FeedStatus(
     @StringRes val titleId: Int,
-    @DrawableRes val iconId: Int,
+    val icon: ImageVector,
     val color: Color
 ) {
-    Fed(R.string.feed_status_fed, R.drawable.ic_face_happy, CustomColor.StatusGreen),
-    InProgress(R.string.feed_status_in_progress, R.drawable.ic_face_neutral, CustomColor.StatusYellow),
-    Pending(R.string.feed_status_pending, R.drawable.ic_pending_orange, CustomColor.StatusYellow),
-    Starved(R.string.feed_status_starved, R.drawable.ic_face_upset, CustomColor.StatusRed)
+    Fed(
+        titleId = R.string.feed_status_fed,
+        icon = AnimealIcons.Colored.FaceHappy,
+        color = CustomColor.StatusGreen
+    ),
+    InProgress(
+        titleId = R.string.feed_status_in_progress,
+        icon = AnimealIcons.Colored.FaceNeutral,
+        color = CustomColor.StatusYellow
+    ),
+    Pending(
+        titleId = R.string.feed_status_pending,
+        icon = AnimealIcons.Colored.PendingOrange,
+        color = CustomColor.StatusYellow
+    ),
+    Starved(
+        titleId = R.string.feed_status_starved,
+        icon = AnimealIcons.Colored.FaceUpset,
+        color = CustomColor.StatusRed
+    )
 }
 
 fun AnimalState.toFeedStatus(): FeedStatus =

@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.epmedu.animeal.extensions.copyText
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.outlined.Copy
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.spacer.WidthSpacer
@@ -74,9 +75,8 @@ internal fun DonateListItem(
                 text = donateInformation.paymentCredentials,
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
-                contentDescription = null,
-                tint = Color.Unspecified,
+                imageVector = AnimealIcons.Outlined.Copy,
+                contentDescription = null
             )
         }
     }

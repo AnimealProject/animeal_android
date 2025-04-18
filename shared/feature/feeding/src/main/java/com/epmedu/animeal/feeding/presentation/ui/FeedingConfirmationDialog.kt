@@ -19,12 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Attention
+import com.epmedu.animeal.foundation.icons.colored.WillFeedDialog
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -52,7 +54,7 @@ fun FeedingConfirmationDialog(
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp),
-                painter = painterResource(id = R.drawable.ic_attention),
+                imageVector = AnimealIcons.Colored.Attention,
                 contentDescription = null
             )
             Spacer(modifier = Modifier.weight(0.22f))
@@ -65,7 +67,7 @@ fun FeedingConfirmationDialog(
             Image(
                 modifier = Modifier
                     .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.ic_will_feed_dialog),
+                imageVector = AnimealIcons.Colored.WillFeedDialog,
                 contentScale = ContentScale.FillWidth,
                 contentDescription = null
             )

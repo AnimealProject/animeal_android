@@ -1,9 +1,16 @@
 package com.epmedu.animeal.feedings.presentation.model
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.epmedu.animeal.feeding.domain.model.FeedingStatus
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Approved
+import com.epmedu.animeal.foundation.icons.colored.Outdated
+import com.epmedu.animeal.foundation.icons.colored.PendingGrey
+import com.epmedu.animeal.foundation.icons.colored.PendingOrange
+import com.epmedu.animeal.foundation.icons.colored.PendingRed
+import com.epmedu.animeal.foundation.icons.colored.Rejected
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import kotlin.time.Duration.Companion.hours
@@ -11,24 +18,44 @@ import kotlin.time.Duration.Companion.minutes
 
 enum class FeedingModelStatus(
     @StringRes val titleId: Int,
-    @DrawableRes val iconId: Int,
+    val icon: ImageVector,
     val color: Color
 ) {
     AUTO_APPROVED(
-        R.string.feed_status_auto_approved,
-        R.drawable.ic_approved,
-        CustomColor.StatusGreen
+        titleId = R.string.feed_status_auto_approved,
+        icon = AnimealIcons.Colored.Approved,
+        color = CustomColor.StatusGreen
     ),
-    APPROVED(R.string.feed_status_approved, R.drawable.ic_approved, CustomColor.StatusGreen),
+    APPROVED(
+        titleId = R.string.feed_status_approved,
+        icon = AnimealIcons.Colored.Approved,
+        color = CustomColor.StatusGreen
+    ),
     PENDING_ORANGE(
-        R.string.feed_status_pending,
-        R.drawable.ic_pending_orange,
-        CustomColor.StatusYellow
+        titleId = R.string.feed_status_pending,
+        icon = AnimealIcons.Colored.PendingOrange,
+        color = CustomColor.StatusYellow
     ),
-    PENDING_RED(R.string.feed_status_pending, R.drawable.ic_pending_red, CustomColor.StatusRed),
-    PENDING_GREY(R.string.feed_status_pending, R.drawable.ic_pending_grey, CustomColor.StatusGrey),
-    REJECTED(R.string.feed_status_rejected, R.drawable.ic_rejected, CustomColor.StatusRed),
-    OUTDATED(R.string.feed_status_outdated, R.drawable.ic_outdated, CustomColor.StatusMaroon),
+    PENDING_RED(
+        titleId = R.string.feed_status_pending,
+        icon = AnimealIcons.Colored.PendingRed,
+        color = CustomColor.StatusRed
+    ),
+    PENDING_GREY(
+        titleId = R.string.feed_status_pending,
+        icon = AnimealIcons.Colored.PendingGrey,
+        color = CustomColor.StatusGrey
+    ),
+    REJECTED(
+        titleId = R.string.feed_status_rejected,
+        icon = AnimealIcons.Colored.Rejected,
+        color = CustomColor.StatusRed
+    ),
+    OUTDATED(
+        titleId = R.string.feed_status_outdated,
+        icon = AnimealIcons.Colored.Outdated,
+        color = CustomColor.StatusMaroon
+    ),
 }
 
 fun FeedingModelStatus.isPending() = this == FeedingModelStatus.PENDING_RED ||

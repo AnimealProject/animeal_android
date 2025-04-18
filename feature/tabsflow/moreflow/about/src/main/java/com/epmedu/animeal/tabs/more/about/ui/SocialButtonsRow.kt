@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.epmedu.animeal.foundation.button.AnimealSocialButton
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.outlined.Facebook
+import com.epmedu.animeal.foundation.icons.outlined.Instagram
+import com.epmedu.animeal.foundation.icons.outlined.Linkedin
+import com.epmedu.animeal.foundation.icons.outlined.Web
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.about.SocialMedia
 
 @Composable
@@ -22,19 +26,19 @@ internal fun SocialButtonsRow(
     ) {
         AnimealSocialButton(
             onClick = { onSocialClick(SocialMedia.FACEBOOK) },
-            iconResource = R.drawable.ic_facebook
+            icon = AnimealIcons.Outlined.Facebook
         )
         AnimealSocialButton(
             onClick = { onSocialClick(SocialMedia.INSTAGRAM) },
-            iconResource = R.drawable.ic_instagram
+            icon = AnimealIcons.Outlined.Instagram
         )
         AnimealSocialButton(
             onClick = { onSocialClick(SocialMedia.LINKEDIN) },
-            iconResource = R.drawable.ic_linkedin
+            icon = AnimealIcons.Outlined.Linkedin
         )
         AnimealSocialButton(
             onClick = { onSocialClick(SocialMedia.WEB) },
-            iconResource = R.drawable.ic_web
+            icon = AnimealIcons.Outlined.Web
         )
     }
 }

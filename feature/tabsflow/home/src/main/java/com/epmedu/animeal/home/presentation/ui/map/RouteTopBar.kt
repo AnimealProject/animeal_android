@@ -18,11 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.outlined.Cancel
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun RouteTopBar(
@@ -52,7 +52,7 @@ internal fun RouteTopBar(
             IconButton(onClick = onCancelClick) {
                 Icon(
                     modifier = Modifier.size(14.dp),
-                    painter = painterResource(R.drawable.ic_cancel),
+                    imageVector = AnimealIcons.Outlined.Cancel,
                     contentDescription = null
                 )
             }

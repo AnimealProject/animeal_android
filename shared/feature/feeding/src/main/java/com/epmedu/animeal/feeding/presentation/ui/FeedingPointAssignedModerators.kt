@@ -24,11 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Person
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.foundation.util.withLocalAlpha
@@ -94,7 +95,7 @@ private fun FeedingPointModerator(moderator: String) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_person),
+                imageVector = AnimealIcons.Colored.Person,
                 tint = CustomColor.Orange.withLocalAlpha(),
                 contentDescription = null
             )

@@ -9,13 +9,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.EmptyScreenBone
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -23,7 +24,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun AnimealPopUpScreen(
-    painterResource: Painter,
+    imageVector: ImageVector,
     @StringRes titleText: Int,
     @StringRes subtitleText: Int,
     modifier: Modifier = Modifier,
@@ -36,7 +37,7 @@ fun AnimealPopUpScreen(
     ) {
         Image(
             contentScale = ContentScale.None,
-            painter = painterResource,
+            imageVector = imageVector,
             contentDescription = null,
         )
         HeightSpacer(height = 16.dp)
@@ -62,9 +63,9 @@ fun AnimealPopUpScreen(
 private fun AnimealPopUpScreenPreview() {
     AnimealTheme {
         AnimealPopUpScreen(
-            painterResource(R.drawable.empty_screen_bone),
-            R.string.feeding_tab_all_reviewed_title,
-            R.string.feeding_tab_all_reviewed_subtitle
+            imageVector = AnimealIcons.Colored.EmptyScreenBone,
+            titleText = R.string.feeding_tab_all_reviewed_title,
+            subtitleText = R.string.feeding_tab_all_reviewed_subtitle
         )
     }
 }

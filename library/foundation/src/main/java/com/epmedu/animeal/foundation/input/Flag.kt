@@ -1,8 +1,8 @@
 package com.epmedu.animeal.foundation.input
 
-import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.vector.ImageVector
 
 data class Flag(
-    @DrawableRes val iconFlag: Int? = null,
+    val iconFlag: ImageVector? = null,
     val emojiFlag: String? = null,
 )

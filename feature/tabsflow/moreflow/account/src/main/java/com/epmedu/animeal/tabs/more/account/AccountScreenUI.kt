@@ -11,12 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.button.AnimealTextButtonWithIcon
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Delete
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
@@ -61,7 +62,7 @@ internal fun AccountScreenUI(
                 .padding(horizontal = 16.dp)
         ) {
             AnimealTextButtonWithIcon(
-                icon = painterResource(id = R.drawable.ic_delete),
+                icon = AnimealIcons.Colored.Delete,
                 text = stringResource(id = R.string.account_delete),
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Start,

@@ -10,7 +10,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -41,7 +40,7 @@ internal fun BottomNavigationBar(
                 BottomNavigationItem(
                     icon = {
                         Icon(
-                            painter = painterResource(id = item.icon),
+                            imageVector = item.icon,
                             contentDescription = stringResource(item.contentDescription)
                         )
                     },

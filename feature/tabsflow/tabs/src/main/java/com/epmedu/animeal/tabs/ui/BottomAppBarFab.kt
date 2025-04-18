@@ -15,13 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.common.route.TabsRoute
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.outlined.Home
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.NavigationTab
 
 @Composable
@@ -67,7 +67,7 @@ internal fun BottomAppBarFab(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_home),
+                    imageVector = AnimealIcons.Outlined.Home,
                     contentDescription = stringResource(associatedScreen.contentDescription),
                     tint = when (currentRoute) {
                         route -> MaterialTheme.colors.surface

@@ -11,9 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.AnimealLogo
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -31,9 +32,7 @@ internal fun SplashScreenUI(
         Image(
             modifier = Modifier.width(110.dp),
             contentScale = ContentScale.Crop,
-            painter = painterResource(
-                id = R.drawable.ic_animeal_logo
-            ),
+            imageVector = AnimealIcons.Colored.AnimealLogo,
             contentDescription = null
         )
         HeightSpacer(16.dp)
