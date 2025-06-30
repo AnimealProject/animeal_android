@@ -70,10 +70,7 @@ internal class AuthAPIImpl(
                                     resume(false)
                                 }
                             } else {
-                                // TODO find out why dev env has errors
-                                // resume(session.isSignedInWithoutErrors)
-                                session.isSignedInWithoutErrors
-                                resume(session.isSignedIn)
+                                resume(session.isSignedInWithoutErrors)
                             }
                         }
 
