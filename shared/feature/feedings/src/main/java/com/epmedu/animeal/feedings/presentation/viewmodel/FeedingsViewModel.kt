@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
@@ -181,8 +182,16 @@ internal class FeedingsViewModel @Inject constructor(
         feeding: Feeding,
         feedingPoint: FeedingPoint
     ): FeedingModel? {
+        var feedingStatusDate = when (feeding.status) {
+            FeedingStatus.Approved, // should have 'moderated'
+            FeedingStatus.Outdated,
+            FeedingStatus.Rejected, // should have 'moderated'
+            FeedingStatus.Pending -> (feeding.moderated ?: feeding.updated).time
+            else -> feeding.created.time
+        }
+
         val feedingStatus = feeding.status.toFeedingModelStatus(
-            deltaTime = System.currentTimeMillis() - feeding.date.time,
+            deltaTime = System.currentTimeMillis() - feedingStatusDate,
             isFeederTrusted = feeding.feeder?.isTrusted == true
         )
 
@@ -194,7 +203,7 @@ internal class FeedingsViewModel @Inject constructor(
                 feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
-                    feeding.date.time,
+                    feedingStatusDate,
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),

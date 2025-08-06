@@ -12,7 +12,9 @@ internal suspend fun SearchFeedingsQuery.Item.toFeeding(
     id = id(),
     feeder = feeder,
     status = status().toDomain(),
-    date = Temporal.DateTime(createdAt()).toDate(),
+    created = Temporal.DateTime(createdAt()).toDate(),
+    moderated = if (!moderatedAt().isNullOrEmpty()) Temporal.DateTime(moderatedAt()!!).toDate() else null,
+    updated = Temporal.DateTime(updatedAt()).toDate(),
     feedingPointId = feedingPointFeedingsId(),
     photos = images().map { getImageFrom(it) }
 )
