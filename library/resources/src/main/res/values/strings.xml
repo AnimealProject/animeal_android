@@ -168,6 +168,10 @@
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
     <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at hi@animalproject.ge</string>
 
+    <string-array name="about_links">
+        <item>Terms and Conditions|https://animalproject.ge/about.html</item>
+        <item>Privacy policy|https://animalproject.ge/contact.html</item>
+    </string-array>
     <string-array name="about_paragraphs">
         <item>Who are we?\nAnimal Project was founded in 2020 by animal lovers with different professions and experiences. For decades, our team members have been independently helping strays and raising awareness through personal channels.</item>
         <item>What is our goal?\nWe exist so that dogs and cats no longer have to live in the streets of Georgia. Our goal is to create a habitable, comfortable environment for companion animals and raise awareness within our communities.</item>

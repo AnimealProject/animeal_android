@@ -13,12 +13,12 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.text.AnimealUnorderedList
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.about.ui.AboutFooter
 import com.epmedu.animeal.tabs.more.about.ui.AboutHeading
+import com.epmedu.animeal.tabs.more.about.ui.AboutLinks
 import com.epmedu.animeal.tabs.more.about.ui.AboutText
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -26,9 +26,10 @@ import com.epmedu.animeal.tabs.more.about.ui.AboutText
 internal fun AboutScreenUI(
     currentVersion: String,
     onBack: () -> Unit,
-    onSocialClick: (type: SocialMedia) -> Unit,
+    onLinkClick: (type: LinkMediaType, url: String?) -> Unit,
 ) {
     val paragraphsArray = stringArrayResource(R.array.about_paragraphs)
+    val linksArray = stringArrayResource(R.array.about_links)
     val horizontalPadding = 36.dp
 
     LazyColumn(
@@ -39,7 +40,16 @@ internal fun AboutScreenUI(
     ) {
         item {
             AboutHeading(onBack, horizontalPadding)
-            HeightSpacer(height = 5.dp)
+        }
+        item {
+            AboutLinks(
+                linksArray,
+                onLinkClick = onLinkClick,
+                modifier = Modifier
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = 12.dp)
+            )
         }
         items(paragraphsArray) { paragraph ->
             AboutText(
@@ -61,7 +71,7 @@ internal fun AboutScreenUI(
         item {
             AboutFooter(
                 currentVersion = currentVersion,
-                onSocialClick = onSocialClick,
+                onLinkClick = { onLinkClick(it, null) },
                 modifier = Modifier
                     .padding(top = 35.dp)
                     .padding(horizontal = horizontalPadding)
@@ -77,7 +87,7 @@ private fun AboutScreenUIPreview() {
         AboutScreenUI(
             currentVersion = "0.000",
             onBack = {},
-            onSocialClick = {}
+            onLinkClick = { _, _ -> }
         )
     }
 }

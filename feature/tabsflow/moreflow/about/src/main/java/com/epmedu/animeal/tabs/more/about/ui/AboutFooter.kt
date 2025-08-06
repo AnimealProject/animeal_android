@@ -14,12 +14,12 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.more.about.SocialMedia
+import com.epmedu.animeal.tabs.more.about.LinkMediaType
 
 @Composable
 internal fun AboutFooter(
     currentVersion: String,
-    onSocialClick: (type: SocialMedia) -> Unit,
+    onLinkClick: (type: LinkMediaType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -31,7 +31,7 @@ internal fun AboutFooter(
             textAlign = TextAlign.Center
         )
         SocialButtonsRow(
-            onSocialClick = onSocialClick,
+            onSocialClick = onLinkClick,
             modifier = Modifier.padding(top = 28.dp, bottom = 40.dp)
         )
     }
@@ -43,7 +43,7 @@ private fun AboutFooterPreview() {
     AnimealTheme {
         AboutFooter(
             currentVersion = "",
-            onSocialClick = {},
+            onLinkClick = {},
             modifier = Modifier.padding(horizontal = 36.dp)
         )
     }

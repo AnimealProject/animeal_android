@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.epmedu.animeal.common.constants.Links.ANIMEAL_WEB_LINK
 import com.epmedu.animeal.common.constants.Links.FACEBOOK_APP_LINK
 import com.epmedu.animeal.common.constants.Links.FACEBOOK_WEB_LINK
@@ -107,25 +108,28 @@ fun Context.startAppOrBrowser(appIntent: Intent, webIntent: Intent) {
 }
 
 fun Context.openFacebook() {
-    val facebookAppIntent = Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_APP_LINK))
-    val facebookWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_WEB_LINK))
+    val facebookAppIntent = Intent(Intent.ACTION_VIEW, FACEBOOK_APP_LINK.toUri())
+    val facebookWebIntent = Intent(Intent.ACTION_VIEW, FACEBOOK_WEB_LINK.toUri())
     startAppOrBrowser(facebookAppIntent, facebookWebIntent)
 }
 
 fun Context.openInstagram() {
-    val instagramAppIntent = Intent(Intent.ACTION_VIEW, Uri.parse(INSTAGRAM_WEB_LINK))
+    val instagramAppIntent = Intent(Intent.ACTION_VIEW, INSTAGRAM_WEB_LINK.toUri())
         .setPackage("com.instagram.android")
-    val instagramWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(INSTAGRAM_WEB_LINK))
+    val instagramWebIntent = Intent(Intent.ACTION_VIEW, INSTAGRAM_WEB_LINK.toUri())
     startAppOrBrowser(instagramAppIntent, instagramWebIntent)
 }
 
 fun Context.openLinkedin() {
-    val linkedinWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(LINKEDIN_WEB_LINK))
-    startActivity(linkedinWebIntent)
+    openWebsite(LINKEDIN_WEB_LINK)
 }
 
 fun Context.openAnimealWebsite() {
-    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(ANIMEAL_WEB_LINK))
+    openWebsite(ANIMEAL_WEB_LINK)
+}
+
+fun Context.openWebsite(url: String) {
+    val webIntent = Intent(Intent.ACTION_VIEW, url.toUri())
     startActivity(webIntent)
 }
 
