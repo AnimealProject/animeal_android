@@ -113,7 +113,7 @@
     <string name="onboarding_facebook_sign_in_error">Error during Facebook sign-in occurred, please check network connection and try again</string>
 
     <string name="camera_permission_request">To continue please grant the permission to use the "Camera"</string>
-    <string name="willfeed_timeleft_msg">You will have 1 hour to feed the point</string>
+    <string name="willfeed_timeleft_msg">You will have &lt;b&gt;1 hour&lt;/b&gt; to provide food at the Feeding Point. Thank you in advance!</string>
     <string name="feeding_timer_suspended">Do you really want to cancel feeding?</string>
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
     <string name="feeding_point_expired_accept">Choose another location</string>
