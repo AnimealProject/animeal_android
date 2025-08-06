@@ -45,10 +45,7 @@ internal fun AboutScreenUI(
             AboutLinks(
                 linksArray,
                 onLinkClick = onLinkClick,
-                modifier = Modifier
-                    .padding(
-                        horizontal = horizontalPadding,
-                        vertical = 12.dp)
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 12.dp)
             )
         }
         items(paragraphsArray) { paragraph ->

@@ -66,7 +66,7 @@ private fun AboutLinksPreview() {
                 "Terms of condition|",
                 "Privacy policy|"
             ),
-            onLinkClick = {_, _ -> },
+            onLinkClick = { _, _ -> },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
