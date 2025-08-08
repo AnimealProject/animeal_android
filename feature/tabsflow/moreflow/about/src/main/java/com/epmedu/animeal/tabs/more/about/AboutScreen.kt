@@ -41,7 +41,7 @@ fun handleSocialClick(context: Context, type: LinkMediaType, url: String?) {
         LinkMediaType.INSTAGRAM -> context.openInstagram()
         LinkMediaType.LINKEDIN -> context.openLinkedin()
         LinkMediaType.ANIMEAL -> context.openAnimealWebsite()
-        LinkMediaType.WEB -> context.openWebsite(url!!)
+        LinkMediaType.WEB -> context.openWebsite(url)
     }
 }
 
