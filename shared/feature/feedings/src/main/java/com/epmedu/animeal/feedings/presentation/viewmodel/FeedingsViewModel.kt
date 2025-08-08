@@ -182,16 +182,8 @@ internal class FeedingsViewModel @Inject constructor(
         feeding: Feeding,
         feedingPoint: FeedingPoint
     ): FeedingModel? {
-        var feedingStatusDate = when (feeding.status) {
-            FeedingStatus.Approved, // should have 'moderated'
-            FeedingStatus.Outdated,
-            FeedingStatus.Rejected, // should have 'moderated'
-            FeedingStatus.Pending -> (feeding.moderated ?: feeding.updated).time
-            else -> feeding.created.time
-        }
-
         val feedingStatus = feeding.status.toFeedingModelStatus(
-            deltaTime = System.currentTimeMillis() - feedingStatusDate,
+            deltaTime = System.currentTimeMillis() - feeding.statusUpdated.time,
             isFeederTrusted = feeding.feeder?.isTrusted == true
         )
 
@@ -203,7 +195,7 @@ internal class FeedingsViewModel @Inject constructor(
                 feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
-                    feedingStatusDate,
+                    feeding.statusUpdated.time,
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),
