@@ -128,9 +128,11 @@ fun Context.openAnimealWebsite() {
     openWebsite(ANIMEAL_WEB_LINK)
 }
 
-fun Context.openWebsite(url: String) {
-    val webIntent = Intent(Intent.ACTION_VIEW, url.toUri())
-    startActivity(webIntent)
+fun Context.openWebsite(url: String?) {
+    url?.let {
+        val webIntent = Intent(Intent.ACTION_VIEW, it.toUri())
+        startActivity(webIntent)
+    }
 }
 
 inline val Context.locationManager: LocationManager
