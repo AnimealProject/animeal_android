@@ -8,7 +8,7 @@ data class Feeding(
     val id: String,
     val feeder: User?,
     val status: FeedingStatus,
-    var statusUpdated: Date,
+    val statusUpdated: Date,
     val feedingPointId: String,
     val photos: List<NetworkFile>,
     val reviewedBy: User? = null,

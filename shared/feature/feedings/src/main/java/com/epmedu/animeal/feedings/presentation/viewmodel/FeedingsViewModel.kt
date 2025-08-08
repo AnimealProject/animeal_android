@@ -8,7 +8,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
-import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
