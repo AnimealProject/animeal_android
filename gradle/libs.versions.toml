@@ -43,7 +43,6 @@ playServicesAuthApiPhone = "18.1.0"
 playServicesLocation = "21.3.0"
 richtext = "0.20.0"
 versions = "0.42.0"
-uiAndroid = "1.8.3"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
@@ -127,4 +126,3 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 junit = { module = "junit:junit", version.ref = "junit" }
 
 leakcanaryAndroid = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
-androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
