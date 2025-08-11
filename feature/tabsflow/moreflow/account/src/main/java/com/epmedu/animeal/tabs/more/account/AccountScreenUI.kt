@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.button.AnimealTextButtonWithIcon
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -61,6 +62,8 @@ internal fun AccountScreenUI(
                 .padding(horizontal = 16.dp)
         ) {
             AnimealTextButtonWithIcon(
+                modifier = Modifier
+                    .testTagAsResourceId("btn_account_delete"),
                 icon = painterResource(id = R.drawable.ic_delete),
                 text = stringResource(id = R.string.account_delete),
                 color = MaterialTheme.colors.error,
@@ -71,7 +74,9 @@ internal fun AccountScreenUI(
             Spacer(modifier = Modifier.weight(1f))
 
             AnimealSecondaryButtonOutlined(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 24.dp)
+                    .testTagAsResourceId("btn_logout"),
                 text = stringResource(id = R.string.logout),
                 onClick = { isLogoutConfirmationDialogShowing.value = true },
             )

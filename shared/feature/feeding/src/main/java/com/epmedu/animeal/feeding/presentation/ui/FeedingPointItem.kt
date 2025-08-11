@@ -39,10 +39,11 @@ fun FeedingPointItem(
     isFavourite: Boolean,
     image: NetworkFile?,
     onFavouriteChange: (Boolean) -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         border = BorderStroke(
@@ -108,15 +109,17 @@ fun MoreScreenPreview() {
                 FeedStatus.Starved,
                 isFavourite = true,
                 image,
+                {},
                 {}
-            ) {}
+            )
             FeedingPointItem(
                 shortText,
                 FeedStatus.Fed,
                 isFavourite = false,
                 image,
+                {},
                 {}
-            ) {}
+            )
         }
     }
 }

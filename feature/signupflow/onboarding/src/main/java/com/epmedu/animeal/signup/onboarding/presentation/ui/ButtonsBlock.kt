@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -29,6 +30,8 @@ internal fun ButtonsBlock(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AnimealButton(
+            modifier = Modifier
+                .testTagAsResourceId("btn_sign_in_mobile"),
             onClick = onSignInMobile,
             contentColor = MaterialTheme.colors.onPrimary,
         ) {
@@ -38,7 +41,11 @@ internal fun ButtonsBlock(
                 tint = MaterialTheme.colors.onPrimary
             )
         }
-        AnimealSecondaryButtonOutlined(onClick = onContinueClick) {
+        AnimealSecondaryButtonOutlined(
+            modifier = Modifier
+                .testTagAsResourceId("btn_sign_in_as_guest"),
+            onClick = onContinueClick
+        ) {
             LoginButtonContent(
                 iconId = R.drawable.ic_sign_in_guest,
                 textId = R.string.sign_in_as_guest,

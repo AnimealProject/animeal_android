@@ -6,6 +6,7 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -25,11 +26,15 @@ internal fun ProfileButton(
     Box(modifier = modifier) {
         if (state == READ_ONLY) {
             AnimealButton(
+                modifier = Modifier
+                    .testTagAsResourceId("btn_edit"),
                 text = stringResource(R.string.edit),
                 onClick = onEdit
             )
         } else {
             AnimealButton(
+                modifier = Modifier
+                    .testTagAsResourceId("btn_save"),
                 text = stringResource(R.string.save),
                 enabled = state == EDITED,
                 onClick = onSave

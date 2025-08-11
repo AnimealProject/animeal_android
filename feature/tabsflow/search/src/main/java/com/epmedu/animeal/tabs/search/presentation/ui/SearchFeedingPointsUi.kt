@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.ui.FeedingPointItem
@@ -85,10 +86,9 @@ private fun LazyListScope.renderSearchView(
 ) {
     item {
         SearchView(
-            modifier = Modifier.padding(
-                horizontal = 30.dp,
-                vertical = 14.dp
-            ),
+            modifier = Modifier
+                .padding(horizontal = 30.dp, vertical = 14.dp)
+                .testTagAsResourceId("search_view"),
             initialValue = query,
             onValueChange = { textFieldValue ->
                 onEvent(SearchScreenEvent.Search(textFieldValue.text, animalType))
@@ -125,6 +125,8 @@ private fun LazyListScope.renderGroupedFeedingPoints(
             ) {
                 group.points.forEach { feedingPoint ->
                     FeedingPointItem(
+                        modifier = Modifier
+                            .testTagAsResourceId("point_item_${feedingPoint.id}"),
                         title = feedingPoint.title,
                         status = feedingPoint.feedStatus,
                         isFavourite = feedingPoint.isFavourite,
@@ -152,6 +154,7 @@ private fun LazyListScope.renderEmptyListState(query: String) {
                 .fillMaxSize()
                 .fillParentMaxHeight(0.7f)
                 .padding(horizontal = 32.dp)
+                .testTagAsResourceId("search_no_items"),
         ) {
             Text(
                 text = stringResource(R.string.search_no_items, query),
