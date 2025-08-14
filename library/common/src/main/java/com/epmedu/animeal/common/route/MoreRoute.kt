@@ -7,5 +7,7 @@ enum class MoreRoute {
     FAQ,
     About,
     Account,
-    Donate
+    Donate,
+    Terms,
+    Policy
 }

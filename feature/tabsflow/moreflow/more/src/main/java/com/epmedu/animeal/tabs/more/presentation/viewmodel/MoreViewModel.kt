@@ -24,6 +24,8 @@ internal class MoreViewModel @Inject constructor(
                 MoreOption.Feedings(),
                 MoreOption.FAQ,
                 MoreOption.About,
+                MoreOption.Terms,
+                MoreOption.Policy,
                 MoreOption.Account,
                 MoreOption.Donate,
             )

@@ -8,6 +8,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.signup.onboarding.presentation.ui.ButtonsBlock
 import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
+import com.epmedu.animeal.tabs.more.about.ui.LegalLinks
 
 @Composable
 internal fun OnboardingScreenUI(
@@ -24,7 +25,9 @@ internal fun OnboardingScreenUI(
             onSignInMobile = onSignInMobile,
             onContinueClick = onContinueClick,
         )
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(0.5f))
+        LegalLinks()
+        Spacer(modifier = Modifier.weight(0.5f))
     }
 }
 

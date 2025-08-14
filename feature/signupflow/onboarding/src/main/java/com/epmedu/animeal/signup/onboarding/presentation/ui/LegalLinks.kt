@@ -12,26 +12,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.openWebsite
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-import com.epmedu.animeal.tabs.more.about.LinkMediaType
+import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun AboutLinks(
-    links: Array<String>,
-    onLinkClick: (type: LinkMediaType, url: String?) -> Unit,
+internal fun LegalLinks(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val links = stringArrayResource(R.array.about_links)
+
     Row(
         modifier = modifier
+            .padding(horizontal = 24.dp, vertical = 12.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         links.forEachIndexed { index, item ->
-            val (title, url) = item.split("|")
+            val (_, title, url) = item.split("|")
             Box(
                 modifier = Modifier
                     .weight(1f),
@@ -49,7 +54,7 @@ internal fun AboutLinks(
                     ),
                     modifier = Modifier
                         .clickable {
-                            onLinkClick(LinkMediaType.WEB, url)
+                            context.openWebsite(url)
                         }
                 )
             }
@@ -59,14 +64,9 @@ internal fun AboutLinks(
 
 @AnimealPreview
 @Composable
-private fun AboutLinksPreview() {
+private fun LegalLinksPreview() {
     AnimealTheme {
-        AboutLinks(
-            links = arrayOf(
-                "Terms of condition|",
-                "Privacy policy|"
-            ),
-            onLinkClick = { _, _ -> },
+        LegalLinks(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
