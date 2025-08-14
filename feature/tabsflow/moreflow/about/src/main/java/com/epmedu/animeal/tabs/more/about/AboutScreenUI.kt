@@ -13,12 +13,12 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.text.AnimealUnorderedList
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.about.ui.AboutFooter
 import com.epmedu.animeal.tabs.more.about.ui.AboutHeading
-import com.epmedu.animeal.tabs.more.about.ui.AboutLinks
 import com.epmedu.animeal.tabs.more.about.ui.AboutText
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -29,7 +29,6 @@ internal fun AboutScreenUI(
     onLinkClick: (type: LinkMediaType, url: String?) -> Unit,
 ) {
     val paragraphsArray = stringArrayResource(R.array.about_paragraphs)
-    val linksArray = stringArrayResource(R.array.about_links)
     val horizontalPadding = 36.dp
 
     LazyColumn(
@@ -40,13 +39,7 @@ internal fun AboutScreenUI(
     ) {
         item {
             AboutHeading(onBack, horizontalPadding)
-        }
-        item {
-            AboutLinks(
-                linksArray,
-                onLinkClick = onLinkClick,
-                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 12.dp)
-            )
+            HeightSpacer(height = 5.dp)
         }
         items(paragraphsArray) { paragraph ->
             AboutText(
