@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.signup.onboarding.presentation.ui.ButtonsBlock
-import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
 import com.epmedu.animeal.signup.onboarding.presentation.ui.LegalLinks
+import com.epmedu.animeal.signup.onboarding.presentation.ui.OnBoarding
 
 @Composable
 internal fun OnboardingScreenUI(

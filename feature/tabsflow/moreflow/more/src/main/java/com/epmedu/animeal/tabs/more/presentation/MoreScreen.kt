@@ -12,8 +12,8 @@ import com.epmedu.animeal.extensions.openWebsite
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibility
 import com.epmedu.animeal.foundation.bottombar.BottomBarVisibilityState.SHOWN
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
-import com.epmedu.animeal.tabs.more.presentation.viewmodel.MoreViewModel
 import com.epmedu.animeal.resources.R
+import com.epmedu.animeal.tabs.more.presentation.viewmodel.MoreViewModel
 
 @Composable
 fun MoreScreen() {
@@ -23,8 +23,8 @@ fun MoreScreen() {
     val context = LocalContext.current
 
     val optionNameToUrl: Map<String, String> = stringArrayResource(R.array.about_links)
-        .map { item ->
-            val (name, _, url) = item.split("|")
+        .map {
+            val (name, _, url) = it.split("|")
             name to url
         }
         .toMap()
@@ -34,7 +34,7 @@ fun MoreScreen() {
     MoreScreenUi(
         state = state,
         onNavigate = {
-            when(it) {
+            when (it) {
                 MoreRoute.Terms.name,
                 MoreRoute.Policy.name -> optionNameToUrl[it]?.let(context::openWebsite)
                 else -> navigator.navigate(it)
