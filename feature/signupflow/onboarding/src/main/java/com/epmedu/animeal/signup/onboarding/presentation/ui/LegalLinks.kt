@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.about.ui
+package com.epmedu.animeal.signup.onboarding.presentation.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
