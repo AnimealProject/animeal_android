@@ -120,7 +120,7 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFile: service_account.json
-          groups: developers
+          groups: developers, qa_team
           releaseNotes: ${{ env.RELEASE_NOTES }}
           file: dev-release-${{ env.VERSION_NAME }}.apk/dev-release-${{ env.VERSION_NAME }}.apk
 
