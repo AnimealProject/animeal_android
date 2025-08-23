@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.feedings.presentation.FeedingsScreenEvent.ApproveClicked
@@ -46,6 +45,8 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Expande
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue.Hidden
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.EmptyScreenBone
 import com.epmedu.animeal.foundation.listener.TapListener
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.AnimealSwitchTab
@@ -210,7 +211,7 @@ private fun EmptyState(state: FeedingsState) {
         contentAlignment = Alignment.Center
     ) {
         AnimealPopUpScreen(
-            painterResource = painterResource(R.drawable.empty_screen_bone),
+            imageVector = AnimealIcons.Colored.EmptyScreenBone,
             titleText = if (isWellDone) R.string.feeding_tab_all_reviewed_title else R.string.feeding_tab_empty_title,
             subtitleText = if (isWellDone) {
                 R.string.feeding_tab_all_reviewed_subtitle

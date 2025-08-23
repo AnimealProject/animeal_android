@@ -25,15 +25,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.epmedu.animeal.feeding.presentation.model.FeedingPhotoItem
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Picture
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
-import com.epmedu.animeal.resources.R
 
 @Composable
 fun MarkFeedingDonePhotoGallery(
@@ -80,7 +80,7 @@ private fun TakePhotoItem(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_picture),
+            imageVector = AnimealIcons.Colored.Picture,
             tint = CustomColor.SeaSerpent,
             contentDescription = null
         )

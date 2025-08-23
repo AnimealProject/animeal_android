@@ -9,6 +9,8 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Georgia
 import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -25,7 +27,6 @@ import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameChan
 import com.epmedu.animeal.profile.presentation.ProfileInputFormEvent.SurnameFocusCleared
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.READ_ONLY
-import com.epmedu.animeal.resources.R
 
 @Composable
 fun ProfileInputForm(
@@ -90,7 +91,7 @@ private fun ProfileInputFormState.PhoneInput(
         value = phoneNumber,
         prefix = prefix,
         flag = when (region) {
-            Region.GE -> Flag(R.drawable.ic_georgia)
+            Region.GE -> Flag(iconFlag = AnimealIcons.Colored.Georgia)
             else -> Flag(emojiFlag = profile.phoneNumberRegion.flagEmoji())
         },
         format = format,

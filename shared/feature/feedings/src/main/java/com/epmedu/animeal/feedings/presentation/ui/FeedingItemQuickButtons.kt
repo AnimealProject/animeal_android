@@ -1,6 +1,5 @@
 package com.epmedu.animeal.feedings.presentation.ui
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,13 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.button.AnimealButton
 import com.epmedu.animeal.foundation.button.AnimealSecondaryButtonOutlined
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Checkmark
+import com.epmedu.animeal.foundation.icons.colored.Cross
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -51,7 +53,7 @@ internal fun FeedingItemQuickButtons(
             contentPadding = contentPadding,
         ) {
             FeedingItemQuickButtonContent(
-                iconRes = R.drawable.ic_checkmark,
+                icon = AnimealIcons.Colored.Checkmark,
                 textRes = R.string.approve,
                 textColor = Color.White
             )
@@ -65,7 +67,7 @@ internal fun FeedingItemQuickButtons(
             contentPadding = contentPadding,
         ) {
             FeedingItemQuickButtonContent(
-                iconRes = R.drawable.ic_cross,
+                icon = AnimealIcons.Colored.Cross,
                 textRes = R.string.reject
             )
         }
@@ -74,7 +76,7 @@ internal fun FeedingItemQuickButtons(
 
 @Composable
 private fun FeedingItemQuickButtonContent(
-    @DrawableRes iconRes: Int,
+    icon: ImageVector,
     @StringRes textRes: Int,
     textColor: Color = Color.Unspecified,
 ) {
@@ -83,7 +85,7 @@ private fun FeedingItemQuickButtonContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(iconRes),
+            imageVector = icon,
             contentDescription = stringResource(textRes)
         )
         Text(

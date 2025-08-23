@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -20,30 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
-
-@Composable
-fun AnimealTextButtonWithIcon(
-    icon: Painter,
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Center,
-    color: Color = Color.Unspecified,
-    contentDescription: String? = null,
-) = AnimealTextButtonWithIcon(
-    modifier = modifier,
-    icon = {
-        Icon(
-            painter = icon,
-            contentDescription = contentDescription,
-            tint = color
-        )
-    },
-    text = text,
-    textAlign = textAlign,
-    color = color,
-    onClick = onClick,
-)
 
 @Composable
 fun AnimealTextButtonWithIcon(
@@ -86,7 +61,9 @@ internal fun AnimealTextButtonWithIcon(
     icon()
 
     Text(
-        modifier = Modifier.fillMaxWidth().padding(start = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp),
         text = text,
         color = color,
         textAlign = textAlign,

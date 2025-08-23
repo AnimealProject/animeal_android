@@ -16,13 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.common.validation.Constants.GE_PHONE_NUMBER_LENGTH
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Georgia
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -39,7 +40,7 @@ fun PhoneNumberInput(
     error: String = "",
     isEnabled: Boolean = true,
     isFlagClickable: Boolean = false,
-    flag: Flag = Flag(iconFlag = R.drawable.ic_georgia),
+    flag: Flag = Flag(iconFlag = AnimealIcons.Colored.Georgia),
     useNumberFormatter: Boolean = true,
     format: String = GE_PHONE_NUMBER_FORMAT,
     numberLength: Int = GE_PHONE_NUMBER_LENGTH,
@@ -70,7 +71,7 @@ fun PhoneNumberInput(
                 if (flag.iconFlag != null) {
                     Image(
                         contentScale = ContentScale.Crop,
-                        painter = painterResource(flag.iconFlag),
+                        imageVector = flag.iconFlag,
                         contentDescription = null
                     )
                 }

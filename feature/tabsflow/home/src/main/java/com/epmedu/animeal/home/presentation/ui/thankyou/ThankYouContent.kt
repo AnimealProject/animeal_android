@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import com.epmedu.animeal.foundation.common.AnimealPopUpScreen
+import com.epmedu.animeal.foundation.icons.AnimealIcons
+import com.epmedu.animeal.foundation.icons.colored.Paw
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
@@ -18,7 +19,7 @@ internal fun ThankYouContent(
 ) {
     BoxWithConstraints {
         AnimealPopUpScreen(
-            painterResource = painterResource(id = R.drawable.ic_paw),
+            imageVector = AnimealIcons.Colored.Paw,
             titleText = R.string.thank_you,
             subtitleText = when {
                 isAutoApproved -> R.string.animals_fed
