@@ -23,7 +23,11 @@ internal suspend fun OnCreateFeedingExtSubscription.OnCreateFeedingExt.toFeeding
         id = id(),
         feeder = feeder,
         status = status().toDomain(),
-        date = Temporal.DateTime(createdAt()).toDate(),
+        statusUpdated = if (!moderatedAt().isNullOrEmpty()) {
+            Temporal.DateTime(moderatedAt()!!).toDate()
+        } else {
+            Temporal.DateTime(updatedAt()).toDate()
+        },
         feedingPointId = feedingPointFeedingsId(),
         photos = images().map { getImageFrom(it) }
     )
@@ -37,7 +41,11 @@ internal suspend fun OnUpdateFeedingExtSubscription.OnUpdateFeedingExt.toFeeding
         id = id(),
         feeder = feeder,
         status = status().toDomain(),
-        date = Temporal.DateTime(createdAt()).toDate(),
+        statusUpdated = if (!moderatedAt().isNullOrEmpty()) {
+            Temporal.DateTime(moderatedAt()!!).toDate()
+        } else {
+            Temporal.DateTime(updatedAt()).toDate()
+        },
         feedingPointId = feedingPointFeedingsId(),
         photos = images().map { getImageFrom(it) }
     )

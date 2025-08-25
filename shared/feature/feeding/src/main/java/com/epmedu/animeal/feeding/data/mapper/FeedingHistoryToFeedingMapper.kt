@@ -18,7 +18,11 @@ internal suspend fun SearchFeedingHistoriesQuery.Item.toFeeding(
             id = id(),
             feeder = feeder,
             status = status,
-            date = Temporal.DateTime(createdAt()).toDate(),
+            statusUpdated = if (!moderatedAt().isNullOrEmpty()) {
+                Temporal.DateTime(moderatedAt()!!).toDate()
+            } else {
+                Temporal.DateTime(updatedAt()).toDate()
+            },
             feedingPointId = feedingPointId(),
             photos = images().map { getImageFrom(it) },
             reviewedBy = reviewedBy,
@@ -37,7 +41,11 @@ internal suspend fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistor
             id = id(),
             feeder = feeder,
             status = status,
-            date = Temporal.DateTime(createdAt()).toDate(),
+            statusUpdated = if (!moderatedAt().isNullOrEmpty()) {
+                Temporal.DateTime(moderatedAt()!!).toDate()
+            } else {
+                Temporal.DateTime(updatedAt()).toDate()
+            },
             feedingPointId = feedingPointId(),
             photos = images().map { getImageFrom(it) },
             reviewedBy = reviewedBy

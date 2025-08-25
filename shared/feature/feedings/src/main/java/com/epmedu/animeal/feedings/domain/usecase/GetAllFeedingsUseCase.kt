@@ -43,6 +43,6 @@ class GetAllFeedingsUseCase(
     }
 
     private fun sortByDate(feedings: List<Feeding>): List<Feeding> {
-        return feedings.sortedBy { feeding -> feeding.date }
+        return feedings.sortedBy { feeding -> feeding.statusUpdated }
     }
 }
