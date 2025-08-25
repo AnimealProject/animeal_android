@@ -9,11 +9,11 @@ import com.epmedu.animeal.foundation.button.AnimealSocialButton
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
-import com.epmedu.animeal.tabs.more.about.SocialMedia
+import com.epmedu.animeal.tabs.more.about.LinkMediaType
 
 @Composable
 internal fun SocialButtonsRow(
-    onSocialClick: (type: SocialMedia) -> Unit,
+    onSocialClick: (type: LinkMediaType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -21,19 +21,19 @@ internal fun SocialButtonsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AnimealSocialButton(
-            onClick = { onSocialClick(SocialMedia.FACEBOOK) },
+            onClick = { onSocialClick(LinkMediaType.FACEBOOK) },
             iconResource = R.drawable.ic_facebook
         )
         AnimealSocialButton(
-            onClick = { onSocialClick(SocialMedia.INSTAGRAM) },
+            onClick = { onSocialClick(LinkMediaType.INSTAGRAM) },
             iconResource = R.drawable.ic_instagram
         )
         AnimealSocialButton(
-            onClick = { onSocialClick(SocialMedia.LINKEDIN) },
+            onClick = { onSocialClick(LinkMediaType.LINKEDIN) },
             iconResource = R.drawable.ic_linkedin
         )
         AnimealSocialButton(
-            onClick = { onSocialClick(SocialMedia.WEB) },
+            onClick = { onSocialClick(LinkMediaType.ANIMEAL) },
             iconResource = R.drawable.ic_web
         )
     }
