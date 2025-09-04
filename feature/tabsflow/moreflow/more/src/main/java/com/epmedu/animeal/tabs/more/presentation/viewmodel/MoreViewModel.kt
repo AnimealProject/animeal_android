@@ -22,12 +22,12 @@ internal class MoreViewModel @Inject constructor(
             val options = mutableSetOf(
                 MoreOption.Profile,
                 MoreOption.Feedings(),
+                MoreOption.Donate,
                 MoreOption.FAQ,
                 MoreOption.About,
+                MoreOption.Account,
                 MoreOption.Terms,
                 MoreOption.Policy,
-                MoreOption.Account,
-                MoreOption.Donate,
             )
 
             feedingsButtonHandler.getFeedingsButtonState(

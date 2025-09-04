@@ -22,10 +22,10 @@ fun MoreScreen() {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
 
-    val optionNameToUrl: Map<String, String> = stringArrayResource(R.array.about_links)
+    val optionNameToUrl: Map<String, String> = stringArrayResource(R.array.legal_links)
         .map {
-            val (name, _, url) = it.split("|")
-            name to url
+            val (option, _, url) = it.split("|")
+            option to url
         }
         .toMap()
 
