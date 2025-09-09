@@ -5,8 +5,11 @@ package com.epmedu.animeal.signup.enterphone.presentation
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -80,10 +83,23 @@ private fun BottomSheet(
     focusRequester: FocusRequester,
     sheetContent: @Composable ColumnScope.() -> Unit
 ) {
+    val topPadding =
+        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
+            WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+        } else {
+            0.dp
+        }
     ModalBottomSheetLayout(
         scrimColor = Color.Transparent,
         sheetState = bottomSheetState,
-        sheetContent = sheetContent
+        sheetContent = {
+            Column(
+                modifier = Modifier
+                    .padding(top = topPadding)
+            ) {
+                sheetContent()
+            }
+        }
     ) {
         ScaffoldAndBody(
             onBack,
