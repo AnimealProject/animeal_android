@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.layout.LastElementBottom
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -63,6 +64,8 @@ internal fun DonateScreenUI(
                 Text(
                     text = stringResource(id = R.string.donation_thanks),
                     style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 26.dp),
                 )
                 HeightSpacer(height = 40.dp)
             }

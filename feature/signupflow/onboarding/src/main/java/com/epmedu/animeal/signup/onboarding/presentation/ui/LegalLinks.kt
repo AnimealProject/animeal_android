@@ -11,13 +11,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.openWebsite
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.text.getUrlStyle
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
@@ -26,11 +25,11 @@ internal fun LegalLinks(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val links = stringArrayResource(R.array.about_links)
-
+    val links = stringArrayResource(R.array.legal_links)
+    val urlStyle = getUrlStyle(1f)
     Row(
         modifier = modifier
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(horizontal = 36.dp, vertical = 12.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -48,9 +47,9 @@ internal fun LegalLinks(
             ) {
                 Text(
                     text = title,
-                    color = Color.Blue,
+                    color = urlStyle.color,
                     style = MaterialTheme.typography.body2.copy(
-                        textDecoration = TextDecoration.Underline
+                        textDecoration = urlStyle.textDecoration
                     ),
                     modifier = Modifier
                         .clickable {
