@@ -105,6 +105,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+      
+      - name: Set build version
+        run: ./.github/scripts/increment.sh      
 
       - name: Extract version name
         run: ./.github/scripts/extract-version.sh
