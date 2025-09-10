@@ -79,8 +79,11 @@ private fun BottomSheet(
     state: EnterPhoneState,
     focusRequester: FocusRequester,
     sheetContent: @Composable ColumnScope.() -> Unit
-) {
+) = Scaffold { padding ->
     ModalBottomSheetLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         scrimColor = Color.Transparent,
         sheetState = bottomSheetState,
         sheetContent = sheetContent
