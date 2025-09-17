@@ -182,7 +182,7 @@ internal class FeedingsViewModel @Inject constructor(
         feedingPoint: FeedingPoint
     ): FeedingModel? {
         val feedingStatus = feeding.status.toFeedingModelStatus(
-            deltaTime = System.currentTimeMillis() - feeding.date.time,
+            deltaTime = System.currentTimeMillis() - feeding.statusUpdated.time,
             isFeederTrusted = feeding.feeder?.isTrusted == true
         )
 
@@ -194,7 +194,7 @@ internal class FeedingsViewModel @Inject constructor(
                 feeder = "${feeding.feeder?.name.orEmpty()} ${feeding.feeder?.surname.orEmpty()}",
                 status = feedingStatus,
                 elapsedTime = DateUtils.getRelativeTimeSpanString(
-                    feeding.date.time,
+                    feeding.statusUpdated.time,
                     System.currentTimeMillis(),
                     DateUtils.SECOND_IN_MILLIS
                 ).toString(),

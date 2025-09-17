@@ -53,6 +53,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Set build version
+        run: ./.github/scripts/increment.sh
+
       - name: Extract version name
         run: ./.github/scripts/extract-version.sh
 
@@ -102,6 +105,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+      
+      - name: Set build version
+        run: ./.github/scripts/increment.sh      
 
       - name: Extract version name
         run: ./.github/scripts/extract-version.sh
@@ -120,7 +126,7 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFile: service_account.json
-          groups: developers
+          groups: developers, qa_team
           releaseNotes: ${{ env.RELEASE_NOTES }}
           file: dev-release-${{ env.VERSION_NAME }}.apk/dev-release-${{ env.VERSION_NAME }}.apk
 

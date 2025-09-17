@@ -26,7 +26,7 @@ import com.epmedu.animeal.tabs.more.about.ui.AboutText
 internal fun AboutScreenUI(
     currentVersion: String,
     onBack: () -> Unit,
-    onSocialClick: (type: SocialMedia) -> Unit,
+    onLinkClick: (type: LinkMediaType, url: String?) -> Unit,
 ) {
     val paragraphsArray = stringArrayResource(R.array.about_paragraphs)
     val horizontalPadding = 36.dp
@@ -61,7 +61,7 @@ internal fun AboutScreenUI(
         item {
             AboutFooter(
                 currentVersion = currentVersion,
-                onSocialClick = onSocialClick,
+                onLinkClick = { onLinkClick(it, null) },
                 modifier = Modifier
                     .padding(top = 35.dp)
                     .padding(horizontal = horizontalPadding)
@@ -77,7 +77,7 @@ private fun AboutScreenUIPreview() {
         AboutScreenUI(
             currentVersion = "0.000",
             onBack = {},
-            onSocialClick = {}
+            onLinkClick = { _, _ -> }
         )
     }
 }
