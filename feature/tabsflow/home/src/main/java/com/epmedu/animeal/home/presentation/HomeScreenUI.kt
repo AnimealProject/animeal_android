@@ -40,6 +40,7 @@ import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetLayout
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.bottomsheet.contentAlphaButtonAlpha
 import com.epmedu.animeal.foundation.dialog.AnimealAlertDialog
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
@@ -90,7 +91,8 @@ internal fun HomeScreenUI(
     onFeedingEvent: (FeedingEvent) -> Unit,
     onFeedingPointEvent: (FeedingPointEvent) -> Unit,
     onTimerEvent: (TimerEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onDisablingRouteForGuest: () -> Unit
 ) {
     val context = LocalContext.current
     val (contentAlpha: Float, buttonAlpha: Float) = bottomSheetState.contentAlphaButtonAlpha()
@@ -196,7 +198,13 @@ internal fun HomeScreenUI(
             HomeMapbox(
                 state = state,
                 bottomSheetState = bottomSheetState,
-                onFeedingPointSelect = { onFeedingPointEvent(FeedingPointEvent.Select(it)) },
+                onFeedingPointSelect = {
+                    if (GuestSession.isGuest.value) {
+                        onDisablingRouteForGuest()
+                    } else {
+                        onFeedingPointEvent(FeedingPointEvent.Select(it))
+                    }
+                },
                 onCameraChange = onCameraChange,
                 onMapClick = { hideBottomSheet() },
                 onInitialLocationDisplay = { onScreenEvent(HomeScreenEvent.InitialLocationWasDisplayed) },
@@ -207,13 +215,21 @@ internal fun HomeScreenUI(
                     onRouteEvent(RouteEvent.FeedingRouteUpdateRequest(result))
                 },
                 onGeolocationClick = { mapView ->
-                    onGeoLocationClick(mapView, state, geolocationPermissionState)
+                    if (GuestSession.isGuest.value) {
+                        onDisablingRouteForGuest()
+                    } else {
+                        onGeoLocationClick(mapView, state, geolocationPermissionState)
+                    }
                 },
                 onSelectTab = {
                     onFeedingPointEvent(FeedingPointEvent.AnimalTypeChange(it))
                 },
                 onFeedingsClick = {
-                    navigator.navigate(TabsRoute.Feedings.name)
+                    if (GuestSession.isGuest.value) {
+                        onDisablingRouteForGuest()
+                    } else {
+                        navigator.navigate(TabsRoute.Feedings.name)
+                    }
                 }
             )
         }

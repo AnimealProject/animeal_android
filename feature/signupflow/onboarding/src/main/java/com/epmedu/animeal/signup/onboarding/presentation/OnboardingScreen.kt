@@ -15,6 +15,7 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.ErrorShown
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInGuestClicked
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithMobileClicked
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingState
 import com.epmedu.animeal.signup.onboarding.presentation.viewmodel.OnboardingViewModel
@@ -29,10 +30,7 @@ fun OnboardingScreen() {
 
     OnboardingScreenUI(
         onSignInMobile = { viewModel.handleEvent(SignInWithMobileClicked) },
-        onContinueClick = {
-            viewModel.saveGuestProfile()
-            navigator.navigateToTabs()
-        },
+        onSignInGuest = { viewModel.handleEvent(SignInGuestClicked) },
     )
 }
 
@@ -54,6 +52,9 @@ private fun OnState(
         when (it) {
             AuthenticationType.Mobile -> {
                 navigator.navigate(SignUpRoute.EnterPhone.name)
+            }
+            AuthenticationType.Guest -> {
+                navigator.navigateToTabs()
             }
         }
 

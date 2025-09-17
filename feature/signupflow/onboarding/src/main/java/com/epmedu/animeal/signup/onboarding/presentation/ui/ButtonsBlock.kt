@@ -18,7 +18,7 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun ButtonsBlock(
     onSignInMobile: () -> Unit,
-    onContinueClick: () -> Unit,
+    onSignInGuest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -38,7 +38,7 @@ internal fun ButtonsBlock(
                 tint = MaterialTheme.colors.onPrimary
             )
         }
-        AnimealSecondaryButtonOutlined(onClick = onContinueClick) {
+        AnimealSecondaryButtonOutlined(onClick = onSignInGuest) {
             LoginButtonContent(
                 iconId = R.drawable.ic_sign_in_guest,
                 textId = R.string.sign_in_as_guest,
@@ -54,7 +54,7 @@ private fun ButtonsBlockPreview() {
     AnimealTheme {
         ButtonsBlock(
             onSignInMobile = {},
-            onContinueClick = {}
+            onSignInGuest = {}
         )
     }
 }

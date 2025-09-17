@@ -13,7 +13,9 @@ import com.epmedu.animeal.tabs.more.presentation.MoreScreen
 import com.epmedu.animeal.tabs.more.profile.ProfileScreen
 
 @Composable
-fun MoreHost() {
+fun MoreHost(
+    onDisablingRouteForGuest: () -> Unit
+) {
     AnimatedScreenNavHost(
         startDestination = MoreRoute.More.name,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
@@ -24,7 +26,7 @@ fun MoreHost() {
             enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
             exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left) }
         ) {
-            MoreScreen()
+            MoreScreen(onDisablingRouteForGuest)
         }
         screen(MoreRoute.Profile.name) { ProfileScreen() }
         screen(MoreRoute.Feedings.name) { FeedingsScreen() }

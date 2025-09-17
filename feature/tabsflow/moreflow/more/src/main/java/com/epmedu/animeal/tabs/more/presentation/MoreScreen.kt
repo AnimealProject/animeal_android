@@ -11,7 +11,9 @@ import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.tabs.more.presentation.viewmodel.MoreViewModel
 
 @Composable
-fun MoreScreen() {
+fun MoreScreen(
+    onDisablingRouteForGuest: () -> Unit
+) {
     val navigator = LocalNavigator.currentOrThrow
     val viewModel = hiltViewModel<MoreViewModel>()
     val state by viewModel.stateFlow.collectAsState()
@@ -20,6 +22,7 @@ fun MoreScreen() {
 
     MoreScreenUi(
         state = state,
-        onNavigate = navigator::navigate,
+        onDisablingRouteForGuest = onDisablingRouteForGuest,
+        onNavigate = navigator::navigate
     )
 }

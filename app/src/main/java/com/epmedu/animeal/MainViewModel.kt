@@ -8,7 +8,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingH
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
 import com.epmedu.animeal.profile.domain.model.BasicProfile
-import com.epmedu.animeal.profile.domain.model.GuestProfile
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +32,7 @@ internal class MainViewModel @Inject constructor(
             repository.getProfile().collect { profile ->
                 when (profile) {
                     is BasicProfile -> getRefreshTokenExpiration()
-                    is GuestProfile -> Unit
+                    else -> Unit
                 }
             }
         }

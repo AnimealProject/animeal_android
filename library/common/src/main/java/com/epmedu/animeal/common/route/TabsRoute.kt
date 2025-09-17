@@ -1,11 +1,11 @@
 package com.epmedu.animeal.common.route
 
-enum class TabsRoute : RouteWithArgs {
+enum class TabsRoute(val allowGuest: Boolean = false) : RouteWithArgs {
     Search,
     Favourites,
-    Home,
+    Home(true),
     Analytics,
-    More,
+    More(true),
     Feedings;
     companion object {
         fun fromRoutePath(routeName: String?): TabsRoute? {
