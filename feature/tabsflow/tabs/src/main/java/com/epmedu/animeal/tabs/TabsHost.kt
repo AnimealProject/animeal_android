@@ -107,13 +107,9 @@ fun TabsHost() {
     if (guestMessageVisible) {
         AnimealAlertDialog(
             title = stringResource(R.string.guest_block_message),
-            acceptText = stringResource(id = R.string.back_to_home),
+            acceptText = stringResource(id = R.string.btn_register_login),
             onConfirm = {
-                navigator.navigate(MainRoute.SignUp.name) {
-                    navigationController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) { inclusive = true }
-                    }
-                }
+                navigator.popBackStackOrNavigate(MainRoute.SignUp.name)
             },
             closeText = stringResource(id = R.string.cancel),
             onClose = {
