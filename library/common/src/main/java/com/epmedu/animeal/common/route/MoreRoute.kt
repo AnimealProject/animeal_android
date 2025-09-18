@@ -8,6 +8,6 @@ enum class MoreRoute(val allowGuest: Boolean = false) {
     About(true),
     Account,
     Donate(true),
-    Terms,
-    Policy
+    Terms(true),
+    Policy(true)
 }
