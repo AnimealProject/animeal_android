@@ -113,9 +113,7 @@ internal class FinishProfileViewModel @Inject constructor(
             }
 
             Cancel -> {
-                when (authenticationType) {
-                    AuthenticationType.Mobile -> logout()
-                }
+                logout()
             }
 
             ScreenDisplayed -> {
@@ -174,12 +172,6 @@ internal class FinishProfileViewModel @Inject constructor(
     }
 
     private fun navigateToNextDestination() {
-        updateState {
-            copy(
-                nextDestination = when (authenticationType) {
-                    AuthenticationType.Mobile -> Tabs
-                }
-            )
-        }
+        updateState { copy(nextDestination = Tabs) }
     }
 }

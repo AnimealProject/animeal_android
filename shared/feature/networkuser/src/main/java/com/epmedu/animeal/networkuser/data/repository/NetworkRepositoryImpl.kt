@@ -8,6 +8,7 @@ import com.epmedu.animeal.auth.UserAttributesAPI
 import com.epmedu.animeal.auth.constants.UserAttributesKey
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.networkuser.data.mapper.AuthUserAttributesToProfileMapper
 import com.epmedu.animeal.networkuser.data.mapper.ProfileToAuthUserAttributesMapper
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
@@ -63,6 +64,12 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchUserGroup(): ActionResult<UserGroup> {
+        if (GuestSession.isGuest.value) {
+            val res = ActionResult.Failure(IllegalArgumentException("Is not allowed for guests"))
+            currentUserGroupResult = res
+            return res
+        }
+
         return when (val result = usersRepository.getGroupsForUser(authAPI.getCurrentUserId())) {
             is ActionResult.Success -> {
                 result.result.maxByOrNull { it.ordinal }?.let { group ->

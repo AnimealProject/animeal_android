@@ -26,6 +26,7 @@ import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.util.Keys.SAVED_FEEDING_POINT_KEY
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.router.presentation.RouteHandler
 import kotlinx.collections.immutable.ImmutableList
@@ -200,6 +201,8 @@ class DefaultFeedingPointHandler @Inject constructor(
     }
 
     private fun CoroutineScope.selectFeedingPoint(feedingPoint: FeedingPointModel) {
+        if (GuestSession.isGuest.value) return
+
         savedStateHandle[SAVED_FEEDING_POINT_KEY] = feedingPoint
         updateState { copy(currentFeedingPoint = feedingPoint) }
         fetchFeedings(feedingPoint.id)
@@ -231,7 +234,7 @@ class DefaultFeedingPointHandler @Inject constructor(
             copy(defaultAnimalType = type)
         }
         launch {
-            updateAnimalTypeSettingsUseCase(type)
+            if (!GuestSession.isGuest.value) updateAnimalTypeSettingsUseCase(type)
             fetchFeedingPoints()
         }
     }

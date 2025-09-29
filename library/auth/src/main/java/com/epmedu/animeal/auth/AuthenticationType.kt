@@ -2,4 +2,5 @@ package com.epmedu.animeal.auth
 
 sealed interface AuthenticationType {
     data object Mobile : AuthenticationType
+    data object Guest : AuthenticationType
 }

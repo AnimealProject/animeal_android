@@ -211,4 +211,7 @@
     <string name="session_expired">Your user session has expired</string>
     <string name="coming_soon">Coming soon…</string>
     <string name="thank_you_for_visiting">Thank you for visiting!</string>
+
+	<string name="guest_block_message">You’re just one step away from joining our community of heroes! By registering or logging in, you can actively contribute to feeding and protecting these amazing animals.\n\nTogether, we can ensure they thrive in a safe and healthy environment.</string>
+    <string name="btn_register_login">Register/Log-in</string>
 </resources>

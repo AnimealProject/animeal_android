@@ -15,6 +15,7 @@ import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.AnimalTyp
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feeding.FeedingHandler
 import com.epmedu.animeal.feeding.presentation.viewmodel.handler.feedingpoint.FeedingPointHandler
 import com.epmedu.animeal.feedings.presentation.viewmodel.handlers.FeedingsButtonHandler
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingsProvider
 import com.epmedu.animeal.geolocation.location.LocationProvider
 import com.epmedu.animeal.geolocation.location.model.Location
@@ -103,7 +104,7 @@ internal class HomeViewModel @Inject constructor(
             is RouteEvent -> handleRouteEvent(event = event)
             is TimerCancellationEvent -> viewModelScope.handleTimerCancellationEvent(event)
             is ErrorShowed -> hideError()
-            ScreenCreated -> onScreenCreated()
+            ScreenCreated -> if (!GuestSession.isGuest.value) onScreenCreated()
             ScreenDisplayed -> onScreenDisplayed()
             is CameraEvent -> viewModelScope.handleCameraEvent(event)
             HomeScreenEvent.InitialLocationWasDisplayed -> confirmInitialLocationWasDisplayed()

@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onDisablingRouteForGuest: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val willFeedViewModel = hiltViewModel<WillFeedViewModel>()
@@ -58,7 +58,8 @@ fun HomeScreen() {
             onFeedingEvent = homeViewModel::handleFeedingEvent,
             onFeedingPointEvent = homeViewModel::handleFeedingPointEvent,
             onTimerEvent = homeViewModel::handleTimerEvent,
-            onWillFeedEvent = willFeedViewModel::handleEvent
+            onWillFeedEvent = willFeedViewModel::handleEvent,
+            onDisablingRouteForGuest
         )
     }
 

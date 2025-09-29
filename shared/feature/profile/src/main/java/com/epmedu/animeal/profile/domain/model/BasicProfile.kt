@@ -13,5 +13,3 @@ data class BasicProfile(
 ) : Profile {
     fun isFilled() = name.isNotBlank() && surname.isNotBlank() && email.isNotBlank()
 }
-
-data object GuestProfile : Profile

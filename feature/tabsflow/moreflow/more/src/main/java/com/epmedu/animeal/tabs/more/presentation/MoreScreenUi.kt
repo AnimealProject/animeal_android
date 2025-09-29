@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarPadding
@@ -30,6 +31,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun MoreScreenUi(
     state: MoreState,
     onNavigate: (String) -> Unit,
+    onDisablingRouteForGuest: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -62,7 +64,12 @@ internal fun MoreScreenUi(
                                 }
                             }
                         },
-                        onClick = { onNavigate(option.route.name) }
+                        onClick = {
+                            when {
+                                GuestSession.isGuest.value && !option.route.allowGuest -> onDisablingRouteForGuest()
+                                else -> onNavigate(option.route.name)
+                            }
+                        }
                     )
                 }
             }
@@ -82,6 +89,7 @@ private fun MoreScreenPreview() {
                     MoreOption.Feedings(isIndicatorEnabled = true)
                 )
             ),
+            onDisablingRouteForGuest = {},
             onNavigate = {}
         )
     }
