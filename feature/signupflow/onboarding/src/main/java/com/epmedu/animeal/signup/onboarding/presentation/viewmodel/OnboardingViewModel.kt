@@ -42,6 +42,7 @@ internal class OnboardingViewModel @Inject constructor(
         loadingHandler.showLoading()
         viewModelScope.launch {
             setMobileAuthenticationTypeUseCase()
+            GuestSession.end()
             updateState { copy(authenticationType = AuthenticationType.Mobile) }
         }
     }
