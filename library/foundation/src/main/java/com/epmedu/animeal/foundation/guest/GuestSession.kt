@@ -11,4 +11,8 @@ object GuestSession {
     fun start() {
         _isGuest.value = true
     }
+
+    fun end() {
+        _isGuest.value = false
+    }
 }
