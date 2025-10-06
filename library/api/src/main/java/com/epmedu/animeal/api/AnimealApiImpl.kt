@@ -44,6 +44,7 @@ internal class AnimealApiImpl(
         val path = restOptions.path
 
         Amplify.API.get(
+            API_NAME_AUTH,
             restOptions,
             { restResponse ->
                 resume(
@@ -84,6 +85,7 @@ internal class AnimealApiImpl(
     ): Flow<List<GraphQLModel>> {
         return callbackFlow {
             val graphQLOperation = Amplify.API.query(
+                API_NAME_ANONYMOUS,
                 predicate?.let {
                     ModelQuery.list(modelClass, it)
                 } ?: ModelQuery.list(modelClass),
@@ -119,6 +121,7 @@ internal class AnimealApiImpl(
     ): ApiResult<D> {
         return suspendCancellableCoroutine {
             Amplify.API.query(
+                API_NAME_AUTH,
                 buildRequestFromOperation(query, responseClass),
                 { response ->
                     Log.i(LOG_TAG, "Query $query received response $response")
@@ -144,6 +147,7 @@ internal class AnimealApiImpl(
     ): ApiResult<R> {
         return suspendCancellableCoroutine {
             Amplify.API.mutate(
+                API_NAME_AUTH,
                 buildRequestFromOperation(mutation, responseClass),
                 { response ->
                     Log.i(LOG_TAG, "Mutation $mutation received response $response")
@@ -173,6 +177,7 @@ internal class AnimealApiImpl(
             var subscriptionId = ""
 
             val graphQLOperation = Amplify.API.subscribe(
+                API_NAME_AUTH,
                 ModelSubscription.of(modelClass, subscriptionType),
                 { id ->
                     subscriptionId = id
@@ -218,6 +223,7 @@ internal class AnimealApiImpl(
             var subscriptionId = ""
 
             val graphQLOperation = Amplify.API.subscribe(
+                API_NAME_AUTH,
                 buildRequestFromOperation(subscription, responseClass),
                 { id ->
                     subscriptionId = id
@@ -274,5 +280,7 @@ internal class AnimealApiImpl(
     private companion object {
         const val LOG_TAG = "AnimealApi"
         const val SUBSCRIPTION_RETRY_ATTEMPTS = 3
+        const val API_NAME_AUTH = "animeal_auth"
+        const val API_NAME_ANONYMOUS = "animeal"
     }
 }
