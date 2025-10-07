@@ -44,7 +44,6 @@ internal class AnimealApiImpl(
         val path = restOptions.path
 
         Amplify.API.get(
-            API_NAME_AUTH,
             restOptions,
             { restResponse ->
                 resume(
