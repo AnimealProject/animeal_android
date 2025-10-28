@@ -56,9 +56,11 @@ jobs:
       - name: Copy amplify config files
         run: |
           mkdir -p app/src/dev/res/raw
+          mkdir -p library/api/src/main/res/raw
 
           cat android-keystore/amplify-keys/dev/raw/amplifyconfiguration.json >> app/src/dev/res/raw/amplifyconfiguration.json
           cat android-keystore/amplify-keys/dev/raw/awsconfiguration.json >> app/src/dev/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/main/raw/guestmock.json >> library/api/src/main/res/raw/guestmock.json
 
       - name: Setup Java 17
         uses: actions/setup-java@v3
