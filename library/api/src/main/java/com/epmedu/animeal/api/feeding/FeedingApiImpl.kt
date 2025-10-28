@@ -16,7 +16,7 @@ internal class FeedingApiImpl(
 ) : FeedingApi {
 
     override fun getUserFeedings(isGuest: Boolean, userId: String): Flow<List<Feeding>> {
-        if (isGuest){
+        if (isGuest) {
             return flow { emptyList<Feeding>() }
         }
 

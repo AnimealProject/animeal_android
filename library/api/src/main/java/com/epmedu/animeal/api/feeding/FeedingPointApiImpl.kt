@@ -4,9 +4,10 @@ import android.content.Context
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.epmedu.animeal.api.AnimealApi
-import kotlinx.coroutines.flow.Flow
 import com.epmedu.animeal.api.R
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 internal class FeedingPointApiImpl(
@@ -14,17 +15,19 @@ internal class FeedingPointApiImpl(
     private val context: Context
 ) : FeedingPointApi {
 
-    data class FeedingPointWrapper(val FeedingPoints: List<FeedingPoint>)
+    data class FeedingPointWrapper(
+        @SerializedName("FeedingPoints")
+        val feedingPoints: List<FeedingPoint>
+    )
 
     override fun getAllFeedingPoints(isGuest: Boolean): Flow<List<FeedingPoint>> = if (isGuest) {
         flow {
             context.resources.openRawResource(R.raw.guestmock).bufferedReader().use { reader ->
                 val wrapper = Gson().fromJson(reader.readText(), FeedingPointWrapper::class.java)
-                emit(wrapper.FeedingPoints)
+                emit(wrapper.feedingPoints)
             }
         }
-    }
-    else {
+    } else {
         animealApi.getModelList(FeedingPoint::class.java)
     }
 

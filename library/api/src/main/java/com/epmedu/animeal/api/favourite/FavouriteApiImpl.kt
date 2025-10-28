@@ -16,7 +16,7 @@ internal class FavouriteApiImpl(
 ) : FavouriteApi {
 
     override fun getFavouriteList(isGuest: Boolean, userId: String): Flow<List<Favourite>> {
-        if (isGuest){
+        if (isGuest) {
             return flow { emptyList<Favourite>() }
         }
 
