@@ -73,8 +73,11 @@ jobs:
       - name: Copy amplify config files
         run: |
           mkdir -p app/src/${{ matrix.flavor }}/res/raw
+          mkdir -p library/api/src/main/res/raw
+          
           cat android-keystore/amplify-keys/${{ matrix.flavor }}/raw/amplifyconfiguration.json >> app/src/${{ matrix.flavor }}/res/raw/amplifyconfiguration.json
           cat android-keystore/amplify-keys/${{ matrix.flavor }}/raw/awsconfiguration.json >> app/src/${{ matrix.flavor }}/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/main/raw/guestmock.json >> library/api/src/main/res/raw/guestmock.json
 
       - name: Copy keystore
         uses: RollyPeres/base64-to-path@v1
