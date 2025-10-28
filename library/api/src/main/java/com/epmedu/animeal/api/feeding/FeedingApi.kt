@@ -11,7 +11,7 @@ import type.SearchableStringFilterInput
 
 interface FeedingApi {
 
-    fun getUserFeedings(userId: String): Flow<List<Feeding>>
+    fun getUserFeedings(isGuest: Boolean, userId: String): Flow<List<Feeding>>
 
     suspend fun getAllFeedings(): ApiResult<SearchFeedingsQuery.Data>
 

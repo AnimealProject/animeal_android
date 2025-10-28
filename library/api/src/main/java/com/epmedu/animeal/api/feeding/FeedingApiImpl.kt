@@ -6,6 +6,7 @@ import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.api.feeding.FeedingFilters.feedingsCreatedAtFilterInput
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import type.FeedingStatus
 import type.SearchableFeedingFilterInput
 import type.SearchableStringFilterInput
@@ -14,7 +15,11 @@ internal class FeedingApiImpl(
     private val animealApi: AnimealApi
 ) : FeedingApi {
 
-    override fun getUserFeedings(userId: String): Flow<List<Feeding>> {
+    override fun getUserFeedings(isGuest: Boolean, userId: String): Flow<List<Feeding>> {
+        if (isGuest){
+            return flow { emptyList<Feeding>() }
+        }
+
         return animealApi.getModelList(
             predicate = Feeding.USER_ID.eq(userId),
             modelClass = Feeding::class.java
