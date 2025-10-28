@@ -6,6 +6,7 @@ import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
@@ -72,7 +73,7 @@ internal class FeedingPointRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchFeedingPoints(): Flow<List<DomainFeedingPoint>> {
         return combine(
-            feedingPointApi.getAllFeedingPoints(),
+            feedingPointApi.getAllFeedingPoints(GuestSession.isGuest.value),
             favouriteRepository.getFavouriteFeedingPointIds(),
             fetchModeratorsMap()
         ) { feedingPoints, favoriteFeedingPointIDs, moderatorsMap ->

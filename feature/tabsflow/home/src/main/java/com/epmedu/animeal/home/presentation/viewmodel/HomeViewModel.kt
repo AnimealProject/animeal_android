@@ -201,7 +201,8 @@ internal class HomeViewModel @Inject constructor(
 
     private suspend fun collectPermissionsState() {
         permissionsStateFlow.collect { permissionsState ->
-            if (permissionsState.geolocationPermissionStatus is PermissionStatus.Granted &&
+            if (!GuestSession.isGuest.value &&
+                permissionsState.geolocationPermissionStatus is PermissionStatus.Granted &&
                 state.permissionsState.geolocationPermissionStatus !is PermissionStatus.Granted
             ) {
                 // We have to catch SecurityException instead of checking the permission status

@@ -1,5 +1,6 @@
 package com.epmedu.animeal.api.di
 
+import android.content.Context
 import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.api.AnimealApiImpl
 import com.epmedu.animeal.api.donate.DonateApi
@@ -20,6 +21,7 @@ import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -36,8 +38,9 @@ internal object ApiModule {
     @Singleton
     @Provides
     fun providesFeedingPointApi(
-        animealApi: AnimealApi
-    ): FeedingPointApi = FeedingPointApiImpl(animealApi)
+        animealApi: AnimealApi,
+        @ApplicationContext context: Context
+    ): FeedingPointApi = FeedingPointApiImpl(animealApi, context)
 
     @Singleton
     @Provides

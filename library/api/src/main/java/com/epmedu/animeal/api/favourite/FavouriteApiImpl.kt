@@ -7,6 +7,7 @@ import com.amplifyframework.datastore.generated.model.Favourite
 import com.epmedu.animeal.api.AnimealApi
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import type.CreateFavouriteInput
 import type.DeleteFavouriteInput
 
@@ -14,7 +15,11 @@ internal class FavouriteApiImpl(
     private val animealApi: AnimealApi
 ) : FavouriteApi {
 
-    override fun getFavouriteList(userId: String): Flow<List<Favourite>> {
+    override fun getFavouriteList(isGuest: Boolean, userId: String): Flow<List<Favourite>> {
+        if (isGuest) {
+            return flow { emptyList<Favourite>() }
+        }
+
         return animealApi.getModelList(
             modelClass = Favourite::class.java,
             predicate = Favourite.USER_ID.eq(userId)
