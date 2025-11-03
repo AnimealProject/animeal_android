@@ -6,6 +6,7 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
+import com.epmedu.animeal.foundation.guest.GuestSession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +46,7 @@ internal class FavouriteRepositoryImpl(
     private fun fetchFavourites(): Flow<List<Favourite>> {
         return flow { emit(authApi.getCurrentUserId()) }.flatMapLatest { userId ->
             merge(
-                favouriteApi.getFavouriteList(userId),
+                favouriteApi.getFavouriteList(GuestSession.isGuest.value, userId),
                 subscribeToFavouritesCreations(),
                 subscribeToFavouritesDeletions()
             )

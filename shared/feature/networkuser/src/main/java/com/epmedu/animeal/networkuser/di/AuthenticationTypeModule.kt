@@ -4,6 +4,7 @@ import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.networkuser.data.repository.AuthenticationTypeRepositoryImpl
 import com.epmedu.animeal.networkuser.domain.repository.AuthenticationTypeRepository
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.GetAuthenticationTypeUseCase
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetGuestAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
 import dagger.Module
 import dagger.Provides
@@ -33,4 +34,10 @@ object AuthenticationTypeModule {
     fun provideSetMobileAuthenticationTypeUseCase(
         repository: AuthenticationTypeRepository,
     ) = SetMobileAuthenticationTypeUseCase(repository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideSetGuestAuthenticationTypeUseCase(
+        repository: AuthenticationTypeRepository,
+    ) = SetGuestAuthenticationTypeUseCase(repository)
 }

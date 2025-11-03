@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.button.AnimealShortButton
@@ -27,6 +30,7 @@ import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.modifier.focusOnGloballyPositioned
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.text.buildLinkedAnnotatedString
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.BackButton
 import com.epmedu.animeal.foundation.topbar.TopBar
@@ -75,8 +79,11 @@ private fun BottomSheet(
     state: EnterPhoneState,
     focusRequester: FocusRequester,
     sheetContent: @Composable ColumnScope.() -> Unit
-) {
+) = Scaffold { padding ->
     ModalBottomSheetLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         scrimColor = Color.Transparent,
         sheetState = bottomSheetState,
         sheetContent = sheetContent
@@ -91,6 +98,7 @@ private fun BottomSheet(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ScaffoldAndBody(
     onBack: () -> Unit,
@@ -101,6 +109,12 @@ private fun ScaffoldAndBody(
 ) {
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val linksMap: Map<String, String> = stringArrayResource(R.array.legal_links)
+        .map {
+            val (_, title, url) = it.split("|")
+            title to url
+        }
+        .toMap()
 
     Scaffold(
         modifier = Modifier
@@ -148,6 +162,13 @@ private fun ScaffoldAndBody(
                     scope.launch { bottomSheetState.show() }
                 },
                 error = if (state.isError) stringResource(id = R.string.enter_phone_error) else ""
+            )
+            Text(
+                text = buildLinkedAnnotatedString(
+                    stringResource(id = R.string.enter_phone_agreement),
+                    linksMap
+                ),
+                style = MaterialTheme.typography.body2
             )
         }
     }

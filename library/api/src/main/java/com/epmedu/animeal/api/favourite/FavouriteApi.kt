@@ -5,7 +5,7 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 interface FavouriteApi {
-    fun getFavouriteList(userId: String): Flow<List<Favourite>>
+    fun getFavouriteList(isGuest: Boolean, userId: String): Flow<List<Favourite>>
 
     fun subscribeToFavouriteCreation(): Flow<Favourite>
 

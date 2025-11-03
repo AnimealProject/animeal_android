@@ -7,12 +7,13 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.ActionDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
+import com.epmedu.animeal.foundation.guest.GuestSession
+import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetGuestAuthenticationTypeUseCase
 import com.epmedu.animeal.networkuser.domain.usecase.authenticationtype.SetMobileAuthenticationTypeUseCase
-import com.epmedu.animeal.profile.domain.SaveProfileUseCase
-import com.epmedu.animeal.profile.domain.model.GuestProfile
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.ErrorShown
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInFinished
+import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInGuestClicked
 import com.epmedu.animeal.signup.onboarding.presentation.OnboardingScreenEvent.SignInWithMobileClicked
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import javax.inject.Inject
 internal class OnboardingViewModel @Inject constructor(
     actionDelegate: ActionDelegate,
     private val setMobileAuthenticationTypeUseCase: SetMobileAuthenticationTypeUseCase,
-    private val saveProfileUseCase: SaveProfileUseCase,
+    private val setGuestAuthenticationTypeUseCase: SetGuestAuthenticationTypeUseCase,
     private val loadingHandler: LoadingHandler
 ) : ViewModel(),
     StateDelegate<OnboardingState> by DefaultStateDelegate(initialState = OnboardingState()),
@@ -31,6 +32,7 @@ internal class OnboardingViewModel @Inject constructor(
     fun handleEvent(event: OnboardingScreenEvent) {
         when (event) {
             SignInWithMobileClicked -> changeAuthenticationTypeToMobile()
+            SignInGuestClicked -> changeAuthenticationTypeToGuest()
             ErrorShown -> updateState { copy(isError = false) }
             SignInFinished -> updateState { copy(authenticationType = null) }
         }
@@ -40,11 +42,17 @@ internal class OnboardingViewModel @Inject constructor(
         loadingHandler.showLoading()
         viewModelScope.launch {
             setMobileAuthenticationTypeUseCase()
+            GuestSession.end()
             updateState { copy(authenticationType = AuthenticationType.Mobile) }
         }
     }
 
-    fun saveGuestProfile() {
-        viewModelScope.launch { saveProfileUseCase(GuestProfile) }
+    private fun changeAuthenticationTypeToGuest() {
+        loadingHandler.showLoading()
+        viewModelScope.launch {
+            setGuestAuthenticationTypeUseCase()
+            GuestSession.start()
+            updateState { copy(authenticationType = AuthenticationType.Guest) }
+        }
     }
 }

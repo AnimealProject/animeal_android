@@ -42,16 +42,19 @@ internal class AuthAPIImpl(
             userSubResult.type == AuthSessionResult.Type.SUCCESS
 
     override suspend fun getCurrentUserId(): String = suspendCancellableCoroutine {
-        Amplify.Auth.getCurrentUser(
-            { user -> resume(user.username) },
-            { authException ->
-                if (isRefreshTokenHasExpiredException(authException)) {
-                    handleRefreshTokenExpiration()
-                } else {
-                    resumeWithException(authException)
+        when (authenticationType) {
+            AuthenticationType.Guest -> resume("guest")
+            else -> Amplify.Auth.getCurrentUser(
+                { user -> resume(user.username) },
+                { authException ->
+                    if (isRefreshTokenHasExpiredException(authException)) {
+                        handleRefreshTokenExpiration()
+                    } else {
+                        resumeWithException(authException)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     /** Keep in mind: verification of session expiration (session.isExpired) works only for Mobile authorization flow.
@@ -191,6 +194,7 @@ internal class AuthAPIImpl(
     ): ApiResult<Unit> {
         return when (authenticationType) {
             AuthenticationType.Mobile -> signIn(phoneNumber)
+            else -> ApiResult.Success(Unit)
         }
     }
 

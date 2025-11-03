@@ -120,6 +120,7 @@ internal class EnterCodeViewModel @Inject constructor(
                 lastCode = state.code
                 when (authenticationType) {
                     AuthenticationType.Mobile -> confirmSignIn()
+                    else -> Unit
                 }
             }
         }

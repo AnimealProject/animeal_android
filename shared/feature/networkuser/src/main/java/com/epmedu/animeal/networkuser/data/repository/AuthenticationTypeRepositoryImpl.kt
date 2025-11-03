@@ -14,4 +14,8 @@ class AuthenticationTypeRepositoryImpl @Inject constructor(
     override fun setAuthenticationTypeAsMobile() {
         authAPI.authenticationType = AuthenticationType.Mobile
     }
+
+    override fun setAuthenticationTypeAsGuest() {
+        authAPI.authenticationType = AuthenticationType.Guest
+    }
 }

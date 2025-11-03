@@ -26,6 +26,7 @@ import com.epmedu.animeal.feeding.domain.model.UserFeeding
 import com.epmedu.animeal.feeding.domain.repository.FavouriteRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingPointRepository
 import com.epmedu.animeal.feeding.domain.repository.FeedingRepository
+import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.networkstorage.domain.NetworkFile
 import com.epmedu.animeal.users.domain.UsersRepository
@@ -82,7 +83,7 @@ internal class FeedingRepositoryImpl(
 
     override suspend fun getUserFeedings(): List<UserFeeding> {
         return combine(
-            feedingApi.getUserFeedings(userId = authApi.getCurrentUserId()),
+            feedingApi.getUserFeedings(GuestSession.isGuest.value, userId = authApi.getCurrentUserId()),
             feedingPointRepository.getAllFeedingPoints(shouldFetch = false).take(1),
             favouriteRepository.getFavouriteFeedingPointIds(shouldFetch = false)
         ) { feedings, feedingPoints, favouriteIds ->

@@ -69,13 +69,12 @@ internal fun SwipeableFeedingItem(
         }
     }
 
-    Box(
-        modifier = Modifier.height(104.dp)
-    ) {
+    Box {
         FeedingItemQuickButtons(
             onApproveClick = onApproveClick,
             onRejectClick = onRejectClick,
             modifier = Modifier
+                .height(104.dp)
                 .align(Alignment.CenterEnd)
                 .offset(x = 18.dp)
                 .alpha(buttonsAlpha)

@@ -53,6 +53,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Set build version
+        run: ./.github/scripts/increment.sh
+
       - name: Extract version name
         run: ./.github/scripts/extract-version.sh
 
@@ -70,8 +73,11 @@ jobs:
       - name: Copy amplify config files
         run: |
           mkdir -p app/src/${{ matrix.flavor }}/res/raw
+          mkdir -p library/api/src/main/res/raw
+          
           cat android-keystore/amplify-keys/${{ matrix.flavor }}/raw/amplifyconfiguration.json >> app/src/${{ matrix.flavor }}/res/raw/amplifyconfiguration.json
           cat android-keystore/amplify-keys/${{ matrix.flavor }}/raw/awsconfiguration.json >> app/src/${{ matrix.flavor }}/res/raw/awsconfiguration.json
+          cat android-keystore/amplify-keys/main/raw/guestmock.json >> library/api/src/main/res/raw/guestmock.json
 
       - name: Copy keystore
         uses: RollyPeres/base64-to-path@v1
@@ -102,6 +108,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+      
+      - name: Set build version
+        run: ./.github/scripts/increment.sh      
 
       - name: Extract version name
         run: ./.github/scripts/extract-version.sh
@@ -120,7 +129,7 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFile: service_account.json
-          groups: developers
+          groups: developers, qa_team
           releaseNotes: ${{ env.RELEASE_NOTES }}
           file: dev-release-${{ env.VERSION_NAME }}.apk/dev-release-${{ env.VERSION_NAME }}.apk
 
