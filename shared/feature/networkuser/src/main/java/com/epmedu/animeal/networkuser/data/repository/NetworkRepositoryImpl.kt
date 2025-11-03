@@ -26,6 +26,7 @@ class NetworkRepositoryImpl @Inject constructor(
 ) : NetworkRepository {
 
     private var currentUserGroupResult: ActionResult<UserGroup>? = null
+    private val messagingTokenKey = AuthUserAttributeKey.custom(UserAttributesKey.MESSAGING_TOKEN_KEY)
 
     override suspend fun isPhoneNumberVerified(): ActionResult<Boolean> {
         val result = userAttributesAPI.fetchUserAttributes()
@@ -109,6 +110,11 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun deleteNetworkUser(): ActionResult<Unit> {
         return userAttributesAPI.deleteUser().toActionResult()
+    }
+
+    override suspend fun updateMessagingToken(token: String): ActionResult<Unit> {
+        val updatedData = listOf(AuthUserAttribute(messagingTokenKey, token))
+        return userAttributesAPI.updateUserAttributes(updatedData).toActionResult()
     }
 }
 

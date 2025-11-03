@@ -5,6 +5,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey
 object UserAttributesKey {
     const val PHONE_NUMBER_VERIFIED_KEY = "phone_number_verified"
     const val IS_TRUSTED_ATTRIBUTE_KEY = "custom:trusted"
+    const val MESSAGING_TOKEN_KEY = "custom:messaging_token"
 
     val nameKey: AuthUserAttributeKey = AuthUserAttributeKey.name()
     val surnameKey: AuthUserAttributeKey = AuthUserAttributeKey.familyName()
