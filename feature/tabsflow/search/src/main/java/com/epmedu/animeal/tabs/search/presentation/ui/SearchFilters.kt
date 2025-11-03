@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -50,7 +51,9 @@ internal fun SearchFilters(
         SearchFilters.entries.forEach { filter ->
             Chip(
                 onClick = { onSelectFilter(filter) },
-                modifier = Modifier.weight(filter.weight),
+                modifier = Modifier
+                    .weight(filter.weight)
+                    .testTagAsResourceId("chp_${filter.name}"),
                 colors = ChipDefaults.chipColors(
                     backgroundColor = when (filter) {
                         selectedFilter -> filter.color

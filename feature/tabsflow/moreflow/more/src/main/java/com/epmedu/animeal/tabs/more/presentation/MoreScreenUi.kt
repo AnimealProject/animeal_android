@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.guest.GuestSession
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -52,6 +53,8 @@ internal fun MoreScreenUi(
             LazyColumn {
                 items(state.options) { option ->
                     MoreOption(
+                        modifier = Modifier
+                            .testTagAsResourceId("more_option_${option.route.name}"),
                         text = {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
