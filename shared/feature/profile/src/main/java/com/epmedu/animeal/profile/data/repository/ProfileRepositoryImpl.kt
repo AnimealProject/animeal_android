@@ -3,12 +3,10 @@ package com.epmedu.animeal.profile.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.epmedu.animeal.common.di.gson.GsonPreferences
 import com.epmedu.animeal.extensions.edit
 import com.epmedu.animeal.extensions.read
 import com.epmedu.animeal.extensions.write
 import com.epmedu.animeal.profile.domain.model.BasicProfile
-import com.epmedu.animeal.profile.domain.model.Profile
 import com.epmedu.animeal.profile.domain.model.Region
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.google.gson.Gson
@@ -21,23 +19,23 @@ import javax.inject.Inject
 
 internal class ProfileRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    @GsonPreferences private val gson: Gson,
 ) : ProfileRepository {
 
-    override fun getProfile(): Flow<Profile> {
+    override fun getProfile(): Flow<BasicProfile> {
         return dataStore.data.mapNotNull { preferences ->
-            val json = preferences.read(PROFILE_DATA_STORE)
-            gson.fromJson(json, Profile::class.java)
+            preferences.read(PROFILE_DATA_STORE)?.let { json ->
+                Gson().fromJson(json, BasicProfile::class.java)
+            }
         }
     }
 
     override fun getBasicProfile(): Flow<BasicProfile> {
-        return getProfile().mapNotNull { it as? BasicProfile }
+        return getProfile().mapNotNull { it }
     }
 
-    override fun saveProfile(profile: Profile): Flow<Unit> {
+    override fun saveProfile(profile: BasicProfile): Flow<Unit> {
         return flowOf(Unit).map {
-            val json = gson.toJson(profile, Profile::class.java)
+            val json = Gson().toJson(profile, BasicProfile::class.java)
             dataStore.write(PROFILE_DATA_STORE, json)
         }
     }
@@ -45,9 +43,9 @@ internal class ProfileRepositoryImpl @Inject constructor(
     override suspend fun updatePhoneAndRegion(phone: String, region: Region) {
         dataStore.data.map {
             val json = it.read(PROFILE_DATA_STORE)
-            val profile = gson.fromJson(json, Profile::class.java) as BasicProfile
+            val profile = Gson().fromJson(json, BasicProfile::class.java) as BasicProfile
             val newProfile = profile.copy(phoneNumber = phone, phoneNumberRegion = region)
-            dataStore.write(PROFILE_DATA_STORE, gson.toJson(newProfile, Profile::class.java))
+            dataStore.write(PROFILE_DATA_STORE, Gson().toJson(newProfile, BasicProfile::class.java))
         }
     }
 
