@@ -1,8 +1,11 @@
 package com.epmedu.animeal.api
 
 import android.util.Log
+import com.amplifyframework.api.aws.AppSyncGraphQLRequest
+import com.amplifyframework.api.aws.AuthModeStrategyType
 import com.amplifyframework.api.aws.GsonVariablesSerializer
 import com.amplifyframework.api.graphql.GraphQLRequest
+import com.amplifyframework.api.graphql.PaginatedResult
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest
 import com.amplifyframework.api.graphql.SubscriptionType
 import com.amplifyframework.api.graphql.model.ModelQuery
@@ -84,9 +87,7 @@ internal class AnimealApiImpl(
     ): Flow<List<GraphQLModel>> {
         return callbackFlow {
             val graphQLOperation = Amplify.API.query(
-                predicate?.let {
-                    ModelQuery.list(modelClass, it)
-                } ?: ModelQuery.list(modelClass),
+                buildMULTIAUTHRequestFromModel(modelClass, predicate),
                 { response ->
                     Log.i(
                         LOG_TAG,
@@ -269,6 +270,19 @@ internal class AnimealApiImpl(
             responseClass,
             GsonVariablesSerializer()
         )
+    }
+
+    private fun <GraphQLModel : Model> buildMULTIAUTHRequestFromModel(
+        modelClass: Class<GraphQLModel>,
+        predicate: QueryPredicate?
+    ): GraphQLRequest<PaginatedResult<GraphQLModel>> {
+        val baseRequest = predicate?.let {
+            ModelQuery.list(modelClass, it)
+        } ?: ModelQuery.list(modelClass)
+        return (baseRequest as AppSyncGraphQLRequest<PaginatedResult<GraphQLModel>>)
+            .newBuilder()
+            .requestAuthorizationStrategyType(AuthModeStrategyType.MULTIAUTH)
+            .build()
     }
 
     private companion object {
