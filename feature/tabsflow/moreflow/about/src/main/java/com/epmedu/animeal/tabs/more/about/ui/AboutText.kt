@@ -12,7 +12,6 @@ internal fun AboutText(text: String, modifier: Modifier = Modifier) {
         text = text,
         modifier = modifier,
         letterSpacing = 0.sp,
-        style = MaterialTheme.typography.body2,
-        lineHeight = 20.sp,
+        style = MaterialTheme.typography.body1,
     )
 }

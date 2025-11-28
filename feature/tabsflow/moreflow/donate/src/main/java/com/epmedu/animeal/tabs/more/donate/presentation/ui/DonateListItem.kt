@@ -24,7 +24,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.epmedu.animeal.extensions.copyText
 import com.epmedu.animeal.foundation.preview.AnimealPreview
-import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.spacer.WidthSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
@@ -45,7 +44,6 @@ internal fun DonateListItem(
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.subtitle1
         )
-        HeightSpacer(2.dp)
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
@@ -56,7 +54,7 @@ internal fun DonateListItem(
                         toastText = R.string.donation_copy_toast
                     )
                 }
-                .padding(16.dp),
+                .padding(16.dp, 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(

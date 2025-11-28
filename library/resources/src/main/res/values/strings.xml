@@ -169,7 +169,7 @@
     <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
 
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
-    <string name="faq_footer">Didn’t find your question here or have issues?\nPlease contact us at hi@animalproject.ge</string>
+    <string name="faq_footer">Didn’t find your question here or have issues? Please contact us at hi@animalproject.ge</string>
 
     <string-array name="legal_links">
         <item>Terms|Terms &amp; Conditions|https://animalproject.ge/about.html</item>

@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.preview.AnimealPreview
+import com.epmedu.animeal.foundation.spacer.HeightSpacer
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
@@ -16,10 +17,10 @@ import com.epmedu.animeal.resources.R
 internal fun FAQHeader(onBack: () -> Unit) {
     Column {
         FAQTopBar(onBack)
+        HeightSpacer(height = 16.dp)
         Text(
             modifier = Modifier
-                .padding(top = 12.dp, bottom = 24.dp)
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 26.dp),
             text = stringResource(id = R.string.faq_subtitle),
             style = MaterialTheme.typography.subtitle1,
         )
