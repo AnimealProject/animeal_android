@@ -21,7 +21,10 @@ fun String.toAnnotatedLinkString(): AnnotatedString {
     val spannable = SpannableString(this)
 
     Linkify.addLinks(
-        spannable, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS
+        spannable,
+        Linkify.WEB_URLS or
+            Linkify.EMAIL_ADDRESSES or
+            Linkify.PHONE_NUMBERS
     )
 
     val builder = AnnotatedString.Builder(this)
@@ -32,15 +35,18 @@ fun String.toAnnotatedLinkString(): AnnotatedString {
 
         builder.addLink(
             LinkAnnotation.Url(
-                url = span.url, styles = TextLinkStyles(
+                url = span.url,
+                styles = TextLinkStyles(
                     style = SpanStyle(
-                        color = Color.Blue, textDecoration = TextDecoration.Underline
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
                     )
                 )
-            ), start, end
+            ),
+            start,
+            end
         )
     }
 
-    // Return the final AnnotatedString containing clickable links.
     return builder.toAnnotatedString()
 }
