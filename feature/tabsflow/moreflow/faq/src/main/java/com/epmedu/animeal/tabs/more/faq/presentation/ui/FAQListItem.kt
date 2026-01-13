@@ -16,6 +16,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
+import com.epmedu.animeal.tabs.more.faq.presentation.ui.util.toAnnotatedLinkString
 
 @Composable
 internal fun FAQListItem(
@@ -37,7 +38,7 @@ internal fun FAQListItem(
         ) {
             SelectionContainer {
                 Text(
-                    text = frequentlyAskedQuestion.answer,
+                    text = frequentlyAskedQuestion.answer.toAnnotatedLinkString(),
                     modifier = Modifier
                         .padding(16.dp)
                         .padding(start = 4.dp),

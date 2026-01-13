@@ -22,6 +22,7 @@ import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.resources.R
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent
+import com.epmedu.animeal.tabs.more.faq.presentation.ui.util.toAnnotatedLinkString
 import com.epmedu.animeal.tabs.more.faq.presentation.viewmodel.FAQState
 import kotlinx.collections.immutable.toImmutableList
 
@@ -50,7 +51,7 @@ internal fun FAQContent(
             item {
                 SelectionContainer {
                     Text(
-                        text = stringResource(id = R.string.faq_footer),
+                        text = stringResource(id = R.string.faq_footer).toAnnotatedLinkString(),
                         modifier = Modifier
                             .padding(vertical = 24.dp)
                             .padding(horizontal = 26.dp),
