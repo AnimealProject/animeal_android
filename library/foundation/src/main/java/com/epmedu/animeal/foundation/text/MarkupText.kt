@@ -17,11 +17,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.text.parser.OrderedListParser
 import com.epmedu.animeal.foundation.text.parser.UnorderedListParser
+import com.epmedu.animeal.foundation.theme.CustomColor
 import com.ireward.htmlcompose.HtmlText
 
 fun getUrlStyle(alpha: Float = 1f) =
     SpanStyle(
-        color = Color.Blue.copy(alpha = alpha),
+        color = CustomColor.LinkColor.copy(alpha = alpha),
         textDecoration = TextDecoration.Underline
     )
 
