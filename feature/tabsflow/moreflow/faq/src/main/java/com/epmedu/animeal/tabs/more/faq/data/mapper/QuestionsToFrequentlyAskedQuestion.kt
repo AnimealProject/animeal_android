@@ -5,5 +5,6 @@ import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 internal fun Question.toDomain() = FrequentlyAskedQuestion(
     id = getId(),
     question = getValue(),
-    answer = getAnswer()
+    answer = getAnswer(),
+    orderNum = getOrderNum()
 )

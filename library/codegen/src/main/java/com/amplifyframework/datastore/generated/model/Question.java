@@ -31,6 +31,7 @@ public final class Question implements Model {
   public static final QueryField ID = field("Question", "id");
   public static final QueryField VALUE = field("Question", "value");
   public static final QueryField ANSWER = field("Question", "answer");
+  public static final QueryField ORDER_NUM = field("Question", "orderNum");
   public static final QueryField I18N = field("Question", "i18n");
   public static final QueryField CREATED_AT = field("Question", "createdAt");
   public static final QueryField UPDATED_AT = field("Question", "updatedAt");
@@ -40,6 +41,7 @@ public final class Question implements Model {
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String value;
   private final @ModelField(targetType="String") String answer;
+  private final @ModelField(targetType="Integer") Integer orderNum;
   private final @ModelField(targetType="QuestionI18n") List<QuestionI18n> i18n;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime createdAt;
   private final @ModelField(targetType="AWSDateTime", isRequired = true) Temporal.DateTime updatedAt;
@@ -56,6 +58,10 @@ public final class Question implements Model {
   
   public String getAnswer() {
       return answer;
+  }
+
+  public Integer getOrderNum() {
+      return orderNum;
   }
   
   public List<QuestionI18n> getI18n() {
@@ -82,10 +88,11 @@ public final class Question implements Model {
       return owner;
   }
   
-  private Question(String id, String value, String answer, List<QuestionI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
+  private Question(String id, String value, String answer, Integer orderNum, List<QuestionI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
     this.id = id;
     this.value = value;
     this.answer = answer;
+    this.orderNum = orderNum;
     this.i18n = i18n;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -105,6 +112,7 @@ public final class Question implements Model {
       return ObjectsCompat.equals(getId(), question.getId()) &&
               ObjectsCompat.equals(getValue(), question.getValue()) &&
               ObjectsCompat.equals(getAnswer(), question.getAnswer()) &&
+              ObjectsCompat.equals(getOrderNum(), question.getOrderNum()) &&
               ObjectsCompat.equals(getI18n(), question.getI18n()) &&
               ObjectsCompat.equals(getCreatedAt(), question.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), question.getUpdatedAt()) &&
@@ -120,6 +128,7 @@ public final class Question implements Model {
       .append(getId())
       .append(getValue())
       .append(getAnswer())
+      .append(getOrderNum())
       .append(getI18n())
       .append(getCreatedAt())
       .append(getUpdatedAt())
@@ -137,6 +146,7 @@ public final class Question implements Model {
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("value=" + String.valueOf(getValue()) + ", ")
       .append("answer=" + String.valueOf(getAnswer()) + ", ")
+      .append("orderNum=" + String.valueOf(getOrderNum()) + ", ")
       .append("i18n=" + String.valueOf(getI18n()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
@@ -165,6 +175,7 @@ public final class Question implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -173,6 +184,7 @@ public final class Question implements Model {
     return new CopyOfBuilder(id,
       value,
       answer,
+      orderNum,
       i18n,
       createdAt,
       updatedAt,
@@ -195,6 +207,7 @@ public final class Question implements Model {
     BuildStep id(String id);
     BuildStep value(String value);
     BuildStep answer(String answer);
+    BuildStep orderNum(Integer orderNum);
     BuildStep i18n(List<QuestionI18n> i18n);
     BuildStep createdBy(String createdBy);
     BuildStep updatedBy(String updatedBy);
@@ -208,6 +221,7 @@ public final class Question implements Model {
     private Temporal.DateTime updatedAt;
     private String value;
     private String answer;
+    private Integer orderNum;
     private List<QuestionI18n> i18n;
     private String createdBy;
     private String updatedBy;
@@ -220,6 +234,7 @@ public final class Question implements Model {
           id,
           value,
           answer,
+          orderNum,
           i18n,
           createdAt,
           updatedAt,
@@ -251,6 +266,12 @@ public final class Question implements Model {
     @Override
      public BuildStep answer(String answer) {
         this.answer = answer;
+        return this;
+    }
+
+    @Override
+     public BuildStep orderNum(Integer orderNum) {
+        this.orderNum = orderNum;
         return this;
     }
     
@@ -290,12 +311,13 @@ public final class Question implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String value, String answer, List<QuestionI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
+    private CopyOfBuilder(String id, String value, String answer, Integer orderNum, List<QuestionI18n> i18n, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner) {
       super.id(id);
       super.createdAt(createdAt)
         .updatedAt(updatedAt)
         .value(value)
         .answer(answer)
+        .orderNum(orderNum)
         .i18n(i18n)
         .createdBy(createdBy)
         .updatedBy(updatedBy)
@@ -320,6 +342,11 @@ public final class Question implements Model {
     @Override
      public CopyOfBuilder answer(String answer) {
       return (CopyOfBuilder) super.answer(answer);
+    }
+
+    @Override
+     public CopyOfBuilder orderNum(Integer orderNum) {
+      return (CopyOfBuilder) super.orderNum(orderNum);
     }
     
     @Override
