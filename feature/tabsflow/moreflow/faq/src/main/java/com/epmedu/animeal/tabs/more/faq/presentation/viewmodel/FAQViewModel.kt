@@ -33,9 +33,8 @@ internal class FAQViewModel @Inject constructor(
             getFAQUseCase()
                 .map { it.sortedWith(faqComparator).toImmutableList() }
                 .collect {
-                    updateState { copy(questions = it, isLoading = false)
+                    updateState { copy(questions = it, isLoading = false) }
                 }
-            }
         }
     }
 
