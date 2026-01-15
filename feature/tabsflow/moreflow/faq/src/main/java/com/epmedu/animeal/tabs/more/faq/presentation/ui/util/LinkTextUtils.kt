@@ -3,12 +3,10 @@ package com.epmedu.animeal.tabs.more.faq.presentation.ui.util
 import android.text.SpannableString
 import android.text.style.URLSpan
 import android.text.util.Linkify
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.style.TextDecoration
+import com.epmedu.animeal.foundation.text.getUrlStyle
 
 /**
  * Converts a plain String into an AnnotatedString with clickable links.
@@ -37,10 +35,7 @@ fun String.toAnnotatedLinkString(): AnnotatedString {
             LinkAnnotation.Url(
                 url = span.url,
                 styles = TextLinkStyles(
-                    style = SpanStyle(
-                        color = Color.Blue,
-                        textDecoration = TextDecoration.Underline
-                    )
+                    style = getUrlStyle()
                 )
             ),
             start,

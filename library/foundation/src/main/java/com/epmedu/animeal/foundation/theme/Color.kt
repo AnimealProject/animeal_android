@@ -43,4 +43,5 @@ object CustomColor {
     val FilterGrey = Color(0xFF706F6F)
     val FilterGreen = Color(0xFF3BC372)
     val FilterRed = Color(0xFFF04E45)
+    val LinkColor = Color(0xFF1976D2)
 }
