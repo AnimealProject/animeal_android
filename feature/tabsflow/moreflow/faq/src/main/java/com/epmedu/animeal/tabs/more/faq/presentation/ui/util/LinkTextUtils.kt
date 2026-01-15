@@ -8,6 +8,7 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.style.TextDecoration
+import com.epmedu.animeal.foundation.text.getUrlStyle
 import com.epmedu.animeal.foundation.theme.CustomColor
 
 /**
@@ -37,10 +38,7 @@ fun String.toAnnotatedLinkString(): AnnotatedString {
             LinkAnnotation.Url(
                 url = span.url,
                 styles = TextLinkStyles(
-                    style = SpanStyle(
-                        color = CustomColor.LinkColor,
-                        textDecoration = TextDecoration.Underline
-                    )
+                    style = getUrlStyle()
                 )
             ),
             start,
