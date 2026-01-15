@@ -40,12 +40,7 @@ internal fun FAQContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.LastElementBottom,
         ) {
-            items(
-                state.questions.sortedWith(
-                    compareBy<FrequentlyAskedQuestion> { it.orderNum ?: Int.MAX_VALUE }
-                        .thenBy { it.question }
-                )
-            ) { question ->
+            items(state.questions) { question ->
                 FAQListItem(
                     frequentlyAskedQuestion = question,
                     isExpanded = question == state.selectedQuestion,
