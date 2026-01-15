@@ -5,11 +5,8 @@ import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.style.TextDecoration
 import com.epmedu.animeal.foundation.text.getUrlStyle
-import com.epmedu.animeal.foundation.theme.CustomColor
 
 /**
  * Converts a plain String into an AnnotatedString with clickable links.
