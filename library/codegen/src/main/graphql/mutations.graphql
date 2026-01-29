@@ -1654,6 +1654,7 @@ mutation CreateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1677,6 +1678,7 @@ mutation UpdateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1700,6 +1702,7 @@ mutation DeleteQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value

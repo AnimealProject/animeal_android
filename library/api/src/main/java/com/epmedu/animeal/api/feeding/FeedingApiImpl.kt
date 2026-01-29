@@ -1,15 +1,11 @@
 package com.epmedu.animeal.api.feeding
 
-import SearchFeedingsQuery
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.api.AnimealApi
-import com.epmedu.animeal.api.feeding.FeedingFilters.feedingsCreatedAtFilterInput
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import type.FeedingStatus
-import type.SearchableFeedingFilterInput
-import type.SearchableStringFilterInput
 
 internal class FeedingApiImpl(
     private val animealApi: AnimealApi
@@ -26,59 +22,34 @@ internal class FeedingApiImpl(
         )
     }
 
-    override suspend fun getAllFeedings(): ApiResult<SearchFeedingsQuery.Data> {
+    override suspend fun getAllFeedings(): ApiResult<GetActiveFeedingsQuery.Data> {
         return animealApi.launchQuery(
-            query = SearchFeedingsQuery.builder()
-                .filter(
-                    SearchableFeedingFilterInput.builder()
-                        .createdAt(feedingsCreatedAtFilterInput)
-                        .build()
-                )
+            query = GetActiveFeedingsQuery.builder()
                 .build(),
-            responseClass = SearchFeedingsQuery.Data::class.java
+            responseClass = GetActiveFeedingsQuery.Data::class.java
         )
     }
 
     override suspend fun getFeedingsBy(
         feedingPointId: String?,
         assignedModeratorId: String?,
-        status: FeedingStatus?,
-        createdAt: SearchableStringFilterInput?
-    ): ApiResult<SearchFeedingsQuery.Data> {
-        val filterBuilder = SearchableFeedingFilterInput.builder()
+        status: FeedingStatus?
+    ): ApiResult<GetActiveFeedingsQuery.Data> {
+        val requestBuilder = GetActiveFeedingsQuery.builder()
 
         feedingPointId?.let {
-            filterBuilder.feedingPointFeedingsId(
-                SearchableStringFilterInput.builder()
-                    .eq(feedingPointId)
-                    .build()
-            )
+            requestBuilder.feedingPointId(feedingPointId);
         }
         status?.let {
-            filterBuilder.status(
-                SearchableStringFilterInput.builder()
-                    .eq(status.name)
-                    .build()
-            )
+            requestBuilder.status(status.name)
         }
         assignedModeratorId?.let {
-            filterBuilder.assignedModerators(
-                SearchableStringFilterInput.builder()
-                    .eq(assignedModeratorId)
-                    .build()
-            )
+            requestBuilder.moderatorId(assignedModeratorId)
         }
-        createdAt?.let {
-            filterBuilder.createdAt(createdAt)
-        }
-
-        val query = SearchFeedingsQuery.builder()
-            .filter(filterBuilder.build())
-            .build()
 
         return animealApi.launchQuery(
-            query = query,
-            responseClass = SearchFeedingsQuery.Data::class.java
+            query = requestBuilder.build(),
+            responseClass = GetActiveFeedingsQuery.Data::class.java
         )
     }
 
