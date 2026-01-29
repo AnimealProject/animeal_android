@@ -84,11 +84,10 @@ internal fun FeedingsScreenUI(
             }
         },
         sheetControls = {
-            state.currentFeeding?.let {
+            state.currentFeeding?.takeIf { it.status.isPending() }?.let {
                 FeedingItemButtons(
-                    areEnabled = state.currentFeeding.status.isPending(),
-                    onRejectClick = { onEvent(RejectClicked(state.currentFeeding)) },
-                    onApproveClick = { onEvent(ApproveClicked(state.currentFeeding)) },
+                    onRejectClick = { onEvent(RejectClicked(it)) },
+                    onApproveClick = { onEvent(ApproveClicked(it)) },
                     modifier = Modifier
                         .alpha(buttonAlpha)
                         .padding(vertical = 40.dp)

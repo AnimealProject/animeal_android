@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,7 +16,6 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 internal fun FeedingItemButtons(
-    areEnabled: Boolean,
     onRejectClick: () -> Unit,
     onApproveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -29,14 +27,12 @@ internal fun FeedingItemButtons(
         AnimealSecondaryButtonOutlined(
             text = stringResource(id = R.string.reject),
             onClick = onRejectClick,
-            modifier = Modifier.weight(1f),
-            enabled = areEnabled
+            modifier = Modifier.weight(1f)
         )
         AnimealButton(
             text = stringResource(id = R.string.approve),
             onClick = onApproveClick,
-            modifier = Modifier.weight(1f),
-            enabled = areEnabled
+            modifier = Modifier.weight(1f)
         )
     }
 }
@@ -46,16 +42,10 @@ internal fun FeedingItemButtons(
 private fun FeedingItemButtonsPreview() {
     AnimealTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            val buttons: @Composable (areEnabled: Boolean) -> Unit = { areEnabled ->
-                FeedingItemButtons(
-                    areEnabled = areEnabled,
-                    onRejectClick = {},
-                    onApproveClick = {}
-                )
-            }
-            buttons(true)
-            Divider()
-            buttons(false)
+            FeedingItemButtons(
+                onRejectClick = {},
+                onApproveClick = {}
+            )
         }
     }
 }
