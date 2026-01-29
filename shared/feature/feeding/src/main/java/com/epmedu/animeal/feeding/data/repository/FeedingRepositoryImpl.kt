@@ -148,8 +148,8 @@ internal class FeedingRepositoryImpl(
     private fun fetchAllFeedings(): Flow<List<Feeding>> {
         return flow {
             val feedingHistories =
-                feedingHistoryApi.getAllFeedingHistories().data?.historicalFeedings;
-            val feedings = feedingApi.getAllFeedings().data?.activeFeedings;
+                feedingHistoryApi.getAllFeedingHistories().data?.historicalFeedings
+            val feedings = feedingApi.getAllFeedings().data?.activeFeedings
 
             emit(FeedingsContainer(feedings, feedingHistories))
         }
@@ -219,10 +219,10 @@ internal class FeedingRepositoryImpl(
             val currentUserId = authApi.getCurrentUserId()
             val feedingHistories = feedingHistoryApi.getFeedingHistoriesBy(
                 assignedModeratorId = currentUserId
-            ).data?.historicalFeedings;
+            ).data?.historicalFeedings
             val feedings = feedingApi.getFeedingsBy(
-                assignedModeratorId = currentUserId,
-            ).data?.activeFeedings;
+                assignedModeratorId = currentUserId
+            ).data?.activeFeedings
 
             emit(FeedingsContainer(feedings, feedingHistories))
         }
