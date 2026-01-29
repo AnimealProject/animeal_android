@@ -38,7 +38,7 @@ internal class FeedingApiImpl(
         val requestBuilder = GetActiveFeedingsQuery.builder()
 
         feedingPointId?.let {
-            requestBuilder.feedingPointId(feedingPointId);
+            requestBuilder.feedingPointId(feedingPointId)
         }
         status?.let {
             requestBuilder.status(status.name)
