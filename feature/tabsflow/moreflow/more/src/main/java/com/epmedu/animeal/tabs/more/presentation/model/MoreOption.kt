@@ -15,7 +15,7 @@ sealed class MoreOption(
 
     data object Profile : MoreOption(MoreRoute.Profile, R.string.page_profile)
     data object FAQ : MoreOption(MoreRoute.FAQ, R.string.page_faq)
-    data object About : MoreOption(MoreRoute.About, R.string.page_about_detailed)
+    data object About : MoreOption(MoreRoute.About, R.string.page_about)
     data object Account : MoreOption(MoreRoute.Account, R.string.page_account)
     data object Donate : MoreOption(MoreRoute.Donate, R.string.page_donate)
     data object Terms : MoreOption(MoreRoute.Terms, R.string.page_terms)
