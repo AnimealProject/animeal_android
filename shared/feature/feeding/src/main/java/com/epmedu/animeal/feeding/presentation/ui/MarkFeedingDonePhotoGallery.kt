@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,6 +40,7 @@ import com.epmedu.animeal.resources.R
 fun MarkFeedingDonePhotoGallery(
     photos: List<FeedingPhotoItem>,
     isUploadingNextImage: Boolean,
+    isTakePhotoAvailable: Boolean,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
 ) {
@@ -47,10 +49,6 @@ fun MarkFeedingDonePhotoGallery(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
-            TakePhotoItem(onClick = onTakePhotoClick)
-        }
-
         items(items = photos) { item ->
             PhotoItem(
                 uri = item.uri,
@@ -59,9 +57,12 @@ fun MarkFeedingDonePhotoGallery(
                 }
             )
         }
-        if (isUploadingNextImage) {
-            item {
+
+        item {
+            if (isUploadingNextImage) {
                 CircularProgressIndicator(Modifier.size(70.dp))
+            } else if (isTakePhotoAvailable) {
+                TakePhotoItem(onClick = onTakePhotoClick)
             }
         }
     }
@@ -79,9 +80,9 @@ private fun TakePhotoItem(
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_picture),
-            tint = CustomColor.SeaSerpent,
+        Image(
+            painter = painterResource(R.drawable.ic_picture_plus),
+            contentScale = ContentScale.FillWidth,
             contentDescription = null
         )
     }
@@ -135,7 +136,8 @@ private fun MarkFeedingDonePhotoGalleryPreview() {
     AnimealTheme {
         MarkFeedingDonePhotoGallery(
             photos = listOf(FeedingPhotoItem.empty, FeedingPhotoItem.empty),
-            isUploadingNextImage = true,
+            isUploadingNextImage = false,
+            isTakePhotoAvailable = true,
             onTakePhotoClick = {},
             onDeletePhotoClick = {}
         )

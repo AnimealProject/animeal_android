@@ -39,6 +39,7 @@ fun MarkFeedingDoneSheet(
     modifier: Modifier = Modifier,
     photos: List<FeedingPhotoItem> = emptyList(),
     isUploadingNextImage: Boolean = false,
+    isTakePhotoAvailable: Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -73,6 +74,7 @@ fun MarkFeedingDoneSheet(
         MarkFeedingDoneContent(
             photos = photos,
             isUploadingNextImage = isUploadingNextImage,
+            isTakePhotoAvailable = isTakePhotoAvailable,
             onTakePhotoClick = onTakePhotoClick,
             onDeletePhotoClick = onDeletePhotoClick
         )
@@ -112,6 +114,7 @@ private fun MarkFeedingDoneHeader(
 private fun MarkFeedingDoneContent(
     photos: List<FeedingPhotoItem>,
     isUploadingNextImage: Boolean,
+    isTakePhotoAvailable: Boolean,
     onTakePhotoClick: () -> Unit,
     onDeletePhotoClick: (FeedingPhotoItem) -> Unit,
 ) {
@@ -130,6 +133,7 @@ private fun MarkFeedingDoneContent(
         MarkFeedingDonePhotoGallery(
             photos = photos,
             isUploadingNextImage = isUploadingNextImage,
+            isTakePhotoAvailable = isTakePhotoAvailable,
             onTakePhotoClick = onTakePhotoClick,
             onDeletePhotoClick = onDeletePhotoClick
         )

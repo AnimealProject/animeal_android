@@ -153,6 +153,7 @@ internal fun HomeScreenUI(
                     feedingPoint = feedingPoint,
                     feedingPhotos = state.feedingPhotos,
                     contentAlpha = contentAlpha,
+                    isTakePhotoAvailable = state.feedingPhotos.count() < state.maxFinishPhotoCount,
                     onFavouriteChange = {
                         onFeedingPointEvent(
                             FeedingPointEvent.FavouriteChange(
