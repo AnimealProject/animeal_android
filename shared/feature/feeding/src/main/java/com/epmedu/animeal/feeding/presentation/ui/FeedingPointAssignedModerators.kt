@@ -45,7 +45,7 @@ internal fun FeedingPointAssignedModerators(
 ) {
     val configuration = LocalConfiguration.current
     var isExpanded by remember { mutableStateOf(isExpandedInitially) }
-    var showAll by remember { mutableStateOf(false) }
+    var showAll by remember { mutableStateOf(moderators.count() <= assignedModeratorsInitialCount) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -77,7 +77,7 @@ internal fun FeedingPointAssignedModerators(
                         .forEach { moderator ->
                             FeedingPointModerator(moderator = moderator)
                         }
-                    if (!showAll && moderators.count() > assignedModeratorsInitialCount) {
+                    if (!showAll) {
                         Text(
                             modifier = Modifier.clickable { showAll = true },
                             text = stringResource(id = R.string.show_all_count, moderators.count()),
