@@ -2,7 +2,6 @@ package com.epmedu.animeal.feeding.presentation.model
 
 import android.text.format.DateUtils
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
-import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.feeding.domain.model.FeedingHistory as DomainFeedingHistory
 import com.epmedu.animeal.feeding.domain.model.FeedingInProgress as DomainFeedingInProgress
 
@@ -13,12 +12,14 @@ sealed class Feeding(
     data class InProgress(
         override val id: String = EMPTY_STRING,
         override val feederName: String = EMPTY_STRING,
-        val timeLeft: Long = 0L
+        val startTime: Long = 0L,
+        val endTime: Long? = null
     ) : Feeding(id, feederName) {
         constructor(feedingInProgress: DomainFeedingInProgress) : this(
             id = feedingInProgress.id,
             feederName = "${feedingInProgress.name} ${feedingInProgress.surname}",
-            timeLeft = HOUR_IN_MILLIS - (System.currentTimeMillis() - feedingInProgress.startDate.time)
+            startTime = feedingInProgress.startDate.time,
+            endTime = feedingInProgress.endDate?.time
         )
     }
 
