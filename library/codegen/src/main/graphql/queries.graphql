@@ -54,6 +54,148 @@ query SearchByBounds(
   }
 }
 
+query GetActiveFeedings(
+  $moderatorId: String
+  $feedingPointId: String
+  $status: String
+) {
+  getActiveFeedings(
+    moderatorId: $moderatorId
+    feedingPointId: $feedingPointId
+    status: $status
+  ) {
+    id
+    userId
+    images
+    status
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointDetails {
+      address
+      __typename
+    }
+    feedingPointFeedingsId
+    expireAt
+    assignedModerators
+    moderatedBy
+    moderatedAt
+    __typename
+  }
+}
+
+query GetHistoricalFeedings(
+  $start: AWSDateTime
+  $end: AWSDateTime
+  $moderatorId: String
+  $feedingPointId: String
+  $status: String
+) {
+  getHistoricalFeedings(
+    start: $start
+    end: $end
+    moderatorId: $moderatorId
+    feedingPointId: $feedingPointId
+    status: $status
+  ) {
+    id
+    userId
+    images
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    feedingPointId
+    feedingPointDetails {
+      address
+      __typename
+    }
+    status
+    reason
+    moderatedBy
+    moderatedAt
+    assignedModerators
+    __typename
+  }
+}
+
+query GetFeedingPoints(
+  $locationBounds: BoundsInput
+  $moderatorId: String
+  $categoryTag: String
+) {
+  getFeedingPoints(
+    locationBounds: $locationBounds
+    moderatorId: $moderatorId
+    categoryTag: $categoryTag
+  ) {
+    id
+    name
+    description
+    city
+    street
+    address
+    images
+    point {
+      type
+      coordinates
+      __typename
+    }
+    location {
+      lat
+      lon
+      __typename
+    }
+    region
+    neighborhood
+    distance
+    status
+    i18n {
+      locale
+      name
+      description
+      city
+      street
+      address
+      region
+      neighborhood
+      __typename
+    }
+    statusUpdatedAt
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    pets {
+      nextToken
+      __typename
+    }
+    category {
+      id
+      name
+      icon
+      tag
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      __typename
+    }
+    users {
+      nextToken
+      __typename
+    }
+    cover
+    feedingPointCategoryId
+    __typename
+  }
+}
+
 query GetPet($id: ID!) {
   getPet(id: $id) {
     id
@@ -1471,6 +1613,7 @@ query GetQuestion($id: ID!) {
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1496,6 +1639,7 @@ query ListQuestions(
       id
       value
       answer
+      orderNum
       createdAt
       updatedAt
       createdBy
@@ -1524,6 +1668,7 @@ query SearchQuestions(
       id
       value
       answer
+      orderNum
       createdAt
       updatedAt
       createdBy

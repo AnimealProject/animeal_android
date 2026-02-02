@@ -5,6 +5,7 @@ import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedState
 import com.epmedu.animeal.feeding.presentation.viewmodel.FeedingPointState
 import com.epmedu.animeal.feedings.presentation.model.FeedingsButtonState
+import com.epmedu.animeal.foundation.common.validation.Constants.MAX_FINISH_PHOTO_COUNT
 import com.epmedu.animeal.geolocation.gpssetting.GpsSettingState
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.model.CancellationRequestState
@@ -37,7 +38,9 @@ data class HomeState(
 
     val timerState: TimerState? = null,
 
-    val isError: Boolean = false
+    val isError: Boolean = false,
+
+    val maxFinishPhotoCount: Int = MAX_FINISH_PHOTO_COUNT
 )
 
 sealed interface LocationState {

@@ -1622,6 +1622,7 @@ subscription OnCreateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1645,6 +1646,7 @@ subscription OnUpdateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1668,6 +1670,7 @@ subscription OnDeleteQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value

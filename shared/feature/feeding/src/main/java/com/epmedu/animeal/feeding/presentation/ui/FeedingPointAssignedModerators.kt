@@ -1,6 +1,7 @@
 package com.epmedu.animeal.feeding.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
@@ -37,11 +39,13 @@ import com.epmedu.animeal.resources.R
 @Composable
 internal fun FeedingPointAssignedModerators(
     moderators: List<String>,
+    assignedModeratorsInitialCount: Int,
     isExpandedInitially: Boolean = false,
     onExpanding: () -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
     var isExpanded by remember { mutableStateOf(isExpandedInitially) }
+    var showAll by remember { mutableStateOf(moderators.count() <= assignedModeratorsInitialCount) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -68,8 +72,21 @@ internal fun FeedingPointAssignedModerators(
                         .padding(horizontal = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    moderators.forEach { moderator ->
-                        FeedingPointModerator(moderator = moderator)
+                    moderators
+                        .let { if (showAll) it else it.take(assignedModeratorsInitialCount) }
+                        .forEach { moderator ->
+                            FeedingPointModerator(moderator = moderator)
+                        }
+                    if (!showAll) {
+                        Text(
+                            modifier = Modifier.clickable { showAll = true },
+                            text = stringResource(id = R.string.show_all_count, moderators.count()),
+                            style = MaterialTheme.typography.subtitle1.copy(
+                                color = CustomColor.SeaSerpent,
+                                textDecoration = TextDecoration.Underline
+                            ),
+                            color = CustomColor.SeaSerpent,
+                        )
                     }
                 }
             }
@@ -82,13 +99,13 @@ private fun FeedingPointModerator(moderator: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp),
+            .heightIn(min = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(56.dp)
+                .size(32.dp)
                 .clip(CircleShape)
                 .background(CustomColor.LynxWhite.withLocalAlpha()),
             contentAlignment = Alignment.Center,

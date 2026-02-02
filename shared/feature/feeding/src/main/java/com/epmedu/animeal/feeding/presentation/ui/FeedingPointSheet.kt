@@ -61,6 +61,7 @@ fun FeedingPointSheetContent(
     modifier: Modifier = Modifier,
     useExpandableFeeders: Boolean = false,
     showAssignedModerators: Boolean = false,
+    assignedModeratorsInitialCount: Int = 5,
     onFavouriteChange: (Boolean) -> Unit = {}
 ) {
     Column(
@@ -95,7 +96,8 @@ fun FeedingPointSheetContent(
                 feedings = feedings,
                 scrimAlpha = contentAlpha,
                 assignedModerators = if (showAssignedModerators) assignedModerators else null,
-                useExpandableFeeders = useExpandableFeeders
+                useExpandableFeeders = useExpandableFeeders,
+                assignedModeratorsInitialCount = assignedModeratorsInitialCount
             )
         }
     }
@@ -152,7 +154,8 @@ internal fun FeedingPointDetails(
     description: String,
     feedings: List<Feeding>?,
     assignedModerators: List<String>?,
-    useExpandableFeeders: Boolean
+    useExpandableFeeders: Boolean,
+    assignedModeratorsInitialCount: Int
 ) {
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -195,7 +198,8 @@ internal fun FeedingPointDetails(
             assignedModerators?.let { moderators ->
                 item {
                     FeedingPointAssignedModerators(
-                        moderators = moderators,
+                        moderators = moderators.sorted(),
+                        assignedModeratorsInitialCount = assignedModeratorsInitialCount,
                         onExpanding = {
                             coroutineScope.launch {
                                 lazyListState.layoutInfo.viewportSize.height.let {

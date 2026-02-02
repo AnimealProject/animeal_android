@@ -4,13 +4,11 @@ import OnCreateFeedingExtSubscription
 import OnCreateFeedingHistoryExtSubscription
 import OnUpdateFeedingExtSubscription
 import SearchFeedingHistoriesQuery
-import SearchFeedingsQuery
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.apollographql.apollo.api.Operation.Data
 import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
-import com.epmedu.animeal.api.feeding.FeedingFilters
 import com.epmedu.animeal.api.feeding.FeedingHistoryApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
@@ -102,7 +100,7 @@ internal class FeedingRepositoryImpl(
     override fun getFeedingInProgress(feedingPointId: String): Flow<FeedingInProgress?> {
         return flow {
             emit(
-                feedingApi.getFeedingsBy(feedingPointId).data?.searchFeedings()?.items()
+                feedingApi.getFeedingsBy(feedingPointId).data?.activeFeedings
             )
         }.flatMapLatest { feedings ->
             if (feedings.isNullOrEmpty()) {
@@ -150,9 +148,8 @@ internal class FeedingRepositoryImpl(
     private fun fetchAllFeedings(): Flow<List<Feeding>> {
         return flow {
             val feedingHistories =
-                feedingHistoryApi.getAllFeedingHistories().data?.searchFeedingHistories()
-                    ?.items()
-            val feedings = feedingApi.getAllFeedings().data?.searchFeedings()?.items()
+                feedingHistoryApi.getAllFeedingHistories().data?.historicalFeedings
+            val feedings = feedingApi.getAllFeedings().data?.activeFeedings
 
             emit(FeedingsContainer(feedings, feedingHistories))
         }
@@ -221,13 +218,11 @@ internal class FeedingRepositoryImpl(
         return flow {
             val currentUserId = authApi.getCurrentUserId()
             val feedingHistories = feedingHistoryApi.getFeedingHistoriesBy(
-                assignedModeratorId = currentUserId,
-                createdAt = FeedingFilters.feedingsCreatedAtFilterInput
-            ).data?.searchFeedingHistories()?.items()
+                assignedModeratorId = currentUserId
+            ).data?.historicalFeedings
             val feedings = feedingApi.getFeedingsBy(
-                assignedModeratorId = currentUserId,
-                createdAt = FeedingFilters.feedingsCreatedAtFilterInput
-            ).data?.searchFeedings()?.items()
+                assignedModeratorId = currentUserId
+            ).data?.activeFeedings
 
             emit(FeedingsContainer(feedings, feedingHistories))
         }
@@ -355,6 +350,10 @@ internal class FeedingRepositoryImpl(
         return this?.status() == rejected && images().isEmpty()
     }
 
+    private fun GetHistoricalFeedingsQuery.GetHistoricalFeeding?.isExpired(): Boolean {
+        return this?.status() == rejected && images().isEmpty()
+    }
+
     private fun OnCreateFeedingHistoryExtSubscription.OnCreateFeedingHistoryExt?.isExpired(): Boolean {
         return this?.status() == rejected && images().isEmpty()
     }
@@ -376,7 +375,7 @@ internal class FeedingRepositoryImpl(
                 feedingHistoryApi.getFeedingHistoriesBy(
                     feedingPointId = feedingPointId,
                     status = status?.toData()
-                ).data?.searchFeedingHistories()?.items()
+                ).data?.historicalFeedings
             )
         }.flatMapLatest { feedingsHistories ->
             if (feedingsHistories.isNullOrEmpty()) {
@@ -428,7 +427,7 @@ internal class FeedingRepositoryImpl(
     }
 
     private data class FeedingsContainer(
-        val feedings: List<SearchFeedingsQuery.Item?>?,
-        val feedingHistories: List<SearchFeedingHistoriesQuery.Item?>?
+        val feedings: List<GetActiveFeedingsQuery.GetActiveFeeding?>?,
+        val feedingHistories: List<GetHistoricalFeedingsQuery.GetHistoricalFeeding?>?
     )
 }

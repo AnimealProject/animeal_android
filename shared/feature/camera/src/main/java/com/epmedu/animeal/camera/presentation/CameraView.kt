@@ -121,6 +121,8 @@ private fun buildImageCapture() = ImageCapture.Builder()
             )
             .build()
     )
+    .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+    .setJpegQuality(80)
     .build()
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
