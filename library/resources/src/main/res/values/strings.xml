@@ -150,6 +150,7 @@
     <string name="last_feeders">Last feeders</string>
     <string name="assigned_moderators">Assigned moderators</string>
     <string name="show_on_map">Show on map</string>
+    <string name="show_all_count">Show all (%s)</string>
     <string name="agree">Agree</string>
     <string name="finish">Finish</string>
     <string name="reject">Reject</string>
