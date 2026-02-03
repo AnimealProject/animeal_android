@@ -113,7 +113,12 @@ internal class FeedingRepositoryImpl(
                         id = feeding.userId(),
                         name = user?.name.orEmpty(),
                         surname = user?.surname.orEmpty(),
-                        startDate = Temporal.DateTime(feeding.createdAt()).toDate()
+                        startDate = Temporal.DateTime(feeding.createdAt()).toDate(),
+                        endDate = if (feeding.status() == type.FeedingStatus.pending) {
+                            Temporal.DateTime(feeding.updatedAt()).toDate()
+                        } else {
+                            null
+                        }
                     )
                 }
             }

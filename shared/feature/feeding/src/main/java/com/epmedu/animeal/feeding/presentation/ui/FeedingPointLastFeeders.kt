@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.Feeding
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
@@ -113,13 +114,13 @@ private fun FeedingPointFeeding(feeding: Feeding) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(56.dp)
+                .size(32.dp)
                 .clip(CircleShape)
                 .background(CustomColor.LynxWhite.withLocalAlpha()),
             contentAlignment = Alignment.Center,
@@ -145,13 +146,8 @@ private fun FeedingPointFeeding(feeding: Feeding) {
             Text(
                 text = when (feeding) {
                     is Feeding.InProgress -> {
-                        stringResource(
-                            id = R.string.feeding_in_progress,
-                            LocalContext.current.formatNumberToHourMin(feeding.timeLeft)
-                                ?: stringResource(id = R.string.unknown_time)
-                        )
+                        getInProgressElapsedInfo(feeding)
                     }
-
                     is Feeding.History -> {
                         feeding.elapsedTime
                     }
@@ -166,22 +162,38 @@ private fun FeedingPointFeeding(feeding: Feeding) {
 }
 
 @Composable
+private fun getInProgressElapsedInfo(feeding: Feeding.InProgress): String {
+    var resourceId = R.string.feeding_in_progress
+    var timeLeft = HOUR_IN_MILLIS - (System.currentTimeMillis() - feeding.startTime)
+    if (feeding.endTime != null) {
+        resourceId = R.string.feeding_in_pending
+        timeLeft = 12 * HOUR_IN_MILLIS - (System.currentTimeMillis() - feeding.endTime)
+    }
+
+    return stringResource(
+        id = resourceId,
+        LocalContext.current.formatNumberToHourMin(timeLeft)
+            ?: stringResource(id = R.string.unknown_time)
+    )
+}
+
+@Composable
 private fun FeedingPointFeedingLoading() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         ShimmerLoading(
-            modifier = Modifier.size(56.dp),
+            modifier = Modifier.size(32.dp),
             alpha = LocalContentAlpha.current
         )
         Column(
-            modifier = Modifier.height(56.dp),
+            modifier = Modifier.height(40.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             ShimmerLoading(
-                modifier = Modifier.size(height = 14.dp, width = 160.dp),
+                modifier = Modifier.size(height = 16.dp, width = 160.dp),
                 alpha = LocalContentAlpha.current
             )
             ShimmerLoading(
@@ -210,7 +222,7 @@ private fun FeedingPointLastFeederPreview() {
             FeedingPointLastFeeder(
                 feeding = Feeding.InProgress(
                     feederName = "John Doe",
-                    timeLeft = 1.minutes.inWholeMilliseconds
+                    startTime = 58.minutes.inWholeMilliseconds
                 )
             )
             Divider()
