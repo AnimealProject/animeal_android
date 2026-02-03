@@ -103,6 +103,7 @@
 
     <string name="unknown_user">Unknown user</string>
     <string name="feeding_in_progress">Feeding in progress, %s left</string>
+    <string name="feeding_in_pending">Feeding pending approval, %s left</string>
     <string name="unknown_time">unknown time</string>
 
     <string name="delete">Delete</string>

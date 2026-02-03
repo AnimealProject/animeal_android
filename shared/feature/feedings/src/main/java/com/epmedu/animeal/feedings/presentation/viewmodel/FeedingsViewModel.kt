@@ -8,6 +8,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.DefaultStateDel
 import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.feeding.domain.model.Feeding
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
+import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RejectFeedingUseCase
 import com.epmedu.animeal.feedings.domain.usecase.ApproveFeedingUseCase
@@ -89,11 +90,19 @@ internal class FeedingsViewModel @Inject constructor(
             getHasReviewedFeedingsUseCase(),
             getViewedFeedingsUseCase()
         ) { feedings, hasReviewedFeedings, viewedFeedingIds ->
-            val feedingModels = feedings.mapNotNull { feeding ->
-                getFeedingPointByIdUseCase(feeding.feedingPointId)?.let { feedingPoint ->
-                    createFeedingModel(feeding, feedingPoint)
+            val feedingModels = feedings
+                .sortedBy {
+                    if (it.status == FeedingStatus.Pending) {
+                        it.statusUpdated.time
+                    } else {
+                        -it.statusUpdated.time
+                    }
                 }
-            }
+                .mapNotNull { feeding ->
+                    getFeedingPointByIdUseCase(feeding.feedingPointId)?.let { feedingPoint ->
+                        createFeedingModel(feeding, feedingPoint)
+                    }
+                }
             mapFeedingsByCategory(feedingModels)
 
             val feedingsFiltered =
@@ -143,25 +152,12 @@ internal class FeedingsViewModel @Inject constructor(
     }
 
     private fun mapFeedingsByCategory(feedings: List<FeedingModel>) {
-        val pendingFeedings = mutableListOf<FeedingModel>()
-        val approvedFeedings = mutableListOf<FeedingModel>()
-        val rejectedFeedings = mutableListOf<FeedingModel>()
-        val outdatedFeedings = mutableListOf<FeedingModel>()
-
-        feedings.forEach { feeding ->
-            when (toFilterCategory(feeding.status)) {
-                FeedingFilterCategory.PENDING -> pendingFeedings.add(feeding)
-                FeedingFilterCategory.APPROVED -> approvedFeedings.add(feeding)
-                FeedingFilterCategory.REJECTED -> rejectedFeedings.add(feeding)
-                FeedingFilterCategory.OUTDATED -> outdatedFeedings.add(feeding)
-            }
-        }
-
         allFeedings.clear()
-        allFeedings[FeedingFilterCategory.PENDING] = pendingFeedings
-        allFeedings[FeedingFilterCategory.APPROVED] = approvedFeedings
-        allFeedings[FeedingFilterCategory.REJECTED] = rejectedFeedings
-        allFeedings[FeedingFilterCategory.OUTDATED] = outdatedFeedings
+        FeedingFilterCategory.values().forEach { category ->
+            allFeedings[category] = feedings
+                .filter { toFilterCategory(it.status) == category }
+                .toMutableList()
+        }
     }
 
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
