@@ -7,7 +7,7 @@
     <string name="logout">Log out</string>
     <string name="home">Home</string>
     <string name="more">More</string>
-    <string name="favourites">Favourites</string>
+    <string name="favourites">Favorites</string>
     <string name="feeding_analysis">Feeding Analysis</string>
     <string name="feedings">Feedings</string>
 
@@ -34,7 +34,7 @@
     <string name="sign_in_mobile">Sign in with Mobile</string>
 
     <string name="tab_search">Search</string>
-    <string name="tab_favourites">Favourites</string>
+    <string name="tab_favourites">Favorites</string>
     <string name="tab_home">Home</string>
     <string name="tab_analytics">Analytics</string>
     <string name="tab_more">More</string>
@@ -167,7 +167,7 @@
     <string name="routes_failed">Route request failed</string>
     <string name="routes_cancelled">Route request cancelled</string>
 
-    <string name="favourites_no_items">You don’t have favourite feeding points yet. Press the heart button on the feeding point details to add that one as favourite.</string>
+    <string name="favourites_no_items">You don’t have favorite feeding points yet. Press the heart button on the feeding point details to add that one as favorite.</string>
 
     <string name="faq_subtitle">If you have any questions please check our FAQ section below</string>
     <string name="faq_footer">Didn’t find your question here or have issues? Please contact us at hi@animalproject.ge</string>
