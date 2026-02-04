@@ -28,3 +28,12 @@
 -dontwarn com.amazonaws.services.s3.model.**
 -dontwarn org.eclipse.paho.android.service.MqttAndroidClient
 -dontwarn org.eclipse.paho.client.mqttv3.**
+
+# === Apollo GraphQL (Java generated models) ===
+-keep class * implements com.apollographql.apollo.api.Operation { *; }
+-keep class * implements com.apollographql.apollo.api.Operation$Data { *; }
+-keep class * implements com.apollographql.apollo.api.Operation$Variables { *; }
+-keepclassmembers class * {
+    <fields>;
+}
+-keepattributes *Annotation*
