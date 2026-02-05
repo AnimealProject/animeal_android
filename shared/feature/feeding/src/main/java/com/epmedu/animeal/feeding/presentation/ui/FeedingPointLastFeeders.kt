@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.epmedu.animeal.extensions.HOUR_IN_MILLIS
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.presentation.model.Feeding
+import com.epmedu.animeal.feeding.presentation.util.FeedingConstants.FEEDERS_LIMIT
 import com.epmedu.animeal.foundation.listitem.ExpandableListItem
 import com.epmedu.animeal.foundation.loading.ShimmerLoading
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -46,6 +48,14 @@ import com.epmedu.animeal.resources.R
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
+internal fun NoFeeders() {
+    Text(
+        text = stringResource(R.string.last_feeders_empty, FEEDERS_LIMIT),
+        style = MaterialTheme.typography.body2,
+    )
+}
+
+@Composable
 internal fun FeedingPointLastFeeder(
     feeding: Feeding?,
     modifier: Modifier = Modifier,
@@ -54,11 +64,20 @@ internal fun FeedingPointLastFeeder(
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         LastFeedersHeader(isAlone = true)
-        if (isLoading) FeedingPointFeedingLoading()
-        feeding?.let { FeedingPointFeeding(feeding = feeding) }
+        when {
+            isLoading -> {
+                FeedingPointFeedingLoading()
+            }
+            feeding == null -> {
+                NoFeeders()
+            }
+            else -> {
+                FeedingPointFeeding(feeding = feeding)
+            }
+        }
     }
 }
 
@@ -87,10 +106,22 @@ internal fun FeedingPointExpandableLastFeeders(
                         .padding(horizontal = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    feedings?.forEach { feeding ->
-                        FeedingPointFeeding(feeding = feeding)
-                    } ?: repeat(3) {
-                        FeedingPointFeedingLoading()
+                    when {
+                        feedings == null -> {
+                            repeat(3) {
+                                FeedingPointFeedingLoading()
+                            }
+                        }
+
+                        feedings.isEmpty() -> {
+                            NoFeeders()
+                        }
+
+                        else -> {
+                            feedings.forEach { feeding ->
+                                FeedingPointFeeding(feeding = feeding)
+                            }
+                        }
                     }
                 }
             }
@@ -114,7 +145,7 @@ private fun FeedingPointFeeding(feeding: Feeding) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .heightIn(min = 40.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {

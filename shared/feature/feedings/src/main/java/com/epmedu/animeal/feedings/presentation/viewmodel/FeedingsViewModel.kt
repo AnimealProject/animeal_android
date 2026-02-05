@@ -199,7 +199,7 @@ internal class FeedingsViewModel @Inject constructor(
                 reviewedBy = feeding.reviewedBy?.let { "${it.name} ${it.surname}" }
                     .takeIf { feedingStatus == FeedingModelStatus.APPROVED || feedingStatus == FeedingModelStatus.REJECTED },
                 rejectionReason = feeding.rejectionReason
-                    .takeIf { feedingStatus == FeedingModelStatus.REJECTED }
+                    .takeIf { feedingStatus == FeedingModelStatus.REJECTED || feedingStatus == FeedingModelStatus.OUTDATED }
             )
         } else {
             null
