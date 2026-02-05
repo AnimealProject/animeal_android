@@ -149,6 +149,7 @@
     <string name="i_will_feed">I will feed</string>
     <string name="last_feeder">Last feeder</string>
     <string name="last_feeders">Last feeders</string>
+    <string name="last_feeders_empty">No feeders for the last %s days</string>
     <string name="assigned_moderators">Assigned moderators</string>
     <string name="show_on_map">Show on map</string>
     <string name="show_all_count">Show all (%s)</string>
