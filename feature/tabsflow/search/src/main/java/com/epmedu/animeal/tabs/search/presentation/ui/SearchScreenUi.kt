@@ -148,7 +148,7 @@ private fun ScreenScaffold(
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
                     enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                        state.feedState.feedPoint == null,
+                        feedingPointInProgress == null,
                     onClick = {
                         state.showingFeedingPoint?.id?.let {
                             onWillFeedEvent(WillFeedClicked)

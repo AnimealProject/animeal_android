@@ -112,7 +112,8 @@ class DefaultFeedingHandler(
     private suspend fun restartFeedingConfirmationState() {
         updateFeedingState(
             feedingConfirmationState = Dismissed,
-            updateGlobally = false
+            updateGlobally = false,
+            feedPoint = state.feedPoint
         )
     }
 

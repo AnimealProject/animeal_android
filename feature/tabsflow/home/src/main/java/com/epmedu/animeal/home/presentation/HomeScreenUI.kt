@@ -184,7 +184,8 @@ internal fun HomeScreenUI(
                     else -> {
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
-                            enabled = feedingPoint.feedStatus == FeedStatus.Starved,
+                            enabled = feedingPoint.feedStatus == FeedStatus.Starved &&
+                                state.feedState.feedPoint == null,
                             onClick = { onWillFeedEvent(WillFeedClicked) }
                         )
                     }
