@@ -22,6 +22,7 @@ data class FeedingPointModel(
     val description: String,
     val city: String,
     val feedStatus: FeedStatus,
+    val inactive: Boolean,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
     val coordinates: Point,
@@ -36,6 +37,7 @@ data class FeedingPointModel(
         description = feedingPoint.description,
         city = feedingPoint.city,
         feedStatus = feedingPoint.animalStatus.toFeedStatus(),
+        inactive = feedingPoint.inactive,
         animalType = feedingPoint.animalType,
         isFavourite = feedingPoint.isFavourite,
         coordinates = Point.fromLngLat(
@@ -48,7 +50,7 @@ data class FeedingPointModel(
         }
     )
 
-    fun getDrawableRes(): Int =
+    private fun getGeneralDrawableRes(): Int =
         when {
             isFavourite -> {
                 when (feedStatus) {
@@ -72,6 +74,17 @@ data class FeedingPointModel(
                     InProgress, Pending -> R.drawable.ic_catsstate_cathungry_in_process
                     Fed -> R.drawable.ic_catsstate_cathungry_low
                 }
+            }
+        }
+
+    fun getDrawableRes(): Int =
+        if (!inactive) {
+            getGeneralDrawableRes()
+        } else {
+            when {
+                isFavourite -> R.drawable.ic_favstate_favouritehungry_inactive
+                animalType == AnimalType.Dogs -> R.drawable.ic_dogsstate_doghungry_inactive
+                else -> R.drawable.ic_catsstate_cathungry_inactive
             }
         }
 }

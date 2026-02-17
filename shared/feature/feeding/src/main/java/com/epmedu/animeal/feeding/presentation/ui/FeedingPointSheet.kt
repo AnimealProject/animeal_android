@@ -4,11 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +27,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,6 +91,7 @@ fun FeedingPointSheetContent(
             FeedingPointHeader(
                 title = title,
                 status = feedStatus,
+                inactive = inactive,
                 isFavourite = isFavourite,
                 image = image,
                 onFavouriteChange = onFavouriteChange
@@ -107,44 +112,55 @@ fun FeedingPointSheetContent(
 internal fun FeedingPointHeader(
     title: String,
     status: FeedStatus,
+    inactive: Boolean,
     isFavourite: Boolean,
     image: NetworkFile?,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        FeedingPointImage(
-            image = image,
-            contentDescription = title
-        )
-        Column(
+    Box {
+        Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .alpha(if (inactive) 0.6f else 1.0f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colors.onSurface,
-                maxLines = 2,
+            FeedingPointImage(
+                image = image,
+                contentDescription = title
             )
-            FeedStatusItem(
-                status = status,
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colors.onSurface,
+                    maxLines = 2,
+                )
+                FeedStatusItem(
+                    status = status,
+                )
+            }
+            AnimealHeartButton(
+                modifier = Modifier.align(Alignment.Top),
+                selected = isFavourite,
+                onChange = onFavouriteChange,
             )
         }
-        AnimealHeartButton(
-            modifier = Modifier.align(Alignment.Top),
-            selected = isFavourite,
-            onChange = onFavouriteChange,
-        )
+
+        if (inactive) {
+            FeedingPointInactiveBadge(
+                modifier = Modifier.offset(x = (-8).dp, y = (-8).dp)
+            )
+        }
     }
 }
 
@@ -236,6 +252,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
                 id = "",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
+                inactive = false,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,
@@ -259,6 +276,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 id = "",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
+                inactive = true,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
                 isFavourite = true,

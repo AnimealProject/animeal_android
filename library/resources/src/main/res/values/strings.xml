@@ -29,6 +29,8 @@
     <string name="page_account">Account</string>
     <string name="page_terms">Terms &amp; Conditions</string>
     <string name="page_policy">Privacy Policy</string>
+    <string name="page_privacy_secure">Privacy &amp; Security</string>
+    <string name="page_moderation">Moderation</string>
 
     <string name="sign_in_as_guest">Continue as a Guest</string>
     <string name="sign_in_mobile">Sign in with Mobile</string>
@@ -158,6 +160,7 @@
     <string name="reject">Reject</string>
     <string name="approve">Approve</string>
     <string name="go_back">Go back</string>
+    <string name="inactive">Inactive</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>

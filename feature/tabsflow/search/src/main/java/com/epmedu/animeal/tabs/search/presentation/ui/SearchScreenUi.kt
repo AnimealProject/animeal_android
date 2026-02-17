@@ -145,10 +145,13 @@ private fun ScreenScaffold(
                         }
                     )
                 }
+                val enabled = state.showingFeedingPoint != null &&
+                    state.showingFeedingPoint.feedStatus == FeedStatus.Starved &&
+                    feedingPointInProgress == null &&
+                    !state.showingFeedingPoint.inactive
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                        feedingPointInProgress == null,
+                    enabled = enabled,
                     onClick = {
                         state.showingFeedingPoint?.id?.let {
                             onWillFeedEvent(WillFeedClicked)

@@ -17,10 +17,10 @@ internal class FeedingPointApiImpl(
 
     data class FeedingPointWrapper(
         @SerializedName("FeedingPoints")
-        val feedingPoints: List<FeedingPoint>
+        val feedingPoints: List<GetFeedingPointsQuery.GetFeedingPoint>
     )
 
-    override fun getAllFeedingPoints(isGuest: Boolean): Flow<List<FeedingPoint>> = if (isGuest) {
+    override fun getAllFeedingPoints(isGuest: Boolean): Flow<List<GetFeedingPointsQuery.GetFeedingPoint>> = if (isGuest) {
         flow {
             context.resources.openRawResource(R.raw.guestmock).bufferedReader().use { reader ->
                 val wrapper = Gson().fromJson(reader.readText(), FeedingPointWrapper::class.java)
@@ -28,7 +28,13 @@ internal class FeedingPointApiImpl(
             }
         }
     } else {
-        animealApi.getModelList(FeedingPoint::class.java)
+        flow {
+            val items = animealApi.launchQuery(
+                query = GetFeedingPointsQuery.builder().build(),
+                responseClass = GetFeedingPointsQuery.Data::class.java
+            )
+            emit(items.data?.feedingPoints?.let { it } ?: emptyList())
+        }
     }
 
     override fun subscribeToFeedingPointsUpdates(): Flow<FeedingPoint> {

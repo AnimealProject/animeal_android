@@ -128,6 +128,7 @@ private fun LazyListScope.renderGroupedFeedingPoints(
                         modifier = Modifier
                             .testTagAsResourceId("point_item_${feedingPoint.id}"),
                         title = feedingPoint.title,
+                        inactive = feedingPoint.inactive,
                         status = feedingPoint.feedStatus,
                         isFavourite = feedingPoint.isFavourite,
                         onFavouriteChange = { isFavourite ->

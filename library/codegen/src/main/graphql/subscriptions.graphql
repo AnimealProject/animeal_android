@@ -109,6 +109,7 @@ subscription OnUpdateFeedingPointExt {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -175,6 +176,7 @@ subscription OnCreateFeedingPointExt {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -568,6 +570,7 @@ subscription OnCreateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -637,6 +640,7 @@ subscription OnUpdateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -706,6 +710,7 @@ subscription OnDeleteFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -972,6 +977,7 @@ subscription OnCreateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1027,6 +1033,7 @@ subscription OnUpdateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1082,6 +1089,7 @@ subscription OnDeleteRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1119,6 +1127,7 @@ subscription OnCreateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1156,6 +1165,7 @@ subscription OnUpdateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1193,6 +1203,7 @@ subscription OnDeleteRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
