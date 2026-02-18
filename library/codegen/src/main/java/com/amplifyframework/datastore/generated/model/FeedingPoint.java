@@ -52,6 +52,7 @@ public final class FeedingPoint implements Model {
     public static final QueryField UPDATED_BY = field("FeedingPoint", "updatedBy");
     public static final QueryField OWNER = field("FeedingPoint", "owner");
     public static final QueryField COVER = field("FeedingPoint", "cover");
+    public static final QueryField DISABLED = field("FeedingPoint", "disabled");
     public static final QueryField FEEDING_POINT_CATEGORY_ID = field("FeedingPoint", "feedingPointCategoryId");
     private final @ModelField(targetType="ID", isRequired = true) String id;
     private final @ModelField(targetType="String", isRequired = true) String name;
@@ -77,6 +78,7 @@ public final class FeedingPoint implements Model {
     private final @ModelField(targetType="Category") @HasOne(associatedWith = "id", type = Category.class) Category category = null;
     private final @ModelField(targetType="RelationUserFeedingPoint") @HasMany(associatedWith = "feedingPoint", type = RelationUserFeedingPoint.class) List<RelationUserFeedingPoint> users = null;
     private final @ModelField(targetType="String") String cover;
+    private final @ModelField(targetType="Boolean") Boolean disabled;
     private final @ModelField(targetType="ID") String feedingPointCategoryId;
     public String getId() {
         return id;
@@ -174,11 +176,15 @@ public final class FeedingPoint implements Model {
         return cover;
     }
 
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
     public String getFeedingPointCategoryId() {
         return feedingPointCategoryId;
     }
 
-    private FeedingPoint(String id, String name, String description, String city, String street, String address, List<String> images, Point point, Location location, String region, String neighborhood, Double distance, FeedingPointStatus status, List<FeedingPointI18n> i18n, Temporal.DateTime statusUpdatedAt, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String cover, String feedingPointCategoryId) {
+    private FeedingPoint(String id, String name, String description, String city, String street, String address, List<String> images, Point point, Location location, String region, String neighborhood, Double distance, FeedingPointStatus status, List<FeedingPointI18n> i18n, Temporal.DateTime statusUpdatedAt, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String cover, Boolean disabled, String feedingPointCategoryId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -200,6 +206,7 @@ public final class FeedingPoint implements Model {
         this.updatedBy = updatedBy;
         this.owner = owner;
         this.cover = cover;
+        this.disabled = disabled;
         this.feedingPointCategoryId = feedingPointCategoryId;
     }
 
@@ -232,6 +239,7 @@ public final class FeedingPoint implements Model {
                     ObjectsCompat.equals(getUpdatedBy(), feedingPoint.getUpdatedBy()) &&
                     ObjectsCompat.equals(getOwner(), feedingPoint.getOwner()) &&
                     ObjectsCompat.equals(getCover(), feedingPoint.getCover()) &&
+                    ObjectsCompat.equals(getDisabled(), feedingPoint.getDisabled()) &&
                     ObjectsCompat.equals(getFeedingPointCategoryId(), feedingPoint.getFeedingPointCategoryId());
         }
     }
@@ -260,6 +268,7 @@ public final class FeedingPoint implements Model {
                 .append(getUpdatedBy())
                 .append(getOwner())
                 .append(getCover())
+                .append(getDisabled())
                 .append(getFeedingPointCategoryId())
                 .toString()
                 .hashCode();
@@ -290,6 +299,7 @@ public final class FeedingPoint implements Model {
                 .append("updatedBy=" + String.valueOf(getUpdatedBy()) + ", ")
                 .append("owner=" + String.valueOf(getOwner()) + ", ")
                 .append("cover=" + String.valueOf(getCover()) + ", ")
+                .append("disabled=" + String.valueOf(getDisabled()) + ", ")
                 .append("feedingPointCategoryId=" + String.valueOf(getFeedingPointCategoryId()))
                 .append("}")
                 .toString();
@@ -330,6 +340,7 @@ public final class FeedingPoint implements Model {
                 null,
                 null,
                 null,
+                false,
                 null
         );
     }
@@ -356,6 +367,7 @@ public final class FeedingPoint implements Model {
                 updatedBy,
                 owner,
                 cover,
+                disabled,
                 feedingPointCategoryId);
     }
     public interface NameStep {
@@ -437,6 +449,7 @@ public final class FeedingPoint implements Model {
         BuildStep updatedBy(String updatedBy);
         BuildStep owner(String owner);
         BuildStep cover(String cover);
+        BuildStep disabled(Boolean disabled);
         BuildStep feedingPointCategoryId(String feedingPointCategoryId);
     }
 
@@ -463,6 +476,7 @@ public final class FeedingPoint implements Model {
         private String updatedBy;
         private String owner;
         private String cover;
+        private Boolean disabled;
         private String feedingPointCategoryId;
         @Override
         public FeedingPoint build() {
@@ -490,6 +504,7 @@ public final class FeedingPoint implements Model {
                     updatedBy,
                     owner,
                     cover,
+                    disabled,
                     feedingPointCategoryId);
         }
 
@@ -628,6 +643,12 @@ public final class FeedingPoint implements Model {
         }
 
         @Override
+        public BuildStep disabled(Boolean disabled) {
+            this.disabled = disabled;
+            return this;
+        }
+
+        @Override
         public BuildStep feedingPointCategoryId(String feedingPointCategoryId) {
             this.feedingPointCategoryId = feedingPointCategoryId;
             return this;
@@ -645,7 +666,7 @@ public final class FeedingPoint implements Model {
 
 
     public final class CopyOfBuilder extends Builder {
-        private CopyOfBuilder(String id, String name, String description, String city, String street, String address, List<String> images, Point point, Location location, String region, String neighborhood, Double distance, FeedingPointStatus status, List<FeedingPointI18n> i18n, Temporal.DateTime statusUpdatedAt, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String cover, String feedingPointCategoryId) {
+        private CopyOfBuilder(String id, String name, String description, String city, String street, String address, List<String> images, Point point, Location location, String region, String neighborhood, Double distance, FeedingPointStatus status, List<FeedingPointI18n> i18n, Temporal.DateTime statusUpdatedAt, Temporal.DateTime createdAt, Temporal.DateTime updatedAt, String createdBy, String updatedBy, String owner, String cover, Boolean disabled, String feedingPointCategoryId) {
             super.id(id);
             super.name(name)
                     .description(description)
@@ -667,6 +688,7 @@ public final class FeedingPoint implements Model {
                     .updatedBy(updatedBy)
                     .owner(owner)
                     .cover(cover)
+                    .disabled(disabled)
                     .feedingPointCategoryId(feedingPointCategoryId);
         }
 
@@ -769,6 +791,9 @@ public final class FeedingPoint implements Model {
         public CopyOfBuilder cover(String cover) {
             return (CopyOfBuilder) super.cover(cover);
         }
+
+        @Override
+        public CopyOfBuilder disabled(Boolean disabled) { return (CopyOfBuilder) super.disabled(disabled); }
 
         @Override
         public CopyOfBuilder feedingPointCategoryId(String feedingPointCategoryId) {

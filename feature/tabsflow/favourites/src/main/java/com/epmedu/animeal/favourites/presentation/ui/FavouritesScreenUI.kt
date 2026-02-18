@@ -183,10 +183,13 @@ private fun ScreenScaffold(
                         }
                     )
                 }
+                val enabled = state.showingFeedingPoint != null &&
+                    state.showingFeedingPoint.feedStatus == FeedStatus.Starved &&
+                    feedingPointInProgress == null &&
+                    !state.showingFeedingPoint.inactive
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                        feedingPointInProgress == null,
+                    enabled = enabled,
                     onClick = { onWillFeedEvent(WillFeedClicked) },
                 )
             }
@@ -295,6 +298,7 @@ private fun FavouritesList(
                 FeedingPointItem(
                     title = feedingPoint.title,
                     status = feedingPoint.feedStatus,
+                    inactive = feedingPoint.inactive,
                     isFavourite = feedingPoint.isFavourite,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))

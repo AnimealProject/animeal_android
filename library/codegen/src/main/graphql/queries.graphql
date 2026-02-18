@@ -45,6 +45,7 @@ query SearchByBounds(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -187,10 +188,15 @@ query GetFeedingPoints(
       __typename
     }
     users {
+      items {
+        id
+        userId
+      }
       nextToken
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -481,6 +487,7 @@ query GetFeedingPoint($id: ID!) {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -511,6 +518,7 @@ query ListFeedingPoints(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -550,6 +558,7 @@ query SearchFeedingPoints(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -969,6 +978,7 @@ query GetRelationPetFeedingPoint($id: ID!) {
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1087,6 +1097,7 @@ query GetRelationUserFeedingPoint($id: ID!) {
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }

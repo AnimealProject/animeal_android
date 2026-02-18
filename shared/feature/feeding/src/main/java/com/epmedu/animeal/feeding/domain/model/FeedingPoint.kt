@@ -17,4 +17,5 @@ data class FeedingPoint(
     val assignedModerators: List<User>?,
     val isFavourite: Boolean = false,
     val image: NetworkFile? = null,
+    val inactive: Boolean = false,
 )

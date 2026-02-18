@@ -82,10 +82,10 @@ internal class FeedingPointRepositoryImpl(
             cachedFeedingPointsMap.clear()
             cachedFeedingPointsMap.putAll(
                 feedingPoints.associate { feedingPoint ->
-                    feedingPoint.id to feedingPoint.toDomainFeedingPoint(
+                    feedingPoint.id() to feedingPoint.toDomainFeedingPoint(
                         getImageFrom = ::getImageFromName,
                         moderatorsMap = moderatorsMap,
-                        isFavourite = favoriteFeedingPointIDs.any { it == feedingPoint.id }
+                        isFavourite = favoriteFeedingPointIDs.any { it == feedingPoint.id() }
                     )
                 }
             )

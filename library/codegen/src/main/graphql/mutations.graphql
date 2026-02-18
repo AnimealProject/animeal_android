@@ -93,6 +93,7 @@ mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -159,6 +160,7 @@ mutation UpdateFeedingPointExt($input: UpdateFeedingPointInput!) {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -600,6 +602,7 @@ mutation CreateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -669,6 +672,7 @@ mutation UpdateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -738,6 +742,7 @@ mutation DeleteFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -1004,6 +1009,7 @@ mutation CreateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1059,6 +1065,7 @@ mutation UpdateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1114,6 +1121,7 @@ mutation DeleteRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1151,6 +1159,7 @@ mutation CreateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1188,6 +1197,7 @@ mutation UpdateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1225,6 +1235,7 @@ mutation DeleteRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
