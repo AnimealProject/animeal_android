@@ -19,6 +19,7 @@ internal fun FeedState.toDomainFeedState(): DomainFeedState =
 internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
     FeedingPoint(
         id = this.id,
+        code = this.code,
         title = this.title,
         description = this.description,
         city = this.city,
@@ -37,5 +38,6 @@ internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
         ),
         assignedModerators = assignedModerators?.map { name ->
             User(id = EMPTY_STRING, name = name)
-        }
+        },
+        inactive = this.inactive
     )

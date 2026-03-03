@@ -26,6 +26,7 @@ internal class FeedingPointRepositoryMock(
     private val stubData = List(25) { index ->
         FeedingPoint(
             id = index.toString(),
+            code = "GE-TB-0000-D-0000",
             title = "$index - Near to Bukia Garden M.S Technical University",
             description = "Ordered list : <ol> <li>first item</li> <li>second item</li> " +
                     "<li>third item</li> </ol><h1> Header1 </h1> <h2> Header2 </h2> <h3> Header3 </h3>" +

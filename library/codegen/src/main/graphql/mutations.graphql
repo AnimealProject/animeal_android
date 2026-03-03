@@ -35,6 +35,7 @@ mutation ExpireFeeding($feedingId: String!, $reason: String!) {
 mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
   createFeedingPointExt(input: $input) {
     id
+    code
     name
     description
     city
@@ -102,6 +103,7 @@ mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
 mutation UpdateFeedingPointExt($input: UpdateFeedingPointInput!) {
   updateFeedingPointExt(input: $input) {
     id
+    code
     name
     description
     city
@@ -544,6 +546,7 @@ mutation CreateFeedingPoint(
 ) {
   createFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -614,6 +617,7 @@ mutation UpdateFeedingPoint(
 ) {
   updateFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -684,6 +688,7 @@ mutation DeleteFeedingPoint(
 ) {
   deleteFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -992,6 +997,7 @@ mutation CreateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1048,6 +1054,7 @@ mutation UpdateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1104,6 +1111,7 @@ mutation DeleteRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1142,6 +1150,7 @@ mutation CreateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1180,6 +1189,7 @@ mutation UpdateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1218,6 +1228,7 @@ mutation DeleteRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city

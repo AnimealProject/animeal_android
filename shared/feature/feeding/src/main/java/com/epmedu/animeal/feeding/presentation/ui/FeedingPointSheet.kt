@@ -89,6 +89,7 @@ fun FeedingPointSheetContent(
         )
         with(feedingPoint) {
             FeedingPointHeader(
+                code = code,
                 title = title,
                 status = feedStatus,
                 inactive = inactive,
@@ -110,6 +111,7 @@ fun FeedingPointSheetContent(
 
 @Composable
 internal fun FeedingPointHeader(
+    code: String,
     title: String,
     status: FeedStatus,
     inactive: Boolean,
@@ -137,24 +139,35 @@ internal fun FeedingPointHeader(
                     .padding(bottom = 8.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.subtitle1,
-                    fontWeight = FontWeight.Bold,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colors.onSurface,
-                    maxLines = 2,
-                )
+                Column {
+                    Text(
+                        text = code,
+                        style = MaterialTheme.typography.subtitle2,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 1,
+                    )
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.subtitle1,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 1,
+                    )
+                }
+
                 FeedStatusItem(
                     status = status,
                 )
             }
-            AnimealHeartButton(
-                modifier = Modifier.align(Alignment.Top),
-                selected = isFavourite,
-                onChange = onFavouriteChange,
-            )
         }
+
+        AnimealHeartButton(
+            modifier = Modifier.align(Alignment.TopEnd).offset(y = (-8).dp),
+            selected = isFavourite,
+            onChange = onFavouriteChange,
+        )
 
         if (inactive) {
             FeedingPointInactiveBadge(
@@ -250,6 +263,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
                 id = "",
+                code = "GE-TB-0000-D-0000",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
                 inactive = false,
@@ -274,6 +288,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
                 id = "",
+                code = "GE-TB-0000-D-0000",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
                 inactive = true,

@@ -296,6 +296,7 @@ private fun FavouritesList(
         ) {
             items(favourites) { feedingPoint ->
                 FeedingPointItem(
+                    code = feedingPoint.code,
                     title = feedingPoint.title,
                     status = feedingPoint.feedStatus,
                     inactive = feedingPoint.inactive,
@@ -319,6 +320,7 @@ private fun FavouritesScreenPreview() {
         FeedingPointModel(
             FeedingPoint(
                 id = "0",
+                code = "GE-TB-0000-D-0000",
                 title = title,
                 description = "Hungry dog",
                 city = "Minsk",

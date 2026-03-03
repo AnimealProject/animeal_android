@@ -36,6 +36,7 @@ import com.epmedu.animeal.networkstorage.domain.NetworkFile
 @Suppress("LongMethod")
 @Composable
 fun FeedingPointItem(
+    code: String,
     title: String,
     inactive: Boolean,
     status: FeedStatus,
@@ -75,25 +76,35 @@ fun FeedingPointItem(
                         .padding(bottom = 8.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.subtitle1,
-                        fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 2
-                    )
+                    Column {
+                        Text(
+                            text = code,
+                            style = MaterialTheme.typography.subtitle2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Bold,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
+                        )
+                    }
                     FeedStatusItem(
                         status = status,
                     )
                 }
-                AnimealHeartButton(
-                    modifier = Modifier.align(Alignment.Top),
-                    selected = isFavourite,
-                    onChange = onFavouriteChange,
-                )
             }
         }
+
+        AnimealHeartButton(
+            modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+            selected = isFavourite,
+            onChange = onFavouriteChange,
+        )
 
         if (inactive) {
             FeedingPointInactiveBadge()
@@ -104,17 +115,19 @@ fun FeedingPointItem(
 @AnimealPreview
 @Composable
 fun MoreScreenPreview() {
-    val longText = "Very very very very very very very very very long text"
+    val code = "GE-TB-0000-D-0000"
+    val longText = "Very very very very very Very Very Very very long text"
     val shortText = "Short text"
     val image = NetworkFile(
         name = EMPTY_STRING,
-        url = "https://fastly.picsum.photos/id/866/200/300.jpg?" +
-            "hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI"
+        url = "https://fastly.picsum.photos/id/237/200/300.jpg?" +
+            "hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
     )
 
     AnimealTheme {
         Column {
             FeedingPointItem(
+                code,
                 longText,
                 true,
                 FeedStatus.Starved,
@@ -124,6 +137,7 @@ fun MoreScreenPreview() {
                 {}
             )
             FeedingPointItem(
+                code,
                 shortText,
                 false,
                 FeedStatus.Fed,
