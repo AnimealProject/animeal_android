@@ -31,6 +31,7 @@
     <string name="page_policy">Privacy Policy</string>
     <string name="page_privacy_secure">Privacy &amp; Security</string>
     <string name="page_moderation">Moderation</string>
+    <string name="page_delete_account">Delete Account</string>
 
     <string name="sign_in_as_guest">Continue as a Guest</string>
     <string name="sign_in_mobile">Sign in with Mobile</string>
@@ -40,6 +41,8 @@
     <string name="tab_home">Home</string>
     <string name="tab_analytics">Analytics</string>
     <string name="tab_more">More</string>
+
+    <string name="tab_section_admin">Admin Tools</string>
 
     <string name="location_permission_denied">Location permission is permanently denied. Navigate to app settings to enable it.</string>
     <string name="location_rationale_text">Location permission is needed to access Maps!</string>
