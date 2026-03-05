@@ -29,6 +29,7 @@ fun FeedingSheet(
                 photos = feedingPhotos,
                 isUploadingNextImage = cameraState == CameraState.LoadingImageToServer,
                 isTakePhotoAvailable = isTakePhotoAvailable,
+                code = feedingPoint.code,
                 title = feedingPoint.title,
                 image = feedingPoint.image,
                 onDeletePhotoClick = onDeletePhotoClick,

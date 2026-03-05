@@ -8,6 +8,7 @@ import com.epmedu.animeal.users.domain.model.User
 
 data class FeedingPoint(
     val id: String,
+    val code: String,
     val title: String,
     val description: String,
     val city: String,

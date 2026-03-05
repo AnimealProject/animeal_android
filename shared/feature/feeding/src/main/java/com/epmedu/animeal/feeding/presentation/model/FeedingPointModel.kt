@@ -18,6 +18,7 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class FeedingPointModel(
     val id: String,
+    val code: String,
     val title: String,
     val description: String,
     val city: String,
@@ -33,6 +34,7 @@ data class FeedingPointModel(
 
     constructor(feedingPoint: FeedingPoint) : this(
         id = feedingPoint.id,
+        code = feedingPoint.code,
         title = feedingPoint.title,
         description = feedingPoint.description,
         city = feedingPoint.city,

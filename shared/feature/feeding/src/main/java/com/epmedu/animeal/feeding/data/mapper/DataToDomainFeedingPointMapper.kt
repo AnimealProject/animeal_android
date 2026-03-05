@@ -4,6 +4,7 @@ import com.amplifyframework.datastore.generated.model.CategoryTag
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.amplifyframework.datastore.generated.model.FeedingPointStatus
 import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
+import com.epmedu.animeal.common.constants.DefaultConstants.NA_STRING
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -21,6 +22,7 @@ internal suspend fun DataFeedingPoint.toDomainFeedingPoint(
     isFavourite: Boolean = false
 ) = DomainFeedingPoint(
     id = id ?: EMPTY_STRING,
+    code = code ?: NA_STRING,
     title = name ?: EMPTY_STRING,
     description = description ?: EMPTY_STRING,
     city = city.orEmpty(),
@@ -44,6 +46,7 @@ internal suspend fun GetFeedingPointsQuery.GetFeedingPoint.toDomainFeedingPoint(
 ): DomainFeedingPoint {
     return DomainFeedingPoint(
         id = id(),
+        code = code() ?: NA_STRING,
         title = name(),
         description = description(),
         city = city(),
