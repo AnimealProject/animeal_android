@@ -32,6 +32,7 @@ import com.epmedu.animeal.resources.R
 
 @Composable
 fun MarkFeedingDoneSheet(
+    code: String,
     title: String,
     image: NetworkFile?,
     onTakePhotoClick: () -> Unit,
@@ -62,6 +63,7 @@ fun MarkFeedingDoneSheet(
         )
 
         MarkFeedingDoneHeader(
+            code = code,
             title = title,
             image = image
         )
@@ -83,6 +85,7 @@ fun MarkFeedingDoneSheet(
 
 @Composable
 private fun MarkFeedingDoneHeader(
+    code: String,
     title: String,
     image: NetworkFile?
 ) {
@@ -98,15 +101,25 @@ private fun MarkFeedingDoneHeader(
             image = image,
             contentDescription = title
         )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = title,
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colors.onSurface,
-            maxLines = 2
-        )
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = code,
+                style = MaterialTheme.typography.subtitle2,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 1
+            )
+            Text(
+                text = title,
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 1
+            )
+        }
     }
 }
 
@@ -146,6 +159,7 @@ private fun MarkFeedingDoneSheetPreview(@PreviewParameter(LoremIpsum::class) tex
     AnimealTheme {
         MarkFeedingDoneSheet(
             modifier = Modifier.fillMaxHeight(),
+            code = "GE-TB-0000-D-0000",
             title = text.take(50),
             image = null,
             onDeletePhotoClick = {},

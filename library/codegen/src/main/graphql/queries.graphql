@@ -28,6 +28,7 @@ query SearchByBounds(
   ) {
     items {
       id
+      code
       name
       description
       city
@@ -134,6 +135,7 @@ query GetFeedingPoints(
     categoryTag: $categoryTag
   ) {
     id
+    code
     name
     description
     city
@@ -429,6 +431,7 @@ query SearchCategories(
 query GetFeedingPoint($id: ID!) {
   getFeedingPoint(id: $id) {
     id
+    code
     name
     description
     city
@@ -501,6 +504,50 @@ query ListFeedingPoints(
   listFeedingPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      code
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      disabled
+      feedingPointCategoryId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query FeedingPointByCode(
+  $code: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelFeedingPointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  feedingPointByCode(
+    code: $code
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      code
       name
       description
       city
@@ -541,6 +588,7 @@ query SearchFeedingPoints(
   ) {
     items {
       id
+      code
       name
       description
       city
@@ -961,6 +1009,7 @@ query GetRelationPetFeedingPoint($id: ID!) {
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1080,6 +1129,7 @@ query GetRelationUserFeedingPoint($id: ID!) {
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city

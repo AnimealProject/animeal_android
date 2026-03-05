@@ -10,6 +10,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,18 +28,24 @@ fun AnimealHeartButton(
     modifier: Modifier = Modifier,
     elevation: Dp = 0.dp,
 ) {
-    val iconColor = if (selected) {
+    var localSelected by remember { mutableStateOf(selected) }
+    LaunchedEffect(selected) {
+        localSelected = selected
+    }
+
+    val iconColor = if (localSelected) {
         MaterialTheme.colors.error
     } else {
         MaterialTheme.colors.secondaryVariant
     }
 
     Surface(
-        modifier = modifier.size(32.dp),
+        modifier = modifier.size(36.dp),
         shape = CircleShape,
         elevation = elevation,
         onClick = {
-            onChange(!selected)
+            localSelected = !localSelected
+            onChange(localSelected)
         },
     ) {
         Icon(

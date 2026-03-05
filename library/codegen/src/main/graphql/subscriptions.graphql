@@ -51,6 +51,7 @@ subscription OnCreateFeedingExt {
 subscription OnUpdateFeedingPointExt {
   onUpdateFeedingPointExt {
     id
+    code
     name
     description
     city
@@ -118,6 +119,7 @@ subscription OnUpdateFeedingPointExt {
 subscription OnCreateFeedingPointExt {
   onCreateFeedingPointExt {
     id
+    code
     name
     description
     city
@@ -512,6 +514,7 @@ subscription OnCreateFeedingPoint(
 ) {
   onCreateFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -582,6 +585,7 @@ subscription OnUpdateFeedingPoint(
 ) {
   onUpdateFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -652,6 +656,7 @@ subscription OnDeleteFeedingPoint(
 ) {
   onDeleteFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -960,6 +965,7 @@ subscription OnCreateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1016,6 +1022,7 @@ subscription OnUpdateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1072,6 +1079,7 @@ subscription OnDeleteRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1110,6 +1118,7 @@ subscription OnCreateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1148,6 +1157,7 @@ subscription OnUpdateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1186,6 +1196,7 @@ subscription OnDeleteRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
