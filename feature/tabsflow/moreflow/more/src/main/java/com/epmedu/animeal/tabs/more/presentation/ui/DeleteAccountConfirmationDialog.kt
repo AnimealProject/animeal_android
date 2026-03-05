@@ -1,4 +1,4 @@
-package com.epmedu.animeal.tabs.more.account.ui
+package com.epmedu.animeal.tabs.more.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -11,15 +11,15 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.resources.R
 
 @Composable
-internal fun LogoutConfirmationDialog(
+internal fun DeleteAccountConfirmationDialog(
     isShowing: MutableState<Boolean>,
     onConfirm: () -> Unit,
 ) {
     if (isShowing.value) {
         AnimealQuestionDialog(
-            title = stringResource(id = R.string.profile_logout_cancel),
+            title = stringResource(id = R.string.account_delete_confirmation),
             dismissText = stringResource(id = R.string.cancel),
-            acceptText = stringResource(id = R.string.logout),
+            acceptText = stringResource(id = R.string.delete),
             onDismiss = { isShowing.value = false },
             onConfirm = {
                 isShowing.value = false
@@ -31,10 +31,10 @@ internal fun LogoutConfirmationDialog(
 
 @AnimealPreview
 @Composable
-private fun LogoutConfirmationDialogPreview() {
+private fun DeleteAccountConfirmationDialogPreview() {
     val isShowing = remember { mutableStateOf(true) }
 
     AnimealTheme {
-        LogoutConfirmationDialog(isShowing) {}
+        DeleteAccountConfirmationDialog(isShowing) {}
     }
 }

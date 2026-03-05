@@ -2,12 +2,18 @@ package com.epmedu.animeal.common.route
 
 enum class MoreRoute(val allowGuest: Boolean = false) {
     More(true),
+    Account,
     Profile,
-    FAQ(true),
-    Donate(true),
-    About(true),
+    DeleteAccount,
+
+    Feedings,
+
     Terms(true),
     Policy(true),
-    Account,
-    Feedings
+    About(true),
+
+    FAQ(true),
+    Donate(true),
+
+    Linebreak,
 }

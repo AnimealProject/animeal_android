@@ -20,6 +20,8 @@ dependencies {
     implementation(projects.library.resources)
 
     implementation(projects.shared.feature.feedings)
+	implementation(projects.shared.feature.networkuser)
+	implementation(projects.shared.feature.profile)
 
     implementation(libs.compose.material)
     implementation(libs.compose.material.icons.extended)
