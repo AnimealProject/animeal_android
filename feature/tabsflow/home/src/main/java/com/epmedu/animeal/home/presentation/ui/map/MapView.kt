@@ -32,7 +32,6 @@ import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.compass.compass
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
@@ -177,7 +176,6 @@ fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
 
 @Composable
 fun MapView.GesturesListeners(
-    onMapClick: (Point) -> Unit,
     onCameraChange: () -> Unit
 ) {
     val debounceState = remember {
@@ -199,10 +197,6 @@ fun MapView.GesturesListeners(
     mapboxMap.apply {
         subscribeCameraChanged {
             debounceState.tryEmit(it)
-        }
-        addOnMapClickListener { point ->
-            onMapClick(point)
-            false
         }
     }
 }
