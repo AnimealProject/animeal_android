@@ -1,11 +1,9 @@
 package com.epmedu.animeal.home.presentation.ui.map
 
-import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.drawable.toBitmap
 import com.epmedu.animeal.extensions.drawableCompat
 import com.epmedu.animeal.feeding.presentation.model.FeedStatus
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
@@ -24,8 +22,8 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression.Companio
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.neq
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.step
 import com.mapbox.maps.extension.style.layers.addLayer
-import com.mapbox.maps.extension.style.layers.generated.CircleLayer
 import com.mapbox.maps.extension.style.layers.generated.circleLayer
+import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.symbolLayer
 import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor
@@ -158,14 +156,9 @@ class MarkerController(
             )
         }
 
-        val selectedLayer = circleLayer(FeedingPoint.SELECTED_NAME, FEEDING_SOURCE_NAME) {
-            circleRadius(64.0)
-            circleColor(CustomColor.CarminePink.toArgb())
-            circleOpacity(0.2)
-            circleStrokeColor(CustomColor.CarminePink.toArgb())
-            circleStrokeOpacity(0.32)
-            circleStrokeWidth(1.0)
-
+        val selectedLayer = symbolLayer(FeedingPoint.SELECTED_NAME, FEEDING_SOURCE_NAME) {
+            iconImage(get(FeatureKey.ICON))
+            iconSize(1.5)
             filter(eq(get(FeatureKey.ID), literal("")))
         }
 
@@ -211,8 +204,8 @@ class MarkerController(
         style.addLayer(starvedBadgeCircleLayer)
         style.addLayer(starvedBadgeLayer)
 
-        style.addLayer(selectedLayer)
         style.addLayer(pointLayer)
+        style.addLayer(selectedLayer)
     }
 
     private fun getIconName(resourceId: Int) = "fp_icon_$resourceId"
@@ -247,7 +240,7 @@ class MarkerController(
 
     fun selectMarker(feedingPoint: FeedingPointModel?) {
         mapView.mapboxMap.getStyle { style ->
-            val layer = style.getLayer(FeedingPoint.SELECTED_NAME) as CircleLayer
+            val layer = style.getLayer(FeedingPoint.SELECTED_NAME) as SymbolLayer
             layer.filter(
                 eq(get(FeatureKey.ID), literal(feedingPoint?.id ?: ""))
             )
