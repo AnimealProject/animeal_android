@@ -33,6 +33,7 @@ import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.foundation.theme.CustomColor.DarkerGrey
 import com.epmedu.animeal.foundation.theme.CustomColor.LynxWhite
+import com.epmedu.animeal.foundation.theme.CustomColor.Porcelain
 import com.epmedu.animeal.foundation.theme.interFontFamily
 
 @Composable
@@ -52,7 +53,12 @@ fun TextInputField(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     var focusedDirty by rememberSaveable { mutableStateOf(false) }
-    val borderColor: Color = if (errorText.isEmpty()) LynxWhite else CustomColor.Error
+    val borderColor: Color =
+        if (errorText.isEmpty()) {
+            if (isEnabled) Porcelain else LynxWhite
+        } else {
+            CustomColor.Error
+        }
 
     Column(modifier = modifier.fillMaxWidth()) {
         title?.let {
@@ -119,7 +125,7 @@ private fun TextInputFieldBox(
             .onFocusChanged { onFocusChange(it) }
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
             .background(
-                color = LynxWhite,
+                color = if (!isEnabled) LynxWhite else Color.White,
                 shape = RoundedCornerShape(12.dp)
             ),
         value = value,
