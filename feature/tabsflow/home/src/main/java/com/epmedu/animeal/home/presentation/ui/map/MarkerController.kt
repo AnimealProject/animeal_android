@@ -123,7 +123,11 @@ class MarkerController(
             R.drawable.ic_catsstate_cathungry_high,
             R.drawable.ic_catsstate_cathungry_low,
             R.drawable.ic_catsstate_cathungry_in_process,
-            R.drawable.ic_catsstate_cathungry_inactive
+            R.drawable.ic_catsstate_cathungry_inactive,
+            R.drawable.ic_favstate_favouritehungry_high,
+            R.drawable.ic_favstate_favouritehungry_low,
+            R.drawable.ic_favstate_favouritehungry_in_process,
+            R.drawable.ic_favstate_favouritehungry_inactive,
         ).forEach { id ->
             val bitmap = mapView.context.drawableCompat(id).toBitmap()
             style.addImage(getIconName(id), bitmap)
