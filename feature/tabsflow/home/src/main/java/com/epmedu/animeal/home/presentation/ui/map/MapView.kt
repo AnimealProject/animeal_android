@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
+import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
@@ -86,11 +87,11 @@ fun rememberMapViewWithLifecycle(
     return mapView
 }
 
-fun MapView.setLocation(location: MapLocation, zoom: Double = DEFAULT_ZOOM) =
+fun MapView.setLocation(location: MapLocation) =
     mapboxMap.setCamera(
         CameraOptions.Builder()
-            .zoom(zoom)
-            .center(Point.fromLngLat(location.longitude, location.latitude))
+            .zoom(location.zoom ?: mapboxMap.cameraState.zoom)
+            .center(location.toPoint())
             .build()
     )
 
@@ -142,9 +143,9 @@ fun MapView.focusOnFeedingPoint(
     setLocation(
         location = MapLocation(
             feedingPoint.coordinates.latitude(),
-            feedingPoint.coordinates.longitude()
-        ),
-        zoom = DEFAULT_ZOOM
+            feedingPoint.coordinates.longitude(),
+            DEFAULT_ZOOM
+        )
     )
 }
 
