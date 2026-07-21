@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +44,8 @@ fun SearchFeedingPointsUi(
     onEvent: (SearchScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var selectedFilter by remember { mutableStateOf(SearchFilters.All) }
     val groupedPoints by remember(feedingPoints) {
         derivedStateOf {
@@ -76,6 +81,11 @@ fun SearchFeedingPointsUi(
             isSearchResultsEmpty -> renderEmptyListState(query)
             else -> renderGroupedFeedingPoints(query, groupedPoints, onEvent)
         }
+    }
+
+    LaunchedEffect(animalType) {
+        focusManager.clearFocus()
+        keyboardController?.hide()
     }
 }
 
