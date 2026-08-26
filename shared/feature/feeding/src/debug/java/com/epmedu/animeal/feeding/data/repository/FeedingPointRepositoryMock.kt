@@ -37,6 +37,7 @@ internal class FeedingPointRepositoryMock(
                     " text </u> unordered list: <ul> <li>first item</li> <li>second item</li>" +
                     " <li>third item</li> </ul> Text outside markup tags",
             city = cities.random(),
+            address = "Address",
             animalStatus = AnimalState.entries.random(),
             animalType = AnimalType.entries.random(),
             isFavourite = Random.nextBoolean(),

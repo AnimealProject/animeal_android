@@ -324,6 +324,7 @@ private fun FavouritesScreenPreview() {
                 title = title,
                 description = "Hungry dog",
                 city = "Minsk",
+                address = "Address",
                 animalStatus = AnimalState.Starved,
                 animalType = AnimalType.Dogs,
                 isFavourite = true,

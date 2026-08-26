@@ -1,5 +1,6 @@
 package com.epmedu.animeal.feeding.data.repository
 
+import androidx.compose.ui.text.intl.Locale
 import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toDomainFeedingPoint
@@ -85,7 +86,8 @@ internal class FeedingPointRepositoryImpl(
                     feedingPoint.id() to feedingPoint.toDomainFeedingPoint(
                         getImageFrom = ::getImageFromName,
                         moderatorsMap = moderatorsMap,
-                        isFavourite = favoriteFeedingPointIDs.any { it == feedingPoint.id() }
+                        isFavourite = favoriteFeedingPointIDs.any { it == feedingPoint.id() },
+                        locale = Locale.current.language
                     )
                 }
             )
@@ -137,7 +139,8 @@ internal class FeedingPointRepositoryImpl(
         cachedFeedingPointsMap[it.id] = it.toDomainFeedingPoint(
             getImageFrom = ::getImageFromName,
             moderatorsMap = cachedModeratorsMap,
-            isFavourite = cachedFavoriteIDs.any { id -> id == it.id }
+            isFavourite = cachedFavoriteIDs.any { id -> id == it.id },
+            locale = Locale.current.language
         )
         cachedFeedingPointsMap.values.toList()
     }

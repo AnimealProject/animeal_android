@@ -23,6 +23,7 @@ internal fun FeedingPointModel.toDomainFeedingPoint(): FeedingPoint =
         title = this.title,
         description = this.description,
         city = this.city,
+        address = this.address,
         animalStatus = when (this.feedStatus) {
             FeedStatus.Fed -> AnimalState.Fed
             FeedStatus.Pending -> AnimalState.Pending
