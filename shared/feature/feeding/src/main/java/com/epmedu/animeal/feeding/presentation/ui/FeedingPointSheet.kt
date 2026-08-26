@@ -269,6 +269,7 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
                 inactive = false,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
+                address = "Address",
                 isFavourite = true,
                 feedings = null,
                 animalType = AnimalType.Dogs,
@@ -293,6 +294,7 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
                 feedStatus = FeedStatus.Starved,
                 inactive = true,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
+                address = "Address",
                 city = "Minsk",
                 isFavourite = true,
                 feedings = listOf(

@@ -12,6 +12,7 @@ data class FeedingPoint(
     val title: String,
     val description: String,
     val city: String,
+    val address: String,
     val animalStatus: AnimalState,
     val animalType: AnimalType,
     val location: MapLocation,

@@ -3,7 +3,6 @@ package com.epmedu.animeal.feeding.data.mapper
 import com.amplifyframework.datastore.generated.model.CategoryTag
 import com.amplifyframework.datastore.generated.model.FeedingPoint
 import com.amplifyframework.datastore.generated.model.FeedingPointStatus
-import com.epmedu.animeal.common.constants.DefaultConstants.EMPTY_STRING
 import com.epmedu.animeal.common.constants.DefaultConstants.NA_STRING
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
@@ -19,37 +18,45 @@ import type.FeedingPointStatus as TypeFeedingPointStatus
 internal suspend fun DataFeedingPoint.toDomainFeedingPoint(
     getImageFrom: suspend (fileName: String) -> NetworkFile?,
     moderatorsMap: Map<String, User>?,
-    isFavourite: Boolean = false
-) = DomainFeedingPoint(
-    id = id ?: EMPTY_STRING,
-    code = code ?: NA_STRING,
-    title = name ?: EMPTY_STRING,
-    description = description ?: EMPTY_STRING,
-    city = city.orEmpty(),
-    animalStatus = status.toAnimalState(),
-    animalType = category?.tag.toAnimalType(),
-    isFavourite = isFavourite,
-    location = MapLocation(
-        latitude = location?.lat ?: 0.0,
-        longitude = location?.lon ?: 0.0
-    ),
-    image = (cover?.takeIf { it.isNotEmpty() } ?: images?.firstOrNull())
-        ?.let { getImageFrom(it) },
-    assignedModerators = getAssignedModerators(moderatorsMap),
-    inactive = disabled ?: false
-)
+    isFavourite: Boolean = false,
+    locale: String? = null
+): DomainFeedingPoint {
+    var localeData = i18n?.firstOrNull { it.locale == locale }
+    return DomainFeedingPoint(
+        id = id.orEmpty(),
+        code = code ?: NA_STRING,
+        title = localeData?.name ?: name.orEmpty(),
+        description = localeData?.description ?: description.orEmpty(),
+        city = localeData?.city ?: city.orEmpty(),
+        address = localeData?.address ?: address.orEmpty(),
+        animalStatus = status.toAnimalState(),
+        animalType = category?.tag.toAnimalType(),
+        isFavourite = isFavourite,
+        location = MapLocation(
+            latitude = location?.lat ?: 0.0,
+            longitude = location?.lon ?: 0.0
+        ),
+        image = (cover?.takeIf { it.isNotEmpty() } ?: images?.firstOrNull())
+            ?.let { getImageFrom(it) },
+        assignedModerators = getAssignedModerators(moderatorsMap),
+        inactive = disabled ?: false
+    )
+}
 
 internal suspend fun GetFeedingPointsQuery.GetFeedingPoint.toDomainFeedingPoint(
     getImageFrom: suspend (fileName: String) -> NetworkFile?,
     moderatorsMap: Map<String, User>?,
-    isFavourite: Boolean = false
+    isFavourite: Boolean = false,
+    locale: String? = null
 ): DomainFeedingPoint {
+    var localeData = i18n()?.firstOrNull { it.locale() == locale }
     return DomainFeedingPoint(
         id = id(),
         code = code() ?: NA_STRING,
-        title = name(),
-        description = description(),
-        city = city(),
+        title = localeData?.name() ?: name(),
+        description = localeData?.description() ?: description(),
+        city = localeData?.city() ?: city(),
+        address = localeData?.address() ?: address(),
         animalStatus = status().toAnimalState(),
         animalType = category()?.tag().toAnimalType(),
         isFavourite = isFavourite,
