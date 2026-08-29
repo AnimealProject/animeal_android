@@ -22,7 +22,6 @@ import com.epmedu.animeal.extensions.formatMetersToKilometers
 import com.epmedu.animeal.extensions.formatNumberToHourMin
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
-import com.epmedu.animeal.feeding.presentation.model.MapLocation
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetState
 import com.epmedu.animeal.foundation.tabs.AnimealSwitch
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
@@ -48,7 +47,6 @@ import com.epmedu.animeal.router.model.RouteResult
 import com.epmedu.animeal.router.presentation.FeedingRouteState
 import com.epmedu.animeal.timer.data.model.TimerState
 import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.StyleLoadedCallback
 import com.mapbox.maps.plugin.attribution.attribution
@@ -174,7 +172,7 @@ private fun ShowUserCurrentLocation(
         if (state.permissionsState.geolocationPermissionStatus == PermissionStatus.Granted &&
             state.gpsSettingState == GpsSettingState.Enabled
         ) {
-            mapboxMapView.showCurrentLocation(state.locationState.location)
+            mapboxMapView.setLocation(state.locationState.location)
         }
     }
 }
@@ -222,10 +220,6 @@ private fun MapboxMap(
 
     LaunchedEffect(key1 = state.locationState) {
         when (state.locationState) {
-            is LocationState.UndefinedLocation -> {
-                mapboxMapView.setLocation(state.locationState.location)
-            }
-
             is LocationState.InitialLocation -> {
                 mapboxMapView.setLocation(state.locationState.location)
                 onInitialLocationDisplay()
@@ -261,13 +255,5 @@ private fun rememberMapboxMapView(homeState: HomeState): MapView {
                 compassEnabled = false
             )
         )
-    )
-}
-
-internal fun MapView.showCurrentLocation(location: MapLocation) {
-    mapboxMap.setCamera(
-        CameraOptions.Builder()
-            .center(Point.fromLngLat(location.longitude, location.latitude))
-            .build()
     )
 }

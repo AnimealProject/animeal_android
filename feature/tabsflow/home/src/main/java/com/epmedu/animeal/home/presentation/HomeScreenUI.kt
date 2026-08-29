@@ -54,7 +54,7 @@ import com.epmedu.animeal.home.presentation.ui.FeedingCancellationRequestDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingExpiredDialog
 import com.epmedu.animeal.home.presentation.ui.FeedingSheet
 import com.epmedu.animeal.home.presentation.ui.HomeMapbox
-import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
+import com.epmedu.animeal.home.presentation.ui.map.setLocation
 import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.LocationState.UndefinedLocation
@@ -369,7 +369,7 @@ private fun onGeoLocationClick(
                 }
 
                 else -> {
-                    mapView.showCurrentLocation(state.locationState.location)
+                    mapView.setLocation(state.locationState.location)
                 }
             }
         }
