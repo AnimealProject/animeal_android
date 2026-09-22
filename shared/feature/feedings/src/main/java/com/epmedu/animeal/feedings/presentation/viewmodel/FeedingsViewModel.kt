@@ -163,14 +163,14 @@ internal class FeedingsViewModel @Inject constructor(
     private fun toFilterCategory(feedingStatus: FeedingModelStatus): FeedingFilterCategory =
         when (feedingStatus) {
             FeedingModelStatus.APPROVED,
-            FeedingModelStatus.AUTO_APPROVED -> FeedingFilterCategory.APPROVED
+            FeedingModelStatus.AUTO_APPROVED -> FeedingFilterCategory.HISTORY
 
             FeedingModelStatus.PENDING_RED,
             FeedingModelStatus.PENDING_ORANGE,
             FeedingModelStatus.PENDING_GREY -> FeedingFilterCategory.PENDING
 
-            FeedingModelStatus.REJECTED -> FeedingFilterCategory.REJECTED
-            FeedingModelStatus.OUTDATED -> FeedingFilterCategory.OUTDATED
+            FeedingModelStatus.REJECTED -> FeedingFilterCategory.HISTORY
+            FeedingModelStatus.OUTDATED -> FeedingFilterCategory.HISTORY
         }
 
     private fun createFeedingModel(

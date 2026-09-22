@@ -126,10 +126,8 @@
     <string name="feeding_timer_expired_dialog_msg">Your feeding time is over. You can book a new feeding from the home page.</string>
     <string name="feeding_point_expired_accept">Choose another location</string>
     <string name="feeding_point_expired_description">Sorry, another volunteer has booked this location for feeding.</string>
-    <string name="feeding_category_pending">Pending</string>
-    <string name="feeding_category_approved">Approved</string>
-    <string name="feeding_category_rejected">Rejected</string>
-    <string name="feeding_category_outdated">Outdated</string>
+    <string name="feeding_filter_pending">Pending review</string>
+    <string name="feeding_filter_history">History data</string>
 
     <string name="feeding_tab_all_reviewed_title">Well done!</string>
     <string name="feeding_tab_all_reviewed_subtitle">Thank you!\n All feedings have been reviewed.</string>
