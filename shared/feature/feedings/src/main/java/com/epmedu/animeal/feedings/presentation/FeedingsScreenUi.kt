@@ -234,7 +234,7 @@ private fun FeedingList(
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(top = 70.dp, bottom = 30.dp, start = 5.dp, end = 5.dp)
+        contentPadding = PaddingValues(top = 60.dp, bottom = 30.dp, start = 0.dp, end = 0.dp)
     ) {
         items(feedings) { feedingModel ->
             when {
