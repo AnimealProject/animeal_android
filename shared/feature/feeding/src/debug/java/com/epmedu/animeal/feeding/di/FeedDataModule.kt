@@ -5,6 +5,7 @@ import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingHistoryApi
 import com.epmedu.animeal.api.feeding.FeedingPointApi
+import com.epmedu.animeal.api.message.MessageApi
 import com.epmedu.animeal.networkstorage.data.api.StorageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.debugmenu.domain.DebugMenuRepository
@@ -72,6 +73,7 @@ object FeedDataModule {
         favouriteRepository: FavouriteRepository,
         usersRepository: UsersRepository,
         debugMenuRepository: DebugMenuRepository,
+        messageApi: MessageApi
     ): FeedingRepository {
         return when {
             debugMenuRepository.useMockedFeedingPoints -> {
@@ -87,7 +89,8 @@ object FeedDataModule {
                     feedingPointRepository = feedingPointRepository,
                     storageApi = storageApi,
                     favouriteRepository = favouriteRepository,
-                    usersRepository = usersRepository
+                    usersRepository = usersRepository,
+                    messageApi = messageApi
                 )
             }
         }

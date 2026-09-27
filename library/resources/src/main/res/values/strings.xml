@@ -150,6 +150,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="i_will_feed">I will feed</string>
+    <string name="i_will_inform">Inform</string>
     <string name="last_feeder">Last feeder</string>
     <string name="last_feeders">Last feeders</string>
     <string name="last_feeders_empty">No feeders for the last %s days</string>
@@ -162,6 +163,7 @@
     <string name="approve">Approve</string>
     <string name="go_back">Go back</string>
     <string name="inactive">Inactive</string>
+    <string name="send">Send</string>
 
     <string name="thank_you">"Thank You!"</string>
     <string name="animals_fed">"Animals are fed"</string>
@@ -220,4 +222,7 @@
 
 	<string name="guest_block_message">You’re just one step away from joining our community of heroes! By registering or logging in, you can actively contribute to feeding and protecting these amazing animals.\n\nTogether, we can ensure they thrive in a safe and healthy environment.</string>
     <string name="btn_register_login">Register/Log-in</string>
+
+    <string name="message_body_title">Description</string>
+    <string name="message_body_hint">Please describe the problem with this feeding point.</string>
 </resources>

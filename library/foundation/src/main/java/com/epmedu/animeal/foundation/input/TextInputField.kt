@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -50,7 +51,8 @@ fun TextInputField(
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    multiLines: Boolean = false
 ) {
     var focusedDirty by rememberSaveable { mutableStateOf(false) }
     val borderColor: Color =
@@ -71,6 +73,11 @@ fun TextInputField(
         }
 
         TextInputFieldBox(
+            modifier = if (multiLines) {
+                Modifier.weight(1f)
+            } else {
+                Modifier
+            },
             value = value,
             hint = hint,
             isEnabled = isEnabled,
@@ -90,6 +97,7 @@ fun TextInputField(
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
+            singleLine = !multiLines
         )
 
         Text(
@@ -113,14 +121,16 @@ private fun TextInputFieldBox(
     onValueChange: (String) -> Unit,
     onFocusChange: (FocusState) -> Unit,
     borderColor: Color,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation,
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
+    singleLine: Boolean,
+    modifier: Modifier = Modifier,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .onFocusChanged { onFocusChange(it) }
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
@@ -153,7 +163,8 @@ private fun TextInputFieldBox(
                 fontWeight = FontWeight.ExtraLight
             )
         },
-        singleLine = true,
+        singleLine = singleLine,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = isEnabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions
@@ -179,6 +190,15 @@ private fun TextInputFieldPreview() {
                 hint = "Enter your name",
                 onValueChange = {},
                 value = "Value"
+            )
+            Divider()
+            TextInputField(
+                modifier = Modifier.padding(horizontal = 16.dp).height(200.dp),
+                title = "With value + multiline",
+                hint = "Enter your name",
+                onValueChange = {},
+                value = "Value sdfsa ds asd asd asd asd asd asd asd asd asd asd asdas d",
+                multiLines = true
             )
             Divider()
             TextInputField(

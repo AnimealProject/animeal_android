@@ -10,6 +10,7 @@ import com.apollographql.apollo.api.Operation.Data
 import com.epmedu.animeal.api.feeding.FeedingActionApi
 import com.epmedu.animeal.api.feeding.FeedingApi
 import com.epmedu.animeal.api.feeding.FeedingHistoryApi
+import com.epmedu.animeal.api.message.MessageApi
 import com.epmedu.animeal.auth.AuthAPI
 import com.epmedu.animeal.common.domain.wrapper.ActionResult
 import com.epmedu.animeal.feeding.data.mapper.toActionResult
@@ -63,7 +64,8 @@ internal class FeedingRepositoryImpl(
     private val feedingPointRepository: FeedingPointRepository,
     private val storageApi: StorageApi,
     private val favouriteRepository: FavouriteRepository,
-    private val usersRepository: UsersRepository
+    private val usersRepository: UsersRepository,
+    private val messageApi: MessageApi
 ) : FeedingRepository {
 
     private val _domainFeedState = MutableStateFlow(DomainFeedState())
@@ -429,6 +431,14 @@ internal class FeedingRepositoryImpl(
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {
         _domainFeedState.emit(newFeedState)
+    }
+
+    override suspend fun sendMessage(
+        feedingPointId: String,
+        messageType: String,
+        body: String
+    ): ActionResult<Unit> {
+        return messageApi.sendMessage(feedingPointId, messageType, body).toActionResult(feedingPointId)
     }
 
     private data class FeedingsContainer(

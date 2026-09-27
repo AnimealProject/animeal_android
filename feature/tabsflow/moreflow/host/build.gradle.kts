@@ -19,4 +19,5 @@ dependencies {
     implementation(projects.library.navigation)
 
     implementation(projects.shared.feature.feedings)
+    implementation(projects.shared.feature.messages)
 }

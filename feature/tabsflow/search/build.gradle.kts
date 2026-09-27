@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.shared.feature.feeding)
     implementation(projects.shared.feature.networkstorage)
     implementation(projects.shared.feature.permissions)
+	implementation(projects.shared.feature.messages)
 
     implementation(libs.accompanist.permissions)
 

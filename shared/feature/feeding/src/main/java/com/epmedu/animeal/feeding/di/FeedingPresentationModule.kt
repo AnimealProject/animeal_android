@@ -17,6 +17,7 @@ import com.epmedu.animeal.feeding.domain.usecase.GetFeedingInProgressUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByPriorityUseCase
 import com.epmedu.animeal.feeding.domain.usecase.RemoveFeedingPointFromFavouritesUseCase
+import com.epmedu.animeal.feeding.domain.usecase.SendMessageUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateAnimalTypeSettingsUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
@@ -60,7 +61,8 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase: CancelFeedingUseCase,
         expireFeedingUseCase: ExpireFeedingUseCase,
         finishFeedingUseCase: FinishFeedingUseCase,
-        getIsTrustedUseCase: GetIsTrustedUseCase
+        getIsTrustedUseCase: GetIsTrustedUseCase,
+        sendMessageUseCase: SendMessageUseCase
     ): FeedingHandler = DefaultFeedingHandler(
         stateDelegate,
         actionDelegate,
@@ -76,7 +78,8 @@ internal object FeedingPresentationModule {
         cancelFeedingUseCase,
         expireFeedingUseCase,
         finishFeedingUseCase,
-        getIsTrustedUseCase
+        getIsTrustedUseCase,
+        sendMessageUseCase
     )
 
     @ViewModelScoped

@@ -6,6 +6,7 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Dismissed
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
@@ -15,9 +16,11 @@ import com.epmedu.animeal.feeding.domain.usecase.FetchCurrentFeedingPointUseCase
 import com.epmedu.animeal.feeding.domain.usecase.FinishFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedStateUseCase
 import com.epmedu.animeal.feeding.domain.usecase.GetFeedingPointByIdUseCase
+import com.epmedu.animeal.feeding.domain.usecase.SendMessageUseCase
 import com.epmedu.animeal.feeding.domain.usecase.StartFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.UpdateFeedStateUseCase
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
+import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.AddMessage
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Cancel
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Expired
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Finish
@@ -53,7 +56,8 @@ class DefaultFeedingHandler(
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val expireFeedingUseCase: ExpireFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase,
-    private val getIsTrustedUseCase: GetIsTrustedUseCase
+    private val getIsTrustedUseCase: GetIsTrustedUseCase,
+    private val sendMessageUseCase: SendMessageUseCase,
 ) : FeedingHandler,
     StateDelegate<FeedState> by stateDelegate,
     ActionDelegate by actionDelegate,
@@ -106,6 +110,7 @@ class DefaultFeedingHandler(
             Expired -> expireFeeding()
             is Finish -> finishFeeding(event.feedingPhotos)
             Reset -> launch { restartFeedingConfirmationState() }
+            is AddMessage -> launch { addMessage(event.feedingPointId, event.messageType, event.body) }
         }
     }
 
@@ -115,6 +120,27 @@ class DefaultFeedingHandler(
             updateGlobally = false,
             feedPoint = state.feedPoint
         )
+    }
+
+    private suspend fun addMessage(feedingPointId: String, messageType: String, body: String) {
+        getFeedingPointByIdUseCase(feedingPointId)?.let { feedingPoint ->
+            updateState {
+                copy(
+                    feedPoint = FeedingPointModel(feedingPoint)
+                )
+            }
+            performFeedingAction(
+                action = { feedingPointId ->
+                    sendMessageUseCase(feedingPointId, messageType, body)
+                },
+                onSuccess = {
+                    updateFeedingState(Dismissed)
+                },
+                onError = { message ->
+                    updateFeedingState(Error(message))
+                }
+            )
+        }
     }
 
     private suspend fun startFeeding(id: String) {
@@ -215,7 +241,7 @@ class DefaultFeedingHandler(
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit = {},
-        onError: suspend () -> Unit = { showError() },
+        onError: suspend (message: String?) -> Unit = { showError() },
         onStart: suspend (String) -> Unit = {},
         onFinish: suspend () -> Unit = {},
     ) {
@@ -228,7 +254,7 @@ class DefaultFeedingHandler(
                 onFinish = onFinish
             )
         } ?: run {
-            onError()
+            onError("Feeding point is not selected")
             showError()
         }
     }
