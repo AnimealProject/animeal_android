@@ -68,12 +68,4 @@ internal class FeedingRepositoryMock : FeedingRepository {
     }
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {}
-
-    override suspend fun sendMessage(
-        feedingPointId: String,
-        messageType: String,
-        body: String
-    ): ActionResult<Unit> {
-        return ActionResult.Success(Unit)
-    }
 }

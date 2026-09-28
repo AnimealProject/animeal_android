@@ -8,5 +8,4 @@ sealed interface FeedingEvent {
     data class Finish(val feedingPhotos: List<FeedingPhotoItem>) : FeedingEvent
     data object Expired : FeedingEvent
     data object Reset : FeedingEvent
-    data class AddMessage(val feedingPointId: String, val messageType: String, val body: String) : FeedingEvent
 }

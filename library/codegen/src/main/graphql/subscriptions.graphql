@@ -12,6 +12,7 @@ subscription OnUpdateFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -36,6 +37,7 @@ subscription OnCreateFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -196,6 +198,7 @@ subscription OnUpdateFeedingHistoryExt {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -220,6 +223,7 @@ subscription OnCreateFeedingHistoryExt {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -244,6 +248,7 @@ subscription OnDeleteFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -736,6 +741,7 @@ subscription OnCreateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -763,6 +769,7 @@ subscription OnUpdateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -790,6 +797,7 @@ subscription OnDeleteFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -871,6 +879,7 @@ subscription OnCreateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -898,6 +907,7 @@ subscription OnUpdateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -925,6 +935,7 @@ subscription OnDeleteFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -1764,6 +1775,126 @@ subscription OnDeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onCreateMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
+    feedingPoint {
+      id
+      code
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      disabled
+      feedingPointCategoryId
+      __typename
+    }
+    __typename
+  }
+}
+
+subscription OnUpdateMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onUpdateMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
+    feedingPoint {
+      id
+      code
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      disabled
+      feedingPointCategoryId
+      __typename
+    }
+    __typename
+  }
+}
+
+subscription OnDeleteMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onDeleteMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
     __typename
   }
 }

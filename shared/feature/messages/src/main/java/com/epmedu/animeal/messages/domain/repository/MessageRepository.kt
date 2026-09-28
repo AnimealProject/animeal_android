@@ -10,4 +10,10 @@ interface MessageRepository {
     fun getAllMessages(shouldFetch: Boolean = false): Flow<List<Message>>
 
     suspend fun removeMessage(messageId: String): ActionResult<Unit>
+
+    suspend fun createFeedingPointIssue(
+        feedingPointId: String,
+        body: String,
+        images: List<String>
+    ): ActionResult<Unit>
 }

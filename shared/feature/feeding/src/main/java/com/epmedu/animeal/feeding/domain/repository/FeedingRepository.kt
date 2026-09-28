@@ -40,6 +40,4 @@ interface FeedingRepository {
     suspend fun rejectFeeding(feedingPointId: String, reason: String): ActionResult<Unit>
 
     suspend fun updateFeedStateFlow(newFeedState: DomainFeedState)
-
-    suspend fun sendMessage(feedingPointId: String, messageType: String, body: String): ActionResult<Unit>
 }

@@ -4,5 +4,9 @@ import com.epmedu.animeal.common.data.wrapper.ApiResult
 
 interface MessageApi {
 
-    suspend fun sendMessage(feedingPointId: String, messageType: String, body: String): ApiResult<String>
+    suspend fun createFeedingPointIssue(
+        feedingPointId: String,
+        body: String,
+        images: List<String>
+    ): ApiResult<String>
 }

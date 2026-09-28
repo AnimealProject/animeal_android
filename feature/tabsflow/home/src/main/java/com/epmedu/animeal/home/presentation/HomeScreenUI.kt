@@ -26,7 +26,6 @@ import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingW
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Loading
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.AddMessage
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingPointEvent.Deselect
@@ -61,6 +60,7 @@ import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.LocationState.UndefinedLocation
 import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.CreateIssue
 import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.Open
 import com.epmedu.animeal.messages.presentation.ui.MessageCreateDialog
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
@@ -258,7 +258,7 @@ internal fun HomeScreenUI(
             point.code,
             point.title,
             onConfirm = { body ->
-                onFeedingEvent(AddMessage(point.id, "issue", body))
+                onMessageCreateEvent(CreateIssue(point.id, body, listOf()))
                 hideBottomSheet()
             }
         )

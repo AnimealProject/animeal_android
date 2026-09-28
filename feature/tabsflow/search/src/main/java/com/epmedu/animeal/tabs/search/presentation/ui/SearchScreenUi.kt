@@ -29,7 +29,6 @@ import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
-import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.AddMessage
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent.WillFeedClicked
@@ -48,6 +47,7 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.theme.bottomBarHeight
 import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.CreateIssue
 import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.Open
 import com.epmedu.animeal.messages.presentation.ui.MessageCreateDialog
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
@@ -195,7 +195,7 @@ private fun ScreenScaffold(
             point.code,
             point.title,
             onConfirm = { body ->
-                onFeedingEvent(AddMessage(point.id, "issue", body))
+                onMessageCreateEvent(CreateIssue(point.id, body, listOf<String>()))
                 scope.launch { bottomSheetState.hide() }
             }
         )

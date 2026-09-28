@@ -32,6 +32,18 @@ mutation ExpireFeeding($feedingId: String!, $reason: String!) {
   expireFeeding(feedingId: $feedingId, reason: $reason)
 }
 
+mutation CreateFeedingPointIssue(
+  $feedingPointId: String!
+  $body: String!
+  $images: [String!]!
+) {
+  createFeedingPointIssue(
+    feedingPointId: $feedingPointId
+    body: $body
+    images: $images
+  )
+}
+
 mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
   createFeedingPointExt(input: $input) {
     id
@@ -180,6 +192,7 @@ mutation CreateFeedingExt($input: CreateFeedingInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -204,6 +217,7 @@ mutation UpdateFeedingExt($input: UpdateFeedingInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -228,6 +242,7 @@ mutation CreateFeedingHistoryExt($input: CreateFeedingHistoryInput!) {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -252,6 +267,7 @@ mutation UpdateFeedingHistoryExt($input: UpdateFeedingHistoryInput!) {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -276,6 +292,7 @@ mutation DeleteFeedingExt($input: DeleteFeedingExtInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -768,6 +785,7 @@ mutation CreateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -795,6 +813,7 @@ mutation UpdateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -822,6 +841,7 @@ mutation DeleteFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -903,6 +923,7 @@ mutation CreateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -930,6 +951,7 @@ mutation UpdateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -957,6 +979,7 @@ mutation DeleteFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -1796,6 +1819,30 @@ mutation DeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
+  }
+}
+
+mutation DeleteMessage(
+  $input: DeleteMessageInput!
+  $condition: ModelMessageConditionInput
+) {
+  deleteMessage(input: $input, condition: $condition) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
     __typename
   }
 }

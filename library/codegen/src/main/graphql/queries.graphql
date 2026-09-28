@@ -76,6 +76,7 @@ query GetActiveFeedings(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -112,6 +113,7 @@ query GetHistoricalFeedings(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -287,58 +289,6 @@ query ListPets($filter: ModelPetFilterInput, $limit: Int, $nextToken: String) {
   }
 }
 
-query SearchPets(
-  $filter: SearchablePetFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchPets(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      name
-      images
-      breed
-      color
-      chipNumber
-      vaccinatedAt
-      yearOfBirth
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      petCategoryId
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetCategory($id: ID!) {
   getCategory(id: $id) {
     id
@@ -378,52 +328,6 @@ query ListCategories(
       __typename
     }
     nextToken
-    __typename
-  }
-}
-
-query SearchCategories(
-  $filter: SearchableCategoryFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchCategories(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      name
-      icon
-      tag
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
     __typename
   }
 }
@@ -574,64 +478,6 @@ query FeedingPointByCode(
   }
 }
 
-query SearchFeedingPoints(
-  $filter: SearchableFeedingPointFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFeedingPoints(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      code
-      name
-      description
-      city
-      street
-      address
-      images
-      region
-      neighborhood
-      distance
-      status
-      statusUpdatedAt
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      cover
-      disabled
-      feedingPointCategoryId
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetFeeding($id: ID!) {
   getFeeding(id: $id) {
     id
@@ -644,6 +490,7 @@ query GetFeeding($id: ID!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -720,57 +567,6 @@ query FeedingByFeedingPointId(
   }
 }
 
-query SearchFeedings(
-  $filter: SearchableFeedingFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFeedings(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      userId
-      images
-      status
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      feedingPointFeedingsId
-      expireAt
-      assignedModerators
-      moderatedBy
-      moderatedAt
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetFeedingUsers($id: ID!) {
   getFeedingUsers(id: $id) {
     id
@@ -804,47 +600,6 @@ query ListFeedingUsers(
   }
 }
 
-query SearchFeedingUsers(
-  $filter: SearchableFeedingUsersFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFeedingUsers(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetFeedingHistory($id: ID!) {
   getFeedingHistory(id: $id) {
     id
@@ -857,6 +612,7 @@ query GetFeedingHistory($id: ID!) {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -929,57 +685,6 @@ query FeedingHistoryByFeedingPointId(
       __typename
     }
     nextToken
-    __typename
-  }
-}
-
-query SearchFeedingHistories(
-  $filter: SearchableFeedingHistoryFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFeedingHistories(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      userId
-      images
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      feedingPointId
-      status
-      reason
-      moderatedBy
-      moderatedAt
-      assignedModerators
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
     __typename
   }
 }
@@ -1348,50 +1053,6 @@ query ListMedications(
   }
 }
 
-query SearchMedications(
-  $filter: SearchableMedicationFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchMedications(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      name
-      petId
-      date
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetSettings($id: ID!) {
   getSettings(id: $id) {
     id
@@ -1625,50 +1286,6 @@ query FavouritesByFeedingPointId(
   }
 }
 
-query SearchFavourites(
-  $filter: SearchableFavouriteFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchFavourites(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      userId
-      sub
-      feedingPointId
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-
 query GetQuestion($id: ID!) {
   getQuestion(id: $id) {
     id
@@ -1709,52 +1326,6 @@ query ListQuestions(
       __typename
     }
     nextToken
-    __typename
-  }
-}
-
-query SearchQuestions(
-  $filter: SearchableQuestionFilterInput
-  $limit: Int
-  $nextToken: String
-  $from: Int
-) {
-  searchQuestions(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
-    items {
-      id
-      value
-      answer
-      orderNum
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      owner
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
     __typename
   }
 }
@@ -1801,50 +1372,55 @@ query ListBankAccounts(
   }
 }
 
-query SearchBankAccounts(
-  $filter: SearchableBankAccountFilterInput
+query ListMessages(
+  $filter: ModelMessageFilterInput
   $limit: Int
   $nextToken: String
-  $from: Int
 ) {
-  searchBankAccounts(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-  ) {
+  listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      name
-      value
-      cover
+      feedingPointId
+      type
+      body
       images
-      enabled
+      sender
+      recipients
+      status
+      resolutionNote
+      createdAt
+      updatedAt
       createdBy
       updatedBy
       owner
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
+      userId
+      feedingPoint {
+        id
+        code
+        name
+        description
+        city
+        street
+        address
+        images
+        region
+        neighborhood
+        distance
+        status
+        statusUpdatedAt
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        owner
+        cover
+        disabled
+        feedingPointCategoryId
+        __typename
       }
       __typename
     }
+    nextToken
     __typename
   }
 }
