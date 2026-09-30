@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
     implementation(projects.shared.feature.feeding)
+	implementation(projects.shared.feature.messages)
 
     implementation(projects.shared.feature.networkstorage)
     implementation(projects.shared.feature.permissions)

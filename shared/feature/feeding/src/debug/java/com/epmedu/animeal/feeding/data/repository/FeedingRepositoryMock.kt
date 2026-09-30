@@ -68,5 +68,4 @@ internal class FeedingRepositoryMock : FeedingRepository {
     }
 
     override suspend fun updateFeedStateFlow(newFeedState: DomainFeedState) {}
-
 }

@@ -53,7 +53,7 @@ class DefaultFeedingHandler(
     private val cancelFeedingUseCase: CancelFeedingUseCase,
     private val expireFeedingUseCase: ExpireFeedingUseCase,
     private val finishFeedingUseCase: FinishFeedingUseCase,
-    private val getIsTrustedUseCase: GetIsTrustedUseCase
+    private val getIsTrustedUseCase: GetIsTrustedUseCase,
 ) : FeedingHandler,
     StateDelegate<FeedState> by stateDelegate,
     ActionDelegate by actionDelegate,
@@ -215,7 +215,7 @@ class DefaultFeedingHandler(
     private suspend fun performFeedingAction(
         action: suspend (String) -> ActionResult<Unit>,
         onSuccess: suspend (FeedingPointModel) -> Unit = {},
-        onError: suspend () -> Unit = { showError() },
+        onError: suspend (message: String?) -> Unit = { showError() },
         onStart: suspend (String) -> Unit = {},
         onFinish: suspend () -> Unit = {},
     ) {
@@ -228,7 +228,7 @@ class DefaultFeedingHandler(
                 onFinish = onFinish
             )
         } ?: run {
-            onError()
+            onError("Feeding point is not selected")
             showError()
         }
     }

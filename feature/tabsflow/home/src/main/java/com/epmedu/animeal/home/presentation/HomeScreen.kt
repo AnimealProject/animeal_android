@@ -19,6 +19,7 @@ import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenCreated
 import com.epmedu.animeal.home.presentation.HomeScreenEvent.ScreenDisplayed
 import com.epmedu.animeal.home.presentation.model.CameraState
 import com.epmedu.animeal.home.presentation.viewmodel.HomeViewModel
+import com.epmedu.animeal.messages.presentation.viewmodel.MessageCreateDialogViewModel
 import com.epmedu.animeal.router.presentation.FeedingRouteState.Active
 import com.epmedu.animeal.router.presentation.FeedingRouteState.Disabled
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ fun HomeScreen(onDisablingRouteForGuest: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val willFeedViewModel = hiltViewModel<WillFeedViewModel>()
+    val messageCreateViewModel = hiltViewModel<MessageCreateDialogViewModel>()
     val state by homeViewModel.stateFlow.collectAsState()
     val bottomSheetState = rememberAnimealBottomSheetState(
         initialValue = AnimealBottomSheetValue.Hidden
@@ -59,6 +61,7 @@ fun HomeScreen(onDisablingRouteForGuest: () -> Unit) {
             onFeedingPointEvent = homeViewModel::handleFeedingPointEvent,
             onTimerEvent = homeViewModel::handleTimerEvent,
             onWillFeedEvent = willFeedViewModel::handleEvent,
+            onMessageCreateEvent = messageCreateViewModel::handleEvent,
             onDisablingRouteForGuest
         )
     }

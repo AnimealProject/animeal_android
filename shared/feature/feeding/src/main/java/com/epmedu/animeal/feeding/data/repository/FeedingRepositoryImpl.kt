@@ -3,7 +3,6 @@ package com.epmedu.animeal.feeding.data.repository
 import OnCreateFeedingExtSubscription
 import OnCreateFeedingHistoryExtSubscription
 import OnUpdateFeedingExtSubscription
-import SearchFeedingHistoriesQuery
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.generated.model.FeedingStatus
 import com.apollographql.apollo.api.Operation.Data
@@ -349,10 +348,6 @@ internal class FeedingRepositoryImpl(
                 getImageFrom = ::getImageFromName
             )
         }
-    }
-
-    private fun SearchFeedingHistoriesQuery.Item?.isExpired(): Boolean {
-        return this?.status() == rejected && images().isEmpty()
     }
 
     private fun GetHistoricalFeedingsQuery.GetHistoricalFeeding?.isExpired(): Boolean {

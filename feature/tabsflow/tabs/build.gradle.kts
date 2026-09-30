@@ -21,6 +21,7 @@ dependencies {
 
     implementation(projects.shared.feature.feedings)
     implementation(projects.shared.feature.timer)
+    implementation(projects.shared.feature.messages)
 
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
