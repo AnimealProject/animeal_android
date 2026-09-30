@@ -54,8 +54,7 @@ object FeedDataModule {
         storageApi: StorageApi,
         feedingPointRepository: FeedingPointRepository,
         favouriteRepository: FavouriteRepository,
-        usersRepository: UsersRepository,
-        messageApi: MessageAPI
+        usersRepository: UsersRepository
     ): FeedingRepository {
         return FeedingRepositoryImpl(
             dispatchers = Dispatchers,
@@ -66,8 +65,7 @@ object FeedDataModule {
             feedingPointRepository = feedingPointRepository,
             storageApi = storageApi,
             favouriteRepository = favouriteRepository,
-            usersRepository = usersRepository,
-            messageApi = messageApi
+            usersRepository = usersRepository
         )
     }
 
