@@ -120,7 +120,7 @@ class DefaultFeedingPointHandler @Inject constructor(
                 } ?: feedingPoints.find { feedingPoint ->
                     feedingPoint.id == feedState.feedPoint.id
                 }?.let { feedingPoint ->
-                    persistentListOf(feedingPoint)
+                    persistentListOf(feedingPoint.copy(feedStatus = FeedStatus.InProgress))
                 } ?: persistentListOf(FeedingPointModel(feedState.feedPoint))
             }
 
