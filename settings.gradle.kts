@@ -18,7 +18,12 @@ dependencyResolutionManagement {
                 create<BasicAuthentication>("basic")
             }
             credentials {
-                val prop = loadProperties("local.properties")
+                val prop = java.util.Properties().apply {
+                    val file = rootDir.resolve("local.properties")
+                    if (file.exists()) {
+                        file.inputStream().use { load(it) }
+                    }
+                }
                 val mapBoxSecretToken: String? = prop.getProperty("MAPBOX_SECRET_TOKEN")
 
                 gradle.settingsEvaluated {

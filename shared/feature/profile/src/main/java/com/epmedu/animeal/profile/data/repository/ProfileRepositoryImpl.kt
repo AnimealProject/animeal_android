@@ -41,11 +41,13 @@ internal class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updatePhoneAndRegion(phone: String, region: Region) {
-        dataStore.data.map {
-            val json = it.read(PROFILE_DATA_STORE)
-            val profile = Gson().fromJson(json, BasicProfile::class.java) as BasicProfile
+        dataStore.edit {
+            val key = stringPreferencesKey(PROFILE_DATA_STORE)
+            val profile = this[key]
+                ?.let { json -> Gson().fromJson(json, BasicProfile::class.java) }
+                ?: BasicProfile()
             val newProfile = profile.copy(phoneNumber = phone, phoneNumberRegion = region)
-            dataStore.write(PROFILE_DATA_STORE, Gson().toJson(newProfile, BasicProfile::class.java))
+            this[key] = Gson().toJson(newProfile, BasicProfile::class.java)
         }
     }
 
