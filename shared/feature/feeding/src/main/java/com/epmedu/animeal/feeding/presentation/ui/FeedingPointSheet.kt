@@ -4,11 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +27,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +65,7 @@ fun FeedingPointSheetContent(
     modifier: Modifier = Modifier,
     useExpandableFeeders: Boolean = false,
     showAssignedModerators: Boolean = false,
+    assignedModeratorsInitialCount: Int = 5,
     onFavouriteChange: (Boolean) -> Unit = {}
 ) {
     Column(
@@ -84,8 +89,10 @@ fun FeedingPointSheetContent(
         )
         with(feedingPoint) {
             FeedingPointHeader(
+                code = code,
                 title = title,
                 status = feedStatus,
+                inactive = inactive,
                 isFavourite = isFavourite,
                 image = image,
                 onFavouriteChange = onFavouriteChange
@@ -95,7 +102,8 @@ fun FeedingPointSheetContent(
                 feedings = feedings,
                 scrimAlpha = contentAlpha,
                 assignedModerators = if (showAssignedModerators) assignedModerators else null,
-                useExpandableFeeders = useExpandableFeeders
+                useExpandableFeeders = useExpandableFeeders,
+                assignedModeratorsInitialCount = assignedModeratorsInitialCount
             )
         }
     }
@@ -103,46 +111,69 @@ fun FeedingPointSheetContent(
 
 @Composable
 internal fun FeedingPointHeader(
+    code: String,
     title: String,
     status: FeedStatus,
+    inactive: Boolean,
     isFavourite: Boolean,
     image: NetworkFile?,
     onFavouriteChange: (Boolean) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        FeedingPointImage(
-            image = image,
-            contentDescription = title
-        )
-        Column(
+    Box {
+        Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .alpha(if (inactive) 0.6f else 1.0f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colors.onSurface,
-                maxLines = 2,
+            FeedingPointImage(
+                image = image,
+                contentDescription = title
             )
-            FeedStatusItem(
-                status = status,
-            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = code,
+                        style = MaterialTheme.typography.subtitle2,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 1,
+                    )
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.subtitle1,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 1,
+                    )
+                }
+
+                FeedStatusItem(
+                    status = status,
+                )
+            }
         }
+
         AnimealHeartButton(
-            modifier = Modifier.align(Alignment.Top),
+            modifier = Modifier.align(Alignment.TopEnd).offset(y = (-8).dp),
             selected = isFavourite,
             onChange = onFavouriteChange,
         )
+
+        if (inactive) {
+            FeedingPointInactiveBadge(
+                modifier = Modifier.offset(x = (-8).dp, y = (-8).dp)
+            )
+        }
     }
 }
 
@@ -152,7 +183,8 @@ internal fun FeedingPointDetails(
     description: String,
     feedings: List<Feeding>?,
     assignedModerators: List<String>?,
-    useExpandableFeeders: Boolean
+    useExpandableFeeders: Boolean,
+    assignedModeratorsInitialCount: Int
 ) {
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -195,7 +227,8 @@ internal fun FeedingPointDetails(
             assignedModerators?.let { moderators ->
                 item {
                     FeedingPointAssignedModerators(
-                        moderators = moderators,
+                        moderators = moderators.sorted(),
+                        assignedModeratorsInitialCount = assignedModeratorsInitialCount,
                         onExpanding = {
                             coroutineScope.launch {
                                 lazyListState.layoutInfo.viewportSize.height.let {
@@ -230,10 +263,13 @@ private fun FeedingPointSheetLoadingPreview(@PreviewParameter(LoremIpsum::class)
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
                 id = "",
+                code = "GE-TB-0000-D-0000",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
+                inactive = false,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
                 city = "Minsk",
+                address = "Address",
                 isFavourite = true,
                 feedings = null,
                 animalType = AnimalType.Dogs,
@@ -253,9 +289,12 @@ private fun FeedingPointSheetPreview(@PreviewParameter(LoremIpsum::class) text: 
         FeedingPointSheetContent(
             feedingPoint = FeedingPointModel(
                 id = "",
+                code = "GE-TB-0000-D-0000",
                 title = text.take(30),
                 feedStatus = FeedStatus.Starved,
+                inactive = true,
                 description = stringResource(id = R.string.feeding_sheet_mock_text),
+                address = "Address",
                 city = "Minsk",
                 isFavourite = true,
                 feedings = listOf(

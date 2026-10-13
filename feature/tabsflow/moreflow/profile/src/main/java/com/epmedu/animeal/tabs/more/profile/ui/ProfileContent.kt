@@ -55,14 +55,15 @@ internal fun ProfileContent(
                     BackButton(onClick = onBack)
                 }
             )
+            HeightSpacer(height = 16.dp)
+            Text(
+                modifier = Modifier.padding(horizontal = 26.dp),
+                text = stringResource(id = R.string.profile_subtitle),
+                style = MaterialTheme.typography.subtitle1,
+            )
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier.padding(horizontal = 26.dp),
             ) {
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.profile_subtitle),
-                    style = MaterialTheme.typography.subtitle1,
-                )
                 ProfileInputForm(
                     modifier = Modifier.padding(top = 24.dp),
                     state = state,
@@ -82,8 +83,8 @@ internal fun ProfileContent(
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 30.dp)
-                .padding(top = 16.dp, bottom = 40.dp)
+                .padding(horizontal = 26.dp)
+                .padding(bottom = 16.dp)
         )
     }
 }

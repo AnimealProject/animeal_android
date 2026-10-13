@@ -32,9 +32,22 @@ mutation ExpireFeeding($feedingId: String!, $reason: String!) {
   expireFeeding(feedingId: $feedingId, reason: $reason)
 }
 
+mutation CreateFeedingPointIssue(
+  $feedingPointId: String!
+  $body: String!
+  $images: [String!]!
+) {
+  createFeedingPointIssue(
+    feedingPointId: $feedingPointId
+    body: $body
+    images: $images
+  )
+}
+
 mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
   createFeedingPointExt(input: $input) {
     id
+    code
     name
     description
     city
@@ -93,6 +106,7 @@ mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -101,6 +115,7 @@ mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
 mutation UpdateFeedingPointExt($input: UpdateFeedingPointInput!) {
   updateFeedingPointExt(input: $input) {
     id
+    code
     name
     description
     city
@@ -159,6 +174,7 @@ mutation UpdateFeedingPointExt($input: UpdateFeedingPointInput!) {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -176,6 +192,7 @@ mutation CreateFeedingExt($input: CreateFeedingInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -200,6 +217,7 @@ mutation UpdateFeedingExt($input: UpdateFeedingInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -224,6 +242,7 @@ mutation CreateFeedingHistoryExt($input: CreateFeedingHistoryInput!) {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -248,6 +267,7 @@ mutation UpdateFeedingHistoryExt($input: UpdateFeedingHistoryInput!) {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -272,6 +292,7 @@ mutation DeleteFeedingExt($input: DeleteFeedingExtInput!) {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -542,6 +563,7 @@ mutation CreateFeedingPoint(
 ) {
   createFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -600,6 +622,7 @@ mutation CreateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -611,6 +634,7 @@ mutation UpdateFeedingPoint(
 ) {
   updateFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -669,6 +693,7 @@ mutation UpdateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -680,6 +705,7 @@ mutation DeleteFeedingPoint(
 ) {
   deleteFeedingPoint(input: $input, condition: $condition) {
     id
+    code
     name
     description
     city
@@ -738,6 +764,7 @@ mutation DeleteFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -758,6 +785,7 @@ mutation CreateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -785,6 +813,7 @@ mutation UpdateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -812,6 +841,7 @@ mutation DeleteFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -893,6 +923,7 @@ mutation CreateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -920,6 +951,7 @@ mutation UpdateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -947,6 +979,7 @@ mutation DeleteFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -987,6 +1020,7 @@ mutation CreateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1004,6 +1038,7 @@ mutation CreateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1042,6 +1077,7 @@ mutation UpdateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1059,6 +1095,7 @@ mutation UpdateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1097,6 +1134,7 @@ mutation DeleteRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1114,6 +1152,7 @@ mutation DeleteRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1134,6 +1173,7 @@ mutation CreateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1151,6 +1191,7 @@ mutation CreateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1171,6 +1212,7 @@ mutation UpdateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1188,6 +1230,7 @@ mutation UpdateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1208,6 +1251,7 @@ mutation DeleteRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1225,6 +1269,7 @@ mutation DeleteRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1654,6 +1699,7 @@ mutation CreateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1677,6 +1723,7 @@ mutation UpdateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1700,6 +1747,7 @@ mutation DeleteQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1771,6 +1819,30 @@ mutation DeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
+  }
+}
+
+mutation DeleteMessage(
+  $input: DeleteMessageInput!
+  $condition: ModelMessageConditionInput
+) {
+  deleteMessage(input: $input, condition: $condition) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
     __typename
   }
 }

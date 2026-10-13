@@ -9,6 +9,8 @@ import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent
 import com.epmedu.animeal.tabs.more.faq.presentation.FAQScreenEvent.QuestionClicked
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,11 +24,17 @@ internal class FAQViewModel @Inject constructor(
         getFaq()
     }
 
+    private val faqComparator =
+        compareBy<FrequentlyAskedQuestion> { it.orderNum ?: Int.MAX_VALUE }
+            .thenBy { it.question }
+
     private fun getFaq() {
         viewModelScope.launch {
-            getFAQUseCase().collect {
-                updateState { copy(questions = it, isLoading = false) }
-            }
+            getFAQUseCase()
+                .map { it.sortedWith(faqComparator).toImmutableList() }
+                .collect {
+                    updateState { copy(questions = it, isLoading = false) }
+                }
         }
     }
 

@@ -2,8 +2,9 @@ package com.epmedu.animeal.tabs.more.about.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,16 +25,17 @@ internal fun AboutHeading(onBack: () -> Unit, horizontalPadding: Dp) {
     Column {
         TopBar(
             title = stringResource(id = R.string.page_about),
+            modifier = Modifier.statusBarsPadding(),
             navigationIcon = {
                 BackButton(onClick = onBack)
             }
         )
         Image(
             modifier = Modifier
-                .padding(top = 30.dp)
                 .padding(horizontal = horizontalPadding)
-                .height(190.dp)
-                .clip(RoundedCornerShape(12.dp)),
+                .padding(vertical = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .aspectRatio(2.0f),
             contentScale = ContentScale.Crop,
             painter = painterResource(R.drawable.about),
             contentDescription = null,

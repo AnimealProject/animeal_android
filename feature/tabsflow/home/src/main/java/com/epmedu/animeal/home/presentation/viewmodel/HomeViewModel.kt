@@ -31,6 +31,7 @@ import com.epmedu.animeal.home.presentation.viewmodel.handlers.camera.CameraHand
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.gallery.FeedingPhotoGalleryHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.location.LocationHandler
 import com.epmedu.animeal.home.presentation.viewmodel.handlers.timercancellation.TimerCancellationHandler
+import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_SHOW_ON_MAP_ZOOM
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
 import com.epmedu.animeal.permissions.presentation.PermissionsEvent
 import com.epmedu.animeal.permissions.presentation.handler.PermissionsHandler
@@ -234,7 +235,7 @@ internal class HomeViewModel @Inject constructor(
             getForcedFeedingPointId()?.let { id ->
                 nearestFeedingJob.cancel()
                 showFeedingPoint(id)?.coordinates?.let {
-                    collectLocations(Location(it.latitude(), it.longitude()))
+                    collectLocations(Location(it.latitude(), it.longitude(), DEFAULT_SHOW_ON_MAP_ZOOM))
                 }
             }
         }

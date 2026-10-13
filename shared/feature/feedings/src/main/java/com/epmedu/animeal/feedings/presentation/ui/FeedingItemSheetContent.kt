@@ -38,7 +38,7 @@ internal fun FeedingItemSheetContent(
 ) {
     var currentPhotoIndex by rememberSaveable(feeding.id) { mutableIntStateOf(0) }
     val currentPhoto by remember(currentPhotoIndex, feeding.id) {
-        mutableStateOf(feeding.photos[currentPhotoIndex])
+        mutableStateOf(feeding.photos.getOrNull(currentPhotoIndex))
     }
     val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
@@ -53,23 +53,25 @@ internal fun FeedingItemSheetContent(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                FeedingPhoto(
-                    photo = currentPhoto,
-                    modifier = Modifier
-                        .heightIn(max = photoContainerHeight)
-                        .alpha(contentAlpha)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(horizontal = 30.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                )
-                HeightSpacer(height = 10.dp)
-                FeedingPhotoCarousel(
-                    feeding = feeding,
-                    contentAlpha = contentAlpha,
-                    onPhotoClick = { index -> currentPhotoIndex = index }
-                )
-                if (feeding.reviewedBy != null || feeding.rejectionReason != null) {
+                currentPhoto?.let { photo ->
+                    FeedingPhoto(
+                        photo = photo,
+                        modifier = Modifier
+                            .heightIn(max = photoContainerHeight)
+                            .alpha(contentAlpha)
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 30.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                    )
+                    HeightSpacer(height = 10.dp)
+                    FeedingPhotoCarousel(
+                        feeding = feeding,
+                        contentAlpha = contentAlpha,
+                        onPhotoClick = { index -> currentPhotoIndex = index }
+                    )
                     HeightSpacer(height = 24.dp)
+                }
+                if (feeding.reviewedBy != null || feeding.rejectionReason != null) {
                     FeedingItemReviewDetails(
                         feeding = feeding,
                         modifier = Modifier.padding(horizontal = 30.dp)

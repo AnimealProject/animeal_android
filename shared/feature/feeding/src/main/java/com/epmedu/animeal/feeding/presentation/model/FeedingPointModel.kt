@@ -18,10 +18,13 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class FeedingPointModel(
     val id: String,
+    val code: String,
     val title: String,
     val description: String,
     val city: String,
+    val address: String,
     val feedStatus: FeedStatus,
+    val inactive: Boolean,
     val animalType: AnimalType,
     val isFavourite: Boolean = false,
     val coordinates: Point,
@@ -32,10 +35,13 @@ data class FeedingPointModel(
 
     constructor(feedingPoint: FeedingPoint) : this(
         id = feedingPoint.id,
+        code = feedingPoint.code,
         title = feedingPoint.title,
         description = feedingPoint.description,
         city = feedingPoint.city,
+        address = feedingPoint.address,
         feedStatus = feedingPoint.animalStatus.toFeedStatus(),
+        inactive = feedingPoint.inactive,
         animalType = feedingPoint.animalType,
         isFavourite = feedingPoint.isFavourite,
         coordinates = Point.fromLngLat(
@@ -48,7 +54,7 @@ data class FeedingPointModel(
         }
     )
 
-    fun getDrawableRes(): Int =
+    private fun getGeneralDrawableRes(): Int =
         when {
             isFavourite -> {
                 when (feedStatus) {
@@ -72,6 +78,17 @@ data class FeedingPointModel(
                     InProgress, Pending -> R.drawable.ic_catsstate_cathungry_in_process
                     Fed -> R.drawable.ic_catsstate_cathungry_low
                 }
+            }
+        }
+
+    fun getDrawableRes(): Int =
+        if (!inactive) {
+            getGeneralDrawableRes()
+        } else {
+            when {
+                isFavourite -> R.drawable.ic_favstate_favouritehungry_inactive
+                animalType == AnimalType.Dogs -> R.drawable.ic_dogsstate_doghungry_inactive
+                else -> R.drawable.ic_catsstate_cathungry_inactive
             }
         }
 }

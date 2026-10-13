@@ -13,7 +13,7 @@ class DefaultActionDelegate(
     override suspend fun performAction(
         action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit,
-        onError: suspend () -> Unit,
+        onError: suspend (message: String?) -> Unit,
         onStart: suspend () -> Unit,
         onFinish: suspend () -> Unit
     ) {
@@ -24,7 +24,7 @@ class DefaultActionDelegate(
                     onSuccess()
                 }
                 is ActionResult.Failure -> {
-                    onError()
+                    onError(result.error.message)
                     Log.e(LOG_TAG, result.error.toString())
                 }
             }
@@ -35,7 +35,7 @@ class DefaultActionDelegate(
     override suspend fun <T> performAction(
         action: suspend () -> ActionResult<T>,
         onSuccess: suspend (T) -> Unit,
-        onError: () -> Unit
+        onError: (message: String?) -> Unit
     ) {
         coroutineScope {
             when (val result = withContext(dispatchers.IO) { action() }) {
@@ -43,7 +43,7 @@ class DefaultActionDelegate(
                     onSuccess(result.result as T)
                 }
                 is ActionResult.Failure -> {
-                    onError()
+                    onError(result.error.message)
                     Log.e(LOG_TAG, result.error.toString())
                 }
             }

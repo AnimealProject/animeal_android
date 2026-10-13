@@ -165,7 +165,7 @@ internal class FinishProfileViewModel @Inject constructor(
                 performAction(
                     action = { updateNetworkProfileUseCase(state.profileInputFormState.profile) },
                     onSuccess = ::navigateToNextDestination,
-                    onError = loadingHandler::hideLoading
+                    onError = { message -> loadingHandler.hideLoading() }
                 )
             }
         }

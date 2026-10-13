@@ -4,8 +4,10 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.input.TextInputField
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -21,6 +23,8 @@ internal fun SurnameInput(
     onNext: KeyboardActionScope.() -> Unit = {},
 ) {
     TextInputField(
+        modifier = Modifier
+            .testTagAsResourceId("profile_surname"),
         isEnabled = isEnabled,
         title = stringResource(id = R.string.profile_surname_title),
         hint = stringResource(id = R.string.profile_surname_hint),

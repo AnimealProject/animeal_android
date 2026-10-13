@@ -12,6 +12,7 @@ subscription OnUpdateFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -36,6 +37,7 @@ subscription OnCreateFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -51,6 +53,7 @@ subscription OnCreateFeedingExt {
 subscription OnUpdateFeedingPointExt {
   onUpdateFeedingPointExt {
     id
+    code
     name
     description
     city
@@ -109,6 +112,7 @@ subscription OnUpdateFeedingPointExt {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -117,6 +121,7 @@ subscription OnUpdateFeedingPointExt {
 subscription OnCreateFeedingPointExt {
   onCreateFeedingPointExt {
     id
+    code
     name
     description
     city
@@ -175,6 +180,7 @@ subscription OnCreateFeedingPointExt {
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -192,6 +198,7 @@ subscription OnUpdateFeedingHistoryExt {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -216,6 +223,7 @@ subscription OnCreateFeedingHistoryExt {
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -240,6 +248,7 @@ subscription OnDeleteFeedingExt {
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -510,6 +519,7 @@ subscription OnCreateFeedingPoint(
 ) {
   onCreateFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -568,6 +578,7 @@ subscription OnCreateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -579,6 +590,7 @@ subscription OnUpdateFeedingPoint(
 ) {
   onUpdateFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -637,6 +649,7 @@ subscription OnUpdateFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -648,6 +661,7 @@ subscription OnDeleteFeedingPoint(
 ) {
   onDeleteFeedingPoint(filter: $filter, owner: $owner) {
     id
+    code
     name
     description
     city
@@ -706,6 +720,7 @@ subscription OnDeleteFeedingPoint(
       __typename
     }
     cover
+    disabled
     feedingPointCategoryId
     __typename
   }
@@ -726,6 +741,7 @@ subscription OnCreateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -753,6 +769,7 @@ subscription OnUpdateFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -780,6 +797,7 @@ subscription OnDeleteFeeding(
     updatedBy
     owner
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -861,6 +879,7 @@ subscription OnCreateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -888,6 +907,7 @@ subscription OnUpdateFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -915,6 +935,7 @@ subscription OnDeleteFeedingHistory(
     owner
     feedingPointId
     feedingPointDetails {
+      code
       address
       __typename
     }
@@ -955,6 +976,7 @@ subscription OnCreateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -972,6 +994,7 @@ subscription OnCreateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1010,6 +1033,7 @@ subscription OnUpdateRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1027,6 +1051,7 @@ subscription OnUpdateRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1065,6 +1090,7 @@ subscription OnDeleteRelationPetFeedingPoint(
     }
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1082,6 +1108,7 @@ subscription OnDeleteRelationPetFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1102,6 +1129,7 @@ subscription OnCreateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1119,6 +1147,7 @@ subscription OnCreateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1139,6 +1168,7 @@ subscription OnUpdateRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1156,6 +1186,7 @@ subscription OnUpdateRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1176,6 +1207,7 @@ subscription OnDeleteRelationUserFeedingPoint(
     feedingPointId
     feedingPoint {
       id
+      code
       name
       description
       city
@@ -1193,6 +1225,7 @@ subscription OnDeleteRelationUserFeedingPoint(
       updatedBy
       owner
       cover
+      disabled
       feedingPointCategoryId
       __typename
     }
@@ -1622,6 +1655,7 @@ subscription OnCreateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1645,6 +1679,7 @@ subscription OnUpdateQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1668,6 +1703,7 @@ subscription OnDeleteQuestion(
     id
     value
     answer
+    orderNum
     i18n {
       locale
       value
@@ -1739,6 +1775,126 @@ subscription OnDeleteBankAccount(
     owner
     createdAt
     updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onCreateMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
+    feedingPoint {
+      id
+      code
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      disabled
+      feedingPointCategoryId
+      __typename
+    }
+    __typename
+  }
+}
+
+subscription OnUpdateMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onUpdateMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
+    feedingPoint {
+      id
+      code
+      name
+      description
+      city
+      street
+      address
+      images
+      region
+      neighborhood
+      distance
+      status
+      statusUpdatedAt
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      owner
+      cover
+      disabled
+      feedingPointCategoryId
+      __typename
+    }
+    __typename
+  }
+}
+
+subscription OnDeleteMessage(
+  $filter: ModelSubscriptionMessageFilterInput
+  $owner: String
+) {
+  onDeleteMessage(filter: $filter, owner: $owner) {
+    id
+    feedingPointId
+    type
+    body
+    images
+    sender
+    recipients
+    status
+    resolutionNote
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    owner
+    userId
     __typename
   }
 }

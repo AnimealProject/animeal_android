@@ -3,7 +3,9 @@ package com.epmedu.animeal.profile.presentation.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.checkbox.AnimealSquareCheckbox
 import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
@@ -17,6 +19,8 @@ internal fun AgeConfirmationCheckbox(
     onEvent: (ProfileInputFormEvent) -> Unit
 ) {
     AnimealSquareCheckbox(
+        modifier = Modifier
+            .testTagAsResourceId("profile_age_confirmation"),
         isChecked = state.isAgeConfirmed,
         onCheckedChange = { onEvent(ProfileInputFormEvent.AgeConfirmationChanged(it)) },
         label = stringResource(id = R.string.profile_age_confirmation),

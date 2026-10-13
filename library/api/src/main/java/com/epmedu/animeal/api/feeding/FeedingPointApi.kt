@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FeedingPointApi {
 
-    fun getAllFeedingPoints(isGuest: Boolean): Flow<List<FeedingPoint>>
+    fun getAllFeedingPoints(isGuest: Boolean): Flow<List<GetFeedingPointsQuery.GetFeedingPoint>>
 
     fun subscribeToFeedingPointsUpdates(): Flow<FeedingPoint>
 

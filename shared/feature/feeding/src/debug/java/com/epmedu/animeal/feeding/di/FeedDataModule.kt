@@ -71,7 +71,7 @@ object FeedDataModule {
         feedingPointRepository: FeedingPointRepository,
         favouriteRepository: FavouriteRepository,
         usersRepository: UsersRepository,
-        debugMenuRepository: DebugMenuRepository,
+        debugMenuRepository: DebugMenuRepository
     ): FeedingRepository {
         return when {
             debugMenuRepository.useMockedFeedingPoints -> {

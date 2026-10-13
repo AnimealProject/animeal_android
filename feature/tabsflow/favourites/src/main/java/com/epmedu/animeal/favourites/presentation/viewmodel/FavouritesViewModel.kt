@@ -158,12 +158,10 @@ internal class FavouritesViewModel @Inject constructor(
     }
 
     private fun addFeedingPointToFavourites(feedingPoint: FeedingPointModel) {
-        markFeedingPointAsFavourite(feedingPoint)
         tryAddingFeedingPointToFavourites(feedingPoint)
     }
 
     private fun removeFeedingPointFromFavourites(feedingPoint: FeedingPointModel) {
-        unmarkFeedingPointFromFavourites(feedingPoint)
         tryRemovingFeedingPointFromFavourites(feedingPoint)
     }
 
@@ -195,7 +193,7 @@ internal class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             performAction(
                 action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
-                onError = { unmarkFeedingPointFromFavourites(feedingPoint) }
+                onSuccess = { markFeedingPointAsFavourite(feedingPoint) },
             )
         }
     }
@@ -204,7 +202,7 @@ internal class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             performAction(
                 action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },
-                onError = { markFeedingPointAsFavourite(feedingPoint) }
+                onSuccess = { unmarkFeedingPointFromFavourites(feedingPoint) },
             )
         }
     }

@@ -19,6 +19,9 @@ class SearchFeedingPointsUseCase @Inject constructor(private val feedingPointRep
                     point.title.contains(
                         other = query,
                         ignoreCase = true
+                    ) || point.code.contains(
+                        other = query,
+                        ignoreCase = true
                     )
                 }
             }

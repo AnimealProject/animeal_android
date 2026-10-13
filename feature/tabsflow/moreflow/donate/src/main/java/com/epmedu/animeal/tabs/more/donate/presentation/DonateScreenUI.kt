@@ -2,12 +2,16 @@ package com.epmedu.animeal.tabs.more.donate.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,40 +38,50 @@ internal fun DonateScreenUI(
     state: DonateState,
     onBack: () -> Unit,
 ) {
-    Column {
+    val horizontalPadding = 26.dp
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         DonateHeading(onBack = onBack)
-        HeightSpacer(height = 43.dp)
-        LazyColumn(
-            verticalArrangement = Arrangement.LastElementBottom,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            item {
-                Image(
-                    modifier = Modifier
-                        .padding(horizontal = 37.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .aspectRatio(2.0f),
-                    painter = painterResource(id = R.drawable.doggo),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                HeightSpacer(height = 43.dp)
+        HeightSpacer(height = 16.dp)
+        Image(
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding)
+                .clip(RoundedCornerShape(12.dp))
+                .aspectRatio(2.0f),
+            painter = painterResource(id = R.drawable.doggo),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+        HeightSpacer(height = 16.dp)
+        Text(
+            text = stringResource(id = R.string.donation_thanks),
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = horizontalPadding),
+        )
+        HeightSpacer(height = 16.dp)
+        when {
+            state.isLoading -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
             }
-            items(state.donationInformation) { donateInformation ->
-                DonateListItem(
-                    modifier = Modifier.padding(horizontal = 26.dp),
-                    donateInformation = donateInformation,
-                )
-                HeightSpacer(height = 32.dp)
-            }
-            item {
-                Text(
-                    text = stringResource(id = R.string.donation_thanks),
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 26.dp),
-                )
-                HeightSpacer(height = 40.dp)
+            else -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.LastElementBottom,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    items(state.donationInformation) { donateInformation ->
+                        DonateListItem(
+                            modifier = Modifier.padding(horizontal = horizontalPadding),
+                            donateInformation = donateInformation,
+                        )
+                        HeightSpacer(height = 16.dp)
+                    }
+                }
             }
         }
     }
@@ -79,7 +93,18 @@ private fun DonateScreenPreview() {
     AnimealTheme {
         DonateScreenUI(
             onBack = {},
-            state = DonateState(donationInformation = donateInformationStubList)
+            state = DonateState(donationInformation = donateInformationStubList, isLoading = false)
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun DonateScreenLoadingStatePreview() {
+    AnimealTheme {
+        DonateScreenUI(
+            onBack = {},
+            state = DonateState()
         )
     }
 }

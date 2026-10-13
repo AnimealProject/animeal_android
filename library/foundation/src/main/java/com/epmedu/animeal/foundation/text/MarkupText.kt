@@ -3,7 +3,6 @@ package com.epmedu.animeal.foundation.text
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -17,11 +16,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.foundation.text.parser.OrderedListParser
 import com.epmedu.animeal.foundation.text.parser.UnorderedListParser
+import com.epmedu.animeal.foundation.theme.CustomColor
 import com.ireward.htmlcompose.HtmlText
 
 fun getUrlStyle(alpha: Float = 1f) =
     SpanStyle(
-        color = Color.Blue.copy(alpha = alpha),
+        color = CustomColor.LinkColor.copy(alpha = alpha),
         textDecoration = TextDecoration.Underline
     )
 

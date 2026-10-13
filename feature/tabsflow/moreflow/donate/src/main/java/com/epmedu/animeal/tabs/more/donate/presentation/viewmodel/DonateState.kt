@@ -5,5 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class DonateState(
+    val isLoading: Boolean = true,
     val donationInformation: ImmutableList<DonateInformation> = persistentListOf()
 )

@@ -7,7 +7,6 @@ import com.epmedu.animeal.feeding.domain.model.FeedingStatus
 import com.epmedu.animeal.foundation.theme.CustomColor
 import com.epmedu.animeal.resources.R
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 enum class FeedingModelStatus(
     @StringRes val titleId: Int,
@@ -53,6 +52,6 @@ fun FeedingStatus.toFeedingModelStatus(
         else -> null
     }
 
-private val greyTimeRange = 0..30.minutes.inWholeMilliseconds
-private val orangeTimeRange = 30.minutes.inWholeMilliseconds..1.hours.inWholeMilliseconds
-private val redTimeRange = 1.hours.inWholeMilliseconds..12.hours.inWholeMilliseconds
+private val greyTimeRange = 0..2.hours.inWholeMilliseconds
+private val orangeTimeRange = 2.hours.inWholeMilliseconds..6.hours.inWholeMilliseconds
+private val redTimeRange = 6.hours.inWholeMilliseconds..12.hours.inWholeMilliseconds

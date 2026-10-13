@@ -21,6 +21,7 @@ import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Loading
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
@@ -58,6 +59,10 @@ import com.epmedu.animeal.home.presentation.ui.showCurrentLocation
 import com.epmedu.animeal.home.presentation.ui.thankyou.ThankYouDialog
 import com.epmedu.animeal.home.presentation.viewmodel.HomeState
 import com.epmedu.animeal.home.presentation.viewmodel.LocationState.UndefinedLocation
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.CreateIssue
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.Open
+import com.epmedu.animeal.messages.presentation.ui.MessageCreateDialog
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
 import com.epmedu.animeal.permissions.presentation.PermissionStatus
@@ -92,6 +97,7 @@ internal fun HomeScreenUI(
     onFeedingPointEvent: (FeedingPointEvent) -> Unit,
     onTimerEvent: (TimerEvent) -> Unit,
     onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onMessageCreateEvent: (MessageCreateDialogEvent) -> Unit,
     onDisablingRouteForGuest: () -> Unit
 ) {
     val context = LocalContext.current
@@ -153,6 +159,7 @@ internal fun HomeScreenUI(
                     feedingPoint = feedingPoint,
                     feedingPhotos = state.feedingPhotos,
                     contentAlpha = contentAlpha,
+                    isTakePhotoAvailable = state.feedingPhotos.count() < state.maxFinishPhotoCount,
                     onFavouriteChange = {
                         onFeedingPointEvent(
                             FeedingPointEvent.FavouriteChange(
@@ -181,10 +188,14 @@ internal fun HomeScreenUI(
                     }
 
                     else -> {
+                        val enabled = feedingPoint.feedStatus == FeedStatus.Starved &&
+                            state.feedState.feedPoint == null &&
+                            !feedingPoint.inactive
                         FeedingPointActionButton(
                             alpha = buttonAlpha,
-                            enabled = feedingPoint.feedStatus == FeedStatus.Starved,
-                            onClick = { onWillFeedEvent(WillFeedClicked) }
+                            enabled = enabled,
+                            onFeedClick = { onWillFeedEvent(WillFeedClicked) },
+                            onInformClick = { onMessageCreateEvent(Open) },
                         )
                     }
                 }
@@ -242,6 +253,16 @@ internal fun HomeScreenUI(
     )
     ThankYouConfirmationDialog(state.feedState.feedingConfirmationState, onScreenEvent)
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, onFeedingEvent)
+    state.feedingPointState.currentFeedingPoint?.let { point ->
+        MessageCreateDialog(
+            point.code,
+            point.title,
+            onConfirm = { body ->
+                onMessageCreateEvent(CreateIssue(point.id, body, listOf()))
+                hideBottomSheet()
+            }
+        )
+    }
 }
 
 private fun openCamera(
@@ -319,14 +340,23 @@ private fun ThankYouConfirmationDialog(
 
 @Composable
 fun OnFeedingConfirmationState(
-    feedingConfirmationState: FeedingConfirmationState,
+    state: FeedingConfirmationState,
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
-    if (feedingConfirmationState == FeedingWasAlreadyBooked) {
+    if (state == FeedingWasAlreadyBooked) {
         AnimealAlertDialog(
             titleFontSize = 16.sp,
             title = stringResource(id = R.string.feeding_point_expired_description),
             acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+            onConfirm = {
+                onFeedingEvent(FeedingEvent.Reset)
+            }
+        )
+    } else if (state is Error) {
+        AnimealAlertDialog(
+            titleFontSize = 16.sp,
+            title = state.message ?: "Unknown error",
+            acceptText = stringResource(id = R.string.ok),
             onConfirm = {
                 onFeedingEvent(FeedingEvent.Reset)
             }
@@ -378,7 +408,18 @@ private fun OnFeedingConfirmationStatePreview() {
     AnimealTheme {
         OnFeedingConfirmationState(
             onFeedingEvent = {},
-            feedingConfirmationState = FeedingWasAlreadyBooked,
+            state = FeedingWasAlreadyBooked,
+        )
+    }
+}
+
+@AnimealPreview
+@Composable
+private fun OnSendMessageErrorPreview() {
+    AnimealTheme {
+        OnFeedingConfirmationState(
+            onFeedingEvent = {},
+            state = Error(message = "Any error"),
         )
     }
 }

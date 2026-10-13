@@ -10,7 +10,6 @@ android {
 
 dependencies {
     implementation(projects.feature.tabsflow.moreflow.about)
-    implementation(projects.feature.tabsflow.moreflow.account)
     implementation(projects.feature.tabsflow.moreflow.donate)
     implementation(projects.feature.tabsflow.moreflow.faq)
     implementation(projects.feature.tabsflow.moreflow.more)
@@ -20,4 +19,5 @@ dependencies {
     implementation(projects.library.navigation)
 
     implementation(projects.shared.feature.feedings)
+    implementation(projects.shared.feature.messages)
 }

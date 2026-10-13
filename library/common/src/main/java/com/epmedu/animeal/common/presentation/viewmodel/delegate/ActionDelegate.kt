@@ -7,7 +7,7 @@ interface ActionDelegate {
     suspend fun performAction(
         action: suspend () -> ActionResult<Unit>,
         onSuccess: suspend () -> Unit = {},
-        onError: suspend () -> Unit = {},
+        onError: suspend (message: String?) -> Unit = {},
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {}
     )
@@ -15,7 +15,7 @@ interface ActionDelegate {
     suspend fun <T> performAction(
         action: suspend () -> ActionResult<T>,
         onSuccess: suspend (T) -> Unit,
-        onError: () -> Unit
+        onError: (message: String?) -> Unit
     )
 
     suspend fun <T> performAction(

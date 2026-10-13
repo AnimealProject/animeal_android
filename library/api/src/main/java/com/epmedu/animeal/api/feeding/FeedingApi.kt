@@ -1,26 +1,23 @@
 package com.epmedu.animeal.api.feeding
 
-import SearchFeedingsQuery
 import com.amplifyframework.datastore.generated.model.Feeding
 import com.epmedu.animeal.common.data.wrapper.ApiResult
 import kotlinx.coroutines.flow.Flow
 import type.FeedingStatus
 import type.FeedingStatus.inProgress
 import type.FeedingStatus.pending
-import type.SearchableStringFilterInput
 
 interface FeedingApi {
 
     fun getUserFeedings(isGuest: Boolean, userId: String): Flow<List<Feeding>>
 
-    suspend fun getAllFeedings(): ApiResult<SearchFeedingsQuery.Data>
+    suspend fun getAllFeedings(): ApiResult<GetActiveFeedingsQuery.Data>
 
     /**
      * Returns feedings filtered by parameters that are not `null`.
      * @param feedingPointId Id of associated feeding point.
      * @param assignedModeratorId Id of assigned moderator.
      * @param status Feeding status of feedings.
-     * @param createdAt Filter by date of feeding creation.
      * Can be [inProgress] or [pending].
      * `null` by default.
      */
@@ -28,8 +25,7 @@ interface FeedingApi {
         feedingPointId: String? = null,
         assignedModeratorId: String? = null,
         status: FeedingStatus? = null,
-        createdAt: SearchableStringFilterInput? = null
-    ): ApiResult<SearchFeedingsQuery.Data>
+    ): ApiResult<GetActiveFeedingsQuery.Data>
 
     fun subscribeToFeedingsUpdates(): Flow<OnUpdateFeedingExtSubscription.Data>
 

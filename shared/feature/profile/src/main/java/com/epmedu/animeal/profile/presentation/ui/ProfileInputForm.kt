@@ -1,6 +1,5 @@
 package com.epmedu.animeal.profile.presentation.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,7 +7,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import com.epmedu.animeal.extensions.testTagAsResourceId
 import com.epmedu.animeal.foundation.input.Flag
 import com.epmedu.animeal.foundation.input.PhoneNumberInput
 import com.epmedu.animeal.foundation.preview.AnimealPreview
@@ -38,8 +37,7 @@ fun ProfileInputForm(
     val isFormEnabled = state.formState != READ_ONLY
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier
     ) {
         with(state) {
             NameInput(
@@ -87,6 +85,8 @@ private fun ProfileInputFormState.PhoneInput(
     onCountryClick: (() -> Unit)? = null,
 ) {
     PhoneNumberInput(
+        modifier = Modifier
+            .testTagAsResourceId("profile_phone_number"),
         value = phoneNumber,
         prefix = prefix,
         flag = when (region) {

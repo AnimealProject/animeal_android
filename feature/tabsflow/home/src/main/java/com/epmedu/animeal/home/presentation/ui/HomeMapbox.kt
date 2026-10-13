@@ -189,13 +189,6 @@ private fun MapboxMap(
     onCameraChange: () -> Unit,
     onMapClick: (Point) -> Unit
 ) {
-    val markerController = remember(mapboxMapView) {
-        MarkerController(
-            mapView = mapboxMapView,
-            onFeedingPointClick = onFeedingPointClick
-        )
-    }
-
     // If we return from other tab and there was a route active in map the camera zoom will not work
     // so we have to make sure the map is loaded before setting location
     val styleLoadedCallback = StyleLoadedCallback {
@@ -205,6 +198,15 @@ private fun MapboxMap(
         }
     }
 
+    val markerController = remember(mapboxMapView) {
+        MarkerController(
+            mapView = mapboxMapView,
+            onFeedingPointClick = onFeedingPointClick,
+            styleLoadedCallback = styleLoadedCallback,
+            onMapClick = onMapClick
+        )
+    }
+
     LaunchedEffect(key1 = state.feedingPointState.feedingPoints) {
         markerController.drawMarkers(
             feedingPoints = state.feedingPointState.feedingPoints
@@ -212,10 +214,9 @@ private fun MapboxMap(
     }
 
     LaunchedEffect(key1 = state.feedingPointState.currentFeedingPoint) {
-        if (state.feedingRouteState is FeedingRouteState.Active) {
-            markerController.drawSelectedMarkerBackground(null)
-        } else {
-            markerController.drawSelectedMarkerBackground(state.feedingPointState.currentFeedingPoint)
+        when (state.feedingRouteState is FeedingRouteState.Active) {
+            true -> markerController.selectMarker(null)
+            else -> markerController.selectMarker(state.feedingPointState.currentFeedingPoint)
         }
     }
 
@@ -234,8 +235,7 @@ private fun MapboxMap(
         }
     }
 
-    mapboxMapView.mapboxMap.subscribeStyleLoaded(styleLoadedCallback)
-    mapboxMapView.GesturesListeners(onMapClick, onCameraChange)
+    mapboxMapView.GesturesListeners(onCameraChange = onCameraChange)
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),

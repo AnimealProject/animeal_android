@@ -23,16 +23,17 @@ internal fun AboutFooter(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
+        SocialButtonsRow(
+            onSocialClick = onLinkClick
+        )
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(),
             text = stringResource(id = R.string.about_app_version, currentVersion),
             style = MaterialTheme.typography.body1,
             color = CustomColor.TextGrey,
             textAlign = TextAlign.Center
-        )
-        SocialButtonsRow(
-            onSocialClick = onLinkClick,
-            modifier = Modifier.padding(top = 28.dp, bottom = 40.dp)
         )
     }
 }

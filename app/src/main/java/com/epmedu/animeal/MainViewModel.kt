@@ -9,7 +9,6 @@ import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingH
 import com.epmedu.animeal.networkuser.domain.repository.NetworkRepository
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
-import com.epmedu.animeal.profile.domain.model.BasicProfile
 import com.epmedu.animeal.profile.domain.repository.ProfileRepository
 import com.epmedu.animeal.router.domain.RouterRepository
 import com.google.firebase.ktx.Firebase
@@ -34,12 +33,7 @@ internal class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getProfile().collect { profile ->
-                when (profile) {
-                    is BasicProfile -> getRefreshTokenExpiration()
-                    else -> Unit
-                }
-            }
+            repository.getProfile().collect { getRefreshTokenExpiration() }
         }
     }
 

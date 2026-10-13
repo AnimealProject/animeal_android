@@ -30,48 +30,22 @@ class GetFeedingPointByPriorityUseCase(
         return feedingPointRepository.getFeedingPointsBy(shouldFetch = false) {
             it.animalType == type && it.animalStatus == AnimalState.Starved
         }.map { feedingPoints ->
-            Factory(feedingPoints).resolvePriority(userLocation)
+            resolvePriority(feedingPoints, userLocation)
         }.filterNotNull().take(1)
     }
-    sealed interface FeedingPointsPriority {
-        val feedingPoints: List<FeedingPoint>
 
-        fun getPrioritisedFeedingPoints(userLocation: MapLocation): List<FeedingPoint>
-
-        class Favourite(override val feedingPoints: List<FeedingPoint>) : FeedingPointsPriority {
-
-            override fun getPrioritisedFeedingPoints(userLocation: MapLocation): List<FeedingPoint> =
-                feedingPoints.sortedWith(
-                    compareBy {
-                        it.location.toPoint().distanceInKmTo(userLocation.toPoint())
-                    }
-                )
-        }
-
-        class NotFavourite(override val feedingPoints: List<FeedingPoint>) : FeedingPointsPriority {
-
-            override fun getPrioritisedFeedingPoints(userLocation: MapLocation): List<FeedingPoint> =
-                feedingPoints.filter {
-                    it.location.toPoint().isNearTo(userLocation.toPoint())
-                }.sortedWith(
-                    compareBy {
-                        it.location.toPoint().distanceInKmTo(userLocation.toPoint())
-                    }
-                )
-        }
-    }
-
-    class Factory(private val feedingPoints: List<FeedingPoint>) {
-
-        fun resolvePriority(userLocation: MapLocation): FeedingPoint? {
-            val (favourite, notFavourite) = feedingPoints.partition { it.isFavourite }
-
-            val priority = when {
-                favourite.isNotEmpty() -> FeedingPointsPriority.Favourite(favourite) // 1st and 2nd priority
-                else -> FeedingPointsPriority.NotFavourite(notFavourite) // 3rd priority
+    private fun resolvePriority(feedingPoints: List<FeedingPoint>, userLocation: MapLocation): FeedingPoint? {
+        val (favourite, notFavourite) = feedingPoints.filter {
+            it.location.toPoint().isNearTo(userLocation.toPoint())
+        }.sortedWith(
+            compareBy {
+                it.location.toPoint().distanceInKmTo(userLocation.toPoint())
             }
+        ).partition { it.isFavourite }
 
-            return priority.getPrioritisedFeedingPoints(userLocation).firstOrNull()
-        }
+        return when {
+            favourite.isNotEmpty() -> favourite // 1st and 2nd priority
+            else -> notFavourite // 3rd priority
+        }.firstOrNull()
     }
 }

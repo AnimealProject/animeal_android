@@ -19,7 +19,7 @@ class DonateViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getDonateInformationUseCase().collect {
-                updateState { copy(donationInformation = it) }
+                updateState { copy(donationInformation = it, isLoading = false) }
             }
         }
     }

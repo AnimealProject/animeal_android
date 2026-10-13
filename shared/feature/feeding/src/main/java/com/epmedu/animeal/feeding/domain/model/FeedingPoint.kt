@@ -8,13 +8,16 @@ import com.epmedu.animeal.users.domain.model.User
 
 data class FeedingPoint(
     val id: String,
+    val code: String,
     val title: String,
     val description: String,
     val city: String,
+    val address: String,
     val animalStatus: AnimalState,
     val animalType: AnimalType,
     val location: MapLocation,
     val assignedModerators: List<User>?,
     val isFavourite: Boolean = false,
     val image: NetworkFile? = null,
+    val inactive: Boolean = false,
 )

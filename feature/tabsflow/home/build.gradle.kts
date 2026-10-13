@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.shared.feature.router)
     implementation(projects.shared.feature.timer)
     implementation(projects.shared.feature.users)
+    implementation(projects.shared.feature.messages)
 
     implementation(libs.accompanist.permissions)
 

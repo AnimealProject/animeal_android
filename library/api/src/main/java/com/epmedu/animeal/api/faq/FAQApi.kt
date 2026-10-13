@@ -1,8 +1,9 @@
 package com.epmedu.animeal.api.faq
 
-import com.epmedu.animeal.common.data.wrapper.ApiResult
+import com.amplifyframework.datastore.generated.model.Question
+import kotlinx.coroutines.flow.Flow
 
 interface FAQApi {
 
-    suspend fun getFAQ(): ApiResult<SearchQuestionsQuery.Data>
+    fun getFAQ(): Flow<List<Question>>
 }

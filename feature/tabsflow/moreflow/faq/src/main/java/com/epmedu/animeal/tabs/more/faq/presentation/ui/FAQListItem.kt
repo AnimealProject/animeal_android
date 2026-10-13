@@ -16,27 +16,29 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.util.generateLoremIpsum
 import com.epmedu.animeal.tabs.more.faq.domain.model.FrequentlyAskedQuestion
+import com.epmedu.animeal.tabs.more.faq.presentation.ui.util.toAnnotatedLinkString
 
 @Composable
 internal fun FAQListItem(
     frequentlyAskedQuestion: FrequentlyAskedQuestion,
     isExpanded: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ExpandableListItem(
         title = frequentlyAskedQuestion.question,
         onClick = onClick,
-        modifier = Modifier.padding(top = 16.dp),
+        modifier = modifier,
         isExpanded = isExpanded
     ) {
         Card(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp),
+            modifier = Modifier.padding(vertical = 16.dp, horizontal = 26.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = 3.dp
         ) {
             SelectionContainer {
                 Text(
-                    text = frequentlyAskedQuestion.answer,
+                    text = frequentlyAskedQuestion.answer.toAnnotatedLinkString(),
                     modifier = Modifier
                         .padding(16.dp)
                         .padding(start = 4.dp),
@@ -60,7 +62,7 @@ private fun FAQCardPreview() {
                     answer = answer
                 ),
                 isExpanded = true,
-                onClick = {}
+                onClick = {},
             )
             Divider()
             FAQListItem(
@@ -69,7 +71,7 @@ private fun FAQCardPreview() {
                     answer = answer
                 ),
                 isExpanded = false,
-                onClick = {}
+                onClick = {},
             )
         }
     }

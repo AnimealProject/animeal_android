@@ -204,12 +204,10 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun addFeedingPointToFavourites(feedingPoint: FeedingPointModel) {
-        markFeedingPointAsFavourite(feedingPoint)
         tryAddingFeedingPointToFavourites(feedingPoint)
     }
 
     private fun removeFeedingPointFromFavourites(feedingPoint: FeedingPointModel) {
-        unmarkFeedingPointFromFavourites(feedingPoint)
         tryRemovingFeedingPointFromFavourites(feedingPoint)
     }
 
@@ -241,7 +239,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             performAction(
                 action = { addFeedingPointToFavouritesUseCase(feedingPoint.id) },
-                onError = { unmarkFeedingPointFromFavourites(feedingPoint) }
+                onSuccess = { markFeedingPointAsFavourite(feedingPoint) },
             )
         }
     }
@@ -250,7 +248,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             performAction(
                 action = { removeFeedingPointFromFavouritesUseCase(feedingPoint.id) },
-                onError = { markFeedingPointAsFavourite(feedingPoint) }
+                onSuccess = { unmarkFeedingPointFromFavourites(feedingPoint) },
             )
         }
     }

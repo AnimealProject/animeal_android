@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.doOnDetach
 import com.epmedu.animeal.feeding.presentation.model.FeedingPointModel
 import com.epmedu.animeal.feeding.presentation.model.MapLocation
+import com.epmedu.animeal.feeding.presentation.model.MapLocation.Companion.toPoint
 import com.epmedu.animeal.home.presentation.model.MapPath
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_BOTTOM_PADDING
 import com.epmedu.animeal.home.utils.MapConstants.DEFAULT_MAP_END_PADDING
@@ -32,7 +33,6 @@ import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.compass.compass
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
@@ -87,11 +87,11 @@ fun rememberMapViewWithLifecycle(
     return mapView
 }
 
-fun MapView.setLocation(location: MapLocation, zoom: Double = DEFAULT_ZOOM) =
+fun MapView.setLocation(location: MapLocation) =
     mapboxMap.setCamera(
         CameraOptions.Builder()
-            .zoom(zoom)
-            .center(Point.fromLngLat(location.longitude, location.latitude))
+            .zoom(location.zoom ?: mapboxMap.cameraState.zoom)
+            .center(location.toPoint())
             .build()
     )
 
@@ -143,9 +143,9 @@ fun MapView.focusOnFeedingPoint(
     setLocation(
         location = MapLocation(
             feedingPoint.coordinates.latitude(),
-            feedingPoint.coordinates.longitude()
-        ),
-        zoom = DEFAULT_ZOOM
+            feedingPoint.coordinates.longitude(),
+            DEFAULT_ZOOM
+        )
     )
 }
 
@@ -177,7 +177,6 @@ fun MapView.removeRoute(mapBoxRouteInitOptions: MapBoxRouteInitOptions) {
 
 @Composable
 fun MapView.GesturesListeners(
-    onMapClick: (Point) -> Unit,
     onCameraChange: () -> Unit
 ) {
     val debounceState = remember {
@@ -199,10 +198,6 @@ fun MapView.GesturesListeners(
     mapboxMap.apply {
         subscribeCameraChanged {
             debounceState.tryEmit(it)
-        }
-        addOnMapClickListener { point ->
-            onMapClick(point)
-            false
         }
     }
 }

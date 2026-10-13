@@ -76,7 +76,7 @@ fun FeedingConfirmationDialog(
                 onCancelClick = onCancelClick,
                 onAgreeClick = onAgreeClick
             )
-            Spacer(modifier = Modifier.weight(0.22f))
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 }

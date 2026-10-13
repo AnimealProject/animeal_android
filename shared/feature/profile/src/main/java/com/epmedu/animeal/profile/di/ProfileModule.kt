@@ -1,6 +1,5 @@
 package com.epmedu.animeal.profile.di
 
-import com.epmedu.animeal.common.di.gson.AbsGsonTypeAdapter
 import com.epmedu.animeal.foundation.common.validation.validator.DefaultProfileValidator
 import com.epmedu.animeal.foundation.common.validation.validator.ProfileValidator
 import com.epmedu.animeal.profile.data.repository.ProfileRepositoryImpl
@@ -21,7 +20,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -94,8 +92,4 @@ internal interface ProfileBinding {
 
     @Binds
     fun bindProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
-
-    @IntoSet
-    @Binds
-    fun bindBasicUserAdapter(impl: BasicProfileTypeAdapter): AbsGsonTypeAdapter<*>
 }

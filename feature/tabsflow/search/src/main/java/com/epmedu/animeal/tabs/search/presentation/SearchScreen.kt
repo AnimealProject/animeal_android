@@ -11,6 +11,7 @@ import androidx.lifecycle.withCreated
 import com.epmedu.animeal.feeding.presentation.viewmodel.WillFeedViewModel
 import com.epmedu.animeal.foundation.bottomsheet.AnimealBottomSheetValue
 import com.epmedu.animeal.foundation.bottomsheet.rememberAnimealBottomSheetState
+import com.epmedu.animeal.messages.presentation.viewmodel.MessageCreateDialogViewModel
 import com.epmedu.animeal.tabs.search.presentation.ui.SearchScreenUi
 import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchViewModel
 
@@ -19,6 +20,7 @@ import com.epmedu.animeal.tabs.search.presentation.viewmodel.SearchViewModel
 fun SearchScreen() {
     val searchViewModel: SearchViewModel = hiltViewModel()
     val willFeedViewModel: WillFeedViewModel = hiltViewModel()
+    val messageCreateViewModel = hiltViewModel<MessageCreateDialogViewModel>()
     val searchState by searchViewModel.stateFlow.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -30,7 +32,8 @@ fun SearchScreen() {
         onEvent = searchViewModel::handleEvents,
         onFeedingEvent = searchViewModel::handleFeedingEvent,
         onPermissionsEvent = searchViewModel::handlePermissionsEvent,
-        onWillFeedEvent = willFeedViewModel::handleEvent
+        onWillFeedEvent = willFeedViewModel::handleEvent,
+        onMessageCreateEvent = messageCreateViewModel::handleEvent
     )
 
     if (searchState.showingFeedingPoint != null) {

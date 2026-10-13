@@ -1,3 +1,3 @@
 package com.epmedu.animeal.geolocation.location.model
 
-data class Location(val latitude: Double, val longitude: Double)
+data class Location(val latitude: Double, val longitude: Double, val zoom: Double? = null)

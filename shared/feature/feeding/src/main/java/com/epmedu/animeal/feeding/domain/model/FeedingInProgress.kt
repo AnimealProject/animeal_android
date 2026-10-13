@@ -6,5 +6,6 @@ data class FeedingInProgress(
     val id: String,
     val name: String,
     val surname: String,
-    val startDate: Date
+    val startDate: Date,
+    val endDate: Date?
 )

@@ -15,5 +15,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.appcompat)
     implementation(libs.compose.runtime)
+    implementation(libs.compose.ui)
     implementation(libs.play.services.location)
 }

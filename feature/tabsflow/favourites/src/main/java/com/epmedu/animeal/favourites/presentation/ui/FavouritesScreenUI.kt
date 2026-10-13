@@ -62,6 +62,10 @@ import com.epmedu.animeal.foundation.preview.AnimealPreview
 import com.epmedu.animeal.foundation.tabs.model.AnimalType
 import com.epmedu.animeal.foundation.theme.AnimealTheme
 import com.epmedu.animeal.foundation.topbar.TopBar
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.CreateIssue
+import com.epmedu.animeal.messages.presentation.event.MessageCreateDialogEvent.Open
+import com.epmedu.animeal.messages.presentation.ui.MessageCreateDialog
 import com.epmedu.animeal.navigation.navigator.LocalNavigator
 import com.epmedu.animeal.navigation.navigator.Navigator
 import com.epmedu.animeal.permissions.presentation.AnimealPermissions
@@ -83,7 +87,8 @@ internal fun FavouritesScreenUI(
     onEvent: (FavouritesScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
     onPermissionsEvent: (PermissionsEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onMessageCreateEvent: (MessageCreateDialogEvent) -> Unit
 ) {
     HandleFeedingPointSheetHiddenState(bottomSheetState, onEvent)
 
@@ -110,7 +115,8 @@ internal fun FavouritesScreenUI(
             buttonAlpha,
             onEvent,
             onFeedingEvent,
-            onWillFeedEvent
+            onWillFeedEvent,
+            onMessageCreateEvent
         )
     }
 }
@@ -139,7 +145,8 @@ private fun ScreenScaffold(
     buttonAlpha: Float,
     onEvent: (FavouritesScreenEvent) -> Unit,
     onFeedingEvent: (FeedingEvent) -> Unit,
-    onWillFeedEvent: (WillFeedEvent) -> Unit
+    onWillFeedEvent: (WillFeedEvent) -> Unit,
+    onMessageCreateEvent: (MessageCreateDialogEvent) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val navigator = LocalNavigator.currentOrThrow
@@ -183,11 +190,15 @@ private fun ScreenScaffold(
                         }
                     )
                 }
+                val enabled = state.showingFeedingPoint != null &&
+                    state.showingFeedingPoint.feedStatus == FeedStatus.Starved &&
+                    feedingPointInProgress == null &&
+                    !state.showingFeedingPoint.inactive
                 FeedingPointActionButton(
                     alpha = buttonAlpha,
-                    enabled = state.showingFeedingPoint?.feedStatus == FeedStatus.Starved &&
-                        feedingPointInProgress == null,
-                    onClick = { onWillFeedEvent(WillFeedClicked) },
+                    enabled = enabled,
+                    onFeedClick = { onWillFeedEvent(WillFeedClicked) },
+                    onInformClick = { onMessageCreateEvent(Open) },
                 )
             }
         }
@@ -214,6 +225,16 @@ private fun ScreenScaffold(
         }
     )
     OnFeedingConfirmationState(state.feedState.feedingConfirmationState, navigator, onFeedingEvent)
+    state.showingFeedingPoint?.let { point ->
+        MessageCreateDialog(
+            point.code,
+            point.title,
+            onConfirm = { body ->
+                onMessageCreateEvent(CreateIssue(point.id, body, listOf<String>()))
+                scope.launch { bottomSheetState.hide() }
+            }
+        )
+    }
 }
 
 @Composable
@@ -293,8 +314,10 @@ private fun FavouritesList(
         ) {
             items(favourites) { feedingPoint ->
                 FeedingPointItem(
+                    code = feedingPoint.code,
                     title = feedingPoint.title,
                     status = feedingPoint.feedStatus,
+                    inactive = feedingPoint.inactive,
                     isFavourite = feedingPoint.isFavourite,
                     onFavouriteChange = { isFavourite ->
                         onEvent(FavouriteChange(isFavourite, feedingPoint))
@@ -315,9 +338,11 @@ private fun FavouritesScreenPreview() {
         FeedingPointModel(
             FeedingPoint(
                 id = "0",
+                code = "GE-TB-0000-D-0000",
                 title = title,
                 description = "Hungry dog",
                 city = "Minsk",
+                address = "Address",
                 animalStatus = AnimalState.Starved,
                 animalType = AnimalType.Dogs,
                 isFavourite = true,
@@ -332,6 +357,7 @@ private fun FavouritesScreenPreview() {
                 favourites = favourites.toImmutableList(),
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {},
             {},
             {},
@@ -350,6 +376,7 @@ private fun FavouritesScreenEmptyPreview() {
                 favourites = persistentListOf()
             ),
             AnimealBottomSheetState(AnimealBottomSheetValue.Hidden),
+            {},
             {},
             {},
             {},
