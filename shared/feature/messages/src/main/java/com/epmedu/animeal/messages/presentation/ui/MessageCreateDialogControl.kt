@@ -97,7 +97,7 @@ internal fun MessageCreateDialogControl(
                         text = feedingPoint.code,
                         style = MaterialTheme.typography.subtitle2,
                         overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colors.onSurface,
+                        color = Color.Black,
                         maxLines = 1
                     )
                     Text(
@@ -105,7 +105,7 @@ internal fun MessageCreateDialogControl(
                         style = MaterialTheme.typography.subtitle2,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colors.onSurface,
+                        color = Color.Black,
                         maxLines = 1
                     )
                 }

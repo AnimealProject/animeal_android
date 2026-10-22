@@ -44,6 +44,16 @@ mutation CreateFeedingPointIssue(
   )
 }
 
+mutation RegisterDeviceForPushNotifications(
+  $deviceToken: String!
+  $platform: String!
+) {
+  registerDeviceForPushNotifications(
+    deviceToken: $deviceToken
+    platform: $platform
+  )
+}
+
 mutation CreateFeedingPointExt($input: CreateFeedingPointInput!) {
   createFeedingPointExt(input: $input) {
     id

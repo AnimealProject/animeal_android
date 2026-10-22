@@ -31,7 +31,8 @@ internal fun ButtonsBlock(
     ) {
         AnimealButton(
             modifier = Modifier
-                .testTagAsResourceId("btn_sign_in_mobile"),
+                .testTagAsResourceId("btn_sign_in_mobile")
+                .fillMaxWidth(),
             onClick = onSignInMobile,
             contentColor = MaterialTheme.colors.onPrimary,
         ) {

@@ -7,7 +7,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.loading.LoadingHandler
 import com.epmedu.animeal.networkuser.domain.usecase.LogOutUseCase
 import com.epmedu.animeal.profile.domain.ClearProfileUseCase
-import com.epmedu.animeal.profile.domain.repository.ProfileRepository
+import com.epmedu.animeal.profile.domain.GetProfileUseCase
+import com.epmedu.animeal.push.domain.usecase.RegisterDeviceUseCase
 import com.epmedu.animeal.router.domain.RouterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,14 +22,21 @@ internal class MainViewModel @Inject constructor(
     private val logOutUseCase: LogOutUseCase,
     private val clearProfileUseCase: ClearProfileUseCase,
     private val loadingHandler: LoadingHandler,
-    private val repository: ProfileRepository
+    private val getProfileUseCase: GetProfileUseCase,
+    private val registerDeviceUseCase: RegisterDeviceUseCase
 ) : ViewModel(),
     StateDelegate<MainState> by stateDelegate,
     ActionDelegate by actionDelegate {
 
     init {
         viewModelScope.launch {
-            repository.getProfile().collect { getRefreshTokenExpiration() }
+            getProfileUseCase().collect { profile ->
+                if (profile.isFilled()) {
+                    registerDeviceUseCase()
+                }
+
+                getRefreshTokenExpiration()
+            }
         }
     }
 

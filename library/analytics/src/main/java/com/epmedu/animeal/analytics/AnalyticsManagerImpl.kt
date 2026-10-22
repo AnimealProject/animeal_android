@@ -2,7 +2,7 @@ package com.epmedu.animeal.analytics
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import javax.inject.Inject
 
 internal class AnalyticsManagerImpl @Inject constructor(

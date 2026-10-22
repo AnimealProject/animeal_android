@@ -17,6 +17,11 @@ animealPlugin {
 
 android {
     namespace = "com.epmedu.animeal"
+	
+	defaultConfig {
+        applicationId = "com.epmedu.animeal"
+	}
+	
     signingConfigs {
         debug {
             storeFile = keyStoreFile("debug.keystore")
@@ -64,15 +69,13 @@ dependencies {
     implementation(projects.shared.feature.networkuser)
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.router)
+    implementation(projects.shared.feature.push)
 
     implementation(projects.library.common)
     implementation(projects.library.extensions)
     implementation(projects.library.foundation)
     implementation(projects.library.navigation)
     implementation(projects.library.resources)
-
-    implementation(platform(libs.firebase.bom))
-    releaseImplementation(libs.firebase.crashlytics)
 
     // Support for Java 8 features
     coreLibraryDesugaring(libs.desugarJdkLibs)
@@ -81,6 +84,9 @@ dependencies {
     implementation(libs.amplify.aws.auth.cognito)
     implementation(libs.amplify.core)
     implementation(libs.amplify.storage)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

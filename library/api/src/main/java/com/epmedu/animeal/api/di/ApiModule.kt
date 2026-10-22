@@ -19,6 +19,8 @@ import com.epmedu.animeal.api.feeding.FeedingPointApi
 import com.epmedu.animeal.api.feeding.FeedingPointApiImpl
 import com.epmedu.animeal.api.message.MessageApi
 import com.epmedu.animeal.api.message.MessageApiImpl
+import com.epmedu.animeal.api.push.PushApi
+import com.epmedu.animeal.api.push.PushApiImpl
 import com.epmedu.animeal.token.errorhandler.TokenExpirationHandler
 import dagger.Module
 import dagger.Provides
@@ -85,4 +87,10 @@ internal object ApiModule {
     fun providesMessageApi(
         animealApi: AnimealApi
     ): MessageApi = MessageApiImpl(animealApi)
+
+    @Singleton
+    @Provides
+    fun providesPushApi(
+        animealApi: AnimealApi
+    ): PushApi = PushApiImpl(animealApi)
 }

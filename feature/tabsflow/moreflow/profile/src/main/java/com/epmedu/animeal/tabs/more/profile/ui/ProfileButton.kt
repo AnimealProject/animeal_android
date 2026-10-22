@@ -2,6 +2,7 @@ package com.epmedu.animeal.tabs.more.profile.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,14 +28,16 @@ internal fun ProfileButton(
         if (state == READ_ONLY) {
             AnimealButton(
                 modifier = Modifier
-                    .testTagAsResourceId("btn_edit"),
+                    .testTagAsResourceId("btn_edit")
+                    .fillMaxWidth(),
                 text = stringResource(R.string.edit),
                 onClick = onEdit
             )
         } else {
             AnimealButton(
                 modifier = Modifier
-                    .testTagAsResourceId("btn_save"),
+                    .testTagAsResourceId("btn_save")
+                    .fillMaxWidth(),
                 text = stringResource(R.string.save),
                 enabled = state == EDITED,
                 onClick = onSave
