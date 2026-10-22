@@ -112,9 +112,9 @@ htmlText = { module = "com.github.ireward:compose-html", version.ref = "htmlText
 desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

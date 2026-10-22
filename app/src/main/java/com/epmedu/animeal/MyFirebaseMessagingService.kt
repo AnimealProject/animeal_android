@@ -1,10 +1,20 @@
 package com.epmedu.animeal
 
 import android.util.Log
+import com.epmedu.animeal.push.domain.usecase.RegisterDeviceUseCase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
-class MyFirebaseMessagingService : FirebaseMessagingService() {
+@AndroidEntryPoint
+class MyFirebaseMessagingService(
+    private val registerDeviceUseCase: RegisterDeviceUseCase
+) : FirebaseMessagingService() {
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("Push", "Message received: ${remoteMessage.data}")
     }
@@ -12,21 +22,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        /*Amplify.Notifications.Push.registerDevice(
-            token,
-            {
-                Amplify.Auth.getCurrentUser(
-                    {
-                        Amplify.Notifications.Push.identifyUser(
-                            it.userId,
-                            { Log.i("Push", "User identified: $token") },
-                            { Log.e("PushError", "Failed to identify user", it) }
-                        )
-                    },
-                    { Log.e("Auth", "Error getting current user", it) }
-                )
-            },
-            { Log.e("PushError", "Failed to register device", it) }
-        )*/
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            registerDeviceUseCase(token)
+        }
     }
 }

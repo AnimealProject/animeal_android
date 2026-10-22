@@ -1,6 +1,7 @@
 package com.epmedu.animeal.foundation.dialog
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -41,6 +42,7 @@ fun AnimealAlertDialog(
         buttons = {
             Column {
                 AnimealButton(
+                    modifier = Modifier.fillMaxWidth(),
                     text = acceptText,
                     onClick = onConfirm
                 )

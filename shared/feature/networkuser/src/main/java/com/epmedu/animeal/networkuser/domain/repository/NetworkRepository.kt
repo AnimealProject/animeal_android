@@ -21,6 +21,4 @@ interface NetworkRepository {
     suspend fun logOut(): ActionResult<Unit>
 
     suspend fun deleteNetworkUser(): ActionResult<Unit>
-
-    suspend fun updateMessagingToken(token: String): ActionResult<Unit>
 }

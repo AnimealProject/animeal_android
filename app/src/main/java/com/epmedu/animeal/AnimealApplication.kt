@@ -5,7 +5,6 @@ import com.amplifyframework.AmplifyException
 import com.amplifyframework.api.aws.AWSApiPlugin
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
-import com.amplifyframework.pushnotifications.pinpoint.AWSPinpointPushNotificationsPlugin
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,7 +21,6 @@ class AnimealApplication : Application() {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.addPlugin(AWSApiPlugin())
             Amplify.addPlugin(AWSS3StoragePlugin())
-            Amplify.addPlugin(AWSPinpointPushNotificationsPlugin())
             Amplify.configure(applicationContext)
         } catch (error: AmplifyException) {
             error(

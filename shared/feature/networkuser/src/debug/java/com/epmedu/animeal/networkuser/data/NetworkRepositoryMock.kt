@@ -37,8 +37,4 @@ class NetworkRepositoryMock : NetworkRepository {
     override suspend fun deleteNetworkUser(): ActionResult<Unit> {
         return ActionResult.Success(Unit)
     }
-
-    override suspend fun updateMessagingToken(token: String): ActionResult<Unit> {
-        return ActionResult.Success(Unit)
-    }
 }
