@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.amplify.core)
     implementation(libs.amplify.storage)
 
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
 
     implementation(platform(libs.androidx.compose.bom))

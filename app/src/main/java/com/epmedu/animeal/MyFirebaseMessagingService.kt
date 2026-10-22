@@ -9,11 +9,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyFirebaseMessagingService(
-    private val registerDeviceUseCase: RegisterDeviceUseCase
-) : FirebaseMessagingService() {
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Suppress("LateinitUsage")
+    @Inject
+    lateinit var registerDeviceUseCase: RegisterDeviceUseCase
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("Push", "Message received: ${remoteMessage.data}")
