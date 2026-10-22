@@ -72,7 +72,6 @@ mapbox-turf-measurement = { module = "com.mapbox.mapboxsdk:mapbox-sdk-turf", ver
 
 amplify-aws-api = { module = "com.amplifyframework:aws-api", version.ref = "amplify" }
 amplify-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify" }
-amplify-aws-push-notifications-pinpoint = { module = "com.amplifyframework:aws-push-notifications-pinpoint", version.ref = "amplify" }
 amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify" }
 amplify-storage = { module = "com.amplifyframework:aws-storage-s3", version.ref = "amplify" }
 
