@@ -6,6 +6,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.messaging.messaging
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
 import javax.inject.Inject
 
 class RegisterDeviceUseCase @Inject constructor(
@@ -17,6 +18,8 @@ class RegisterDeviceUseCase @Inject constructor(
             val token = tokenValue ?: Firebase.messaging.getToken().await()
             repository.registerDevice(token)
         } catch (e: FirebaseException) {
+            Log.e("PUSH", "Fetching FCM registration token failed", e)
+        } catch (e: IOException) {
             Log.e("PUSH", "Fetching FCM registration token failed", e)
         }
     }
