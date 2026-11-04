@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -44,7 +45,7 @@ internal fun ThankYouDialog(
             ThankYouContent(isAutoApproved)
             Spacer(modifier = Modifier.weight(1f))
             AnimealButton(
-                modifier = Modifier.padding(30.dp),
+                modifier = Modifier.padding(30.dp).fillMaxWidth(),
                 text = stringResource(R.string.back_to_home),
                 onClick = onDismiss
             )

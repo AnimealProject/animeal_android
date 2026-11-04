@@ -1,6 +1,7 @@
 package com.epmedu.animeal
 
 import android.util.Log
+import android.widget.Toast
 import com.epmedu.animeal.push.domain.usecase.RegisterDeviceUseCase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -19,12 +20,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var registerDeviceUseCase: RegisterDeviceUseCase
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d("Push", "Message received: ${remoteMessage.data}")
+        Log.d("Push", "Action received: ${remoteMessage.data.get("action")}")
+        CoroutineScope(Dispatchers.Main).launch {
+            Toast.makeText(
+                applicationContext,
+                remoteMessage.notification?.body,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             registerDeviceUseCase(token)
         }
