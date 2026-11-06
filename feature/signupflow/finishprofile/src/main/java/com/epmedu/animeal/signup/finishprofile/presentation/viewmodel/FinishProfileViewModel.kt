@@ -20,6 +20,7 @@ import com.epmedu.animeal.profile.domain.ValidatePhoneNumberUseCase
 import com.epmedu.animeal.profile.domain.ValidateSurnameUseCase
 import com.epmedu.animeal.profile.presentation.viewmodel.ProfileInputFormState.FormState.EDITABLE
 import com.epmedu.animeal.profile.presentation.viewmodel.handler.ProfileInputFormHandler
+import com.epmedu.animeal.push.domain.usecase.RegisterDeviceUseCase
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.Cancel
 import com.epmedu.animeal.signup.finishprofile.presentation.FinishProfileScreenEvent.InputFormEvent
@@ -46,7 +47,8 @@ internal class FinishProfileViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
     private val logOutUseCase: LogOutUseCase,
-    private val loadingHandler: LoadingHandler
+    private val loadingHandler: LoadingHandler,
+    private val registerDeviceUseCase: RegisterDeviceUseCase
 ) : ViewModel(),
     StateDelegate<FinishProfileState> by DefaultStateDelegate(FinishProfileState()),
     ActionDelegate by actionDelegate {
@@ -164,7 +166,10 @@ internal class FinishProfileViewModel @Inject constructor(
             saveProfileUseCase(state.profileInputFormState.profile).collect {
                 performAction(
                     action = { updateNetworkProfileUseCase(state.profileInputFormState.profile) },
-                    onSuccess = ::navigateToNextDestination,
+                    onSuccess = {
+                        registerDeviceUseCase()
+                        navigateToNextDestination()
+                    },
                     onError = { message -> loadingHandler.hideLoading() }
                 )
             }
@@ -172,6 +177,8 @@ internal class FinishProfileViewModel @Inject constructor(
     }
 
     private fun navigateToNextDestination() {
-        updateState { copy(nextDestination = Tabs) }
+        viewModelScope.launch {
+            updateState { copy(nextDestination = Tabs) }
+        }
     }
 }
