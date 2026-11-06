@@ -22,6 +22,7 @@ dependencies {
 
     implementation(projects.shared.feature.profile)
     implementation(projects.shared.feature.networkuser)
+	implementation(projects.shared.feature.push)
 
     implementation(libs.androidx.viewmodel)
 
