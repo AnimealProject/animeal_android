@@ -44,7 +44,7 @@ internal fun FeedingItemDetails(feedingModel: FeedingModel) {
                 ),
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colors.onSurface,
-                maxLines = 3
+                maxLines = 2
             )
             Text(
                 text = feedingModel.elapsedTime,
