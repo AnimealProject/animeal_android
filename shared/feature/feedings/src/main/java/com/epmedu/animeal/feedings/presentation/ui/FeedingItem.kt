@@ -76,7 +76,10 @@ fun FeedingItemPreview() {
                         id = "$index",
                         feedingPointId = "$index",
                         title = setOf(longText, shortText).elementAt(index % 2),
-                        feeder = "Giorgi Abutibze",
+                        feeder = setOf(
+                            "Aleksandre Bagrationi-Mukhranbatoni Moderator",
+                            "Giorgi Abutibze"
+                        ).elementAt(index % 2),
                         status = status,
                         elapsedTime = "12 hours ago",
                         image = image

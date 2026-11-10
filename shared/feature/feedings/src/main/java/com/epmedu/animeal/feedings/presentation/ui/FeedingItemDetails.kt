@@ -33,20 +33,31 @@ internal fun FeedingItemDetails(feedingModel: FeedingModel) {
             maxLines = 1,
         )
 
-        Text(
-            text = stringResource(
-                id = R.string.fed_by,
-                feedingModel.feeder.ifEmpty { stringResource(R.string.unknown_user) }
-            ) + "\n" + feedingModel.elapsedTime,
-            style = MaterialTheme.typography.subtitle2.copy(
-                lineHeight = 16.sp
-            ),
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colors.onSurface,
-            maxLines = 2,
-            modifier = Modifier
-                .padding(bottom = 6.dp)
-        )
+        Column {
+            Text(
+                text = stringResource(
+                    id = R.string.fed_by,
+                    feedingModel.feeder.ifBlank { stringResource(R.string.unknown_user) }
+                ),
+                style = MaterialTheme.typography.subtitle2.copy(
+                    lineHeight = 16.sp
+                ),
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 2
+            )
+            Text(
+                text = feedingModel.elapsedTime,
+                style = MaterialTheme.typography.subtitle2.copy(
+                    lineHeight = 16.sp
+                ),
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(bottom = 6.dp)
+            )
+        }
         FeedingStatusUi(status = feedingModel.status)
     }
 }
