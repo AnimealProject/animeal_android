@@ -51,7 +51,8 @@ jobs:
           cat ./local.properties
 
       - name: Copy google services config
-        run: echo $GOOGLE_SERVICES >> app/google-services.json
+        run: |
+          cp android-keystore/google-services.json >> app/google-services.json
 
       - name: Copy amplify config files
         run: |
