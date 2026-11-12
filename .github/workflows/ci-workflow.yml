@@ -52,7 +52,7 @@ jobs:
 
       - name: Copy google services config
         run: |
-          cp android-keystore/google-services.json >> app/google-services.json
+          cp android-keystore/google-services.json app/google-services.json
 
       - name: Copy amplify config files
         run: |
