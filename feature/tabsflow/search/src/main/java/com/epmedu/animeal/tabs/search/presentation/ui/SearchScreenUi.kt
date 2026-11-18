@@ -21,13 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
-import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent.Start
 import com.epmedu.animeal.feeding.presentation.event.WillFeedEvent
@@ -214,9 +215,10 @@ private fun OnFeedingConfirmationState(
             onFeedingEvent(FeedingEvent.Reset)
         }
 
-        FeedingWasAlreadyBooked -> {
+        is Error -> {
             AnimealAlertDialog(
-                title = stringResource(id = R.string.feeding_point_expired_description),
+                titleFontSize = 16.sp,
+                title = feedingConfirmationState.message ?: stringResource(id = R.string.unknown_error),
                 acceptText = stringResource(id = R.string.feeding_point_expired_accept),
                 onConfirm = {
                     onFeedingEvent(FeedingEvent.Reset)

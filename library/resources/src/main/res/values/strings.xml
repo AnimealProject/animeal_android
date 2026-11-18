@@ -225,4 +225,6 @@
 
     <string name="message_body_title">Description</string>
     <string name="message_body_hint">Please describe the problem with this feeding point.</string>
+
+    <string name="unknown_error">Unknown error</string>
 </resources>

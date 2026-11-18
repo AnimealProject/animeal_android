@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.epmedu.animeal.common.constants.Arguments
 import com.epmedu.animeal.common.route.TabsRoute
 import com.epmedu.animeal.extensions.currentOrThrow
@@ -36,8 +37,8 @@ import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingP
 import com.epmedu.animeal.favourites.presentation.FavouritesScreenEvent.FeedingPointSelected
 import com.epmedu.animeal.favourites.presentation.viewmodel.FavouritesState
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
-import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingPoint
 import com.epmedu.animeal.feeding.domain.model.enum.AnimalState
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -249,9 +250,10 @@ private fun OnFeedingConfirmationState(
             onFeedingEvent(FeedingEvent.Reset)
         }
 
-        FeedingWasAlreadyBooked -> {
+        is Error -> {
             AnimealAlertDialog(
-                title = stringResource(id = R.string.feeding_point_expired_description),
+                titleFontSize = 16.sp,
+                title = feedingConfirmationState.message ?: stringResource(id = R.string.unknown_error),
                 acceptText = stringResource(id = R.string.feeding_point_expired_accept),
                 onConfirm = {
                     onFeedingEvent(FeedingEvent.Reset)

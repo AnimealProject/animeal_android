@@ -64,7 +64,10 @@ internal class AnimealApiImpl(
                             ApiResult.Failure(jsonSyntaxException)
                         }
                     } else {
-                        val responseError = ResponseError(listOf(restResponse.data.asString()))
+                        val responseError = ResponseError(
+                            listOf(restResponse.data.asString()),
+                            restResponse.data.asString()
+                        )
                         Log.e(LOG_TAG, "Query $path failed with $responseError")
                         ApiResult.Failure(responseError)
                     }
@@ -125,7 +128,7 @@ internal class AnimealApiImpl(
                     Log.i(LOG_TAG, "Query $query received response $response")
                     response.data?.let { data ->
                         resume(ApiResult.Success(data))
-                    } ?: resume(ApiResult.Failure(ResponseError(response.errors)))
+                    } ?: resume(ApiResult.Failure(ResponseError(response.errors, response.errors.firstOrNull()?.message)))
                 },
                 { apiException ->
                     Log.e(LOG_TAG, "Query $query failed with $apiException")
@@ -151,7 +154,7 @@ internal class AnimealApiImpl(
                     resume(
                         response.data?.let { data ->
                             ApiResult.Success(data)
-                        } ?: ApiResult.Failure(ResponseError(response.errors))
+                        } ?: ApiResult.Failure(ResponseError(response.errors, response.errors.firstOrNull()?.message))
                     )
                 },
                 { apiException ->

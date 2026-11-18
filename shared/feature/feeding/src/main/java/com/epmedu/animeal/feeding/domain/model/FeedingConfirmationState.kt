@@ -5,6 +5,5 @@ sealed interface FeedingConfirmationState {
     data object Loading : FeedingConfirmationState
     data class Showing(val isAutoApproved: Boolean) : FeedingConfirmationState
     data object FeedingStarted : FeedingConfirmationState
-    data object FeedingWasAlreadyBooked : FeedingConfirmationState
     data class Error(val message: String?) : FeedingConfirmationState
 }

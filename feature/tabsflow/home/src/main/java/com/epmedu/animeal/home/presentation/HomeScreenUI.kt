@@ -22,7 +22,6 @@ import com.epmedu.animeal.extensions.launchAppSettings
 import com.epmedu.animeal.extensions.requestGpsByDialog
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
-import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Loading
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.presentation.event.FeedingEvent
@@ -343,20 +342,11 @@ fun OnFeedingConfirmationState(
     state: FeedingConfirmationState,
     onFeedingEvent: (FeedingEvent) -> Unit
 ) {
-    if (state == FeedingWasAlreadyBooked) {
+    if (state is Error) {
         AnimealAlertDialog(
             titleFontSize = 16.sp,
-            title = stringResource(id = R.string.feeding_point_expired_description),
+            title = state.message ?: stringResource(id = R.string.unknown_error),
             acceptText = stringResource(id = R.string.feeding_point_expired_accept),
-            onConfirm = {
-                onFeedingEvent(FeedingEvent.Reset)
-            }
-        )
-    } else if (state is Error) {
-        AnimealAlertDialog(
-            titleFontSize = 16.sp,
-            title = state.message ?: "Unknown error",
-            acceptText = stringResource(id = R.string.ok),
             onConfirm = {
                 onFeedingEvent(FeedingEvent.Reset)
             }
@@ -399,17 +389,6 @@ private fun onGeoLocationClick(
                 }
             }
         }
-    }
-}
-
-@AnimealPreview
-@Composable
-private fun OnFeedingConfirmationStatePreview() {
-    AnimealTheme {
-        OnFeedingConfirmationState(
-            onFeedingEvent = {},
-            state = FeedingWasAlreadyBooked,
-        )
     }
 }
 
