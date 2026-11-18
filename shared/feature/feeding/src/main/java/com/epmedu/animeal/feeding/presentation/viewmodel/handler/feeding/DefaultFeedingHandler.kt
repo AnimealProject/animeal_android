@@ -6,8 +6,8 @@ import com.epmedu.animeal.common.presentation.viewmodel.delegate.StateDelegate
 import com.epmedu.animeal.common.presentation.viewmodel.handler.error.ErrorHandler
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Dismissed
+import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Error
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingStarted
-import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.FeedingWasAlreadyBooked
 import com.epmedu.animeal.feeding.domain.model.FeedingConfirmationState.Showing
 import com.epmedu.animeal.feeding.domain.usecase.CancelFeedingUseCase
 import com.epmedu.animeal.feeding.domain.usecase.ExpireFeedingUseCase
@@ -139,7 +139,7 @@ class DefaultFeedingHandler(
                     }
                 },
                 onError = {
-                    updateFeedingState(FeedingWasAlreadyBooked)
+                    updateFeedingState(Error(it))
                 }
             )
         }
