@@ -346,7 +346,7 @@ fun OnFeedingConfirmationState(
         AnimealAlertDialog(
             titleFontSize = 16.sp,
             title = state.message ?: stringResource(id = R.string.unknown_error),
-            acceptText = stringResource(id = R.string.feeding_point_expired_accept),
+            acceptText = stringResource(id = R.string.ok),
             onConfirm = {
                 onFeedingEvent(FeedingEvent.Reset)
             }
